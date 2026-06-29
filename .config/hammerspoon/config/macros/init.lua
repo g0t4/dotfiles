@@ -1,12 +1,10 @@
 require("config._packages")
-local logger = require("devtools.logs.logger")
-
-local km_run_lua = logger.create("km_run_lua.log")
+local log = require("config.logs").km_run_lua()
 
 local M = {}
 
 function nudge_human()
-    hs.alert.show("check " .. km_run_lua.basename, nil, nil, 5)
+    hs.alert.show("check " .. log.basename, nil, nil, 5)
 end
 
 function StreamDeckKeyboardMaestroRunner(what)
@@ -20,11 +18,11 @@ function StreamDeckKeyboardMaestroRunner(what)
     -- - THUS => use a log file, especially for info level logs
     -- - + egregious and unhandled exceptions poke the user (i.e. hs.alert.show)
 
-    km_run_lua:with_context("km `" .. what .. "`",
+    log:with_context("km `" .. what .. "`",
         function()
             local func, error_message = load(what) -- load lua here so invalid lua code failures are logged too
             if error_message then
-                km_run_lua:error("load lua code failed", error_message)
+                log:error("load lua code failed", error_message)
                 nudge_human()
                 return
             end
