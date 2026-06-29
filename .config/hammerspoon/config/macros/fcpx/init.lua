@@ -47,7 +47,7 @@ end
 local _cached_inspector_panel_group = nil
 
 function FcpxFindAndEnsureInspectorPanelIsOpen(checkbox_description, callback)
-    -- PRN setup run_async to unravel the callback hell below (and in nested functions)
+    -- PRN setup run_in_coroutine to unravel the callback hell below (and in nested functions)
 
     -- FYI speed up testing by selecting an element in the Inspector Panel => takes much less time to find checkbox globally
 
