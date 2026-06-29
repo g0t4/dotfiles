@@ -97,7 +97,7 @@ function VolumeMenu:wait_for_narrate_title_button()
     end, 20, 20, "button Narration")
 end
 
-function VolumeMenu:_wait_for_submenu_to_open()
+function VolumeMenu:_wait_for_submenu_to_be_open()
     -- TODO how do I find out if the submenu is already working?
     local button_description = "Narration"
 
@@ -114,7 +114,7 @@ end
 
 function VolumeMenu:wait_for_volume_to_be_mute()
     -- PRN re-eval this and shuffle as you use it
-    local submenu = self:_wait_for_submenu_to_open()
+    local submenu = self:_wait_for_submenu_to_be_open()
     -- TODO check if already mute before click?
     --  TODO can I find out its state from "Narration" button which has an icon that changes
     --    might have to OCR the element, like I think I am doing with Keyboard Maestro presently
