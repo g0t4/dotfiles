@@ -989,6 +989,13 @@ function _cat_range_abbr
     echo "$sed_cmd -n '$start,$end""p'"
 end
 
+# *** code finders
+# TODO WIP ... change as you use these... help with log/print review
+abbr lua_logs "rg -g '*.lua' '^\\s*log'"
+abbr lua_logs_commented_out "rg -g '*.lua' '^\\s*--\\s*log'"
+abbr lua_prints "rg -g '*.lua' '^\\s*print\\\('"
+abbr lua_prints_commented_out "rg -g '*.lua' '^\\s*--\\s*print\\\('"
+
 # *** dns
 # TODO port more dns/arp helpers here
 function _flush_dns
