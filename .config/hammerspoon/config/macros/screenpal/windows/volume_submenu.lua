@@ -45,10 +45,12 @@ function VolumeSubmenu:find_my_window()
     return self._windows:get_window_by_title("SOM-FloatingWindow-Type=edit2.side.menu.window-ZOrder=2(Undefined+2)")
 end
 
-function VolumeSubmenu:wait_for_button_by_description(description)
+function VolumeSubmenu:_wait_for_button_by_description(description)
     local win = self:find_my_window()
     if not win then
-        log:error("Volume submenu window not found")
+        local fail = "Volume submenu window not found"
+        log:error(fail)
+        error(fail)
     end
     local button = win:button_by_description(description)
     if button and not button:isValid() then
@@ -58,7 +60,7 @@ function VolumeSubmenu:wait_for_button_by_description(description)
 end
 
 function VolumeSubmenu:wait_for_reset_button()
-    return self:wait_for_button_by_description("Reset volume levels")
+    return self:_wait_for_button_by_description("Reset volume levels")
 end
 
 function VolumeSubmenu:press_reset_button()
@@ -68,7 +70,7 @@ function VolumeSubmenu:press_reset_button()
 end
 
 function VolumeSubmenu:press_mute_button()
-    local button = self:wait_for_button_by_description("Silence volume levels")
+    local button = self:_wait_for_button_by_description("Silence volume levels")
     if not button then error("Could not find button") end
     button:axPress()
 end
