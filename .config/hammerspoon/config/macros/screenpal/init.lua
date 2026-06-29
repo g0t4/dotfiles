@@ -230,7 +230,7 @@ function act_on_silence(win, silence, action)
 
     if is_mute then
         local menu = VolumeMenu.new(win.windows)
-        menu:wait_for_volume_to_be_mute()
+        menu:wait_for_volume_to_be_muted()
     end
 
     -- log:info("silence ", silence)

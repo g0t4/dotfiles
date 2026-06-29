@@ -36,7 +36,7 @@ local function WIP_OpenMuteTool()
     hs.eventtap.keyStroke({}, "v", 0) -- Cmd+V to paste since I can't type it, would put me in a loop (at best)
     local win = get_cached_editor_window()
     local menu = VolumeMenu.new(win.windows)
-    menu:wait_for_volume_to_be_mute()
+    menu:wait_for_volume_to_be_muted()
 end
 
 function SPal_Test()

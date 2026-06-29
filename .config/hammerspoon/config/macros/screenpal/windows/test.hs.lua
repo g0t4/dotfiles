@@ -27,9 +27,9 @@ app:asHSApplication():activate()
 -- -- type v key
 -- hs.eventtap.keyStroke({}, "v") -- open volume tool in the silence under cursor... wow it works fast and good
 -- --
--- local volume_menu = require("config.macros.screenpal.windows.volume_menu").new(wins)
--- log:info(volume_menu)
--- volume_menu:wait_for_volume_to_be_mute() -- TODO anything in here that would not wait appropriately to pull off the volume menu clicking to mute? .. i.e. skip waiting for submenu to appear and just rely on first access to work?
+local volume_menu = require("config.macros.screenpal.windows.volume_menu").new(wins)
+log:info(volume_menu)
+volume_menu:wait_for_volume_to_be_muted() -- TODO anything in here that would not wait appropriately to pull off the volume menu clicking to mute? .. i.e. skip waiting for submenu to appear and just rely on first access to work?
 
 -- * test act_on_silence(MUTE_INWARD)
 SPal_ActOnThisSilence('MUTE_INWARD')

@@ -112,7 +112,7 @@ function VolumeMenu:_wait_for_submenu_to_be_open()
     return submenu
 end
 
-function VolumeMenu:wait_for_volume_to_be_mute()
+function VolumeMenu:wait_for_volume_to_be_muted()
     -- PRN re-eval this and shuffle as you use it
     local submenu = self:_wait_for_submenu_to_be_open()
     -- TODO check if already mute before click?
