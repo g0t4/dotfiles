@@ -243,5 +243,14 @@ function harness._run_path(test_type, directory)
   return paths
 end
 
+function run_hammerspoon_tests()
+  local current_file = vim.fn.expand('%:p')
+  test_paths({ Path:new(current_file) })
+end
+
+function harness.setup()
+  vim.keymap.set('n', "<leader>hs", run_hammerspoon_tests)
+end
+
 return harness
 
