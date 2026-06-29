@@ -2,10 +2,11 @@ local Path = require "plenary.path"
 local Job = require "plenary.job"
 
 local f = require "plenary.functional"
-local log = require "plenary.log"
 local win_float = require "plenary.window.float"
 
 local headless = require("plenary.nvim_meta").is_headless
+
+local log = require("devtools.logs.logger").universal()
 
 local plenary_dir = vim.fn.fnamemodify(debug.getinfo(1).source:match "@?(.*[/\\])", ":p:h:h:h")
 
@@ -130,20 +131,20 @@ local function test_paths(paths, opts)
     return job
   end, paths)
 
-  log.debug "Running..."
+  log:debug "Running..."
   for i, j in ipairs(jobs) do
     outputter(res.bufnr, "Scheduling: " .. j.nvim_busted_path)
     j:start()
     if opts.sequential then
-      log.debug("... Sequential wait for job number", i)
+      log:debug("... Sequential wait for job number", i)
       if not Job.join(j, opts.timeout) then
-        log.debug("... Timed out job number", i)
+        log:debug("... Timed out job number", i)
         failure = true
         pcall(function()
           j.handle:kill(15) -- SIGTERM
         end)
       else
-        log.debug("... Completed job number", i, j.code, j.signal)
+        log:debug("... Completed job number", i, j.code, j.signal)
         failure = failure or j.code ~= 0 or j.signal ~= 0
       end
       if failure and not opts.keep_going then
@@ -159,9 +160,9 @@ local function test_paths(paths, opts)
 
   if not opts.sequential then
     table.insert(jobs, opts.timeout)
-    log.debug "... Parallel wait"
+    log:debug "... Parallel wait"
     Job.join(unpack(jobs))
-    log.debug "... Completed jobs"
+    log:debug "... Completed jobs"
     table.remove(jobs, table.getn(jobs))
     failure = f.any(function(_, v)
       return v.code ~= 0
