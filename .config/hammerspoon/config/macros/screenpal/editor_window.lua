@@ -157,11 +157,11 @@ function ScreenPalEditorWindow:is_paused()
     return not self:is_playing()
 end
 
-function ScreenPalEditorWindow:ensure_playing(is_tool_open)
+function ScreenPalEditorWindow:ensure_playing(is_toolbar_open)
     if self:is_playing() then
         return
     end
-    if is_tool_open then
+    if is_toolbar_open then
         -- "p" is for preview
         hs.eventtap.keyStroke({}, "p")
     else
