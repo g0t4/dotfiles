@@ -10,7 +10,8 @@ local AppWindows = require("config.macros.screenpal.app_windows")
 
 -- local macros = require("config.macros")
 -- StreamDeckKeyboardMaestroRunner("print('works to dispatch KM macro like streamdeck button press with logging + coroutine context!')") -- works
-
+-- print("this is from print in hammerspoon (should end up in log file after removing float window in harness)", hs)
+do return end
 -- *** test new automations of screenpal w/o restart HS + trigger full actions (streamdeck button)!
 -- PRN setup facade to get at controls in spal app
 local app = get_app_element_or_throw("com.screenpal.app")
