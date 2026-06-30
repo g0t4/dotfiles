@@ -39,6 +39,32 @@ vim.defer_fn(function()
     ${0}
 end,${1:1000})
 
+snippet vp "vim.print(_)"
+vim.print(${0})
+
+snippet vpq "vim.print('_')"
+vim.print('${0}')
+
+snippet vi "vim.inspect(_)"
+vim.inspect(${0})
+
+snippet hsi "hs.inspect(_)"
+hs.inspect(${0})
+
+snippet logt "log:trace()"
+log:trace("${1}",${1})
+
+snippet logd "log:debug()"
+log:debug("${1}",${1:what})
+
+snippet logi "log:info()"
+log:info("${1}",${1})
+
+snippet logw "log:warn()"
+log:warn("${1}",${1})
+
+snippet loge "log:error()"
+log:error("${1}",${1})
 
 # TODO not sure a1/a2 are easy enough to justify reaching for the #... find a new name?
 snippet a1 "array of array"
