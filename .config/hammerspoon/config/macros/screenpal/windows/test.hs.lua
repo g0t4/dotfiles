@@ -42,6 +42,23 @@ local ToolOptionWindows = require("config.macros.screenpal.windows.tool_options"
 local tool_options = ToolOptionWindows.new(wins)
 local range_win = tool_options:wait_for_range_selection_toolbar_window()
 log:info('range_win', range_win)
+local btn1 = range_win:button(1)
+log:info('btn1', btn1) -- help page is button1
+-- btn1:dumpAttributes() -- logs the attributes!! very cool (love the logs now)
+--
+local start_button = range_win:button_by_description_matching("start")
+-- AXDescription => "Select everything from this point to the start of the video"
+log:info("start_button", start_button)
+-- start_button:axPress()
+-- start_button:dumpAttributes()
+--
+local end_button = range_win:button_by_description_matching("end")
+-- AXDescription "Select everything from this point to the end of the video"
+log:info("end_button", end_button)
+end_button:axPress()
+end_button:dumpAttributes()
+
+-- btn1:axPress()
 --
 -- ensure_in_coroutine(function()
 --     local win, silences = syncify(detect_silences)
