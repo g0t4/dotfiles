@@ -228,6 +228,11 @@ function act_on_silence(win, silence, action)
         -- hs.timer.usleep(_50ms) -- TODO? try 50ms if need delay
     end
 
+    -- * wait on range tool bar is SUPER FAST too... I can add this in if issues w/o waiting?
+    local tool_options = ToolOptionsWindows.new(win.windows)
+    local range_toolbar = tool_options:wait_for_range_selection_toolbar_window()
+    log:info("found range_toolbar", range_toolbar)
+
     -- *** SELECT RANGE:
     -- * set tool start
     hs.eventtap.keyStroke({}, "s", 0, win.app)

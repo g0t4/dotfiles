@@ -33,7 +33,9 @@ app:asHSApplication():activate()
 -- volume_menu:wait_for_volume_to_be_muted() -- TODO anything in here that would not wait appropriately to pull off the volume menu clicking to mute? .. i.e. skip waiting for submenu to appear and just rely on first access to work?
 
 -- * test act_on_silence(MUTE_INWARD)
--- SPal_ActOnThisSilence('MUTE_INWARD') -- streamdeck button triggers this
+SPal_ActOnThisSilence('MUTE_INWARD') -- streamdeck button triggers this
+
+do return end
 -- SPal_ActOnThisSilence('CUT_20_OK') -- streamdeck button triggers this
 --
 hs.eventtap.keyStroke({}, 'c', 0, app)
