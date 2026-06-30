@@ -76,13 +76,13 @@ end
 
 function VolumeSubmenu:press_reset_button()
     local button = self:wait_for_reset_button()
-    if not button then error("Could not find button") end
+    if not button then error("Could not find _RESET_ button") end
     button:axPress()
 end
 
 function VolumeSubmenu:press_mute_button()
     local button = self:_wait_for_button_by_description("Silence volume levels")
-    if not button then error("Could not find button") end
+    if not button then error("Could not find _MUTE_ button") end
     button:axPress()
 end
 
