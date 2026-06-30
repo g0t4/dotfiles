@@ -49,7 +49,7 @@ local function test_paths(paths, opts)
         table.insert(args, p:absolute())
         -- table.insert(args,  p.filename)
 
-        log:info("hs args", args)
+        -- log:info("hs args", args)
         local job = Job:new {
             command = opts.nvim_cmd,
             args = args,
@@ -80,7 +80,7 @@ local function test_paths(paths, opts)
         return job
     end, paths)
 
-    log:info "Running hammerspoon test/script harness..."
+    -- log:info "Running hammerspoon test/script harness..."
     for i, j in ipairs(jobs) do
         log:info("Scheduling: " .. j.nvim_busted_path)
         j:start()
