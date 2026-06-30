@@ -216,17 +216,10 @@ function act_on_silence(win, silence, action)
     --   and you need to ignore it b/c your streamdeck buttons exist to auto select a DIFFERENT RANGE!
     if is_cut then
         hs.eventtap.keyStroke({}, 'c', 0, win.app)
-        -- DERP... neither cut nor volume tools show toolbar before start and end of range selected
-        -- *** IOTW they both show the range selection bar
-        --   TODO do I want to wait for the range selection bar to show?
-        -- win.windows:get_tool_bar_window():wait_for_an_open_edit_tool()
-        -- hs.timer.usleep(_50ms) -- TODO? try 50ms if need delay
     elseif is_mute then
         hs.eventtap.keyStroke({}, 'v', 0, win.app)
-        -- for volume edit => toolbar only shows once the range is selected
-        -- FYI initial tests show that I do not need a delay between setting start/end in/out points
-        -- hs.timer.usleep(_50ms) -- TODO? try 50ms if need delay
     end
+    -- FYI so far no need to wait after starting tool
 
     -- PRN! only add wait if issues with timing the start/end of range selection (below)
     -- FYI ~200ms to wait for it, NBD actually but still don't do it if not needed
