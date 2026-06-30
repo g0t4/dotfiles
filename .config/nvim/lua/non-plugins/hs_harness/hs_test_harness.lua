@@ -1,12 +1,8 @@
+local log = require("devtools.logs.logger").universal()
 local Path = require "plenary.path"
 local Job = require "plenary.job"
 
-local f = require "plenary.functional"
-local win_float = require "plenary.window.float"
-
-local headless = require("plenary.nvim_meta").is_headless
-
-local log = require("devtools.logs.logger").universal()
+-- FYI use hs CLI to run outside of nvim => thus no need for `headless` mode (unlike plenary nvim unit tests)
 
 local plenary_dir = vim.fn.stdpath("data") .. "/lazy/plenary.nvim"
 
@@ -25,7 +21,6 @@ end
 
 local function test_paths(paths, opts)
     opts = vim.tbl_deep_extend("force", {
-        -- nvim_cmd = vim.v.progpath,
         nvim_cmd = "/opt/homebrew/bin/hs",
         winopts = { winblend = 3 },
         sequential = false,
@@ -34,28 +29,6 @@ local function test_paths(paths, opts)
     }, opts or {})
 
     vim.env.PLENARY_TEST_TIMEOUT = opts.timeout
-
-    local res = {}
-    if not headless then
-        res = win_float.percentage_range_window(0.95, 0.70, opts.winopts)
-
-        res.job_id = vim.api.nvim_open_term(res.bufnr, {})
-        vim.api.nvim_buf_set_keymap(res.bufnr, "n", "q", ":q<CR>", {})
-
-        harness.last_res = res
-        vim.api.nvim_win_set_option(res.win_id, "winhl", "Normal:Normal")
-        vim.api.nvim_win_set_option(res.win_id, "conceallevel", 3)
-        vim.api.nvim_win_set_option(res.win_id, "concealcursor", "n")
-
-        if res.border_win_id then
-            vim.api.nvim_win_set_option(res.border_win_id, "winhl", "Normal:Normal")
-        end
-
-        if res.bufnr then
-            vim.api.nvim_buf_set_option(res.bufnr, "filetype", "PlenaryTestPopup")
-        end
-        vim.cmd "mode"
-    end
 
     local path_len = #paths
     local failure = false
@@ -76,7 +49,7 @@ local function test_paths(paths, opts)
         table.insert(args, p:absolute())
         -- table.insert(args,  p.filename)
 
-        log:info(res.bufnr, vim.inspect(args))
+        log:info("hs args", args)
         local job = Job:new {
             command = opts.nvim_cmd,
             args = args,
@@ -84,23 +57,23 @@ local function test_paths(paths, opts)
             -- Can be turned on to debug
             on_stdout = function(_, data)
                 if path_len == 1 then
-                    log:info(res.bufnr, data)
+                    -- redirect to log
+                    log:info(data)
                 end
             end,
 
             on_stderr = function(_, data)
                 if path_len == 1 then
-                    log:info(res.bufnr, data)
+                    -- redirect to log
+                    log:info(data)
                 end
             end,
 
             on_exit = vim.schedule_wrap(function(j_self, _, _)
                 if path_len ~= 1 then
-                    log:info(res.bufnr, unpack(j_self:stderr_result()))
-                    log:info(res.bufnr, unpack(j_self:result()))
+                    log:info(unpack(j_self:stderr_result()))
+                    log:info(unpack(j_self:result()))
                 end
-
-                vim.cmd "mode"
             end),
         }
         job.nvim_busted_path = p.filename
@@ -109,7 +82,7 @@ local function test_paths(paths, opts)
 
     log:info "Running hammerspoon test/script harness..."
     for i, j in ipairs(jobs) do
-        log:info(res.bufnr, "Scheduling: " .. j.nvim_busted_path)
+        log:info("Scheduling: " .. j.nvim_busted_path)
         j:start()
         if opts.sequential then
             log:debug("... Sequential wait for job number", i)
@@ -127,31 +100,6 @@ local function test_paths(paths, opts)
                 break
             end
         end
-    end
-
-    -- TODO: Probably want to let people know when we've completed everything.
-    if not headless then
-        return
-    end
-
-    if not opts.sequential then
-        table.insert(jobs, opts.timeout)
-        log:debug "... Parallel wait"
-        Job.join(unpack(jobs))
-        log:debug "... Completed jobs"
-        table.remove(jobs, table.getn(jobs))
-        failure = f.any(function(_, v)
-            return v.code ~= 0
-        end, jobs)
-    end
-    vim.wait(100)
-
-    if headless then
-        if failure then
-            return vim.cmd "1cq"
-        end
-
-        return vim.cmd "0cq"
     end
 end
 
@@ -215,7 +163,6 @@ function harness._run_path(test_type, directory)
     end
 
     harness:run(test_type, bufnr, win_id)
-    vim.cmd "qa!"
 
     return paths
 end
@@ -223,13 +170,6 @@ end
 function run_hammerspoon_tests()
     local current_file = vim.fn.expand('%:p')
     test_paths({ Path:new(current_file) })
-
-    -- * uncomment to close window always (careful you won't see any prints... maybe I should route those to logs anyways... I don't really want the float window w/ hs b/c logs are where it is at)
-    -- log:info("win_id", harness.last_res.win_id)
-    if harness.HIDE_FLOAT_WINDOW then
-        vim.api.nvim_win_hide(harness.last_res.win_id)
-    end
-    -- FYI! restart nvim for changes here to take effect
 end
 
 function harness.setup()
