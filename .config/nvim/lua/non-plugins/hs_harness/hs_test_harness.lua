@@ -14,26 +14,6 @@ local harness = {
     HIDE_FLOAT_WINDOW = true
 }
 
-local print_output = vim.schedule_wrap(function(_, ...)
-    for _, v in ipairs { ... } do
-        io.stdout:write(tostring(v))
-        io.stdout:write "\n"
-    end
-
-    vim.cmd [[mode]]
-end)
-
-local get_nvim_output = function(job_id)
-    return vim.schedule_wrap(function(bufnr, ...)
-        if not vim.api.nvim_buf_is_valid(bufnr) then
-            return
-        end
-        for _, v in ipairs { ... } do
-            vim.api.nvim_chan_send(job_id, v .. "\r\n")
-        end
-    end)
-end
-
 function harness.test_directory_command(command)
     local split_string = vim.split(command, " ")
     local directory = vim.fn.expand(table.remove(split_string, 1))
@@ -77,14 +57,10 @@ local function test_paths(paths, opts)
         vim.cmd "mode"
     end
 
-    local outputter = headless and print_output or get_nvim_output(res.job_id)
-
     local path_len = #paths
     local failure = false
 
     local jobs = vim.tbl_map(function(p)
-        log:info(vim.fn.escape(plenary_dir, " "))
-
         local args = {}
 
         -- TODO? run plenary.busted style tests instead of just code file?
@@ -100,7 +76,7 @@ local function test_paths(paths, opts)
         table.insert(args, p:absolute())
         -- table.insert(args,  p.filename)
 
-        outputter(res.bufnr, vim.inspect(args))
+        log:info(res.bufnr, vim.inspect(args))
         local job = Job:new {
             command = opts.nvim_cmd,
             args = args,
@@ -108,20 +84,20 @@ local function test_paths(paths, opts)
             -- Can be turned on to debug
             on_stdout = function(_, data)
                 if path_len == 1 then
-                    outputter(res.bufnr, data)
+                    log:info(res.bufnr, data)
                 end
             end,
 
             on_stderr = function(_, data)
                 if path_len == 1 then
-                    outputter(res.bufnr, data)
+                    log:info(res.bufnr, data)
                 end
             end,
 
             on_exit = vim.schedule_wrap(function(j_self, _, _)
                 if path_len ~= 1 then
-                    outputter(res.bufnr, unpack(j_self:stderr_result()))
-                    outputter(res.bufnr, unpack(j_self:result()))
+                    log:info(res.bufnr, unpack(j_self:stderr_result()))
+                    log:info(res.bufnr, unpack(j_self:result()))
                 end
 
                 vim.cmd "mode"
@@ -131,9 +107,9 @@ local function test_paths(paths, opts)
         return job
     end, paths)
 
-    log:debug "Running..."
+    log:info "Running hammerspoon test/script harness..."
     for i, j in ipairs(jobs) do
-        outputter(res.bufnr, "Scheduling: " .. j.nvim_busted_path)
+        log:info(res.bufnr, "Scheduling: " .. j.nvim_busted_path)
         j:start()
         if opts.sequential then
             log:debug("... Sequential wait for job number", i)
