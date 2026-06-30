@@ -42,6 +42,9 @@ end,${1:1000})
 snippet vp "vim.print(_)"
 vim.print(${0})
 
+snippet locall "local log ..."
+local log = require('devtools.logs.logger').universal()
+
 snippet vpq "vim.print('_')"
 vim.print('${0}')
 
