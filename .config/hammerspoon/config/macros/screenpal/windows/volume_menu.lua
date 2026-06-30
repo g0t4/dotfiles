@@ -104,6 +104,8 @@ function VolumeMenu:_wait_for_submenu_to_be_open()
     -- TODO how do I find out if the submenu is already working?
     local button_description = "Narration"
 
+    -- * wait for top level Narration window to show
+    --  then click its button to open submenu
     if not wait_for_element_then_press_it(function()
             return self:get_button_by_description(button_description)
         end, 20, 20, button_description) then
