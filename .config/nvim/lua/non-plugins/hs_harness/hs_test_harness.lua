@@ -11,7 +11,7 @@ local log = require("devtools.logs.logger").universal()
 local plenary_dir = vim.fn.stdpath("data") .. "/lazy/plenary.nvim"
 
 local harness = {
-    HIDE_FLOAT_WINDOW = false
+    HIDE_FLOAT_WINDOW = true
 }
 
 local print_output = vim.schedule_wrap(function(_, ...)
