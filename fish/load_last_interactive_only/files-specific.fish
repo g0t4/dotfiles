@@ -479,59 +479,18 @@ if status --is-interactive
 
 end
 
-# *** DISK USAGE ***
-# only expand du, don't also alias
-abbr du _du # sort by size (makes sense only for current dir1) => most of the time this is what I want to do so just use this for `du`
-#  FYI I could add psh => '| sort -hr' global alias (expands anywhere)?
-# retire: abbr du 'grc du -h'  # tree command doesn't show size of dirs (unless showing entire hierarchy so not -L 2 for example, so stick with du command)
-abbr dua 'grc du -ha' # show all files (FYI cannot use -a with -d1)
-#
+# *** DISK USAGE (use `dust` now) ***
 # show only N levels deep
-#   du1 => du -hd 1
-abbr --add duX --regex 'du\d+' --function duX
-function duX
-    string replace --regex '^du' 'grc du -hd' $argv
+#   du1 => dust --depth 1
+#   dust1 => dust --depth 1
+abbr --add dustX --regex '(du|dust)\d+' --function dustX
+function dustX
+    string replace --regex '^(du|dust)' 'dust --depth ' $argv
 end
 #
 abbr df 'grc df -h' # use command to avoid infinite recursion
 # Mac HD: (if fails try df -h and update this alias to be be more general)
 abbr dfm 'grc df -h /System/Volumes/Data'
-
-# a few hard coded _du nested helpers
-function _du3
-    # REALLY JUST USE FINDER AT THIS POINT... can easily drill in  and move around with sizes cached
-    _du "$argv[1]" "$argv[2]" 3
-end
-
-function _du2
-    # todo if I like this then find a way to generalize it...
-    #   one issue is now I am back to the path (first arg) being way to the left.... yucky
-    #   but I also dont really want it to the right b/c then I have to pass all the other args
-    _du "$argv[1]" "$argv[2]" 2
-end
-
-function _du
-    # use this for du now? so I don't have to arrow back and put path in middle (before sort)
-    set dir $argv[1]
-    set threshold $argv[2] # empty to not filter
-    if test -n "$threshold"
-        # otherwise leave empty to not apply it
-        set threshold "-t $threshold"
-    end
-    set levels $argv[3]
-    if test -z "$levels"
-        set levels 1
-    end
-
-    if not test -e $dir
-        log_ --yellow "skipping non-existent dir $argv[2]"
-        return
-    end
-
-    set cmd "grc du -h -d$levels $threshold $dir | sort -h --reverse"
-    log_ --blue -- $cmd
-    eval $cmd
-end
 
 function gpristine_nested_repos
     for i in *
@@ -540,56 +499,35 @@ function gpristine_nested_repos
 end
 
 function review_huge_files
-    # somewhat a reminder how I wanna clean things
-    if test $USER = wes
-        log_blankline
-        log_blankline
-        log_ --bold --brred "USE wesdemos for all VMs/containers/models/etc, do not put on both accounts... or share between them"
-        log_blankline
-        log_blankline
-    end
+    set threshold 10G
 
-    set threshold 100M
-    if test -n "$argv"
-        set threshold "$argv"
-    end
-
-    log_ --bold --white "USE FINDER FOR ~/repos .. often a few repos blow up => .venv or build/target dirs\n   just use this CLI entrypoint as a reminder for common spots and then finder the rest"
-    log_ --bold --white "use gpristine on large repos that can be cleaned"
+    log_ reminders:
+    log_ "  gpristine on large repos"
     log_blankline
 
-    _du $HOME/.cache $threshold
     # .cache => packer, huggingface, whisper, vosk, lm-studio, package managers
-
-    log_ --yellow "Check for other VM dirs in home dir => vbox, vmware fusion"
-    _du $HOME/Parallels $threshold
-
-    _du $HOME/.config $threshold
-    _du $HOME/.local $threshold
-    _du $HOME/.local/share $threshold
-    _du $HOME/.ollama $threshold
-    _du $HOME/Library/Application\ Support/pywhispercpp/models $threshold
-    _du $HOME/Downloads $threshold
-    _du $HOME/.Trash $threshold
-    #_du $HOME/Library $threshold
+    # log_ --yellow "Check for other VM dirs in home dir => vbox, vmware fusion"
 
     # might be a few BIG apps in there worth removing
-    # _du /opt/homebrew $threshold
-    _du /opt/homebrew/Cellar $threshold
-    _du /opt/homebrew/Caskroom $threshold
+    dust /opt/homebrew/ +1G
 
-    #  search these in finder... very easy to find HUGE repos
-    #_du ~/repos # use finder to drill in... sometimes a few repos are MASSIVE
+    # most nuisance files are in home dir and can be found quickly with dust
+    dust ~/ +10G # 10G cumulative filter is AWESOME
+    # consider step down to:
+    #   +5G if 10G filter not enough
+    #   +1G
+    #   might help for these smaller sizes to look at recently modified files only
+    dust --mtime -2 ~/ +100M  # anything over 1G from last two days
 
-    log_ --red "FYI checking home dir is last so feel free to ctrl+c"
-    _du $HOME # $threshold
-    # todo docker image/container store
-    # log files?
-    # VM dirs in home dir
-    # do on entire home dir last too? .. that way can ctrl+c before that point and work on first detected issues
+    # last week, everywhwere:
+    dust --mtime -7 / +100M
+
+    # conversely, look at big + OLD files (not recently used):
+    dust --mtime +100 ~/ +100M
+
+    dust / --min-size 10G
 
     # package caches (get unruly over time)
-    ##   also get moved at times?
     #_du $HOME/.local/share/NuGet # one of these is old! $threshold
     #_du $HOME/.nuget $threshold
     #_du $HOME/.npm $threshold
@@ -602,6 +540,28 @@ function review_huge_files
 
     # maybe clears:
     #    ~/.vscode  # old extensions and stuff here? logs? 4.1G on wesdemos
+
+    # FTR past culprits:
+    #
+    # was 200GB after a few years of logs: ~/.local/state/nvim/log
+    # trash ~/.local/state/nvim/*log
+    #
+    # linqpad was leaking a 200GB file for some reason!
+    # ls -al /Users/*/Library/"Application Support"/LINQPad/**/*log*
+    #
+    # AI models
+    # ~/.ollama  # use llama.cpp exclusively now
+    # ~/Library/Caches/llama.cpp
+    hf cache list
+    #
+    # VMs/containers + their images
+    # ls -al /{Users,home}/*/.cache/packer/*.iso
+    # fd --size +100M . /{Users,home}/*/.vagrant.d
+    # uv cache size -H
+    # ls -al ~/.cache/uv # same size as uv cache size in my testing
+    #
+    sudo chown -R wesdemos:staff ~/.cache/uv/. # fix ownership before prune
+    uv cache prune
 
 end
 
