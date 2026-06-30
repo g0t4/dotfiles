@@ -487,6 +487,22 @@ abbr --add dustX --regex '(du|dust)\d+' --function dustX
 function dustX
     string replace --regex '^(du|dust)' 'dust --depth ' $argv
 end
+# cumulative size on end (right most number) => + means greater than, - means less thatn
+set dust_lots_of_lines "--number-of-lines 500"
+abbr dust_HOME_2G "dust $dust_lots_of_lines ~/ +2G"
+abbr dust_HOMES_2G "dust $dust_lots_of_lines /Users +2G"
+abbr dust_ROOT_10G "dust $dust_lots_of_lines / +10G"
+abbr dust_HOME_recent_100M "dust $dust_lots_of_lines --mtime -3 ~/ +100M"
+abbr dust_HOME_old_100M "dust $dust_lots_of_lines --mtime +90 ~/ +100M" # more than 90 days
+# TODO refine these as you find best combinations
+#
+# short to long options
+abbr --command dust -- "-n" "$dust_lots_of_lines" # default shows terminal height only
+abbr --command dust -- "-M" "--mtime +7 # greater than 7 days ago"  # +/- greater/less than X days ago
+abbr dust_past_week "dust --mtime -7"
+abbr dust_past_month "dust --mtime -30"
+#
+
 #
 abbr df 'grc df -h' # use command to avoid infinite recursion
 # Mac HD: (if fails try df -h and update this alias to be be more general)
