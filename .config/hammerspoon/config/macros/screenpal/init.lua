@@ -290,7 +290,7 @@ end
 
 ---@param callback fun(win: ScreenPalEditorWindow, silences: SilencesController)
 local function detect_silences(callback)
-    -- ensure_in_coroutine(function()
+    ensure_in_coroutine(function()
         local win = get_cached_editor_window()
 
         local timeline_element = win:get_timeline_slider_or_throw()
@@ -306,7 +306,7 @@ local function detect_silences(callback)
         -- log:info("detect_silences calling back with silences:", silences)
         log:info("detect_silences found " .. #silences.all .. " silences")
         callback(win, silences)
-    -- end)
+    end)
 end
 
 ---@param win ScreenPalEditorWindow
