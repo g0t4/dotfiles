@@ -208,13 +208,14 @@ function act_on_silence(win, silence, action)
     timeline:move_playhead_to(timeline_relative_x_start)
 
     -- * activate tool
-    local start_tool_key = ''
     if is_cut then
-        start_tool_key = 'c'
+        local start_tool_key = 'c'
+        hs.eventtap.keyStroke({}, start_tool_key, 0, win.app)
     elseif is_mute then
-        start_tool_key = 'v'
+        local start_tool_key = 'v'
+        hs.eventtap.keyStroke({}, start_tool_key, 0, win.app)
     end
-    hs.eventtap.keyStroke({}, start_tool_key, 0, win.app)
+
     if is_cut then
         -- for volume we wonn't see a tool until full range is selected! so don't wait for no reason!!!
         win.windows:get_tool_bar_window():wait_for_an_open_edit_tool()
