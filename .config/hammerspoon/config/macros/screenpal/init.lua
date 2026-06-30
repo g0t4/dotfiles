@@ -204,10 +204,16 @@ function act_on_silence(win, silence, action)
         end
     end
 
-    -- * set tool start
+    -- * move playhead to start of range
     timeline:move_playhead_to(timeline_relative_x_start)
+    -- so far no wait is necessary after moving playhead!
 
-    -- * activate tool
+    -- *** Activate Tool
+    -- KEEP IN MIND in a SOM detected silence => range is auto selected => toolbar opens right away!
+    --   outside SOM detected silence => no auto range selection => toolbar doesn't show right away!
+    --   basically, auto range selection behaves different
+    --   BUT, you can select start/end and ignore auto range select (not think about it in terms of how the automation works)
+    --   and you need to ignore it b/c your streamdeck buttons exist to auto select a DIFFERENT RANGE!
     if is_cut then
         hs.eventtap.keyStroke({}, 'c', 0, win.app)
         -- DERP... neither cut nor volume tools show toolbar before start and end of range selected
@@ -222,6 +228,7 @@ function act_on_silence(win, silence, action)
         -- hs.timer.usleep(_50ms) -- TODO? try 50ms if need delay
     end
 
+    -- *** SELECT RANGE:
     -- * set tool start
     hs.eventtap.keyStroke({}, "s", 0, win.app)
     -- PRN could wait for time_string to change and/or OK to show (if cancel was first) but neither of these are slam dunk... fine with 100ms here too
