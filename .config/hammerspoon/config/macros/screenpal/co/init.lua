@@ -7,22 +7,28 @@ local CoroutineStateTracker = require("devtools.co.state")
 
 --- ensure we are running inside a non main coroutine
 function ensure_in_coroutine(what, ...)
+    local function ensure_timer()
+        if CoroutineStateTracker.get("timer") == nil then
+            local timer = Timer.new()
+            CoroutineStateTracker.set("timer", timer)
+        end
+    end
+
     local running_thread, ismain = coroutine.running()
     -- log:info("ismain:", ismain, "|", "running_thread:", running_thread)
     -- DO not try to reuse main thread (coroutine), it is not yield/resumable
     if running_thread and not ismain then
         -- log:info("already have running, non-main coroutine, reusing it")
         -- * ensure timer attached on first call to ensure_in_coroutine
-        if CoroutineStateTracker.get("timer") == nil then
-            local timer = Timer.new()
-            CoroutineStateTracker.set("timer", timer)
-        end
+        ensure_timer()
         what(...)
         return
     end
 
     -- log:info("creating coroutine (thread)...")
     local co = coroutine.create(what)
+    ensure_timer()
+
     -- ONLY call resume once, let `what` manage subsequent yield/resume (or delegate it to helpers like sleep_ms and callbacker)
     local ok, err = coroutine.resume(co, ...)
     if not ok then
