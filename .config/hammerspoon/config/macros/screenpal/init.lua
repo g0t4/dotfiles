@@ -210,15 +210,11 @@ function act_on_silence(win, silence, action)
     -- * activate tool
     if is_cut then
         hs.eventtap.keyStroke({}, 'c', 0, win.app)
-    elseif is_mute then
-        hs.eventtap.keyStroke({}, 'v', 0, win.app)
-    end
-
-    if is_cut then
-        -- for volume we wonn't see a tool until full range is selected! so don't wait for no reason!!!
+        -- for cut tool => toolbar shows right away (do not need to select range)
         win.windows:get_tool_bar_window():wait_for_an_open_edit_tool()
     elseif is_mute then
-        -- for volume edit => tool bar will NOT show until after setting the end point
+        hs.eventtap.keyStroke({}, 'v', 0, win.app)
+        -- for volume edit => toolbar only shows once the range is selected
         -- FYI initial tests show that I do not need a delay between setting start/end in/out points
         -- hs.timer.usleep(_50ms) -- PRN if you have issues w/o a delay, add a small delay between s/e start/end cursor movements
     end
