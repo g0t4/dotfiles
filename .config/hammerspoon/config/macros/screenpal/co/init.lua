@@ -25,6 +25,7 @@ function ensure_in_coroutine(what, ...)
         return
     end
 
+    -- FYI no easy way to test this pathway b/c plenary creates a coroutine per test case so this would never fire within plenary test runner
     -- log:info("creating coroutine (thread)...")
     local co = coroutine.create(what)
     ensure_timer()
