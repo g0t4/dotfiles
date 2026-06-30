@@ -124,6 +124,10 @@ function VolumeMenu:wait_for_volume_to_be_muted()
     --  TODO can I find out its state from "Narration" button which has an icon that changes
     --    might have to OCR the element, like I think I am doing with Keyboard Maestro presently
     submenu:press_mute_button()
+
+    -- * ensure submenu is closed
+    -- FYI in testing this completes in 100us b/c the submenu closes rapidly after clicking mute button
+    -- but that also means it doesn't hurt to leave the wait in here...
     wait_until(function()
         return not submenu:is_open()
     end, 20, 20, "submenu is closed")
