@@ -65,7 +65,7 @@ function VolumeSubmenu:_wait_for_button_by_description(description)
     -- TODO rewrite this stuff to use syncify so I can see it all in one damn spot what actually happens (waits vs not) and write/split functions for readability
     local what = wait_for_element(function() return try_get_button_by_desc() end, 20, 20)
     if not what then
-        error("clicking " .. description .. "  button failed")
+        error("timeout waiting for button by description '" .. description .. "'")
     end
     return what
 end
