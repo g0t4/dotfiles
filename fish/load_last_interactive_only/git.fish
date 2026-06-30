@@ -586,3 +586,7 @@ end
 function get_license_MIT0
     _get_license "https://raw.githubusercontent.com/aws/mit-0/refs/heads/master/MIT-0"
 end
+
+abbr git_archive_tgz "git archive --format=tgz --output repo.tgz HEAD" # refs: HEAD/master/etc (files as of that commit/tree)
+abbr git_archive_zip "git archive --format=zip --output repo.zip HEAD"
+abbr git_archive_everything "git bundle create repo.bundle --all" # transfer format
