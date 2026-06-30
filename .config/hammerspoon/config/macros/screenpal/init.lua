@@ -209,11 +209,9 @@ function act_on_silence(win, silence, action)
 
     -- * activate tool
     if is_cut then
-        local start_tool_key = 'c'
-        hs.eventtap.keyStroke({}, start_tool_key, 0, win.app)
+        hs.eventtap.keyStroke({}, 'c', 0, win.app)
     elseif is_mute then
-        local start_tool_key = 'v'
-        hs.eventtap.keyStroke({}, start_tool_key, 0, win.app)
+        hs.eventtap.keyStroke({}, 'v', 0, win.app)
     end
 
     if is_cut then
