@@ -57,6 +57,7 @@ local end_button = range_win:button_by_description_matching("end")
 log:info("end_button", end_button)
 end_button:axPress()
 end_button:dumpAttributes()
+-- FYI I MUCH PREFER THIS METHOD (along with my inspector) to build out APIs around UI interactions!
 
 -- btn1:axPress()
 --
