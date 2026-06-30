@@ -135,7 +135,6 @@ return {
                             symbols         = { modified = '+', },
 
                             fmt             = function(basename, context)
-                                -- add icon to left of active filename (per tab)
                                 local devicons = require('nvim-web-devicons')
                                 local icon, _ = devicons.get_icon(basename, nil, { default = true })
                                 local show_name = basename
@@ -145,8 +144,9 @@ return {
                                 end
                                 return icon .. ' ' .. show_name
                             end,
+
                             -- allow stretching full width of screen (tabline) => else limited to left half (ish) and scrolls in an ugly way
-                            max_length = vim.o.columns - 1,
+                            max_length      = vim.o.columns - 1,
                         },
                     },
                     -- lualine_b = {},
