@@ -229,22 +229,22 @@ function act_on_silence(win, silence, action)
     end
 
     -- PRN! only add wait if issues with timing the start/end of range selection (below)
-    -- -- * wait on range tool bar is SUPER FAST too... I can add this in if issues w/o waiting?
     -- FYI ~200ms to wait for it, NBD actually but still don't do it if not needed
     -- local tool_options = ToolOptionsWindows.new(win.windows)
     -- local range_toolbar = tool_options:wait_for_range_selection_toolbar_window()
     -- log:info("found range_toolbar", range_toolbar)
+    --
+    -- also FTR, if you move playhead and then select start, after open tool, then a range is selcted too... that's not happening here just a heads up that would change what to wait for
+    --   this can still be before setting end point if you moved playhead after starting the tool... right now playhead is moved before starting the edit tool... so not an issue now
 
     -- *** SELECT RANGE:
     -- * set tool start
     hs.eventtap.keyStroke({}, "s", 0, win.app)
     -- log:info("set [s]tart of range")
 
-    -- -- PRN could wait for time_string to change and/or OK to show (if cancel was first) but neither of these are slam dunk... fine with 100ms here too
-    -- -- hs.timer.usleep(_100ms)
     -- local tool_options = ToolOptionsWindows.new(win.windows)
     -- local range_toolbar = tool_options:wait_for_range_selection_toolbar_window()
-    -- -- log:info("found range_toolbar", range_toolbar)
+    -- log:info("found range_toolbar", range_toolbar)
 
     -- * set tool end
     timeline:move_playhead_to(timeline_relative_x_end)
