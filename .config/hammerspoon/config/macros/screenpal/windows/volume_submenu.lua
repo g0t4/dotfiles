@@ -55,7 +55,7 @@ function VolumeSubmenu:_wait_for_button_by_description(description)
         end
         local button = win:button_by_description(description)
         if button and not button:isValid() then
-            log:error("WARNING: Button '" .. description .. "' is not valid, unexpectedly... ", button)
+            log:error("WARNING: button (found by description) '" .. description .. "' is not valid, unexpectedly... ", button)
             -- TODO error here if it means it will always fail after this
         end
         return button
