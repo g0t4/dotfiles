@@ -297,6 +297,7 @@ local function detect_silences(callback)
         local timeline = win:timeline_controller()
         local silences = SilencesController:new(detected, timeline)
         -- log:info("detect_silences calling back with silences:", silences)
+        log:info("detect_silences found " .. #silences.all .. " silences")
         callback(win, silences)
     -- end)
 end

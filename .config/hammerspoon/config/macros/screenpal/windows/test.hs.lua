@@ -11,7 +11,7 @@ local AppWindows = require("config.macros.screenpal.app_windows")
 -- local macros = require("config.macros")
 -- StreamDeckKeyboardMaestroRunner("print('works to dispatch KM macro like streamdeck button press with logging + coroutine context!')") -- works
 -- print("this is from print in hammerspoon (should end up in log file after removing float window in harness)", hs)
-do return end
+
 -- *** test new automations of screenpal w/o restart HS + trigger full actions (streamdeck button)!
 -- PRN setup facade to get at controls in spal app
 local app = get_app_element_or_throw("com.screenpal.app")
@@ -34,7 +34,14 @@ app:asHSApplication():activate()
 
 -- * test act_on_silence(MUTE_INWARD)
 SPal_ActOnThisSilence('MUTE_INWARD') -- streamdeck button triggers this
--- TODO wait for this to be slow again... right now mute is super fast even though I haven't accepted a mute edit so the mute button has to be changed every time... and all are curently fast ... will see if delays creep up later
+--
+-- ensure_in_coroutine(function()
+--     local win, silences = syncify(detect_silences)
+--     local silence = silences:get_this_silence()
+--     act_on_silence(win, silence, "MUTE_INWARD")
+--     -- TODO wait for this to be slow again... right now mute is super fast even though I haven't accepted a mute edit so the mute button has to be changed every time... and all are curently fast ... will see if delays creep up later
+-- end)
+--
 
 -- TODO! just use this script style for now is FINE!
 
