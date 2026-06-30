@@ -34,11 +34,14 @@ app:asHSApplication():activate()
 
 -- * test act_on_silence(MUTE_INWARD)
 -- SPal_ActOnThisSilence('MUTE_INWARD') -- streamdeck button triggers this
-SPal_ActOnThisSilence('CUT_20_OK') -- streamdeck button triggers this
+-- SPal_ActOnThisSilence('CUT_20_OK') -- streamdeck button triggers this
 --
--- hs.eventtap.keyStroke({}, 'c', 0, app)
--- hs.eventtap.keyStroke({}, 's', 0, app)
-
+hs.eventtap.keyStroke({}, 'c', 0, app)
+hs.eventtap.keyStroke({}, 's', 0, app)
+local ToolOptionWindows = require("config.macros.screenpal.windows.tool_options").new(wins)
+local tool_options = ToolOptionWindows.new(wins)
+local range_win = tool_options:wait_for_range_selection_toolbar_window()
+log:info('range_win', range_win)
 --
 -- ensure_in_coroutine(function()
 --     local win, silences = syncify(detect_silences)
