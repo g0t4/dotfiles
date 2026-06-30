@@ -12,9 +12,11 @@ function ensure_in_coroutine(what, ...)
     -- DO not try to reuse main thread (coroutine), it is not yield/resumable
     if running_thread and not ismain then
         -- log:info("already have running, non-main coroutine, reusing it")
-
-        local timer = Timer.new()
-        CoroutineStateTracker.set("timer", timer)
+        -- * ensure timer attached on first call to ensure_in_coroutine
+        if CoroutineStateTracker.get("timer") == nil then
+            local timer = Timer.new()
+            CoroutineStateTracker.set("timer", timer)
+        end
         what(...)
         return
     end
