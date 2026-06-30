@@ -10,7 +10,9 @@ local log = require("devtools.logs.logger").universal()
 
 local plenary_dir = vim.fn.stdpath("data") .. "/lazy/plenary.nvim"
 
-local harness = {}
+local harness = {
+    HIDE_FLOAT_WINDOW = false
+}
 
 local print_output = vim.schedule_wrap(function(_, ...)
     for _, v in ipairs { ... } do
@@ -247,8 +249,10 @@ function run_hammerspoon_tests()
     test_paths({ Path:new(current_file) })
 
     -- * uncomment to close window always (careful you won't see any prints... maybe I should route those to logs anyways... I don't really want the float window w/ hs b/c logs are where it is at)
-    log:info("win_id", harness.last_res.win_id)
-    -- vim.api.nvim_win_hide(harness.last_res.win_id)
+    -- log:info("win_id", harness.last_res.win_id)
+    if harness.HIDE_FLOAT_WINDOW then
+        vim.api.nvim_win_hide(harness.last_res.win_id)
+    end
     -- FYI! restart nvim for changes here to take effect
 end
 
