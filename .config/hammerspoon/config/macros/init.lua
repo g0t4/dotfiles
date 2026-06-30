@@ -21,6 +21,7 @@ function StreamDeckKeyboardMaestroRunner(what)
 
     ensure_in_coroutine(function()
         log:set_coroutine_context("km `" .. what .. "`")
+        log:info("start")
 
         local ok, result = xpcall(
             function()
