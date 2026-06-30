@@ -56,14 +56,14 @@ local function test_paths(paths, opts)
 
             -- Can be turned on to debug
             on_stdout = function(_, data)
-                if path_len == 1 then
+                if path_len == 1 and data ~= nil then
                     -- redirect to log
                     log:info(data)
                 end
             end,
 
             on_stderr = function(_, data)
-                if path_len == 1 then
+                if path_len == 1 and data ~= nil then
                     -- redirect to log
                     log:info(data)
                 end
