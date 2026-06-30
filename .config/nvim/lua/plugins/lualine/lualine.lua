@@ -134,11 +134,16 @@ return {
                             path            = 0,
                             symbols         = { modified = '+', },
 
-                            fmt             = function(name, context)
+                            fmt             = function(basename, context)
                                 -- add icon to left of active filename (per tab)
                                 local devicons = require('nvim-web-devicons')
-                                local icon, _ = devicons.get_icon(name, nil, { default = true })
-                                return icon .. ' ' .. name
+                                local icon, _ = devicons.get_icon(basename, nil, { default = true })
+                                local show_name = basename
+                                if basename == "init.lua" then
+                                    local parent_dir = vim.fn.fnamemodify(context.file, ':h:t')
+                                    show_name = parent_dir .. '/' .. basename
+                                end
+                                return icon .. ' ' .. show_name
                             end,
                             -- allow stretching full width of screen (tabline) => else limited to left half (ish) and scrolls in an ugly way
                             max_length = vim.o.columns - 1,
