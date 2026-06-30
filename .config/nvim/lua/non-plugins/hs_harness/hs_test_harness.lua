@@ -82,7 +82,7 @@ local function test_paths(paths, opts)
 
     -- log:info "Running hammerspoon test/script harness..."
     for i, j in ipairs(jobs) do
-        log:info("Scheduling: " .. j.nvim_busted_path)
+        log:info("Running: " .. j.nvim_busted_path)
         j:start()
         if opts.sequential then
             log:debug("... Sequential wait for job number", i)
