@@ -221,14 +221,17 @@ function act_on_silence(win, silence, action)
     end
     -- FYI so far no need to wait after starting tool
 
-    -- PRN! only add wait if issues with timing the start/end of range selection (below)
-    -- FYI ~200ms to wait for it, NBD actually but still don't do it if not needed
-    -- local tool_options = ToolOptionsWindows.new(win.windows)
-    -- local range_toolbar = tool_options:wait_for_range_selection_toolbar_window()
-    -- log:info("found range_toolbar", range_toolbar)
+    -- TIMING wise carefully consider timing for ALL OF:
+    -- - start 'c'ut edit tool inside of SOM detected silence period
+    -- - start 'v'olume edit tool inside of SOM detected silence period
+    -- - start 'c'ut outside of SOM detected silence
+    -- - start 'v'olume outside of SOM detected silence
+    --  ** VALIDATE TIMING IS OK FOR EACH SCENARIO!
     --
-    -- also FTR, if you move playhead and then select start, after open tool, then a range is selcted too... that's not happening here just a heads up that would change what to wait for
-    --   this can still be before setting end point if you moved playhead after starting the tool... right now playhead is moved before starting the edit tool... so not an issue now
+    -- FYI slight delay for when start cut tool in a SOM detected silence...
+    -- - Without this delay the range start point stays on the auto range start point (effectively like "s" key isn't pressed next)
+    -- - Does not hurt other sceanrios so leave this for all scenarios
+    hs.timer.usleep(_100ms)
 
     -- *** SELECT RANGE:
     -- * set tool start
