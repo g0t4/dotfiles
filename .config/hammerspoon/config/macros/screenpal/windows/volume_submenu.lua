@@ -63,11 +63,11 @@ function VolumeSubmenu:_wait_for_button_by_description(description)
 
     -- PRN sync with what VolumeMenu does for waiting to get its buttons by description...
     -- TODO rewrite this stuff to use syncify so I can see it all in one damn spot what actually happens (waits vs not) and write/split functions for readability
-    if not wait_for_element_then_press_it(function()
-            return try_get_button_by_desc()
-        end, 20, 20) then
+    local what = wait_for_element(function() return try_get_button_by_desc() end, 20, 20)
+    if not what then
         error("clicking " .. description .. "  button failed")
     end
+    return what
 end
 
 function VolumeSubmenu:wait_for_reset_button()
