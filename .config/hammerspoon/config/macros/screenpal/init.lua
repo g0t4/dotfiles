@@ -215,7 +215,10 @@ function act_on_silence(win, silence, action)
         start_tool_key = 'v'
     end
     hs.eventtap.keyStroke({}, start_tool_key, 0, win.app)
-    win.windows:get_tool_bar_window():wait_for_an_open_edit_tool()
+    if start_tool_key == 'c' then
+        -- for volume we wonn't see a tool until full range is selected! so don't wait for no reason!!!
+        win.windows:get_tool_bar_window():wait_for_an_open_edit_tool()
+    end
 
     -- * set tool start
     hs.eventtap.keyStroke({}, "s", 0, win.app)
