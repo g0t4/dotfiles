@@ -1,4 +1,7 @@
 local log = require("config.logs").hammerspoons()
+local Timer = require("devtools.logs.timer")
+local CoroutineStateTracker = require("devtools.co.state")
+
 -- FYI! always check resume result for failure!!!
 --   else wind up swallowing errors!
 
@@ -9,6 +12,9 @@ function ensure_in_coroutine(what, ...)
     -- DO not try to reuse main thread (coroutine), it is not yield/resumable
     if running_thread and not ismain then
         -- log:info("already have running, non-main coroutine, reusing it")
+
+        local timer = Timer.new()
+        CoroutineStateTracker.set("timer", timer)
         what(...)
         return
     end

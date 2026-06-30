@@ -36,6 +36,40 @@ end)
 
 local stop_after_this = only
 
+describe("ensure_in_coroutine", function()
+    it("should not start a new coroutine", function()
+        local co_before, is_main = coroutine.running()
+        assert.not_truthy(is_main, "assumed that test runner starts a coroutine and is thus not main thread") -- is_main is nil in plenary test runner, I thought it was a boolean?
+        ensure_in_coroutine(function()
+            local co_after = coroutine.running()
+            should.be_equal(co_before, co_after)
+        end)
+    end)
+    it("should attach timer to coroutine state", function()
+        local CoroutineStateTracker = require("devtools.co.state")
+        local co, is_main = coroutine.running()
+        assert.not_truthy(is_main, "assumed that test runner starts a coroutine and is thus not main thread") -- is_main is nil in plenary test runner, I thought it was a boolean?
+        ensure_in_coroutine(function()
+            local timer = CoroutineStateTracker.get("timer")
+            assert.not_nil(timer, "timer not set")
+        end)
+    end)
+    it("should not create new timer if ensure_in_coroutine is nested", function()
+        local CoroutineStateTracker = require("devtools.co.state")
+        local co, is_main = coroutine.running()
+        assert.not_truthy(is_main, "assumed that test runner starts a coroutine and is thus not main thread") -- is_main is nil in plenary test runner, I thought it was a boolean?
+        ensure_in_coroutine(function()
+            local timer = CoroutineStateTracker.get("timer")
+            assert.not_nil(timer, "timer not set")
+            ensure_in_coroutine(function()
+                local timer2 = CoroutineStateTracker.get("timer")
+                assert.not_nil(timer2, "timer not set")
+                assert.are.equal(timer, timer2)
+            end)
+        end)
+    end)
+end)
+
 describe("syncify", function()
     -- TODO! should syncify just be about callback only? was there another purpose (i.e. did I originally mash up ensure_in_coroutine+syncify into one func? if so then strip syncify to the bear minimum just to support sync looking callback (assume in coroutine/thread when its used, throw if not)
 
