@@ -20,3 +20,5 @@ end
 
 # * hf CLI
 hf --show-completion > $WES_DOTFILES/fish/completions/hf.fish
+
+fx --comp fish > $WES_DOTFILES/fish/completions/fx.fish
