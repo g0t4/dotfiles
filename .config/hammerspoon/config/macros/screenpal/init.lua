@@ -211,7 +211,10 @@ function act_on_silence(win, silence, action)
     if is_cut then
         hs.eventtap.keyStroke({}, 'c', 0, win.app)
         -- for cut tool => toolbar shows right away (do not need to select range)
-        win.windows:get_tool_bar_window():wait_for_an_open_edit_tool()
+        -- holy crap I don't need to wait for tool bar here either, it seems... good deal!
+        -- FYI I was using wait for toolbar to delay 's' set range [s]tart for cutting... but it seems that might not be necessary
+        -- win.windows:get_tool_bar_window():wait_for_an_open_edit_tool()
+        -- TODO if you have issues with timing around start/end range points then add back a wait for the toolbar (or just solid 50ms wait)
     elseif is_mute then
         hs.eventtap.keyStroke({}, 'v', 0, win.app)
         -- for volume edit => toolbar only shows once the range is selected
