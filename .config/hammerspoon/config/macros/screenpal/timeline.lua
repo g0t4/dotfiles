@@ -246,7 +246,7 @@ local function _move_playhead_to_screen_x(self, playhead_screen_x)
     -- is_concerning = true
     if is_concerning then
         -- FYI when a tool is open, it ends up rounding different to nearest frame (after sometimes), NBD just heads up
-        local msg = "start: " .. known_frame_x
+        local msg = "\nheads up... likely NBD... playhead landed outside expected frames\n   start: " .. known_frame_x
             .. "\n  " .. "  left: " .. frame_left
             .. " " .. "  intended: " .. intended_x
             .. " " .. "  right: " .. frame_right
@@ -268,8 +268,8 @@ function TimelineController:move_playhead_by_seconds(seconds)
     local target_rel_x = playhead_x + seconds * pps
     -- PRN check to make sure this is in the visible range of timline, i.e. make sure playhead is not jumping back while at very start (left side) of timeline
     if target_rel_x < 0 or target_rel_x > self._timeline_frame.w then
-        local message = "WARN: move playhead outside visible range is NOT IMPLEMENTED (YET)"
-        log:info(message)
+        local message = "ERROR: move playhead outside visible range is NOT IMPLEMENTED (YET)"
+        log:error(message)
         hs.alert.show(message)
         -- TODO you could move timeline view with slider below (to shift timeline back) then recompute relative position and click it
         -- TODO OR, could move playhead to exactly relative zero (start of timeline view) => then press left/right arrow to make screenpal do timeline scroll... then recompute relative position with new view range
