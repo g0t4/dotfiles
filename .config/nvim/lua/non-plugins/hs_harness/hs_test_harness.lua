@@ -225,14 +225,14 @@ function harness._run_path(test_type, directory)
 
     for _, p in pairs(paths) do
         print " "
-        print("Loading Tests For: ", p:absolute(), "\n")
+        log:info("Loading Tests For: ", p:absolute(), "\n")
 
-        local ok, _ = pcall(function()
+        local ok, result = pcall(function()
             dofile(p:absolute())
         end)
 
         if not ok then
-            print "Failed to load file"
+            log:error("Failed to load file", result)
         end
     end
 
