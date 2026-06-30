@@ -279,6 +279,11 @@ function act_on_silence(win, silence, action)
         -- * insert pause auto-approved
         SPAL_Insert_Pause()
         win.windows:get_tool_bar_window():wait_for_ok_button_then_press_it()
+
+        -- * preview from start of video (important that the start doesn't have extra click or noises)
+        local timeline = win:timeline_controller()
+        timeline:move_playhead_by_seconds(-1)
+        win:ensure_playing(false)
         return
     end
 
