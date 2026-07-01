@@ -271,7 +271,7 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "S", function()
 end)
 
 
-hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "M", function()
+function uielements_cmd_alt_ctrl_m()
     -- USEFUL to quick check for a menu item
     -- FYI could use this to replace app - Paletro (use canvas to draw menu control)
 
@@ -293,7 +293,7 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "M", function()
     --     -- local title = get_value_or_empty_string(item)
     --     show_it(hs.inspect(item), "<br>")
     -- end
-end)
+end
 
 
 hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "E", function()

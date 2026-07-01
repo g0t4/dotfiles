@@ -14,6 +14,17 @@ local _100ms = 100000
 local _50ms = 50000
 local _10ms = 10000
 
+function screenpal_cmd_alt_ctrl_m()
+    SPal_ActOnThisSilence('MUTE_INWARD')
+end
+function screenpal_cmd_alt_ctrl_r()
+    SPAL_Add_Rectangle()
+end
+function screenpal_cmd_alt_ctrl_l()
+    SPAL_Add_Line()
+end
+
+
 local silences_canvas = nil
 ---@param win ScreenPalEditorWindow
 ---@param silences SilencesController
