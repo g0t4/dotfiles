@@ -1502,7 +1502,7 @@ local bookmarkActions = {
             "ctr", "runc", "k3s", "kubectl", "kubeadm", "PackageReference", "dotnet",
             "CLI", "aspnetcore", "SDK", "dockerignore", "WSL2", "WSL", "VirtualBox", "vagrant",
             "gitignore", "Dockerfile", "docker-compose", "docker-compose.yml", "compose.yml",
-            "package.json", "git", "gRPC", "xDS", "VM", "VMs", "DNS",
+            "package.json", "git", "gRPC", "xDS", "Valkey", "valkey", "Redis", "redis", "VM", "VMs", "DNS",
             "/etc/resolv.conf", "dig", "HCL", "SMTP", "SIGHUP", "SIGKILL", "SIGINT", "SIGTERM",
             "MailHog", "VSCode", "SRV", "curl", "consul-template", "envconsul",
             "localhost", "tcpflow", "tcpdump", "ipconfig", "ifconfig", "NGINX",
