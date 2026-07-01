@@ -1481,7 +1481,7 @@ local bookmarkActions = {
     end,
     sentence_case = function()
         -- Read current clipboard content
-        local txt = hs.pasteboard.readString() or ""
+        local original_text = hs.pasteboard.readString() or ""
 
         -- List of words that should retain their original casing.
         -- These are matched case‑insensitively after the sentence‑case conversion.
@@ -1514,28 +1514,35 @@ local bookmarkActions = {
             "bash_history",
         }
 
-        -- Helper: convert a string to sentence case.
-        local function to_sentence_case(s)
-            return (s:gsub("([^.!?]+)([.!?]?)", function(sentence, punct)
+        -- TODO add tests for this...
+        --   include matching words at start/middle/end
+        --   TODO make it preseve verbatim casing and preserve that instead of lower case match then insert perserve_words...
+        --   I should only preserve a word if I used the casing for it listed above and then I can have dual entries for words that can be either or (i.e. Ansible and ansible, Valkey and valkey, etc)
+
+        local function to_sentence_case(text)
+            return (text:gsub("([^.!?]+)([.!?]?)", function(sentence, punct)
+                log:info("sentence", sentence, "punct", punct)
                 sentence = sentence:lower()
                 sentence = sentence:gsub("^%s*%l", string.upper)
                 return sentence .. punct
             end))
         end
 
-        local new_txt = to_sentence_case(txt)
+        local new_text = " " .. to_sentence_case(original_text) .. " "
 
         -- Preserve the original casing of special words.
         for _, w in ipairs(preserve_words) do
             local lower = w:lower()
             -- Replace any occurrence of the lower‑cased word with the proper case.
-            new_txt = new_txt:gsub(lower, w)
+            new_text = new_text:gsub("%s" .. lower .. "%s", " " .. w .. " ")
         end
 
+        new_text = new_text:gsub("^%s*", ""):gsub("%s*$", "")
+
         -- Write back to clipboard
-        hs.pasteboard.writeObjects({new_txt})
+        hs.pasteboard.writeObjects({ new_text })
         -- Paste the fully converted text
-        hs.eventtap.keyStroke({'cmd'}, 'v')
+        hs.eventtap.keyStroke({ 'cmd' }, 'v')
     end,
     title_case = function()
         -- wrapper function gets title cased value
