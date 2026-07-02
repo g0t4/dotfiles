@@ -59,8 +59,6 @@ function ToolOptionWindows:wait_and_press_freeze_frame_option(description)
 end
 
 --- * RANGE SELECTION TOOLBAR WINDOW
---- has buttons to select to start/end of video file
-
 function ToolOptionWindows:find_range_selection_toolbar_window()
     -- app:window(2):button(2)
     -- AXDescription: Select everything from this point to the start of the video<string>
