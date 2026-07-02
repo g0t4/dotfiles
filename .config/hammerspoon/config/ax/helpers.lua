@@ -58,6 +58,20 @@ axuielemMT.axPress = function(self)
 end
 
 axuielemMT.dumpAttributes = function(self)
+    -- TODO setup describe/overview that builds off role+descc+etc (do I have that already?)
+    -- ... since there's no "name" attr that would universally identify a control
+    local ansi = require("devtools.ansi")
+    local role = self:axRole()
+    local describe = ""
+    if role then
+        describe = role
+    end
+    local description = self:axDescription()
+    if description then
+        describe = describe .. " desc='" .. description .. "'"
+    end
+
+    log:info(ansi.white_bold(ansi.red_bg("  dumpAttributes " .. describe .. "  ")))
     f.each(self:allAttributeValues() or {}, function(name, value)
         log:info(name, value)
     end)
