@@ -55,19 +55,19 @@ snippet hsi "hs.inspect(_)"
 hs.inspect(${0})
 
 snippet logt "log:trace()"
-log:trace("${1}",${1})
+log:trace("${1}",${1:what})
 
 snippet logd "log:debug()"
 log:debug("${1}",${1:what})
 
 snippet logi "log:info()"
-log:info("${1}",${1})
+log:info("${1}",${1:what})
 
 snippet logw "log:warn()"
-log:warn("${1}",${1})
+log:warn("${1}",${1:what})
 
 snippet loge "log:error()"
-log:error("${1}",${1})
+log:error("${1}",${1:what})
 
 # TODO not sure a1/a2 are easy enough to justify reaching for the #... find a new name?
 snippet a1 "array of array"
