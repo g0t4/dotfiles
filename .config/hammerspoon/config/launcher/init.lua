@@ -1,4 +1,5 @@
 local log = require("config.logs").launcher()
+local casing = require("config.launcher.casing")
 local M = {}
 
 -- File launcher using mdfind (Spotlight index)
@@ -1480,69 +1481,20 @@ local bookmarkActions = {
         osascriptOrLog('tell app "System Events" to tell appearance preferences to set dark mode to not dark mode')
     end,
     sentence_case = function()
-        -- Read current clipboard content
-        local original_text = hs.pasteboard.readString() or ""
+        local original_clipboard_text = hs.pasteboard.readString() or "" -- FYI not handling case where pasteboard is not text which I could theoretically handle but MEH
 
-        -- List of words that should retain their original casing.
-        -- These are matched case‑insensitively after the sentence‑case conversion.
-        local preserve_words = {
-            "GNU", "PROMPT_COMMAND", "PIPESTATUS", "IFS", "PATH", "STDERR", "STDOUT",
-            "STDIN", "TTY", "PTY", "PID", "PPID", "UID", "GID", "ANSI", "EOF", "EOL",
-            "shopt", "sed", "awk", "wget", "vim", "nvim", "jq",
-            "grok.com", "x.com", "PDF", "CSV", "eBay", "xAI", "DeepSearch", "DeeperSearch",
-            "vLLM", "FastAPI", "StreamingResponse", "WebSocket", "WebSockets", "HTTPX",
-            "ASGI", "WSGI", "GZipMiddleware", "SlowAPIMiddleware", "SlowApi",
-            "HorizontalPodAutoscaler", "HPA", "CPU", "GitRepo", "K3s", "RKE2", "RKE", "RKE1",
-            "GCP", "GKE", "YAML", "ChatGPT", "K8s", "GPU", "MCP", "ModelContextProtocol",
-            "LLM", "LLMs", "AI", "HTTPS", "GH", "PAT",
-            "StatefulSet", "DaemonSet", "CronJob", "ReplicaSet",
-            "NodePort", "LoadBalancer", "ClusterIP",
-            "PersistentVolume", "PersistentVolumeClaim", "StorageClass",
-            "ConfigMap", "HostPath", "JDK", "DSL", "systemd", "dockerd", "containerd",
-            "ctr", "runc", "k3s", "kubectl", "kubeadm", "PackageReference", "dotnet",
-            "CLI", "aspnetcore", "SDK", "dockerignore", "WSL2", "WSL", "VirtualBox", "vagrant",
-            "gitignore", "Dockerfile", "docker-compose", "docker-compose.yml", "compose.yml",
-            "package.json", "git", "gRPC", "xDS", "Valkey", "valkey", "Redis", "redis", "VM", "VMs", "DNS",
-            "/etc/resolv.conf", "dig", "HCL", "SMTP", "SIGHUP", "SIGKILL", "SIGINT", "SIGTERM",
-            "MailHog", "VSCode", "SRV", "curl", "consul-template", "envconsul",
-            "localhost", "tcpflow", "tcpdump", "ipconfig", "ifconfig", "NGINX",
-            ".editorconfig", "EditorConfig", "Vagrantfile",
-            "LF", "CRLF", "CR",
-            ".gitconfig", ".gitignore", ".gitattributes", ".bash_history", ".zsh_history",
-            ".hush_login", ".zshenv", ".zshrc", ".bashrc", ".bash_logout", ".profile",
-            ".vscode", ".vagrant.d", ".vagrant", ".ssh", ".config",
-            "bash_history",
-        }
+        -- * copy selection
+        hs.eventtap.keyStroke({'cmd'}, 'c')
+        local selected_text = hs.pasteboard.readString() or ""
 
-        -- TODO add tests for this...
-        --   include matching words at start/middle/end
-        --   TODO make it preseve verbatim casing and preserve that instead of lower case match then insert perserve_words...
-        --   I should only preserve a word if I used the casing for it listed above and then I can have dual entries for words that can be either or (i.e. Ansible and ansible, Valkey and valkey, etc)
+        local new_text = casing.sentence_case(selected_text)
 
-        local function to_sentence_case(text)
-            return (text:gsub("([^.!?]+)([.!?]?)", function(sentence, punct)
-                log:info("sentence", sentence, "punct", punct)
-                sentence = sentence:lower()
-                sentence = sentence:gsub("^%s*%l", string.upper)
-                return sentence .. punct
-            end))
-        end
-
-        local new_text = " " .. to_sentence_case(original_text) .. " "
-
-        -- Preserve the original casing of special words.
-        for _, w in ipairs(preserve_words) do
-            local lower = w:lower()
-            -- Replace any occurrence of the lower‑cased word with the proper case.
-            new_text = new_text:gsub("%s" .. lower .. "%s", " " .. w .. " ")
-        end
-
-        new_text = new_text:gsub("^%s*", ""):gsub("%s*$", "")
-
-        -- Write back to clipboard
-        hs.pasteboard.writeObjects({ new_text })
-        -- Paste the fully converted text
+        -- * paste it over selection
+        hs.pasteboard.writeObjects({ new_text  })
         hs.eventtap.keyStroke({ 'cmd' }, 'v')
+
+        -- * restore clipboard
+        hs.pasteboard.setContents(original_clipboard_text)
     end,
     title_case = function()
         -- wrapper function gets title cased value
