@@ -3,6 +3,7 @@ local timer = require("hs.timer")
 require("config.helpers.misc")
 require("config.helpers.perf")
 local log = require("config.logs").hammerspoons()
+local ansi = require("devtools.ansi")
 
 -- goal here is to simplify syntax for navigating children by roles (and index)
 --    :childrenWithRole("AXWindow")[1]
@@ -789,9 +790,14 @@ function wait_for_element(search_func, interval_ms, max_cycles, name)
         cycles = cycles + 1
     end
 
-    log:info("wait_for_element " .. (name or "") .. " timed out after "
-        .. tostring(max_cycles) .. " cycles @ " .. tostring(interval_ms) .. "ms intervals",
-        start)
+    log:info(
+        ansi.red_bg(
+            ansi.white_bold(
+                "wait_for_element timeout " .. (name or "") .. ": "
+                .. max_cycles .. " cycles @ " .. interval_ms .. "ms intervals (are you waiting on the wrong element?)"
+            )
+        )
+    )
     return nil
 end
 
