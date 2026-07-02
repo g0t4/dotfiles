@@ -13,25 +13,37 @@ APPS = {
 --   AND register new keymaps here going forward...
 --  'hotkey.*cmd.*["\']\w["\']'
 
-hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "M", function()
-    local app = hs.application.frontmostApplication()
-    if app:name() == APPS.ScreenPal then
-        screenpal_cmd_alt_ctrl_m()
-    else
-        uielements_cmd_alt_ctrl_m()
-    end
-end)
+local spal_keys = require("config.macros.screenpal").keys
 
-hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "R", function()
-    local app = hs.application.frontmostApplication()
-    if app:name() == APPS.ScreenPal then
-        screenpal_cmd_alt_ctrl_r()
-    end
-end)
+local global_keys = {
+    ["cmd_alt_ctrl|m"] = uielements_cmd_alt_ctrl_m
+}
 
-hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "L", function()
-    local app = hs.application.frontmostApplication()
-    if app:name() == APPS.ScreenPal then
-        screenpal_cmd_alt_ctrl_l()
+function handle_key(modifiers, key_char)
+    local key_key = table.concat(modifiers, "_") .. "|" .. key_char
+    hs.hotkey.bind(modifiers, key_char, function()
+        local app = hs.application.frontmostApplication()
+        if app:name() == APPS.ScreenPal and spal_keys[key_key] then
+            spal_keys[key_key]()
+            return
+        end
+        if not global_keys[key_key] then
+            return
+        end
+        global_keys[key_key]()
+    end)
+end
+
+all_keys = _.union(_.keys(spal_keys), _.keys(global_keys))
+
+for _, key_str in pairs(all_keys) do
+    local modifier_parts, key_char = key_str:match("^([^|]+)%|(.)$")
+    if modifier_parts and key_char then
+        local modifiers = {}
+        for mod in string.gmatch(modifier_parts, "([^_]+)") do
+            table.insert(modifiers, mod)
+        end
+        log:info("  register key", modifiers, key_char)
+        handle_key(modifiers, key_char)
     end
-end)
+end

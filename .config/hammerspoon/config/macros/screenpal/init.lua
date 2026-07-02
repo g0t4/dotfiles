@@ -14,16 +14,7 @@ local _100ms = 100000
 local _50ms = 50000
 local _10ms = 10000
 
-function screenpal_cmd_alt_ctrl_m()
-    SPal_ActOnThisSilence('MUTE_INWARD')
-end
-function screenpal_cmd_alt_ctrl_r()
-    SPAL_Add_Rectangle()
-end
-function screenpal_cmd_alt_ctrl_l()
-    SPAL_Add_Line()
-end
-
+local M = {}
 
 local silences_canvas = nil
 ---@param win ScreenPalEditorWindow
@@ -1412,3 +1403,14 @@ end
 function SPal_RestartSPal_then_ReopenProject()
     get_cached_editor_window():reopen_project(true)
 end
+
+M.keys = {
+    -- FYI careful if the global is not yet defined then it will be a nil value and thus the key will not appear in table (not set)
+    ["cmd_alt_ctrl|m"] = function() SPal_ActOnThisSilence('MUTE_INWARD') end,
+    ["cmd_alt_ctrl|r"] = SPAL_Add_Rectangle,
+    ["cmd_alt_ctrl|l"] = SPAL_Add_Line,
+    ["cmd_alt_ctrl|1"] = SPAL_Edit1,
+    ["cmd_alt_ctrl|2"] = SPAL_Edit2,
+}
+
+return M
