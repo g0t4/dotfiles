@@ -22,7 +22,8 @@ local wins = AppWindows.new(app)
 -- edit edit buttons => keymaps
 
 local tool_win = wins:get_tool_bar_window()
-tool_win:dump_tool_bar_controls()
+-- tool_win:dump_tool_bar_controls()
+log:info(tool_win:get_edits_buttons())
 
 do return end
 
