@@ -13,6 +13,7 @@ local _300ms = 300000
 local _100ms = 100000
 local _50ms = 50000
 local _10ms = 10000
+local _30ms = 30000
 
 local M = {}
 
