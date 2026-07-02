@@ -3233,7 +3233,15 @@ abbr strs_pipe "string split '|'"
 abbr strjoin_lines "string join '\n'"
 #
 #
-# TODO other string * abbrs
+# string match short => long options
+#   btw cannot tie to subcommand, only top level command `string`
+#   only include options I regularly use
+#   btw use a dynamic expansion to qualify overlapping subcommand options
+#   ... i.e. string match has `-n/--index` vs string split has `-n/--no-empty`
+abbr --command string -- "-a" "--all"
+abbr --command string -- "-q" "--quiet"
+abbr --command string -- "-r" "--regex"
+abbr --command string -- "-v" "--invert"
 
 # * BASH
 
