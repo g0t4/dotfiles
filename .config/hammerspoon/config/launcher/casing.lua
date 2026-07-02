@@ -91,4 +91,32 @@ function M.transform_selection_via_clipboard(operation)
     hs.pasteboard.setContents(original_clipboard_text)
 end
 
+local function execOrLog(cmd)
+    local stdout, ok, _, rc = hs.execute(cmd)
+    if not ok then
+        log:error(string.format("[launcher] exec failed (rc=%s): %s", tostring(rc), cmd))
+    end
+    return stdout, ok
+end
+
+function M.title_case(original_text)
+    -- escape '
+    local escaped = original_text:gsub("'", "\\'")
+
+    local stdout, ok = execOrLog("/opt/homebrew/bin/fish -c 'title_case_wrapper " .. escaped .. "'")
+    if not ok then
+        hs.alert.show("Title case conversion failed (see HS console)")
+        return
+    end
+
+    -- Trim trailing whitespace/newlines from the wrapper output.
+    local title = stdout:gsub("%s+$", "")
+    if title == "" then
+        hs.alert.show("Title case produced empty result")
+        return
+    end
+
+    return title
+end
+
 return M

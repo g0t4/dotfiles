@@ -1484,22 +1484,7 @@ local bookmarkActions = {
         casing.transform_selection_via_clipboard(casing.sentence_case)
     end,
     title_case = function()
-        -- wrapper function gets title cased value
-        local stdout, ok = execOrLog("fish -c \"title_case_wrapper\"")
-        if not ok then
-            hs.alert.show("Title case conversion failed (see HS console)")
-            return
-        end
-        -- Trim trailing whitespace/newlines from the wrapper output.
-        local title = stdout:gsub("%s+$", "")
-        if title == "" then
-            hs.alert.show("Title case produced empty result")
-            return
-        end
-        log:info("title cased: ", title) -- remove when things are working well enough
-        hs.pasteboard.writeObjects({ title })
-        -- Paste the fully converted text
-        hs.eventtap.keyStroke({'cmd'}, 'v')
+        casing.transform_selection_via_clipboard(casing.title_case)
     end,
 }
 
