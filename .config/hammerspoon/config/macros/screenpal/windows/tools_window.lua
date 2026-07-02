@@ -65,6 +65,19 @@ function ToolBarWindow:wait_for_tools_submenu()
     return wait_for_element(function() return self:find_tools_submenu() end, 20, 20, "Tools submenu (window)")
 end
 
+function ToolBarWindow:find_opened_cut_sub_toolbar()
+    -- popup above the toolbar
+    -- this window has Remove button:
+    -- AXDescription: Remove<string>
+    -- unique ref: app:window('SOM-FloatingWindow-Type=edit2.toolbar.menu.window-ZOrder=2(Undefined+2)'):button(desc='Remove')   --
+    return self.app_windows:get_window_by_title("SOM-FloatingWindow-Type=edit2.toolbar.menu.window-ZOrder=2(Undefined+2)")
+end
+
+function ToolBarWindow:wait_for_opened_cut_sub_toolbar()
+    -- TODO does anything else use this sub toolbar (i.e. other tools opened, existing edits)
+    return wait_for_element(function() return self:find_opened_cut_sub_toolbar() end, 20, 20, "Opened sub-toolbar for existing Cut")
+end
+
 ---@param exact_match string
 ---@return hs.axuielement | nil
 function ToolBarWindow:get_button_by_description(exact_match)

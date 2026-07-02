@@ -1121,7 +1121,17 @@ function SPal_OpenThisEdit(number)
     -- * open edit by number (left to right)
     local edit_button = tool_window:get_edits_buttons()[number]
     edit_button:axPress() -- PRN make tool_window:open_edit(number)
-    tool_window:wait_for_ok_button() -- ? make func like wait_for_edit_to_be_open() ?
+    local desc = edit_button:axDescription()
+    -- TODO put logic somewhere to decipher the edit type off button names (i.e. is_cut)
+    if desc:match("Cut") then
+        -- cut has a little sub-toolbar that appears above main toolbar (both are open)
+        -- and that subtool bar has a Remove button (or 'r' key)
+        tool_window:wait_for_opened_cut_sub_toolbar()
+        -- FYI a new cut doesn't show this same Remove button / subtoolbar b/c it isn't added yet
+    else
+        -- TODO any other edits not have OK button after edit is opened?
+        tool_window:wait_for_ok_button() -- ? make func like wait_for_edit_to_be_open() ?
+    end
 end
 
 function SPal_PreviewThisEdit(number)
