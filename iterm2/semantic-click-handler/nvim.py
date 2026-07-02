@@ -34,7 +34,6 @@ if os.path.exists(workspace_profile_path):
 # FYI test this w/o literally clicking in iterm2 (i.e. tree output in this sematnic-click-handler dir and click on nvim.fish):
 #   ./nvim.fish  $WES_DOTFILES/iterm2/semantic-click-handler/nvim.py "" "" "" $WES_DOTFILES/iterm2/semantic-click-handler $WES_DOTFILES
 
-
 # exit(0) # for testing, uncomment to stop here
 async def open_nvim_window(connection: iterm2.Connection):
 
@@ -127,7 +126,11 @@ async def open_nvim_window(connection: iterm2.Connection):
     # both of these are closable too.. IOTW neither returns to shell if you quit nvim so either is fine for me for now:
     # fish_to_nvim_cmd = f"/opt/homebrew/bin/fish -c 'nvim \"{clicked_path}\"'"
 
-    if os.path.exists("/usr/local/bin/nvim"):
+    nvim_nix = f"{os.getenv("HOME")}/.nix-profile/bin/nvim"
+    if os.path.exists(nvim_nix):
+        log(f"py - USING {nvim_nix=}")
+        nvim_cmd_path = nvim_nix
+    elif os.path.exists("/usr/local/bin/nvim"):
         log("py - USING CUSTOM /usr/local/bin/nvim build")
         nvim_cmd_path = "/usr/local/bin/nvim"
     elif os.path.exists("opt/homebrew/bin/nvim"):
@@ -167,7 +170,6 @@ async def open_nvim_window(connection: iterm2.Connection):
 
     await window.async_set_variable("user.workspace_root", workspace_root)
     await window.async_set_variable("user.workspace_profile_path", workspace_profile_path)
-
 
 ## NOTES:
 #  - try open new window/tab/pane in nvim popup window and that just opens another nvim instance, not necessarily a bad thing! ... just FYI, think about it
