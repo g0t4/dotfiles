@@ -16,13 +16,22 @@ local AppWindows = require("config.macros.screenpal.app_windows")
 -- PRN setup facade to get at controls in spal app
 local app = get_app_element_or_throw("com.screenpal.app")
 local wins = AppWindows.new(app)
--- wins:_refresh()
--- log:info(wins)
--- local tool_win = wins:get_tool_bar_window()
--- log:info(tool_win)
-
 -- switch to screenpal
-app:asHSApplication():activate()
+-- app:asHSApplication():activate()
+
+-- edit edit buttons => keymaps
+local tool_win = wins:get_tool_bar_window()
+log:info(tool_win)
+local tb = tool_win:find_tool_bar_window()
+tb:dumpAttributes()
+local _ = require("config.helpers.underscore")
+_.each_value(tb:children(), function(child)
+    child:dumpAttributes()
+end)
+
+
+do return end
+
 
 -- -- -- * test v + mute => working fast and fine
 -- -- -- type v key
@@ -33,33 +42,38 @@ app:asHSApplication():activate()
 -- volume_menu:wait_for_volume_to_be_muted() -- TODO anything in here that would not wait appropriately to pull off the volume menu clicking to mute? .. i.e. skip waiting for submenu to appear and just rely on first access to work?
 
 -- * test act_on_silence(MUTE_INWARD)
-SPal_ActOnThisSilence('MUTE_INWARD') -- streamdeck button triggers this
+-- SPal_ActOnThisSilence('MUTE_INWARD') -- streamdeck button triggers this
 
-do return end
--- SPal_ActOnThisSilence('CUT_20_OK') -- streamdeck button triggers this
---
-hs.eventtap.keyStroke({}, 'c', 0, app)
-hs.eventtap.keyStroke({}, 's', 0, app)
-local ToolOptionWindows = require("config.macros.screenpal.windows.tool_options").new(wins)
-local tool_options = ToolOptionWindows.new(wins)
-local range_win = tool_options:wait_for_range_selection_toolbar_window()
-log:info('range_win', range_win)
-local btn1 = range_win:button(1)
-log:info('btn1', btn1) -- help page is button1
--- btn1:dumpAttributes() -- logs the attributes!! very cool (love the logs now)
---
-local start_button = range_win:button_by_description_matching("start")
--- AXDescription => "Select everything from this point to the start of the video"
-log:info("start_button", start_button)
--- start_button:axPress()
--- start_button:dumpAttributes()
---
-local end_button = range_win:button_by_description_matching("end")
--- AXDescription "Select everything from this point to the end of the video"
-log:info("end_button", end_button)
-end_button:axPress()
-end_button:dumpAttributes()
+
+
+
+
+-- -- SPal_ActOnThisSilence('CUT_20_OK') -- streamdeck button triggers this
+-- --
+-- hs.eventtap.keyStroke({}, 'c', 0, app)
+-- hs.eventtap.keyStroke({}, 's', 0, app)
+-- local ToolOptionWindows = require("config.macros.screenpal.windows.tool_options").new(wins)
+-- local tool_options = ToolOptionWindows.new(wins)
+-- local range_win = tool_options:wait_for_range_selection_toolbar_window()
+-- log:info('range_win', range_win)
+-- local btn1 = range_win:button(1)
+-- log:info('btn1', btn1) -- help page is button1
+-- -- btn1:dumpAttributes() -- logs the attributes!! very cool (love the logs now)
+-- --
+-- local start_button = range_win:button_by_description_matching("start")
+-- -- AXDescription => "Select everything from this point to the start of the video"
+-- log:info("start_button", start_button)
+-- -- start_button:axPress()
+-- -- start_button:dumpAttributes()
+-- --
+-- local end_button = range_win:button_by_description_matching("end")
+-- -- AXDescription "Select everything from this point to the end of the video"
+-- log:info("end_button", end_button)
+-- end_button:axPress()
+-- end_button:dumpAttributes()
 -- FYI I MUCH PREFER THIS METHOD (along with my inspector) to build out APIs around UI interactions!
+
+
 
 -- btn1:axPress()
 --
