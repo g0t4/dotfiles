@@ -1409,8 +1409,10 @@ M.keys = {
     ["cmd_alt_ctrl|m"] = function() SPal_ActOnThisSilence('MUTE_INWARD') end,
     ["cmd_alt_ctrl|r"] = SPAL_Add_Rectangle,
     ["cmd_alt_ctrl|l"] = SPAL_Add_Line,
-    ["cmd_alt_ctrl|1"] = SPAL_Edit1,
-    ["cmd_alt_ctrl|2"] = SPAL_Edit2,
+    ["cmd_alt_ctrl|1"] = function() SPal_OpenThisEdit(1) end,
+    ["cmd_alt_ctrl|2"] = function() SPal_OpenThisEdit(2) end,
+    ["cmd_alt_ctrl|3"] = function() SPal_OpenThisEdit(3) end,
+    ["cmd_alt_ctrl|4"] = function() SPal_OpenThisEdit(4) end,
 }
 
 return M
