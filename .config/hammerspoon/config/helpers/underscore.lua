@@ -38,7 +38,7 @@ end
 ---@param t table<T, _>
 ---@param separator string|nil
 ---@return string
-function M.concatKeys(t, separator)
+function M.concat_keys(t, separator)
     separator = separator or ", "
     local result = {}
     for k, _ in pairs(t) do
@@ -52,7 +52,7 @@ end
 ---@param t table<_, T>
 ---@param separator string|nil
 ---@return string
-function M.concatValues(t, separator)
+function M.concat_values(t, separator)
     -- table.concat only works for array tables (integer, consecutive keys that start at 1)
     --   so lets make the same thing but use pairs so we don't miss any items
     --   and we concat the values
@@ -123,7 +123,7 @@ end
 ---@generic T
 ---@param t table<_, T>
 ---@param fn fun(value: T)
-function M.eachValue(t, fn)
+function M.each_value(t, fn)
     for _, v in pairs(t) do
         fn(v)
     end
@@ -137,7 +137,7 @@ function M.ieach(t, fn)
 end
 
 --- preserves order for arrays only (integer, consecutive keys) (uses ipairs)
-function M.ieachKey(t, fn)
+function M.ieach_key(t, fn)
     for i, v in ipairs(t) do
         fn(v, i)
     end
@@ -148,7 +148,7 @@ end
 ---@generic TValue: any
 ---@param t table<TKey, TValue>
 ---@return table<TKey, TValue>
-function M.shallowCopyTable(t)
+function M.shallow_copy_table(t)
     local result = {}
     for k, v in pairs(t) do
         result[k] = v
@@ -178,7 +178,7 @@ end
 ---@param t table<TKey, TValue>
 ---@param valuePredicate fun(value: TValue): boolean
 ---@return table<TKey, TValue>
-function M.whereValues(t, valuePredicate)
+function M.where_values(t, valuePredicate)
     return M.where(t, function(_key, value)
         return valuePredicate(value)
     end)
@@ -190,7 +190,7 @@ end
 ---@param t table<TKey, TValue>
 ---@param keyPredicate fun(key: TKey): boolean
 ---@return table<TKey, TValue>
-function M.whereKeys(t, keyPredicate)
+function M.where_keys(t, keyPredicate)
     return M.where(t, function(key, _value)
         return keyPredicate(key)
     end)
@@ -201,7 +201,7 @@ end
 ---@param t table <string, T>
 ---@param value T
 ---@return string|nil # nil if value is not found
-function getFirstKeyForValue(t, value)
+function get_first_key_for_value(t, value)
     for k, v in pairs(t) do
         if v == value then
             return k
@@ -213,17 +213,15 @@ end
 --  TODO migrate to underscore equivalents above
 --  FYI DO NOT TRY TO EXPORT THESE from this module, instead split them out if you need that.
 
---   some use fun.lua
-local fun = require("fun")
--- TODO break away from fun.lua too (it barely had anything useful anyways)
-
 function EnumTableValues(tbl)
+    -- TOD replace w/ vim.iter (which IIRC I also load into hs lua VM)
+    local fun = require("fun")
     return fun.enumerate(tbl):map(function(key, value)
         return value
     end)
 end
 
-function TableLeftJoin(theTable, separator)
+function table_left_join(theTable, separator)
     -- FYI just to get a bit of practice using luafun library
     --  surprised to find it provides very few methods (i.e. no reverse)
     return EnumTableValues(theTable)
@@ -236,16 +234,7 @@ function TableLeftJoin(theTable, separator)
         end, "")
 end
 
-function TableReverse(theTable)
-    -- just for practice
-    local reversed = {}
-    for _, v in pairs(theTable) do
-        table.insert(reversed, 1, v)
-    end
-    return reversed
-end
-
-function TableContains(theTable, value)
+function table_contains_value(theTable, value)
     for _, v in pairs(theTable) do
         if v == value then return true end
     end
@@ -256,6 +245,34 @@ end
 function table_prepend(theTable, value)
     table.insert(theTable, 1, value)
     return theTable
+end
+
+--- Merges two table arrays into one set (no duplicate values)
+---@param t1 table<any, any>
+---@param t2 table<any, any>
+---@return table<integer, any>
+function M.union(t1, t2)
+    local merged_result = {}
+    local seen_values = {}
+    local index_base1 = 1
+
+    for _, value in pairs(t1) do
+        if not seen_values[value] then
+            seen_values[value] = true
+            merged_result[index_base1] = value
+            index_base1 = index_base1 + 1
+        end
+    end
+
+    for _, value in pairs(t2) do
+        if not seen_values[value] then
+            seen_values[value] = true
+            merged_result[index_base1] = value
+            index_base1 = index_base1 + 1
+        end
+    end
+
+    return merged_result
 end
 
 return M

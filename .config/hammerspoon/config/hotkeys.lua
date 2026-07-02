@@ -1,4 +1,5 @@
 local log = require('devtools.logs.logger').universal()
+local _ = require("config.helpers.underscore")
 
 APPS = {
     ScreenPal = "ScreenPal",

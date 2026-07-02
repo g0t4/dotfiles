@@ -165,7 +165,7 @@ local function show_tooltip_for_element(element, frame)
         if attr_value == "" then goto continue end -- skip empty values, i.e. empty AXDescription
 
         local value = display_attribute(attr_name, attr_value) or ""
-        if TableContains({ "AXValue" }, attr_name) then
+        if table_contains_value({ "AXValue" }, attr_name) then
             -- notoriously long values (i.e. AXValue for iTerm2 window)
             --  and by long I mean like 30 lines (tooltip is entire screen)...
             --  don't worry about things like CustomContent that can be 10 short lines long
@@ -344,7 +344,7 @@ local function show_tooltip_for_element(element, frame)
     local role = element:attributeValue("AXRole")
     local background = { white = 0, alpha = 1 }
     -- if role == "AXWindow" or role == "AXMenuBar" then
-    if TableContains({ "AXMenuBar", "AXWindow" }, role) then
+    if table_contains_value({ "AXMenuBar", "AXWindow" }, role) then
         -- dark green
         background = { hex = "#013220", alpha = 1 }
     elseif role == "AXApplication" then
