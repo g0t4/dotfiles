@@ -74,4 +74,21 @@ function M.sentence_case(original_text)
     return to_sentence_case(original_text)
 end
 
+function M.transform_selection_via_clipboard(operation)
+    local original_clipboard_text = hs.pasteboard.readString() or "" -- FYI not handling case where pasteboard is not text which I could theoretically handle but MEH
+
+    -- * copy selection
+    hs.eventtap.keyStroke({ 'cmd' }, 'c')
+    local selected_text = hs.pasteboard.readString() or ""
+
+    local new_text = operation(selected_text)
+
+    -- * paste it over selection
+    hs.pasteboard.writeObjects({ new_text })
+    hs.eventtap.keyStroke({ 'cmd' }, 'v')
+
+    -- * restore clipboard
+    hs.pasteboard.setContents(original_clipboard_text)
+end
+
 return M

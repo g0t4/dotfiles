@@ -1481,20 +1481,7 @@ local bookmarkActions = {
         osascriptOrLog('tell app "System Events" to tell appearance preferences to set dark mode to not dark mode')
     end,
     sentence_case = function()
-        local original_clipboard_text = hs.pasteboard.readString() or "" -- FYI not handling case where pasteboard is not text which I could theoretically handle but MEH
-
-        -- * copy selection
-        hs.eventtap.keyStroke({'cmd'}, 'c')
-        local selected_text = hs.pasteboard.readString() or ""
-
-        local new_text = casing.sentence_case(selected_text)
-
-        -- * paste it over selection
-        hs.pasteboard.writeObjects({ new_text  })
-        hs.eventtap.keyStroke({ 'cmd' }, 'v')
-
-        -- * restore clipboard
-        hs.pasteboard.setContents(original_clipboard_text)
+        casing.transform_selection_via_clipboard(casing.sentence_case)
     end,
     title_case = function()
         -- wrapper function gets title cased value
