@@ -58,18 +58,26 @@ function ToolOptionWindows:wait_and_press_freeze_frame_option(description)
     press_if_exists(function() return win:button_by_description(description) end)
 end
 
-
 --- * RANGE SELECTION TOOLBAR WINDOW
 --- has buttons to select to start/end of video file
 
--- app:window(2):button(2)
--- AXDescription: Select everything from this point to the start of the video<string>
--- frame: x=1099.0,y=326.0,w=40.0,h=42.0
--- unique ref: app:window('SOM-FloatingWindow-Type=edit2.addedit.toolbar.menu.window-ZOrder=1(Undefined+1)')
---   :button(desc='Select everything from this point to the start of the video')
-
 function ToolOptionWindows:find_range_selection_toolbar_window()
-    return self.app_windows:get_window_by_title("SOM-FloatingWindow-Type=edit2.addedit.toolbar.menu.window-ZOrder=1(Undefined+1)")
+    -- app:window(2):button(2)
+    -- AXDescription: Select everything from this point to the start of the video<string>
+    -- frame: x=1099.0,y=326.0,w=40.0,h=42.0
+    -- unique ref: app:window('SOM-FloatingWindow-Type=edit2.addedit.toolbar.menu.window-ZOrder=1(Undefined+1)')
+    --   :button(desc='Select everything from this point to the start of the video')
+
+    -- error("TODO this is not in use, make sure to verify this is accurate if you add it to a macro")
+
+    -- FYI right now this is just finding tool bar window
+    local tool_bar_window = self.app_windows:get_tool_bar_window()
+    if not tool_bar_window then
+        return nil
+    end
+    -- FYI won't find this on SOM detected silences (if open cut too b/c auto range selected)
+    --  use a cut outside of a SOM detected silence to find this
+    return tool_bar_window:get_button_by_description('Select everything from this point to the start of the video')
 end
 
 function ToolOptionWindows:wait_for_range_selection_toolbar_window()
