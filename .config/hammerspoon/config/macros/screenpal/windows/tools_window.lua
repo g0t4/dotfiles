@@ -1,3 +1,4 @@
+local _ = require("config.helpers.underscore")
 local log = require("config.logs").hammerspoons()
 local Timer = require("config.macros.screenpal.experiments.timer")
 
@@ -178,6 +179,13 @@ end
 
 function ToolBarWindow:get_ok_accept_this_edit_button()
     return self:get_button_by_description_matching("^Accept this edit")
+end
+
+function ToolBarWindow:dump_tool_bar_controls()
+    local win = self:find_tool_bar_window()
+    _.each_value(win:children(), function(child)
+        child:dumpAttributes()
+    end)
 end
 
 return ToolBarWindow

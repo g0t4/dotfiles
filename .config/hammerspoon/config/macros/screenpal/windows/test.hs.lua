@@ -20,15 +20,9 @@ local wins = AppWindows.new(app)
 -- app:asHSApplication():activate()
 
 -- edit edit buttons => keymaps
-local tool_win = wins:get_tool_bar_window()
-log:info(tool_win)
-local tb = tool_win:find_tool_bar_window()
-tb:dumpAttributes()
-local _ = require("config.helpers.underscore")
-_.each_value(tb:children(), function(child)
-    child:dumpAttributes()
-end)
 
+local tool_win = wins:get_tool_bar_window()
+tool_win:dump_tool_bar_controls()
 
 do return end
 
