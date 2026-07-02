@@ -132,12 +132,31 @@ function ToolBarWindow:wait_for_ok_button()
     return wait_for_element(function() return self:get_button_by_description("OK") end, 20, 20, "button OK")
 end
 
+function ToolBarWindow:wait_for_copy_edit_button()
+    -- AXDescription: Copy overlay so you can paste into this or any other video<string>
+    -- unique ref: app:window('SOM-FloatingWindow-Type=edit2.addedit.toolbar.menu.window-ZOrder=1(Undefined+1)')
+    --   :button(desc='Copy overlay so you can paste into this or any other video')
+    --   IIRC this is same window as range selection (tool windo wright?)
+    -- SOM-FloatingWindow-Type=edit2.addedit.toolbar.menu.window-ZOrder=1(Undefined+1)
+
+    -- btw you must open an existing edit to see the duplicate tool
+    return wait_for_element(function() return self:get_button_by_description_matching('Copy overlay') end, 20, 20, "Copy edit button")
+end
+
+function ToolBarWindow:wait_for_copy_edit_button_then_press_it()
+    if not wait_for_element_then_press_it(function() return self:wait_for_copy_edit_button() end, 20, 20) then
+        error("clicking Copy Overlay button failed")
+    end
+    self:wait_for_tools_button() -- tools button shows after b/c opened edit is closed after copy
+    -- no further action, thus don't need return value (not found, no diff than if found)
+end
+
 function ToolBarWindow:wait_for_ok_button_then_press_it()
     if not wait_for_element_then_press_it(function() return self:get_button_by_description("OK") end, 20, 20) then
         error("clicking OK button failed") -- kill action is fine b/c I will be using this in streamdeck button handlers, just means that button press dies
     end
     -- FYI taking 300-400ms to find Tools button, so don't shirk waiting
-    self:wait_for_tools_button()
+    self:wait_for_tools_button() -- this indicates the last tool is closed
     -- no further action, thus don't need return value (not found, no diff than if found)
 end
 

@@ -26,12 +26,12 @@ local tool_win = wins:get_tool_bar_window()
 -- tool_win:dump_tool_bar_controls()
 log:info(tool_win:get_edits_buttons())
 
+copy = tool_win:wait_for_copy_edit_button()
+
 
 -- start cut tool
 hs.eventtap.keyStroke({}, 'c', 0, app)
 local options = ToolOptionWindows.new(wins)
-local range_select_win = options:find_range_selection_toolbar_window()
-log:info("range_select_win", range_select_win)
 
 
 do return end
