@@ -27,11 +27,12 @@ local tool_win = wins:get_tool_bar_window()
 log:info(tool_win:get_edits_buttons())
 
 copy = tool_win:wait_for_copy_edit_button()
+log:info("copy",copy)
 
 
--- start cut tool
-hs.eventtap.keyStroke({}, 'c', 0, app)
-local options = ToolOptionWindows.new(wins)
+-- -- start cut tool
+-- hs.eventtap.keyStroke({}, 'c', 0, app)
+-- local options = ToolOptionWindows.new(wins)
 
 
 do return end

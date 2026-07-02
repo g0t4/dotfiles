@@ -1176,7 +1176,7 @@ function SPal_RemoveThisEdit(number)
     end
 end
 
-function SPal_CopyThisEdit(number)
+function SPal_CopyOverlayEdit(number)
     number = number or 1
 
     -- FYI AFAICT "Copy overlay" only applies to Overlay edits (shapes, arrows, images, ...)
