@@ -238,6 +238,11 @@ function act_on_silence(win, silence, action)
     -- *** SELECT RANGE:
     -- * set tool start
     hs.eventtap.keyStroke({}, "s", 0, win.app)
+    --
+    -- FYI I haven't noticed any issues needing a delay when not in a SOM detected silence:
+    hs.timer.usleep(_10ms) -- slight delay helps with auto range in SOM detected silences... w/o this delay, the start point randomly remains at the start of the original auto-range (from opening range based tool in a SOM detected silence)
+    -- TODO adjust up on 10ms if start point still messes up at times
+
     -- log:info("set [s]tart of range")
 
     -- local tool_options = ToolOptionsWindows.new(win.windows)
