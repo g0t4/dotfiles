@@ -7,8 +7,8 @@ function M.hammerspoons()
     return logger.create("hammerspoons.log")
 end
 
-function M.km_run_lua()
-    return logger.create("km_run_lua.log")
+function M.macros()
+    return logger.create("macros.log")
 end
 
 function M.launcher()

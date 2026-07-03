@@ -1,5 +1,5 @@
 require("config._packages")
-local log = require("config.logs").km_run_lua()
+local log = require("config.logs").macros()
 
 local M = {}
 
