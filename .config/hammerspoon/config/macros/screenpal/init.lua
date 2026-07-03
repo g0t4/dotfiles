@@ -881,31 +881,31 @@ function SPal_Mute_Inward_Then_OK_Then_Preview()
     end)
 end
 
-function SPal_OpenSilence_AdjustStartInward()
-    _Spal_OpenSilence_Then(function()
+function SPAL_AdjustStartInward()
+    _adjust_edit(function()
         SPal_AdjustSelection("start", -1)
     end)
 end
 
-function SPal_OpenSilence_AdjustStartOutward()
-    _Spal_OpenSilence_Then(function()
+function SPAL_AdjustStartOutward()
+    _adjust_edit(function()
         SPal_AdjustSelection("start", 1)
     end)
 end
 
-function SPal_OpenSilence_AdjustEndInward()
-    _Spal_OpenSilence_Then(function()
+function SPAL_AdjustEndInward()
+    _adjust_edit(function()
         SPal_AdjustSelection("end", -1)
     end)
 end
 
-function SPal_OpenSilence_AdjustEndOutward()
-    _Spal_OpenSilence_Then(function()
+function SPAL_AdjustEndOutward()
+    _adjust_edit(function()
         SPal_AdjustSelection("end", 1)
     end)
 end
 
-function _Spal_OpenSilence_Then(adjust_callback)
+function _adjust_edit(adjust_callback)
     -- FYI! this now detects if an edit tool is open or not (only opens if NOT)
     --   AND currently assumes want to open Volume edit if not (could parameterize type)
     ensure_in_coroutine(function()
