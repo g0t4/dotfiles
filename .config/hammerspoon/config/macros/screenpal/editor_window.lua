@@ -4,6 +4,8 @@ local TimelineController = require('config.macros.screenpal.timeline')
 require("config.macros.streamdeck.commands")
 local log = require("config.logs").hammerspoons()
 local inspect = require("hs.inspect")
+local Timer = require("devtools.logs.timer")
+
 
 local _200ms = 200000
 local _100ms = 100000
@@ -461,7 +463,6 @@ end
 
 ---@return integer? level -- 0(not zoomed),1,2,3 or nil(failure)
 function ScreenPalEditorWindow:detect_zoom_level()
-    local Timer = require("config.macros.screenpal.experiments.timer")
     local timer = Timer.new()
 
     if not self:is_zoomed() then

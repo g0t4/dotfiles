@@ -1,6 +1,6 @@
 local _ = require("config.helpers.underscore")
 local log = require("config.logs").hammerspoons()
-local Timer = require("config.macros.screenpal.experiments.timer")
+local Timer = require("devtools.logs.timer")
 
 ---@class ToolBarWindow
 ---@field app_windows AppWindows
