@@ -1,4 +1,4 @@
-local log = require("config.logs").hammerspoons()
+local log = require("config.logs").macros()
 
 function Parallels_CloseFocusedWindow()
     -- because Parallels Desktop, in their fucking infinite wisdom, decided to disable Cmd+W for all windows in the app

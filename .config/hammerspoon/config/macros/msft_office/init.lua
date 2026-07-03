@@ -1,4 +1,4 @@
-local log = require("config.logs").hammerspoons()
+local log = require("config.logs").macros()
 
 --
 -- *** OFFICE RIBBON HELPERS ***

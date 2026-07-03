@@ -1,4 +1,4 @@
-local log = require("config.logs").hammerspoons()
+local log = require("config.logs").macros()
 
 function StreamDeckExcelEnsureTabOpen(tabName)
     MicrosoftOfficeEnsureTabSelected("Microsoft Excel", tabName)

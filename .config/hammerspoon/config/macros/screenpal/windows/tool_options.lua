@@ -1,4 +1,4 @@
-local log = require("config.logs").hammerspoons()
+local log = require("config.logs").macros()
 ---@class ToolOptionWindows
 ---@field app_windows AppWindows
 local ToolOptionWindows = {}

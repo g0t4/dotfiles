@@ -1,5 +1,5 @@
 local inspect = require "hs.inspect"
-local log = require("config.logs").hammerspoons()
+local log = require("config.logs").macros()
 
 local function get_preview_app()
     return GetAppElement("com.apple.Preview")

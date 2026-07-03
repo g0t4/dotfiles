@@ -2,7 +2,7 @@ local AppWindows = require("config.macros.screenpal.app_windows")
 require("config.macros.screenpal.co")
 local TimelineController = require('config.macros.screenpal.timeline')
 require("config.macros.streamdeck.commands")
-local log = require("config.logs").hammerspoons()
+local log = require("config.logs").macros()
 local inspect = require("hs.inspect")
 local Timer = require("devtools.logs.timer")
 

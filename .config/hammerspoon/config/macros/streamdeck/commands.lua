@@ -1,5 +1,5 @@
 -- FYI this is mostly a duplicate of the same module in the separate stremadeck controller repo
-local log = require("config.logs").hammerspoons()
+local log = require("config.logs").macros()
 
 function runCommand(cmd)
     -- AVOID hs.execute and os.execute... PITA, can't see STDERR or not easily

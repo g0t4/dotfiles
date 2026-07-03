@@ -1,5 +1,5 @@
 local _ = require("config.helpers.underscore")
-local log = require("config.logs").hammerspoons()
+local log = require("config.logs").macros()
 local Timer = require("devtools.logs.timer")
 
 ---@class ToolBarWindow

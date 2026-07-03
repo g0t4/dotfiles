@@ -1,5 +1,5 @@
 local FcpxEditorWindow = require("config.macros.fcpx.editor_window")
-local log = require("config.logs").hammerspoons()
+local log = require("config.logs").macros()
 
 ---@return hs.axuielement
 function GetFcpxAppElement()

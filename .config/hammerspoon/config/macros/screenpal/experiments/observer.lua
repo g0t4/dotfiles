@@ -1,5 +1,5 @@
 local app = get_app_element_or_throw("com.screenpal.app")
-local log = require("config.logs").hammerspoons()
+local log = require("config.logs").macros()
 log:info("app", app)
 local pid = app:pid()
 local observer = hs.axuielement.observer.new(pid)

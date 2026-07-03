@@ -3,7 +3,7 @@
 -- local hs_config = os.getenv("WES_DOTFILES") .. "/.config/hammerspoon"
 -- package.path = package.path .. ";" .. hs_config .. "/?.lua"
 
-local log = require("config.logs").hammerspoons()
+local log = require("config.logs").macros()
 local editor_window = require("config.macros.screenpal.editor_window")
 local AppWindows = require("config.macros.screenpal.app_windows")
 local ToolOptionWindows = require("config.macros.screenpal.windows.tool_options")

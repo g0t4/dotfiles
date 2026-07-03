@@ -1,4 +1,4 @@
-local log = require("config.logs").hammerspoons()
+local log = require("config.logs").macros()
 
 local function percent_to_dmx(percent)
     local value = math.floor(percent / 100 * 65535)

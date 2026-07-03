@@ -1,5 +1,5 @@
 local parse_time_to_seconds = require('config.macros.screenpal.helpers')
-local log = require("config.logs").hammerspoons()
+local log = require("config.logs").macros()
 
 ---@class TimelineController
 ---@field _timeline_frame AXFrame

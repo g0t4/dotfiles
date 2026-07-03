@@ -8,7 +8,7 @@ local combined = require('devtools.diff.combined')
 local describe = require('devtools.tests.define.describe')
 local only = require('devtools.tests.define.only')
 local skip = require('devtools.tests.define.skip')
-local log = require("config.logs").hammerspoons()
+local log = require("config.logs").macros()
 
 require("config.macros.screenpal.co")
 local TestTimer = require("config.macros.screenpal.co.tests.timer")
