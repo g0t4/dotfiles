@@ -10,8 +10,17 @@ end
 -- `q` as in [q]uickfix
 -- TODO move this somewhere else too, was gonna use <leader>h and hence put here but I want <leader>q now
 vim.keymap.set('n', "<leader>qhs", open_hammerspoon_failure_in_quickfix)
-vim.keymap.set('n', "<leader>qn", function() end) -- TODO_open_neovim_failure_in_quickfix
-vim.keymap.set('n', "<leader>qc", function() end) -- TODO open clipboard in quickfix (already done with hs quickfix approach (move part back here to nvim))
+
+-- FYI in treesitter you can open in quick fix with ctrl-q and then use these for navigating items:
+-- quickfix item navigation:
+vim.keymap.set('n', "<leader>qn", function() vim.cmd('cnext') end) -- next item in quickfix
+vim.keymap.set('n', "<leader>qp", function() vim.cmd('cprev') end) -- prev item in quickfix
+-- move by file:
+vim.keymap.set('n', "<leader>qnf", function() vim.cmd('cnfile') end)
+vim.keymap.set('n', "<leader>qpf", function() vim.cmd('cpfile') end)
+
+vim.keymap.set('n', "<leader>qp", function() vim.cmd('cprev') end) -- prev item in quickfix
+-- vim.keymap.set('n', "<leader>qc", function() end) -- TODO open clipboard in quickfix (already done with hs quickfix approach (move part back here to nvim))
 
 
 -- TODO last failure => AskAgent :)
