@@ -431,10 +431,16 @@ end
 # -d  --max-depth                   (Descend at most NUM directories.)
 #
 # --passthru            (Print both matching and non-matching lines.)
-#
+
 # --sort                           (Sort results in ascending order.)
 # --sortr                         (Sort results in descending order.)
 # --sort-files              ((DEPRECATED) Sort results by file path.)
+# reminder abbrs for tab completing only (now that my fix is merged in fish for tab completing anywhere abbrs)
+abbr -- sort_path "--sort=path"
+abbr -- sort_accessed "--sort=accessed"
+abbr -- sort_modified "--sort=modified"
+abbr -- sort_created "--sort=created"
+
 #
 # --engine                              (Specify which regex engine to use.)
 # -e  --regexp                              (A pattern to search for.)
