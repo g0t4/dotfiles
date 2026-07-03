@@ -837,6 +837,9 @@ function wait_until(is_done, interval_ms, max_cycles, name)
     local cycles = 0
     while cycles < max_cycles do
         local finished = is_done()
+        if finished ~= true and finished ~= false then
+            log:warn("is_done() should only return a boolean, did you forget a `return`? returned: ", finished)
+        end
         if finished then
             log_if_slower_than_100ms("wait_until " .. (name or ""), start)
             return true

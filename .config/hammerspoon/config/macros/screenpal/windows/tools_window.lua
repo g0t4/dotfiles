@@ -104,12 +104,10 @@ end
 function ToolBarWindow:wait_for_an_open_edit_tool()
     -- PRN return edit tool type? (see notes in is_an_edit_tool_open() below)
     -- toolbar opens to cancel/ok one edit tool is opened/started
-    wait_until(function() self:is_an_edit_tool_open() end, 20, 20, "edit tool is open?")
+    wait_until(function() return self:is_an_edit_tool_open() end, 20, 20, "edit tool is open?")
 end
 
---- is it open right now?
----   USE "wait" to wait for it to be open
---- alias to express intention that an edit tool is open
+--- make intent explicit... vs just looking for OK... why we want to find OK!
 --- (not just ok/cancel which technically could be open due to other reasons, though not AFAIK)
 function ToolBarWindow:is_an_edit_tool_open()
     -- PRN return edit tool type? not sure I can reliably discern that though
