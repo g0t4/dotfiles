@@ -30,5 +30,5 @@ function SDECKCFG_open_button_color_picker()
         error_if_nil(front_window, "no front window found")
 
         return front_window:button_with_identifier("ESDStreamDeckApplication.ESDPopoverView.ESDTitleStyleEditor.colorButton")
-    end)
+    end, "colorButton")
 end

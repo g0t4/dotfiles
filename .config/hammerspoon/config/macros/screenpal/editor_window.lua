@@ -350,7 +350,7 @@ function ScreenPalEditorWindow:reopen_project(restart)
                     return desc == title
                 end)
                 :totable()[1]
-        end, 100, 200) -- 200 cycles × 100 ms/cycle = 20 000 ms → 20 seconds (for restart to complete and find and reopen project)
+        end, "screenpal editor after restart", 100, 200) -- 200 cycles × 100 ms/cycle = 20 000 ms → 20 seconds (for restart to complete and find and reopen project)
 
         if not btn_reopen_project then
             error("cannot find project to re-open, aborting...")
@@ -391,7 +391,7 @@ function ScreenPalEditorWindow:wait_until_time_changes(before_seconds)
         -- PRN could check for specific amount of time change
         local now_seconds = self:get_current_time()
         return before_seconds ~= now_seconds
-    end)
+    end, "until_time_changes")
 end
 
 function ScreenPalEditorWindow:toggle_AXEnhancedUserInterface()

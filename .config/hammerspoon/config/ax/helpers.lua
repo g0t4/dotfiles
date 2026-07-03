@@ -773,7 +773,7 @@ end
 ---@param max_cycles? number
 ---@param name string? - optional name for logging
 ---@return hs.axuielement?
-function wait_for_element(search_func, interval_ms, max_cycles, name)
+function wait_for_element(search_func, name, interval_ms, max_cycles)
     interval_ms = interval_ms or 20
     max_cycles = max_cycles or 30
 
@@ -805,9 +805,10 @@ end
 ---@param max_cycles? number
 ---@param name string? - optional name for logging
 ---@return boolean
-function wait_for_element_then_press_it(search_func, interval_ms, max_cycles, name)
+function wait_for_element_then_press_it(search_func, name, interval_ms, max_cycles)
+    -- TODO change order here too
     -- PRN extract generic wait_for_element_then_perform_action(..., action_name)
-    local elem = wait_for_element(search_func, interval_ms, max_cycles, name)
+    local elem = wait_for_element(search_func, name, interval_ms, max_cycles)
     if elem then
         local success, err = elem:performAction("AXPress")
         -- log:info("AXPress result: ", success, ", err: ", err)
@@ -827,7 +828,7 @@ end
 ---@param max_cycles? number
 ---@param name string? - optional name for logging
 ---@return boolean
-function wait_until(is_done, interval_ms, max_cycles, name)
+function wait_until(is_done, name, interval_ms, max_cycles)
     -- TODO rewrite with syncify
     interval_ms = interval_ms or 20
     max_cycles = max_cycles or 30

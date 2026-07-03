@@ -26,7 +26,7 @@ function PPTX_SaveAs()
     --
     local save_as_name = wait_for_element(function()
         return app:window(1):sheet(1):splitGroup(1):textField(2)
-    end, 100, 200) -- 200 cycles × 100 ms/cycle = 20 000 ms → 20 seconds (for restart to complete and find and reopen project)
+    end, "save_as_name", 100, 200) -- 200 cycles × 100 ms/cycle = 20 000 ms → 20 seconds (for restart to complete and find and reopen project)
     -- set name to just "thumb" instead of thumbs
     save_as_name:setAttributeValue("AXValue", "thumb.png")
 

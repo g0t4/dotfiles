@@ -16,7 +16,7 @@ function ToolOptionWindows:find_shape_picker_window()
 end
 
 function ToolOptionWindows:wait_for_shape_picker_window()
-    return wait_for_element(function() return self:find_shape_picker_window() end, 20, 20, "Shape picker window")
+    return wait_for_element(function() return self:find_shape_picker_window() end, "Shape picker window")
 end
 
 ---@alias ShapeType "Rectangle"|"RoundedRectangle"|"Triangle"|"Oval"  |  "Star"|"Heart"|"Line" | ""
@@ -37,7 +37,7 @@ function ToolOptionWindows:find_shape_picker_submenu_window()
 end
 
 function ToolOptionWindows:wait_for_shape_picker_submenu_window()
-    return wait_for_element(function() return self:find_shape_picker_submenu_window() end, 20, 20, "Shape picker submenu window")
+    return wait_for_element(function() return self:find_shape_picker_submenu_window() end, "Shape picker submenu window")
 end
 
 function ToolOptionWindows:get_freeze_tool_window()
@@ -45,7 +45,7 @@ function ToolOptionWindows:get_freeze_tool_window()
 end
 
 function ToolOptionWindows:wait_for_freeze_tool_window()
-    return wait_for_element(function() return self:get_freeze_tool_window() end, 20, 20, "Freeze tool window")
+    return wait_for_element(function() return self:get_freeze_tool_window() end, "Freeze tool window")
 end
 
 function ToolOptionWindows:wait_and_press_freeze_frame_option(description)
@@ -79,7 +79,7 @@ function ToolOptionWindows:find_range_selection_toolbar_window()
 end
 
 function ToolOptionWindows:wait_for_range_selection_toolbar_window()
-    return wait_for_element(function() return self:find_range_selection_toolbar_window() end, 20, 20, "Range selection toolbar window")
+    return wait_for_element(function() return self:find_range_selection_toolbar_window() end, "Range selection toolbar window")
 end
 
 return ToolOptionWindows

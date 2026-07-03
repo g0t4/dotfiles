@@ -97,7 +97,7 @@ end
 function VolumeMenu:wait_for_narrate_title_button()
     return wait_for_element(function()
         return self:get_button_by_description("Narration")
-    end, 20, 20, "button Narration")
+    end, "narrate title button")
 end
 
 function VolumeMenu:_wait_for_submenu_to_be_open()
@@ -108,7 +108,7 @@ function VolumeMenu:_wait_for_submenu_to_be_open()
     --  then click its button to open submenu
     if not wait_for_element_then_press_it(function()
             return self:get_button_by_description(button_description)
-        end, 20, 20, button_description) then
+        end, button_description) then
         error("clicking " .. button_description .. "  button failed")
     end
 
@@ -130,7 +130,7 @@ function VolumeMenu:wait_for_volume_to_be_muted()
     -- but that also means it doesn't hurt to leave the wait in here...
     wait_until(function()
         return not submenu:is_open()
-    end, 20, 20, "submenu is closed")
+    end, "submenu is closed")
 end
 
 return VolumeMenu

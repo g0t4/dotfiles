@@ -33,7 +33,7 @@ function ToolBarWindow:wait_for_tools_menu()
     -- TODO do I do any window waits elsewhere?
     -- IIRC this can be like 50ms wait for window refersh (or maybe more)
     -- TODO! add a wait_for_window on AppWindows
-    return wait_for_element(function() return self:find_tools_menu() end, 20, 20, "Tools main menu (window)")
+    return wait_for_element(function() return self:find_tools_menu() end, "Tools main menu (window)")
 end
 
 function ToolBarWindow:find_tools_submenu()
@@ -62,7 +62,7 @@ function ToolBarWindow:find_tools_submenu()
 end
 
 function ToolBarWindow:wait_for_tools_submenu()
-    return wait_for_element(function() return self:find_tools_submenu() end, 20, 20, "Tools submenu (window)")
+    return wait_for_element(function() return self:find_tools_submenu() end, "Tools submenu (window)")
 end
 
 function ToolBarWindow:find_opened_cut_sub_toolbar()
@@ -75,7 +75,7 @@ end
 
 function ToolBarWindow:wait_for_opened_cut_sub_toolbar()
     -- TODO does anything else use this sub toolbar (i.e. other tools opened, existing edits)
-    return wait_for_element(function() return self:find_opened_cut_sub_toolbar() end, 20, 20, "Opened sub-toolbar for existing Cut")
+    return wait_for_element(function() return self:find_opened_cut_sub_toolbar() end, "Opened sub-toolbar for existing Cut")
 end
 
 ---@param exact_match string
@@ -104,7 +104,7 @@ end
 function ToolBarWindow:wait_for_an_open_edit_tool()
     -- PRN return edit tool type? (see notes in is_an_edit_tool_open() below)
     -- toolbar opens to cancel/ok one edit tool is opened/started
-    wait_until(function() return self:is_an_edit_tool_open() end, 20, 20, "edit tool is open?")
+    wait_until(function() return self:is_an_edit_tool_open() end, "edit tool is open")
 end
 
 --- make intent explicit... vs just looking for OK... why we want to find OK!
@@ -121,21 +121,21 @@ function ToolBarWindow:get_tools_button()
 end
 
 function ToolBarWindow:wait_for_tools_button()
-    return wait_for_element(function() return self:get_button_by_description("Tools") end, 20, 20, "button Tools")
+    return wait_for_element(function() return self:get_button_by_description("Tools") end, "button Tools")
 end
 
 function ToolBarWindow:wait_for_tools_button_then_press_it()
-    if not wait_for_element_then_press_it(function() return self:get_button_by_description("Tools") end, 20, 20) then
+    if not wait_for_element_then_press_it(function() return self:get_button_by_description("Tools") end, "tools button") then
         error("clicking Tools button failed") -- kill action is fine b/c I will be using this in streamdeck button handlers, just means that button press dies
     end
 end
 
 function ToolBarWindow:wait_for_ok_button()
-    return wait_for_element(function() return self:get_button_by_description("OK") end, 20, 20, "button OK")
+    return wait_for_element(function() return self:get_button_by_description("OK") end, "button OK")
 end
 
 function ToolBarWindow:wait_for_ok_button_then_press_it()
-    if not wait_for_element_then_press_it(function() return self:get_button_by_description("OK") end, 20, 20) then
+    if not wait_for_element_then_press_it(function() return self:get_button_by_description("OK") end, "ok button") then
         error("clicking OK button failed") -- kill action is fine b/c I will be using this in streamdeck button handlers, just means that button press dies
     end
     -- FYI taking 300-400ms to find Tools button, so don't shirk waiting
@@ -196,11 +196,11 @@ function ToolBarWindow:wait_for_copy_edit_button()
     -- SOM-FloatingWindow-Type=edit2.addedit.toolbar.menu.window-ZOrder=1(Undefined+1)
 
     -- btw you must open an existing edit to see the duplicate tool
-    return wait_for_element(function() return self:get_button_by_description_matching('Copy overlay') end, 20, 20, "Copy edit button")
+    return wait_for_element(function() return self:get_button_by_description_matching('Copy overlay') end, "Copy edit button")
 end
 
 function ToolBarWindow:wait_for_copy_edit_button_then_press_it()
-    if not wait_for_element_then_press_it(function() return self:wait_for_copy_edit_button() end, 20, 20) then
+    if not wait_for_element_then_press_it(function() return self:wait_for_copy_edit_button() end, "copy edit button") then
         error("clicking Copy Overlay button failed")
     end
     self:wait_for_tools_button() -- tools button shows after b/c opened edit is closed after copy
