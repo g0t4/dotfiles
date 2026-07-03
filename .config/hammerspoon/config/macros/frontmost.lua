@@ -1,4 +1,4 @@
-local log = require("config.logs").macros()
+local log = require("config.logs").hammerspoons()
 
 ---@param menu string
 function PressMenuItemRegex(menu)

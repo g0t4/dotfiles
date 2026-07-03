@@ -1,4 +1,4 @@
-local log = require("config.logs").macros()
+local log = require("config.logs").hammerspoons()
 local Timer = require("devtools.logs.timer")
 local CoroutineStateTracker = require("devtools.co.state")
 

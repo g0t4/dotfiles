@@ -1,4 +1,4 @@
-local log = require("config.logs").macros()
+local log = require("config.logs").hammerspoons()
 
 -- *** ask-openai troubleshooting brave devtools randomly doesn't get selected text
 

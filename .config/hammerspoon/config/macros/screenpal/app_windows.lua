@@ -1,5 +1,5 @@
 local ToolBarWindow = require("config.macros.screenpal.windows.tools_window")
-local log = require("config.logs").macros()
+local log = require("config.logs").hammerspoons()
 
 ---@class AppWindows
 ---@field app hs.axuielement

@@ -1,5 +1,5 @@
 require("config._packages")
-local log = require("config.logs").macros()
+local log = require("config.logs").hammerspoons()
 
 local M = {}
 

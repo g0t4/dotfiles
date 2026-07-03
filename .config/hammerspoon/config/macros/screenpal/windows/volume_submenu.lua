@@ -1,4 +1,4 @@
-local log = require("config.logs").macros()
+local log = require("config.logs").hammerspoons()
 
 --
 -- ?? specialize by sub-menu type, so I have one of these for volume's submenu?

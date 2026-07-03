@@ -1,6 +1,6 @@
 local FcpxInspectorPanel = require("config.macros.fcpx.inspector_panel")
 local FcpxTopToolbar = require("config.macros.fcpx.top_toolbar")
-local log = require("config.logs").macros()
+local log = require("config.logs").hammerspoons()
 
 ---@class FcpxEditorWindow
 ---@field window hs.axuielement

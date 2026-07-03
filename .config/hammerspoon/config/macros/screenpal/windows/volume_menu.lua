@@ -1,5 +1,5 @@
 local VolumeSubmenu = require("config.macros.screenpal.windows.volume_submenu")
-local log = require("config.logs").macros()
+local log = require("config.logs").hammerspoons()
 
 ---@class VolumeMenu
 ---@field app_windows AppWindows

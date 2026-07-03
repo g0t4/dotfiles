@@ -6,7 +6,7 @@ local ScreenPalEditorWindow = require('config.macros.screenpal.editor_window')
 local test_button = require('config.macros.screenpal.experiments.test_button')
 local VolumeMenu = require("config.macros.screenpal.windows.volume_menu")
 local ToolOptionsWindows = require('config.macros.screenpal.windows.tool_options')
-local log = require("config.logs").macros()
+local log = require("config.logs").hammerspoons()
 
 local _200ms = 200000
 local _300ms = 300000

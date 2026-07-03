@@ -2,7 +2,7 @@ require("config.hs_harness.busted") -- PRN assume loaded by hs init?
 
 describe("FOO", function()
     it("dammit", function()
-        local log = require("config.logs").macros()
+        local log = require("config.logs").hammerspoons()
         log:info("TESTING WORKS")
         assert.same("bar", true)
     end)

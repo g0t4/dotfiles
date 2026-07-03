@@ -1,4 +1,4 @@
-local log = require("config.logs").macros()
+local log = require("config.logs").hammerspoons()
 
 local function EnsureCheckboxIsChecked(checkbox)
     if checkbox:attributeValue("AXValue") ~= 0 then
