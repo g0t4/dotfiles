@@ -43,7 +43,7 @@ for _, key_str in pairs(all_keys) do
         for mod in string.gmatch(modifier_parts, "([^_]+)") do
             table.insert(modifiers, mod)
         end
-        log:info("  register key", modifiers, key_char)
+        -- log:trace("register key", modifiers, key_char)
         handle_key(modifiers, key_char)
     end
 end
