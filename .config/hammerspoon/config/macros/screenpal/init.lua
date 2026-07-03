@@ -916,14 +916,26 @@ function _adjust_edit(adjust_callback)
         local tool_win = win.windows:get_tool_bar_window()
         -- if any edit tool is open => assume it's volume edit tool or another compatible tool
         if not tool_win:is_an_edit_tool_open() then
-            -- if no edit tool is open => open first volum edit
-            tool_win:get_tools_button() -- should already be on tools, wait to be safe?
+            -- if no edit tool is open => open an edit tool to adjust
 
-            -- PRN make this pluggable to pass the edit button type (not just volume)
-            volume_edits = tool_win:get_volume_edit_buttons()
-            -- log:info("volume_edits", volume_edits)
-            volume_edits[1]:axPress()
+            tool_win:get_tools_button()
 
+            -- start w/ volume type (if available)
+            --  b/c most minor adjustments are made for volume edits
+            --  PRN if need be I can add a way to target a specific edit type or index in the edits list...
+            --    could add hotkeys 1/2/3/4 etc like I do with other edit macros (i.e. open edit 1)
+            edits = tool_win:get_volume_edit_buttons()
+            if not edits or #edits == 0 then
+                -- else any edit tool
+                edits = tool_win:get_edits_buttons()
+            end
+
+            if not edits or #edits == 0 then
+                log:warn("No edit buttons were found, nothing to adjust...")
+                return
+            end
+
+            edits[1]:axPress()
             tool_win:wait_for_an_open_edit_tool()
         end
 
