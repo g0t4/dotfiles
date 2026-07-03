@@ -1006,6 +1006,8 @@ function SPal_AdjustSelection(side, num_frames, text)
         local win, silences = syncify(detect_silences)
         local timeline = win:timeline_controller()
 
+        -- TODO! if I want to adjust start/end of non-silence periods I need to detect those intervals like I do with volume intervals (pink) b/c right now I only do pink from volume edit intervals
+
         local tool = silences.hack_detected.tool
         if not tool or not tool.x_end then
             -- TODO split out function
