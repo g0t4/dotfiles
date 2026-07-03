@@ -1,4 +1,7 @@
-# *** trace
+#
+# FYI!!! some of these need to always be available (i.e. rag_indexer for use in git hooks)
+#  and for simplicity, just load entire file always
+#  PRN later I can split into two parts and put `if not status is-interactive` check to then `return` if there are parts that break non-interactive shell instances
 
 set ASK_REPO "$HOME/repos/github/g0t4/ask-openai.nvim"
 
