@@ -26,9 +26,16 @@ local tool_win = wins:get_tool_bar_window()
 -- tool_win:dump_tool_bar_controls()
 log:info(tool_win:get_edits_buttons())
 
-copy = tool_win:wait_for_copy_edit_button()
-log:info("copy",copy)
+-- copy = tool_win:wait_for_copy_edit_button()
+-- log:info("copy",copy)
+local edits = tool_win:get_edits_buttons()
+edits[1]:axPress()
 
+tool_win:wait_for_an_open_edit_tool()
+
+-- local btn = tool_win:wait_for_ok_button()
+-- log:info(btn)
+-- log:info("is_an_edit_tool_open", tool_win:is_an_edit_tool_open())
 
 -- -- start cut tool
 -- hs.eventtap.keyStroke({}, 'c', 0, app)
