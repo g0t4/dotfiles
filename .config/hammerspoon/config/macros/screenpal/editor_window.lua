@@ -535,12 +535,12 @@ function ScreenPalEditorWindow:detect_zoom_level()
                 math.abs(green - 157) <= tolerance and
                 math.abs(red - 37) <= tolerance then
                 -- active bar
-                -- timer:log_timing()
+                -- log:info(timer:captures_log())
                 return bar.level
             end
         end
     end
-    timer:log_timing()
+    log:info(timer:captures_log())
     return nil
 end
 
