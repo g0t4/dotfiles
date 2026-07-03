@@ -150,3 +150,40 @@ function _abbr_trace_command --argument-names count
     echo "$echo_msg.tool_calls.[].function.arguments --raw-output | jq .command_line --raw-output"
 end
 
+abbr --position anywhere --add msgargs --regex "msg(r|f|c|args|patch)?\d+" --function _abbr_msg_num
+function _abbr_msg_num --argument-names to_expand
+    # cat 1772355717-trace.json  | jq .request_body.messages[7].tool_calls[0].function.arguments -r | string split "\n" > test.patch
+    # extractions:
+    #  `msg7` => entire message
+    #  `msgc7` => contents
+    #  `msgargs7` => tool call args
+
+    set num (math (string replace --regex '\D+' '' $to_expand) )
+    set prefix (string replace --regex '\d+' '' $to_expand)
+
+    set first_trace (fd "\-trace.json" | head -n 1)
+
+    # dump messages
+    echo -n "cat $first_trace | jq '.request_body.messages[$num]"
+    if test "$prefix" = msg
+        echo -n "'"
+        return
+    else if test "$prefix" = msgr
+        echo -n ".reasoning_content' -r"
+        return
+    else if test "$prefix" = msgc
+        echo -n ".content' -r"
+        return
+    else if test "$prefix" = msgf
+        echo -n ".tool_calls[0].function'"
+        return
+    else if test "$prefix" = msgargs
+        echo -n ".tool_calls[0].function.arguments' -r | jq '.'"
+        return
+    else if test "$prefix" = msgpatch
+        echo -n ".tool_calls[0].function.arguments' -r | jq '.patch' -r | bat -l patch"
+        return
+    end
+    echo "WHAT THE FUUU you smoking crack"
+end
+
