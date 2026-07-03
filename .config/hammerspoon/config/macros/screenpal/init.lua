@@ -917,7 +917,7 @@ function _adjust_edit(adjust_callback)
         -- if any edit tool is open => assume it's volume edit tool or another compatible tool
         if not tool_win:is_an_edit_tool_open() then
             -- if no edit tool is open => open first volum edit
-            tool_win:wait_for_tools_button() -- should already be on tools, wait to be safe?
+            tool_win:get_tools_button() -- should already be on tools, wait to be safe?
 
             -- PRN make this pluggable to pass the edit button type (not just volume)
             volume_edits = tool_win:get_volume_edit_buttons()

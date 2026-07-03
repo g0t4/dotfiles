@@ -118,6 +118,10 @@ function ToolBarWindow:is_an_edit_tool_open()
         or (self:get_button_by_description("OK") ~= nil)
 end
 
+function ToolBarWindow:get_tools_button()
+    return self:get_button_by_description("Tools")
+end
+
 function ToolBarWindow:wait_for_tools_button()
     return wait_for_element(function() return self:get_button_by_description("Tools") end, 20, 20, "button Tools")
 end
