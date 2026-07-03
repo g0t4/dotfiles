@@ -6,7 +6,7 @@ local should = require('devtools.tests.should')
 local describe = require('devtools.tests.define.describe')
 local only = require('devtools.tests.define.only')
 local skip = require('devtools.tests.define.skip')
-local log = require("config.logs").hammerspoons()
+local log = require("config.logs").launcher()
 
 local casing = require("config.launcher.casing")
 
