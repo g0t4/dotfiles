@@ -974,6 +974,8 @@ build_abbrs_for_filetype m md
 build_abbrs_for_filetype p py
 build_abbrs_for_filetype t ts
 build_abbrs_for_filetype y "{yaml,yml}"
+abbr --command rg -- "*nd" "--glob='!datasets'" # easily exlude datasets JSON files from shared traces
+
 # all -  use rg w/o a filter on language (no -g *.lua for example)
 abbr --set-cursor seda "$sed_cmd -Ei 's/%//g' (rg --files-with-matches ___) "
 abbr --command $sed_cmd --position=anywhere "*a" "(rg --files-with-matches ___) "
