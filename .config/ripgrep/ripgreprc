@@ -35,3 +35,9 @@
 --glob=!stack.yaml.lock
 --glob=!.rag
 
+
+# FYI this disables parallel search!
+#  DO NOT USE THIS in ripgreprc
+#  instead I am adding abbrs to help use it easier when I want it
+# --sort-files
+# --sort=path
