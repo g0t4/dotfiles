@@ -949,7 +949,7 @@ function build_abbrs_for_filetype
     set -l _abbr "sed$filetype_letter"
 
     # * two approaches to making it easier to target specific files...
-    set rg_filter "(rg -g '*.$glob_end' --files-with-matches ___)"
+    set rg_filter "(rg -g '*.$glob_end' --files-with-matches '___')"
 
     # 1. dedicated abbr per file type(s)
     #   i.e. sedl, sedf, sedp, etc
