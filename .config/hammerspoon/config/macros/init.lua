@@ -20,7 +20,13 @@ function StreamDeckKeyboardMaestroRunner(what)
 
 
     ensure_in_coroutine(function()
-        log:set_coroutine_context("km `" .. what .. "`")
+        local context = what
+        local has_whitespace = context:find("%s")
+        if has_whitespace then
+            context = "`" .. context .. "`"
+        end
+
+        log:set_coroutine_context(context)
         log:info("start")
 
         local ok, result = xpcall(
