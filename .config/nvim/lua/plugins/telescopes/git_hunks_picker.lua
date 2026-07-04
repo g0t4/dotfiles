@@ -39,7 +39,23 @@ end
 M.git_hunks = function(opts)
     opts = opts or {}
 
-    -- FYI GH issue closed as not planned:
+    -- improvements vs using telescope's builtin.git_status
+    -- 1. jump to selected hunk when you open the file! (on Enter)
+    --    this is the main reason I made my own picker
+    -- 2. previewer:
+    --    1. show entire file (vs git_status which just shows the diff)
+    --       syntax highlighted too (color)
+    --    2. scroll to + highlight hunk
+    --
+    --    basically a picker previewer like I setup for my semantic_grep picker
+    -- 3. extensible to new pickers:
+    --    - added `git diff` vs `git diff --staged` already
+    --      PRN get entire file using git show? not sure this is ever needed for `git diff` (nor `--staged`)
+    --         but using it here too might make a unified platform for other scenarios
+    --    TODO any issues with showing file from history? will probably need to use git to get the file
+
+
+    -- FYI GH issue (for builtin.git_status picker) closed as not planned:
     --   https://github.com/nvim-telescope/telescope.nvim/issues/3341
     --   seems like there's no interest in jumping to the hunk you selected in the telescope picker
     --   very strange IMO
