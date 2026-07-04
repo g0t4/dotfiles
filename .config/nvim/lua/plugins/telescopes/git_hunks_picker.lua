@@ -94,6 +94,8 @@ M.git_hunks = function(opts)
 
         previewer = previewers.new_buffer_previewer({
             define_preview = function(self, entry, status)
+                log:info("selected entry", entry)
+
                 previewers.buffer_previewer_maker(
                     entry.filename,
                     self.state.bufnr,
