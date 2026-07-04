@@ -3,6 +3,8 @@ local finders = require("telescope.finders")
 local previewers = require("telescope.previewers")
 local conf = require("telescope.config").values
 local make_entry = require("telescope.make_entry")
+local putils = require("telescope.previewers.utils")
+local log = require("devtools.logs.logger").universal()
 
 local M = {}
 
@@ -90,7 +92,32 @@ M.git_hunks = function(opts)
 
         sorter = conf.generic_sorter(opts),
 
-        previewer = previewers.vim_buffer_cat.new(opts),
+        previewer = previewers.new_buffer_previewer({
+            define_preview = function(self, entry, status)
+                previewers.buffer_previewer_maker(
+                    entry.filename,
+                    self.state.bufnr,
+                    {
+                        bufname = self.state.bufname,
+                        callback = function(bufnr)
+                            vim.schedule(function()
+                                local winid = self.state.winid
+                                if vim.api.nvim_win_is_valid(winid) then
+                                    vim.api.nvim_win_set_cursor(winid, {
+                                        entry.lnum,
+                                        0,
+                                    })
+                                    vim.api.nvim_win_call(winid, function()
+                                        vim.cmd.normal({ "zz", bang = true })
+                                    end)
+                                end
+                            end)
+                        end,
+                    }
+                )
+            end,
+        })
+
 
     }):find()
 end
