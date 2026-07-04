@@ -445,8 +445,8 @@ return {
                 end,
             })
 
-            local hunks_picker = require("plugins.telescopes.git_hunks_picker")
-            hunks_picker.setup()
+            local git_hunks_picker = require("plugins.telescopes.git_hunks_picker")
+            git_hunks_picker.setup()
         end,
     },
 
