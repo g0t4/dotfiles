@@ -530,7 +530,7 @@ end
 # * stash
 # FYI can do gstashl<TAB> or gashl<TAB>
 abbr gstash 'git stash'
-abbr git_stash_list 'git stash list'
+abbr git_stash_list 'git stash list --pretty=stash-list'
 #
 abbr git_stash_show 'git stash show --text 0' # 0 as reminder that you can pass any index number instead of stash@{1} etc
 # --text makes it show the diff vs a stat of files
