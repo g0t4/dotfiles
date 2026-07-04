@@ -789,14 +789,13 @@ function wait_for_element(search_func, name, interval_ms, max_cycles)
         cycles = cycles + 1
     end
 
-    log:info(
-        ansi.red_bg(
-            ansi.white_bold(
-                "wait_for_element timeout " .. (name or "") .. ": "
-                .. max_cycles .. " cycles @ " .. interval_ms .. "ms intervals (are you waiting on the wrong element?)"
-            )
-        )
-    )
+    local duration = get_elapsed_time_in_milliseconds(start)
+    log:white_on_red(string.format(
+        "timeout '%s' after %.1f ms (are you waiting on the wrong element?)",
+        name or "",
+        duration
+    ))
+
     return nil
 end
 

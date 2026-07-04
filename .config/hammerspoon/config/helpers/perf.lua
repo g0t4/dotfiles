@@ -11,12 +11,13 @@ end
 
 local function log_if_slower_than_x_ms(minimum_ms, message, start_time)
     local elapsed_time_ms = get_elapsed_time_in_milliseconds(start_time)
-
     if elapsed_time_ms > minimum_ms then
-        log:info("WARN " .. elapsed_time_ms .. " ms - " .. message)
+        log:warn(string.format(
+            "%s took a while @" .. "%.1f" .. "ms",
+            message,
+            elapsed_time_ms
+        ))
     end
-
-    return elapsed_time_ms
 end
 
 function log_if_slower_than_100ms(message, start_time)
