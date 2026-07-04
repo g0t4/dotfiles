@@ -53,6 +53,16 @@ M.git_hunks = function(opts)
     --      PRN get entire file using git show? not sure this is ever needed for `git diff` (nor `--staged`)
     --         but using it here too might make a unified platform for other scenarios
     --    TODO any issues with showing file from history? will probably need to use git to get the file
+    --    FYI refactor this to have location providers:
+    --    - i.e. git diff hunks, staged hunks, stash list, stash show, git log, etc...
+    --    - each location result can have:
+    --      - preview contents (or function to lazy load) - w/e shows on right in picker
+    --        can show worktree files, dirs
+    --        can show a file using `git show` as of a commit
+    --      - action function when selected (as well as any other actions I define)
+    --        can open a file in worktree (i.e. for git diff)
+    --        can open a buffer w/ old version of file (not in worktree) via git show
+    --        can open a sub-picker (i.e. git stash list => pick stash ref => git stash show the hunks/files as of the commit)
 
 
     -- FYI GH issue (for builtin.git_status picker) closed as not planned:
