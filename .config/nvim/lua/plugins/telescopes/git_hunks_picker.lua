@@ -48,12 +48,19 @@ M.git_hunks = function(opts)
     --     only to then have to step through hunks (if I have gitsigns)
     --     until I land on the hunk I already selected?
 
-    local output = vim.fn.systemlist({
+    local cmd = {
         "git",
         "diff",
         "--unified=0",
         "--no-color",
-    })
+    }
+    if opts.staged then
+        table.insert(cmd, "--staged")
+    end
+    log:warn(cmd)
+
+    local output = vim.fn.systemlist(cmd)
+
 
     if vim.v.shell_error ~= 0 then
         vim.notify("git diff failed", vim.log.levels.ERROR)
@@ -135,8 +142,14 @@ M.git_hunks = function(opts)
 end
 
 function M.setup()
-    vim.keymap.set("n", "<leader>gh", function()
-        M.git_hunks()
+    vim.keymap.set("n", "<leader>gst", function()
+        -- I used to have gst to match my gst fish abbr... but this is best put under `gd` for git diff
+        --  and gdc for staged... I use both of these as fish abbrs too
+        vim.notify("Use <leader>gd instead of <leader>gst for git hunks", vim.log.levels.INFO)
+    end)
+    vim.keymap.set("n", "<leader>gd", M.git_hunks)
+    vim.keymap.set("n", "<leader>gdc", function()
+        M.git_hunks({ staged = true })
     end)
 end
 
