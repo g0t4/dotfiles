@@ -113,6 +113,16 @@ M.git_hunks = function(opts)
                                         vim.cmd.normal({ "zz", bang = true })
                                     end)
                                 end
+
+                                local end_line = entry.lnum + entry.value.new_count - 1
+
+                                vim.hl.range(
+                                    bufnr,
+                                    vim.api.nvim_create_namespace("git_hunks"),
+                                    "Visual",
+                                    { entry.lnum - 1, 0 },
+                                    { end_line, 0 }
+                                )
                             end)
                         end,
                     }
