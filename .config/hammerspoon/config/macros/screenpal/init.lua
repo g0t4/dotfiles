@@ -8,8 +8,10 @@ local VolumeMenu = require("config.macros.screenpal.windows.volume_menu")
 local ToolOptionsWindows = require('config.macros.screenpal.windows.tool_options')
 local log = require("config.logs").hammerspoons()
 
-local _200ms = 200000
+local _1000ms = 1000000
 local _300ms = 300000
+local _200ms = 200000
+local _150ms = 150000
 local _100ms = 100000
 local _50ms = 50000
 local _10ms = 10000
@@ -234,15 +236,17 @@ function act_on_silence(win, silence, action)
     -- FYI slight delay for when start cut tool in a SOM detected silence...
     -- - Without this delay the range start point stays on the auto range start point (effectively like "s" key isn't pressed next)
     -- - Does not hurt other sceanrios so leave this for all scenarios
-    hs.timer.usleep(_100ms)
+    -- - I could try to find out if I am in an auto range or not... then use that for activating a longer pause here?
+    hs.timer.usleep(_150ms)
 
     -- *** SELECT RANGE:
     -- * set tool start
     hs.eventtap.keyStroke({}, "s", 0, win.app)
-    --
-    -- FYI I haven't noticed any issues needing a delay when not in a SOM detected silence:
-    hs.timer.usleep(_10ms) -- slight delay helps with auto range in SOM detected silences... w/o this delay, the start point randomly remains at the start of the original auto-range (from opening range based tool in a SOM detected silence)
-    -- TODO adjust up on 10ms if start point still messes up at times
+
+    -- TODO verify I don't need the delay here right? I suspect delay is needed before hitting "s"
+    -- hs.timer.usleep(_10ms) -- not enough in fucking auto ranges which take random, massive time b/c fucking animations ... fuck
+    --  b/c what happens is `c`/`v` activates tool, then I hit `s` to set start of range
+    --  BUT, that `s` happens before the tool is open so the tool then sets the start (auto range only) to start of auto silence
 
     -- log:info("set [s]tart of range")
 
