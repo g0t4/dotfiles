@@ -39,11 +39,12 @@ function StreamDeckKeyboardMaestroRunner(what)
                 end
                 func()
             end,
-            nudge_human
+            full_traceback_xpcall
         )
         if ok then
             return
         end
+        nudge_human()
         log:error("StreamDeckKeyboardMaestroRunner unhandled error", result)
     end)
 end
