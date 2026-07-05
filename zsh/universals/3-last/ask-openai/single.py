@@ -18,7 +18,7 @@ system_message = "You are a command line expert. Respond with a single, valid, c
 max_tokens = 2000
 
 # Directory for fish shell traces (mirrors nvim plugin's trace dir)
-FISH_TRACE_DIR = os.path.expanduser("~/.local/state/nvim/ask-openai/fish")
+ASK_SHELL_TRACE_DIR = os.path.expanduser("~/.local/state/nvim/ask-openai/shell")
 
 
 def build_trace_data(
@@ -79,14 +79,14 @@ def build_trace_data(
 def save_trace_file(trace_data: dict) -> str | None:
     """Save trace data to disk and return the file path, or None on failure."""
     try:
-        os.makedirs(FISH_TRACE_DIR, exist_ok=True)
+        os.makedirs(ASK_SHELL_TRACE_DIR, exist_ok=True)
     except OSError as e:
-        print(f"Warning: could not create trace dir {FISH_TRACE_DIR}: {e}", file=sys.stderr)
+        print(f"Warning: could not create trace dir {ASK_SHELL_TRACE_DIR}: {e}", file=sys.stderr)
         return None
 
     unix_timestamp = trace_data["session_id"]
     trace_filename = f"{unix_timestamp}-trace.json"
-    trace_path = os.path.join(FISH_TRACE_DIR, trace_filename)
+    trace_path = os.path.join(ASK_SHELL_TRACE_DIR, trace_filename)
 
     try:
         with open(trace_path, "w", encoding="utf-8") as trace_file:

@@ -13,7 +13,7 @@ from services import Service, get_selected_service
 from logs import log
 
 # Directory for iTerm2 streaming traces (mirrors nvim plugin's trace dir)
-ITERM2_TRACE_DIR = os.path.expanduser("~/.local/state/nvim/ask-openai/fish")
+ASK_SHELL_TRACE_DIR = os.path.expanduser("~/.local/state/nvim/ask-openai/shell")
 
 TIMEOUT_SECONDS = 15
 
@@ -147,9 +147,9 @@ def _save_iterm2_trace(
     both code paths (fish non-streaming and iTerm2 streaming).
     """
     try:
-        os.makedirs(ITERM2_TRACE_DIR, exist_ok=True)
+        os.makedirs(ASK_SHELL_TRACE_DIR, exist_ok=True)
     except OSError as e:
-        log(f"Warning: could not create trace dir {ITERM2_TRACE_DIR}: {e}")
+        log(f"Warning: could not create trace dir {ASK_SHELL_TRACE_DIR}: {e}")
         return
 
     # Build assistant message with content and any reasoning if available
@@ -190,7 +190,7 @@ def _save_iterm2_trace(
     }
 
     trace_filename = f"{unix_timestamp}-trace.json"
-    trace_path = os.path.join(ITERM2_TRACE_DIR, trace_filename)
+    trace_path = os.path.join(ASK_SHELL_TRACE_DIR, trace_filename)
 
     try:
         with open(trace_path, "w", encoding="utf-8") as trace_file:
