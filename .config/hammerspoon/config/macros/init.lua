@@ -1,4 +1,5 @@
 require("config._packages")
+local debug = require("devtools.debug")
 local log = require("config.logs").hammerspoons()
 
 local M = {}
