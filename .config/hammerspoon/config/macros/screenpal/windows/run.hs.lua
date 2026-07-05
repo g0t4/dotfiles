@@ -4,7 +4,7 @@
 -- package.path = package.path .. ";" .. hs_config .. "/?.lua"
 
 local log = require("config.logs").hammerspoons()
-local editor_window = require("config.macros.screenpal.editor_window")
+local ScreenPalEditorWindow = require('config.macros.screenpal.editor_window')
 local AppWindows = require("config.macros.screenpal.app_windows")
 local ToolOptionWindows = require("config.macros.screenpal.windows.tool_options")
 local Timer = require("devtools.logs.timer")
