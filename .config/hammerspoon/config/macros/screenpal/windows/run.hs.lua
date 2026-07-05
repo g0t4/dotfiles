@@ -7,6 +7,7 @@ local log = require("config.logs").hammerspoons()
 local editor_window = require("config.macros.screenpal.editor_window")
 local AppWindows = require("config.macros.screenpal.app_windows")
 local ToolOptionWindows = require("config.macros.screenpal.windows.tool_options")
+local Timer = require("devtools.logs.timer")
 -- log:info(ensure_in_coroutine)
 
 -- local macros = require("config.macros")
@@ -17,31 +18,41 @@ local ToolOptionWindows = require("config.macros.screenpal.windows.tool_options"
 -- PRN setup facade to get at controls in spal app
 local app = get_app_element_or_throw("com.screenpal.app")
 local wins = AppWindows.new(app)
+-- list windows:
+wins:_refresh()
+log:info(wins.windows_by_title)
+
 -- switch to screenpal
-app:asHSApplication():activate()
+-- app:asHSApplication():activate() -- FYI not all task require foreground, in fact I am finding exploring UI doesn't require it at all!
 
 -- edit edit buttons => keymaps
 
 local tool_win = wins:get_tool_bar_window()
 -- tool_win:dump_tool_bar_controls()
-log:info(tool_win:get_edits_buttons())
+-- log:info(tool_win:get_edits_buttons())
 
 -- copy = tool_win:wait_for_copy_edit_button()
 -- log:info("copy",copy)
-local edits = tool_win:get_edits_buttons()
-edits[1]:axPress()
-
-tool_win:wait_for_an_open_edit_tool()
-
+-- local edits = tool_win:get_edits_buttons()
+-- edits[1]:axPress()
 -- local btn = tool_win:wait_for_ok_button()
--- log:info(btn)
 -- log:info("is_an_edit_tool_open", tool_win:is_an_edit_tool_open())
 
 -- -- start cut tool
 -- hs.eventtap.keyStroke({}, 'c', 0, app)
 -- local options = ToolOptionWindows.new(wins)
+Timer.time_this(function()
+    -- FYI if I don't activate ScrenPal this takes 10-20ms but if I activate it.. it can be upwards of 150ms?!
+    local posbar = wins:get_window_by_title_pattern("^SOM%-FloatingWindow%-Type=edit2.posbar%-ZOrder=1")
+    local time = posbar:textField(1):axValue():gsub("\n", "") -- trim leading \n
+    log:info("time", time)
 
+    -- AXValue:
+    -- 1:45.88<string>
+    -- unique ref: app:window('SOM-FloatingWindow-Type=edit2.posbar-ZOrder=1(Undefined+1)'):textField()
 
+    -- TODO! is get_current_time() slow and inefficent? b/c of cached controls? if so rewrite to go right to window and get control instead?
+end, "time", log)
 do return end
 
 

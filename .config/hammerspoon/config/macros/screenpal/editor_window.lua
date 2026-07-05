@@ -379,6 +379,11 @@ end
 
 ---@return number, string -- seconds and text values
 function ScreenPalEditorWindow:get_current_time()
+    -- TODO! is get_current_time() this ridiculously slow?
+    --  all that is involved is getting posbar window + read axValue of text field...
+    --   why do I need cached controls to get at this?
+    --   is caching doing anything to boost getting the current time?
+    --
     self:ensure_cached_controls()
     local t = self:timeline_controller()
     -- PRN combine two times into one object?
