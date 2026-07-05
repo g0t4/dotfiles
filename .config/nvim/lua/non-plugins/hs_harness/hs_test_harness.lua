@@ -56,24 +56,22 @@ local function test_paths(paths, opts)
 
             -- Can be turned on to debug
             on_stdout = function(_, data)
-                if path_len == 1 and data ~= nil then
+                if data ~= nil then
                     -- redirect to log
                     log:info(data)
                 end
             end,
 
             on_stderr = function(_, data)
-                if path_len == 1 and data ~= nil then
+                if data ~= nil then
                     -- redirect to log
                     log:info(data)
                 end
             end,
 
             on_exit = vim.schedule_wrap(function(j_self, _, _)
-                if path_len ~= 1 then
-                    log:info(unpack(j_self:stderr_result()))
-                    log:info(unpack(j_self:result()))
-                end
+                log:info(unpack(j_self:stderr_result()))
+                log:info(unpack(j_self:result()))
             end),
         }
         job.nvim_busted_path = p.filename
