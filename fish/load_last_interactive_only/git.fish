@@ -590,3 +590,10 @@ end
 abbr git_archive_tgz "git archive --format=tgz --output repo.tgz HEAD" # refs: HEAD/master/etc (files as of that commit/tree)
 abbr git_archive_zip "git archive --format=zip --output repo.zip HEAD"
 abbr git_archive_everything "git bundle create repo.bundle --all" # transfer format
+
+## *** git grep!
+#
+# grep across commit history (fast)
+abbr --set-cursor gg "git grep -Ee '%' \$(git rev-list --all)"
+abbr --set-cursor ggc "git grep -C10 -Ee '%' \$(git rev-list --all)"
+abbr --set-cursor ggf "git grep --function-context -Ee '%' \$(git rev-list --all)"
