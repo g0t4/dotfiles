@@ -53,22 +53,24 @@ end
 function ScreenPalEditorWindow:ensure_cached_controls(force)
     -- log:info("window valid? A ", self.win:isValid()) -- NOTE this is not valid (nil) when need reload everything so do that instead
     if not self.win:isValid() then
-        -- log:info("*** REFRESH WINDOWS *** - self.win is NOT VALID")
+        log:info("*** REFRESH WINDOWS *** - self.win is NOT VALID")
         self:_force_refresh_windows()
     end
     -- log:info("window valid? B ", self.win:isValid()) -- NOTE this is not valid (nil) when need reload everything so do that instead
     if not force and self._cached_buttons then
-        if self._btn_minimum_zoom:isValid() then
+        if self._btn_my_content_on_screenpal_com:isValid() then
+            log:info("found button my content on screenpal.com")
             return
         end
-        -- log:info("editor window cache invalidated")
+        log:info("editor window cache invalidated")
     end
-    -- log:info("building editor window")
+    log:info("building editor window")
     self:force_refresh_cached_controls()
 end
 
 function ScreenPalEditorWindow:force_refresh_cached_controls()
     self._scrollbars = {}
+    self._btn_my_content_on_screenpal_com = nil
     self._btn_back_to_projects = nil
     self._btn_maximum_zoom = nil
     self._btn_medium_zoom = nil
@@ -79,6 +81,7 @@ function ScreenPalEditorWindow:force_refresh_cached_controls()
     self._btn_play_or_pause = nil
     self._btn_play_speed = nil
     self._textfield_title = nil
+    self._project_list = nil
 
     local start = get_time()
     vim.iter(self.win:children())
@@ -87,8 +90,19 @@ function ScreenPalEditorWindow:force_refresh_cached_controls()
             function(ui_elem)
                 local description = ui_elem:axDescription()
                 local role = ui_elem:axRole()
+                -- TODO other controls for project list
+                -- log:info(ui_elem, ui_elem:axDescription())
+                if role == "AXScrollArea" then
+                    -- nested scrollarea in scrollarea
+                    local scroll_area = ui_elem
+                    self._project_list = scroll_area:scrollArea(1)
+                end
                 if role == "AXButton" then
-                    if description == "Minimum Zoom" then
+                    if description == "My content on ScreenPal.com" then
+                        -- both project list and project editor views
+                        self._btn_my_content_on_screenpal_com = ui_elem
+                        return
+                    elseif description == "Minimum Zoom" then
                         -- AXIndex: 3, #42 in array in my testing (could change)
                         self._btn_minimum_zoom = ui_elem
                         return -- continue early so I can add more complex checks below and avoid them when possible
@@ -176,6 +190,7 @@ end
 ---@return boolean|nil - nil means failure
 function ScreenPalEditorWindow:is_zoomed()
     self:ensure_cached_controls()
+    -- no zoom controls if don't have project open...
     if not self._btn_minimum_zoom then
         error("No zoom button found, aborting...")
         return nil
@@ -284,45 +299,57 @@ function ScreenPalEditorWindow:toggle_frame_zoom()
     self._btn_frame_zoom_preview:performAction("AXPress")
 end
 
-function ScreenPalEditorWindow:cache_project_view_controls()
-    vim.iter(self.win:children())
-        :each(function(ui_elem)
-            -- one time hit, just cache all buttons when I have to find one of them
-            -- not extra expensive to cache each one relative to time to enumerate / get description (has to be done to find even one button)
-            local description = ui_elem:axDescription()
-            local role = ui_elem:axRole()
-            if role == "AXScrollArea" then
-                self._scrollarea_list = ui_elem -- s/b only scroll area in the scorll area
-                -- log:info("sa", self._scrollarea_list)
-                -- log:info("sa.sa", self._scrollarea_list:scrollAreas()[1])
-                self._scrollarea_list = self._scrollarea_list:scrollAreas()[1]
-            end
-        end)
+---@return string[] names for projects
+function ScreenPalEditorWindow:get_all_projects()
+    -- TODO warn if not in projects view?
+    return Timer.time_this(function()
+        self:ensure_cached_controls()
+
+        if self._project_list == nil then
+            -- TODO throw_if_not_project_list?
+            error("No scrollarea list found, aborting...")
+        end
+        -- FYI 40ms for all this! not bad
+        return vim.iter(self._project_list:buttons())
+            :map(function(button)
+                return button:axDescription()
+            end)
+            :totable()
+    end)
 end
 
 ---@param restart? boolean -- instead of just close project, restart ScreenPal, then resume where you left off!
 function ScreenPalEditorWindow:reopen_project(restart)
     restart = restart or false
 
+    -- TODO! this is the EXCELLENT FIRST ACTION to add a SPINNER for progress...
+    --  that way I know when it is done
+    --  many small delays that are indistinguishable from failure otherwise
+
     ensure_in_coroutine(function()
-        local win = get_cached_editor_window()
+        -- FYI self == cached window (callers had to look it up)
+        --  TODO review my editor_window caching, seems like crap code that is very confusing to say the least
+
+        -- * capture original zoom level
         local original_zoom_level = self:timeline_controller():zoom_level()
-
         self:zoom_off()
+        -- so far no need to delay after change zoom
 
-        -- * capture position
+        -- * capture playhead position (unzoomed, to restore after reopen)
         -- use percent, that way if the width changes, it's still the same timecode
         local playhead_percent = self:timeline_controller():get_position_percent()
         -- DO NOT reuse timeline controller after changes like zoom, IIRC need latest state always
         --   TODO maybe rename timeline controller to hint at the lifespan/applicability of it?
 
+        -- * capture project title (to reopen it)
         if not self._textfield_title then
-            error("No title found, aborting...")
+            error("No title found, cannot re-open without project title, aborting...")
         end
         local title = self._textfield_title:axValue()
         -- log:info("title: ", title)
 
         if restart then
+            -- * restart ScreenPal too
             -- most issues are fixed w/ project close/reopen
             -- but, repeated playhead seizures are a sign of app open too long...
             -- bugs seem to trigger faster the longer I've had ScreePal open, so restart it _too_
@@ -331,19 +358,23 @@ function ScreenPalEditorWindow:reopen_project(restart)
             --  PRN make macro specific to this HS action if need be... restart and repoen s/b fast and then I can use it way more often to wipe memory leaks, bugs, etc!
             -- sleep_ms(5000) -- not needed so far
         else
+            -- * go back to projects list
             if not self._btn_back_to_projects then
                 error("No back to projects button found, aborting...")
             end
             self._btn_back_to_projects:performAction("AXPress")
         end
 
+        -- * find button to reopen project
         local btn_reopen_project = wait_for_element(function()
-            log:info("attempting to re-acquire the editor window...") -- TODO comment out later once restart+repoen feels solid
-            clear_cached_editor_window() -- must clear b/c old instance won't work, that _cached_ window is gone!
-            local win = get_cached_editor_window()
-            self:cache_project_view_controls()
-            if not self._scrollarea_list then return end
-            return vim.iter(self._scrollarea_list:buttons())
+            log:info("attempting to re-acquire the editor PROJECT LIST window...") -- TODO comment out later once restart+repoen feels solid
+            -- self:_force_refresh_windows() -- TODO review what is needed here, seems like force refersh windows isn't needed
+            self:ensure_cached_controls(true)
+            if not self._project_list then
+                log:info("project list not found yet")
+                return
+            end
+            return vim.iter(self._project_list:buttons())
                 :filter(function(button)
                     -- look for the project open button to re-open, wait until find this
                     local desc = button:axDescription()
@@ -351,23 +382,39 @@ function ScreenPalEditorWindow:reopen_project(restart)
                 end)
                 :totable()[1]
         end, "screenpal editor after restart", 100, 200) -- 200 cycles × 100 ms/cycle = 20 000 ms → 20 seconds (for restart to complete and find and reopen project)
-
         if not btn_reopen_project then
             error("cannot find project to re-open, aborting...")
         end
 
+        -- * reopen project
         btn_reopen_project:performAction("AXPress")
-        sleep_ms(100) -- PRN if possible, and useful, replace w/ wait_for_element, which one to look for?
+        sleep_ms(100) -- TODO this is probably where a wait below would work better, especially if delay is variable
+        -- FYI if you find examples of not repositioning the playhead, this might be the culprit
+        --   if so, see below for loop over invalidating cache and rebuild controls list until find the timeline window controls
 
-        -- * restore position
-        self:zoom_off()
+        -- * redo cache of controls after timeline editor opens
+        -- self:_force_refresh_windows() -- TODO review what is needed here, seems like force refersh windows isn't needed
+        self:ensure_cached_controls(true)
+        --
+        -- TODO if I have issues, should I force refresh on a loop here too like with project list above?
+        --  TODO else nuke this:
+        -- local _element = wait_for_element(function()
+        --     log:info("attempting to re-acquire the editor TIMELINE window...") -- TODO comment out later once restart+repoen feels solid
+        --     -- self:_force_refresh_windows()
+        --     self:ensure_cached_controls(true)
+        --     if not self._btn_play_or_pause then
+        --         -- TODO add a method like self:is_project_list() and self:is_timeline_editor()
+        --         log:info("timeline editor not yet found")
+        --         return
+        --     end
+        -- end, "wait for timeline window after reopen button pressed", 100, 20) -- 100ms x 20 attempts
+
+        -- * restore playhead position
+        self:zoom_off() -- * ensure not zoomed (shouldn't be the case, ever)
         self:timeline_controller():move_playhead_to_position_percent(playhead_percent)
 
-        -- * restore zoom level
+        -- * restore zoom level (accounts for time code position automatically!)
         self:set_zoom_level(original_zoom_level)
-
-        -- after reopen previous cached window is always invalid, no noticeable hit to refresh for that here!
-        self:force_refresh_cached_controls()
     end)
 end
 
