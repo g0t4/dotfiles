@@ -14,9 +14,9 @@ local function red_alert(message)
     hs.alert.show(message, { fillColor = { red = 1, green = 0, blue = 0 } })
 end
 
----@param what string
-function StreamDeckKeyboardMaestroRunner(what)
-    -- log:info("StreamDeckKeyboardMaestroRunner called with: " .. hs.inspect(what)) -- FYI inspect is explicit here so a string is quoted in output
+---@param lua_code_string string
+function StreamDeckKeyboardMaestroRunner(lua_code_string)
+    -- log:info("StreamDeckKeyboardMaestroRunner called with: " .. hs.inspect(lua_code_string)) -- FYI inspect is explicit here so a string is quoted in output
     -- USED in KM Macros => look at kmsync file:
     --    plutil -p Keyboard\ Maestro\ Macros.kmsync  | grep "StreamDeckKeyboardMaestroRunner"
 
@@ -27,16 +27,16 @@ function StreamDeckKeyboardMaestroRunner(what)
     -- - THUS => use a log file, especially for info level logs
     -- - + egregious and unhandled exceptions poke the user (i.e. hs.alert.show)
 
-    local no_code = what == nil or what:gmatch("^%s*$")
+    local no_code = lua_code_string == nil or lua_code_string:gmatch("^%s*$")
     if no_code then
-        log:error("StreamDeckKeyboardMaestroRunner called without lua code: " .. hs.inspect(what))
+        log:error("StreamDeckKeyboardMaestroRunner called without lua code: " .. hs.inspect(lua_code_string))
         local message = "no code provided to StreamDeckKeyboardMaestroRunner"
         red_alert(message)
         return
     end
 
     ensure_in_coroutine(function()
-        local context = what
+        local context = lua_code_string
         local has_whitespace = context:find("%s")
         if has_whitespace then
             context = "`" .. context .. "`"
@@ -47,7 +47,7 @@ function StreamDeckKeyboardMaestroRunner(what)
 
         local ok, result = xpcall(
             function()
-                local func, error_message = load(what) -- load lua here so invalid lua code failures are logged too
+                local func, error_message = load(lua_code_string) -- load lua here so invalid lua code failures are logged too
                 if error_message then
                     log:error("load lua code failed", error_message)
                     nudge_human_to_check_log()
