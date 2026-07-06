@@ -16,7 +16,7 @@ end
 
 ---@param lua_code_string string
 function StreamDeckKeyboardMaestroRunner(lua_code_string)
-    -- log:info("StreamDeckKeyboardMaestroRunner called with: " .. hs.inspect(lua_code_string)) -- FYI inspect is explicit here so a string is quoted in output
+    log:info("StreamDeckKeyboardMaestroRunner called with: " .. hs.inspect(lua_code_string)) -- FYI inspect is explicit here so a string is quoted in output
     -- USED in KM Macros => look at kmsync file:
     --    plutil -p Keyboard\ Maestro\ Macros.kmsync  | grep "StreamDeckKeyboardMaestroRunner"
 
@@ -26,11 +26,10 @@ function StreamDeckKeyboardMaestroRunner(lua_code_string)
     -- - so I inevitably silence outputs in KM (b/c no good way to decide when and what to show)
     -- - THUS => use a log file, especially for info level logs
     -- - + egregious and unhandled exceptions poke the user (i.e. hs.alert.show)
-
-    local no_code = lua_code_string == nil or lua_code_string:gmatch("^%s*$")
-    if no_code then
-        log:error("StreamDeckKeyboardMaestroRunner called without lua code: " .. hs.inspect(lua_code_string))
-        local message = "no code provided to StreamDeckKeyboardMaestroRunner"
+    local is_empty = lua_code_string == nil or lua_code_string:match("^%s*$")
+    if is_empty then
+        local message = "no code provided to StreamDeckKeyboardMaestroRunner: " .. hs.inspect(lua_code_string)
+        log:error(message)
         red_alert(message)
         return
     end
