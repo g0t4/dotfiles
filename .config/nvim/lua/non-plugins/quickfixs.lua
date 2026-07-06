@@ -6,6 +6,7 @@ function open_hammerspoon_failure_in_quickfix()
     local fails = require("devtools.logs.fails")
     local task = require("plenary.job")
     vim.notify("finish calling hs")
+    -- TODO review/cleanup this triggering of hammerspoon + make it reusable if beneficial elsewhere
     task:new({
         command = "hs",
         args = { "-c", "StreamDeckKeyboardMaestroRunner('HS_last_failure_to_nvim_quickfix()')" },
@@ -14,7 +15,9 @@ function open_hammerspoon_failure_in_quickfix()
                 log:info("hs -c on_stdout", data)
             end
         end,
+        -- on_stderr?  TODO stderr
         on_exit = function(_, code, _)
+            -- TODO log anything else? log nothing?
             log:info("hs -c on_exit (code=" .. code .. ")")
         end,
     }):start()
