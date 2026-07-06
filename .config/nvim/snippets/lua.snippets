@@ -54,6 +54,8 @@ vim.inspect(${0})
 snippet hsi "hs.inspect(_)"
 hs.inspect(${0})
 
+# FYI log* snippets, the duplicated values for $1 ... I think due to CoC completions, they don't always update as you type, but on enter/Ctrl-J they will mirror
+
 snippet logt "log:trace()"
 log:trace("${1}",${1:what})
 
