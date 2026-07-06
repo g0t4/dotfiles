@@ -1,8 +1,3 @@
--- print(package.path)
--- FYI already have hs config added to path (obviously):
--- local hs_config = os.getenv("WES_DOTFILES") .. "/.config/hammerspoon"
--- package.path = package.path .. ";" .. hs_config .. "/?.lua"
-
 local log = require("config.logs").hammerspoons()
 local ScreenPalEditorWindow = require('config.macros.screenpal.editor_window')
 local AppWindows = require("config.macros.screenpal.app_windows")
@@ -38,45 +33,8 @@ local tool_win = wins:get_tool_bar_window()
 -- local btn = tool_win:wait_for_ok_button()
 -- log:info("is_an_edit_tool_open", tool_win:is_an_edit_tool_open())
 
-
-
--- on saveAllProjects()
--- 	if not isProjects() then
--- 		display notification "cannot use save all if not on projects page"
--- 		return
--- 	end if
---
--- 	-- sort criteria affects grouping as well - sometimes one group, sometimes many
--- 	-- for each grouping (batch) - there are buttons in a scroll area
--- 	-- all scroll areas are inside primary scroll area -- I hope scroll areas never show up for smth else :)
--- 	repeat with batch in scroll areas of scroll area 1 of editor_window
--- 		-- PRN TODO any identifying characteristics of buttons? perhaps description starts with mX?
--- 		-- each button inside the batch is a project
--- 		repeat with proj in every button of batch
--- 			click proj
--- 			delayUntilEditingModeIsOpen() of my _editingmode
--- 			saveAsVideoFilePurpleButton() of my _editingmode
---
--- 			backToProjects() of my _navigation -- testing (nav back right away)
--- 			delay 0.25
--- 			-- **** NO FUCKING IDEA WHY BUT IF I HAVE NO DELAY HERE, AppleScript SHITS A MEANINGLESS BRICK about handler failure...
--- 			--   so leave small delay between backToProjects and delayUntilProjectsLoaded (or just comment out delayUntilProjectsLoaded, seems to work fine too)
--- 			delayUntilProjectsLoaded() of my _navigation -- double check fully return after save as which I don't think guarnatees projects is fully loaded
--- 			delay 0.25 -- used to be 2s delay but new arm build is much faster
--- 			-- avoid overwhelming screenpal (so far this works, also wise to restart spal if lots of exports or editing since last restart)
---
--- 			-- UNCOMMENT to only test one project per scroll area: (scroll area per grouping based on sorting criteria selected)
--- 			--exit repeat --
--- 		end repeat
--- 	end repeat
---
--- end saveAllProjects
--- get all projects:
-local editor_window = get_cached_editor_window()
-local all_projects = editor_window:get_all_projects()
-log:info("projects", table.concat(all_projects, "\n"))
-
-
+local fails = require("devtools.logs.fails")
+fails.load_to_quickfix()
 -- -- -- start cut tool
 -- -- hs.eventtap.keyStroke({}, 'c', 0, app)
 -- -- local options = ToolOptionWindows.new(wins)
