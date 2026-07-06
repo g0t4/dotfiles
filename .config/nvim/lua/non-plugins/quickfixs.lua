@@ -1,10 +1,23 @@
+local log = require("devtools.logs.logger").universal()
+
 -- <leader>h - keys for hammerspoon too...
 -- <leader>hf =>
 function open_hammerspoon_failure_in_quickfix()
     local fails = require("devtools.logs.fails")
     local task = require("plenary.job")
     vim.notify("finish calling hs")
-    -- TODO hs -c "StreamDeckKeyboardMaestroRunner('HS_last_failure_to_nvim_quickfix()')"
+    task:new({
+        command = "hs",
+        args = { "-c", "StreamDeckKeyboardMaestroRunner('HS_last_failure_to_nvim_quickfix()')" },
+        on_stdout = function(_, data)
+            if data then
+                log:info("hs -c on_stdout", data)
+            end
+        end,
+        on_exit = function(_, code, _)
+            log:info("hs -c on_exit (code=" .. code .. ")")
+        end,
+    }):start()
 end
 
 -- `q` as in [q]uickfix
