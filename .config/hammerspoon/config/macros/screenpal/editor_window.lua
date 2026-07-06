@@ -59,7 +59,16 @@ function ScreenPalEditorWindow:ensure_cached_controls(force)
     end
     -- log:info("window valid? B ", self.win:isValid()) -- NOTE this is not valid (nil) when need reload everything so do that instead
     if not force and self._cached_buttons then
-        if self._btn_my_content_on_screenpal_com:isValid() then
+        -- TODO this needs to be PER window type and check for a control you'd expect in each...
+        --  weird that the common control is valid but I guess the others aren't?!
+        local is_valid_my_content = self._btn_my_content_on_screenpal_com:isValid()
+        log:info("is_valid(_btn_my_content_on_screenpal_com)", is_valid_my_content)
+        local is_valid_btn_min_zoom = self._btn_minimum_zoom and self._btn_minimum_zoom:isValid()
+        log:info("is_valid(_btn_minimum_zoom)", is_valid_btn_min_zoom)
+        local is_valid_project_list = self._project_list and self._project_list:isValid()
+        log:info("is_valid(_project_list)", is_valid_project_list)
+
+        if is_valid_my_content then
             log:info("found button my content on screenpal.com")
             return
         end

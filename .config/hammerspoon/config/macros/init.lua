@@ -42,7 +42,7 @@ function StreamDeckKeyboardMaestroRunner(lua_code_string)
         end
 
         log:set_coroutine_context(context)
-        log:info("start")
+        log:divider("start")
 
         local ok, result = xpcall(
             function()
