@@ -197,6 +197,9 @@ function ScreenPalEditorWindow:is_zoomed()
     end
     -- AXPosition == 0,0 ==> not zoomed
     local position = self._btn_minimum_zoom:axPosition()
+    if position == nil then
+        error("Failed to get minimum zoom button position")
+    end
     return position.x > 0 and position.y > 0
 end
 
