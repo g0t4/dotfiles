@@ -16,6 +16,7 @@ end
 
 ---@param what string
 function StreamDeckKeyboardMaestroRunner(what)
+    -- log:info("StreamDeckKeyboardMaestroRunner called with: " .. hs.inspect(what)) -- FYI inspect is explicit here so a string is quoted in output
     -- USED in KM Macros => look at kmsync file:
     --    plutil -p Keyboard\ Maestro\ Macros.kmsync  | grep "StreamDeckKeyboardMaestroRunner"
 
@@ -28,7 +29,7 @@ function StreamDeckKeyboardMaestroRunner(what)
 
     local no_code = what == nil or what:gmatch("^%s*$")
     if no_code then
-        log:error("StreamDeckKeyboardMaestroRunner called without lua code! what=", vim.inspect(what))
+        log:error("StreamDeckKeyboardMaestroRunner called without lua code: " .. hs.inspect(what))
         local message = "no code provided to StreamDeckKeyboardMaestroRunner"
         red_alert(message)
         return
