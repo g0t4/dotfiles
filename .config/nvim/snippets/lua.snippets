@@ -37,7 +37,7 @@ end)
 snippet defer_fn "vim.defer(func, ms)"
 vim.defer_fn(function()
     ${0}
-end,${1:1000})
+end, ${1:1000})
 
 snippet vp "vim.print(_)"
 vim.print(${0})
@@ -57,19 +57,19 @@ hs.inspect(${0})
 # FYI log* snippets, the duplicated values for $1 ... I think due to CoC completions, they don't always update as you type, but on enter/Ctrl-J they will mirror
 
 snippet logt "log:trace()"
-log:trace("${1}",${1:what})
+log:trace("${1}", ${1:what})
 
 snippet logd "log:debug()"
-log:debug("${1}",${1:what})
+log:debug("${1}", ${1:what})
 
 snippet logi "log:info()"
-log:info("${1}",${1:what})
+log:info("${1}", ${1:what})
 
 snippet logw "log:warn()"
-log:warn("${1}",${1:what})
+log:warn("${1}", ${1:what})
 
 snippet loge "log:error()"
-log:error("${1}",${1:what})
+log:error("${1}", ${1:what})
 
 # TODO not sure a1/a2 are easy enough to justify reaching for the #... find a new name?
 snippet a1 "array of array"
