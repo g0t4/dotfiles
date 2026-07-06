@@ -17,10 +17,14 @@ local wins = AppWindows.new(app)
 wins:_refresh()
 log:info(wins.windows_by_title)
 
--- switch to screenpal
--- app:asHSApplication():activate() -- FYI not all task require foreground, in fact I am finding exploring UI doesn't require it at all!
+-- app:asHSApplication():activate()
 
--- edit edit buttons => keymaps
+local editor_window = get_cached_editor_window()
+log:info("editor_window", editor_window)
+local zoom = editor_window:detect_zoom_level()
+log:info("zoom", zoom)
+
+do return end
 
 local tool_win = wins:get_tool_bar_window()
 -- tool_win:dump_tool_bar_controls()

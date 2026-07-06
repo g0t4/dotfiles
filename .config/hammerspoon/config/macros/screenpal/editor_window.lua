@@ -190,7 +190,7 @@ end
 
 ---@return boolean|nil - nil means failure
 function ScreenPalEditorWindow:is_zoomed()
-    self:ensure_cached_controls()
+    self:ensure_cached_controls() -- THIS SHOULD NOT BE HERE... no no no
     -- no zoom controls if don't have project open...
     if not self._btn_minimum_zoom then
         error("No zoom button found, aborting...")
