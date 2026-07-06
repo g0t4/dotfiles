@@ -28,12 +28,13 @@ function ScreenPalEditorWindow:new()
     return editor_window
 end
 
----@type hs.axuielement?
+---@type ScreenPalEditorWindow
 local _cached_editor_window = nil
 function clear_cached_editor_window()
     _cached_editor_window = nil
 end
 
+---@return ScreenPalEditorWindow
 function get_cached_editor_window()
     if not _cached_editor_window then
         _cached_editor_window = ScreenPalEditorWindow:new()
