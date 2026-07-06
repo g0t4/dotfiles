@@ -4,10 +4,17 @@ local log = require("config.logs").hammerspoons()
 
 local M = {}
 
-function nudge_human()
+function nudge_human_to_check_log()
+    -- leave as black alert
     hs.alert.show("check " .. log.basename, nil, nil, 5)
 end
 
+local function red_alert(message)
+    -- I routinely miss the black defaultStyle... so for important messages I should make it red!
+    hs.alert.show(message, { fillColor = { red = 1, green = 0, blue = 0 } })
+end
+
+---@param what string
 function StreamDeckKeyboardMaestroRunner(what)
     -- USED in KM Macros => look at kmsync file:
     --    plutil -p Keyboard\ Maestro\ Macros.kmsync  | grep "StreamDeckKeyboardMaestroRunner"
@@ -19,6 +26,13 @@ function StreamDeckKeyboardMaestroRunner(what)
     -- - THUS => use a log file, especially for info level logs
     -- - + egregious and unhandled exceptions poke the user (i.e. hs.alert.show)
 
+    local no_code = what == nil or what:gmatch("^%s*$")
+    if no_code then
+        log:error("StreamDeckKeyboardMaestroRunner called without lua code! what=", vim.inspect(what))
+        local message = "no code provided to StreamDeckKeyboardMaestroRunner"
+        red_alert(message)
+        return
+    end
 
     ensure_in_coroutine(function()
         local context = what
@@ -35,7 +49,7 @@ function StreamDeckKeyboardMaestroRunner(what)
                 local func, error_message = load(what) -- load lua here so invalid lua code failures are logged too
                 if error_message then
                     log:error("load lua code failed", error_message)
-                    nudge_human()
+                    nudge_human_to_check_log()
                     return
                 end
                 func()
@@ -45,7 +59,7 @@ function StreamDeckKeyboardMaestroRunner(what)
         if ok then
             return
         end
-        nudge_human()
+        nudge_human_to_check_log()
         log:error("StreamDeckKeyboardMaestroRunner unhandled error", result)
     end)
 end
