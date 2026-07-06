@@ -59,20 +59,36 @@ function ScreenPalEditorWindow:ensure_cached_controls(force)
     end
     -- log:info("window valid? B ", self.win:isValid()) -- NOTE this is not valid (nil) when need reload everything so do that instead
     if not force and self._cached_buttons then
-        -- TODO this needs to be PER window type and check for a control you'd expect in each...
-        --  weird that the common control is valid but I guess the others aren't?!
-        local is_valid_my_content = self._btn_my_content_on_screenpal_com:isValid()
-        log:info("is_valid(_btn_my_content_on_screenpal_com)", is_valid_my_content)
-        local is_valid_btn_min_zoom = self._btn_minimum_zoom and self._btn_minimum_zoom:isValid()
-        log:info("is_valid(_btn_minimum_zoom)", is_valid_btn_min_zoom)
-        local is_valid_project_list = self._project_list and self._project_list:isValid()
-        log:info("is_valid(_project_list)", is_valid_project_list)
+        -- PRN cached lookup could note which view type it is and then I could check that here too/instead
+        --   instead of looking at a control from each view
+        --   would that save meaningful time? or would it slow things down?
 
-        if is_valid_my_content then
-            log:info("found button my content on screenpal.com")
+        -- TODO I don't think I need a shared control validity check now...
+        -- local is_valid_my_content = self._btn_my_content_on_screenpal_com:isValid()
+        --
+        -- one control from each window... that would not be visible in other view too
+        local is_valid_btn_min_zoom = self._btn_minimum_zoom and self._btn_minimum_zoom:isValid()
+        local is_valid_project_list = self._project_list and self._project_list:isValid()
+        -- basically we take cached controls we found last cache lookup and see if any are invalid
+        --  invalid happens if not visible anymore or if window appears "recreated" such that original control ref is no longer pointing at that control
+        --  i.e. open project => close project => open project (even if cached project view controls, once you re-open the any project (including same as before) the controls are recreated
+
+        -- ONLY false means something
+        -- PRN I could check control is not nil before including it here... but the is_valid being nil basically does the same thing (assuming isValid is not returning nil)
+        local need_refresh =
+            is_valid_btn_min_zoom == false or
+            is_valid_project_list == false
+        -- is_valid_my_content == false or
+        -- nil value likely means control is not found in last round of cached lookup... so there's nothing to learn from it as far as if we need to refresh
+        -- the presence of false for any control (regardless which view is open) indicates the last cached lookup of controls is stale (at least) and possible from different view
+        if not need_refresh then
+            log:info("all sampled controls are valid, assuming no cached controls are still valid")
             return
         end
         log:info("editor window cache invalidated")
+        -- log:info("  is_valid(_btn_my_content_on_screenpal_com)", is_valid_my_content)
+        log:info("  is_valid(_btn_minimum_zoom)", is_valid_btn_min_zoom)
+        log:info("  is_valid(_project_list)", is_valid_project_list)
     end
     log:info("building editor window")
     self:force_refresh_cached_controls()
