@@ -419,3 +419,20 @@ cv_img_edit_points_2red2white = cv.imread(str(samples_dir / 'edit-points/2red2wh
 # HEX: 070809
 # SRGBA: srgba(7,8,9,1)
 #
+
+# TODO! detect silences underneath yellow shape overlay range
+# example:
+cv_img_volume_cursor_end = cv.imread(str(samples_dir / "overlay/yellow-shape/detect-silence-under-yellow.png"))
+# 1718 to 1781 (width) => silence _not_ detected by screenpal (darker blue silence detection)
+# 1941 to 2100 (width) => silence detected by screenpal (lighter gray silence detection)
+#   with in this there are a few challenges for edge cases:
+#   playhead is in range @1982-1983 pixels
+#   cut edit point (vertical red dashed line) is in range @2024-2025 pixels
+#   freeze frame is over most of range (except start) @1977 to 2144 (past end of silence)
+# 2770 to 2925 => silence detected by screenpal (lighter gray)
+#   has cut edit point (vertical red dashed line) in range @2846-2847 pixels
+#
+# TODO decide what to detect as a result of the yellow
+#   TODO how does the yellow interfere with existing detection?
+#   what did I do on other cases like freeze frame?
+#   PRN detect yellow and then use that to trigger speical silence detection (instead of modifying general silence detection which is working very well already)
