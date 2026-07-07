@@ -82,7 +82,8 @@ function ScreenPalEditorWindow:ensure_cached_controls(force)
         -- nil value likely means control is not found in last round of cached lookup... so there's nothing to learn from it as far as if we need to refresh
         -- the presence of false for any control (regardless which view is open) indicates the last cached lookup of controls is stale (at least) and possible from different view
         if not need_refresh then
-            log:info("all sampled controls are valid, assuming no cached controls are still valid")
+            -- FYI leave this for a while so you can see how often you are checking control validity
+            log:info("cached controls appear valid (editor window)")
             return
         end
         log:info("editor window cache invalidated")
