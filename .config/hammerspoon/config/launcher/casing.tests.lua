@@ -52,7 +52,11 @@ describe("sentence_case", function()
                 should.be_equal(casing.sentence_case("I love VirtualBox"), "I love VirtualBox")
             end)
         end)
-    end)
 
-    -- PRN add tests of multiple sentences in one... I won't be using this anytime soon.
+        describe("punctuation", function()
+            it("dotted notation", function()
+                should.be_equal(casing.sentence_case("I used community.docker.docker_containers module"), "I used community.docker.docker_containers module")
+            end)
+        end)
+    end)
 end)
