@@ -2,7 +2,41 @@ local log = require("config.logs").launcher()
 
 local M = {}
 
+---@param text string
+---@return string
+local function strip_metadata(text)
+    local result = text
+
+    -- Strip prefix patterns:
+    -- 1. m2-04, M2-04, etc. optionally followed by a 3+ all-caps word
+    result = result:gsub("^[mM][0-9]+-[0-9]+%s+([A-Z][A-Z][A-Z]+%s+)?", "")
+    -- 2. m01a10, M01A10, etc. optionally followed by a 3+ all-caps word
+    result = result:gsub("^[mM][0-9]+[aA][0-9]+%s+([A-Z][A-Z][A-Z]+%s+)?", "")
+    -- 3. M2 02, m2 04, etc. optionally followed by a 3+ all-caps word
+    result = result:gsub("^[mM][0-9]+%s+[0-9]+%s+([A-Z][A-Z][A-Z]+%s+)?", "")
+
+    -- Strip suffix patterns:
+    -- 1. .30fps, .60fps, etc. (fps metadata) - strip from words like checklist.30fps -> checklist
+    result = result:gsub("%.[0-9]+fps", "")
+
+    -- 2. .mp4, .mkv, .mov, .webm extensions at the end
+    result = result:gsub("%.[mM][pP]4$", "")
+    result = result:gsub("%.[mM][kK][vV]$", "")
+    result = result:gsub("%.[mM][oO][vV]$", "")
+    result = result:gsub("%.[wW][eE][bB][mM]$", "")
+
+    -- 3. Trim trailing whitespace that might be left
+    result = result:gsub("%s+$", "")
+
+    -- 4. shasum hashed value 8+ hex chars at the end (preceded by space or hyphen)
+    result = result:gsub("[%s%-][a-fA-F0-9][a-fA-F0-9][a-fA-F0-9][a-fA-F0-9][a-fA-F0-9][a-fA-F0-9][a-fA-F0-9][a-fA-F0-9][a-fA-F0-9]*$", "")
+
+    return result
+end
+
 function M.sentence_case(original_text)
+    local text_without_metadata = strip_metadata(original_text)
+
     local preserve_words = {
         "GNU", "PROMPT_COMMAND", "PIPESTATUS", "IFS", "PATH", "STDERR", "STDOUT",
         "STDIN", "TTY", "PTY", "PID", "PPID", "UID", "GID", "ANSI", "EOF", "EOL",
@@ -48,8 +82,9 @@ function M.sentence_case(original_text)
         --   - TODO decide if preserve CamelCase too? (do not do this yet)
         --
         local words = {}
-        for word, sep in text:gmatch("([^%s]+)(%s*)") do
-            log:info("word", vim.inspect(word))
+        for match_word, sep in text:gmatch("([^%s]+)(%s*)") do
+            log:info("word", vim.inspect(match_word))
+            local word = match_word
             local is_acronym = word:match("^%u+$") and #word > 1
             if perserved_dict[word] or is_acronym then
                 -- keep word as-is
@@ -65,7 +100,7 @@ function M.sentence_case(original_text)
         return table.concat(words)
     end
 
-    return to_sentence_case(original_text)
+    return to_sentence_case(text_without_metadata)
 end
 
 function M.transform_selection_via_clipboard(operation)
