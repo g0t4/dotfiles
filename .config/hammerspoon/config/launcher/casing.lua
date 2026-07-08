@@ -39,36 +39,30 @@ function M.sentence_case(original_text)
     end
 
     local function to_sentence_case(text)
-        return (text:gsub("([^.!?]+)([.!?]?)", function(sentence, punct)
-            log:info("sentence", sentence, "punct", punct)
-
-            -- within a sentence... split on whitespace and then:
-            -- Each word:
-            --   - if exact match in preserve_words then leave as-is
-            --   - else if all uppercase letters then leave as-is (assume acronym)
-            --   - else if first word => uppercase
-            --   - else if not first word => lowercase
-            --
-            --   - TODO decide if preserve CamelCase too? (do not do this yet)
-            --
-            local words = {}
-            for word, sep in sentence:gmatch("([^%s]+)(%s*)") do
-                log:info("word", vim.inspect(word))
-                local is_acronym = word:match("^%u+$") and #word > 1
-                if perserved_dict[word] or is_acronym then
-                    -- keep word as-is
+        -- Each word:
+        --   - if exact match in preserve_words then leave as-is
+        --   - else if all uppercase letters then leave as-is (assume acronym)
+        --   - else if first word => uppercase
+        --   - else if not first word => lowercase
+        --
+        --   - TODO decide if preserve CamelCase too? (do not do this yet)
+        --
+        local words = {}
+        for word, sep in text:gmatch("([^%s]+)(%s*)") do
+            log:info("word", vim.inspect(word))
+            local is_acronym = word:match("^%u+$") and #word > 1
+            if perserved_dict[word] or is_acronym then
+                -- keep word as-is
+            else
+                if #words == 0 then
+                    word = word:sub(1, 1):upper() .. word:sub(2):lower()
                 else
-                    if #words == 0 then
-                        word = word:sub(1, 1):upper() .. word:sub(2):lower()
-                    else
-                        word = word:sub(1, 1):lower() .. word:sub(2)
-                    end
+                    word = word:sub(1, 1):lower() .. word:sub(2)
                 end
-                table.insert(words, word .. sep)
             end
-            sentence = table.concat(words)
-            return sentence .. punct
-        end))
+            table.insert(words, word .. sep)
+        end
+        return table.concat(words)
     end
 
     return to_sentence_case(original_text)
