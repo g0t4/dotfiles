@@ -256,13 +256,18 @@ abbr --command git --position anywhere -- agentworld '--author "qwen-agentworld-
 abbr --set-cursor -- yolo 'git commit --all -m "%" && git push'
 
 # * git push
-# push up to the last X commits, IOTW all but the last X commits
-abbr --regex 'gpupto\d+' --function gpuptoX _gpuptoX
-function gpuptoX
-    set -l num (string replace --regex '^gpupto' '' $argv)
+# push up to the last X commits, IOTW all but the last X commits (or leave it blank to type in a ref)
+abbr --set-cursor --regex 'gpt\d*' --function _abbr_git_push_up_to -- _abbr_git_push_up_to
+function _abbr_git_push_up_to
+    set -l num (string replace --regex '^gpt' '' $argv)
+    if test -z "$num"
+        set commit_ref ""
+    else
+        set commit_ref "HEAD~$num"
+    end
     # refspec has object:dest_ref
     # TODO also use default remote? or?
-    echo "git push origin HEAD~$num:$(git_current_branch)"
+    echo "git push origin $commit_ref%:$(git_current_branch)"
 end
 
 # *** LOG RELATED ***
