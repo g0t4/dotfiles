@@ -75,15 +75,11 @@ async def main(connection: iterm2.Connection):
             await wes_split_pane(connection, split_vert=False)
             return
 
-        # *** Replace pane helpers (split + close original) — "R" for [R]eplace
-        # FYI KM => remaps Cmd+R (replace vert) => Cmd+Shift+Control+R
-        # FYI   and Cmd+Shift+R (replace horiz) => Cmd+Ctrl+Option+R
+        # *** Replace pane helper (split + close original) — "R" for [R]eplace
+        # FYI KM => remaps Cmd+R (replace) => Cmd+Shift+Control+R
         r = keystroke.keycode == iterm2.Keycode.ANSI_R
         if r and control and shift and command:
-            await wes_replace_pane(connection, split_vert=True)
-            return
-        if r and control and command and option:
-            await wes_replace_pane(connection, split_vert=False)
+            await wes_replace_pane(connection)
             return
 
         b = keystroke.keycode == iterm2.Keycode.ANSI_B
