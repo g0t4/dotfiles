@@ -307,14 +307,8 @@ function git_unpushed_commits --description "(g)it (u)n(p)ushed commits"
 
     # has remotes:
     if git rev-parse --abbrev-ref --symbolic-full-name @{upstream} &>/dev/null
-        git log $_unpushed_commits
-        return
-    end
-
-    # has reviewed branch:
-    if git rev-parse --verify reviewed >/dev/null 2>&1
-        # PRN do I even like this idea?
-        git log reviewed~1..HEAD
+        # show line numbers so I can see how far back to push (up to is weird to me - off by 1 issue)
+        git log --color=always $_unpushed_commits | awk '{printf "'(set_color yellow)'%4d'(set_color normal)' %s\n", NR, $0}'
         return
     end
 
