@@ -1424,6 +1424,13 @@ local bookmarks = {
         subText = "Convert clipboard text to title case, copy and paste",
         image = hs.image.imageFromName("NSActionTemplate"),
     },
+    {
+        name = "spinner_test",
+        keywords = {"spinner", "test", "canvas"},
+        text = "Test Canvas Spinner",
+        subText = "Show canvas-based processing spinner",
+        image = hs.image.imageFromName("NSActionTemplate"),
+    },
 }
 
 local function execOrLog(cmd)
@@ -1482,6 +1489,14 @@ local bookmarkActions = {
     end,
     sentence_case = function()
         casing.transform_selection_via_clipboard(casing.sentence_case)
+    end,
+    spinner_test = function()
+        local canvas_spinner = require("config.ui.canvas_spinner")
+        canvas_spinner:start()
+        -- Auto-stop after 5 seconds for testing
+        hs.timer.doAfter(5, function()
+            canvas_spinner:stop()
+        end)
     end,
     title_case = function()
         casing.transform_selection_via_clipboard(casing.title_case)

@@ -4,6 +4,12 @@ local AppWindows = require("config.macros.screenpal.app_windows")
 local ToolOptionWindows = require("config.macros.screenpal.windows.tool_options")
 local Timer = require("devtools.logs.timer")
 -- log:info(ensure_in_coroutine)
+local spinner = require("config.ui.canvas_spinner")
+spinner:start()
+-- spinner:stop()
+
+
+do return end
 
 -- local macros = require("config.macros")
 -- StreamDeckKeyboardMaestroRunner("print('works to dispatch KM macro like streamdeck button press with logging + coroutine context!')") -- works

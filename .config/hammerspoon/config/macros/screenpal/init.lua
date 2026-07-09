@@ -693,6 +693,9 @@ end
 function SPAL_Add_Shape(shape_type)
     -- formerly startOverlayShapeOfType
     ensure_in_coroutine(function()
+        local canvas_spinner = require("config.ui.canvas_spinner")
+        canvas_spinner:start()
+        
         _click2LevelTool("Overlay", "Shape") -- FYI WORKING!
 
         -- * set shape type
@@ -719,6 +722,8 @@ function SPAL_Add_Shape(shape_type)
         else
             shapes:wait_for_shape_type_checkbox_then_press_it(shape_type)
         end
+        
+        canvas_spinner:stop()
     end)
 end
 
