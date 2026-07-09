@@ -299,6 +299,31 @@ abbr gst 'git status' # I just can't stop using gst...
 #
 abbr gstl "git status && echo && git_unpushed_commits" # * try # FYI requires gst/glo aliases(funcs) to work
 
+# * nl - short => long options
+# FYI I don't need most of these BUT IIAC the penalty is low to have them given that they are command specific
+#  and IIAC fish only even considers them when I use the relevant command for command specific abbrs...
+#  if not I should consider optimizing abbr usage (if it provies to be too much overhead in my own config first)
+#    do not optimize what doesn't need it... this set of comments is just a reminder that I assume it is safe to define lots of abbrs
+#    in fact IIAC going forward I could define abbrs for short=>long on every command I use and it wouldn't hurt any perf of abbrs in general
+#    or I should qualify it won't hurt perf of command position and anywhere positioned abbrs (that command specific never impact perf if not that command)
+#
+#    TODO consider a registry of short to long options, maybe move these into a single script file... these could become as useful as completions IMO
+abbr --command nl -- '-b' '--body-numbering'
+abbr --command nl -- '-d' '--section-delimiter'
+abbr --command nl -- '-f' '--footer-numbering'
+abbr --command nl -- '-h' '--header-numbering'
+abbr --command nl -- '-i' '--line-increment'
+abbr --command nl -- '-l' '--join-blank-lines'
+abbr --command nl -- '-n' '--number-format'
+abbr --command nl -- '-p' '--no-renumber'
+abbr --command nl -- '-s' '--number-separator'
+abbr --command nl -- '-v' '--starting-line-number'
+abbr --command nl -- '-w' '--number-width'
+
+
+
+
+
 abbr glo git_unpushed_commits # composed by gsl
 abbr gup git_unpushed_commits
 function git_unpushed_commits --description "(g)it (u)n(p)ushed commits"
