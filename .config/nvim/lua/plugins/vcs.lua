@@ -58,12 +58,12 @@ return {
                     --            * blame
 
                     -- * hunk actions
-                    map('n', '<leader>hs', gitsigns.stage_hunk) -- * toggles staged/unstaged
+                    map('n', '<leader>hst', gitsigns.stage_hunk) -- * toggles staged/unstaged
                     map('n', '<leader>hr', gitsigns.reset_hunk)
                     -- FYI careful w/ reset... removes unstaged changes! (still have to save though)
 
                     -- * selection actions
-                    map('v', '<leader>hs', function()
+                    map('v', '<leader>hst', function()
                         gitsigns.stage_hunk({ vim.fn.line('.'), vim.fn.line('v') })
                     end)
                     map('v', '<leader>hr', function()
@@ -71,7 +71,7 @@ return {
                     end)
 
                     -- * buffer actions
-                    map('n', '<leader>hS', gitsigns.stage_buffer)
+                    map('n', '<leader>hST', gitsigns.stage_buffer)
                     map('n', '<leader>hR', gitsigns.reset_buffer)
 
                     -- * preview changes
