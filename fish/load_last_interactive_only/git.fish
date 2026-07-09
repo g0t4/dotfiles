@@ -193,6 +193,10 @@ abbr gdc "git diff --staged"
 abbr gdc_summary "git diff --staged --summary" # --summary will show rename % similarity but squelches diff
 abbr gd_index "git diff --staged" # show staged (index) changes
 #
+abbr git_diff_two_files "git diff --no-index" # reminder abbr
+abbr gdni "git diff --no-index" # compare two files
+abbr git_diff_two_dirs "git diff --no-index __dir1__ __dir2__ '*foo*'" # reminder abbr
+#
 abbr gd_is_worktree_clean "git diff --quiet" # 0 = worktree is clean (no unstaged changes), 1 = worktree is dirty
 abbr gd_is_index_clean "git diff --staged --quiet" # 0 = index is clean (no staged changes), 1 = index is dirty
 # last commit diff:
