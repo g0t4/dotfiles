@@ -1509,6 +1509,7 @@ abbr hfcls "hf cache ls --no-truncate"
 abbr hfcrm "hf cache rm"
 abbr hfcv "hf cache verify"
 abbr hfcpr "hf cache prune"
+abbr hfc_downloadInProgress "fd .downloadInProgress ~/.cache/huggingface/" # reminder abbr
 
 abbr hfml "hf models ls"
 abbr hfmls "hf models ls --search"
