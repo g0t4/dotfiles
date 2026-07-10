@@ -37,7 +37,32 @@ vim.filetype.add({
         notes = "markdown",
         test = "test",
         gitconfig = "gitconfig",
+
+        -- * systemd filetype
+        -- neovim core does not map all .service files to systemd
+        -- FYI look at core filetypes:
+        --   require("vim.filetype") -- F12 to this source file
+        --   require("vim.filetype").match({filename= "foo.unit"})
         --
+        -- consider more file extensions when you encounter a need for them
+        service = "systemd",
+        socket = "systemd",
+        timer = "systemd",
+        target = "systemd",
+        mount = "systemd",
+        automount = "systemd",
+        -- path = "systemd",
+        -- slice = "systemd",
+        -- swap = "systemd",
+        -- link = "systemd",
+        netdev = "systemd",
+        network = "systemd",
+        nspawn = "systemd",
+        dnssd = "systemd",
+        --
+        -- more maybes:
+        -- .image, .container, .volume, .pod, .kube, .build, .artifact
+
         -- override bash as bash...
         -- FYI this should be the case from the nvim runtime files (but somehow nvim runtime seems to assign sh instead)
         -- bash = "bash",
