@@ -220,7 +220,7 @@ function close_temp_windows_so_they_do_not_reopen()
         local buf_name = vim.api.nvim_buf_get_name(buf_nr)
         local ft = vim.bo[buf_nr].filetype
         -- log:info("buf_name", buf_name)
-        log:info("ft", ft)
+        -- log:info("ft", ft)
         if
             buf_name:match('coc%-nvim%.log') or
             buf_name:match('output:///') or -- output:// include coc windows from :CocCommand workspace.showOutput
