@@ -71,7 +71,9 @@
     "python.formatting.yapfArgs": [
         // join_multiple_lines: False apparently doesn't apply to dictionary values... FUCK really... in that cas though PUT A TRAILING COMMA ON LAST ITEM IN DICT/LIST and it wont join then
         // TODO evals around gptoss patch issues w/ 1 line around top level definitions vs 2... see if indeed it helps and if so then fine, I can use 2 which is the default
-        "--style", "{column_limit: 400, allow_split_before_dict_value: False, blank_lines_around_top_level_definition: 1, join_multiple_lines: False}"
+        "--style", "{column_limit: 400, allow_split_before_dict_value: False, join_multiple_lines: False}"
+        // lets try to move to 2 blank lines as agents always use that... allow style.yapf to override locally... old value I used:  blank_lines_around_top_level_definition: 1,
+        // TODO use .style.yapf instead of global defaults? probably best that way so each repo has to declare its style (and can differ) and otherwise uses defaults
         // "{based_on_style: pep8, indent_width: 4}"
     ],
     // // *** ruff/coc-ruff
