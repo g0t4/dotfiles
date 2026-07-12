@@ -132,9 +132,13 @@ abbr uvi_bootstrap 'uv init --no-description --no-readme && uv add yapf rope ipy
 abbr uvi 'uv init --no-description --no-readme'
 abbr uvinw 'uv init --no-description --no-readme --no-workspace'
 # ipykernel is for ipython
-abbr uvi_common 'uv init --no-description --no-readme && uv add ipython ipykernel yapf rope rich httpx'
-abbr uvi_cli 'uv init --no-description --no-readme && uv add ipython ipykernel yapf rope rich httpx typer'
-abbr uvi_web 'uv init --no-description --no-readme && uv add ipython ipykernel yapf rope rich httpx fastapi'
+set --local _pypi_common ipython ipykernel yapf rope rich httpx pytest pytest-watch
+abbr uva_common "uv add $_pypi_common"
+abbr uvi_common "uv init --no-description --no-readme && uv add $_pypi_common"
+abbr uvi_cli "uv init --no-description --no-readme && uv add $_pypi_common typer"
+abbr uvi_web "uv init --no-description --no-readme && uv add $_pypi_common fastapi"
+# PRN other sets like for LLMs and/or scipy type stuff
+# av libraries?
 #
 abbr uvp 'uv pip'
 abbr uvpi 'uv pip install'
