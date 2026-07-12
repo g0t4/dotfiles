@@ -1969,7 +1969,7 @@ function abbr_aio
     abbr_videos_glob_for_current_dir
 end
 
-abbr shift_only 'for i in *.mkv; video_editing_just_shift_to_mp4_one_video $i; end'
+abbr shift_only 'for i in *.{mkv,mov}; video_editing_just_shift_to_mp4_one_video $i; end'
 function video_editing_just_shift_to_mp4_one_video
     # TODO merge with stage_1 below which does the same thing
     # converts to mp4 + shifts by 100ms
