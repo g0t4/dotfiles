@@ -269,7 +269,7 @@ if status is-interactive
 end
 
 # * ptw
-abbr --set-cursor -- ptw_logs 'ptw --clear *%_tests.py -- --capture=no --log-cli-level=INFO'
+abbr --set-cursor -- ptw_prints 'ptw --clear -- --capture=no --log-cli-level=INFO -vv' # show prints and logs
 # setup % so I can easily change matching python code files for tests to run
 # ptw args:
 #   --clear == clear screen b/w runs
@@ -278,6 +278,7 @@ abbr --set-cursor -- ptw_logs 'ptw --clear *%_tests.py -- --capture=no --log-cli
 #   --log-cli-level=INFO
 #   --durations=N         Show N slowest setup/test durations (N=0 for all)
 #   --durations-min=N     Minimal duration in seconds for inclusion in slowest list. Default: 0.005 (or 0.0 if -vv is given).
+#   -vv Show full diff on assertion failures (FYI can set assertion verbosity level too if I don't want other verbose outputs, use pytest.init for this... can I add smth like ~/.pytest.ini)
 #
 abbr --set-cursor ptw_one --function __ptw_one
 function __ptw_one
@@ -295,12 +296,12 @@ function __ptw_one
     end
 
     # FYI leave ptw_file_watch_glob unwrapped (shell glob)
-    echo "ptw --clear $ptw_file_watch_glob -- '$test_case%' --capture=no --log-cli-level=INFO"
+    echo "ptw --clear $ptw_file_watch_glob -- '$test_case%' -vv --capture=no --log-cli-level=INFO"
     # % is for cursor placement, now that this can have local overrides, probably most likely place to make changes is the one test case to run, and not the files to monitor for changes
 
 end
 
-abbr pytest_nocapture 'pytest --capture=no'
-abbr pytest_info_logs  'pytest --log-cli-level=INFO'
+abbr pytest_nocapture 'pytest -vv --capture=no'
+abbr pytest_info_logs  'pytest -vv --log-cli-level=INFO'
 # expand short to long options:
 abbr --command pytest --position=anywhere -- "-s" "--capture=no"
