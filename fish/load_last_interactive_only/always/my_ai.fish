@@ -20,30 +20,39 @@ function ask_rewrite_diff_reviewer
 end
 
 abbr --add abbr_trace_nth_file --regex 't\d*a?' --function abbr_expand_trace_nth_file
-function abbr_expand_trace_nth_file
-    set original $argv[1]
-    # extract the numeric part after the leading 't'
-    set index (string replace --regex '^t' '' $original)
-    if string match --quiet --regex a $index
-        set index (string replace --regex 'a' '' $index)
-        set opts --all
-    else
-        set opts ""
-    end
-    # default to the first file if no number was provided
-    if test -z "$index"
-        set index 1
-    end
-    # find all trace files, sort them, and pick the Nth one
-    set files (fd --max-depth=1 ".*-trace\.json" . | sort)
-    set file $files[$index]
+function abbr_expand_trace_nth_file --argument-names abbreviation
+    set current_command_line (commandline)
+    set current_cursor_position (commandline --cursor)
+    set text_after_cursor (string sub --start (math $current_cursor_position + 1) $current_command_line)
 
-    if test -n "$file"
-        echo "nvim -c 'AskViewTrace $opts $file'"
-        # echo "view_trace $opts $file"
+    if test -n "$text_after_cursor"
+        # AFAICT I cannot modify commandline (either blocked in abbrs OR when abbr is triggered fish snapshots commandline and then the expansion is inserted in the expanded word and the rest remains the same)
+        # SO, don't close the quoted command... I'll have to do that myself
+        # TODO can I schedule something to run after the abbr expands :)... if so I could end the quoted command that way (and maybe move cursor to end of line)
+        echo "nvim -c 'AskViewTrace $assumed_file"
     else
-        echo "nvim -c 'AskViewTrace $opts'"
-        # echo "view_trace $opts"
+        # extract the numeric part after the leading 't'
+        set index_part (string replace --regex '^t' '' $abbreviation)
+        set opts ""
+        if string match --quiet --regex a $index_part
+            set index_part (string replace --regex 'a' '' $index_part)
+            set opts "--all"
+        end
+        # default to the first file if no number was provided
+        if test -z "$index_part"
+            set index_part 1
+        end
+        # find all trace files, sort them, and pick the Nth one
+        set sorted_trace_files (fd --max-depth=1 ".*-trace\.json" . | sort)
+        set selected_trace_file $sorted_trace_files[$index_part]
+
+        if test -n "$selected_trace_file"
+            echo "nvim -c 'AskViewTrace $opts $selected_trace_file'"
+            # echo "view_trace $opts $file"
+        else
+            echo "nvim -c 'AskViewTrace $opts'"
+            # echo "view_trace $opts"
+        end
     end
 end
 
