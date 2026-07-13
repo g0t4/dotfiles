@@ -257,9 +257,13 @@ abbr --set-cursor -- yolo 'git commit --all -m "%" && git push'
 
 # * git push
 # push up to the last X commits, IOTW all but the last X commits (or leave it blank to type in a ref)
-abbr --set-cursor --regex 'gpt\d*' --function _abbr_git_push_up_to -- _abbr_git_push_up_to
+abbr --set-cursor --regex 'gptf?\d*f?' --function _abbr_git_push_up_to -- _abbr_git_push_up_to
+# allow f before or after number (in case I type gpt1 first, vs if i habituate gptf1 which is long term probably where I will go)
 function _abbr_git_push_up_to
-    set -l num (string replace --regex '^gpt' '' $argv)
+    set num (string replace --all --regex '[^\d]' '' "$argv") # strip non numbers
+    if string match --quiet --regex f "$argv"
+        set --function force \--force
+    end
     if test -z "$num"
         set commit_ref ""
     else
@@ -267,7 +271,7 @@ function _abbr_git_push_up_to
     end
     # refspec has object:dest_ref
     # TODO also use default remote? or?
-    echo "git push origin $commit_ref%:$(git_current_branch)"
+    echo "git push origin $commit_ref%:$(git_current_branch) $force"
 end
 
 # *** LOG RELATED ***
