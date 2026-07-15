@@ -329,9 +329,9 @@ abbr --command nl -- '-s' '--number-separator'
 abbr --command nl -- '-v' '--starting-line-number'
 abbr --command nl -- '-w' '--number-width'
 
-
-
-
+function line_numbers --description "Prepend yellow, padded line numbers to input"
+    awk '{printf "'(set_color yellow)'%4d'(set_color normal)' %s\n", NR, $0}'
+end
 
 abbr glo git_unpushed_commits # composed by gsl
 abbr gup git_unpushed_commits
@@ -342,7 +342,7 @@ function git_unpushed_commits --description "(g)it (u)n(p)ushed commits"
     # has remotes:
     if git rev-parse --abbrev-ref --symbolic-full-name @{upstream} &>/dev/null
         # show line numbers so I can see how far back to push (up to is weird to me - off by 1 issue)
-        git log --color=always $_unpushed_commits | awk '{printf "'(set_color yellow)'%4d'(set_color normal)' %s\n", NR, $0}'
+        git log --color=always $_unpushed_commits | line_numbers
         return
     end
 
