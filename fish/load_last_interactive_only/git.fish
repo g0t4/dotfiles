@@ -289,7 +289,7 @@ abbr --command git -- pretty_reflog --pretty=reflog
 abbr --command git -- pretty_committers --pretty=names
 abbr --command git -- pretty_authors --pretty=emails
 
-abbr gl git log
+abbr -- gl "git log --color=always | line_numbers"
 
 abbr --regex 'gl\d+' --function glX _glX
 abbr --regex 'g\d+' --function glX _gX
@@ -298,7 +298,7 @@ function glX
     #   gl10
     #   g10
     #   hence l? => optional l after the g
-    string replace --regex '^gl?' 'git log -' $argv
+    echo "$(string replace --regex '^gl?' 'git log --color=always -' $argv) | line_numbers"
 end
 
 set _unpushed_commits "HEAD@{push}~1..HEAD" # always show last pushed commit too (so if nothing unpushed the output isn't empty as if maybe broken)
@@ -329,8 +329,9 @@ abbr --command nl -- '-s' '--number-separator'
 abbr --command nl -- '-v' '--starting-line-number'
 abbr --command nl -- '-w' '--number-width'
 
+abbr --position=anywhere -- pln "| line_numbers"
 function line_numbers --description "Prepend yellow, padded line numbers to input"
-    awk '{printf "'(set_color yellow)'%4d'(set_color normal)' %s\n", NR, $0}'
+    awk '{printf "'(set_color yellow)'%4d'(set_color normal)' %s\n", NR, $0}' | less
 end
 
 abbr glo git_unpushed_commits # composed by gsl
