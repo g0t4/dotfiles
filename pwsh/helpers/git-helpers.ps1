@@ -68,9 +68,9 @@ ealias gds "git diff --staged ${color_words}"
 ealias gdt 'git describe --tags `git rev-list --tags --max-count=1`'
 # ealias gdt 'git diff-tree --no-commit-id --name-only -r'
 
-ealias gdlc "git diff ${color_words} HEAD~1 HEAD"
+ealias gdlc "git log --patch HEAD~1..HEAD"
 1..50 | ForEach-Object {
-    ealias "gdlc$_" "git diff ${color_words} HEAD~$($_+1) HEAD~$_"
+    ealias "gdlc$_" "git log --patch HEAD~$($_+1)..HEAD~$_"
 }
 
 # Show changes in last commit by diffing with previous commit
