@@ -186,6 +186,22 @@ abbr gassumels 'git ls-files -v | rg_grep ^h'
 # * --color-words fubar's delta diffs (let delta handle the styling)
 # makes me wonder if this was also what I was hating about diff-so-fancy
 abbr gd "git diff" # show unstaged (worktree) changes
+abbr gdu "git -c delta.side-by-side=false diff " # u == ~unified diff (not side by side) - can copy easier
+abbr --regex 'gd[u]*\d+' --function gdX _gdX
+function gdX
+    # show the diff _ACROSS_ X commits back
+    # gd5 => git diff HEAD~5..HEAD
+    echo -n git
+    if string match --quiet --regex 'u' $argv
+        # u == unified (not side by side) diff
+        echo -n " -c delta.side-by-side=false"
+    end
+    set num (string replace --regex 'gd[su]*' '' $argv)
+    # unlike gdlc, we don't do this across one commit, but across N
+    echo " diff HEAD~$num..HEAD"
+end
+
+
 abbr gd_summary "git diff --summary" # --summary shows % similarity but squelches diff
 abbr gd_worktree "git diff" # show worktree changes
 #
@@ -429,10 +445,10 @@ function gdlcX
     echo -n git
     if string match --quiet --regex 'u' $argv
         # u == unified (not side by side) diff
-        echo -n " delta.side-by-side=false "
+        echo -n " -c delta.side-by-side=false"
     end
-    set -l num (string replace --regex '^gdlc[u]?' '' $argv)
-    set -l prev (math $num - 1)
+    set num (string replace --regex '^gdlc[u]?' '' $argv)
+    set prev (math $num - 1)
     echo " log --patch HEAD~$num..HEAD~$prev"
 end
 #
