@@ -62,8 +62,7 @@ ealias gcob 'git checkout -b'
 #   BUT, keep --color-words if no external tool is used
 $color_words="--color-words"
 ealias gd "git diff ${color_words}"
-ealias gdc "git diff --cached ${color_words}"
-ealias kgdc "git diff --cached ${color_words}" # common typo alias (cmd+k clear > kgst)
+ealias gds "git diff --staged ${color_words}"
 
 # TODO resolve conflicting gdt
 ealias gdt 'git describe --tags `git rev-list --tags --max-count=1`'

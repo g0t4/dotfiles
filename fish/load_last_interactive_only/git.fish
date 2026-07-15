@@ -189,8 +189,8 @@ abbr gd "git diff" # show unstaged (worktree) changes
 abbr gd_summary "git diff --summary" # --summary shows % similarity but squelches diff
 abbr gd_worktree "git diff" # show worktree changes
 #
-abbr gdc "git diff --staged"
-abbr gdc_summary "git diff --staged --summary" # --summary will show rename % similarity but squelches diff
+abbr gds "git diff --staged"
+abbr gds_summary "git diff --staged --summary" # --summary will show rename % similarity but squelches diff
 abbr gd_index "git diff --staged" # show staged (index) changes
 #
 abbr git_diff_two_files "git diff --no-index" # reminder abbr
