@@ -427,7 +427,7 @@ abbr gdlcu "git -c delta.side-by-side=false log --patch HEAD~1..HEAD"
 abbr --regex 'gdlc[u]?\d+' --function gdlcX _gdlcX
 function gdlcX
     echo -n git
-    if string match --quiet --regex '^gdlcu' $argv
+    if string match --quiet --regex 'u' $argv
         # u == unified (not side by side) diff
         echo -n " delta.side-by-side=false "
     end
