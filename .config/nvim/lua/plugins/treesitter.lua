@@ -129,6 +129,8 @@ return {
                     --  and it might be also causing issues with indent in those files too outside of comments...
                     --  if you wanna use this at least disable it for yaml!
                     --
+                    --  FYI one test case => see if you have a comment and an indented bullet if you will and if you o to continue to next line, does it put the indent to match indent from prior line (after comment char indent)
+                    --
                     -- local indent_queries_exist = vim.treesitter.query.get(filetype, "indents")
                     -- if indent_queries_exist then
                     --     -- * nvim-treesitter indentation (experimental)
