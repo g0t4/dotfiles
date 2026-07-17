@@ -258,13 +258,15 @@ vim.api.nvim_create_autocmd("FileType", {
 -- yaml
 vim.api.nvim_create_autocmd("FileType", {
     group = "filetypemods",
-    pattern = "yaml",
+    pattern = "yaml,yml,json",
     callback = function()
         -- FYI ftplugin/yaml.vim:28:  setlocal shiftwidth=2 softtabstop=2
         --     in nvim runtime
         -- actually I like 2...  I will fix formatters to use this
-        -- vim.bo.shiftwidth = 4
-        -- vim.bo.softtabstop = 4
+        --  this seems to ignore editorconfig indent config... but I set it to 2 too for yaml+yml
+        vim.bo.shiftwidth = 2
+        vim.bo.softtabstop = 2
+        -- FYI verified in ansible playbooks now the yml file when I add new line with `o` and `O` that it doesn't use 4 spaces to indent each level
     end
 })
 
