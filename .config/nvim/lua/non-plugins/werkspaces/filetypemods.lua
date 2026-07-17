@@ -266,6 +266,7 @@ vim.api.nvim_create_autocmd("FileType", {
         --  this seems to ignore editorconfig indent config... but I set it to 2 too for yaml+yml
         vim.bo.shiftwidth = 2
         vim.bo.softtabstop = 2
+        vim.bo.indentexpr = "" -- disable treesitter indent in yaml... it FUCKS UP CONTINUE COMMENTS (o/O with formatoptions+=o)... neovim's continue comments is PEREFCT (setting "" makes vim/neovim's kick in)
         -- FYI verified in ansible playbooks now the yml file when I add new line with `o` and `O` that it doesn't use 4 spaces to indent each level
     end
 })
