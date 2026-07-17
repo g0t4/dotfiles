@@ -125,13 +125,17 @@ return {
                         vim.o.foldenable = false -- no autofolding, just manual after open file
                     end
 
-                    local indent_queries_exist = vim.treesitter.query.get(filetype, "indents")
-                    if indent_queries_exist then
-                        -- * nvim-treesitter indentation (experimental)
-                        -- FYI IIUC this is gonna be mainlined in nvim 1.0?
-                        --  at which time I should switch to its API to start/enable
-                        vim.bo[bufnr].indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
-                    end
+                    -- FYI THIS IS FUCKING UP YAML (in playbooks .yml files) comments on continue comment
+                    --  and it might be also causing issues with indent in those files too outside of comments...
+                    --  if you wanna use this at least disable it for yaml!
+                    --
+                    -- local indent_queries_exist = vim.treesitter.query.get(filetype, "indents")
+                    -- if indent_queries_exist then
+                    --     -- * nvim-treesitter indentation (experimental)
+                    --     -- FYI IIUC this is gonna be mainlined in nvim 1.0?
+                    --     --  at which time I should switch to its API to start/enable
+                    --     vim.bo[bufnr].indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+                    -- end
                 end,
             })
 
