@@ -26,6 +26,7 @@ vim.o.shiftwidth = 4 -- shifting: << >>
 
 -- *** show whitespace
 vim.opt.listchars = { tab = '→ ', trail = 'x', space = '⋅' } -- FYI also `eol:$`
+-- PRN would be nice to have a mode to toggle trailing whitespace for removal like git diff does
 vim.cmd([[
     command! ToggleShowWhitespace if &list | set nolist | else | set list | endif
 ]])
