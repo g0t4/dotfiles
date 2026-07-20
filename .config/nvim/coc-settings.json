@@ -284,7 +284,8 @@
         }
 
         "systemd": {
-            "command": "systemd-lsp",
+            // "command": "systemd-lsp",
+            "command": "~/repos/github/g0t4/systemd-lsp/target/debug/systemd-lsp", // I am not a fan of stripping all leading whitespace (especially on line continuations where that gets SUPER confusing to not have indented args say on ExecStart where wrap is common)
             "args": [ ],
             "filetypes": [ "systemd" ],
             "rootPatterns": [ ] // I mostly need this for unit files, which don't have the concept of a root project file
