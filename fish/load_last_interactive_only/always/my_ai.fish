@@ -112,7 +112,7 @@ function rag_validate_index
 
     set _python3 "$ASK_REPO/.venv/bin/python3"
     # switch to directory to run the index.validate module... I could install this yes... for now I don't want to go that route
-    fish -c "cd '$ASK_REPO/lua/ask-openai/rag'; $_python3 -m index.validate '$rag_dir'"
+    fish -c "cd '$ASK_REPO/lua/ask-openai/rag'; $_python3 -m index.validate '$rag_dir' $argv"
 end
 
 abbr rag_rebuilder 'time rag_indexer --rebuild --info'
