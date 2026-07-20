@@ -53,16 +53,3 @@ function log_took_in_microseconds(message, start_time)
     local elapsed_time_microseconds = get_elapsed_time_in_nanoseconds(start_time) / 1000
     log:info(message .. " took " .. elapsed_time_microseconds .. " us")
 end
-
-function start_profiler()
-    local ProFi = require("ProFi")
-    ProFi:start()
-end
-
-function stop_profiler(path)
-    log:info("stop_profiler", path)
-    path = path or "profi.txt"
-    local ProFi = require("ProFi")
-    ProFi:stop()
-    ProFi:writeReport(path)
-end
