@@ -323,14 +323,11 @@ function SwitchCopilot()
     end
     if vim.tbl_contains(use_ai, "ask-openai") then
         -- FYI check last b/c sometimes I use a subset of features with another predictions plugin, so give them all a chance first
-        if IsAskOpenAIPredictionsAvailable() then
-            local api = require("ask-openai.api")
-
-            if api.are_predictions_enabled() then
-                DisableAllCopilots()
-            else
-                EnableAllCopilots()
-            end
+        local api = require("ask-openai.api")
+        if api.are_predictions_enabled() then
+            DisableAllCopilots()
+        else
+            EnableAllCopilots()
         end
         return
     end
@@ -361,11 +358,6 @@ vim.keymap.set({ 'n', 'i', 'v', 'c' }, '<F16>', function() require('ask-openai.a
 vim.keymap.set({ 'n', 'i', 'v', 'c' }, '<F20>', function() require('ask-openai.api').toggle_rag() end, { noremap = true, silent = true })
 
 
-function IsAskOpenAIPredictionsAvailable()
-    -- FYI, later, replace with final setting
-    return require("ask-openai.config").get_options().predictions
-end
-
 function EnableAllCopilots()
     if vim.tbl_contains(use_ai, "supermaven") then
         local supermavenapi = require("supermaven-nvim.api")
@@ -377,11 +369,8 @@ function EnableAllCopilots()
         end
     end
     if vim.tbl_contains(use_ai, "ask-openai") then
-        if IsAskOpenAIPredictionsAvailable() then
-            -- TODO see notes below for disabling predictions for more about how to config this
-            local api = require("ask-openai.api")
-            api.enable_predictions()
-        end
+        local api = require("ask-openai.api")
+        api.enable_predictions()
     end
     if vim.tbl_contains(use_ai, "ggml-org/llama.vim") then
         vim.cmd("LlamaEnable")
@@ -399,12 +388,8 @@ function DisableAllCopilots()
         end
     end
     if vim.tbl_contains(use_ai, "ask-openai") then
-        if IsAskOpenAIPredictionsAvailable() then
-            -- TODO figure out what I wanna use for enabling predictions...
-            -- for now just turn this off so it doesn't break my config when not using feat-predictions branch
-            local api = require("ask-openai.api")
-            api.disable_predictions()
-        end
+        local api = require("ask-openai.api")
+        api.disable_predictions()
     end
     if vim.tbl_contains(use_ai, "ggml-org/llama.vim") then
         vim.cmd("LlamaDisable")
