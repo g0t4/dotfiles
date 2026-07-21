@@ -363,7 +363,7 @@ vim.keymap.set({ 'n', 'i', 'v', 'c' }, '<F20>', function() require('ask-openai.a
 
 function IsAskOpenAIPredictionsAvailable()
     -- FYI, later, replace with final setting
-    return require("ask-openai.config").get_options().tmp.predictions
+    return require("ask-openai.config").get_options().predictions
 end
 
 function EnableAllCopilots()
@@ -631,44 +631,10 @@ local ask_openai_plugin = {
     -- event = { "CmdlineEnter", "InsertEnter" }, -- always load in advance for AskToolUse et al?
     dir = "~/repos/github/g0t4/ask-openai.nvim",
 
-    -- *** copilot (default):
-    -- opts = { },
-
-    -- *** OpenAI + keychain:
-    -- opts = {
-    --     provider = function()
-    --         return require("ask-openai.config")
-    --             .get_key_from_stdout("security find-generic-password -s openai -a ask -w")
-    --     end,
-    -- },
-
-    -- *** GROQ + keychain:
-    -- opts = {
-    --     -- model = "meta-llama/llama-4-scout-17b-16e-instruct",
-    --     model = "llama-3.2-90b-text-preview",
-    --     use_api_groq = true, -- easier
-    --     -- api_url = "https://api.groq.com/openai/v1/chat/completions", -- if not standard
-    --     provider = function()
-    --         return require("ask-openai.config")
-    --             .get_key_from_stdout("security find-generic-password -s groq -a ask -w")
-    --     end,
-    -- },
-
-    -- *** ollama:
-    opts = {
-        provider = "keyless",
-        -- model = "llama3.2-vision:11b", -- ollama list
-        model = "llamaservernomatters",
-        use_api_ollama = true,
-        api_url = "http://ask.lan:8012/v1/chat/completions",
-
-        tmp = {
-            predictions = {
-                -- model = ? -- TODO control this here
-                enabled = true, -- turn off my predictions w/o disabling entire ask-openai plugin
-            },
-        },
-    },
+    config = function()
+        local discontinued_user_options_for_now = nil
+        require('ask-openai').setup(discontinued_user_options_for_now)
+    end,
 
     dependencies = {
         "nvim-lua/plenary.nvim",
