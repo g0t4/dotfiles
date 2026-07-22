@@ -2256,9 +2256,11 @@ abbr manf whatis # man -f == whatis
 #
 # * search all manpage text (preformatted files)
 #   not in macOS's man
-abbr man_grep "$man_cmd -K"
+abbr manK "$man_cmd -K" # I recall K all the time so I like manK in this case
+abbr man_grep "use mgr" # reminder
+abbr man_grep_list "use mgrls" # reminder
 abbr mgr "$man_cmd -K" # [m]an [gr]ep (common pattern I use is *gr for grep)
-abbr man_grep_list "$man_cmd -w -K"
+abbr mgrls "$man_cmd --where -K" # --where/--path/--location (print the location)
 # i.e. gman -w -K autostash
 # note -K is slow, hence why by default it starts showing pages it finds so you can look at them while it searches (presumably it continues searching in bg?)
 #
