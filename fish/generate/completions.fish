@@ -10,7 +10,10 @@ set argcomplete_commands \
     ansible-playbook \
     ansible-pull \
     ansible-test \
-    ansible-vault
+    ansible-vault \
+    #
+    pytest
+
 # TODO any other tools that use argcomplete that I can add to this list?
 #   not just applicable to ansible
 
