@@ -44,6 +44,7 @@ async def main(connection: iterm2.Connection):
         if n and control and shift and command:
             await wes_new_window(connection, force_local=False)
             return
+        #
         if n and command and control:
             await wes_new_window(connection, force_local=True)
             return
@@ -72,6 +73,7 @@ async def main(connection: iterm2.Connection):
         if d and control and shift and command:
             await wes_split_pane(connection, split_vert=True)
             return
+        #
         if d and control and command and option:
             await wes_split_pane(connection, split_vert=False)
             return
@@ -120,6 +122,7 @@ async def main(connection: iterm2.Connection):
         if e and control and shift and command:
             await smaller_font_wes_stops(connection)
             return
+        #
         e = keystroke.keycode == iterm2.Keycode.ANSI_EQUAL
         if e and control and shift and command:
             await bigger_font_wes_stops(connection)
