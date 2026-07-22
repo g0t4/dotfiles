@@ -4,6 +4,21 @@
 # `gi*` for my git ignore customizations
 # `globurl`
 
+# abbrs to remind me of common man pages I forget about (until I habituate them)
+abbr man_gitrevisions "man gitrevisions" # reminder
+#
+# * revision specifiers (helpers)
+# TODO can we add tab complete of matching regex abbrs too?! and show the pattern?
+#    so if I type ref<TAB> matches include reflog\d that if I select it could inline the regex OR finish up to the fixed part (remaining fixed part?)
+abbr --position anywhere --regex 'reflog\d+' --function _abbr_expand_reflog_d --add _reflog_d
+function _abbr_expand_reflog_d
+    echo -s (string replace --regex '^reflog' '@{' $argv) "}"
+end
+# FYI if static expand text then tab complete works in newer fish build w/ my fix for tab completing anywhere abbrs
+abbr --set-cursor --position anywhere commit_with_message ":/%"  # set cursor is merely to avoid the trailing space
+# TODO add more specifiers helpers when they come up
+
+
 # status
 abbr gsts 'git status -s'
 abbr gstb 'git status -sb'
