@@ -2,6 +2,7 @@ import iterm2
 import asyncio
 import traceback
 
+from commandlines import yank_last_command_output_and_paste_to_commandline
 from scrape_ask import copy_screen_to_clipboard
 from f9command import on_f9
 from logs import log
@@ -123,6 +124,10 @@ async def main(connection: iterm2.Connection):
         if e and control and shift and command:
             await bigger_font_wes_stops(connection)
             return
+
+        key_a = keystroke.keycode == iterm2.Keycode.ANSI_A
+        if control and command and key_a:
+            await yank_last_command_output_and_paste_to_commandline(connection)
 
     async def keystroke_monitor(connection):
         async with iterm2.KeystrokeMonitor(connection) as mon:
