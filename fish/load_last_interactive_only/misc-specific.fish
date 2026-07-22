@@ -2254,18 +2254,30 @@ abbr mana "$man_cmd --all --regex" ## -a = all, -w = list path(s) open all match
 abbr mank apropos # man -k ~= apropos
 abbr manf whatis # man -f == whatis
 #
+# * gnu man short => long options
+#
+# FYI for now, if I type -k/-K standalone then I will expand it (but I won't expand it in my abbrs below where -K matches my intuition)
+abbr --command "$man_cmd" -- -K "--global-apropos"
+abbr --command "$man_cmd" -- -k "--apropos"
+#
+abbr --command "$man_cmd" -- -w --where
+abbr --command "$man_cmd" -- -a --all
+
 # * search all manpage text (preformatted files)
 #   not in macOS's man
+reminder_abbr man_grep "use mgr"
+reminder_abbr man_grep_list_matches "use mgrw"
+#
+# I have -K/-w mostly burned into memory... so keep these
 abbr manK "$man_cmd -K" # I recall K all the time so I like manK in this case
-abbr man_grep "use mgr" # reminder
-abbr man_grep_list "use mgrls" # reminder
+abbr manw "$man_cmd --where -K" # man -w == whereis for man pages, or map to whereis?
+#
+# long term I wanna use a `gr` style:
 abbr mgr "$man_cmd -K" # [m]an [gr]ep (common pattern I use is *gr for grep)
-abbr mgrls "$man_cmd --where -K" # --where/--path/--location (print the location)
+abbr mgrw "$man_cmd --where -K" # --where/--path/--location (print the location)
 # i.e. gman -w -K autostash
 # note -K is slow, hence why by default it starts showing pages it finds so you can look at them while it searches (presumably it continues searching in bg?)
 #
-abbr manw "$man_cmd --where --regex" # man -w == whereis for man pages, or map to whereis?
-reminder_abbr man_list_all "$man_cmd --where --regex"
 abbr manbash "$man_cmd $HOME/repos/github/g0t4/bash/doc/bash.1"
 # use newest build of bash man page (at least don't use 3.2 from apple!)
 abbr mbash "$man_cmd $HOME/repos/github/g0t4/bash/doc/bash.1"
