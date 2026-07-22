@@ -45,3 +45,9 @@ function _enable_fish_suggestions
     set -U fish_autosuggestion_enabled 1
 end
 
+# * my custom python tools
+set PYTHON_TOOLS_REPO "$HOME/repos/github/g0t4/python-tools"
+function my_pyfmt
+    set _python3 "$PYTHON_TOOLS_REPO/.venv/bin/python3"
+    env PYTHONPATH="$PYTHON_TOOLS_REPO" $_python3 -m pyfmt repair --in-place $argv
+end
