@@ -286,6 +286,14 @@ abbr --set-cursor -- gcam 'git commit -a -m "%"'
 abbr --command git --position anywhere -- gptoss '--author "gptoss120b<wes.mcclure+gptoss120b@gmail.com>"'
 abbr --command git --position anywhere -- qwen3 '--author "qwen3.6-35b-a3b<wes.mcclure+qwen3.6-35b-a3b@gmail.com>"'
 abbr --command git --position anywhere -- agentworld '--author "qwen-agentworld-35b-a3b<wes.mcclure+qwen-agentworld-35b-a3b@gmail.com>"'
+abbr --command git --position anywhere -- codex '--author "codex-gpt5<wes.mcclure+codex-gpt5@gmail.com>"'
+#
+# amend last commit (no edit) just set --author
+abbr --set-cursor -- amend_gptoss 'git commit --amend --no-edit --author "gptoss120b<wes.mcclure+gptoss120b@gmail.com>"'
+abbr --set-cursor -- amend_qwen3 'git commit --amend --no-edit --author "qwen3.6-35b<a3b<wes.mcclure+qwen3.6-35b-a3b@gmail.com>"'
+abbr --set-cursor -- amend_agentworld 'git commit --amend --no-edit --author "gpt-agentworld-35b-a3b<wes.mcclure+gpt-agentworld-35b-a3b@gmail.com>"'
+abbr --set-cursor -- amend_codex 'git commit --amend --no-edit --author "codex-gpt5<wes.mcclure+codex-gpt5@gmail.com>"'
+
 
 # joke:
 abbr --set-cursor -- yolo 'git commit --all -m "%" && git push'
