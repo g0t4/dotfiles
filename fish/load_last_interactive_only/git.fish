@@ -34,6 +34,10 @@ abbr gstiv_all --set-cursor 'git status --ignored --untracked-files --short ".%"
 
 # reset
 abbr grhh 'git reset --hard HEAD' # last commit hard reset
+#
+abbr grh_undo_amend_commit 'git reset --hard HEAD@{1}' # use reset --hard to undo the last amend commit using reflog
+# btw HEAD -> branch and it is the branch that is reset (not HEAD)... but use HEAD as a bookmark to mean current branch so you don't have to specify the branch
+
 abbr grsh 'git reset --soft HEAD~1' # previous commit soft reset to review it and then purge by grhh or gco etc
 # clean
 #   (FYI leave --dry-run so I can remove it as last arg, then I don't need a second set of abbrs... b/c I should always do a quick review dryrun / or interactive)
