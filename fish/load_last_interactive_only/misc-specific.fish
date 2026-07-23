@@ -2983,6 +2983,8 @@ function rebuild_llama_cpp
         exit 1
     end
 
+    trash "$llama_dir/build"
+
     build_llama_cpp
 end
 
@@ -2996,7 +2998,7 @@ function build_llama_cpp
     #     return 1
     # end
 
-    echo REBUILDING
+    echo BUILDING
     # trash build ? add step
     # LLAMA_CURL=on allows downloading models
     if $IS_MACOS
