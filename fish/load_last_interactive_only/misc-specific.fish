@@ -2969,6 +2969,10 @@ function rebuild_llama_cpp
     end
 
     cd ~/repos/github/ggml-org/llama.cpp
+    if not cd ~/repos/github/ggml-org/llama.cpp
+        echo "Failed to change directory to ~/repos/github/ggml-org/llama.cpp"
+        return 1
+    end
 
     git fetch origin
     # show any commits reachable by `origin` (upstream) and not (^) readable by `^HEAD`
