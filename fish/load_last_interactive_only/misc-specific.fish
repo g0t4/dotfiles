@@ -2963,14 +2963,14 @@ abbr --command yapf -- sh --style-help
 # * idea is to have rebuilders listed here
 function rebuild_llama_cpp
 
-    if not test -d ~/repos/github/ggml-org/llama.cpp
-        echo llama.cpp not checked out, aborting...
+    set llama_dir ~/repos/github/ggml-org/llama.cpp
+    if not test -d $llama_dir
+        echo "llama.cpp not checked out, aborting..."
         return 1
     end
 
-    cd ~/repos/github/ggml-org/llama.cpp
-    if not cd ~/repos/github/ggml-org/llama.cpp
-        echo "Failed to change directory to ~/repos/github/ggml-org/llama.cpp"
+    if not cd $llama_dir 2>/dev/null
+        echo "Failed to change directory to $llama_dir"
         return 1
     end
 
