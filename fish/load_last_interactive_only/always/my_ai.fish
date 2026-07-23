@@ -126,7 +126,7 @@ function mcp_server_semantic_grep
     # BTW I prefer this wrapper approach vs pyproject.toml + project.scripts... these work without any install other than creating the venv initially
     #  then as the end user, I don't have to even think about venv/paths
     set _python3 "$ASK_REPO/.venv/bin/python3"
-    tee /tmp/shit_not_working | env PYTHONPATH="$ASK_REPO/lua/ask-openai/rag" $_python3 -m mcp_server.__main__ $argv
+    tee /tmp/mcp_server_semantic_grep_STDIN.jsonl | env PYTHONPATH="$ASK_REPO/lua/ask-openai/rag" $_python3 -m mcp_server.__main__ $argv | tee /tmp/mcp_server_semantic_grep_STDOUT.jsonl
     # env PYTHONPATH="$ASK_REPO/lua/ask-openai/rag" $_python3 -m mcp_server.__main__ $argv
 end
 complete -c mcp_server_semantic_grep --no-files
