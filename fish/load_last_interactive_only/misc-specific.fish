@@ -2974,7 +2974,8 @@ function rebuild_llama_cpp
         return 1
     end
 
-    git fetch origin
+    # git fetch origin
+    git pull --rebase
     # show any commits reachable by `origin` (upstream) and not (^) readable by `^HEAD`
     if test -n "$(git rev-list origin ^HEAD)"
         # TODO address current branch vs its tracked? or is that implicit in this already?
