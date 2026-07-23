@@ -228,8 +228,8 @@
         "ansible": {
             "command": "ansible-language-server",
             "args": [ "--stdio" ],
-            // use "yaml" filetype here too, that way coc-yaml and existing yaml nvim runtime works with the file... while also layering in ansible-language-server conventionally/conditionally based on path component naming conventions
-            "filetypes": [ "yaml" ],
+            // DO NOT TRY TO USE "yaml" too or instead, just use "ansible" => gets you ALS completions/hover/etc and that's plenty
+            "filetypes": [ "ansible" ],
             "settings": {
                 "ansible": {
                     "validation": {

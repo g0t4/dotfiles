@@ -256,14 +256,19 @@ vim.api.nvim_create_autocmd("FileType", {
     end,
 })
 
--- yaml
-vim.api.nvim_create_autocmd("FileType", {
-    group = "filetypemods",
-    pattern = "yaml,yml,json",
+-- ansible
+vim.api.nvim_create_autocmd("BufRead", {
+    -- SET ON BUFREAD => not on FILETYPE!
+    pattern = {
+        "**/playbooks/*.{yml,yaml}",
+        "site.{yml,yaml}",
+        -- TODO other patterns for ansible?
+    },
     callback = function()
-        -- FYI ftplugin/yaml.vim:28:  setlocal shiftwidth=2 softtabstop=2
-        --     in nvim runtime
-        -- actually I like 2...  I will fix formatters to use this
+        vim.bo.filetype = "ansible"
+        -- DO NOT USE yaml with anything ansible related
+        -- NOTE you might have issues with different ansible types... i.e. inventory vs playbook... cross that bridge later (IIAC ALS has a detection mechanism too, prolly not configurable!)
+
     end
 })
 
