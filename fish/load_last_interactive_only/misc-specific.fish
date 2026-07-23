@@ -2976,7 +2976,13 @@ function rebuild_llama_cpp
         # TODO address current branch vs its tracked? or is that implicit in this already?
         #    TLDR read up on git rev-list args
         log_ --red --bold "Upstream has new commits, pull if needed\n\n"
+        exit 1
     end
+
+    build_llama_cpp
+end
+
+function build_llama_cpp
 
     # warn user if any upstream commits, but don't stop build
     # b/c I might not want to build latest version!
