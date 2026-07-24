@@ -104,10 +104,13 @@ async def ask_openai_async_type_response(
                 chunk_reasoning = additional_kwargs.get("reasoning_content", "")
                 if chunk_reasoning:
                     reasoning_content += chunk_reasoning
+                    if num_reasoning_chunks % 10 == 0:
+                        if num_reasoning_chunks % 100 == 0:
+                            await clear_line()
+                            await on_chunk("thinking")
+                        else:
+                            await on_chunk(".")
                     num_reasoning_chunks += 1
-                    EVERY_NTH_TOKEN = 10
-                    if num_reasoning_chunks % EVERY_NTH_TOKEN == 0:
-                        await on_chunk(".")
 
             # Process content chunks
             content = getattr(chunk, "content", None)
