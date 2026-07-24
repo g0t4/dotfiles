@@ -122,8 +122,6 @@ async def ask_openai_async_type_response(
 
             # strip new lines to avoid submitting commands prematurely, is there an alternate char I could use to split the lines still w/o submitting (would have to check what the shell supports, if anything is possible)... one downside to not being a part of the line editor.. unless there is a workaround? not that I care much b/c multi line commands are not often necessary...
             sanitized = content.replace("\n", " ")  # PRN check if str before calling replace (i.e. can be list[str] or list[dict]... when is that the case and do I ever use it?)
-            if sanitized.strip() == "":
-                continue
 
             if first_content_chunk:
                 log(f"first_chunk: {sanitized}")
