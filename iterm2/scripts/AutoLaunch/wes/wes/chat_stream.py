@@ -73,7 +73,7 @@ async def ask_openai_async_type_response(
 
     # Accumulate full assistant content and capture response_metadata from final chunk
     full_content = ""
-    first_chunk = True
+    first_content_chunk = True
     response_metadata: dict = {}
     finish_reason: str | None = None
     num_reasoning_chunks = 0
@@ -116,12 +116,12 @@ async def ask_openai_async_type_response(
             if sanitized.strip() == "":
                 continue
 
-            if first_chunk:
+            if first_content_chunk:
                 log(f"first_chunk: {sanitized}")
                 sanitized = re.sub(r'```', '', sanitized).lstrip()
                 log(f"sanitized: {sanitized}")
                 log(f"sanitized hex: {sanitized.encode('utf-8').hex()}")
-                first_chunk = sanitized == ""  # stay in "first_chunk" mode until first non-empty chunk
+                first_content_chunk = sanitized == ""  # stay in "first_chunk" mode until first non-empty chunk
                 await clear_line()  # TODO merge with first on_chunk text send into one on_chunk call?
 
             full_content += content
