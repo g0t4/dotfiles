@@ -145,10 +145,9 @@ async def ask_openai_async_type_response(
             full_content += content
             await on_chunk(sanitized)
 
-            # TODO can I check finish_reason to see if it ran out of tokens?
-            # if choice0.finish_reason == "length":
-            #     await on_chunk(f"ran out off tokens, increase max_tokens...")
-            #     break
+            if finish_reason == "length":
+                await on_chunk(f"... OOOPS I ran out off tokens, increase max_tokens {service.max_tokens=}...")
+                break
 
         except Exception as e:
             log(f"Error processing chunk: {e}\n chunk: {chunk}")
