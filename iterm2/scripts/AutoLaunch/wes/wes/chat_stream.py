@@ -129,12 +129,12 @@ async def ask_openai_async_type_response(
                     num_reasoning_chunks += 1
 
             original_content = getattr(chunk, "content", "")
-            # strip new lines to avoid submitting commands prematurely
-            #   FYI I might be able to do shell specific alt+enter (or w/e meta keys to insert line wrap if supported)
-            # TODO add tests of this too (test can pass on_chunk as write_text or smth like that) and accumulate it and verify that way
-            safe_content = original_content.replace("\n", " ")  # PRN check if str before calling replace (i.e. can be list[str] or list[dict]... when is that the case and do I ever use it?)
-            # PRN flag this situation and put flag on trace file? maybe alert me too so I take note and can decide if I like the "fix" of adding a space... I need real examples to decide
-            #   I cannot really think of a time when the model gave me a multiline response
+            if "\n" in original_content:
+                # strip new lines to avoid submitting commands prematurely
+                #   FYI I might be able to do shell specific alt+enter (or w/e meta keys to insert line wrap if supported)
+                # TODO add tests of this too (test can pass on_chunk as write_text or smth like that) and accumulate it and verify that way
+                safe_content = original_content.replace("\n", " ")
+                slap_human("\\n newline in model response", "replacing with space, does it look ok?")  # you wanted to know if this ever happens, remove this if/when you have cataloged sufficient examples
 
             is_first_content_chunk = original_content != "" and all_content == ""
             if is_first_content_chunk:
