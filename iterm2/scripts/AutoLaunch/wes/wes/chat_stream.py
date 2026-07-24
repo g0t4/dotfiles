@@ -91,13 +91,19 @@ async def ask_openai_async_type_response(
             last_chunk = chunk
             log(f'{chunk=}')
 
-            # Extract token_usage/timings from the last chunk's response_metadata
             if hasattr(chunk, "response_metadata") and chunk.response_metadata:
                 response_metadata = dict(chunk.response_metadata)
                 choices = response_metadata.get("choices", [])
                 if choices:
                     last_choice = choices[-1]
                     finish_reason = last_choice.get("finish_reason")
+                    log(f'found finish_reason on choice: {finish_reason=}')
+                    # TODO do any langchain providers (that I use) not put finish_reason on the response_metadata?
+                    #  if no then drop checking here in choices
+
+                if "finish_reason" in response_metadata:
+                    finish_reason = response_metadata["finish_reason"]
+                    log(f'found finish_reason on response_metadata: {finish_reason=}')
 
             # Capture reasoning_content from additional_kwargs (e.g. ChatLlamaServer)
             additional_kwargs = getattr(chunk, "additional_kwargs", None)
