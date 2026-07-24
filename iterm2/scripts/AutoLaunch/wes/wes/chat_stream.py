@@ -170,7 +170,7 @@ def _save_iterm2_trace(
     response_metadata: dict,
     finish_reason: str | None,
     service: Service,
-    last_chunk: AIMessageChunk,
+    last_chunk: AIMessageChunk | None,
     reasoning_content: str = "",
 ) -> None:
     """Write trace file after streaming completes.
