@@ -64,7 +64,6 @@ async def ask_openai_async_type_response(
     response metadata (token usage, timings, etc.).
     """
     show_asking = on_chunk("asking...")
-    log(f"{messages=}")
     model, service = get_model()
 
     stream_kwargs = {}
