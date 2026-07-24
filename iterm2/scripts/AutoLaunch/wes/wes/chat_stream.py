@@ -76,6 +76,7 @@ async def ask_openai_async_type_response(
     first_chunk = True
     response_metadata: dict = {}
     finish_reason: str | None = None
+    num_reasoning_chunks = 0
 
     # Accumulate reasoning_content from additional_kwargs across all chunks
     reasoning_content = ""
@@ -103,6 +104,7 @@ async def ask_openai_async_type_response(
                 chunk_reasoning = additional_kwargs.get("reasoning_content", "")
                 if chunk_reasoning:
                     reasoning_content += chunk_reasoning
+                    num_reasoning_chunks += 1
 
             # Process content chunks
             content = getattr(chunk, "content", None)
