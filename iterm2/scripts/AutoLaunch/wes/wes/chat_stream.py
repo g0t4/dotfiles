@@ -122,7 +122,8 @@ async def ask_openai_async_type_response(
                 log(f"sanitized: {sanitized}")
                 log(f"sanitized hex: {sanitized.encode('utf-8').hex()}")
                 first_content_chunk = sanitized == ""  # stay in "first_chunk" mode until first non-empty chunk
-                await clear_line()  # TODO merge with first on_chunk text send into one on_chunk call?
+                if first_content_chunk:
+                    await clear_line()  # TODO merge with first on_chunk text send into one on_chunk call?
 
             full_content += content
             await on_chunk(sanitized)
