@@ -67,7 +67,7 @@ async def ask_openai_async_type_response(
     model, service = get_model()
 
     stream_kwargs = {}
-    service.max_tokens = 10
+    # service.max_tokens = 10 # testing
     if service.max_tokens is not None:
         stream_kwargs["max_tokens"] = service.max_tokens
 
