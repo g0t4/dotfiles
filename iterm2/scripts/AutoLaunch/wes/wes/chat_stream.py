@@ -146,6 +146,10 @@ async def ask_openai_async_type_response(
                 #  TODO is ``` always in a single chunk?
                 safe_content = re.sub(r'```', '', safe_content).lstrip()
 
+                # TODO would be nice if I could remove undo history so undo in fish shell jumps back to user prompt so I can undo a response and try again
+                #   OR I could have a keymap to pull it back
+                #   OR I could show status in a popup window (tiny, tkinter) like I do w/ hammerspoon ask queries.. in fact I could just use hammerspoon to do most of this...
+                #      a window would allow Escape to clearly cancel the AI request too
                 await clear_line()
 
             all_content += original_content
