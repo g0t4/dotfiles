@@ -121,13 +121,13 @@ async def ask_openai_async_type_response(
                             await on_chunk(".")
                     num_reasoning_chunks += 1
 
-            # Process content chunks
-            content = getattr(chunk, "content", None)
-            if content is None:
-                continue
-
-            # strip new lines to avoid submitting commands prematurely, is there an alternate char I could use to split the lines still w/o submitting (would have to check what the shell supports, if anything is possible)... one downside to not being a part of the line editor.. unless there is a workaround? not that I care much b/c multi line commands are not often necessary...
+            content = getattr(chunk, "content", "")
+            # strip new lines to avoid submitting commands prematurely
+            #   FYI I might be able to do shell specific alt+enter (or w/e meta keys to insert line wrap if supported)
+            # TODO add tests of this too (test can pass on_chunk as write_text or smth like that) and accumulate it and verify that way
             sanitized = content.replace("\n", " ")  # PRN check if str before calling replace (i.e. can be list[str] or list[dict]... when is that the case and do I ever use it?)
+            # PRN flag this situation and put flag on trace file? maybe alert me too so I take note and can decide if I like the "fix" of adding a space... I need real examples to decide
+            #   I cannot really think of a time when the model gave me a multiline response
 
             if first_content_chunk:
                 log(f"first_chunk: {sanitized}")
