@@ -147,7 +147,7 @@ async def ask_openai_async_type_response(
 
             if finish_reason == "length":
                 # careful whatever you type is subject to applicable abbrs ;) so ... at start is gonna => cd ../..
-                await on_chunk(f"--- OOOPS I ran out off tokens, increase max_tokens {service.max_tokens=}...")
+                await on_chunk(f"# --- OOOPS I ran out off tokens, increase max_tokens {service.max_tokens=} --- ")
                 break
 
         except Exception as e:
