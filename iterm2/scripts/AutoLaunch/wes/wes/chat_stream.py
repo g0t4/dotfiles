@@ -105,6 +105,8 @@ async def ask_openai_async_type_response(
                 if chunk_reasoning:
                     reasoning_content += chunk_reasoning
                     if num_reasoning_chunks % 10 == 0:
+                        # TODO try using inject instead of send text... I might be able to use ansi escape codes to color this and italicize it!
+                        #    if I am just drawing on the iterm canvas and not interacting with the shell
                         if num_reasoning_chunks % 100 == 0:
                             await clear_line()
                             await on_chunk("thinking")
