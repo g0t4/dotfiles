@@ -131,6 +131,10 @@ async def ask_openai_async_type_response(
 
             if first_content_chunk:
                 log(f"first_chunk: {sanitized}")
+                # TODO test sanitizing markdown if ``` at start of response
+                #  TODO where do I strip the trailing ```???
+                #  TODO does this ever happen? I can't imagine it doesnt... WTF...
+                #  TODO is ``` always in a single chunk?
                 sanitized = re.sub(r'```', '', sanitized).lstrip()
                 log(f"sanitized: {sanitized}")
                 log(f"sanitized hex: {sanitized.encode('utf-8').hex()}")
