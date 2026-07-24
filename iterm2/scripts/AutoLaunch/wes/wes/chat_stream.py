@@ -82,8 +82,9 @@ async def ask_openai_async_type_response(
     reasoning_content = ""
 
     # PRN temperature based on model or service default configs maybe (mostly I use default configs)?
+
     last_chunk = None
-    await show_asking  # don't need to wait until here (wait right after we get tokens flowing)
+    await show_asking  # don't let showing the asking... message block starting request to backend (assuming non-blocking I/O)
     async for chunk in model.astream(messages, **stream_kwargs):
         try:
             last_chunk = chunk
