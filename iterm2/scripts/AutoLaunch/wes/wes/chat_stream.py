@@ -79,8 +79,10 @@ async def ask_openai_async_type_response(
 
     # PRN temperature based on model or service default configs maybe (mostly I use default configs)?
 
-    last_chunk = None
+    # PRN what happens if asking doesn't show in time? does it even matter if I don't wait for it before first chunk arrives?
     await show_asking  # don't let showing the asking... message block starting request to backend (assuming non-blocking I/O)
+
+    last_chunk = None
     async for chunk in model.astream(messages, **stream_kwargs):
         try:
             last_chunk = chunk
