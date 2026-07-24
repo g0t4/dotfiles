@@ -10,11 +10,11 @@ from langchain_core.language_models.chat_models import BaseChatModel
 from langchain_llama_server.chat_models import ChatLlamaServer
 from langchain_core.messages import AIMessageChunk
 from services import Service, get_selected_service
+from rare_alerts import slap_human
 from logs import log
 
 # Directory for iTerm2 streaming traces (mirrors nvim plugin's trace dir)
 ASK_SHELL_TRACE_DIR = os.path.expanduser("~/.local/state/nvim/ask-openai/shell")
-
 TIMEOUT_SECONDS = 15
 
 
@@ -94,11 +94,19 @@ async def ask_openai_async_type_response(
                 if choices:
                     last_choice = choices[-1]
                     finish_reason = last_choice.get("finish_reason")
-                    log(f'found finish_reason on choice: {finish_reason=}')
                     # TODO do any langchain providers (that I use) not put finish_reason on the response_metadata?
                     #  if no then drop checking here in choices
+                    log(f'found finish_reason on choice: {finish_reason=}')
+                    slap_human(
+                        "FYI you wanted to know if this ever happens...",
+                        f"""finish_reason (in langchain providers) is on choices...
+                            you have code you suspect is old and vestigial...
+                            this proves you may want the code actually...
+                            finish_reason={finish_reason!r} (see logs for more)""",
+                    )
 
                 if "finish_reason" in response_metadata:
+                    # FYI I suspect all my langchain providers put the finish_reason here
                     finish_reason = response_metadata["finish_reason"]
                     log(f'found finish_reason on response_metadata: {finish_reason=}')
 
