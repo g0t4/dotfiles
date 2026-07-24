@@ -116,6 +116,8 @@ async def ask_openai_async_type_response(
                 chunk_reasoning = additional_kwargs.get("reasoning_content", "")
                 if chunk_reasoning:
                     all_reasoning += chunk_reasoning
+
+                    # * show thinking dots
                     if num_reasoning_chunks % 10 == 0:
                         # TODO try using inject instead of send text... I might be able to use ansi escape codes to color this and italicize it!
                         #    if I am just drawing on the iterm canvas and not interacting with the shell
