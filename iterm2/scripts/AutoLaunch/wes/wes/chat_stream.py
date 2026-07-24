@@ -125,25 +125,25 @@ async def ask_openai_async_type_response(
             # strip new lines to avoid submitting commands prematurely
             #   FYI I might be able to do shell specific alt+enter (or w/e meta keys to insert line wrap if supported)
             # TODO add tests of this too (test can pass on_chunk as write_text or smth like that) and accumulate it and verify that way
-            sanitized = content.replace("\n", " ")  # PRN check if str before calling replace (i.e. can be list[str] or list[dict]... when is that the case and do I ever use it?)
+            safe_content = content.replace("\n", " ")  # PRN check if str before calling replace (i.e. can be list[str] or list[dict]... when is that the case and do I ever use it?)
             # PRN flag this situation and put flag on trace file? maybe alert me too so I take note and can decide if I like the "fix" of adding a space... I need real examples to decide
             #   I cannot really think of a time when the model gave me a multiline response
 
             if first_content_chunk:
-                log(f"first_chunk: {sanitized}")
+                log(f"first_chunk: {safe_content}")
                 # TODO test sanitizing markdown if ``` at start of response
                 #  TODO where do I strip the trailing ```???
                 #  TODO does this ever happen? I can't imagine it doesnt... WTF...
                 #  TODO is ``` always in a single chunk?
-                sanitized = re.sub(r'```', '', sanitized).lstrip()
-                log(f"sanitized: {sanitized}")
-                log(f"sanitized hex: {sanitized.encode('utf-8').hex()}")
-                first_content_chunk = sanitized == ""  # stay in "first_chunk" mode until first non-empty chunk
+                safe_content = re.sub(r'```', '', safe_content).lstrip()
+                log(f"sanitized: {safe_content}")
+                log(f"sanitized hex: {safe_content.encode('utf-8').hex()}")
+                first_content_chunk = safe_content == ""  # stay in "first_chunk" mode until first non-empty chunk
                 if first_content_chunk:
                     await clear_line()  # TODO merge with first on_chunk text send into one on_chunk call?
 
             full_content += content
-            await on_chunk(sanitized)
+            await on_chunk(safe_content)
 
             if finish_reason == "length":
                 # careful whatever you type is subject to applicable abbrs ;) so ... at start is gonna => cd ../..
