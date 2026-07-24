@@ -7,31 +7,26 @@ from chat_stream import ask_openai_async_type_response
 
 
 async def ask_openai(connection):
-
-    # BTW b/c most variables/info is extracted via iterm2 shell integration, this works with remote shells that have iterm2 shell integration installed & sourced!
-
     session = await get_current_session(connection)
     if session is None:
         return
 
-    # *** detect process (jobName) to determine appropriate clear command
-    ctrl_c = "\x03"
-    ctrl_u = "\x15"
-    clear_command = {
-        "fish": ctrl_c,  # ctrl+c (my own binding)
-        "lldb": ctrl_u,  # builtin
-        "Python": ctrl_u,  # builtin
-    }
-    job_name = await session.async_get_variable("jobName")
-    log(f"jobName: {job_name}")
-    if job_name is None:
-        # fallback to ctrl+c if jobName not known
-        clear_cmd = ctrl_c
-    elif job_name not in clear_command:
-        log(f"jobName {job_name} not recognized, defaulting to ctrl+c")
-        clear_cmd = ctrl_c
-    else:
-        clear_cmd = clear_command[job_name]
+    async def clear_line():
+        ctrl_c = "\x03"
+        ctrl_u = "\x15"
+        clear_command = {
+            "fish": ctrl_c,  # ctrl+c (my own binding)
+            "lldb": ctrl_u,  # builtin
+            "Python": ctrl_u,  # builtin
+        }
+        job_name = await session.async_get_variable("jobName")
+        log(f"jobName: {job_name}")
+        if job_name is None or job_name not in clear_command:
+            log(f"jobName {job_name} not recognized, defaulting to ctrl+c")
+            clear_cmd = ctrl_c
+        else:
+            clear_cmd = clear_command[job_name]
+        await session.async_send_text(clear_cmd)
 
     # *** get current command line text
     prompt = await iterm2.prompt.async_get_last_prompt(connection, session.session_id)
@@ -48,8 +43,9 @@ async def ask_openai(connection):
         log(failure)
         await session.async_send_text(failure)
         return
+
     # *** clear prompt (start)
-    task_clear = session.async_send_text(clear_cmd)  # ctrl+c/clear for detected process
+    task_clear = clear_line()
 
     # *** read ask_* vars:
     #   user.ask_* variables are set in the shell (on prompt redraw) using iterm2_print_user_vars/iterm2_set_user_var via iterm2 shell integration
@@ -79,9 +75,6 @@ async def ask_openai(connection):
     }]
 
     await task_clear  # ? why can't I put this after try/catch (smth happens with timing to not actually clear the prompt if I do that, but only on remote pi7.lan?)
-
-    async def clear_line():
-        await session.async_send_text(clear_cmd)  # use detected process's clear command
 
     try:
         await ask_openai_async_type_response(messages, session.async_send_text, clear_line)
