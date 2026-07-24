@@ -17,6 +17,7 @@ ASK_SHELL_TRACE_DIR = os.path.expanduser("~/.local/state/nvim/ask-openai/shell")
 
 TIMEOUT_SECONDS = 15
 
+
 def get_model() -> tuple[BaseChatModel, Service]:
     service = get_selected_service()
     log(f"using: {service}")
@@ -50,6 +51,7 @@ def get_model() -> tuple[BaseChatModel, Service]:
     )
     return model, service
 
+
 async def ask_openai_async_type_response(
     messages: list[dict],
     on_chunk: Callable[[str], Awaitable[None]],
@@ -81,7 +83,7 @@ async def ask_openai_async_type_response(
     # PRN temperature based on model or service default configs maybe (mostly I use default configs)?
     chunks = model.astream(messages, **stream_kwargs)
     last_chunk = None
-    await show_asking # don't need to wait until here (wait right after we get tokens flowing)
+    await show_asking  # don't need to wait until here (wait right after we get tokens flowing)
     async for chunk in chunks:
         try:
             last_chunk = chunk
@@ -135,6 +137,7 @@ async def ask_openai_async_type_response(
 
     # After streaming completes, write trace file
     _save_iterm2_trace(messages, full_content, response_metadata, finish_reason, service, last_chunk, reasoning_content)
+
 
 def _save_iterm2_trace(
     messages: list[dict],

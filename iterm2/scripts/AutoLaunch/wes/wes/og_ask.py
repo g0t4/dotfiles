@@ -5,6 +5,7 @@ from common import get_current_session
 from logs import log
 from chat_stream import ask_openai_async_type_response
 
+
 async def ask_openai(connection):
 
     # BTW b/c most variables/info is extracted via iterm2 shell integration, this works with remote shells that have iterm2 shell integration installed & sourced!
