@@ -31,11 +31,14 @@ async def copy_screen_to_clipboard(connection: iterm2.Connection, history: bool 
         log(f"jobName {jobName} not recognized, find and add its clear command to wes.py")
         return
 
+    async def clear_line():
+        await session.async_send_text(clear_command[jobName])
+
     line_info = await session.async_get_line_info()
     lines = await session.async_get_contents(line_info.first_visible_line_number, line_info.first_visible_line_number + line_info.mutable_area_height)
     before_text = [line.string for line in lines]
 
-    await session.async_send_text(clear_command[jobName])
+    await clear_line()
     #
     # wait for clear
     time.sleep(0.1)  # otherwise sometimes command isn't cleared when I copy the after text
@@ -86,7 +89,8 @@ async def copy_screen_to_clipboard(connection: iterm2.Connection, history: bool 
 
     # await task_clear  # in this case, already waited for clear above
 
-    await ask_openai_async_type_response(messages, session.async_send_text)
+    await ask_openai_async_type_response(messages, session.async_send_text, clear_line)
+
 
 async def get_previous_output(session: iterm2.Session):
     li = await session.async_get_line_info()

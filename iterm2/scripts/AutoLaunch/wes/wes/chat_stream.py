@@ -53,6 +53,7 @@ def get_model() -> tuple[BaseChatModel, Service]:
 async def ask_openai_async_type_response(
     messages: list[dict],
     on_chunk: Callable[[str], Awaitable[None]],
+    clear_line: Callable[[], Awaitable[None]],
 ) -> None:
     """Stream OpenAI response and log trace after completion.
 
@@ -60,6 +61,7 @@ async def ask_openai_async_type_response(
     completes, a trace file is written with session_id, messages, and full
     response metadata (token usage, timings, etc.).
     """
+    show_asking = on_chunk("asking...")
     log(f"{messages=}")
     model, service = get_model()
 
@@ -79,6 +81,7 @@ async def ask_openai_async_type_response(
     # PRN temperature based on model or service default configs maybe (mostly I use default configs)?
     chunks = model.astream(messages, **stream_kwargs)
     last_chunk = None
+    await show_asking # don't need to wait until here (wait right after we get tokens flowing)
     async for chunk in chunks:
         try:
             last_chunk = chunk
@@ -115,6 +118,7 @@ async def ask_openai_async_type_response(
                 log(f"sanitized: {sanitized}")
                 log(f"sanitized hex: {sanitized.encode('utf-8').hex()}")
                 first_chunk = sanitized == ""  # stay in "first_chunk" mode until first non-empty chunk
+                await clear_line()  # TODO merge with first on_chunk text send into one on_chunk call?
 
             full_content += content
             await on_chunk(sanitized)
