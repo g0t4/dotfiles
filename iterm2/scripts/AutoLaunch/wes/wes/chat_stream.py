@@ -73,13 +73,12 @@ async def ask_openai_async_type_response(
         stream_kwargs["max_tokens"] = service.max_tokens
 
     # Accumulate full assistant content and capture response_metadata from final chunk
-    all_original_content = ""
+    all_content = ""
     response_metadata: dict = {}
     finish_reason: str | None = None
-    num_reasoning_chunks = 0
 
-    # Accumulate reasoning_content from additional_kwargs across all chunks
-    reasoning_content = ""
+    all_reasoning = ""
+    num_reasoning_chunks = 0
 
     # PRN temperature based on model or service default configs maybe (mostly I use default configs)?
 
@@ -109,7 +108,7 @@ async def ask_openai_async_type_response(
             if additional_kwargs is not None:
                 chunk_reasoning = additional_kwargs.get("reasoning_content", "")
                 if chunk_reasoning:
-                    reasoning_content += chunk_reasoning
+                    all_reasoning += chunk_reasoning
                     if num_reasoning_chunks % 10 == 0:
                         # TODO try using inject instead of send text... I might be able to use ansi escape codes to color this and italicize it!
                         #    if I am just drawing on the iterm canvas and not interacting with the shell
@@ -128,7 +127,7 @@ async def ask_openai_async_type_response(
             # PRN flag this situation and put flag on trace file? maybe alert me too so I take note and can decide if I like the "fix" of adding a space... I need real examples to decide
             #   I cannot really think of a time when the model gave me a multiline response
 
-            is_first_content_chunk = original_content != "" and all_original_content == ""
+            is_first_content_chunk = original_content != "" and all_content == ""
             if is_first_content_chunk:
                 # TODO test this
                 #  TODO where do I strip the trailing ```???
@@ -138,7 +137,7 @@ async def ask_openai_async_type_response(
 
                 await clear_line()
 
-            all_original_content += original_content
+            all_content += original_content
             await on_chunk(safe_content)
 
             if finish_reason == "length":
@@ -153,7 +152,7 @@ async def ask_openai_async_type_response(
             return
 
     # After streaming completes, write trace file
-    _save_iterm2_trace(messages, all_original_content, response_metadata, finish_reason, service, last_chunk, reasoning_content)
+    _save_iterm2_trace(messages, all_content, response_metadata, finish_reason, service, last_chunk, all_reasoning)
 
 
 def _save_iterm2_trace(
