@@ -149,6 +149,7 @@ async def ask_openai_async_type_response(
                 # careful whatever you type is subject to applicable abbrs ;) so ... at start is gonna => cd ../..
                 await on_chunk(f"# --- OOOPS I ran out off tokens, increase max_tokens {service.max_tokens=} --- ")
                 break
+            # TODO any other finish_reason I want to flag to user?
 
         except Exception as e:
             log(f"Error processing chunk: {e}\n chunk: {chunk}")
