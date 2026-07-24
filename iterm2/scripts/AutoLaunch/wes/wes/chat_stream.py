@@ -73,7 +73,7 @@ async def ask_openai_async_type_response(
         stream_kwargs["max_tokens"] = service.max_tokens
 
     # Accumulate full assistant content and capture response_metadata from final chunk
-    full_content = ""
+    all_original_content = ""
     first_content_chunk = True
     response_metadata: dict = {}
     finish_reason: str | None = None
@@ -121,11 +121,11 @@ async def ask_openai_async_type_response(
                             await on_chunk(".")
                     num_reasoning_chunks += 1
 
-            content = getattr(chunk, "content", "")
+            original_content = getattr(chunk, "content", "")
             # strip new lines to avoid submitting commands prematurely
             #   FYI I might be able to do shell specific alt+enter (or w/e meta keys to insert line wrap if supported)
             # TODO add tests of this too (test can pass on_chunk as write_text or smth like that) and accumulate it and verify that way
-            safe_content = content.replace("\n", " ")  # PRN check if str before calling replace (i.e. can be list[str] or list[dict]... when is that the case and do I ever use it?)
+            safe_content = original_content.replace("\n", " ")  # PRN check if str before calling replace (i.e. can be list[str] or list[dict]... when is that the case and do I ever use it?)
             # PRN flag this situation and put flag on trace file? maybe alert me too so I take note and can decide if I like the "fix" of adding a space... I need real examples to decide
             #   I cannot really think of a time when the model gave me a multiline response
 
@@ -142,7 +142,7 @@ async def ask_openai_async_type_response(
                 if first_content_chunk:
                     await clear_line()  # TODO merge with first on_chunk text send into one on_chunk call?
 
-            full_content += content
+            all_original_content += original_content
             await on_chunk(safe_content)
 
             if finish_reason == "length":
@@ -156,7 +156,7 @@ async def ask_openai_async_type_response(
             return
 
     # After streaming completes, write trace file
-    _save_iterm2_trace(messages, full_content, response_metadata, finish_reason, service, last_chunk, reasoning_content)
+    _save_iterm2_trace(messages, all_original_content, response_metadata, finish_reason, service, last_chunk, reasoning_content)
 
 
 def _save_iterm2_trace(
