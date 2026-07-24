@@ -16,7 +16,7 @@ local llmCurrentResponse = ""
 local llmIsThinking = false
 
 -- LLM server configuration
-local LLM_SERVER = "http://ask.lan:8013"
+local LLM_SERVER = "http://ask.lan:8012"
 
 -- Emoji data configuration
 local EMOJI_CACHE_DIR = os.getenv("HOME") .. "/.local/share/hammerspoon"

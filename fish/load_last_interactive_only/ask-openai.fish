@@ -76,7 +76,7 @@ function get_openai_models
         set base_url http://vllm.lan:8000/v1/models
         set api_key ""
     else if test "$argv[1]" = ask_lan
-        set base_url http://ask.lan:8013/v1/models
+        set base_url http://ask.lan:8012/v1/models
         set api_key ""
     else if test "$argv[1]" = inception
         set base_url https://api.inceptionlabs.ai/v1/models

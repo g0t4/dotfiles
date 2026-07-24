@@ -1538,86 +1538,8 @@ abbr hfcoi "hf collections info % | jq \".items | .[] | [ .item_type, .item_id ]
 abbr hfsp "hf skills preview"
 
 if command -q llama-server
-
     # https://github.com/ggml-org/llama.cpp/blob/056eb745/common/arg.cpp#L1424-L1431
     # n_batch == https://github.com/ggml-org/llama.cpp/blob/056eb745/common/arg.cpp#L1442-L1448
-
-    function _setup_llama_server
-
-        # TODO where do I want this, if it gets merged upstream?
-        # source (llama-server --completion-fish | psub)
-
-        # PRN add some abbrs for higher ram usage if you frequently want that... and/or GET ANOTHER 5090 and max it all out!
-        # TODO alter --cache-reuse ? 256 on --fim- presets... smaller, bigger? (how does it work with RoPE scaling? https://ggml.ai/f0.png)
-
-        #   basically changes to the presetes --fim* for my plugin's differences... i.e. bigger batch size (limits to 1K tokens with --fim presets!!!)
-        # FYI I want abbrs so I can see the params I am overriding...and that I am using spec or not
-        set verbose --verbose --verbose-prompt
-        set host --host 0.0.0.0 --port 8012
-
-        # recommend sane defaults b/c it reserves this much GPU RAM upfront!
-        #   IIAC, if I go over, I'll know b/c predictions will be terrible!... maybe find a way to catch that warning in the API call if possible (I know ollama shows in CLI output, at least... and IIAC that is from llama-cpp)
-        # FYI part of the reason I am using abbrs... so I can override for a separate session easily... so yeah don't go for super high context length
-        set batch_size --batch-size 2048 --ubatch-size 2048
-        set batch_size_spec --batch-size 2048 --ubatch-size 2048
-        set _spec7 llama-server --fim-qwen-7b-spec $host $batch_size
-        set _spec14 llama-server --fim-qwen-14b-spec $host $batch_size
-        set _default7 llama-server --fim-qwen-7b-default $host $batch_size
-
-        # FYI I confirmed args override any earlier usages (including in preset combos)
-
-        # First one is for mindlessly saying "just make it work"
-        abbr lsq25 $_spec7
-        # other presets to select from with tab completion
-        abbr lsq25nonspec7 $_default7
-        abbr lsq25spec7 $_spec7
-        # FYI no 14-default (non-spec)
-        abbr lsq25spec14 $_spec14
-        abbr lsverbose_q25nonspec $_default7 $verbose
-        abbr lsverbose_q25spec7 $_spec7 $verbose
-        abbr lsverbose_q25spec14 $_spec14 $verbose
-
-        # * llama-server args for llama.[vim|vscode] FIM predictions
-        #   diff settings, keep more of presets given the presets were designed for llama.vim
-        set _spec7 "llama-server --fim-qwen-7b-spec $host"
-        set _spec14 "llama-server --fim-qwen-14b-spec $host"
-        set _default7 "llama-server --fim-qwen-7b-default $host"
-
-        # FYI 4k --context-size if not specified
-        set _qwen3coder_host "--host 0.0.0.0 --port 8013"
-        set _qwen3coder_shared "llama-server $_qwen3coder_host --ctx-size 65536 --batch-size 2048 --ubatch-size 2048 --flash-attn on --n-gpu-layers 99"
-        # IIUC both qwen2.5-coder and qwen3-coder models share the same vocab though I should double check
-        # set _draft_fimq25_05b "--hf-repo-draft ggml-org/Qwen2.5-Coder-0.5B-Q8_0-GGUF"
-        # TODO! try ncache reuse arg at 256? which is in llama-server repo's arg for this
-        # set qwen3coder_q4 "$qwen3coder_shared -hf TODO make myself? $_qwen3coder_host"
-        set qwen3coder_q8 "$_qwen3coder_shared -hf ggml-org/Qwen3-Coder-30B-A3B-Instruct-Q8_0-GGUF"
-        # set qwen3coder_q8_spec "$_qwen3coder_shared $_draft_fimq25_05b -hf ggml-org/Qwen3-Coder-30B-A3B-Instruct-Q8_0-GGUF"
-        # lol ok spec dec sometimes is fast, othertimes is terribly slow, qwen2.5coder must not be a good fit for this?
-        # abbr lsqwen3coderq4 $qwen3coder_q4
-        # abbr lsqwen3coderq4_verbose $qwen3coder_q4 $verbose
-        abbr lsqwen3coderq8 $qwen3coder_q8
-        # abbr lsqwen3coderq8_spec $qwen3coder_q8_spec
-        abbr lsqwen3coderq8_verbose $qwen3coder_q8 $verbose
-
-        # TODO qwen3 specdec using qwen2.5-coder 0.5B? if so then maybe go FP16 for qwen3-coder to have best fidelity?
-
-        # TODO --batch-size / --ubatch-size # memory impact?
-        # --ctx-size 0 => means load from model or default 4096
-        set _gptoss_host "--host 0.0.0.0 --port 8013"
-        set _gptoss_shared "llama-server $_gptoss_host --batch-size 2048 --ubatch-size 2048 --ctx-size 0 --jinja --flash-attn on --n-gpu-layers 99 --reasoning-format none"
-        abbr lsgptoss20b "$_gptoss_shared -hf ggml-org/gpt-oss-20b-GGUF"
-        abbr lsgptoss120b "$_gptoss_shared -hf ggml-org/gpt-oss-120b-GGUF"
-        # TODO speculative decoding with ngram?! or 20b draft feeds 120b judge
-
-        # * Seed-Coder
-        set _bytedance_host "--host 0.0.0.0 --port 8012"
-        set _bytedance_shared "z base; llama-server $_bytedance_host --batch-size 2048 --ubatch-size 2048 --ctx-size 0 --jinja --flash-attn on --n-gpu-layers 99"
-        abbr lsbytedance_seed_coder_4 "$_bytedance_shared --model ByteDance-Seed-Coder-8B-Base-Q4_K_M.gguf"
-        abbr lsbytedance_seed_coder_8 "$_bytedance_shared --model ByteDance-Seed-Coder-8B-Base-Q8_0.gguf"
-        abbr lsbytedance_seed_coder_f16 "$_bytedance_shared --model ByteDance-Seed-Coder-8B-Base-f16.gguf"
-
-    end
-    _setup_llama_server
 end
 
 if command -q ollama
@@ -3537,7 +3459,8 @@ function string_indent
 end
 
 if command -q claude
-    abbr clm 'ANTHROPIC_BASE_URL="http://ask.lan:8013" claude --model Qwen/Qwen3-Coder-Next-GGUF:Q8_0' # for now just leave full model name as a reminder for one model
+    # run claude code w/ local model
+    abbr clm 'ANTHROPIC_BASE_URL="http://ask.lan:8012" claude --model Qwen/Qwen3-Coder-Next-GGUF:Q8_0' # for now just leave full model name as a reminder for one model
     abbr clr 'claude --resume'
     abbr cld 'claude --dangerously-skip-permissions'
 end
