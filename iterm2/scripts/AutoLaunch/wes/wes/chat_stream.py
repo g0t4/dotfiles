@@ -72,13 +72,11 @@ async def ask_openai_async_type_response(
     if service.max_tokens is not None:
         stream_kwargs["max_tokens"] = service.max_tokens
 
-    # Accumulate full assistant content and capture response_metadata from final chunk
     all_content = ""
-    response_metadata: dict = {}
-    finish_reason: str | None = None
-
     all_reasoning = ""
     num_reasoning_chunks = 0
+    response_metadata: dict = {}
+    finish_reason: str | None = None
 
     # PRN temperature based on model or service default configs maybe (mostly I use default configs)?
 
