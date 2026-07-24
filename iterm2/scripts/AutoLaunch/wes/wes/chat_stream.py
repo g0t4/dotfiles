@@ -74,7 +74,6 @@ async def ask_openai_async_type_response(
 
     # Accumulate full assistant content and capture response_metadata from final chunk
     all_original_content = ""
-    first_content_chunk = True
     response_metadata: dict = {}
     finish_reason: str | None = None
     num_reasoning_chunks = 0
@@ -129,18 +128,15 @@ async def ask_openai_async_type_response(
             # PRN flag this situation and put flag on trace file? maybe alert me too so I take note and can decide if I like the "fix" of adding a space... I need real examples to decide
             #   I cannot really think of a time when the model gave me a multiline response
 
-            if first_content_chunk:
-                log(f"first_chunk: {safe_content}")
-                # TODO test sanitizing markdown if ``` at start of response
+            is_first_content_chunk = original_content != "" and all_original_content == ""
+            if is_first_content_chunk:
+                # TODO test this
                 #  TODO where do I strip the trailing ```???
-                #  TODO does this ever happen? I can't imagine it doesnt... WTF...
+                #  TODO does this ever happen? I can't imagine it doesnt... WTF... I would leave ``` on end and yet I can't think of a time I saw that
                 #  TODO is ``` always in a single chunk?
                 safe_content = re.sub(r'```', '', safe_content).lstrip()
-                log(f"sanitized: {safe_content}")
-                log(f"sanitized hex: {safe_content.encode('utf-8').hex()}")
-                first_content_chunk = safe_content == ""  # stay in "first_chunk" mode until first non-empty chunk
-                if first_content_chunk:
-                    await clear_line()  # TODO merge with first on_chunk text send into one on_chunk call?
+
+                await clear_line()
 
             all_original_content += original_content
             await on_chunk(safe_content)
