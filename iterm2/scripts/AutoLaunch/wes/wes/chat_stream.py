@@ -129,6 +129,8 @@ async def ask_openai_async_type_response(
                     num_reasoning_chunks += 1
 
             original_content = getattr(chunk, "content", "")
+            safe_content = original_content
+
             if "\n" in original_content:
                 # strip new lines to avoid submitting commands prematurely
                 #   FYI I might be able to do shell specific alt+enter (or w/e meta keys to insert line wrap if supported)
