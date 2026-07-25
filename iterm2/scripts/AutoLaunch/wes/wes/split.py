@@ -27,7 +27,7 @@ async def prepare_new_profile(session: iterm2.Session, force_local_fish: bool) -
     tab_id = tab.tab_id if tab is not None else "missing tab"
     window = session.window
     window_id = window.window_id if window is not None else "missing window"
-    rich.inspect(session)  # rich inspect shows tab/window/session IDs... plus prints each of those objects which gives key names/properties and values... awesome for debugging
+    # rich.inspect(session)  # rich inspect shows tab/window/session IDs... plus prints each of those objects which gives key names/properties and values... awesome for debugging
 
     current_profile = await session.async_get_profile()
     # rich.inspect(current_profile)
@@ -96,6 +96,8 @@ async def prepare_new_profile(session: iterm2.Session, force_local_fish: bool) -
         else:
             new_profile.set_use_custom_command("No")  # FYI "No" is default for Custom Command
             print("was local => keep command")
+
+        # {current_profile.__props=} # ridiculous how much trouble iterm goes to, to hide this shit
 
     print(f'''
          {current_profile._simple_get("Command")=}
