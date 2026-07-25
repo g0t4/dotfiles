@@ -517,8 +517,8 @@ abbr dust_HOME_old_100M "dust $dust_lots_of_lines --mtime +90 ~/ +100M" # more t
 # TODO refine these as you find best combinations
 #
 # short to long options
-abbr --command dust -- "-n" "$dust_lots_of_lines" # default shows terminal height only
-abbr --command dust -- "-M" "--mtime +7 # greater than 7 days ago"  # +/- greater/less than X days ago
+abbr --command dust -- -n "$dust_lots_of_lines" # default shows terminal height only
+abbr --command dust -- -M "--mtime +7 # greater than 7 days ago" # +/- greater/less than X days ago
 abbr dust_past_week "dust --mtime -7"
 abbr dust_past_month "dust --mtime -30"
 #
@@ -553,7 +553,7 @@ function review_huge_files
     #   +5G if 10G filter not enough
     #   +1G
     #   might help for these smaller sizes to look at recently modified files only
-    dust --mtime -2 ~/ +100M  # anything over 1G from last two days
+    dust --mtime -2 ~/ +100M # anything over 1G from last two days
 
     # last week, everywhwere:
     dust --mtime -7 / +100M
