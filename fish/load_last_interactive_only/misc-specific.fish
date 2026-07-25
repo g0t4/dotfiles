@@ -1040,9 +1040,9 @@ function z
         end
         # failure == no matches in z "database"
         # fallback to ~/repos dir, using $argv query
-        set selection (fd --type dir $argv ~/repos | fzf --query $argv)
-        if set -q selection
+        if set selection (fd --type dir $argv ~/repos | fzf --query $argv)
             cd $selection
+            return
         end
         echo cancel
         # PRN drop passing $argv to fd (left side) and only filter argv with fzf on right?
