@@ -22,12 +22,31 @@ end
 
 # this was in release notes for 3.6.0! regex just added (among other changes)
 #    https://fishshell.com/docs/3.6/relnotes.html
-function multicd
-    set input $argv[1]
-    echo cd (string repeat -n (math (string length -- $input) - 1) ../)
+function _expand_dots_in_command_position
+    # cd... => cd ../../
+    # ... => cd ../../
+    echo -n "cd "
+    set typed_dots $argv[1]
+    _expand_dots_only "$typed_dots"
 end
 
-abbr --add dotdot --regex '^\.\.+$' --function multicd
+function _expand_dots_only
+    # call with:
+    # cd... => ../../
+    # ... => ../../
+    # strip off any cd prefix and just expand the ../.../..../ etc
+    set typed_dots (string replace "cd" "" "$argv[1]") # strip leading cd
+    set dot_dot_slashes (string repeat -n (math (string length -- $typed_dots) - 1) ../)
+    echo -n $dot_dot_slashes
+end
+
+abbr --add command_cddotdot --regex '^cd\.\.+$' --function _expand_dots_in_command_position # cd... => cd ../../
+#
+abbr --position=anywhere --add dotdot_arg --regex '^\.\.+$' --function _expand_dots_only # _any_command_ ... => _any_command_ ../../
+# FYI this ... => ../../ might be annoying when using ... in a commit message (or otherwise, if so just go back to cd only which is primary spot I'd use this as an arg)
+# PRN for cd only change `--position=anywhere` to `--command cd`
+#
+abbr --add command_dotdot --regex '^\.\.+$' --function _expand_dots_in_command_position # ... => cd ../../
 
 # cd-
 abbr --add cd- 'cd -'
