@@ -23,7 +23,8 @@ end
 # this was in release notes for 3.6.0! regex just added (among other changes)
 #    https://fishshell.com/docs/3.6/relnotes.html
 function multicd
-    echo cd (string repeat -n (math (string length -- $argv[1]) - 1) ../)
+    set input $argv[1]
+    echo cd (string repeat -n (math (string length -- $input) - 1) ../)
 end
 
 abbr --add dotdot --regex '^\.\.+$' --function multicd
