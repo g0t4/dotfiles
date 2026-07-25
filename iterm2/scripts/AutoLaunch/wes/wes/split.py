@@ -2,6 +2,7 @@ import rich
 import os
 from common import *
 
+
 async def close_other_tabs(connection):
     current_tab = await get_current_tab_throw_if_none(connection)
 
@@ -9,6 +10,7 @@ async def close_other_tabs(connection):
     for tab in current_tab.window.tabs:
         if tab != current_tab:
             await tab.async_close()
+
 
 async def new_tab_then_close_others(connection):
     window = await get_current_window_throw_if_none(connection)
@@ -19,6 +21,7 @@ async def new_tab_then_close_others(connection):
         if tab != new_tab:
             await tab.async_close(force=True)
 
+
 async def prepare_new_profile(session: iterm2.Session, force_local_fish: bool) -> tuple[iterm2.LocalWriteOnlyProfile, bool]:
     tab = session.tab
     tab_id = tab.tab_id if tab is not None else "missing tab"
@@ -27,6 +30,7 @@ async def prepare_new_profile(session: iterm2.Session, force_local_fish: bool) -
     rich.inspect(session)  # rich inspect shows tab/window/session IDs... plus prints each of those objects which gives key names/properties and values... awesome for debugging
 
     current_profile = await session.async_get_profile()
+    # rich.inspect(current_profile)
 
     # ** logging of font sizing to see if I can find why src font is sometimes wrong size!
     #    i.e.  parent tiny font, open new tab and reset its font to default big, then new window/tab is wrong usually
@@ -46,6 +50,7 @@ async def prepare_new_profile(session: iterm2.Session, force_local_fish: bool) -
 
     jobName = await session.async_get_variable("jobName")
     commandLine = await session.async_get_variable("commandLine")
+    rich.print(f'Previous {jobName=} {commandLine=}')
     was_sshed = jobName == "ssh"
 
     is_ssh = was_sshed and not force_local_fish
@@ -57,6 +62,7 @@ async def prepare_new_profile(session: iterm2.Session, force_local_fish: bool) -
             #    but, this might be where setting advanced_working_directory_* helps when I open a new window/tab/pane to track what local dir to come back to...
             #    OR, how about open it to home dir?
             new_profile.set_use_custom_command("No")
+            print(f"was_sshed:force_local_fish")
         else:
             # Wrap the original SSH command in a fish invocation, that way if the SSH connection dies (i.e. shutdown remote) the window/tab/pane won't close b/c fish will run on after SSH dies
             # this does mean I'll have to double exit to close these windows too, so we'll see if I like this or not
@@ -65,16 +71,17 @@ async def prepare_new_profile(session: iterm2.Session, force_local_fish: bool) -
             # Use -C so the fish shell stays alive after running the SSH command.
             new_profile.set_command(f"{fish_path} -C \"{escaped_cmd}\"")
             new_profile.set_use_custom_command("Yes")
+            print(f"was_sshed:escaped_cmd {escaped_cmd=}")
             # TODO also replicate bash over ssh on build21 for stract demos there?
     else:
         # * at least for duration of course, launch bash shell... when in bash in current session
         # that way no accidents when I don't realize I'm not in bash b/c I've replicated all my abbrs bash can feel like fish at times ;)
         was_bash = jobName == "bash"
         if force_local_fish:
-            # when I force local, assume I want fish (similar to how I override SSH with force_local above)
+            # force fish when splitting from another local shell
             new_profile.set_command("/opt/homebrew/bin/fish --login")
             new_profile.set_use_custom_command("Yes")
-            print("FISH FORCE LOCAL")
+            print("was local => force_local_fish")
         elif was_bash:
             HOME = os.getenv("HOME")
             # if using bash (locally) then mirror that in new tab
@@ -85,8 +92,20 @@ async def prepare_new_profile(session: iterm2.Session, force_local_fish: bool) -
             print(f"BASH LOCAL: {bash_cmd}")
             new_profile.set_command(bash_cmd)
             new_profile.set_use_custom_command("Yes")
+            print("was local => was_bash")
+        else:
+            new_profile.set_use_custom_command("No")  # FYI "No" is default for Custom Command
+            print("was local => keep command")
+
+    print(f'''
+         {current_profile._simple_get("Command")=}
+         {current_profile._simple_get("Custom Command")=}
+         {new_profile.values["Command"]=}
+         {new_profile.values["Custom Command"]=}
+    ''')
 
     return new_profile, is_ssh
+
 
 async def get_path(session: iterm2.Session) -> str:
     # default to using split_path to avoid issues with path being unreliable
@@ -101,6 +120,7 @@ async def get_path(session: iterm2.Session) -> str:
     path = await session.async_get_variable("path")
     print(f"WARNING: no user.split_path found, using path: {path}")
     return path
+
 
 async def wes_new_window(connection: iterm2.Connection, force_local=False):
     current_window = await get_current_window(connection)
@@ -127,6 +147,7 @@ async def wes_new_window(connection: iterm2.Connection, force_local=False):
     if new_path != path:
         await new_session.async_send_text(f"cd {path}; clear\n")
         # clear does same as Cmd+K (clears scrollback, not just screen)
+
 
 async def wes_new_tab(connection, force_local=False):
     session = await get_current_session_throw_if_none(connection)
@@ -162,6 +183,7 @@ async def wes_new_tab(connection, force_local=False):
 
     await new_session.async_send_text(f"cd {path}; clear\n")
 
+
 # *** split panes:
 async def wes_split_pane(connection: iterm2.Connection, split_vert: bool = False, force_local=False):
     # *** FYI force_local not passed to this func yet by any wes.py handlers
@@ -179,6 +201,7 @@ async def wes_split_pane(connection: iterm2.Connection, split_vert: bool = False
         return
 
     await new_session.async_send_text(f"cd {path}; clear\n")
+
 
 # *** replace pane (split + close original):
 async def wes_replace_pane(connection: iterm2.Connection, force_local=False):
