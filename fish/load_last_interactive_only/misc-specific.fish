@@ -2179,8 +2179,8 @@ abbr manf whatis # man -f == whatis
 # * gnu man short => long options
 #
 # FYI for now, if I type -k/-K standalone then I will expand it (but I won't expand it in my abbrs below where -K matches my intuition)
-abbr --command "$man_cmd" -- -K "--global-apropos"
-abbr --command "$man_cmd" -- -k "--apropos"
+abbr --command "$man_cmd" -- -K --global-apropos
+abbr --command "$man_cmd" -- -k --apropos
 #
 abbr --command "$man_cmd" -- -w --where
 abbr --command "$man_cmd" -- -a --all
@@ -3192,10 +3192,10 @@ abbr strjoin_lines "string join '\n'"
 #   only include options I regularly use
 #   btw use a dynamic expansion to qualify overlapping subcommand options
 #   ... i.e. string match has `-n/--index` vs string split has `-n/--no-empty`
-abbr --command string -- "-a" "--all"
-abbr --command string -- "-q" "--quiet"
-abbr --command string -- "-r" "--regex"
-abbr --command string -- "-v" "--invert"
+abbr --command string -- -a --all
+abbr --command string -- -q --quiet
+abbr --command string -- -r --regex
+abbr --command string -- -v --invert
 
 # * BASH
 
@@ -3336,9 +3336,9 @@ abbr --command jq --position anywhere -- not_null "| select(.)" # or this works:
 # * yq (normally yq intended => jq but can output yaml too)
 abbr yqy "yq --yaml-output"
 # short to long options
-abbr --command yq -- "-y" --yaml-output
-abbr --command yq -- "-c" --compact-output
-abbr --command yq -- "-r" --raw-output
+abbr --command yq -- -y --yaml-output
+abbr --command yq -- -c --compact-output
+abbr --command yq -- -r --raw-output
 
 # * date
 abbr date_s "date +%s"
@@ -3525,7 +3525,7 @@ if test -x "/Applications/Keyboard Maestro.app/Contents/MacOS/keyboardmaestro"
         end
 
         # Handle --list flag
-        if test "$argv[1]" = "--list"
+        if test "$argv[1]" = --list
             set search_pattern ""
             if test (count $argv) -gt 1
                 set search_pattern $argv[2]
@@ -3539,7 +3539,7 @@ if test -x "/Applications/Keyboard Maestro.app/Contents/MacOS/keyboardmaestro"
         set output to output & (id of m) & "|" & (name of m) & "\n"
     end repeat
     return output
-end tell' > $tmp_script
+end tell' >$tmp_script
 
             # Execute the script
             osascript $tmp_script | string trim
@@ -3579,7 +3579,7 @@ if test -x "/Applications/Keyboard Maestro.app/Contents/MacOS/keyboardmaestro"
         end
 
         # Handle --list flag
-        if test "$argv[1]" = "--list"
+        if test "$argv[1]" = --list
             set search_pattern ""
             if test (count $argv) -gt 1
                 set search_pattern $argv[2]
@@ -3593,7 +3593,7 @@ if test -x "/Applications/Keyboard Maestro.app/Contents/MacOS/keyboardmaestro"
         set output to output & (id of m) & "|" & (name of m) & "\n"
     end repeat
     return output
-end tell' > $tmp_script
+end tell' >$tmp_script
 
             # Execute the script - NO filtering, let user pipe to whatever they want
             osascript $tmp_script | string trim
@@ -3605,7 +3605,7 @@ end tell' > $tmp_script
         end
 
         # Handle --help flag
-        if test "$argv[1]" = "--help"
+        if test "$argv[1]" = --help
             echo "Usage:"
             echo "  km <macro-name-or-uuid> [-a] [-v] [-p value] [-e]"
             echo "  km --list"
