@@ -2815,8 +2815,9 @@ abbr vllmc "vllm chat"
 abbr vllmg "vllm complete"
 
 # *** tail
-abbr tailf 'tail -F'
-abbr tailn 'tail -n 10'
+abbr tailf 'tail -F -n 1000'
+abbr tailF 'tail -F -n 1000'
+abbr tailn 'tail -n 1000'
 abbr tailr 'tail -r' # reverse order
 # *** frequently tailed files
 abbr tt trash_n_tail
