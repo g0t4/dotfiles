@@ -124,10 +124,19 @@ function prompt_pwd --description 'wes mod - name of the current dir only'
         return
     end
 
-    # special case: show relative path inside ask_traces dataset
+    # special case: show relative path inside ask_traces dataset (category => end)
+    #  i.e. fim:2026-07/2026-07-26
     set _ask_base "$HOME/repos/github/g0t4/datasets/ask_traces"
     if string match -q "$_ask_base/*" $PWD
-        echo -n -s (string replace --regex "^$_ask_base/" "" $PWD)
+        set relative_path (string replace --regex "^$_ask_base/" "" $PWD)
+        set components (string split "/" $relative_path)
+        set category $components[1] # first dir under ask_traces == category (fim/agents/rewrite)
+        set rest (string join '/' $components[2..])
+        echo -n -s "$category"
+        if test -n "$rest"
+            # goal with : is to distinguish significance of the directory of captures
+            echo -n -s ":$rest"
+        end
         return
     end
 
