@@ -70,6 +70,7 @@ function browse_traces
 end
 complete -c browse_traces -a '(command ls $WES_ASK_CAPTURES)' --no-files
 
+abbr vt view_trace
 function view_trace
     # Run the chat viewer tool using the module namespace.
     # ``tools`` is now a proper Python package, so we invoke the module with
