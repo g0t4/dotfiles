@@ -25,4 +25,7 @@ function love_shell
 end
 
 abbr -- nreadme "nvim README.md -c ':tabonly'" # FYI -c runs after first file + config loaded, necessary for tabonly to work here (close all other tabs)
+# TODO setup fields in the NOTES.yml? copy from a template or prepopulate it?
+#   TODO I could setup neovim helper to do the prepopulate (on-demand or automatically)
+abbr -- nNOTES "nvim NOTES.yml -c ':tabonly'"
 
