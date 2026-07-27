@@ -122,30 +122,32 @@ Respond with a valid link or search text to submit to a search engine. Prefer a 
 
 function M.getAppSpecificParams(app, focusedElem)
     local name = app:name()
+    -- max_tokens = 32768
+    max_tokens = nil
 
     if name == APPS.BraveBrowserBeta then
         local desc = focusedElem:attributeValue('AXDescription')
         if desc and string.lower(desc) == 'address and search bar' then
-            return { systemMessage = omniBarSystemMessage, max_tokens = 150 }
+            return { systemMessage = omniBarSystemMessage, max_tokens = max_tokens }
         end
 
-        return { systemMessage = devtoolsSystemMessage, max_tokens = 200 }
+        return { systemMessage = devtoolsSystemMessage, max_tokens = max_tokens }
     end
 
     if name == "Script Debugger" or name == "Script Editor" then
         -- TODO would it be useful to differentiate Script Debugger vs Script Editor
         --   i.e. the former has better debug tools so might want diff prompt to elucidate setting variables to inspect in Explorer view vs using logs in Script Editor
         -- try a smidge more for getting code blocks (I noticed that often it stops early b/c runs out of tokens)
-        return { systemMessage = applescriptSystemMessage, max_tokens = 300 }
+        return { systemMessage = applescriptSystemMessage, max_tokens = max_tokens }
     end
 
     if name == APPS.Excel then
         -- 200 is more than plenty for an excel formula
-        return { systemMessage = excelSystemMessage, max_tokens = 200 }
+        return { systemMessage = excelSystemMessage, max_tokens = max_tokens }
     end
     if name == APPS.Hammerspoon then
         -- PRN double check its the Console window?
-        return { systemMessage = hammerspoonSystemMessage, max_tokens = 200 }
+        return { systemMessage = hammerspoonSystemMessage, max_tokens = max_tokens }
     end
 
     return nil
