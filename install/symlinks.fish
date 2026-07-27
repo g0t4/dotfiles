@@ -104,6 +104,10 @@ ln -f -s $dotfiles_dir/.config/uv/uv.toml $HOME/.config/uv/.
 mkdir -p $HOME/.config/fd
 ln -f -s $dotfiles_dir/.config/fd/ignore $HOME/.config/fd/.
 
+# *** dust
+mkdir -p $HOME/.config/dust
+ln -f -s $dotfiles_dir/.config/dust/config.toml $HOME/.config/dust/.
+
 # *** bash
 ln -f -s $dotfiles_dir/bash/.bashrc $HOME/.bashrc
 # I chose ~/.bash_profile b/c it wins over ~/.profile and ~/.bash_login
