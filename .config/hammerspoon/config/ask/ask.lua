@@ -281,18 +281,22 @@ function askAbout(userText, app, focusedElem, appendChunk)
         return
     end
 
-    local body = hs.json.encode({
+    local body = {
         model = service.model,
         messages = {
             { role = "system", content = params.systemMessage },
             { role = "user",   content = userText },
         },
         stream = true,
-        max_tokens = service.max_tokens or params.max_tokens,
-    })
+    }
+    if max_tokens then
+        body.max_tokens = max_tokens
+    end
+    local body_string = hs.json.encode(body)
+    max_tokens = service.max_tokens or params.max_tokens
 
     -- TODO review prompts for when an extra end appears (i.e. in AppleScript, and/or extra/missing ) in JavaScript... must be smth in my prompt that's confusing)
-    log:info(body)
+    log:info(body_string)
 
     if appendChunk == nil then
         -- TODO rewrite this to be a pre-handler of sorts? or move it out of this spot?
@@ -425,7 +429,7 @@ function askAbout(userText, app, focusedElem, appendChunk)
         return true -- continue streaming, false would result in rest going to final callback (IIUC)
     end
 
-    myTask = streamingRequest(service.url, "POST", headers, body, streamingCallback, completeCallback)
+    myTask = streamingRequest(service.url, "POST", headers, body_string, streamingCallback, completeCallback)
 end
 
 return M
