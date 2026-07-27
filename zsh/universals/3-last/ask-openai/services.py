@@ -40,7 +40,7 @@ def use_ask_lan(model: Optional[str] = None):
         api_key="none",
         base_url='http://ask.lan:8012/v1',
         model=model if model else 'FIXED_MODEL',  # FYI would need to query to find the actual model
-        max_tokens=2048,
+        # max_tokens=16384,
     )
 
 def use_inception(model: Optional[str] = None):

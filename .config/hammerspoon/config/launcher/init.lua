@@ -674,7 +674,7 @@ local function handleLLM(query, searchId, callback)
         },
         stream = true,
         temperature = 0.7,
-        max_tokens = 4096,
+        -- max_tokens = 16384,
     })
 
     local cmd = "/usr/bin/curl"

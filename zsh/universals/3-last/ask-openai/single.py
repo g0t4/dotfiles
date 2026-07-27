@@ -15,7 +15,7 @@ from chat_non_stream import GenerationResult, generate_non_streaming
 #   this was my OG OG ask-openai plugin core
 
 system_message = "You are a command line expert. Respond with a single, valid, complete command line. I intend to execute it. No explanation. No markdown. No markdown with backticks ` nor ```"
-max_tokens = 2000
+# max_tokens = 2000
 
 # Directory for fish shell traces (mirrors nvim plugin's trace dir)
 ASK_SHELL_TRACE_DIR = os.path.expanduser("~/.local/state/nvim/ask-openai/shell")
