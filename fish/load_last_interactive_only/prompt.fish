@@ -129,9 +129,9 @@ function prompt_pwd --description 'wes mod - name of the current dir only'
     set _ask_base "$HOME/repos/github/g0t4/datasets/ask_traces"
     if string match -q "$_ask_base/*" $PWD
         set relative_path (string replace --regex "^$_ask_base/" "" $PWD)
-        set components (string split "/" $relative_path)
-        set category $components[1] # first dir under ask_traces == category (fim/agents/rewrite)
-        set rest (string join '/' $components[2..])
+        set path_parts (string split --max 1 "/" $relative_path)
+        set category $path_parts[1]
+        set rest $path_parts[2]
         echo -n -s "$category"
         if test -n "$rest"
             # goal with : is to distinguish significance of the directory of captures
