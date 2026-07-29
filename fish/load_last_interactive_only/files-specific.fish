@@ -14,8 +14,12 @@ if status is-interactive
             # thus use crossover
             lsd --group-dirs first $argv
         else
-            echo "lsd is not installed... fall back to ls... get it installed!"
+            if not set -q __lsd_fallback_done
+                set -g __lsd_fallback_done true
+                echo "lsd is not installed... fall back to ls... get it installed!"
+            end
             command ls $argv
+
         end
     end
 end
