@@ -44,3 +44,10 @@ end
 function _enable_fish_suggestions
     set -U fish_autosuggestion_enabled 1
 end
+
+if not status is-interactive
+    # improve behaviors when agents use tool calls via fish?
+    # apparently Claude uses zsh... and did smth funky with my zsh config, leave this just in case at some point I wanna cleanup and use fish as the shell...
+    #  also doesn't hurt to have non interactive processes not use ANSI color codes... though I bet some edge case will bite me... we shall see
+    functions --erase ls # use stock ls command
+end
