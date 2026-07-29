@@ -266,6 +266,7 @@ vim.api.nvim_create_autocmd("BufRead", {
     },
     callback = function()
         vim.bo.filetype = "ansible"
+        vim.bo.commentstring = "# %s"
         -- DO NOT USE yaml with anything ansible related
         -- NOTE you might have issues with different ansible types... i.e. inventory vs playbook... cross that bridge later (IIAC ALS has a detection mechanism too, prolly not configurable!)
 
