@@ -16,7 +16,7 @@ if status is-interactive
         else
             if not set -q __lsd_fallback_done
                 set -g __lsd_fallback_done true
-                echo "lsd is not installed... fall back to ls... get it installed!"
+                echo -e (set_color red --bold) "lsd is not installed, using ls...!\n"
             end
             command ls $argv
 
