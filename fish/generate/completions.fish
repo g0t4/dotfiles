@@ -25,3 +25,5 @@ end
 hf --show-completion > $WES_DOTFILES/fish/completions/hf.fish
 
 fx --comp fish > $WES_DOTFILES/fish/completions/fx.fish
+
+codex completion fish > $WES_DOTFILES/fish/completions/codex.fish
