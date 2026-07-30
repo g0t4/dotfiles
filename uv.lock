@@ -1125,7 +1125,7 @@ wheels = [
 
 [[package]]
 name = "langchain-llama-server"
-version = "0.1.2"
+version = "0.2.0"
 source = { editable = "../langchain-llama-server" }
 dependencies = [
     { name = "langchain" },
@@ -1141,6 +1141,8 @@ requires-dist = [
 [package.metadata.requires-dev]
 dev = [
     { name = "ipykernel", specifier = ">=7.2.0" },
+    { name = "pytest", specifier = ">=8.4.2" },
+    { name = "pytest-watch", specifier = ">=4.2.0" },
     { name = "rich", specifier = ">=14.3.3" },
     { name = "yapf", specifier = ">=0.43.0" },
 ]
