@@ -13,6 +13,7 @@ include_domains:
   # - yaml # not many, yet?
 ignores:
   - "notes/"
+  - "fish/completions"
 global_domains:
   - bash
   - fish
