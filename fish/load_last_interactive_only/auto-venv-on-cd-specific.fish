@@ -18,7 +18,6 @@ end
 
 # PRN register / run as late as possible, else PATH changes after this are reverted on deactive
 
-
 # disable modifying the fish prompt (I will modify it myself to prepend python icon)
 set -gx VIRTUAL_ENV_DISABLE_PROMPT true
 
@@ -79,12 +78,10 @@ end
 # run during startup to activate venv if initial PWD is in a venv
 _auto_venv_pwd_changed_handler
 
-
 # * auto nvm use
 
 # auto nvm use – activate Node version from nearest .nvmrc
 function _auto_nvm_find_nvmrc_in_or_above_dir --argument-names dir_absolute_path
-
     if test -e "$dir_absolute_path/.nvmrc"
         echo "$dir_absolute_path/.nvmrc"
         return 0
