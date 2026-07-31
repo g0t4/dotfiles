@@ -99,8 +99,8 @@ function _auto_nvm_pwd_changed_handler --on-variable PWD
         # no .nvmrc found, optionally deactivate current nvm version
         return
     end
-    # set -l node_version (string trim < "$nvmrc_path")
-    # time nvm use $node_version
+    set -l node_version (string trim < "$nvmrc_path")
+    time nvm use $node_version
 end
 # run during startup to set Node version based on initial PWD
 _auto_nvm_pwd_changed_handler
