@@ -22,9 +22,7 @@ end
 # disable modifying the fish prompt (I will modify it myself to prepend python icon)
 set -gx VIRTUAL_ENV_DISABLE_PROMPT true
 
-function _auto_venv_find_venv_in_or_above_dir
-
-    set -l _dir (path resolve $argv[1]) # realpath => absolute path (i.e. to demo what this func does => call w/ relative path)
+function _auto_venv_find_venv_in_or_above_dir --argument-names _dir
 
     # to understand how this works, uncomment: (and cd around filesystem)
     # echo "searching for venv in $_dir" >&2 # print to stderr so not captured if using cmd substitution
@@ -82,8 +80,8 @@ _auto_venv_pwd_changed_handler
 # * auto nvm use
 
 # auto nvm use – activate Node version from nearest .nvmrc
-function _auto_nvm_find_nvmrc_in_or_above_dir
-    set -l _dir (path resolve $argv[1])
+function _auto_nvm_find_nvmrc_in_or_above_dir --argument-names _dir
+
     if test -e "$_dir/.nvmrc"
         echo "$_dir/.nvmrc"
         return 0
