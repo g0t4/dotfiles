@@ -105,14 +105,22 @@ function find_upward --argument-names filename start_dir
     end
 end
 
-function _auto_nvm_pwd_changed_handler --on-variable PWD
-    time set nvmrc_path (find_upward .nvmrc)
-    if test $status -ne 0
-        # no .nvmrc found, optionally deactivate current nvm version
-        return
+function __auto_nvm_use --on-variable PWD
+    type -q nvm; or return
+
+    time set -l nvmrc (find_upward .nvmrc)
+
+    if test -n "$nvmrc"
+        set -l requested (string trim <"$nvmrc")
+
+        if test (nvm current) != "$requested"
+            nvm use "$requested" >/dev/null
+        end
+    else
+        if test (nvm current) != system
+            nvm use system >/dev/null
+        end
     end
-    set -l node_version (string trim < "$nvmrc_path")
-    nvm use $node_version
 end
-# run during startup to set Node version based on initial PWD
-_auto_nvm_pwd_changed_handler
+
+__auto_nvm_use
