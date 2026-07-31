@@ -11,6 +11,9 @@ set argcomplete_commands \
     ansible-pull \
     ansible-test \
     ansible-vault \
+    \
+    rag_indexer
+
     #
     pytest
 
