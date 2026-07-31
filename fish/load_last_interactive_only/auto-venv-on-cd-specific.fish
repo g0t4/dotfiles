@@ -80,6 +80,8 @@ _auto_venv_pwd_changed_handler
 
 # * auto nvm use
 
+# PRN could skip registering the PWD change handler if nvm not in path
+
 function find_upward --argument-names filename start_dir
     if test -z "$start_dir"
         set start_dir $PWD
@@ -106,7 +108,6 @@ function find_upward --argument-names filename start_dir
 end
 
 function __auto_nvm_use --on-variable PWD
-    type -q nvm; or return
 
     time set -l nvmrc (find_upward .nvmrc)
 
