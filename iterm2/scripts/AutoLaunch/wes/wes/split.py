@@ -23,12 +23,6 @@ async def new_tab_then_close_others(connection):
 
 
 async def prepare_new_profile(session: iterm2.Session, force_local_fish: bool) -> tuple[iterm2.LocalWriteOnlyProfile, bool]:
-    tab = session.tab
-    tab_id = tab.tab_id if tab is not None else "missing tab"
-    window = session.window
-    window_id = window.window_id if window is not None else "missing window"
-    # rich.inspect(session)  # rich inspect shows tab/window/session IDs... plus prints each of those objects which gives key names/properties and values... awesome for debugging
-
     current_profile = await session.async_get_profile()
     # rich.inspect(current_profile)
 
@@ -50,8 +44,16 @@ async def prepare_new_profile(session: iterm2.Session, force_local_fish: bool) -
 
     jobName = await session.async_get_variable("jobName")
     commandLine = await session.async_get_variable("commandLine")
-    rich.print(f'Previous {jobName=} {commandLine=}')
     was_sshed = jobName == "ssh"
+    # rich.inspect(session)
+    # leave for troubleshooting next time a bogus session appears to be copied:
+    print(f'''
+        {jobName=}
+        {commandLine=}
+        {session.session_id=}
+        {session.tab.tab_id=}
+        {session.window.window_id=}
+    ''')
 
     is_ssh = was_sshed and not force_local_fish
     print(f"{force_local_fish=}, {is_ssh=}")
@@ -72,7 +74,7 @@ async def prepare_new_profile(session: iterm2.Session, force_local_fish: bool) -
             new_profile.set_command(f"{fish_path} -C \"{escaped_cmd}\"")
             new_profile.set_use_custom_command("Yes")
             print(f"was_sshed:escaped_cmd {escaped_cmd=}")
-            # TODO also replicate bash over ssh on build21 for stract demos there?
+            # PRN also replicate bash over ssh on build21 for strace demos there?
     else:
         # * at least for duration of course, launch bash shell... when in bash in current session
         # that way no accidents when I don't realize I'm not in bash b/c I've replicated all my abbrs bash can feel like fish at times ;)
