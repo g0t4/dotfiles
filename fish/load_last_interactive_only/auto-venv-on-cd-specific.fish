@@ -24,7 +24,7 @@ set -gx VIRTUAL_ENV_DISABLE_PROMPT true
 
 function _auto_venv_find_venv_in_or_above_dir
 
-    set -l _dir (realpath $argv[1]) # realpath => absolute path (i.e. to demo what this func does => call w/ relative path)
+    set -l _dir (path resolve $argv[1]) # realpath => absolute path (i.e. to demo what this func does => call w/ relative path)
 
     # to understand how this works, uncomment: (and cd around filesystem)
     # echo "searching for venv in $_dir" >&2 # print to stderr so not captured if using cmd substitution
@@ -43,13 +43,13 @@ function _auto_venv_find_venv_in_or_above_dir
         return 1
     end
 
-    set -l _parent_dir (dirname "$_dir")
+    set -l _parent_dir (path dirname "$_dir")
     _auto_venv_find_venv_in_or_above_dir "$_parent_dir"
     return $status
 end
 
 function _auto_venv_pwd_changed_handler --on-variable PWD
-    set venv_dir (_auto_venv_find_venv_in_or_above_dir "$PWD")
+    time set venv_dir (_auto_venv_find_venv_in_or_above_dir "$PWD")
 
     if test $status -ne 0
         # no venv found
@@ -83,7 +83,7 @@ _auto_venv_pwd_changed_handler
 
 # auto nvm use – activate Node version from nearest .nvmrc
 function _auto_nvm_find_nvmrc_in_or_above_dir
-    set -l _dir (realpath $argv[1])
+    set -l _dir (path resolve $argv[1])
     if test -e "$_dir/.nvmrc"
         echo "$_dir/.nvmrc"
         return 0
@@ -91,25 +91,18 @@ function _auto_nvm_find_nvmrc_in_or_above_dir
     if test "$_dir" = /
         return 1
     end
-    set -l _parent_dir (dirname "$_dir")
+    set -l _parent_dir (path dirname "$_dir")
     _auto_nvm_find_nvmrc_in_or_above_dir "$_parent_dir"
     return $status
 end
 function _auto_nvm_pwd_changed_handler --on-variable PWD
-    set nvmrc_path (_auto_nvm_find_nvmrc_in_or_above_dir "$PWD")
+    time set nvmrc_path (_auto_nvm_find_nvmrc_in_or_above_dir "$PWD")
     if test $status -ne 0
         # no .nvmrc found, optionally deactivate current nvm version
         return
     end
-    # read the desired node version
-    set -l node_version (string trim < "$nvmrc_path")
-    # if nvm is available, use it
-    if type -q nvm
-        # nvm may be a function; invoke it with the version
-        nvm use $node_version > /dev/null
-    else if type -q fnm
-        fnm use $node_version > /dev/null
-    end
+    # set -l node_version (string trim < "$nvmrc_path")
+    # time nvm use $node_version
 end
 # run during startup to set Node version based on initial PWD
 _auto_nvm_pwd_changed_handler
