@@ -80,27 +80,39 @@ _auto_venv_pwd_changed_handler
 
 # * auto nvm use
 
-# auto nvm use – activate Node version from nearest .nvmrc
-function _auto_nvm_find_nvmrc_in_or_above_dir --argument-names dir_absolute_path
-    if test -e "$dir_absolute_path/.nvmrc"
-        echo "$dir_absolute_path/.nvmrc"
-        return 0
+function find_upward --argument-names filename start_dir
+    if test -z "$start_dir"
+        set start_dir $PWD
     end
-    if test "$dir_absolute_path" = /
-        return 1
+
+    set -l dir (path resolve "$start_dir")
+
+    while true
+        set -l candidate "$dir/$filename"
+
+        if test -e "$candidate"
+            echo "$candidate"
+            return 0
+        end
+
+        set -l parent (path dirname "$dir")
+
+        if test "$parent" = "$dir"
+            return 1
+        end
+
+        set dir "$parent"
     end
-    set -l parent_dir (path dirname "$dir_absolute_path")
-    _auto_nvm_find_nvmrc_in_or_above_dir "$parent_dir"
-    return $status
 end
+
 function _auto_nvm_pwd_changed_handler --on-variable PWD
-    time set nvmrc_path (_auto_nvm_find_nvmrc_in_or_above_dir "$PWD")
+    time set nvmrc_path (find_upward .nvmrc)
     if test $status -ne 0
         # no .nvmrc found, optionally deactivate current nvm version
         return
     end
     set -l node_version (string trim < "$nvmrc_path")
-    time nvm use $node_version
+    nvm use $node_version
 end
 # run during startup to set Node version based on initial PWD
 _auto_nvm_pwd_changed_handler
