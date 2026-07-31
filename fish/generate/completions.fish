@@ -12,7 +12,8 @@ set argcomplete_commands \
     ansible-test \
     ansible-vault \
     \
-    rag_indexer
+    rag_indexer \
+    rag_validate_index \
 
     #
     pytest
