@@ -22,27 +22,30 @@ end
 # disable modifying the fish prompt (I will modify it myself to prepend python icon)
 set -gx VIRTUAL_ENV_DISABLE_PROMPT true
 
-function _auto_venv_find_venv_in_or_above_dir --argument-names _dir
+function _auto_venv_find_venv_in_or_above_dir --argument-names dir_absolute_path
+    # Assume dir_absolute_path is absolute, given we start with $PWD
+    # FYI if needed to get absolute path, then use
+    #     set dir_absolute_path (path resolve $dir_absolute_path)
 
     # to understand how this works, uncomment: (and cd around filesystem)
-    # echo "searching for venv in $_dir" >&2 # print to stderr so not captured if using cmd substitution
+    # echo "searching for venv in $dir_absolute_path" >&2 # print to stderr so not captured if using cmd substitution
 
-    if test -e "$_dir/.venv.local"
-        echo "$_dir/.venv.local"
+    if test -e "$dir_absolute_path/.venv.local"
+        echo "$dir_absolute_path/.venv.local"
         return 0
-    else if test -e "$_dir/.venv"
-        echo "$_dir/.venv"
+    else if test -e "$dir_absolute_path/.venv"
+        echo "$dir_absolute_path/.venv"
         return 0
     end
 
-    if test "$_dir" = /
+    if test "$dir_absolute_path" = /
         # stop at root of filesystem => /
         # another option might be to stop at root of repo (if in a repo)
         return 1
     end
 
-    set -l _parent_dir (path dirname "$_dir")
-    _auto_venv_find_venv_in_or_above_dir "$_parent_dir"
+    set -l parent_dir (path dirname "$dir_absolute_path")
+    _auto_venv_find_venv_in_or_above_dir "$parent_dir"
     return $status
 end
 
@@ -80,17 +83,17 @@ _auto_venv_pwd_changed_handler
 # * auto nvm use
 
 # auto nvm use – activate Node version from nearest .nvmrc
-function _auto_nvm_find_nvmrc_in_or_above_dir --argument-names _dir
+function _auto_nvm_find_nvmrc_in_or_above_dir --argument-names dir_absolute_path
 
-    if test -e "$_dir/.nvmrc"
-        echo "$_dir/.nvmrc"
+    if test -e "$dir_absolute_path/.nvmrc"
+        echo "$dir_absolute_path/.nvmrc"
         return 0
     end
-    if test "$_dir" = /
+    if test "$dir_absolute_path" = /
         return 1
     end
-    set -l _parent_dir (path dirname "$_dir")
-    _auto_nvm_find_nvmrc_in_or_above_dir "$_parent_dir"
+    set -l parent_dir (path dirname "$dir_absolute_path")
+    _auto_nvm_find_nvmrc_in_or_above_dir "$parent_dir"
     return $status
 end
 function _auto_nvm_pwd_changed_handler --on-variable PWD
