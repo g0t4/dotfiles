@@ -14,6 +14,10 @@ set argcomplete_commands \
     \
     rag_indexer \
     rag_validate_index \
+    trace_dump \
+    view_trace \
+    pii_scanner \
+    browse_traces \
 
     #
     pytest

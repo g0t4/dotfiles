@@ -60,10 +60,11 @@ function strip_trailing_newline --description "trim trailing \\n - last only"
     perl -0777 -pe 'chop if substr($_, -1) eq "\n"'
 end
 
-abbr ba browse_traces agents
-abbr br browse_traces rewrite
-abbr bf browse_traces fim
-abbr bsh browse_traces fish
+abbr bt browse_traces
+abbr bta browse_traces agents
+abbr btr browse_traces rewrite
+abbr btf browse_traces fim
+abbr btsh browse_traces fish
 function browse_traces
     set _python3 "$ASK_REPO/.venv/bin/python3"
     env PYTHONPATH="$ASK_REPO" $_python3 -m tools.chat_viewer.browser $argv
@@ -80,15 +81,13 @@ function view_trace
     env PYTHONPATH="$ASK_REPO" $_python3 -m tools.chat_viewer.__main__ $argv
 end
 
-complete -c trace_dump -l plain-text -d 'Output plain text without colors or panel borders'
+abbr td trace_dump
 function trace_dump
     # Dump run_process commands from a trace file.
     set _python3 "$ASK_REPO/.venv/bin/python3"
     env PYTHONPATH="$ASK_REPO" $_python3 -m tools.trace_dump $argv
 end
 
-complete -c pii_scanner -a '--model --threshold --json --show-matches --extract-paths help' --no-files
-abbr -- pbpii 'pii_scanner (pbpaste | string split "\n" | string trim | psub)'
 abbr pii pii_scanner
 function pii_scanner
     # Run the PII scanner tool using the module namespace.
@@ -147,7 +146,6 @@ set mcp_tool_list '{ "jsonrpc": "2.0", "id": 2, "method": "tools/list" }'
 abbr mcp_copy_init "echo -e '$mcp_init\n$mcp_tool_list'  | pbcopy"
 # set mcp_init_notification '{"jsonrpc":"2.0","method":"notifications/initialized"}' # not required to respond with this, but put it here in case I need it at some point
 
-
 abbr trace_timings "jq --raw-output '.request_body.messages[].timings | select(.) | [.cache_n, .prompt_n, .predicted_n] | @tsv' ./*-trace.json | awk '{a+=\$1; b+=\$2; c+=\$3} END {print a \"\\t\" b \"\\t\" c}'"
 #
 abbr --add _tm --regex "tm\d+" --function _abbr_trace_message
@@ -202,4 +200,3 @@ function _abbr_msg_num --argument-names to_expand
     end
     echo "WHAT THE FUUU you smoking crack"
 end
-
