@@ -49,7 +49,7 @@ function _auto_venv_find_venv_in_or_above_dir --argument-names dir_absolute_path
 end
 
 function _auto_venv_pwd_changed_handler --on-variable PWD
-    time set venv_dir (_auto_venv_find_venv_in_or_above_dir "$PWD")
+    set venv_dir (_auto_venv_find_venv_in_or_above_dir "$PWD")
 
     if test $status -ne 0
         # no venv found
@@ -109,7 +109,7 @@ end
 
 function __auto_nvm_use --on-variable PWD
 
-    time set -l nvmrc (find_upward .nvmrc)
+    set -l nvmrc (find_upward .nvmrc)
 
     if test -n "$nvmrc"
         set -l requested_node_version (string trim <"$nvmrc")
