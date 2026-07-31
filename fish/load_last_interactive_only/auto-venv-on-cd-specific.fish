@@ -77,3 +77,39 @@ end
 
 # run during startup to activate venv if initial PWD is in a venv
 _auto_venv_pwd_changed_handler
+
+
+# * auto nvm use
+
+# auto nvm use – activate Node version from nearest .nvmrc
+function _auto_nvm_find_nvmrc_in_or_above_dir
+    set -l _dir (realpath $argv[1])
+    if test -e "$_dir/.nvmrc"
+        echo "$_dir/.nvmrc"
+        return 0
+    end
+    if test "$_dir" = /
+        return 1
+    end
+    set -l _parent_dir (dirname "$_dir")
+    _auto_nvm_find_nvmrc_in_or_above_dir "$_parent_dir"
+    return $status
+end
+function _auto_nvm_pwd_changed_handler --on-variable PWD
+    set nvmrc_path (_auto_nvm_find_nvmrc_in_or_above_dir "$PWD")
+    if test $status -ne 0
+        # no .nvmrc found, optionally deactivate current nvm version
+        return
+    end
+    # read the desired node version
+    set -l node_version (string trim < "$nvmrc_path")
+    # if nvm is available, use it
+    if type -q nvm
+        # nvm may be a function; invoke it with the version
+        nvm use $node_version > /dev/null
+    else if type -q fnm
+        fnm use $node_version > /dev/null
+    end
+end
+# run during startup to set Node version based on initial PWD
+_auto_nvm_pwd_changed_handler
