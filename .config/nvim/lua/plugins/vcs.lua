@@ -14,8 +14,10 @@ return {
 
         'lewis6991/gitsigns.nvim',
         enabled = true,
-        -- event = 'BufRead',
-        lazy = true, -- must be requested to load, that way I can one off load it as needed w/o default being on (when I wanna use the features in a complex set of changes to a repo)... w/o enabling it for courses where it can be jarring when the gutter resizes on each first change and then on each commit
+
+        -- comment out event and uncomment lazy to load on demand
+        event = 'BufRead',
+        -- lazy = true, -- must be requested to load, that way I can one off load it as needed w/o default being on (when I wanna use the features in a complex set of changes to a repo)... w/o enabling it for courses where it can be jarring when the gutter resizes on each first change and then on each commit
 
         config = function()
             -- TODO! review config options and other features (just added it for gutter signs for now)
