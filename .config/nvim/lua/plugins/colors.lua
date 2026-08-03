@@ -80,6 +80,10 @@ return {
                         bg = "#1f2229", -- 282c34", -- this feels better (is my new terminal bg I made)
                     },
                 },
+                highlights = {
+                    -- Keep closed folds de-emphasized, but make their text easier to scan.
+                    Folded = { fg = "#8b929e", bg = "#30333d" },
+                },
             }
             -- FYI get colors =>    :lua print(vim.inspect(require("onedarkpro.helpers").get_colors()))
             vim.cmd [[
