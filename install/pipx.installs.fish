@@ -8,3 +8,5 @@ pipx inject --include-apps ansible ansible-lint argcomplete
 # libraries only:
 pipx inject --include-apps ansible requests
 # tomli-w
+
+pipx install huggingface-hub
