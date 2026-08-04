@@ -115,6 +115,10 @@ end
 -- vim.opt.splitbelow = true -- i.e. help opens below then
 vim.opt.splitright = true -- :vsplit now opens new window on the right, I def want that as I always flip them, also Ctrl+V in telescope opens file to the right
 
+vim.keymap.set("x", "<leader>ml", function()
+    pcall(vim.cmd, 'normal S]f]a(\27pa)')
+
+end, { noremap = true, silent = true })
 vim.keymap.set("n", "<leader>ml", function()
     -- turn the current big Word into a markdown link
     --    use link in the clipboard
