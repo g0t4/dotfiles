@@ -5,6 +5,7 @@ return {
 
     {
         'nvim-treesitter/nvim-treesitter-textobjects',
+        branch = 'main',
         -- enabled = false,
         -- TODO define my own text objects to use with motions like yi_ or ya_ or vi/va_ ...
         --  directly links captures with custom text objects!
