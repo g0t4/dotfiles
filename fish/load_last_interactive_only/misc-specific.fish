@@ -1506,10 +1506,16 @@ end
 # end
 
 abbr hfc "hf cache"
-abbr hfcls "hf cache ls --no-truncate"
-abbr hfcrm "hf cache rm"
-abbr hfcv "hf cache verify"
+#
+abbr hfcls "hf cache ls --no-truncate --revisions" # show all revisions (aka refs) not just current
+# cache is stored in refs/blobs/snapshots dirs
+#  old revisions are like dangling pointers (no refs/* entry)
+#
+# use prune to remove old revisions so you don't have to hunt those down by hand
 abbr hfcpr "hf cache prune"
+#
+abbr hfcrm "hf cache rm" # can pass revision sha to rm
+abbr hfcv "hf cache verify"
 abbr hfc_downloadInProgress "fd .downloadInProgress ~/.cache/huggingface/" # reminder abbr
 
 abbr hfml "hf models ls"
