@@ -1,5 +1,5 @@
 -- testing:
-require("non-plugins.code_notes.setup").modify_package_path()
+require("tests.setup").modify_package_path()
 local assert = require("luassert")
 local buffers = require("devtools.tests.buffers")
 -- system under test:
