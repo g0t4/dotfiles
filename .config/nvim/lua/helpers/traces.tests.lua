@@ -20,6 +20,8 @@ local function boom()
     error("boom")
 end
 
+-- FYI top-level test is fewer lines to assert on... use this first
+
 local ok, err = xpcall(boom, debug.traceback)
 
 print("\n******************** Original traceback:\n")
