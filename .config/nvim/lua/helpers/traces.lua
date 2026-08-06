@@ -9,19 +9,6 @@ function M.lua_short_path(path, idsize)
     return "..." .. path:sub(-(max_length - 3))
 end
 
-local function split(path)
-    local components = {}
-    for component in path:gmatch("[^/]+") do
-        table.insert(components, component)
-    end
-    return components
-end
-
-local function regex_escape(s)
-    return (s:gsub("([%(%)%.%%%+%-%*%?%[%]%^%$])", "%%%1"))
-end
-
-
 local cached_fixes = {}
 ---@param truncated_path string -- path from traceback that starts with ... and is truncated ending of the absolute path
 function M.resolve_truncated_path(truncated_path)
