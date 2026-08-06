@@ -86,14 +86,12 @@ stack traceback:
 	]] .. home .. [[/.local/share/nvim/lazy/plenary.nvim/lua/plenary/busted.lua:74: in function 'call_inner'
 	]] .. home .. [[/.local/share/nvim/lazy/plenary.nvim/lua/plenary/busted.lua:175: in function 'it'
 	]] .. home .. [[/repos/github/g0t4/dotfiles/.config/nvim/lua/helpers/traces.tests.lua:59: in function <]] .. home .. [[/repos/github/g0t4/dotfiles/.config/nvim/lua/helpers/traces.tests.lua:58>
-
 	[C]: in function 'xpcall'
 	]] .. home .. [[/.local/share/nvim/lazy/plenary.nvim/lua/plenary/busted.lua:74: in function 'call_inner'
 	]] .. home .. [[/.local/share/nvim/lazy/plenary.nvim/lua/plenary/busted.lua:120: in function 'original_describe'
 	]] .. home .. [[/repos/github/g0t4/devtools.nvim/lua/devtools/tests/define/describe.lua:16: in function 'describe'
 	]] .. home .. [[/repos/github/g0t4/dotfiles/.config/nvim/lua/helpers/traces.tests.lua:58: in function 'loaded'
-	]] .. home .. [[/.local/share/nvim/lazy/plenary.nvim/lua/plenary/busted.lua:239: in function <]] .. home .. [[/.local/share/nvim/lazy/plenary.nvim/lua/plenary/busted.lua:238>
-]]
+	]] .. home .. [[/.local/share/nvim/lazy/plenary.nvim/lua/plenary/busted.lua:239: in function <]] .. home .. [[/.local/share/nvim/lazy/plenary.nvim/lua/plenary/busted.lua:238>]]
 
 
         -- .../g0t4/dotfiles/.config/nvim/lua/helpers/traces.tests.lua:20: boom
