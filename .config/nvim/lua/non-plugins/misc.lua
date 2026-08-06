@@ -3,7 +3,6 @@
 --   keymaps.lua
 --   commands.lua
 --   etc
-local traces = require("devtools.traces.traces")
 local log = require('devtools.logs.logger').universal()
 
 -- cursor block in insert:

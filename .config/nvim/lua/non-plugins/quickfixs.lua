@@ -1,4 +1,5 @@
-local log = require("devtools.logs.logger").universal()
+local log = require('devtools.logs.logger').universal()
+local traces = require("devtools.traces.traces")
 
 -- <leader>h - keys for hammerspoon too...
 -- <leader>hf =>
@@ -66,6 +67,18 @@ function set_quickfix_from_clipboard_lua_error()
     })
 
     vim.cmd("copen")
+end
+
+function set_quickfix_auto_detect()
+    local clippy = vim.fn.getreg('+')
+    if clippy:find("stack traceback:\n") then -- assume \n after means it was on its own line and dont care if it is first or not (which is why I don't require \n at start)
+        log:info('detected lua stack trace')
+        print('detected lua stacktrace... parsing, can take a few seconds to fix paths')
+        -- FYI \n b/c stack traceback label is not first line and has lines after, if you copy the wrong part it might not match
+        set_quickfix_from_clipboard_lua_error()
+        return
+    end
+    vim.notify("did not recognize the clipboard format for quickfix purposes", vim.log.levels.INFO)
 end
 
 function fix_clipboard_lua_error_paths()
