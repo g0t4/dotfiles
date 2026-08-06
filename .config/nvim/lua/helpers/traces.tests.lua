@@ -14,19 +14,19 @@ describe("resolve_truncated_path", function()
     it("works for test case error", function()
         local ok, err = xpcall(boom, debug.traceback)
 
-        print("\n******************** Original traceback:\n")
-        print(err)
+        -- print("\n******************** Original traceback:\n")
+        -- print(err)
 
-        print("\n******************** search:\n")
+        -- print("\n******************** search:\n")
         local fixed = err:gsub("(%.%.%.*[^:\n]+)", function(short_path)
-            print("SEARCHING FOR: ", short_path)
+            -- print("SEARCHING FOR: ", short_path)
             local full = traces.resolve_truncated_path(short_path)
-            print("   FULL: ", vim.inspect(full))
+            -- print("   FULL: ", vim.inspect(full))
             return full or short_path
         end)
 
-        print("\n ********************* Fixed traceback:\n")
-        print(fixed)
+        -- print("\n ********************* Fixed traceback:\n")
+        -- print(fixed)
 
         local fixed_string = tostring(fixed)
 
