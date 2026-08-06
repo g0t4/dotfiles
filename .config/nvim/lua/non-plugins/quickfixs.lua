@@ -8,6 +8,7 @@ function open_hammerspoon_failure_in_quickfix()
     local task = require("plenary.job")
     vim.notify("finish calling hs")
     -- TODO review/cleanup this triggering of hammerspoon + make it reusable if beneficial elsewhere
+    -- TODO! plug in the trace fixer for this too using hs root dirs (see below)
     task:new({
         command = "hs",
         args = { "-c", "StreamDeckKeyboardMaestroRunner('HS_last_failure_to_nvim_quickfix()')" },
@@ -78,6 +79,9 @@ function set_quickfix_auto_detect()
         set_quickfix_from_clipboard_lua_error()
         return
     end
+    -- TODO add other cases here!
+    -- TODO hammerspoon will need lua fixes but not with vim.rtp, instead needs HS specific roots to look through
+    --     SEE devtools trace for notes about hammerspoon paths (I could run hs command to do this)
     vim.notify("did not recognize the clipboard format for quickfix purposes", vim.log.levels.INFO)
 end
 
