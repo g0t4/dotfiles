@@ -23,61 +23,61 @@ end
 
 
 local cached_fixes = {}
-
-function M.resolve_truncated_path(workspace_root, truncated_path)
-    if cached_fixes[truncated_path] then
-        print("  CACHED: " .. cached_fixes[truncated_path])
-        return cached_fixes[truncated_path]
+---@param truncated_path string -- path from traceback that starts with ... and is truncated ending of the absolute path
+function M.resolve_truncated_path(truncated_path)
+    local cached = cached_fixes[truncated_path]
+    if cached then
+        return cached
     end
 
-    local trunc_without_dots = truncated_path:gsub("%.%.%.", "")
-    print("  " .. trunc_without_dots)
+    local suffix = truncated_path:gsub("^%.%.%.", "")
 
-    local try_roots = {
-        workspace_root,
-        os.getenv("HOME") .. "/.local"
-    }
+    -- FYI technically we don't need workspace_root first, it is probably the best place to look first
+    --  unless the errors aren't in your own code
+    local workspace_root = vim.fn.getcwd()
+    local roots = { workspace_root }
+    local seen = { [workspace_root] = true }
 
-    ---@param root string
-    local function try_find(root)
-        local cmd = {
+    for root in vim.gsplit(vim.o.runtimepath, ",", { plain = true }) do
+        root = vim.fn.fnamemodify(root, ":p")
+
+        if not seen[root] then
+            seen[root] = true
+            table.insert(roots, root)
+        end
+    end
+
+    for _, root in ipairs(roots) do
+        -- print("  CHECKING " .. root)
+        local result = vim.system({
             "fd",
-            "--type", "f",
+            -- "--type", "file",
             "--absolute-path",
             "--full-path",
             "--fixed-strings",
-            trunc_without_dots,
-            root
-        }
-
-        local result = vim.system(cmd, { text = true }):wait()
-        return result
-    end
-    -- TODO take package.path and extract paths to check after cwd?
-    -- vim.print(table.concat(cmd, " "))
-
-    for _, root in ipairs(try_roots) do
-        local result = try_find(root)
+            suffix,
+            root,
+        }, { text = true }):wait()
 
         if result.code == 0 then
-            local matches = {}
-
-            for path in result.stdout:gmatch("[^\r\n]+") do
-                matches[#matches + 1] = path
-            end
+            local matches = vim
+                .iter(vim.gsplit(result.stdout, "\n", { plain = true }))
+                :filter(function(path)
+                    return path ~= ""
+                end)
+                :totable()
 
             if #matches == 1 then
-                local matched = matches[1]
-                local match_truncated = M.lua_short_path(matched)
-                if match_truncated == truncated_path then
-                    cached_fixes[truncated_path] = matched
-                    return matched
+                local match = matches[1]
+                if M.lua_short_path(match) == truncated_path then
+                    cached_fixes[truncated_path] = match
+                    return match
                 end
-                return nil
             elseif #matches > 1 then
-                -- PRN allow? take first or?
-                print("  multi matches: " .. vim.inspect(matches))
-                error("  unexpected multiple matches, TODO add support if you have real example to work through... truncated_path: " .. vim.inspect(truncated_path))
+                error(("Multiple matches for %q:\n%s"):format(
+                    truncated_path,
+                    table.concat(matches, "\n")
+                ))
             end
         end
     end
