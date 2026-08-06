@@ -324,6 +324,26 @@ end, { range = true, nargs = 0 })
 
 
 -- * WIP for quick fix / location-list
+function set_quickfix_from_clipboard_lua_error()
+    local text = fix_clipboard_lua_error_paths()
+    local lines = vim.split(text, "\n")
+    local cwd = vim.fn.getcwd()
+
+    local format = {
+        lines = lines,
+        efm = [[%A%f:%l:%c: %m]],
+    }
+    vim.fn.setqflist({}, " ", format)
+    vim.cmd("copen")
+end
+
+function fix_clipboard_lua_error_paths()
+    local text = vim.fn.getreg("+")
+    text = traces.fix_paths_in_error(text)
+    vim.fn.setreg('+', text)
+    return text
+end
+
 function set_quickfix_from_clipboard(reg)
     -- ?? there has to be builtin ways for this already?
     reg = reg or "+"
