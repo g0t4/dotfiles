@@ -23,9 +23,12 @@ return {
             -- actually this was useful-ish for hardtime cuz I would see the notices... but I hated it on everything else + disappearing messages are yuck (that I have to lookup special) AND often I want them gone (when recording) and I have to wait 5 sec
             --   TODO learn commands and/or bind keymaps
             vim.notify = require("notify") -- route all notifications through this (plugins can use vim.notify none the wiser)
-            require("notify").setup({
+            ---@type notify.Config
+            local obj = {
                 stages = "static",
                 fps = 1,
+                merge_duplicates = true,
+
                 -- stages = "fade",
                 --
                 -- wtf... turning on wrapped/wrapped-default ignores newlines \n ... UGH
@@ -35,7 +38,8 @@ return {
                 --    OK for now just pass "wrapped-compact" on per notify call and that looks good enough (still has new line issue but whatever)
                 -- render = "wrapped-default",
                 -- max_width = 80,
-            })
+            }
+            require("notify").setup(obj)
         end,
     },
 
