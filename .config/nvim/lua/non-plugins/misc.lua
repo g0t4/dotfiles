@@ -4,7 +4,7 @@
 --   commands.lua
 --   etc
 local traces = require("devtools.traces.traces")
-
+local log = require('devtools.logs.logger').universal()
 
 -- cursor block in insert:
 vim.cmd(":set guicursor=i:block")
@@ -327,13 +327,26 @@ end, { range = true, nargs = 0 })
 function set_quickfix_from_clipboard_lua_error()
     local text = fix_clipboard_lua_error_paths()
     local lines = vim.split(text, "\n")
-    local cwd = vim.fn.getcwd()
 
-    local format = {
-        lines = lines,
-        efm = [[%A%f:%l:%c: %m]],
-    }
-    vim.fn.setqflist({}, " ", format)
+    -- build the entries yourself
+    local items = {}
+    for line in text:gmatch("[^\n]+") do
+        local file, lnum, msg = line:match("^%s*(.-):(%d+):%s*(.*)$")
+        if file then
+            table.insert(items, {
+                filename = file,
+                lnum = tonumber(lnum),
+                text = msg,
+            })
+        end
+    end
+    log:info(items)
+
+    vim.fn.setqflist({}, " ", {
+        title = "Lua Traceback",
+        items = items,
+    })
+
     vim.cmd("copen")
 end
 
@@ -344,13 +357,13 @@ function fix_clipboard_lua_error_paths()
     return text
 end
 
-function set_quickfix_from_clipboard(reg)
+function set_quickfix_from_clipboard_IIRC_HAMMERSPOON(reg)
+    -- TODO was this error format for hammerspoon?
     -- ?? there has to be builtin ways for this already?
     reg = reg or "+"
     local text = vim.fn.getreg(reg)
     text = traces.fix_paths_in_error(text)
     local lines = vim.split(text, "\n")
-    local cwd = vim.fn.getcwd()
 
     vim.fn.setqflist({}, " ", {
         lines = lines,
@@ -358,8 +371,6 @@ function set_quickfix_from_clipboard(reg)
     })
     vim.cmd("copen")
 end
-
--- set_quickfix_from_clipboard("*")
 
 -- TODO clipboard to quickfix
 -- caddexpr split(getreg('+'), "\n") | copen
