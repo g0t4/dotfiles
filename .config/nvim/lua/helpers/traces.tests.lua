@@ -35,3 +35,19 @@ end)
 
 print("\n ********************* Fixed traceback:\n")
 print(fixed)
+
+local fixed_string = tostring(fixed)
+
+local expected = [[/Users/wesdemos/repos/github/g0t4/dotfiles/.config/nvim/lua/helpers/traces.tests.lua:20: boom
+stack traceback:
+	[C]: in function 'error'
+	/Users/wesdemos/repos/github/g0t4/dotfiles/.config/nvim/lua/helpers/traces.tests.lua:20: in function </Users/wesdemos/repos/github/g0t4/dotfiles/.config/nvim/lua/helpers/traces.tests.lua:19>
+	[C]: in function 'xpcall'
+	/Users/wesdemos/repos/github/g0t4/dotfiles/.config/nvim/lua/helpers/traces.tests.lua:23: in function 'loaded'
+	/Users/wesdemos/.local/share/nvim/lazy/plenary.nvim/lua/plenary/busted.lua:239: in function </Users/wesdemos/.local/share/nvim/lazy/plenary.nvim/lua/plenary/busted.lua:238>]]
+
+describe("resolve_truncated_path", function()
+    it("fixes paths to this file", function()
+        should.be_same_colorful_diff(expected, fixed_string)
+    end)
+end)
