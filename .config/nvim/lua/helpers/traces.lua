@@ -1,7 +1,7 @@
 local M = {}
-local LUA_IDSIZE = 60
-function M.lua_short_path(path, idsize)
-    idsize = idsize or LUA_IDSIZE
+
+local function lua_short_path(path)
+    local idsize = 60
     local max_length = idsize - 1
     if #path <= max_length then
         return path
@@ -56,7 +56,7 @@ function M.resolve_truncated_path(truncated_path)
 
             if #matches == 1 then
                 local match = matches[1]
-                if M.lua_short_path(match) == truncated_path then
+                if lua_short_path(match) == truncated_path then
                     cached_fixes[truncated_path] = match
                     return match
                 end
