@@ -24,6 +24,8 @@ return {
             --   TODO learn commands and/or bind keymaps
             vim.notify = require("notify") -- route all notifications through this (plugins can use vim.notify none the wiser)
             require("notify").setup({
+                stages = "static",
+                fps = 1,
                 -- stages = "fade",
                 --
                 -- wtf... turning on wrapped/wrapped-default ignores newlines \n ... UGH
