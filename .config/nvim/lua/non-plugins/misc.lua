@@ -3,6 +3,7 @@
 --   keymaps.lua
 --   commands.lua
 --   etc
+local traces = require("devtools.traces.traces")
 
 
 -- cursor block in insert:
@@ -117,7 +118,6 @@ vim.opt.splitright = true -- :vsplit now opens new window on the right, I def wa
 
 vim.keymap.set("x", "<leader>ml", function()
     pcall(vim.cmd, 'normal S]f]a(\27pa)')
-
 end, { noremap = true, silent = true })
 vim.keymap.set("n", "<leader>ml", function()
     -- turn the current big Word into a markdown link
@@ -324,15 +324,22 @@ end, { range = true, nargs = 0 })
 
 
 -- * WIP for quick fix / location-list
--- function set_quickfix_from_clipboard(reg)
---     -- TODO there has to be builtin ways for this already?
---     reg = reg or "+"
---     local text = vim.fn.getreg(reg)
---     local lines = vim.split(text, "\n")
---     vim.fn.setqflist({}, " ", {
---         lines = lines,
---         efm = [[%A  File "%f"\, line %l\, in %m,%Z%m]],
---     })
---     vim.cmd("copen")
--- end
+function set_quickfix_from_clipboard(reg)
+    -- ?? there has to be builtin ways for this already?
+    reg = reg or "+"
+    local text = vim.fn.getreg(reg)
+    text = traces.fix_paths_in_error(text)
+    local lines = vim.split(text, "\n")
+    local cwd = vim.fn.getcwd()
+
+    vim.fn.setqflist({}, " ", {
+        lines = lines,
+        efm = [[%A  File "%f"\, line %l\, in %m,%Z%m]],
+    })
+    vim.cmd("copen")
+end
+
 -- set_quickfix_from_clipboard("*")
+
+-- TODO clipboard to quickfix
+-- caddexpr split(getreg('+'), "\n") | copen
