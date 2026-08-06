@@ -40,3 +40,55 @@ vim.keymap.set('n', "<leader>qp", function() vim.cmd('cprev') end) -- prev item 
 
 
 -- TODO last failure => AskAgent :)
+
+-- * WIP for quick fix / location-list
+function set_quickfix_from_clipboard_lua_error()
+    local text = fix_clipboard_lua_error_paths()
+    local lines = vim.split(text, "\n")
+
+    -- build the entries yourself
+    local items = {}
+    for line in text:gmatch("[^\n]+") do
+        local file, lnum, msg = line:match("^%s*(.-):(%d+):%s*(.*)$")
+        if file then
+            table.insert(items, {
+                filename = file,
+                lnum = tonumber(lnum),
+                text = msg,
+            })
+        end
+    end
+    log:info(items)
+
+    vim.fn.setqflist({}, " ", {
+        title = "Lua Traceback",
+        items = items,
+    })
+
+    vim.cmd("copen")
+end
+
+function fix_clipboard_lua_error_paths()
+    local text = vim.fn.getreg("+")
+    text = traces.fix_paths_in_error(text)
+    vim.fn.setreg('+', text)
+    return text
+end
+
+function set_quickfix_from_clipboard_IIRC_HAMMERSPOON(reg)
+    -- TODO was this error format for hammerspoon?
+    -- ?? there has to be builtin ways for this already?
+    reg = reg or "+"
+    local text = vim.fn.getreg(reg)
+    text = traces.fix_paths_in_error(text)
+    local lines = vim.split(text, "\n")
+
+    vim.fn.setqflist({}, " ", {
+        lines = lines,
+        efm = [[%A  File "%f"\, line %l\, in %m,%Z%m]],
+    })
+    vim.cmd("copen")
+end
+
+-- TODO clipboard to quickfix
+-- caddexpr split(getreg('+'), "\n") | copen
