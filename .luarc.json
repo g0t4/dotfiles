@@ -39,6 +39,7 @@
         "~/repos/github/g0t4/ask-openai.nvim",
 
         "~/.local/share/nvim/lazy/plenary.nvim", // adds globals for describe, it, before_each, etc
+        "~/.local/share/nvim/lazy/nvim-notify", // to F12 into stuff
     ],
 
     // darn warning in nvim about luv... picking 3 (dont show again) sets this!
