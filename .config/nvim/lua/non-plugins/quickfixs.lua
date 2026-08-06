@@ -89,6 +89,3 @@ function set_quickfix_from_clipboard_IIRC_HAMMERSPOON(reg)
     })
     vim.cmd("copen")
 end
-
--- TODO clipboard to quickfix
--- caddexpr split(getreg('+'), "\n") | copen
