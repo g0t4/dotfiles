@@ -46,7 +46,7 @@ stack traceback:
 	[C]: in function 'error'
 	]] .. home .. [[/repos/github/g0t4/dotfiles/.config/nvim/lua/helpers/traces.tests.lua:20: in function <]] .. home .. [[/repos/github/g0t4/dotfiles/.config/nvim/lua/helpers/traces.tests.lua:19>
 	[C]: in function 'xpcall'
-	]] .. home .. [[/repos/github/g0t4/dotfiles/.config/nvim/lua/helpers/traces.tests.lua:23: in function 'loaded'
+	]] .. home .. [[/repos/github/g0t4/dotfiles/.config/nvim/lua/helpers/traces.tests.lua:25: in function 'loaded'
 	]] .. home .. [[/.local/share/nvim/lazy/plenary.nvim/lua/plenary/busted.lua:239: in function <]] .. home .. [[/.local/share/nvim/lazy/plenary.nvim/lua/plenary/busted.lua:238>]]
 
 describe("resolve_truncated_path", function()
