@@ -27,7 +27,7 @@ print(err)
 
 print("\n******************** search:\n")
 local fixed = err:gsub("(%.%.%.*[^:\n]+)", function(short_path)
-    print("COCKASS", short_path)
+    print("SEARCHING FOR: ", short_path)
     local full = traces.resolve_truncated_path(short_path)
     print("   FULL: ", vim.inspect(full))
     return full or short_path
