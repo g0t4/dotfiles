@@ -288,6 +288,7 @@ abbr --command git --position anywhere -- qwen3 '--author "qwen3.6-35b-a3b<wes.m
 abbr --command git --position anywhere -- agentworld '--author "qwen-agentworld-35b-a3b<wes.mcclure+qwen-agentworld-35b-a3b@gmail.com>"'
 abbr --command git --position anywhere -- codex '--author "codex-gpt5<wes.mcclure+codex-gpt5@gmail.com>"'
 abbr --command git --position anywhere -- deepseek '--author "deepseek-v4-flash-0731<wes.mcclure+deepseek-v4-flash-0731@gmail.com>"'
+abbr --command git --position anywhere -- muse-glimmer '--author "muse-glimmer-30b-dspark<wes.mcclure+muse-glimmer-30b-dspark@gmail.com>"'
 #
 # amend last commit (no edit) just set --author
 abbr --set-cursor -- amend_gptoss 'git commit --amend --no-edit --author "gptoss120b<wes.mcclure+gptoss120b@gmail.com>"'
@@ -295,6 +296,8 @@ abbr --set-cursor -- amend_qwen3 'git commit --amend --no-edit --author "qwen3.6
 abbr --set-cursor -- amend_agentworld 'git commit --amend --no-edit --author "gpt-agentworld-35b-a3b<wes.mcclure+gpt-agentworld-35b-a3b@gmail.com>"'
 abbr --set-cursor -- amend_codex 'git commit --amend --no-edit --author "codex-gpt5<wes.mcclure+codex-gpt5@gmail.com>"'
 abbr --set-cursor -- amend_deepseek 'git commit --amend --no-edit --author "deepseek-v4-flash-0731<wes.mcclure+deepseek-v4-flash-0731@gmail.com>"'
+abbr --set-cursor -- amend_muse_glimmer 'git commit --amend --no-edit --author "muse-glimmer-30b-dspark<wes.mcclure+muse-glimmer-30b-dspark@gmail.com>"'
+
 #
 abbr --set-cursor -- amend_last_msg 'git commit --amend -m "%"' # change msg of last commit
 
