@@ -3322,6 +3322,10 @@ abbr -- pbsse4 "pbpaste | string replace --regex '^\w\w\w \d\d \d\d:\d\d:\d\d \w
 #  TODO setup to work with other prompt types... not just GPT-OSS/harmony... i.e. Qwen3
 #  TODO and setup to rename file based on prompt format (if applicable?) .. at least not call it .harmony :)
 
+# * llama-server endpoints
+# reminder abbr:
+abbr llama_server_current_chat_template "curl paxy:8013/props | jq .chat_template --raw-output"
+
 # ? --join-output
 
 # * jq command
