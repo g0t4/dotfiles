@@ -45,8 +45,10 @@ set fish_escape_delay_ms 200 # 30ms is default and way too fast (ie esc+k is alm
 #    OR hide status in the prompt (perhaps like zsh I could show non-zero exit code on last line before new prompt?)
 
 ### FISH HELP ###
-set __fish_help_dir "" # overwrite fish help dir thus forcing the use of https://fishshell.com instead of local files (which I prefer b/c I have highlighting of fishshell.com pages) # ... try it with: `help help` => opens https://fishshell.com/docs/3.6/interactive.html#help
-# see `type help` to find the part of the help command that decides what to open
+# `help<space>` expands to `help_online`, which opens fishshell.com/docs/current
+# instead of the local (Homebrew) HTML docs — browser highlights/notes persist
+# across fish upgrades. See fish/functions/help_online.fish.
+abbr help help_online
 
 ### BINDINGS ###
 # some of these might be a result of setting up iTerm2 to use xterm default keymapping (in profile), might need to adjust if key map is subsequently changed
