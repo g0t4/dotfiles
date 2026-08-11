@@ -77,6 +77,53 @@ return {
                 "jinja",
                 -- "cst", "test", -- TODO where did I install these from? (both are part of treesitter test file testing
             }
+            -- * list installed parsers/queries
+            --   :TSListInstalled      -> nvim-treesitter's own bookkeeping (get_installed)
+            --   :TSListInstalledAll   -> runtimepath scan (parsers from ANY source)
+            local function show_ts_list(title, lines)
+                local buf = vim.api.nvim_create_buf(false, true) -- scratch, unlisted
+                vim.api.nvim_buf_set_name(buf, title)
+                vim.api.nvim_buf_set_lines(buf, 0, -1, false, lines)
+                vim.api.nvim_buf_set_option(buf, 'bufhidden', 'wipe')
+                vim.api.nvim_buf_set_option(buf, 'modifiable', false)
+                vim.api.nvim_buf_set_keymap(buf, 'n', 'q', '<cmd>bwipeout!<CR>', { noremap = true, silent = true })
+                vim.api.nvim_win_set_buf(0, buf)
+            end
+
+            vim.api.nvim_create_user_command('TSListInstalled', function()
+                local ts = require('nvim-treesitter')
+                local parsers = ts.get_installed('parsers') or {}
+                local queries = ts.get_installed('queries') or {}
+
+                local lines = {
+                    string.format('parsers (%d):', #parsers),
+                }
+                vim.list_extend(lines, vim.tbl_map(function(lang) return '  ' .. lang end, parsers))
+                table.insert(lines, string.format('queries (%d):', #queries))
+                vim.list_extend(lines, vim.tbl_map(function(lang) return '  ' .. lang end, queries))
+
+                show_ts_list('TSListInstalled', lines)
+            end, { desc = 'List parsers and queries tracked by nvim-treesitter' })
+
+            vim.api.nvim_create_user_command('TSListInstalledAll', function()
+                local parser_files = vim.api.nvim_get_runtime_file('parser/*', true)
+                local langs = {}
+                for _, file in ipairs(parser_files) do
+                    local name = vim.fn.fnamemodify(file, ':t:r')
+                    if not vim.tbl_contains(langs, name) then
+                        table.insert(langs, name)
+                    end
+                end
+                table.sort(langs)
+
+                local lines = {
+                    string.format('parsers on runtimepath (%d):', #langs),
+                }
+                vim.list_extend(lines, vim.tbl_map(function(lang) return '  ' .. lang end, langs))
+
+                show_ts_list('TSListInstalledAll', lines)
+            end, { desc = 'List all parsers found on the runtimepath (any source)' })
+
 
             -- v0.12+ notes:
             -- - nvim owns treesitter highlighting, folding
