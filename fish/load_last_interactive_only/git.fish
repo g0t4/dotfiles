@@ -330,16 +330,10 @@ end
 abbr grl 'git reflog --pretty=reflog'
 abbr grla 'git reflog --all --pretty=reflog'
 
-# quick lookup for custom formatters for a given purpose
-#  this plays super well with non-command abbr expansions that I got added to fish!
-#  game changer for tab complete lookups essentially (to remind myself for non-command position too)
-#  type: pr<tab> and it expands into these!
-#  aside: makes me think it would be cool to have function based abbr creators... define a function that can be invoked to expand possible abbrs for a given context (i.e. if `git log` then show pretty_* expansions but not if doing say `git commit` in cmdline already)
-abbr --command git -- pretty_reflog --pretty=reflog
-abbr --command git -- pretty_committers --pretty=names
-abbr --command git -- pretty_authors --pretty=emails
-
 abbr -- gl "git log --color=always | line_numbers"
+abbr -- glemails "git log --pretty=emails"
+abbr -- glnames "git log --pretty=names"
+# btw --pretty=reflog intended for reflog command only
 
 abbr --regex 'gl\d+' --function glX _glX
 abbr --regex 'g\d+' --function glX _gX
