@@ -339,7 +339,7 @@ abbr grl 'git reflog --pretty=reflog'
 abbr grla 'git reflog --all --pretty=reflog'
 
 abbr -- gl "git log --color=always | line_numbers"
-abbr -- glemails "git log --pretty=emails"
+abbr -- glemails "git log --pretty=names"
 abbr -- glnames "git log --pretty=names"
 # btw --pretty=reflog intended for reflog command only
 

@@ -42,9 +42,11 @@
 	reflog = format:%C(auto)%h%d %gd | %cr | %gs%C(reset)
 	#
 	# show committer and author _NAMES_
-	names = %C(yellow)%h%Creset %C(green)%cn / %an%Creset %Cblue%cr%Creset%C(auto)%d%Creset %s
+	; names = %C(yellow)%h%Creset %C(green)%cn / %an%Creset %Cblue%cr%Creset%C(auto)%d%Creset %s
 	# show committer and author _EMAILS_
-	emails = %C(yellow)%h%Creset %C(green)%ce / %ae%Creset %Cblue%cr%Creset%C(auto)%d%Creset %s
+	; emails = %C(yellow)%h%Creset %C(green)%ce / %ae%Creset %Cblue%cr%Creset%C(auto)%d%Creset %s
+	# lets use this full name template so I can see both name and email together (then remove separate above when happy with this)
+    names = %C(yellow)%h%Creset %C(green)committer: %cn <%ce>%Creset / author: %C(white)%an <%ae>%Creset %Cblue%cr%Creset%C(auto)%d%Creset %s
 
 [format]
 	# FYI format.pretty applies to git log (w/o --pretty too!)
