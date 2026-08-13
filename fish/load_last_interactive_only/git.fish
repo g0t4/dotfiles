@@ -400,6 +400,21 @@ function git_unpushed_commits --description "(g)it (u)n(p)ushed commits"
     git log -10 # s/b slightly annoying to remind me that I don't have a point of reference for the most recent of commits (ie unpushed/reviewed)
     log_ --red "WARN: missing both upstream and/or reviewed branch"
 end
+
+abbr gout git_unpushed_commits  # "[g]it [out]going commits"
+abbr gin git_unpulled_commits # [g]it [in]coming commits
+function git_unpulled_commits --description "[g]it [in]coming commits"
+    # TODO merge with gun/glo? could show outgoing/incoming with split divider (if both)
+    #   abbr gun git_unmerged_commits # un merged either way?
+    if git rev-parse --abbrev-ref --symbolic-full-name @{upstream} &>/dev/null
+        # TODO detect if empty and do smth diff? or?
+        git log --color=always HEAD~1..HEAD@{upstream}
+        return
+    end
+
+    log_ --red "WARN: missing upstream, cannot show what is not yet merged from upstream"
+end
+
 #
 # w/ patch (diff)
 abbr glp "git log --patch $_unpunched_commits"
