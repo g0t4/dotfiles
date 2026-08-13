@@ -75,6 +75,9 @@ return {
                 "yaml",
                 "fish",
                 "jinja",
+                "bash",
+                "fish",
+                "zsh",
                 -- "cst", "test", -- TODO where did I install these from? (both are part of treesitter test file testing
             }
             -- * list installed parsers/queries
