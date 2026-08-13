@@ -15,9 +15,8 @@ function _abbr_expand_reflog_d
     echo -s (string replace --regex '^reflog' '@{' $argv) "}"
 end
 # FYI if static expand text then tab complete works in newer fish build w/ my fix for tab completing anywhere abbrs
-abbr --set-cursor --position anywhere commit_with_message ":/%"  # set cursor is merely to avoid the trailing space
+abbr --set-cursor --position anywhere commit_with_message ":/%" # set cursor is merely to avoid the trailing space
 # TODO add more specifiers helpers when they come up
-
 
 # status
 abbr gsts 'git status -s'
@@ -219,7 +218,7 @@ function gdX
     # show the diff _ACROSS_ X commits back
     # gd5 => git diff HEAD~5..HEAD
     echo -n git
-    if string match --quiet --regex 'u' $argv
+    if string match --quiet --regex u $argv
         # u == unified (not side by side) diff
         echo -n " -c delta.side-by-side=false"
     end
@@ -227,7 +226,6 @@ function gdX
     # unlike gdlc, we don't do this across one commit, but across N
     echo " diff HEAD~$num..HEAD"
 end
-
 
 abbr gd_summary "git diff --summary" # --summary shows % similarity but squelches diff
 abbr gd_worktree "git diff" # show worktree changes
@@ -309,7 +307,6 @@ abbr --set-cursor -- amend_muse 'git commit --amend --no-edit --author "muse-gli
 #
 abbr --set-cursor -- amend_last_msg 'git commit --amend -m "%"' # change msg of last commit
 
-
 # joke:
 abbr --set-cursor -- yolo 'git commit --all -m "%" && git push'
 
@@ -369,17 +366,17 @@ abbr gstl "git status && echo && git_unpushed_commits" # * try # FYI requires gs
 #    or I should qualify it won't hurt perf of command position and anywhere positioned abbrs (that command specific never impact perf if not that command)
 #
 #    TODO consider a registry of short to long options, maybe move these into a single script file... these could become as useful as completions IMO
-abbr --command nl -- '-b' '--body-numbering'
-abbr --command nl -- '-d' '--section-delimiter'
-abbr --command nl -- '-f' '--footer-numbering'
-abbr --command nl -- '-h' '--header-numbering'
-abbr --command nl -- '-i' '--line-increment'
-abbr --command nl -- '-l' '--join-blank-lines'
-abbr --command nl -- '-n' '--number-format'
-abbr --command nl -- '-p' '--no-renumber'
-abbr --command nl -- '-s' '--number-separator'
-abbr --command nl -- '-v' '--starting-line-number'
-abbr --command nl -- '-w' '--number-width'
+abbr --command nl -- -b --body-numbering
+abbr --command nl -- -d --section-delimiter
+abbr --command nl -- -f --footer-numbering
+abbr --command nl -- -h --header-numbering
+abbr --command nl -- -i --line-increment
+abbr --command nl -- -l --join-blank-lines
+abbr --command nl -- -n --number-format
+abbr --command nl -- -p --no-renumber
+abbr --command nl -- -s --number-separator
+abbr --command nl -- -v --starting-line-number
+abbr --command nl -- -w --number-width
 
 abbr --position=anywhere -- pln "| line_numbers"
 function line_numbers --description "Prepend yellow, padded line numbers to input"
@@ -479,7 +476,7 @@ abbr gdlcu "git -c delta.side-by-side=false log --patch HEAD~1..HEAD"
 abbr --regex 'gdlc[u]?\d+' --function gdlcX _gdlcX
 function gdlcX
     echo -n git
-    if string match --quiet --regex 'u' $argv
+    if string match --quiet --regex u $argv
         # u == unified (not side by side) diff
         echo -n " -c delta.side-by-side=false"
     end
