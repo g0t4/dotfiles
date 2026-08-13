@@ -39,6 +39,8 @@ abbr grh_undo_amend_commit 'git reset --hard HEAD@{1}' # use reset --hard to und
 # btw HEAD -> branch and it is the branch that is reset (not HEAD)... but use HEAD as a bookmark to mean current branch so you don't have to specify the branch
 
 abbr grsh 'git reset --soft HEAD~1' # previous commit soft reset to review it and then purge by grhh or gco etc
+abbr groh 'git reset --hard ORIG_HEAD' # o==ORIG h==HEAD
+
 # clean
 #   (FYI leave --dry-run so I can remove it as last arg, then I don't need a second set of abbrs... b/c I should always do a quick review dryrun / or interactive)
 abbr gclean 'git clean -d --dry-run' # --dry-ru[n], entire [d]irectories
@@ -171,6 +173,12 @@ abbr grss 'git restore --source'
 # rev-parse (consider adding the following, except that you have helpers that basically do these two:)
 # abbr -- grevp 'git rev-parse --show-toplevel' # repo_root does this
 # abbr -- grevp_prefix 'git rev-parse --show-prefix' # prd does this
+#
+# somewhat use these as remdiners of key refs I wanna habituate
+abbr -- grevp_upstream 'git rev-parse @{upstream}'
+abbr -- grevp_upstream_symbolic 'git rev-parse --symbolic-full-name @{upstream}'
+abbr -- grevp_push 'git rev-parse @{push}'
+abbr -- grevp_push_symbolic 'git rev-parse --symbolic-full-name @{push}'
 
 # show
 abbr gsh 'git show' # --color-words if not using external diff
