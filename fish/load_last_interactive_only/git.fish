@@ -296,13 +296,14 @@ abbr --command git -- codex '--author "codex-gpt5<wes.mcclure+codex-gpt5@gmail.c
 abbr --command git -- deepseek '--author "deepseek-v4-flash-0731<wes.mcclure+deepseek-v4-flash-0731@gmail.com>"'
 abbr --command git -- muse '--author "muse-glimmer-30b-dspark<wes.mcclure+muse-glimmer-30b-dspark@gmail.com>"'
 #
-# amend last commit (no edit) just set --author
-abbr --set-cursor -- amend_gptoss 'git commit --amend --no-edit --author "gptoss120b<wes.mcclure+gptoss120b@gmail.com>"'
-abbr --set-cursor -- amend_qwen3 'git commit --amend --no-edit --author "qwen3.6-35b<a3b<wes.mcclure+qwen3.6-35b-a3b@gmail.com>"'
-abbr --set-cursor -- amend_agentworld 'git commit --amend --no-edit --author "gpt-agentworld-35b-a3b<wes.mcclure+gpt-agentworld-35b-a3b@gmail.com>"'
-abbr --set-cursor -- amend_codex 'git commit --amend --no-edit --author "codex-gpt5<wes.mcclure+codex-gpt5@gmail.com>"'
-abbr --set-cursor -- amend_deepseek 'git commit --amend --no-edit --author "deepseek-v4-flash-0731<wes.mcclure+deepseek-v4-flash-0731@gmail.com>"'
-abbr --set-cursor -- amend_muse 'git commit --amend --no-edit --author "muse-glimmer-30b-dspark<wes.mcclure+muse-glimmer-30b-dspark@gmail.com>"'
+# amend last N commits
+set --local GIT_FULLY_AUTO_REBASE "GIT_SEQUENCE_EDITOR=true"
+abbr --set-cursor -- amend_n_gptoss $GIT_FULLY_AUTO_REBASE 'git rebase -i HEAD~% --exec "git commit --amend --no-edit --author \"gptoss120b<wes.mcclure+gptoss120b@gmail.com>\""'
+abbr --set-cursor -- amend_n_qwen3 $GIT_FULLY_AUTO_REBASE 'git rebase -i HEAD~% --exec "git commit --amend --no-edit --author \"qwen3.6-35b-a3b<wes.mcclure+qwen3.6-35b-a3b@gmail.com>\""'
+abbr --set-cursor -- amend_n_agentworld $GIT_FULLY_AUTO_REBASE 'git rebase -i HEAD~% --exec "git commit --amend --no-edit --author \"qwen-agentworld-35b-a3b<wes.mcclure+qwen-agentworld-35b-a3b@gmail.com>\""'
+abbr --set-cursor -- amend_n_codex $GIT_FULLY_AUTO_REBASE 'git rebase -i HEAD~% --exec "git commit --amend --no-edit --author \"codex-gpt5<wes.mcclure+codex-gpt5@gmail.com>\""'
+abbr --set-cursor -- amend_n_deepseek $GIT_FULLY_AUTO_REBASE 'git rebase -i HEAD~% --exec "git commit --amend --no-edit --author \"deepseek-v4-flash-0731<wes.mcclure+deepseek-v4-flash-0731@gmail.com>\""'
+abbr --set-cursor -- amend_n_muse $GIT_FULLY_AUTO_REBASE 'git rebase -i HEAD~% --exec "git commit --amend --no-edit --author \"muse-glimmer-30b-dspark<wes.mcclure+muse-glimmer-30b-dspark@gmail.com>\""'
 
 #
 abbr --set-cursor -- amend_last_msg 'git commit --amend -m "%"' # change msg of last commit
