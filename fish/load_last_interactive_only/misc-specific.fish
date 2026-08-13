@@ -280,8 +280,8 @@ if command -q kubectl
     alias kubectl "grc kubectl" # ! EVALUATING if I like this, would be sufficient for short term most likely
     export KUBECTL_EXTERNAL_DIFF="icdiff -r" # use icdiff for kubectl diff (slick!)... FYI $1 and $2 are directories to compare (hence the -r)
 
-    abbr --command kubectl --position=anywhere -- oy '-o yaml' # I used to pipe to yq... but I wrapped 'grc kubectl' to be 'kubectl' and don't need yq now
-    abbr --command kubectl --position=anywhere -- ow '-o wide' # I don't believe this will cause collisions b/c it is not a word I expect to use in other contexts, lets see
+    abbr --command kubectl -- oy '-o yaml' # I used to pipe to yq... but I wrapped 'grc kubectl' to be 'kubectl' and don't need yq now
+    abbr --command kubectl -- ow '-o wide' # I don't believe this will cause collisions b/c it is not a word I expect to use in other contexts, lets see
 
     # *** get
     # ! TODO fix completions with grc command and put back grc on front?
@@ -940,7 +940,7 @@ abbr --set-cursor sedi "$sed_cmd -i 's/%//g'"
 # rg => (rg --files-with-matches __)
 # use rg to limit which files are passed to sed (so not touching all files)
 # use this to take your sed search regex and limit the files and then the file names are passed back
-abbr --set-cursor --command $sed_cmd --position=anywhere -- rg "(rg --files-with-matches %)"
+abbr --set-cursor --command $sed_cmd -- rg "(rg --files-with-matches %)"
 
 # abbr "*l" "test redefined (do you see this in warning?)"
 function build_abbrs_for_filetype
@@ -962,7 +962,7 @@ function build_abbrs_for_filetype
     abbr --command rg -- "*$filetype_letter" "-g '*.$glob_end'"
 
     # 2. *l => (rg -g "*.lua" --files-with-matches ___)
-    abbr "*$filetype_letter" --command $sed_cmd --position=anywhere $rg_filter
+    abbr "*$filetype_letter" --command $sed_cmd $rg_filter
 
     # * ripgrep
     abbr "rg$filetype_letter" "rg -g '*.$glob_end'"
@@ -980,7 +980,7 @@ abbr --command rg -- "*nd" "--glob='!datasets'" # easily exlude datasets JSON fi
 
 # all -  use rg w/o a filter on language (no -g *.lua for example)
 abbr --set-cursor seda "$sed_cmd -Ei 's/%//g' (rg --files-with-matches ___) "
-abbr --command $sed_cmd --position=anywhere "*a" "(rg --files-with-matches ___) "
+abbr --command $sed_cmd "*a" "(rg --files-with-matches ___) "
 
 # allow , - or _ to split start/end number
 #   lines1,2    lines 3-10    lines4_6
@@ -2547,7 +2547,7 @@ if command -q pacman
     abbr pmtree_list_all_pkgs_used_by "pactree --sync --color" # FYI no need to differentiate installed/all for dependencies of a pkgg... install status is irrelevant (unless get into optional deps)
     abbr pmtree_list_all_pkgs_that_use "pactree --sync --reverse --color"
     #
-    abbr --add __pactree_depth --position anywhere --command pactree --regex '^d(\d+)$' --function __pactree_depth
+    abbr --add __pactree_depth --command pactree --regex '^d(\d+)$' --function __pactree_depth
     function __pactree_depth
         # dX => --depth=X
         string replace --regex -- '^d(\d+)$' '--depth=$1' $argv
@@ -3331,17 +3331,17 @@ abbr llama_server_current_chat_template "curl paxy:8013/props | jq .chat_templat
 # * jq command
 
 # * expand short options => corresponding long option
-abbr --command jq --position anywhere -- -S --sort-keys
-abbr --command jq --position anywhere -- -C --color-output
-abbr --command jq --position anywhere -- -c --compact-output
-abbr --command jq --position anywhere -- -r --raw-output
-abbr --command jq --position anywhere -- -j --join-output # one use case: don't end w/ \n
+abbr --command jq -- -S --sort-keys
+abbr --command jq -- -C --color-output
+abbr --command jq -- -c --compact-output
+abbr --command jq -- -r --raw-output
+abbr --command jq -- -j --join-output # one use case: don't end w/ \n
 #
 abbr jqk "jq keys"
 #
 # helpers for jq patterns I never remember (with completions of non-command abbrs, these are immensly more useful)
-abbr --command jq --position anywhere -- sort_keys 'jq --sort-keys' # reminder abbr with tab completing anywhere abbrs fix
-abbr --command jq --position anywhere -- not_null "| select(.)" # or this works: `"| select(. != null)"` works
+abbr --command jq -- sort_keys 'jq --sort-keys' # reminder abbr with tab completing anywhere abbrs fix
+abbr --command jq -- not_null "| select(.)" # or this works: `"| select(. != null)"` works
 # TODO expand this list over time, try to capture the key ones you struggle to remember
 # FYI one unfortunate part is that inside the quoted jq expression, you cannot expand abbrs b/c the entire quoted part is the token to expand
 #   but I can arrow out of the quoting to get some help (delete latter ' to go back into non quoted territory and add back quote once done

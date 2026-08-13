@@ -7,24 +7,24 @@ abbr curlM "curl --manual"
 
 # really would rock if I could tab complete these "anywhere" expansions...
 #   having to memorize these defeats the point except for my most commonly used position anywhere abbrs
-# abbr --command curl --position anywhere -- ajson "'Accept: application/json'"
-# abbr --command curl --position anywhere -- asse "'Accept: text/event-stream'"
+# abbr --command curl -- ajson "'Accept: application/json'"
+# abbr --command curl -- asse "'Accept: text/event-stream'"
 # would love to have mime_json, mime_event, etc
 
 # expand short => long options
-abbr --command curl --position anywhere -- -d --data
-abbr --command curl --position anywhere -- -f --fail
-abbr --command curl --position anywhere -- -i --include
-abbr --command curl --position anywhere -- -o --output
-abbr --command curl --position anywhere -- -O --remote-name
-abbr --command curl --position anywhere -- -s --silent
-abbr --command curl --position anywhere -- -S --show-error
-abbr --command curl --position anywhere -- -v --verbose
-abbr --command curl --position anywhere -- -I --head
-abbr --command curl --position anywhere -- -H --header
-abbr --command curl --position anywhere -- -L --location
-abbr --command curl --position anywhere -- -N --no-buffer
-abbr --command curl --position anywhere -- -X --request
+abbr --command curl -- -d --data
+abbr --command curl -- -f --fail
+abbr --command curl -- -i --include
+abbr --command curl -- -o --output
+abbr --command curl -- -O --remote-name
+abbr --command curl -- -s --silent
+abbr --command curl -- -S --show-error
+abbr --command curl -- -v --verbose
+abbr --command curl -- -I --head
+abbr --command curl -- -H --header
+abbr --command curl -- -L --location
+abbr --command curl -- -N --no-buffer
+abbr --command curl -- -X --request
 
 # httpie aliases
 abbr httpg "http GET"

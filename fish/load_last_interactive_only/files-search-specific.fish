@@ -158,8 +158,8 @@ end
 abbr finde "$find_cmd . -executable"
 abbr findud --set-cursor "$find_cmd '%' -user wesdemos"
 abbr finduw --set-cursor "$find_cmd '%' -user wes"
-abbr --add g=w --command $find_cmd --position anywhere -- "-not -perm -g=w"
-abbr --add o=w --command $find_cmd --position anywhere -- "-not -perm -o=w"
+abbr --add g=w --command $find_cmd -- "-not -perm -g=w"
+abbr --add o=w --command $find_cmd -- "-not -perm -o=w"
 # u=w   g=r   g=x   g=rw  g=rwx etc
 # TODO expand to generic [ugo]=[rwx]+ regex and expand abbr to cover all cases of g=w
 
@@ -180,40 +180,40 @@ abbr fd_ext 'fd --extension'
 abbr fdE 'fd --exclude'
 #
 # reminders for some options
-abbr --command fd --position anywhere -- and --and # expand and, mostly a reminder
+abbr --command fd -- and --and # expand and, mostly a reminder
 abbr fdh 'fd --help'
 #
 # * expand short options => corresponding long option
 #   I can still use shorthand and always see it expand to the long option!
 #   i.e. `fd -l<space>` => `fd --list-details <CURSOR>`
 #   TODO do with more of fd short options... AND other commands!
-abbr --command fd --position anywhere -- -0 --print0
-abbr --command fd --position anywhere -- -a --absolute-path
-abbr --command fd --position anywhere -- -C --base-directory
-abbr --command fd --position anywhere -- -c --color
-abbr --command fd --position anywhere -- -d --max-depth
-abbr --command fd --position anywhere -- -E --exclude
-abbr --command fd --position anywhere -- -e --extension
-abbr --command fd --position anywhere -- -F --fixed-strings
-abbr --command fd --position anywhere -- -F --fixed-strings
-abbr --command fd --position anywhere -- -g --glob
-abbr --command fd --position anywhere -- -h --help
-abbr --command fd --position anywhere -- -H --hidden
-abbr --command fd --position anywhere -- -i --ignore-case
-abbr --command fd --position anywhere -- -I --no-ignore
-abbr --command fd --position anywhere -- -j --threads
-abbr --command fd --position anywhere -- -L --follow
-abbr --command fd --position anywhere -- -l --list-details
-abbr --command fd --position anywhere -- -o --owner
-abbr --command fd --position anywhere -- -p --full-path
-abbr --command fd --position anywhere -- -q --quiet
-abbr --command fd --position anywhere -- -s --case-sensitive
-abbr --command fd --position anywhere -- -S --size
-abbr --command fd --position anywhere -- -t --type
-abbr --command fd --position anywhere -- -u --unrestricted
-abbr --command fd --position anywhere -- -V --version
-abbr --command fd --position anywhere -- -x --exec
-abbr --command fd --position anywhere -- -X --exec-batch
+abbr --command fd -- -0 --print0
+abbr --command fd -- -a --absolute-path
+abbr --command fd -- -C --base-directory
+abbr --command fd -- -c --color
+abbr --command fd -- -d --max-depth
+abbr --command fd -- -E --exclude
+abbr --command fd -- -e --extension
+abbr --command fd -- -F --fixed-strings
+abbr --command fd -- -F --fixed-strings
+abbr --command fd -- -g --glob
+abbr --command fd -- -h --help
+abbr --command fd -- -H --hidden
+abbr --command fd -- -i --ignore-case
+abbr --command fd -- -I --no-ignore
+abbr --command fd -- -j --threads
+abbr --command fd -- -L --follow
+abbr --command fd -- -l --list-details
+abbr --command fd -- -o --owner
+abbr --command fd -- -p --full-path
+abbr --command fd -- -q --quiet
+abbr --command fd -- -s --case-sensitive
+abbr --command fd -- -S --size
+abbr --command fd -- -t --type
+abbr --command fd -- -u --unrestricted
+abbr --command fd -- -V --version
+abbr --command fd -- -x --exec
+abbr --command fd -- -X --exec-batch
 #
 abbr fdabs 'fd --absolute-path'
 abbr fdl 'fd --list-details' # `fd -l`... think => fd + ls -al
@@ -243,7 +243,7 @@ abbr fdq 'fd --quiet' # --quiet exits with 0 if finds a match... detect if a fil
 # if fd -q foo; echo "foo exists"; end
 
 # * expand abbrevated options? (don't do for super common and easily remembered ones)
-abbr --command fd --position anywhere -- -F --fixed-strings
+abbr --command fd -- -F --fixed-strings
 # for some of these, seeing what it is might help too, can undo or ctrl+w to delete expansion if its wrong, and this way if it is wrong I can see that!
 
 # FYI fd/rg/ag all have --hidden and --unrestricted concepts/impls that are nearly identical
@@ -345,7 +345,7 @@ function delta_rg --wraps delta
 end
 #
 # alternative... type `jd<SPACE>` on end of an rg command and it expands into the json delta for you!
-abbr --command rg --position anywhere -- jd '--json | delta_rg'
+abbr --command rg -- jd '--json | delta_rg'
 # OR, have it start w/ json delta:
 abbr --set-cursor rg_json_delta 'rg --json "%" | delta_rg'
 abbr --set-cursor rg_delta 'rg --json "%" | delta_rg' # reminder format (use command_what as a way to easily lookup new abbrs that I am trying to habituate)
@@ -369,13 +369,13 @@ abbr --set-cursor rgF 'rg --fixed-strings "%"' # -F/--fixed-strings
 abbr --set-cursor rgw 'rg --word-regexp "%"' # -w/--word-regexp # TODO is this useful enough to use vs \b around pattern?
 
 # * expand short => long options
-abbr --command rg --position anywhere -- -F --fixed-strings
+abbr --command rg -- -F --fixed-strings
 # FYI allow -i (do not expand to --ignore-case)
-abbr --command rg --position anywhere -- -v --invert-match
-abbr --command rg --position anywhere -- -o --only-matching
-abbr --command rg --position anywhere -- -w --word-regexp
-abbr --command rg --position anywhere -- -g --glob
-abbr --command rg --position anywhere -- -U --multiline
+abbr --command rg -- -v --invert-match
+abbr --command rg -- -o --only-matching
+abbr --command rg -- -w --word-regexp
+abbr --command rg -- -g --glob
+abbr --command rg -- -U --multiline
 
 function rg_diff_files
     # usage:

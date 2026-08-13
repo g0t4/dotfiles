@@ -311,4 +311,4 @@ abbr --set-cursor -- ptk 'pytest -k "%"' # run tests matching expression
 abbr -- pytest_nocapture 'pytest --capture=no'
 abbr -- pytest_info_logs  'pytest --log-cli-level=INFO'
 # expand short to long options:
-abbr --command pytest --position=anywhere -- "-s" "--capture=no"
+abbr --command pytest -- "-s" "--capture=no"
