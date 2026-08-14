@@ -1549,6 +1549,12 @@ abbr hfsp "hf skills preview"
 if command -q llama-server
     # https://github.com/ggml-org/llama.cpp/blob/056eb745/common/arg.cpp#L1424-L1431
     # n_batch == https://github.com/ggml-org/llama.cpp/blob/056eb745/common/arg.cpp#L1442-L1448
+
+    abbr lsh "llama-server --help"
+    abbr lslsd "llama-server --list-devices"
+    abbr lsv "llama-server --version"
+    abbr lsc "llama-server --cache-list"
+
 end
 
 if command -q ollama
