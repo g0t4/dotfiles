@@ -99,7 +99,7 @@ local llm_nvim_plugin = {
             --       - will feel way faster, be more likely to want to use it... also will allow me to immediately see if the first part is wrong or not...
             --       - not waiting for full completion
             --       - ALSO, slow models aren't as big of a deal then.. and that means I can run bigger/better models and not notice it b/c it starts streaming no matter what model and the...
-            --         - ... tokens/sec are plenty fast as long as I am not waiting for the entire completion
+            --         - ... tok/s are plenty fast as long as I am not waiting for the entire completion
             --       - AND don't have to have small max_token counts to avoid waiting forever which means longer completions don't get interrupted and have to be resumed with a second round!
             --       - this would obviate the need to differentiate between only want single vs multi line completion, and even token limits, because I don't care if I can quickly see the part I want
             --         - and I could partially accept as its streaming! and let it keep streaming unless I contradict it... which!!! then I don't worry so much about debounce... I worry about "typed a
