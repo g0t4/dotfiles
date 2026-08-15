@@ -24,5 +24,5 @@ function NeovimAskToggleRag()
     -- FYI not currently used, this is just an idea
     --   for now I went with F function key b/c the user doesn't see anything change
     --     F13/F16/17 (etc)
-    NeovimExecCommand("lua require(\"ask-openai.api\").toggle_rag()")
+    NeovimExecCommand("lua require(\"ask-openai.config\").toggle_rag()")
 end

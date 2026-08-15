@@ -323,8 +323,8 @@ function SwitchCopilot()
     end
     if vim.tbl_contains(use_ai, "ask-openai") then
         -- FYI check last b/c sometimes I use a subset of features with another predictions plugin, so give them all a chance first
-        local api = require("ask-openai.api")
-        if api.are_predictions_enabled() then
+        local config = require("ask-openai.config")
+        if config.are_predictions_enabled() then
             DisableAllCopilots()
         else
             EnableAllCopilots()
@@ -340,22 +340,22 @@ end
 vim.keymap.set({ 'n', 'i', 'v', 'c' }, '<F18>', function() SwitchCopilot() end, { noremap = true, silent = true }) -- TODO remove?
 --
 -- <F41> == <C-S-F5> (Keyboard Maestro => use <C-S-...> for higher Function keys (menu only picks up to F20 otherwise)
-vim.keymap.set({ 'n', 'i', 'v', 'c' }, '<F41>', function() require('ask-openai.api').toggle_fim_model() end, { noremap = true, silent = true })
+vim.keymap.set({ 'n', 'i', 'v', 'c' }, '<F41>', function() require('ask-openai.config').toggle_fim_model() end, { noremap = true, silent = true })
 -- <F42> = <C-S-F6>
-vim.keymap.set({ 'n', 'i', 'v', 'c' }, '<F42>', function() require('ask-openai.api').toggle_rewrite_model() end, { noremap = true, silent = true })
+vim.keymap.set({ 'n', 'i', 'v', 'c' }, '<F42>', function() require('ask-openai.config').toggle_rewrite_model() end, { noremap = true, silent = true })
 -- <F43> = <C-S-F7>
-vim.keymap.set({ 'n', 'i', 'v', 'c' }, '<F43>', function() require('ask-openai.api').toggle_agents_model() end, { noremap = true, silent = true })
+vim.keymap.set({ 'n', 'i', 'v', 'c' }, '<F43>', function() require('ask-openai.config').toggle_agents_model() end, { noremap = true, silent = true })
 --
 -- <M-S-F5> (btw matches C-S-F5 used for model cycler for same frontend
-vim.keymap.set({ 'n', 'i', 'v', 'c' }, '<M-S-F5>', function() require('ask-openai.api').cycle_fim_reasoning_level() end, { noremap = true, silent = true })
+vim.keymap.set({ 'n', 'i', 'v', 'c' }, '<M-S-F5>', function() require('ask-openai.config').cycle_fim_reasoning_level() end, { noremap = true, silent = true })
 -- <M-S-F6>
-vim.keymap.set({ 'n', 'i', 'v', 'c' }, '<M-S-F6>', function() require('ask-openai.api').cycle_rewrite_reasoning_level() end, { noremap = true, silent = true })
+vim.keymap.set({ 'n', 'i', 'v', 'c' }, '<M-S-F6>', function() require('ask-openai.config').cycle_rewrite_reasoning_level() end, { noremap = true, silent = true })
 -- <M-S-F7>
-vim.keymap.set({ 'n', 'i', 'v', 'c' }, '<M-S-F7>', function() require('ask-openai.api').cycle_agents_reasoning_level() end, { noremap = true, silent = true })
+vim.keymap.set({ 'n', 'i', 'v', 'c' }, '<M-S-F7>', function() require('ask-openai.config').cycle_agents_reasoning_level() end, { noremap = true, silent = true })
 --
 -- misc:
-vim.keymap.set({ 'n', 'i', 'v', 'c' }, '<F16>', function() require('ask-openai.api').cycle_log_verbosity() end, { noremap = true, silent = true })
-vim.keymap.set({ 'n', 'i', 'v', 'c' }, '<F20>', function() require('ask-openai.api').toggle_rag() end, { noremap = true, silent = true })
+vim.keymap.set({ 'n', 'i', 'v', 'c' }, '<F16>', function() require('ask-openai.config').cycle_log_verbosity() end, { noremap = true, silent = true })
+vim.keymap.set({ 'n', 'i', 'v', 'c' }, '<F20>', function() require('ask-openai.config').toggle_rag() end, { noremap = true, silent = true })
 
 
 function EnableAllCopilots()
@@ -369,8 +369,8 @@ function EnableAllCopilots()
         end
     end
     if vim.tbl_contains(use_ai, "ask-openai") then
-        local api = require("ask-openai.api")
-        api.enable_predictions()
+        local config = require("ask-openai.config")
+        config.enable_predictions()
     end
     if vim.tbl_contains(use_ai, "ggml-org/llama.vim") then
         vim.cmd("LlamaEnable")
@@ -388,8 +388,8 @@ function DisableAllCopilots()
         end
     end
     if vim.tbl_contains(use_ai, "ask-openai") then
-        local api = require("ask-openai.api")
-        api.disable_predictions()
+        local config = require("ask-openai.config")
+        config.disable_predictions()
     end
     if vim.tbl_contains(use_ai, "ggml-org/llama.vim") then
         vim.cmd("LlamaDisable")
@@ -432,7 +432,7 @@ function CopilotsStatus()
     end
 
     if vim.tbl_contains(use_ai, "ask-openai") then
-        vim.list_extend(components, require("ask-openai.api").get_lualine_components())
+        vim.list_extend(components, require("ask-openai.status").get_lualine_components())
     end
 
     if vim.tbl_contains(use_ai, "ggml-org/llama.vim") then
