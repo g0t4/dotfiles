@@ -81,6 +81,14 @@ function view_trace
     env PYTHONPATH="$ASK_REPO" $_python3 -m tools.chat_viewer.__main__ $argv
 end
 
+abbr vtt view_trace_tui
+function view_trace_tui
+    # Interactive Textual chat viewer (a: toggle all content, q: quit).
+    # Reuses the same rendering as ``view_trace`` but in a scrollable TUI.
+    set _python3 "$ASK_REPO/.venv/bin/python3"
+    env PYTHONPATH="$ASK_REPO" $_python3 -m tools.chat_viewer.textual_viewer $argv
+end
+
 abbr td trace_dump
 function trace_dump
     # Dump run_process commands from a trace file.
