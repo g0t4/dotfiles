@@ -16,6 +16,7 @@ set argcomplete_commands \
     rag_validate_index \
     trace_dump \
     view_trace \
+    view_trace_tui \
     pii_scanner \
     browse_traces \
 
