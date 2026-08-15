@@ -1557,6 +1557,26 @@ if command -q llama-server
 
 end
 
+# * llama-server completion testers for rapid checking
+set _ls_test_host paxy.lan:8016
+set --local _ls_http 'http $_ls_test_host' # FYI AFAICT verbose only works on chat/completions but is ok to always pass
+# FYI := means treat value as json literal (i.e. numbers/booleans)
+# keep the prompt/messages as last arg so it is easier to edit
+# use max_tokens=10 so we don't get a ton of SSEs in streaming + fast response
+# one use is to review returned SSE structures
+#
+# FYI same as /v1/completions
+#  TODO is verbose not a param on legacy /completions?
+set --local _ls_prompt "prompt='what is 11*2'"
+abbr ls_test_completions_stream "$_ls_http/completions stream:=true max_tokens:=10 $_ls_prompt"
+abbr ls_test_completions_sync "$_ls_http/completions stream:=false max_tokens:=100 $_ls_prompt"
+#
+# FYI same as /v1/chat/completions
+set --local _ls_messages messages:='[ {"role": "user", "content": "what is 11*2"} ]'
+abbr ls_test_chat_stream "$_ls_http/chat/completions verbose:=true stream:=true max_tokens:=11 '$_ls_messages'"
+abbr ls_test_chat_sync "$_ls_http/chat/completions verbose:=true stream:=false max_tokens:=100 '$_ls_messages'"
+# verbose => returns __verbose object
+
 if command -q ollama
     abbr olc "ollama create"
     abbr olcp "ollama cp"
