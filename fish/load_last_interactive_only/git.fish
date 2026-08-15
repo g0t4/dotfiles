@@ -4,6 +4,23 @@
 # `gi*` for my git ignore customizations
 # `globurl`
 
+# # * git - short => long options
+abbr --command git --function _abbr_git_short_to_long -- -W
+function _abbr_git_short_to_long --argument-names current_token
+    ## TODO setup generic mapping so I can have sub command abbrs!
+    #  register "git diff": { "-W": "--function-context", ... }
+    #  "git log" : { ... }
+    #  etc
+    set commandline_before_cursor (commandline -c)
+    if string match --quiet --regex "git diff" $commandline_before_cursor
+        if test $current_token = -W
+            echo --function-context
+            return
+        end
+    end
+    echo $current_token # do not replace
+end
+
 # abbrs to remind me of common man pages I forget about (until I habituate them)
 abbr man_gitrevisions "man gitrevisions" # reminder
 #
