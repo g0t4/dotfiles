@@ -1449,6 +1449,48 @@ local function osascriptOrLog(script)
     return ok, result
 end
 
+-- Escape double quotes for embedding a path inside an AppleScript string literal
+local function escapeApplescriptString(s)
+    s = s:gsub('\\', '\\\\')  -- backslash -> doubled for AppleScript
+    s = s:gsub('"', '\\"')       -- quote -> backslash-quote for AppleScript
+    return s
+end
+
+-- Open a directory in Finder in a new tab, activating Finder so the new tab is visible/focused
+local function openInFinder(path)
+    local script = string.format(
+        'tell application "Finder"\n'
+        .. '    activate\n'
+        .. '    open POSIX file "%s"\n'
+        .. 'end tell',
+        escapeApplescriptString(path)
+    )
+    osascriptOrLog(script)
+end
+
+-- Reveal a path in Finder, activating Finder so the containing folder tab is visible/focused
+local function revealInFinder(path)
+    local script = string.format(
+        'tell application "Finder"\n'
+        .. '    activate\n'
+        .. '    set targetFile to POSIX file "%s" as alias\n'
+        .. '    reveal targetFile\n'
+        .. 'end tell',
+        escapeApplescriptString(path)
+    )
+    osascriptOrLog(script)
+end
+
+-- Open a path with its default app; directories open in Finder (new tab, focused)
+local function openPath(path)
+    local attrs = hs.fs.attributes(path)
+    if attrs and attrs.mode == "directory" then
+        openInFinder(path)
+    else
+        hs.execute(string.format('open "%s"', path))
+    end
+end
+
 -- Bookmark action dispatch (keyed by name)
 local bookmarkActions = {
     trash = function()
@@ -2269,10 +2311,10 @@ local function onChoice(choice)
         if choice.path then
             if modifiers.cmd or modifiers.shift then
                 -- Reveal in Finder
-                hs.execute(string.format('open -R "%s"', choice.path))
+                revealInFinder(choice.path)
             else
-                -- Open with default app
-                hs.execute(string.format('open "%s"', choice.path))
+                -- Open with default app (directories open in Finder, focused tab)
+                openPath(choice.path)
             end
         end
         return
@@ -2290,10 +2332,10 @@ local function onChoice(choice)
         hs.alert.show("Path copied: " .. choice.text)
     elseif modifiers.cmd or modifiers.shift then
         -- Reveal in Finder
-        hs.execute(string.format('open -R "%s"', choice.path))
+        revealInFinder(choice.path)
     else
-        -- Open with default app
-        hs.execute(string.format('open "%s"', choice.path))
+        -- Open with default app (directories open in Finder, focused tab)
+        openPath(choice.path)
     end
 end
 
