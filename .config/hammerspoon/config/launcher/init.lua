@@ -1458,11 +1458,19 @@ end
 
 -- Open a directory in Finder in a new tab, activating Finder so the new tab is visible/focused
 local function openInFinder(path)
+    -- Repoint the front Finder window's current tab at the folder (no extra window),
+    -- so the picked directory is guaranteed visible/focused. Fall back to `open`
+    -- when Finder has no windows yet.
     local script = string.format(
         'tell application "Finder"\n'
         .. '    activate\n'
-        .. '    open POSIX file "%s"\n'
+        .. '    if (count of windows) is 0 then\n'
+        .. '        open (POSIX file "%s" as alias)\n'
+        .. '    else\n'
+        .. '        set target of front window to (POSIX file "%s" as alias)\n'
+        .. '    end if\n'
         .. 'end tell',
+        escapeApplescriptString(path),
         escapeApplescriptString(path)
     )
     osascriptOrLog(script)
@@ -1470,12 +1478,19 @@ end
 
 -- Reveal a path in Finder, activating Finder so the containing folder tab is visible/focused
 local function revealInFinder(path)
+    -- Show the item (selected in its containing folder) in the front Finder
+    -- window's current tab. Falls back to `reveal` (new window) when Finder has
+    -- no windows yet. Using `set target` avoids spawning a background window.
     local script = string.format(
         'tell application "Finder"\n'
         .. '    activate\n'
-        .. '    set targetFile to POSIX file "%s" as alias\n'
-        .. '    reveal targetFile\n'
+        .. '    if (count of windows) is 0 then\n'
+        .. '        reveal (POSIX file "%s" as alias)\n'
+        .. '    else\n'
+        .. '        set target of front window to (POSIX file "%s" as alias)\n'
+        .. '    end if\n'
         .. 'end tell',
+        escapeApplescriptString(path),
         escapeApplescriptString(path)
     )
     osascriptOrLog(script)
