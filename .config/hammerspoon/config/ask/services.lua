@@ -65,7 +65,7 @@ function M.getService()
         return {
             name = "ask_lan",
             api_key = "whatever",
-            url = "http://ask.lan:8012/v1/chat/completions",
+            url = "http://ask.lan:8014/v1/chat/completions",
             model = stored.model == "" and "llama-server-fixed" or stored.model,
             -- max_tokens = 16384 -- for thinking models (gptoss/qwen3)
         }
