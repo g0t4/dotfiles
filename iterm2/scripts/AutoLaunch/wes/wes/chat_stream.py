@@ -39,8 +39,10 @@ def get_model() -> tuple[BaseChatModel, Service]:
             timeout=TIMEOUT_SECONDS,
             api_key="",
         )
+        model.enable_tracking_input_chunks = True
         return model, service
 
+    # PRN try to use langchain_llama_server for other OpenAI requests for my simple use case of completions?
     from langchain_openai import ChatOpenAI
     model = ChatOpenAI(
         model=service.model,
@@ -82,10 +84,8 @@ async def ask_openai_async_type_response(
     # PRN what happens if asking doesn't show in time? does it even matter if I don't wait for it before first chunk arrives?
     await show_asking  # don't let showing the asking... message block starting request to backend (assuming non-blocking I/O)
 
-    last_chunk = None
     async for chunk in model.astream(messages, **stream_kwargs):
         try:
-            last_chunk = chunk
             log(f'{chunk=}')
 
             if hasattr(chunk, "response_metadata") and chunk.response_metadata:
@@ -166,8 +166,7 @@ async def ask_openai_async_type_response(
             await on_chunk(f"Error processing chunk: {e}")
             return
 
-    # After streaming completes, write trace file
-    _save_iterm2_trace(messages, all_content, response_metadata, finish_reason, service, last_chunk, all_reasoning)
+    _save_iterm2_trace(messages, all_content, response_metadata, finish_reason, service, model, all_reasoning)
 
 
 def _save_iterm2_trace(
@@ -176,7 +175,7 @@ def _save_iterm2_trace(
     response_metadata: dict,
     finish_reason: str | None,
     service: Service,
-    last_chunk: AIMessageChunk | None,
+    model: BaseChatModel,
     reasoning_content: str = "",
 ) -> None:
     """Write trace file after streaming completes.
@@ -215,17 +214,15 @@ def _save_iterm2_trace(
     response_data["service"] = service.name
 
     unix_timestamp = int(time.time())
+
     trace_data: dict = {
         "session_id": unix_timestamp,
         "messages": trace_messages,
         "response": response_data,
-
-        # TODO! switch to my langchain-llama-server client and grab timings + __verbose (if set) => basically grab last_sse (add it if needed to client)
-        # "last_sse": {
-        #     "timings": last_chunk.timings
-        # }
-        # "last_chunk": last_chunk # TODO! rename to last_sse? AIMessageChunk is not serializable
     }
+    original_sses: list[dict] = getattr(model, "tracked_input_chunks", [])
+    if len(original_sses) > 0:
+        trace_data["last_sse"] = original_sses[-1]
 
     trace_filename = f"{unix_timestamp}-trace.json"
     trace_path = os.path.join(ASK_SHELL_TRACE_DIR, trace_filename)
