@@ -32,26 +32,27 @@ def get_model() -> tuple[BaseChatModel, Service]:
         )
         return model, service
 
-    if service.name == "ask_lan":
-        model = ChatLlamaServer(
-            model=service.model,
-            base_url=service.base_url,
-            timeout=TIMEOUT_SECONDS,
-            api_key="",
-        )
-        model.enable_tracking_input_chunks = True
-        return model, service
+    # # TODO add back if anything fails w/ my langchain_llama_server provider
+    # if must_use_openai_provider:
+    #     from langchain_openai import ChatOpenAI
+    #     model = ChatOpenAI(
+    #         model=service.model,
+    #         api_key=service.api_key,
+    #         base_url=service.base_url,
+    #         timeout=TIMEOUT_SECONDS,
+    #         # max_retries=2
+    #     )
+    #     return model, service
 
-    # PRN try to use langchain_llama_server for other OpenAI requests for my simple use case of completions?
-    from langchain_openai import ChatOpenAI
-    model = ChatOpenAI(
+    model = ChatLlamaServer(
         model=service.model,
-        api_key=service.api_key,
         base_url=service.base_url,
         timeout=TIMEOUT_SECONDS,
-        # max_retries=2
+        api_key=service.api_key, # optional, only if set
     )
+    model.enable_tracking_input_chunks = True
     return model, service
+
 
 
 async def ask_openai_async_type_response(
