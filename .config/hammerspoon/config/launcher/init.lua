@@ -1458,16 +1458,22 @@ end
 
 -- Open a directory in Finder in a new tab, activating Finder so the new tab is visible/focused
 local function openInFinder(path)
-    -- Repoint the front Finder window's current tab at the folder (no extra window),
-    -- so the picked directory is guaranteed visible/focused. Fall back to `open`
-    -- when Finder has no windows yet.
+    -- Open the picked folder in a NEW tab of the front Finder window (Cmd+T, which
+    -- is always the active tab), then point that tab at the folder. This keeps the
+    -- user's current tab intact while focusing the newly opened directory. Falls
+    -- back to `open` (a single new window) when Finder has no windows yet.
     local script = string.format(
         'tell application "Finder"\n'
         .. '    activate\n'
-        .. '    if (count of windows) is 0 then\n'
-        .. '        open (POSIX file "%s" as alias)\n'
-        .. '    else\n'
+        .. '    set hasWindow to (count of windows) is not 0\n'
+        .. '    if hasWindow then\n'
+        .. '        tell application "System Events" to tell process "Finder"\n'
+        .. '            keystroke "t" using command down\n'
+        .. '        end tell\n'
+        .. '        delay 0.3\n'
         .. '        set target of front window to (POSIX file "%s" as alias)\n'
+        .. '    else\n'
+        .. '        open (POSIX file "%s" as alias)\n'
         .. '    end if\n'
         .. 'end tell',
         escapeApplescriptString(path),
@@ -1478,16 +1484,22 @@ end
 
 -- Reveal a path in Finder, activating Finder so the containing folder tab is visible/focused
 local function revealInFinder(path)
-    -- Show the item (selected in its containing folder) in the front Finder
-    -- window's current tab. Falls back to `reveal` (new window) when Finder has
-    -- no windows yet. Using `set target` avoids spawning a background window.
+    -- Reveal the item in a NEW tab of the front Finder window (Cmd+T, always the
+    -- active tab), then point that tab at the item so it's shown selected in its
+    -- containing folder. Keeps the user's current tab intact. Falls back to
+    -- `reveal` (a single new window) when Finder has no windows yet.
     local script = string.format(
         'tell application "Finder"\n'
         .. '    activate\n'
-        .. '    if (count of windows) is 0 then\n'
-        .. '        reveal (POSIX file "%s" as alias)\n'
-        .. '    else\n'
+        .. '    set hasWindow to (count of windows) is not 0\n'
+        .. '    if hasWindow then\n'
+        .. '        tell application "System Events" to tell process "Finder"\n'
+        .. '            keystroke "t" using command down\n'
+        .. '        end tell\n'
+        .. '        delay 0.3\n'
         .. '        set target of front window to (POSIX file "%s" as alias)\n'
+        .. '    else\n'
+        .. '        reveal (POSIX file "%s" as alias)\n'
         .. '    end if\n'
         .. 'end tell',
         escapeApplescriptString(path),
