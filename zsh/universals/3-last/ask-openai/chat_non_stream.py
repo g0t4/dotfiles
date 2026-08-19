@@ -10,10 +10,6 @@ from langchain_llama_server.chat_models import ChatLlamaServer
 from langchain_core.messages import AIMessage, HumanMessage, SystemMessage
 from services import Service, get_selected_service
 
-# TODO testing this with only one consumer: (ctrl-b via single.py)
-# TODO test anthropic
-# DONE: openai/llama-server
-
 TIMEOUT_SECONDS = 15
 
 
@@ -109,6 +105,11 @@ def generate_non_streaming(passed_context: str, system_message: str, max_tokens:
         # if choice0.finish_reason == "length":
         #     await session.async_send_text(f"ran out off tokens, increase max_tokens...")
         #     break
+
+        # TODO! maybe just nuke these non-streaming scenarios... I don't like non-streaming that much and I rarely use it... I've been happy with iterm streaming approach for a while
+        # basically get rid of my shell specific helpers and go with iterm only (no more ctrl-b keymap, just ctrl-shift-cmd B in iterm)
+        # PRN save traces too?
+        #  OR just get rid of this and go with streaming only which already has traces?
 
         return GenerationResult(
             content=sanitized,
