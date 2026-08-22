@@ -2753,6 +2753,19 @@ if $IS_MACOS
     abbr free vm_stat
     abbr dmesg "log show --predicate 'eventMessage contains \"kernel\"' --info --debug --last 1m"
 
+else if $IS_LINUX
+    abbr lsblk_fs "lsblk --fs"
+    abbr lsblk_nvme "lsblk --nvme"
+    abbr lsblk_scsi "lsblk --scsi"
+    abbr lsblk_virtio "lsblk --virtio"
+
+    abbr lsblk_topology "lsblk --topology"
+
+    abbr fdisk_ls "sudo fdisk -l"
+    abbr fdisk_details "sudo fdisk -lx"
+
+    abbr findmnt_fstab "findmnt --fstab" # based on /etc/fstab (not necessarily loaded)
+    abbr findmnt_verify "findmnt --verify --verbose" # will report warning if new fstab entries are not yet loaded, that is ok
 end
 
 # *** lsof
