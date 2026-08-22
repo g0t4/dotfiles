@@ -91,7 +91,7 @@ function _update_dotfile_et_al
         tree-sitter-harmony \
         tree-sitter-qwen-chatml \
         streamdeck-wes \
-        private-auto-edit-suggests
+        auto-edit-suggests
 
     for repo in $repos
         set repo_path ~/repos/github/g0t4/$repo
