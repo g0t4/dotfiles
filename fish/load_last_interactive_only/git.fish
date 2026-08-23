@@ -197,8 +197,17 @@ abbr -- grevp_push 'git rev-parse @{push}'
 abbr -- grevp_push_symbolic 'git rev-parse --symbolic-full-name @{push}'
 
 # show
-abbr gsh 'git show' # --color-words if not using external diff
-abbr gsps 'git show --pretty=short --show-signature' # --color-words if not using external diff
+abbr gsh 'git show'
+abbr --set-cursor -- gsh_file 'git --no-pager show HEAD:%' # --no-pager so pager doesn't break showing blobs (files)
+abbr gsps 'git show --pretty=short --show-signature'
+#
+# * cat-file
+# * use cat-file to dump full objects? do I like this better than `git show`? maybe `git show HEAD:path` is easier?
+# abbr --set-cursor gcat 'git cat-file blob HEAD:%' # then I can add the file I want at the end
+abbr --set-cursor -- gcat 'git cat-file -p HEAD:%' # then I can add the file I want at the end
+# -p == pretty print (no long option for it)... use that b/c then I don't need to specify type (i.e. blob|tree|etc)
+#
+# FYI I have `bcat` now which is for `brew cat` so maybe a good convention for a cat like subcommand is `prefixcat` where I use cat as rest of abbr after prefix
 
 # submodules
 abbr gsm 'git submodule'

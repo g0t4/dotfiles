@@ -798,13 +798,60 @@ function __fzf_mru_write --argument-names picker path
 end
 
 function __fzf_picker --argument-names picker fd_command
+
     set -l current_word (commandline --current-token)
+
+    # Detect git revisions syntax, i.e.:
+    #   git cat-file -p HEAD:path/to/foo.txt
+    set -l git_ref ""
+    set -l git_path ""
+    set -l match (string match --regex '^([^:]+):(.*)$' "$current_word")
+    # PRN limit to just git command? right now will work with more than git and I wanna leave that until it is a hassle
+    if set -q match[1]
+        # TODO add some automated tests of this?
+
+        # see `git help revisions`, and then find:
+        #
+        #   <rev>:<path>, e.g. HEAD:README, master:./README
+        #     A suffix : followed by a path names the blob or tree at the given path in the tree-ish object named by the part before the colon.
+        #     A path starting with ./ or ../ is relative to the current working directory.
+        #
+        #   :[<n>:]<path>, e.g. :0:README, :README
+        #      PRN not supported (yet?)
+        #      A colon, optionally followed by a stage number (0 to 3) and a colon, followed by a path
+        #      Names a blob object in the index at the given path.
+        #      `:<path>` or `:0:<path>` => stage 0 entry
+        #      During a merge
+        #        stage 1 is the common ancestor
+        #        stage 2 is the target branch's version (typically the current branch)
+        #        stage 3 is the version from the branch which is being merged.
+        #
+        set git_ref $match[2]
+        set git_path $match[3]
+        # * show repo relevant files, specifically ref/treeish relevant! (i.e. removed files)
+        #   convenient when not in repo root dir (b/c fd wouldn't show repo root!)
+        set fd_command "git ls-tree -r --name-only $git_ref"
+        #
+        # FYI primarily intended to work with _repo root relative paths_
+        #   HEAD:foo/bar.txt   # assumes foo dir in repo root
+        #   HEAD:./foo/bar.txt # not really working and that's ok (dot matches anything)
+        #   HEAD:../foo/       # not really working and that's ok (dot-dot matches anything)
+        #   TBH if I am using ./ or ../ then i'd probably be tab completing fish file completions and not this fzf picker
+        #     otherwise why would I care about relative to repo root vs relative to current dir!?
+        #     I could detect .. and . and try to remap to that as the base directory for fd command (and the resolved dir in repo for git ls-files) but I don't think that is justifiable complexity
+    end
+    # TODO other commands where it would help to limit files to a diff scope?
 
     set -l fzf_opts --height 50% --border --header "MRU ↑  |  Fresh ↓"
     if test -n "$current_word"
         # can type `cd foo<alt-shift-d>` and fzf opens with `foo` prefilled
         #  effectively start filtering before and/or after deciding to use fzf picker
-        set fzf_opts $fzf_opts --query $current_word
+        if test -n "$git_ref"
+            # git_ref is not part of the file path, so only use git_path
+            set fzf_opts $fzf_opts --query $git_path
+        else
+            set fzf_opts $fzf_opts --query $current_word
+        end
     end
 
     set -l file (
@@ -815,20 +862,25 @@ function __fzf_picker --argument-names picker fd_command
         end | fzf $fzf_opts
     )
 
+    #  DO NOT remove current-token if no file picked (i.e. cancel via Escape)
+    #  i.e. start w/ regular file picker => realize its a hidden file => cancel => unmodified start query still there => switch to unrestricted file picker w/ same start query
     if test -n "$file"
         __fzf_mru_write $picker "$file"
 
-        # * remove current token b/c it was a temporary search term only (else file tacked onto end of it)
-        #  DO NOT remove token if no file picked, b/c user might want to switch pickers (w/o retyping query)
-        #  i.e. start w/ regular file picker => realize its a hidden file => switch to unrestricted file picker
-        if test -n "$current_word"
-            # FTR `commandline foo` replaces entire commandline w/ `foo`
-            #   add -t/--current-token to limit replacement to the current token only
-            commandline --current-token -- "" # empty == remove current token
-        end
+        if test -n "$git_ref"
+            # We have git ref, so replace the current token with ref:file
+            commandline --current-token -- "$git_ref:$file"
+        else
+            # remove current token b/c it was a temporary search term only (else file tacked onto end of it)
+            if test -n "$current_word"
+                # FTR `commandline foo` replaces entire commandline w/ `foo`
+                #   add -t/--current-token to limit replacement to the current token only
+                commandline --current-token -- "" # empty == remove current token
+            end
 
-        # insert file at cursor position
-        commandline --insert -- (string escape -- "$file")
+            # insert file at cursor position
+            commandline --insert -- (string escape -- "$file")
+        end
     end
 
     commandline --function repaint
