@@ -36,8 +36,12 @@ abbr --position=anywhere -- pini '| bat -pl ini'
 abbr --position=anywhere -- pmd '| bat -pl md'
 abbr --position=anywhere -- prb '| bat -pl rb'
 abbr --position=anywhere -- psh '| bat -pl sh'
-abbr --position=anywhere -- pxml '| bat -l xml'
-abbr --position=anywhere -- pyml '| bat -l yml'
+abbr --position=anywhere -- pxml '| bat -pl xml'
+abbr --position=anywhere -- pyml '| bat -pl yml'
+abbr --position=anywhere -- plua '| bat -pl lua'
+abbr --position=anywhere -- ppy '| bat -pl py'
+#
+# * sort pipes
 abbr --position=anywhere -- puniq '| sort | uniq -c'
 abbr --position=anywhere -- psort '| sort -h' # TODO? include -h or not by default?
 
