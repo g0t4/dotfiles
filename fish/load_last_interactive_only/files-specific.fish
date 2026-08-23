@@ -797,7 +797,22 @@ function __fzf_mru_write --argument-names picker path
     mv $temp_new_file $file
 end
 
-function __fzf_picker --argument-names picker fd_command
+function __fzf_picker --argument-names picker
+
+    # map picker name => fd_command
+    switch $picker
+        case dirs
+            set fd_command "fd --type d ."
+        case files
+            set fd_command "fd --type f --type symlink ."
+        case unrestricted
+            set fd_command "fd --type f --type symlink . -u"
+        case both
+            set fd_command "fd --type f --type d --type symlink ."
+        case '*'
+            echo "unknown picker: $picker" >&2
+            return 1
+    end
 
     set -l current_word (commandline --current-token)
 
@@ -889,20 +904,20 @@ end
 # ---------------------------------------------------------------------------
 
 function _fzf_nested_dir_picker -d "Paste selected directory into command line"
-    __fzf_picker dirs "fd --type d ."
+    __fzf_picker dirs
 end
 
 function _fzf_nested_file_picker -d "Paste selected file into command line"
-    __fzf_picker files "fd --type f --type symlink ."
+    __fzf_picker files
 end
 
 function _fzf_nested_file_unrestricted_picker
-    __fzf_picker unrestricted "fd --type f --type symlink . -u"
+    __fzf_picker unrestricted
 end
 
 function _fzf_nested_both_file_and_dirs_picker -d "Paste selected file or directory into command line"
     # btw `diff_two_commands 'fd --type f --type d' 'fd'` differ in symlinks (at least)
-    __fzf_picker both "fd --type f --type d --type symlink ."
+    __fzf_picker both
 end
 
 function _fzf_nested_git_commit_picker -d "Pick a git commit_hash"
