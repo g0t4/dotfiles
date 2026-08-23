@@ -799,16 +799,16 @@ end
 
 function __fzf_picker --argument-names picker
 
-    # map picker name => list_command
+    # map picker name => paths_command
     switch $picker
         case dirs
-            set list_command "fd --type d ."
+            set paths_command "fd --type d ."
         case files
-            set list_command "fd --type f --type symlink ."
+            set paths_command "fd --type f --type symlink ."
         case unrestricted
-            set list_command "fd --type f --type symlink . -u"
+            set paths_command "fd --type f --type symlink . -u"
         case both
-            set list_command "fd --type f --type d --type symlink ."
+            set paths_command "fd --type f --type d --type symlink ."
         case '*'
             echo "unknown picker: $picker" >&2
             return 1
@@ -845,7 +845,7 @@ function __fzf_picker --argument-names picker
         set git_path $match[3]
         # * show repo relevant files, specifically ref/treeish relevant! (i.e. removed files)
         #   convenient when not in repo root dir (b/c fd wouldn't show repo root!)
-        set list_command "git ls-tree -r --name-only $git_ref"
+        set paths_command "git ls-tree -r --name-only $git_ref"
         #
         # FYI primarily intended to work with _repo root relative paths_
         #   HEAD:foo/bar.txt   # assumes foo dir in repo root
@@ -873,7 +873,7 @@ function __fzf_picker --argument-names picker
         begin
             set -l mru_file (__fzf_mru_file $picker)
             __fzf_mru_read $picker
-            eval $list_command | rg_grep -Fxv -f $mru_file
+            eval $paths_command | rg_grep -Fxv -f $mru_file
         end | fzf $fzf_opts
     )
 
