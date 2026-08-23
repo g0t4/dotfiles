@@ -758,6 +758,12 @@ function __fzf_mru_key
     pwd | shasum | string split ' ' | head -n 1
 end
 
+function __fzf_mru_dump --argument-names picker
+    # debug only, could use below in read too
+    set -l file (__fzf_mru_file $picker)
+    test -f $file; and cat $file
+end
+
 function __fzf_mru_file --argument-names picker
     set -l dir $FZF_MRU_DIR/$picker
     mkdir -p $dir
