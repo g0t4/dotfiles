@@ -805,7 +805,7 @@ end
 
 function __fzf_picker --argument-names picker
 
-    # map picker name => paths_command
+    # * picker name => paths_command
     switch $picker
         case dirs
             set paths_command "fd --type d ."
@@ -875,7 +875,7 @@ function __fzf_picker --argument-names picker
         end
     end
 
-    set -l selected_file (
+    set -l selected_path (
         begin
             set -l mru_file (__fzf_mru_file $picker)
             __fzf_mru_read $picker
@@ -885,12 +885,12 @@ function __fzf_picker --argument-names picker
 
     #  DO NOT remove current-token if no file picked (i.e. cancel via Escape)
     #  i.e. start w/ regular file picker => realize its a hidden file => cancel => unmodified start query still there => switch to unrestricted file picker w/ same start query
-    if test -n "$selected_file"
-        __fzf_mru_write $picker "$selected_file"
+    if test -n "$selected_path"
+        __fzf_mru_write $picker "$selected_path"
 
         if test -n "$git_ref"
             # We have git ref, so replace the current token with ref:file
-            commandline --current-token -- "$git_ref:$selected_file"
+            commandline --current-token -- "$git_ref:$selected_path"
         else
             # remove current token b/c it was a temporary search term only (else file tacked onto end of it)
             if test -n "$current_word"
@@ -900,7 +900,7 @@ function __fzf_picker --argument-names picker
             end
 
             # insert file at cursor position
-            commandline --insert -- (string escape -- "$selected_file")
+            commandline --insert -- (string escape -- "$selected_path")
         end
     end
 
