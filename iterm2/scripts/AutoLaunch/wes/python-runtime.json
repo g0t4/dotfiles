@@ -1,0 +1,6 @@
+{
+  "backend" : "uv",
+  "python" : "3.10",
+  "schema" : 1,
+  "uv_version" : "0.12.0"
+}
