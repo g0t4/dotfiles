@@ -130,7 +130,7 @@ async def main(connection: iterm2.Connection):
             return
 
         key_a = keystroke.keycode == iterm2.Keycode.ANSI_A
-        if control and command and key_a:
+        if key_a and control and command:
             await yank_last_command_output_and_paste_to_commandline(connection)
 
     async def keystroke_monitor(connection):
