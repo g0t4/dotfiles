@@ -71,7 +71,7 @@ async def main(connection: iterm2.Connection):
         #       (cmd+ctrl+d == define universally)
         #       (ctrl+alt+d == toggle dock)
         d = keystroke.keycode == iterm2.Keycode.ANSI_D
-        if d and control and shift and command:
+        if d and control and command and shift:
             await wes_split_pane(connection, split_vert=True)
             return
         #
@@ -82,35 +82,35 @@ async def main(connection: iterm2.Connection):
         # *** Replace pane helper (split + close original) — "R" for [R]eplace
         # FYI KM => remaps Cmd+R (replace) => Cmd+Shift+Control+R
         r = keystroke.keycode == iterm2.Keycode.ANSI_R
-        if r and control and shift and command:
+        if r and control and command and shift:
             await wes_replace_pane(connection)
             return
 
         b = keystroke.keycode == iterm2.Keycode.ANSI_B
-        if b and control and shift and command:
+        if b and control and command and shift:
             await ask_openai(connection)
             return
 
         # keymap doesn't matter, just update streamdeck button if change this:
         x = keystroke.keycode == iterm2.Keycode.ANSI_X
-        if x and control and shift and command:
+        if x and control and command and shift:
             await close_other_tabs(connection)
             return
 
         # keymap doesn't matter, just update streamdeck button if change this:
         e = keystroke.keycode == iterm2.Keycode.ANSI_Y
-        if e and control and shift and command:
+        if e and control and command and shift:
             await new_tab_then_close_others(connection)
             return
 
         e = keystroke.keycode == iterm2.Keycode.ANSI_F
-        if e and control and shift and command:
+        if e and control and command and shift:
             # TODO merge with ANSI_B? should I just use this instead of ANSI_B approach?
             await copy_screen_to_clipboard(connection, history=False)
             return
 
         e = keystroke.keycode == iterm2.Keycode.ANSI_H
-        if e and control and shift and command:
+        if e and control and command and shift:
             await copy_screen_to_clipboard(connection, history=True)
             return
 
@@ -120,12 +120,12 @@ async def main(connection: iterm2.Connection):
             return
 
         e = keystroke.keycode == iterm2.Keycode.ANSI_MINUS
-        if e and control and shift and command:
+        if e and control and command and shift:
             await smaller_font_wes_stops(connection)
             return
         #
         e = keystroke.keycode == iterm2.Keycode.ANSI_EQUAL
-        if e and control and shift and command:
+        if e and control and command and shift:
             await bigger_font_wes_stops(connection)
             return
 
