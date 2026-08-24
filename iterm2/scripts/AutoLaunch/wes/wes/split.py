@@ -22,7 +22,7 @@ async def new_tab_then_close_others(connection):
             await tab.async_close(force=True)
 
 
-async def prepare_new_profile(session: iterm2.Session, force_local_fish: bool) -> tuple[iterm2.LocalWriteOnlyProfile, bool]:
+async def prepare_new_profile(session: iterm2.Session, force_local_shell: bool) -> tuple[iterm2.LocalWriteOnlyProfile, bool]:
     current_profile = await session.async_get_profile()
     # rich.inspect(current_profile)
 
@@ -56,16 +56,16 @@ async def prepare_new_profile(session: iterm2.Session, force_local_fish: bool) -
         {session.window.window_id=}
     ''')
 
-    is_ssh = was_sshed and not force_local_fish
-    print(f"{force_local_fish=}, {was_sshed=}, {is_ssh=}, {was_xonsh=}")
+    is_ssh = was_sshed and not force_local_shell
+    print(f"{force_local_shell=}, {was_sshed=}, {is_ssh=}, {was_xonsh=}")
     if was_sshed:
-        if force_local_fish:
+        if force_local_shell:
             # force local means don't reconnect over SSH, open a local terminal
             # FYI, might want to address what happens when was_ssh b/c the path then if the ssh window was opened directly to SSH isn't going to be useful
             #    but, this might be where setting advanced_working_directory_* helps when I open a new window/tab/pane to track what local dir to come back to...
             #    OR, how about open it to home dir?
             new_profile.set_use_custom_command("No")
-            print(f"was_sshed:force_local_fish")
+            print(f"was_sshed:force_local_shell")
         else:
             # Wrap the original SSH command in a fish invocation, that way if the SSH connection dies (i.e. shutdown remote) the window/tab/pane won't close b/c fish will run on after SSH dies
             # this does mean I'll have to double exit to close these windows too, so we'll see if I like this or not
@@ -80,11 +80,11 @@ async def prepare_new_profile(session: iterm2.Session, force_local_fish: bool) -
         # * at least for duration of course, launch bash shell... when in bash in current session
         # that way no accidents when I don't realize I'm not in bash b/c I've replicated all my abbrs bash can feel like fish at times ;)
         was_bash = jobName == "bash"
-        if force_local_fish:
+        if force_local_shell:
             # force fish when splitting from another local shell
             new_profile.set_command("/opt/homebrew/bin/fish --login")
             new_profile.set_use_custom_command("Yes")
-            print("was local => force_local_fish")
+            print("was local => force_local_shell")
         elif was_bash:
             HOME = os.getenv("HOME")
             # if using bash (locally) then mirror that in new tab
