@@ -45,6 +45,7 @@ async def prepare_new_profile(session: iterm2.Session, force_local_fish: bool) -
     jobName = await session.async_get_variable("jobName")
     commandLine = await session.async_get_variable("commandLine")
     was_sshed = jobName == "ssh"
+    was_xonsh = commandLine == "xonsh"
     # rich.inspect(session)
     # leave for troubleshooting next time a bogus session appears to be copied:
     print(f'''
@@ -55,10 +56,8 @@ async def prepare_new_profile(session: iterm2.Session, force_local_fish: bool) -
         {session.window.window_id=}
     ''')
 
-    was_xonsh = commandLine == "xonsh"
-
     is_ssh = was_sshed and not force_local_fish
-    print(f"{force_local_fish=}, {is_ssh=}")
+    print(f"{force_local_fish=}, {was_sshed=}, {is_ssh=}, {was_xonsh=}")
     if was_sshed:
         if force_local_fish:
             # force local means don't reconnect over SSH, open a local terminal
