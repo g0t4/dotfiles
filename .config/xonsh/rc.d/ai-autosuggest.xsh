@@ -101,6 +101,8 @@ class _StreamingAIAutoSuggest(AutoSuggest):
         self._active_request_id = None
         self._bound_buffer = None
         self._history = AutoSuggestFromHistory()
+        self._choice_buffer_text = None
+        self._previous_completions = []
 
     def get_suggestion(self, buffer, document):
         # Prompt Toolkit calls the async implementation below.
@@ -112,6 +114,7 @@ class _StreamingAIAutoSuggest(AutoSuggest):
         self._bound_buffer = buffer
 
         def cancel_stale_request(_):
+            self._sync_choice_buffer(buffer.text)
             task = self._active_task
             if task is not None and not task.done():
                 _ai_log.info(
@@ -120,6 +123,30 @@ class _StreamingAIAutoSuggest(AutoSuggest):
                 task.cancel()
 
         buffer.on_text_changed += cancel_stale_request
+
+    def _sync_choice_buffer(self, text):
+        if text == self._choice_buffer_text:
+            return
+        if self._previous_completions:
+            _ai_log.info(
+                "completion_choices_reset previous_count=%s new_buffer=%r",
+                len(self._previous_completions),
+                text,
+            )
+        self._choice_buffer_text = text
+        self._previous_completions = []
+
+    def _remember_visible_completion(self, buffer):
+        self._sync_choice_buffer(buffer.text)
+        suggestion = buffer.suggestion
+        suffix = suggestion.text if suggestion is not None else ""
+        if suffix:
+            self._previous_completions.append(suffix)
+            _ai_log.info(
+                "completion_choice_rejected choice_count=%s suffix=%r",
+                len(self._previous_completions),
+                suffix,
+            )
 
     def _recent_commands(self, buffer, limit=10):
         try:
@@ -141,6 +168,12 @@ class _StreamingAIAutoSuggest(AutoSuggest):
             f"command_before_cursor={before}\n"
             f"command_after_cursor={after}"
         )
+        if self._previous_completions:
+            context += (
+                "\nuser is requesting another choice, these were requested "
+                "previously:\n"
+                + json.dumps(self._previous_completions, ensure_ascii=False)
+            )
         return {
             "model": ${...}["XONSH_AI_AUTOSUGGEST_MODEL"],
             "stream": True,
@@ -161,7 +194,12 @@ class _StreamingAIAutoSuggest(AutoSuggest):
 
     async def regenerate(self, buffer):
         """Discard the current answer and request another for the same buffer."""
-        _ai_log.info("regenerate_start buffer=%r", buffer.text)
+        self._remember_visible_completion(buffer)
+        _ai_log.info(
+            "regenerate_start buffer=%r previous_count=%s",
+            buffer.text,
+            len(self._previous_completions),
+        )
         active_task = self._active_task
         if active_task is not None and not active_task.done():
             active_task.cancel()
@@ -240,6 +278,7 @@ class _StreamingAIAutoSuggest(AutoSuggest):
                 process.terminate()
 
     async def get_suggestion_async(self, buffer, document):
+        self._sync_choice_buffer(document.text)
         if not ${...}.get("XONSH_AI_AUTOSUGGEST", True):
             return self._history.get_suggestion(buffer, document)
 
@@ -256,10 +295,12 @@ class _StreamingAIAutoSuggest(AutoSuggest):
         accumulated = ""
         recent_count = len(self._recent_commands(buffer))
         _ai_log.info(
-            "request_start id=%s cwd=%r history_count=%s before=%r after=%r",
+            "request_start id=%s cwd=%r history_count=%s previous_count=%s "
+            "before=%r after=%r",
             request_id,
             os.getcwd(),
             recent_count,
+            len(self._previous_completions),
             document.text_before_cursor,
             document.text_after_cursor,
         )
