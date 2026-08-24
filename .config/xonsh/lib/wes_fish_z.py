@@ -7,6 +7,8 @@ import sys
 from collections.abc import Callable, Sequence
 from pathlib import Path
 
+from wes_fish_executable import find_fish
+
 
 class FishZError(RuntimeError):
     pass
@@ -15,14 +17,23 @@ class FishZError(RuntimeError):
 class FishZ:
     """Resolve and record directories through Fish's authoritative z plugin."""
 
-    def __init__(self, runner: Callable = subprocess.run, timeout: float = 5.0):
+    def __init__(
+        self,
+        runner: Callable = subprocess.run,
+        timeout: float = 5.0,
+        fish_executable: str | None = None,
+    ):
         self.runner = runner
         self.timeout = timeout
+        self.fish_executable = fish_executable
+
+    def _fish(self) -> str:
+        return self.fish_executable or find_fish()
 
     def resolve(self, args: Sequence[str]) -> Path:
         try:
             completed = self.runner(
-                ["fish", "-c", '__z --echo "$argv"', "--", *map(str, args)],
+                [self._fish(), "-c", '__z --echo "$argv"', "--", *map(str, args)],
                 capture_output=True,
                 text=True,
                 timeout=self.timeout,
@@ -49,7 +60,7 @@ class FishZ:
     ):
         """Run a non-jumping z operation and preserve its output and status."""
         return self.runner(
-            ["fish", "-c", '__z "$argv"', "--", *map(str, args)],
+            [self._fish(), "-c", '__z "$argv"', "--", *map(str, args)],
             cwd=cwd,
             stdin=stdin,
             stdout=stdout,
@@ -61,7 +72,7 @@ class FishZ:
     def record(self, directory: str | Path) -> bool:
         try:
             completed = self.runner(
-                ["fish", "-c", "__z_add"],
+                [self._fish(), "-c", "__z_add"],
                 cwd=Path(directory),
                 capture_output=True,
                 text=True,

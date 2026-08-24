@@ -6,6 +6,8 @@ import os
 import re
 import subprocess
 
+from wes_fish_executable import find_fish
+
 
 _TERMINAL_ESCAPE = re.compile(
     r"(?:\x1b\][^\x07]*(?:\x07|\x1b\\)|\x1b\[[0-?]*[ -/]*[@-~])"
@@ -29,7 +31,7 @@ def fish_function_command(
 ) -> int:
     """Run an interactive Fish function while preserving command I/O."""
     completed = subprocess.run(
-        ["fish", "-ic", "$argv[1] $argv[2..]", "--", name, *map(str, args)],
+        [find_fish(), "-ic", "$argv[1] $argv[2..]", "--", name, *map(str, args)],
         stdin=stdin,
         stdout=stdout,
         stderr=stderr,
@@ -53,7 +55,7 @@ def fish_function(
     env["TERM"] = "dumb"
     env.pop("TERM_PROGRAM", None)
     completed = subprocess.run(
-        ["fish", "-ic", "$argv[1] $argv[2..]", "--", name, *map(str, args)],
+        [find_fish(), "-ic", "$argv[1] $argv[2..]", "--", name, *map(str, args)],
         capture_output=True,
         text=True,
         input=input_text,

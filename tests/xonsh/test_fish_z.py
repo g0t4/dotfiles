@@ -30,11 +30,13 @@ def test_resolve_asks_fish_z_to_echo_the_destination(tmp_path):
     destination.mkdir()
     runner = RecordingRunner(completed(stdout=f"{destination}\n"))
 
-    result = FishZ(runner=runner).resolve(["github", "project"])
+    result = FishZ(runner=runner, fish_executable="/test/fish").resolve(
+        ["github", "project"]
+    )
 
     assert result == destination
     assert runner.calls[0][0] == [
-        "fish",
+        "/test/fish",
         "-c",
         '__z --echo "$argv"',
         "--",
@@ -46,7 +48,9 @@ def test_resolve_asks_fish_z_to_echo_the_destination(tmp_path):
 def test_resolve_preserves_rank_and_recency_options(tmp_path):
     runner = RecordingRunner(completed(stdout=f"{tmp_path}\n"))
 
-    FishZ(runner=runner).resolve(["--recent", "repos"])
+    FishZ(runner=runner, fish_executable="/test/fish").resolve(
+        ["--recent", "repos"]
+    )
 
     assert runner.calls[0][0][-2:] == ["--recent", "repos"]
 
@@ -64,10 +68,10 @@ def test_resolve_rejects_missing_and_non_directory_results(tmp_path):
 def test_record_runs_fish_z_add_from_the_visited_directory(tmp_path):
     runner = RecordingRunner(completed())
 
-    FishZ(runner=runner).record(tmp_path)
+    FishZ(runner=runner, fish_executable="/test/fish").record(tmp_path)
 
     command, kwargs = runner.calls[0]
-    assert command == ["fish", "-c", "__z_add"]
+    assert command == ["/test/fish", "-c", "__z_add"]
     assert kwargs["cwd"] == tmp_path
 
 

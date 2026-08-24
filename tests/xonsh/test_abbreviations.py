@@ -9,6 +9,7 @@ import pytest
 XONSH_LIB = Path(__file__).parents[2] / ".config" / "xonsh" / "lib"
 sys.path.insert(0, str(XONSH_LIB))
 
+import wes_fish_bridge  # noqa: E402
 from wes_abbreviations import (  # noqa: E402
     Abbreviation,
     AbbreviationContext,
@@ -197,9 +198,11 @@ def test_command_path_skips_assignments_env_options_and_redirections():
 
 
 def test_fish_bridge_passes_arguments_outside_command_string(monkeypatch):
+    monkeypatch.setattr(wes_fish_bridge, "find_fish", lambda: "/test/fish")
+
     def fake_run(argv, **kwargs):
         assert argv == [
-            "fish",
+            "/test/fish",
             "-ic",
             "$argv[1] $argv[2..]",
             "--",
@@ -224,11 +227,12 @@ def test_fish_bridge_can_forward_pipeline_input(monkeypatch):
 
 
 def test_fish_command_bridge_preserves_streams_and_exit_status(monkeypatch):
+    monkeypatch.setattr(wes_fish_bridge, "find_fish", lambda: "/test/fish")
     streams = [object(), object(), object()]
 
     def fake_run(argv, **kwargs):
         assert argv == [
-            "fish",
+            "/test/fish",
             "-ic",
             "$argv[1] $argv[2..]",
             "--",
