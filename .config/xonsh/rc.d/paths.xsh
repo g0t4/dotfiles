@@ -50,6 +50,11 @@ home = os.path.expanduser("~")
 # These calls intentionally retain the order of paths.fish. Since each call
 # moves its entry to the front, later entries have higher precedence.
 for path in (
+
+    # TODO look into what else is missing from /usr/libexec/path_helper after chsh
+    # FYI... eval (/usr/libexec/path_helper -c)
+    os.path.join("/usr/local/bin"),
+
     os.path.join(home, ".nix-profile/bin"),
     os.path.join(home, "bin"),
     os.path.join(home, "go/bin"),
