@@ -1,4 +1,5 @@
 import sys
+import subprocess
 from pathlib import Path
 
 
@@ -91,3 +92,21 @@ def test_copied_patch_sides_preserve_context_for_visual_diffing():
         " context\n+new\n more context\n",
         " context\n-old\n more context\n",
     )
+
+
+def test_diff_rc_uses_xonsh_ptk_event_signature_and_live_command_cache():
+    rc = ROOT / ".config/xonsh/rc.d/diff-specific.xsh"
+    abbreviations = ROOT / ".config/xonsh/rc.d/abbreviations.xsh"
+    command = (
+        f"source {abbreviations}; source {rc}; "
+        "from prompt_toolkit.key_binding import KeyBindings; "
+        "events.on_ptk_create.fire(bindings=KeyBindings()); "
+        "assert XSH.commands_cache.locate_binary('icdiff'); "
+        "icdiff --version"
+    )
+    completed = subprocess.run(
+        ["xonsh", "--no-rc", "-c", command], capture_output=True, text=True
+    )
+
+    assert completed.returncode == 0, completed.stderr
+    assert "AttributeError" not in completed.stderr

@@ -28,8 +28,12 @@ _ICDIFF_COLOR_MAP = (
 
 
 def _icdiff(args, stdin=None, stdout=None, stderr=None, **_):
+    executable = XSH.commands_cache.locate_binary("icdiff")
+    if executable is None:
+        print("icdiff: executable not found in Xonsh $PATH", file=stderr or sys.stderr)
+        return 127
     return subprocess.run(
-        ["icdiff", f"--color-map={_ICDIFF_COLOR_MAP}", *args],
+        [executable, f"--color-map={_ICDIFF_COLOR_MAP}", *args],
         stdin=stdin,
         stdout=stdout,
         stderr=stderr,
@@ -173,8 +177,7 @@ def _convert_to_diff_two_commands(event):
 
 
 @events.on_ptk_create
-def _diff_bindings(ptk_shell=None, **_):
-    bindings = ptk_shell.prompter.app.key_bindings
+def _diff_bindings(bindings, **_):
     bindings.add("f6", filter=ViInsertMode() | EmacsInsertMode())(
         _convert_to_diff_two_commands
     )
