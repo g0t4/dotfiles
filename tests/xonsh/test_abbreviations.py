@@ -190,10 +190,20 @@ def test_fish_bridge_passes_arguments_outside_command_string(monkeypatch):
             "argument with spaces",
         ]
         assert kwargs["capture_output"] is True
+        assert kwargs["input"] is None
         return subprocess.CompletedProcess(argv, 0, stdout="value\n", stderr="")
 
     monkeypatch.setattr(subprocess, "run", fake_run)
     assert fish_function("git_helper", "argument with spaces") == "value"
+
+
+def test_fish_bridge_can_forward_pipeline_input(monkeypatch):
+    def fake_run(_argv, **kwargs):
+        assert kwargs["input"] == "one\ntwo\n"
+        return subprocess.CompletedProcess([], 0, stdout="1 one\n2 two\n", stderr="")
+
+    monkeypatch.setattr(subprocess, "run", fake_run)
+    assert fish_function("line_numbers", input_text="one\ntwo\n") == "1 one\n2 two"
 
 
 def test_fish_bridge_reports_function_and_stderr(monkeypatch):

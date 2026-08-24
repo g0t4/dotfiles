@@ -16,7 +16,12 @@ class FishFunctionError(RuntimeError):
     pass
 
 
-def fish_function(name: str, *args: str, timeout: float = 5.0) -> str:
+def fish_function(
+    name: str,
+    *args: str,
+    input_text: str | None = None,
+    timeout: float = 5.0,
+) -> str:
     """Call a function through the user's authoritative interactive Fish config.
 
     Values are passed through Fish's argv rather than interpolated into source.
@@ -30,6 +35,7 @@ def fish_function(name: str, *args: str, timeout: float = 5.0) -> str:
         ["fish", "-ic", "$argv[1] $argv[2..]", "--", name, *map(str, args)],
         capture_output=True,
         text=True,
+        input=input_text,
         timeout=timeout,
         env=env,
     )
