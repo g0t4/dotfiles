@@ -383,3 +383,28 @@ def _wes_install_ai_autosuggester(bindings, **_):
         event.app.create_background_task(
             _ai_autosuggester.regenerate(event.current_buffer)
         )
+
+    @bindings.add(Keys.F18, eager=True, save_before=lambda event: False)
+    def _toggle_ai_autosuggestion(event):
+        # Prompt Toolkit represents Shift-F6 as F18, matching the standard
+        # xterm shifted-function-key sequence CSI 17;2~.
+        enabled = not bool(${...}.get("XONSH_AI_AUTOSUGGEST", True))
+        ${...}["XONSH_AI_AUTOSUGGEST"] = enabled
+        buffer = event.current_buffer
+
+        active_task = _ai_autosuggester._active_task
+        if not enabled and active_task is not None and not active_task.done():
+            _ai_log.info(
+                "toggle_cancel_request id=%s", _ai_autosuggester._active_request_id
+            )
+            active_task.cancel()
+
+        buffer.suggestion = None
+        buffer.on_suggestion_set.fire()
+        event.app.invalidate()
+        _ai_log.info("autosuggest_toggled enabled=%s buffer=%r", enabled, buffer.text)
+
+        # Toggling on should work immediately without requiring a throwaway
+        # edit to trigger Prompt Toolkit's autosuggestion machinery.
+        if enabled and buffer.text.strip():
+            event.app.create_background_task(_ai_autosuggester.regenerate(buffer))
