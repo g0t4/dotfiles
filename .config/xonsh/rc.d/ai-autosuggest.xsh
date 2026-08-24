@@ -91,6 +91,27 @@ class _StreamingAIAutoSuggest(AutoSuggest):
         value = value.replace("```xonsh", "").replace("```sh", "").replace("```", "")
         return value.splitlines()[0][:240] if value else ""
 
+    async def regenerate(self, buffer):
+        """Discard the current answer and request another for the same buffer."""
+        active_task = self._active_task
+        if active_task is not None and not active_task.done():
+            active_task.cancel()
+            try:
+                await active_task
+            except asyncio.CancelledError:
+                pass
+
+        document = buffer.document
+        buffer.suggestion = None
+        buffer.on_suggestion_set.fire()
+        get_app().invalidate()
+
+        suggestion = await self.get_suggestion_async(buffer, document)
+        if buffer.document == document and suggestion is not None:
+            buffer.suggestion = suggestion
+            buffer.on_suggestion_set.fire()
+            get_app().invalidate()
+
     async def _stream_request(self, body, on_content):
         process = await asyncio.create_subprocess_exec(
             "curl",
@@ -196,10 +217,19 @@ _ai_autosuggester = _StreamingAIAutoSuggest()
 
 
 @events.on_ptk_create
-def _wes_install_ai_autosuggester(**_):
+def _wes_install_ai_autosuggester(bindings, **_):
     # Xonsh 0.23 constructs AutoSuggestFromHistory inside cmdloop after rc.d
     # has loaded. Replacing that factory lets Xonsh pass our implementation to
     # Prompt Toolkit without changing Xonsh or Prompt Toolkit source files.
     import xonsh.shells.ptk_shell as ptk_shell
 
     ptk_shell.AutoSuggestFromHistory = lambda: _ai_autosuggester
+
+    @bindings.add("escape", "c-i", eager=True, save_before=lambda event: False)
+    def _regenerate_ai_autosuggestion(event):
+        # Alt-Tab normally arrives at terminals as Escape followed by Tab
+        # (Control-I). Keep the command buffer untouched and replace only the
+        # current streamed suggestion.
+        event.app.create_background_task(
+            _ai_autosuggester.regenerate(event.current_buffer)
+        )
