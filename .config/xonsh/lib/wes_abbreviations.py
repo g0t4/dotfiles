@@ -105,8 +105,12 @@ class AbbreviationRegistry:
         return abbreviation
 
     @staticmethod
-    def _priority(abbreviation: Abbreviation) -> tuple[int, int]:
-        return (not abbreviation.is_regex, bool(abbreviation.commands))
+    def _priority(abbreviation: Abbreviation) -> tuple[int, int, int]:
+        return (
+            not abbreviation.is_regex,
+            bool(abbreviation.commands),
+            abbreviation.position == "command",
+        )
 
     def applicable(self, context: AbbreviationContext) -> list[Abbreviation]:
         """Return matches in expansion order.

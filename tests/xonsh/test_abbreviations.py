@@ -117,6 +117,19 @@ def test_exact_beats_regex_and_scoped_beats_global():
     assert abbreviation is scoped_exact
 
 
+def test_command_position_definition_beats_same_anywhere_regex():
+    command_only = Abbreviation(re.compile(r"\.\.+"), "cd ../")
+    anywhere = Abbreviation(
+        re.compile(r"\.\.+"), "../", position="anywhere"
+    )
+    registry = AbbreviationRegistry([anywhere, command_only])
+
+    result, abbreviation = registry.expand(context("...", command_path=("...",)))
+
+    assert result.text == "cd ../"
+    assert abbreviation is command_only
+
+
 def test_quoted_tokens_are_not_expanded_by_default():
     registry = AbbreviationRegistry([Abbreviation("codex", "an author")])
 
