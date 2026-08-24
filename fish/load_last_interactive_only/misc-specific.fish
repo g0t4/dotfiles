@@ -3089,54 +3089,41 @@ if command -q ctags
 
 end
 
-# lets see how I feel about awk being auto '' quoted... I can change later if this upsets me
-#   i.e. if I find myself often wanting to set args -F ... then this might be annoying
-# abbr --set-cursor awk "awk '/%/ { print }'"
-#
-# abbr awk4 "awk '{print $4}'"
-abbr --add _awkd --regex 'awk\d+' --function _abbr_expand_awk
-function _abbr_expand_awk
-    string replace --regex "(\d+)" " '{print \\\$\$1}'" $argv[1]
-end
-
-# PRN add back if actually useful... for now don't need a-zA-Z for the separator!
-# # abbr awk4_ where _ is any character you want
-# abbr --add _awkd_char --regex 'awk\d+([a-zA-Z])' --function _abbr_expand_awk_char
-# function _abbr_expand_awk_char
-#     string replace --regex "(\d+)([a-zA-Z])" " \-F\$2 '{print \\\$\$1}'" $argv[1]
+# # lets see how I feel about awk being auto '' quoted... I can change later if this upsets me
+# #   i.e. if I find myself often wanting to set args -F ... then this might be annoying
+# # abbr --set-cursor awk "awk '/%/ { print }'"
+# #
+# # abbr awk4 "awk '{print $4}'"
+# abbr --add _awkd --regex 'awk\d+' --function _abbr_expand_awk
+# function _abbr_expand_awk
+#     string replace --regex "(\d+)" " '{print \\\$\$1}'" $argv[1]
 # end
-
-# awk4t
-abbr --add _awk_tab --regex 'awk\d+t' --function _abbr_expand_awk_tab
-function _abbr_expand_awk_tab
-    string replace --regex "(\d+)t" " \-F'\t' '{print \\\$\$1}'" $argv[1]
-end
-
-# awk4,
-abbr --add _awk_comma --regex 'awk\d+,' --function _abbr_expand_awk_comma
-function _abbr_expand_awk_comma
-    string replace --regex "(\d+)," " \-F, '{print \\\$\$1}'" $argv[1]
-end
-
-# awk4p (as in pipe | delimiter)
-#  cannot type | in an abbr b/c its a command delimiter
-abbr --add _awk_pipe --regex 'awk\d+p' --function _abbr_expand_awk_pipe
-function _abbr_expand_awk_pipe
-    string replace --regex "(\d+)p" " \-F'\|' '{print \\\$\$1}'" $argv[1]
-end
-
-# * token counting
-function count_tokens_qwen25_coder
-    # usage:
-    # cat foo.txt | count_tokens_qwen25_coder
-    $WES_DOTFILES/.venv/bin/python3 -c "
-import sys
-from transformers import AutoTokenizer
-tokenizer = AutoTokenizer.from_pretrained('Qwen/Qwen2.5-Coder-7B-Instruct')
-text = sys.stdin.read()
-print(len(tokenizer.encode(text)))
-"
-end
+#
+# # PRN add back if actually useful... for now don't need a-zA-Z for the separator!
+# # # abbr awk4_ where _ is any character you want
+# # abbr --add _awkd_char --regex 'awk\d+([a-zA-Z])' --function _abbr_expand_awk_char
+# # function _abbr_expand_awk_char
+# #     string replace --regex "(\d+)([a-zA-Z])" " \-F\$2 '{print \\\$\$1}'" $argv[1]
+# # end
+#
+# # awk4t
+# abbr --add _awk_tab --regex 'awk\d+t' --function _abbr_expand_awk_tab
+# function _abbr_expand_awk_tab
+#     string replace --regex "(\d+)t" " \-F'\t' '{print \\\$\$1}'" $argv[1]
+# end
+#
+# # awk4,
+# abbr --add _awk_comma --regex 'awk\d+,' --function _abbr_expand_awk_comma
+# function _abbr_expand_awk_comma
+#     string replace --regex "(\d+)," " \-F, '{print \\\$\$1}'" $argv[1]
+# end
+#
+# # awk4p (as in pipe | delimiter)
+# #  cannot type | in an abbr b/c its a command delimiter
+# abbr --add _awk_pipe --regex 'awk\d+p' --function _abbr_expand_awk_pipe
+# function _abbr_expand_awk_pipe
+#     string replace --regex "(\d+)p" " \-F'\|' '{print \\\$\$1}'" $argv[1]
+# end
 
 # * comm(on) command
 #  honestly this makes me wanna write some of my own commands that aren't abbreviated for 32KB tech from 70 years ago
