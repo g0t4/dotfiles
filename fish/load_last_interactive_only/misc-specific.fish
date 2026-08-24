@@ -3247,44 +3247,44 @@ abbr --command string -- -v --invert
 
 # * BASH
 
-abbr b bash
+# abbr b bash
+# #
+# # FYI these alternate bash invocations are mostly for test/demo purposes
+# #   only material diff is the env vars passed
+# #   99% of the time it's ok to just use `bash` from fish shell... and inherit the env
+# #     also ok to not use --login on these too as my startup files don't differentiate
+# #
+# abbr bash_full_rc 'bash --rcfile "$WES_DOTFILES/bash/full.bashrc.sh"'
+# abbr bash_env_no_inherit "env -i HOME=$HOME \$(which bash)"
+# abbr bash_env_no_inherit_no_startup "env -i HOME=$HOME \$(which bash) --noprofile --norc"
+# function bash_env_iterm_inherit_without_path
+#     # restrict env vars inherited..
+#     # mostly to ensure my bashrc can run independent of parent fish shell's env vars
+#     # skip PATH so I know its setup consistently
+#     env -i \
+#         LANG="$LANG" \
+#         TERM="$TERM" \
+#         COLORTERM="$COLORTERM" \
+#         SHELL="$SHELL" \
+#         USER="$USER" \
+#         LOGNAME="$LOGNAME" \
+#         TMPDIR="$TMPDIR" \
+#         HOME="$HOME" \
+#         SSH_AUTH_SOCK="$SSH_AUTH_SOCK" \
+#         DISPLAY="$DISPLAY" \
+#         TERM_PROGRAM="$TERM_PROGRAM" \
+#         TERM_PROGRAM_VERSION="$TERM_PROGRAM_VERSION" \
+#         LC_TERMINAL="$LC_TERMINAL" \
+#         LC_TERMINAL_VERSION="$LC_TERMINAL_VERSION" \
+#         __CF_USER_TEXT_ENCODING="$__CF_USER_TEXT_ENCODING" \
+#         "$(which bash)" \
+#         $argv
+# end
 #
-# FYI these alternate bash invocations are mostly for test/demo purposes
-#   only material diff is the env vars passed
-#   99% of the time it's ok to just use `bash` from fish shell... and inherit the env
-#     also ok to not use --login on these too as my startup files don't differentiate
-#
-abbr bash_full_rc 'bash --rcfile "$WES_DOTFILES/bash/full.bashrc.sh"'
-abbr bash_env_no_inherit "env -i HOME=$HOME \$(which bash)"
-abbr bash_env_no_inherit_no_startup "env -i HOME=$HOME \$(which bash) --noprofile --norc"
-function bash_env_iterm_inherit_without_path
-    # restrict env vars inherited..
-    # mostly to ensure my bashrc can run independent of parent fish shell's env vars
-    # skip PATH so I know its setup consistently
-    env -i \
-        LANG="$LANG" \
-        TERM="$TERM" \
-        COLORTERM="$COLORTERM" \
-        SHELL="$SHELL" \
-        USER="$USER" \
-        LOGNAME="$LOGNAME" \
-        TMPDIR="$TMPDIR" \
-        HOME="$HOME" \
-        SSH_AUTH_SOCK="$SSH_AUTH_SOCK" \
-        DISPLAY="$DISPLAY" \
-        TERM_PROGRAM="$TERM_PROGRAM" \
-        TERM_PROGRAM_VERSION="$TERM_PROGRAM_VERSION" \
-        LC_TERMINAL="$LC_TERMINAL" \
-        LC_TERMINAL_VERSION="$LC_TERMINAL_VERSION" \
-        __CF_USER_TEXT_ENCODING="$__CF_USER_TEXT_ENCODING" \
-        "$(which bash)" \
-        $argv
-end
-
-abbr bash_abbr_tests "ABBR_TESTS=1 bash"
-abbr bash_abbr_tests_debug "ABBR_TESTS=1 ABBR_DEBUG=1 bash"
-#
-abbr bash_startup_trace 'PS4="+ \${BASH_SOURCE}:\${LINENO}: " bash -x -l'
+# abbr bash_abbr_tests "ABBR_TESTS=1 bash"
+# abbr bash_abbr_tests_debug "ABBR_TESTS=1 ABBR_DEBUG=1 bash"
+# #
+# abbr bash_startup_trace 'PS4="+ \${BASH_SOURCE}:\${LINENO}: " bash -x -l'
 
 # * strace
 # --trace=syscall
@@ -3617,7 +3617,6 @@ end tell' >$tmp_script
 end
 
 # * secure entry
-
 function secure_entry_pids
     ioreg -l | awk -F'= ' /kCGSSessionSecureInputPID/ \
         | rg_grep -o "kCGSSessionSecureInputPID.=\d+" \
@@ -3634,5 +3633,3 @@ function secure_entry_who
         echo "Secure Input not enabled."
     end
 end
-
-abbr watch_secure_entry "$WATCH_COMMAND 'fish -ic secure_entry_who'"
