@@ -64,3 +64,6 @@ source ~/.iterm2_shell_integration.bash
 #     return 124
 # }
 # bind -x '"\C-g": "test"'
+
+what_shell() { echo bash; }
+

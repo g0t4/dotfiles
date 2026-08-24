@@ -12,3 +12,6 @@ def dump_keymaps():
 #     handler = getattr(binding.handler, "__name__", repr(binding.handler))
 #     if "control" in keys.lower():
 #         print(keys, handler)
+
+def what_shell():
+    return "xonsh"
