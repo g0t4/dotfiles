@@ -52,15 +52,13 @@ class _StreamingAIAutoSuggest(AutoSuggest):
 
         buffer.on_text_changed += cancel_stale_request
 
-    def _recent_command(self, buffer, current_text):
+    def _recent_commands(self, buffer, limit=10):
         try:
-            for entry in reversed(list(buffer.history.get_strings())):
-                for line in reversed(entry.splitlines()):
-                    if line and line != current_text:
-                        return line
+            entries = list(buffer.history.get_strings())
+            return [entry for entry in entries if entry.strip()][-limit:]
         except Exception:
             pass
-        return ""
+        return []
 
     def _request_body(self, buffer, document):
         before = document.text_before_cursor
@@ -69,7 +67,8 @@ class _StreamingAIAutoSuggest(AutoSuggest):
             f"shell=xonsh\n"
             f"os={platform.system()}\n"
             f"cwd={os.getcwd()}\n"
-            f"previous_command={self._recent_command(buffer, document.text)}\n"
+            "recent_commands_oldest_to_newest="
+            f"{json.dumps(self._recent_commands(buffer), ensure_ascii=False)}\n"
             f"command_before_cursor={before}\n"
             f"command_after_cursor={after}"
         )
