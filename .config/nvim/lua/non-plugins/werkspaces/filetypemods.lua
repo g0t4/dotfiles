@@ -4,6 +4,8 @@
 -- NOTES:
 --   use buffer local variables in filetype mods
 
+vim.api.nvim_create_augroup("filetypemods", { clear = true })
+
 -- *** FORMAT indents
 -- gg=G - runs formatter (indent)
 --  indentexpr can be set for that too (mine defaults to treesitter's indent
@@ -84,6 +86,52 @@ vim.filetype.add({
 --     },
 -- })
 
+vim.filetype.add({
+    extension = { xsh = "xonsh" },
+    filename = {
+        [".xonshrc"] = "xonsh",
+        ["xonshrc"] = "xonsh",
+    },
+})
+
+vim.api.nvim_create_autocmd("FileType", {
+    group = "filetypemods",
+    pattern = "xonsh",
+    callback = function()
+        vim.bo.commentstring = "# %s" -- %s is original text
+    end,
+})
+
+-- vim.lsp.config("xonsh_lsp", {
+--     cmd = { "uvx", "-n", "xonsh-lsp" },
+--     filetypes = { "xonsh" },
+--     root_markers = { ".xonshrc", "xonshrc", ".git" },
+--     init_options = {
+--         pythonBackend = "pyright", -- or "ty"
+--     },
+--     settings = {
+--         environment = {
+--             python = vim.fn.exepath("python3"),
+--         },
+--     },
+-- })
+--
+-- vim.lsp.enable("xonsh_lsp")
+
+-- * xonsh treesitter recommends:
+--   https://github.com/FoamScience/xonsh-language-server#4-optional-tree-sitter-highlighting
+--   FYI I have a generic FileType event handle that calls vim.treesitter.start (don't need special version just for xonsh)
+vim.api.nvim_create_autocmd('User', {
+    pattern = 'TSUpdate',
+    callback = function()
+        require('nvim-treesitter.parsers').xonsh = {
+            install_info = {
+                url = 'https://github.com/FoamScience/tree-sitter-xonsh',
+                queries = 'queries/',
+            },
+        }
+    end,
+})
 
 local function describeFormatOptionForLetter(letter)
     local descriptions = {
@@ -173,7 +221,6 @@ end, { bang = true })
 --     filetype plugin indent on " this is controlling indent on new lines for now and seems fine so leave it as is
 --     set backspace=indent,start,eol " allow backspacing over everything in insert mode, including indent from autoindent, eol thru start of insert
 
-vim.api.nvim_create_augroup("filetypemods", { clear = true })
 
 vim.api.nvim_create_autocmd("FileType", {
     pattern = "*",
@@ -269,7 +316,6 @@ vim.api.nvim_create_autocmd("BufRead", {
         vim.bo.commentstring = "# %s"
         -- DO NOT USE yaml with anything ansible related
         -- NOTE you might have issues with different ansible types... i.e. inventory vs playbook... cross that bridge later (IIAC ALS has a detection mechanism too, prolly not configurable!)
-
     end
 })
 
