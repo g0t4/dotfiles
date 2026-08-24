@@ -41,23 +41,23 @@ async def main(connection: iterm2.Connection):
         # *** New Window helpers
         # FYI also had to remap Cmd+N => Cmd+Shift+Control+N in Keyboard Maestro
         n = keystroke.keycode == iterm2.Keycode.ANSI_N
-        if n and control and shift and command:
+        if n and control and command and shift:
             await wes_new_window(connection, force_local=False)
             return
         #
-        if n and command and control:
+        if n and control and command:
             await wes_new_window(connection, force_local=True)
             return
 
         # *** New Tab helpers
         # FYI also had to remap Cmd+T => Cmd+Shift+Control+T in Keyboard Maestro
         t = keystroke.keycode == iterm2.Keycode.ANSI_T
-        if t and control and shift and command:
+        if t and control and command and shift:
             await wes_new_tab(connection, force_local=False)
             return
         # FYI also had to remap Cmd+Shift+T in KM => Cmd+Ctrl+T
         #    cannot remap to same keys, wouldn't work :)
-        if t and command and control:
+        if t and control and command:
             await wes_new_tab(connection, force_local=True)
             return
 
