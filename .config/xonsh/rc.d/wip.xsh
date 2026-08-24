@@ -1,3 +1,8 @@
+## tab completion
+# Ctrl+S style search of completion entries
+# show static abbrs in completions (dynamic I don't think make sense to show unless it's just the end that varies?)
+# show abbr description in completion entries
+
 ##### AI ideas
 #
 # [DONE] FIM via langchain like I do with neovim
