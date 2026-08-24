@@ -411,22 +411,6 @@ if status --is-interactive
     end
 end
 
-function lspath
-    # usage? # lspath | rg_grep python ??
-
-    for dir in $PATH
-        if not test -d $dir
-            continue
-        end
-
-        # PRN show file name, file type?, symlinks?
-        log_ --apple_white --bold $dir
-        ls -1 -F $dir
-        log_blankline
-    end
-
-end
-
 # ok cd to a file should take to its dir
 if status --is-interactive
 
