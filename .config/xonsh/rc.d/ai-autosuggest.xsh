@@ -8,6 +8,7 @@ import platform
 from prompt_toolkit.application import get_app
 from prompt_toolkit.auto_suggest import AutoSuggest, AutoSuggestFromHistory, Suggestion
 from prompt_toolkit.input import ansi_escape_sequences
+from prompt_toolkit.input.vt100_parser import _IS_PREFIX_OF_LONGER_MATCH_CACHE
 
 
 ${...}.setdefault("XONSH_AI_AUTOSUGGEST", True)
@@ -45,6 +46,9 @@ for _ai_regenerate_sequence in (
         _AI_REGENERATE_KEY
     )
 ansi_escape_sequences.REVERSE_ANSI_SEQUENCES[_AI_REGENERATE_KEY] = "\x1b[9;3u"
+# Xonsh creates Prompt Toolkit's input parser before rc.d finishes loading.
+# It may therefore have cached these prefixes as non-matches already.
+_IS_PREFIX_OF_LONGER_MATCH_CACHE.clear()
 
 
 class _StreamingAIAutoSuggest(AutoSuggest):
