@@ -1,35 +1,37 @@
-"""Fish-style visible command abbreviations for Xonsh."""
+"""Visible command abbreviations backed by Xonsh's completion parser."""
+
+import sys
+from pathlib import Path
 
 
-XONSH_ABBREVIATIONS = {
-    "gst": "git status",
-}
+_wes_xonsh_lib = Path($XONSH_CONFIG_DIR) / "lib"
+if str(_wes_xonsh_lib) not in sys.path:
+    sys.path.insert(0, str(_wes_xonsh_lib))
+
+from wes_abbreviations import AbbreviationRegistry, abbr
+from wes_xonsh_abbreviations import XonshAbbreviationExpander
 
 
-def _expand_command_abbreviation(buffer):
-    document = buffer.document
-    word = document.get_word_before_cursor(WORD=True)
-    expansion = XONSH_ABBREVIATIONS.get(word)
-    if expansion is None:
-        return False
+XONSH_ABBREVIATIONS = AbbreviationRegistry()
 
-    before_word = document.text_before_cursor[: -len(word)]
-    # Like a normal Fish abbreviation, expand only in command position. This
-    # simple first example covers the start of a command and pipeline segments.
-    command_prefix = before_word.rstrip()
-    if command_prefix and not command_prefix.endswith(("|", ";", "&&", "||")):
-        return False
+# Declarations are objects, not dictionaries: callbacks and configuration use
+# normal Python attributes such as context.command_path and result.cursor.
+abbr(XONSH_ABBREVIATIONS, "gst", "git status")
 
-    buffer.delete_before_cursor(count=len(word))
-    buffer.insert_text(expansion)
-    return True
+_wes_abbreviation_expander = XonshAbbreviationExpander(XONSH_ABBREVIATIONS)
+
+
+def _expand_xonsh_abbreviation(buffer):
+    return _wes_abbreviation_expander.expand(buffer)
 
 
 @events.on_ptk_create
 def _wes_abbreviation_keybindings(bindings, **_):
     @bindings.add(" ")
     def _expand_abbreviation_on_space(event):
-        _expand_command_abbreviation(event.current_buffer)
+        # Prompt Toolkit snapshots once before this handler, so replacement and
+        # delimiter insertion are undone together.
+        _expand_xonsh_abbreviation(event.current_buffer)
         event.current_buffer.insert_text(" ")
 
 

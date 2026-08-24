@@ -228,6 +228,8 @@ downloads/
 eggs/
 .eggs/
 lib/
+!.config/xonsh/lib/
+!.config/xonsh/lib/*.py
 lib64/
 parts/
 sdist/
@@ -575,4 +577,3 @@ Cargo.lock
 *.pdb
 
 # End of https://www.toptal.com/developers/gitignore/api/rust
-
