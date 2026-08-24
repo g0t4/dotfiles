@@ -55,6 +55,8 @@ async def prepare_new_profile(session: iterm2.Session, force_local_fish: bool) -
         {session.window.window_id=}
     ''')
 
+    was_xonsh = commandLine == "xonsh"
+
     is_ssh = was_sshed and not force_local_fish
     print(f"{force_local_fish=}, {is_ssh=}")
     if was_sshed:
@@ -95,6 +97,11 @@ async def prepare_new_profile(session: iterm2.Session, force_local_fish: bool) -
             new_profile.set_command(bash_cmd)
             new_profile.set_use_custom_command("Yes")
             print("was local => was_bash")
+        elif was_xonsh:
+            # need full path to xonsh
+            new_profile.set_command("/opt/homebrew/bin/xonsh") # iterm is only macOS, so its safe to do this :)
+            new_profile.set_use_custom_command("Yes")
+            print("was local => was_xonsh")
         else:
             new_profile.set_use_custom_command("No")  # FYI "No" is default for Custom Command
             print("was local => keep command")
