@@ -11,6 +11,7 @@ from split import close_other_tabs, new_tab_then_close_others, wes_split_pane, w
 from semantic_daemon import semantic_daemon
 from font_zooms import bigger_font_wes_stops, smaller_font_wes_stops
 
+
 async def main(connection: iterm2.Connection):
 
     async def keystroke_handler(keystroke: iterm2.Keystroke):
@@ -146,6 +147,7 @@ async def main(connection: iterm2.Connection):
 
     asyncio.create_task(keystroke_monitor(connection))
     asyncio.create_task(semantic_daemon(connection))
+
 
 iterm2.run_forever(main)
 
