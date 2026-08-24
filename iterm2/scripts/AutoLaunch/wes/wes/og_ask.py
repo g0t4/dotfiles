@@ -30,6 +30,8 @@ async def ask_openai(connection):
 
     # *** get current command line text
     prompt = await iterm2.prompt.async_get_last_prompt(connection, session.session_id)
+    import rich
+    log(rich.inspect(prompt))
     if prompt is None:
         # i.e. IIGC right after sourcing iterm2 shell integration, wouldn't yet have a last prompt.. very rare but don't want to crash this script
         failure = "No last prompt, are you missing iterm2 shell integration?"
