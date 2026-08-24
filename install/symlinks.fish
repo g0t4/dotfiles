@@ -129,3 +129,6 @@ ln -f -s $ask_repo_path/.agents/global/instructs $HOME/.agents/. # DIR symlink (
 # * nix
 mkdir -p $HOME/.config/nix
 ln -f -s $dotfiles_dir/nix/nix.conf $HOME/.config/nix/nix.conf
+
+# * xonsh
+ln -f -s $dotfiles_dir/.config/xonsh $HOME/.config/. # DIR SYMLINK
