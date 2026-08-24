@@ -3,6 +3,7 @@
 import os
 import subprocess
 
+# ! this must run early, including before auto-venv-on-cd b/c otherwise deactivate venv removes these PATH changes (reverts to PATH before venv was activated)
 
 def _path_move_prepend(*paths):
     """Put existing directories at the front of PATH, without duplicates."""
@@ -27,8 +28,6 @@ def _env_path_prepend(name, *paths):
     ${...}[name] = list(paths) + current
 
 
-# Keep this early: virtual-environment activation snapshots PATH and restores
-# that snapshot on deactivate.
 if os.path.isfile("/opt/homebrew/bin/brew"):
     $HOMEBREW_PREFIX = "/opt/homebrew"
     $HOMEBREW_CELLAR = "/opt/homebrew/Cellar"
