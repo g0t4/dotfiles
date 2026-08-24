@@ -1,6 +1,35 @@
 """Deferred Xonsh ideas that should remain searchable beside the active rc files."""
 
 
+# Migration rule: Fish functions that must be rewritten instead of bridged.
+#
+# A `fish -ic function_name` bridge is preferred while it preserves behavior,
+# but it runs in a child Fish process. Rewrite a function natively when it uses:
+#   - `commandline`: it reads or edits Fish's reader buffer, not Xonsh's Prompt
+#     Toolkit buffer. Use `event.current_buffer` in a Xonsh keybinding.
+#   - `history` for current interactive state: the child has Fish history, not
+#     the active Xonsh session. Use `XSH.history.inps` (or Prompt Toolkit history
+#     when editor-specific ordering is intended).
+#   - `cd`, exported/universal variables, aliases, abbr, bind, complete, source,
+#     or event handlers for a persistent current-shell side effect: changes in
+#     the child disappear when `fish -ic` exits.
+#   - interactive/TTY job control, repainting, or an interactive selector whose
+#     result edits the shell: stdin/stdout forwarding alone is insufficient.
+#   - Fish syntax embedded in strings later passed to `eval`: Xonsh must parse
+#     and execute the stored command instead.
+#
+# Pure computation and ordinary streamed commands remain good bridge candidates.
+# Performance is the secondary test: measure startup overhead for hot paths, and
+# port only when the bridge is observably costly.
+#
+# Process substitution (implemented in diff-specific.xsh / wes_diff.py):
+#   Xonsh has captured subprocess forms but no built-in `<(...)` pathname syntax.
+#   Our `$(producer | psub)` callable alias writes stdin to a tempfile and prints
+#   its path; `events.on_postcommand` removes all substitutions after the outer
+#   command finishes. `wes_diff.psub` also provides deterministic context-manager
+#   lifetime for Python callable aliases that need multiple substitutions.
+
+
 # TODO: Add Fish-style subsequence completion after learning stock Xonsh completion.
 #
 # Why this is deferred:
