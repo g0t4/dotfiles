@@ -7,6 +7,7 @@ import platform
 
 from prompt_toolkit.application import get_app
 from prompt_toolkit.auto_suggest import AutoSuggest, AutoSuggestFromHistory, Suggestion
+from prompt_toolkit.input import ansi_escape_sequences
 
 
 ${...}.setdefault("XONSH_AI_AUTOSUGGEST", True)
@@ -28,6 +29,22 @@ Output ONLY the exact characters that should be appended after the cursor.
 Never repeat the command prefix. Never explain. No quotes, markdown, or newline.
 Prefer a short, likely completion over inventing a long command.
 If no useful completion is clear, output nothing."""
+
+
+# Prompt Toolkit 3.0 has no enum value for modified Tab. Give enhanced-keyboard
+# terminal encodings a private single-character slot, as Xonsh does for
+# Shift-Enter. Modifiers 3 and 7 cover Alt-Tab and Alt-Ctrl-I; Tab is Ctrl-I.
+_AI_REGENERATE_KEY = "\x81"
+for _ai_regenerate_sequence in (
+    "\x1b[27;3;9~",  # xterm modifyOtherKeys: Alt-Tab
+    "\x1b[27;7;9~",  # xterm modifyOtherKeys: Alt-Ctrl-I
+    "\x1b[9;3u",  # Kitty keyboard protocol: Alt-Tab
+    "\x1b[9;7u",  # Kitty keyboard protocol: Alt-Ctrl-I
+):
+    ansi_escape_sequences.ANSI_SEQUENCES[_ai_regenerate_sequence] = (
+        _AI_REGENERATE_KEY
+    )
+ansi_escape_sequences.REVERSE_ANSI_SEQUENCES[_AI_REGENERATE_KEY] = "\x1b[9;3u"
 
 
 class _StreamingAIAutoSuggest(AutoSuggest):
@@ -224,6 +241,7 @@ def _wes_install_ai_autosuggester(bindings, **_):
 
     ptk_shell.AutoSuggestFromHistory = lambda: _ai_autosuggester
 
+    @bindings.add(_AI_REGENERATE_KEY, eager=True, save_before=lambda event: False)
     @bindings.add("escape", "c-i", eager=True, save_before=lambda event: False)
     def _regenerate_ai_autosuggestion(event):
         # Alt-Tab normally arrives at terminals as Escape followed by Tab
