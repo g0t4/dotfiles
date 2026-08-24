@@ -1,9 +1,24 @@
 import platform
 import iterm2
+import rich
 
 from common import get_current_session
 from logs import log
 from chat_stream import ask_openai_async_type_response
+
+
+async def fix_xonsh_get_commandline(connection, session, prompt):
+    subselection = iterm2.SubSelection(
+        iterm2.WindowedCoordRange(prompt.command_range),
+        iterm2.SelectionMode.CHARACTER,
+        connected=False,
+    )
+
+    command = await subselection.async_get_string(
+        connection,
+        session.session_id,
+    )
+    return command.replace("\x00", " ")
 
 
 async def ask_openai(connection):
@@ -29,9 +44,12 @@ async def ask_openai(connection):
         await session.async_send_text(clear_cmd)
 
     # *** get current command line text
+    commandLine = await session.async_get_variable("commandLine")
+    is_xonsh = commandLine == "xonsh"
+    print(f'{is_xonsh=}')
+
     prompt = await iterm2.prompt.async_get_last_prompt(connection, session.session_id)
-    import rich
-    log(rich.inspect(prompt))
+    print(rich.inspect(prompt))
     if prompt is None:
         # i.e. IIGC right after sourcing iterm2 shell integration, wouldn't yet have a last prompt.. very rare but don't want to crash this script
         failure = "No last prompt, are you missing iterm2 shell integration?"
@@ -39,7 +57,10 @@ async def ask_openai(connection):
         await session.async_send_text(failure)
         return
     current_command = prompt.command
-    log(f"current_command: {current_command}")  # 18us to print
+    if is_xonsh:
+        current_command = await fix_xonsh_get_commandline(connection, session, prompt)
+    log(f"{current_command=}")  # 18us to print
+
     if current_command is None:
         failure = "No current command, are you missing iterm2 shell integration?"
         log(failure)
