@@ -1,14 +1,19 @@
 """Streaming AI command-line autosuggestions for Xonsh/Prompt Toolkit."""
 
 import asyncio
+import itertools
 import json
+import logging
 import os
 import platform
+import time
+from pathlib import Path
 
 from prompt_toolkit.application import get_app
 from prompt_toolkit.auto_suggest import AutoSuggest, AutoSuggestFromHistory, Suggestion
 from prompt_toolkit.input import ansi_escape_sequences
 from prompt_toolkit.input.vt100_parser import _IS_PREFIX_OF_LONGER_MATCH_CACHE
+from prompt_toolkit.keys import Keys
 
 
 ${...}.setdefault("XONSH_AI_AUTOSUGGEST", True)
@@ -21,6 +26,45 @@ ${...}.setdefault(
     "ggml-org/gpt-oss-120b-GGUF",
 )
 ${...}.setdefault("XONSH_AI_AUTOSUGGEST_DEBUG", False)
+${...}.setdefault(
+    "XONSH_AI_AUTOSUGGEST_LOG",
+    str(Path.home() / ".local/state/xonsh/ai-autosuggest.log"),
+)
+
+
+def _make_ai_logger():
+    log_path = Path(str(${...}["XONSH_AI_AUTOSUGGEST_LOG"])).expanduser()
+    log_path.parent.mkdir(parents=True, exist_ok=True)
+
+    logger = logging.getLogger("xonsh.ai_autosuggest")
+    logger.setLevel(logging.INFO)
+    logger.propagate = False
+    if not any(
+        isinstance(handler, logging.FileHandler)
+        and Path(handler.baseFilename) == log_path
+        for handler in logger.handlers
+    ):
+        handler = logging.FileHandler(log_path)
+        handler.setFormatter(
+            logging.Formatter("%(asctime)s %(levelname)s %(message)s")
+        )
+        logger.addHandler(handler)
+    return logger
+
+
+_ai_log = _make_ai_logger()
+
+
+def _clear_ai_log_iterm_scrollback(logger):
+    clear_scrollback = "\x1b]1337;ClearScrollback\a"
+    for handler in logger.handlers:
+        if isinstance(handler, logging.FileHandler):
+            handler.stream.write(clear_scrollback)
+            handler.flush()
+
+
+_clear_ai_log_iterm_scrollback(_ai_log)
+_ai_request_ids = itertools.count(1)
 
 
 _AI_AUTOSUGGEST_SYSTEM_PROMPT = """\
@@ -32,10 +76,10 @@ Prefer a short, likely completion over inventing a long command.
 If no useful completion is clear, output nothing."""
 
 
-# Prompt Toolkit 3.0 has no enum value for modified Tab. Give enhanced-keyboard
-# terminal encodings a private single-character slot, as Xonsh does for
-# Shift-Enter. Modifiers 3 and 7 cover Alt-Tab and Alt-Ctrl-I; Tab is Ctrl-I.
-_AI_REGENERATE_KEY = "\x81"
+# Prompt Toolkit 3.0 has no enum value for modified Tab. Route enhanced-keyboard
+# terminal encodings through an otherwise-unused named key. Modifiers 3 and 7
+# cover Alt-Tab and Alt-Ctrl-I; Tab is Ctrl-I.
+_AI_REGENERATE_KEY = Keys.F24
 for _ai_regenerate_sequence in (
     "\x1b[27;3;9~",  # xterm modifyOtherKeys: Alt-Tab
     "\x1b[27;7;9~",  # xterm modifyOtherKeys: Alt-Ctrl-I
@@ -54,6 +98,7 @@ _IS_PREFIX_OF_LONGER_MATCH_CACHE.clear()
 class _StreamingAIAutoSuggest(AutoSuggest):
     def __init__(self):
         self._active_task = None
+        self._active_request_id = None
         self._bound_buffer = None
         self._history = AutoSuggestFromHistory()
 
@@ -69,6 +114,9 @@ class _StreamingAIAutoSuggest(AutoSuggest):
         def cancel_stale_request(_):
             task = self._active_task
             if task is not None and not task.done():
+                _ai_log.info(
+                    "request_cancel_for_text_change id=%s", self._active_request_id
+                )
                 task.cancel()
 
         buffer.on_text_changed += cancel_stale_request
@@ -113,6 +161,7 @@ class _StreamingAIAutoSuggest(AutoSuggest):
 
     async def regenerate(self, buffer):
         """Discard the current answer and request another for the same buffer."""
+        _ai_log.info("regenerate_start buffer=%r", buffer.text)
         active_task = self._active_task
         if active_task is not None and not active_task.done():
             active_task.cancel()
@@ -132,7 +181,7 @@ class _StreamingAIAutoSuggest(AutoSuggest):
             buffer.on_suggestion_set.fire()
             get_app().invalidate()
 
-    async def _stream_request(self, body, on_content):
+    async def _stream_request(self, request_id, body, on_content):
         process = await asyncio.create_subprocess_exec(
             "curl",
             "--silent",
@@ -152,6 +201,7 @@ class _StreamingAIAutoSuggest(AutoSuggest):
             stdout=asyncio.subprocess.PIPE,
             stderr=asyncio.subprocess.DEVNULL,
         )
+        _ai_log.info("curl_started id=%s pid=%s", request_id, process.pid)
 
         try:
             process.stdin.write(json.dumps(body).encode("utf-8"))
@@ -176,6 +226,7 @@ class _StreamingAIAutoSuggest(AutoSuggest):
 
             return await process.wait()
         except asyncio.CancelledError:
+            _ai_log.info("curl_cancelled id=%s", request_id)
             if process.returncode is None:
                 process.terminate()
                 try:
@@ -199,7 +250,19 @@ class _StreamingAIAutoSuggest(AutoSuggest):
 
         self._bind_cancellation(buffer)
         self._active_task = asyncio.current_task()
+        request_id = next(_ai_request_ids)
+        self._active_request_id = request_id
+        started_at = time.monotonic()
         accumulated = ""
+        recent_count = len(self._recent_commands(buffer))
+        _ai_log.info(
+            "request_start id=%s cwd=%r history_count=%s before=%r after=%r",
+            request_id,
+            os.getcwd(),
+            recent_count,
+            document.text_before_cursor,
+            document.text_after_cursor,
+        )
 
         def show_chunk(content):
             nonlocal accumulated
@@ -213,11 +276,22 @@ class _StreamingAIAutoSuggest(AutoSuggest):
 
         try:
             return_code = await self._stream_request(
-                self._request_body(buffer, document), show_chunk
+                request_id, self._request_body(buffer, document), show_chunk
             )
         except asyncio.CancelledError:
+            _ai_log.info(
+                "request_cancelled id=%s elapsed_ms=%d",
+                request_id,
+                (time.monotonic() - started_at) * 1000,
+            )
             return None
         except Exception as error:
+            _ai_log.exception(
+                "request_error id=%s elapsed_ms=%d error=%r",
+                request_id,
+                (time.monotonic() - started_at) * 1000,
+                error,
+            )
             if ${...}.get("XONSH_AI_AUTOSUGGEST_DEBUG"):
                 from xonsh.tools import print_above_prompt
 
@@ -226,8 +300,16 @@ class _StreamingAIAutoSuggest(AutoSuggest):
         finally:
             if self._active_task is asyncio.current_task():
                 self._active_task = None
+                self._active_request_id = None
 
         suffix = self._clean_suffix(accumulated)
+        _ai_log.info(
+            "request_complete id=%s status=%s elapsed_ms=%d suffix=%r",
+            request_id,
+            return_code,
+            (time.monotonic() - started_at) * 1000,
+            suffix,
+        )
         if return_code == 0 and suffix:
             return Suggestion(suffix)
         return self._history.get_suggestion(buffer, document)
@@ -245,12 +327,18 @@ def _wes_install_ai_autosuggester(bindings, **_):
 
     ptk_shell.AutoSuggestFromHistory = lambda: _ai_autosuggester
 
-    @bindings.add(_AI_REGENERATE_KEY, eager=True, save_before=lambda event: False)
+    @bindings.add(Keys.F24, eager=True, save_before=lambda event: False)
+    # In the live iTerm session, Xonsh's input decoder can expose Meta-Tab as
+    # the legacy high-bit byte 0x89. With UTF-8 surrogate escaping that arrives
+    # as U+DC89; bind both representations so neither falls through to the
+    # catch-all self-insert handler.
+    @bindings.add("\udc89", eager=True, save_before=lambda event: False)
+    @bindings.add("\x89", eager=True, save_before=lambda event: False)
     @bindings.add("escape", "c-i", eager=True, save_before=lambda event: False)
     def _regenerate_ai_autosuggestion(event):
-        # Alt-Tab normally arrives at terminals as Escape followed by Tab
-        # (Control-I). Keep the command buffer untouched and replace only the
-        # current streamed suggestion.
+        # Keep the command buffer untouched and replace only the current
+        # streamed suggestion.
+        _ai_log.info("alt_tab_handler buffer=%r", event.current_buffer.text)
         event.app.create_background_task(
             _ai_autosuggester.regenerate(event.current_buffer)
         )
