@@ -6,9 +6,19 @@ import subprocess
 import sys
 from pathlib import Path
 
+from prompt_toolkit.application import run_in_terminal
+from prompt_toolkit.filters import EmacsInsertMode, ViInsertMode
+from xonsh.parsers.completion_context import CompletionContextParser
+
 from wes_files_abbreviations import register_files_abbreviations
 from wes_fish_bridge import FishFunctionError, fish_function
 from wes_fish_z import FishZ, FishZError
+from wes_fzf_pickers import (
+    FzfMru,
+    apply_path_selection,
+    ordered_candidates,
+    parse_git_ref_token,
+)
 
 
 # Entering a directory in command position changes to it without an explicit cd.
@@ -228,8 +238,151 @@ aliases["supercd"] = _files_unsupported(
     "supercd", "its Fish implementation changes directory and edits an interactive fzf UI"
 )
 
+
+_files_fzf_mru = FzfMru()
+_files_completion_parser = CompletionContextParser()
+
+_FILES_PICKER_COMMANDS = {
+    "dirs": ["fd", "--type", "d", "."],
+    "files": ["fd", "--type", "f", "--type", "symlink", "."],
+    "unrestricted": [
+        "fd",
+        "--type",
+        "f",
+        "--type",
+        "symlink",
+        ".",
+        "-u",
+    ],
+    "both": [
+        "fd",
+        "--type",
+        "f",
+        "--type",
+        "d",
+        "--type",
+        "symlink",
+        ".",
+    ],
+}
+
+
+def _files_current_token(buffer):
+    completion = _files_completion_parser.parse(
+        buffer.text, buffer.cursor_position, ctx={}
+    )
+    if completion is None or completion.command is None:
+        return "", buffer.cursor_position, buffer.cursor_position
+    command = completion.command
+    token = command.prefix + command.suffix
+    start = buffer.cursor_position - len(command.prefix)
+    return token, start, buffer.cursor_position + len(command.suffix)
+
+
+def _files_picker_candidates(picker, git_ref, cwd):
+    if git_ref:
+        command = ["git", "ls-tree", "-r", "--name-only", git_ref]
+    else:
+        command = _FILES_PICKER_COMMANDS[picker]
+    completed = subprocess.run(command, capture_output=True, text=True, cwd=cwd)
+    if completed.returncode:
+        return None, completed.stderr
+    fresh = completed.stdout.splitlines()
+    mru = _files_fzf_mru.read(picker, cwd)
+    return ordered_candidates(mru, fresh), None
+
+
+def _files_run_path_picker(picker, token, cwd):
+    git_ref, query = parse_git_ref_token(token)
+    candidates, error = _files_picker_candidates(picker, git_ref, cwd)
+    if candidates is None:
+        print(error, end="", file=sys.stderr)
+        return None, git_ref
+    fzf = subprocess.run(
+        [
+            "fzf",
+            "--height",
+            "50%",
+            "--border",
+            "--header",
+            "MRU ↑  |  Fresh ↓",
+            "--query",
+            query,
+        ],
+        input="".join(f"{candidate}\n" for candidate in candidates),
+        stdout=subprocess.PIPE,
+        text=True,
+        cwd=cwd,
+    )
+    selected = fzf.stdout.rstrip("\n") if fzf.returncode == 0 else None
+    if selected:
+        _files_fzf_mru.record(picker, selected, cwd)
+    return selected, git_ref
+
+
+def _files_run_commit_picker(cwd):
+    log_format = "%C(white)%h%Creset %Cblue%cr%Creset%C(auto)%d%Creset %s"
+    log = subprocess.run(
+        ["git", "log", "--reverse", f"--format={log_format}"],
+        capture_output=True,
+        text=True,
+        cwd=cwd,
+    )
+    if log.returncode:
+        print(log.stderr, end="", file=sys.stderr)
+        return None
+    fzf = subprocess.run(
+        ["fzf", "--height", "50%", "--border", "--ansi", "--accept-nth=1"],
+        input=log.stdout,
+        stdout=subprocess.PIPE,
+        text=True,
+        cwd=cwd,
+    )
+    return fzf.stdout.strip() if fzf.returncode == 0 else None
+
+
+def _files_path_picker_handler(picker):
+    async def pick(event):
+        buffer = event.current_buffer
+        token, token_start, token_end = _files_current_token(buffer)
+        cwd = Path.cwd()
+        selected, git_ref = await run_in_terminal(
+            lambda: _files_run_path_picker(picker, token, cwd)
+        )
+        if selected:
+            buffer.text, buffer.cursor_position = apply_path_selection(
+                buffer.text,
+                token_start,
+                token_end,
+                selected,
+                git_ref=git_ref,
+            )
+        event.app.invalidate()
+
+    return pick
+
+
+async def _files_commit_picker_handler(event):
+    selected = await run_in_terminal(lambda: _files_run_commit_picker(Path.cwd()))
+    if selected:
+        event.current_buffer.insert_text(selected)
+    event.app.invalidate()
+
+
+@events.on_ptk_create
+def _files_fzf_picker_bindings(bindings, **_):
+    insert_modes = ViInsertMode() | EmacsInsertMode()
+    for key, picker in (
+        ("D", "dirs"),
+        ("F", "files"),
+        ("U", "unrestricted"),
+        ("B", "both"),
+    ):
+        bindings.add("escape", key, filter=insert_modes)(
+            _files_path_picker_handler(picker)
+        )
+    bindings.add("escape", "G", filter=insert_modes)(_files_commit_picker_handler)
+
 # TODO SKIPPED_MIGRATION: Fish's ls/cat/tree overrides. Delegating them through
 # `fish -ic` loses native TTY/streaming semantics, so stock Xonsh commands remain.
 # TODO SKIPPED_MIGRATION: `complete -c batman -w man`; no Xonsh completion wrapper yet.
-# TODO SKIPPED_MIGRATION: Alt-Shift-D/F/U/B/G FZF picker bindings. Their Fish
-# functions edit `commandline`; they require native Prompt Toolkit buffer ports.
