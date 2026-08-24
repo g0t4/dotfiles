@@ -20,7 +20,11 @@ from wes_xonsh_abbreviations import (  # noqa: E402
     command_path_from_args,
     context_from_completion,
 )
-from wes_fish_bridge import FishFunctionError, fish_function  # noqa: E402
+from wes_fish_bridge import (  # noqa: E402
+    FishFunctionError,
+    fish_function,
+    fish_function_command,
+)
 
 
 def context(text, *, command_path=(), quoted=False):
@@ -217,6 +221,34 @@ def test_fish_bridge_can_forward_pipeline_input(monkeypatch):
 
     monkeypatch.setattr(subprocess, "run", fake_run)
     assert fish_function("line_numbers", input_text="one\ntwo\n") == "1 one\n2 two"
+
+
+def test_fish_command_bridge_preserves_streams_and_exit_status(monkeypatch):
+    streams = [object(), object(), object()]
+
+    def fake_run(argv, **kwargs):
+        assert argv == [
+            "fish",
+            "-ic",
+            "$argv[1] $argv[2..]",
+            "--",
+            "interactive_helper",
+            "argument with spaces",
+        ]
+        assert kwargs == dict(zip(("stdin", "stdout", "stderr"), streams))
+        return subprocess.CompletedProcess(argv, 7)
+
+    monkeypatch.setattr(subprocess, "run", fake_run)
+    assert (
+        fish_function_command(
+            "interactive_helper",
+            "argument with spaces",
+            stdin=streams[0],
+            stdout=streams[1],
+            stderr=streams[2],
+        )
+        == 7
+    )
 
 
 def test_fish_bridge_reports_function_and_stderr(monkeypatch):
