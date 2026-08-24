@@ -8,6 +8,14 @@ from chat_stream import ask_openai_async_type_response
 
 
 async def fix_xonsh_get_commandline(connection, session, prompt):
+    print(rich.inspect(prompt))
+    # in xonsh,
+    #  with prompt.command I get back the first word reliably (think command position)
+    #  and then rarely I will get two words or more, but often not the full command line
+    #  BUT, I always get correct command ranges so I can scrape the text myself to ensure it is fixed
+    #  only caveat is I also then get \x00 between words (where I have spaces)
+    #  this is likely whey the command line is cut off in prompt.command
+
     subselection = iterm2.SubSelection(
         iterm2.WindowedCoordRange(prompt.command_range),
         iterm2.SelectionMode.CHARACTER,
@@ -26,6 +34,15 @@ async def ask_openai(connection):
     if session is None:
         return
 
+    # *** determine running shell
+    commandLine = await session.async_get_variable("commandLine")
+    is_xonsh = commandLine == "xonsh"
+    jobName = await session.async_get_variable("jobName")
+    which_shell = jobName
+    if is_xonsh:
+        which_shell = "xonsh"
+    print(f'{jobName=} {is_xonsh=} {which_shell=}')
+
     async def clear_line():
         ctrl_c = "\x03"
         ctrl_u = "\x15"
@@ -33,23 +50,16 @@ async def ask_openai(connection):
             "fish": ctrl_c,  # ctrl+c (my own binding)
             "lldb": ctrl_u,  # builtin
             "Python": ctrl_u,  # builtin
+            # "xonsh": TODO
         }
-        job_name = await session.async_get_variable("jobName")
-        log(f"jobName: {job_name}")
-        if job_name is None or job_name not in clear_command:
-            log(f"jobName {job_name} not recognized, defaulting to ctrl+c")
+        if which_shell is None or which_shell not in clear_command:
+            log(f"{which_shell=} not recognized, defaulting to ctrl+c")
             clear_cmd = ctrl_c
         else:
-            clear_cmd = clear_command[job_name]
+            clear_cmd = clear_command[which_shell]
         await session.async_send_text(clear_cmd)
 
-    # *** get current command line text
-    commandLine = await session.async_get_variable("commandLine")
-    is_xonsh = commandLine == "xonsh"
-    print(f'{is_xonsh=}')
-
     prompt = await iterm2.prompt.async_get_last_prompt(connection, session.session_id)
-    print(rich.inspect(prompt))
     if prompt is None:
         # i.e. IIGC right after sourcing iterm2 shell integration, wouldn't yet have a last prompt.. very rare but don't want to crash this script
         failure = "No last prompt, are you missing iterm2 shell integration?"
