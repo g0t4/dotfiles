@@ -20,6 +20,7 @@ async def copy_screen_to_clipboard(connection: iterm2.Connection, history: bool 
         "fish": ctrl_c,  # ctrl+c (my own binding)
         "lldb": ctrl_u,  # builtin
         "Python": ctrl_u,  # builtin
+        # TODO see og_ask for detecting xonsh with commandLine
     }
     # FYI might want fallback mechanisms... i.e. my fish shell I have ctrl+C for clear but that is not standard... might be useful to detect if my config is loaded (i.e. user vars for other ask-openai path and if so then invoke other one else invoke fallback ctrl+e,ctrl+u  or ctrl+u => ctrl+k to clear (or is there a better way), I'm thinking mostly for remote systems w/o shell integration
     jobName = await session.async_get_variable("jobName")  # see inspector for vars
