@@ -39,7 +39,9 @@ ${...}.setdefault("XONSH_AI_SEMANTIC_HISTORY_HOST", "build21.lan")
 ${...}.setdefault("XONSH_AI_SEMANTIC_HISTORY_PORT", 8015)
 ${...}.setdefault("XONSH_LOG", str(DEFAULT_LOG_PATH))
 configure_logging(
-    str(${...}["XONSH_LOG"]), clear_iterm_scrollback=True
+    str(${...}["XONSH_LOG"]),
+    clear_iterm_scrollback=True,
+    rich_output=${...}.get("XONSH_LOG_RICH", True),
 )
 _ai_log = get_logger("ai_autosuggest")
 _ai_request_ids = itertools.count(1)

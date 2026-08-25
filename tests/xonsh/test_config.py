@@ -19,6 +19,7 @@ def test_common_variables_do_not_require_an_inherited_shell_environment():
         "WES_ASK_CAPTURES",
         "XDG_STATE_HOME",
         "XONSH_LOG",
+        "XONSH_LOG_RICH",
         "VI_MODE",
     ):
         env.pop(name, None)
@@ -29,7 +30,7 @@ def test_common_variables_do_not_require_an_inherited_shell_environment():
         "print($IS_MACOS); print($IS_LINUX); print($IS_ARCH); "
         "print($WES_REPOS); print($WES_BOOTSTRAP); "
         "print($WES_DOTFILES); print($WES_ASK_CAPTURES); "
-        "print($XONSH_LOG); print($VI_MODE)"
+        "print($XONSH_LOG); print($XONSH_LOG_RICH); print($VI_MODE)"
     )
 
     completed = subprocess.run(
@@ -53,5 +54,6 @@ def test_common_variables_do_not_require_an_inherited_shell_environment():
         str(home / "repos/github/g0t4/dotfiles"),
         str(home / ".local/state/nvim/ask-openai"),
         str(home / ".local/state/xonsh/xonsh.log"),
+        "True",
         "True",
     ]

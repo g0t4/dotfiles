@@ -15,7 +15,9 @@ from wes_logging import DEFAULT_LOG_PATH, configure_logging, get_logger
 
 ${...}.setdefault("XONSH_LOG", str(DEFAULT_LOG_PATH))
 configure_logging(
-    str(${...}["XONSH_LOG"]), clear_iterm_scrollback=True
+    str(${...}["XONSH_LOG"]),
+    clear_iterm_scrollback=True,
+    rich_output=${...}.get("XONSH_LOG_RICH", True),
 )
 _auto_venv_log = get_logger("auto_venv.events")
 _wes_auto_venv = AutoVenv(${...})

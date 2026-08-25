@@ -34,7 +34,9 @@ register_files_abbreviations(XONSH_ABBREVIATIONS)
 ${...}.setdefault("XONSH_KEYPRESS_DEBUG", False)
 ${...}.setdefault("XONSH_LOG", str(DEFAULT_LOG_PATH))
 configure_logging(
-    str(${...}["XONSH_LOG"]), clear_iterm_scrollback=True
+    str(${...}["XONSH_LOG"]),
+    clear_iterm_scrollback=True,
+    rich_output=${...}.get("XONSH_LOG_RICH", True),
 )
 _files_picker_logger = get_logger("fzf_pickers")
 _files_log = get_logger("files")

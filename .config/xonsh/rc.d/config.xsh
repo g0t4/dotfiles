@@ -24,6 +24,7 @@ if not ${...}.get("XDG_STATE_HOME"):
 ${...}.setdefault(
     "XONSH_LOG", str(Path($XDG_STATE_HOME) / "xonsh/xonsh.log")
 )
+${...}.setdefault("XONSH_LOG_RICH", True)
 
 $WES_REPOS = str(_wes_home / "repos")
 $WES_BOOTSTRAP = str(Path($WES_REPOS) / "wes-config/wes-bootstrap")
