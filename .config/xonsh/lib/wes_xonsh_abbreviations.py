@@ -5,7 +5,11 @@ from __future__ import annotations
 import re
 from typing import Any, Iterable
 
-from wes_abbreviations import AbbreviationContext, AbbreviationRegistry
+from wes_abbreviations import (
+    AbbreviationContext,
+    AbbreviationRegistry,
+    AbbreviationResult,
+)
 
 
 _ASSIGNMENT = re.compile(r"[A-Za-z_][A-Za-z0-9_]*=.*", re.DOTALL)
@@ -66,7 +70,7 @@ class XonshAbbreviationExpander:
             document.text, document.cursor_position, completion.command
         )
 
-    def expand(self, buffer) -> bool:
+    def expand(self, buffer) -> AbbreviationResult | None:
         context = self.context(buffer)
         if context is None:
             return False
@@ -79,4 +83,11 @@ class XonshAbbreviationExpander:
         buffer.insert_text(result.text)
         if result.cursor is not None:
             buffer.cursor_position = context.token_start + result.cursor
-        return True
+        return result
+
+
+def expand_abbreviation_on_space(buffer, expander) -> None:
+    """Expand and insert the triggering space unless it would move the cursor."""
+    result = expander.expand(buffer)
+    if result is None or result.cursor is None:
+        buffer.insert_text(" ")

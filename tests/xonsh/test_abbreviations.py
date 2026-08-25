@@ -4,6 +4,7 @@ import sys
 from pathlib import Path
 
 import pytest
+from prompt_toolkit.buffer import Buffer
 
 
 XONSH_LIB = Path(__file__).parents[2] / ".config" / "xonsh" / "lib"
@@ -18,6 +19,7 @@ from wes_abbreviations import (  # noqa: E402
     abbr,
 )
 from wes_xonsh_abbreviations import (  # noqa: E402
+    expand_abbreviation_on_space,
     command_path_from_args,
     context_from_completion,
 )
@@ -109,6 +111,31 @@ def test_cursor_marker_is_removed_and_sets_cursor():
 
     result, _ = registry.expand(context("gcmsg", command_path=("gcmsg",)))
     assert result == AbbreviationResult('git commit -m ""', cursor=15)
+
+
+@pytest.mark.parametrize(
+    ("replacement", "cursor", "expected_text", "expected_cursor"),
+    (
+        ('git commit -m ""', 15, 'git commit -m ""', 15),
+        ("git status", None, "git status ", 11),
+    ),
+)
+def test_space_trigger_is_consumed_only_for_internal_cursor_expansions(
+    replacement, cursor, expected_text, expected_cursor
+):
+    buffer = Buffer()
+    buffer.text = "abbr"
+
+    class StubExpander:
+        def expand(self, target_buffer):
+            target_buffer.text = replacement
+            target_buffer.cursor_position = len(replacement) if cursor is None else cursor
+            return AbbreviationResult(replacement, cursor=cursor)
+
+    expand_abbreviation_on_space(buffer, StubExpander())
+
+    assert buffer.text == expected_text
+    assert buffer.cursor_position == expected_cursor
 
 
 def test_exact_beats_regex_and_scoped_beats_global():

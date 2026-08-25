@@ -15,7 +15,10 @@ from xonsh.shells.ptk_shell.key_bindings import (
 )
 
 from wes_abbreviations import AbbreviationRegistry
-from wes_xonsh_abbreviations import XonshAbbreviationExpander
+from wes_xonsh_abbreviations import (
+    XonshAbbreviationExpander,
+    expand_abbreviation_on_space,
+)
 
 
 XONSH_ABBREVIATIONS = AbbreviationRegistry()
@@ -33,8 +36,9 @@ def _wes_abbreviation_keybindings(bindings, **_):
     def _expand_abbreviation_on_space(event):
         # Prompt Toolkit snapshots once before this handler, so replacement and
         # delimiter insertion are undone together.
-        _expand_xonsh_abbreviation(event.current_buffer)
-        event.current_buffer.insert_text(" ")
+        expand_abbreviation_on_space(
+            event.current_buffer, _wes_abbreviation_expander
+        )
 
     _insert_mode = ViInsertMode() | EmacsInsertMode()
     _submit_filter = (
