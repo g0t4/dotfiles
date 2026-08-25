@@ -59,3 +59,28 @@ def test_iterm_esc_plus_alt_tab_decodes_as_one_regeneration_key():
     )
 
     assert completed.returncode == 0, completed.stderr
+
+
+def test_semantic_history_is_included_as_a_separate_prompt_signal():
+    ai = ROOT / ".config/xonsh/rc.d/ai-autosuggest.xsh"
+    command = (
+        f"source {ai}; "
+        "from prompt_toolkit.buffer import Buffer; "
+        "buffer = Buffer(); buffer.text = 'git st'; buffer.cursor_position = 6; "
+        "body = _ai_autosuggester._request_body("
+        "buffer, buffer.document, ['git status', 'git diff --staged']); "
+        "content = body['messages'][1]['content']; "
+        "assert 'semantic_history_commands_most_relevant_first=' in content; "
+        "assert 'git diff --staged' in content"
+    )
+    env = os.environ.copy()
+    env["XONSH_AI_AUTOSUGGEST_LOG"] = os.devnull
+
+    completed = subprocess.run(
+        ["xonsh", "--no-rc", "-c", command],
+        capture_output=True,
+        text=True,
+        env=env,
+    )
+
+    assert completed.returncode == 0, completed.stderr

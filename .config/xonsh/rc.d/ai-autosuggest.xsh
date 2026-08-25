@@ -6,6 +6,7 @@ import json
 import logging
 import os
 import platform
+import sys
 import time
 from pathlib import Path
 
@@ -14,6 +15,13 @@ from prompt_toolkit.auto_suggest import AutoSuggest, AutoSuggestFromHistory, Sug
 from prompt_toolkit.input import ansi_escape_sequences
 from prompt_toolkit.input.vt100_parser import _IS_PREFIX_OF_LONGER_MATCH_CACHE
 from prompt_toolkit.keys import Keys
+
+
+_ai_xonsh_lib = Path($XONSH_CONFIG_DIR) / "lib"
+if str(_ai_xonsh_lib) not in sys.path:
+    sys.path.insert(0, str(_ai_xonsh_lib))
+
+from wes_semantic_history import InferenceClient, SemanticHistoryRetriever
 
 
 ${...}.setdefault("XONSH_AI_AUTOSUGGEST", True)
@@ -26,6 +34,9 @@ ${...}.setdefault(
     "ggml-org/gpt-oss-120b-GGUF",
 )
 ${...}.setdefault("XONSH_AI_AUTOSUGGEST_DEBUG", False)
+${...}.setdefault("XONSH_AI_SEMANTIC_HISTORY", True)
+${...}.setdefault("XONSH_AI_SEMANTIC_HISTORY_HOST", "build21.lan")
+${...}.setdefault("XONSH_AI_SEMANTIC_HISTORY_PORT", 8015)
 ${...}.setdefault(
     "XONSH_AI_AUTOSUGGEST_LOG",
     str(Path.home() / ".local/state/xonsh/ai-autosuggest.log"),
@@ -105,6 +116,19 @@ class _StreamingAIAutoSuggest(AutoSuggest):
         self._choice_buffer_text = None
         self._previous_completions = []
         self._submitting_buffer = None
+        semantic_client = InferenceClient(
+            str(${...}["XONSH_AI_SEMANTIC_HISTORY_HOST"]),
+            int(${...}["XONSH_AI_SEMANTIC_HISTORY_PORT"]),
+        )
+        self._semantic_history = SemanticHistoryRetriever(
+            semantic_client,
+            on_timing=lambda stage, count, elapsed_ms: _ai_log.info(
+                "semantic_history stage=%s count=%s elapsed_ms=%.1f",
+                stage,
+                count,
+                elapsed_ms,
+            ),
+        )
 
     def get_suggestion(self, buffer, document):
         # Prompt Toolkit calls the async implementation below.
@@ -176,7 +200,7 @@ class _StreamingAIAutoSuggest(AutoSuggest):
             pass
         return []
 
-    def _request_body(self, buffer, document):
+    def _request_body(self, buffer, document, semantic_commands=()):
         before = document.text_before_cursor
         after = document.text_after_cursor
         context = (
@@ -185,6 +209,8 @@ class _StreamingAIAutoSuggest(AutoSuggest):
             f"cwd={os.getcwd()}\n"
             "recent_commands_oldest_to_newest="
             f"{json.dumps(self._recent_commands(buffer), ensure_ascii=False)}\n"
+            "semantic_history_commands_most_relevant_first="
+            f"{json.dumps(list(semantic_commands), ensure_ascii=False)}\n"
             f"command_before_cursor={before}\n"
             f"command_after_cursor={after}"
         )
@@ -317,12 +343,24 @@ class _StreamingAIAutoSuggest(AutoSuggest):
         started_at = time.monotonic()
         accumulated = ""
         recent_count = len(self._recent_commands(buffer))
+        semantic_commands = []
+        if ${...}.get("XONSH_AI_SEMANTIC_HISTORY", True):
+            try:
+                history = list(buffer.history.get_strings())
+                semantic_commands = await self._semantic_history.retrieve(
+                    document.text, history
+                )
+            except asyncio.CancelledError:
+                raise
+            except Exception as error:
+                _ai_log.info("semantic_history unavailable error=%r", error)
         _ai_log.info(
-            "request_start id=%s cwd=%r history_count=%s previous_count=%s "
+            "request_start id=%s cwd=%r history_count=%s semantic_count=%s previous_count=%s "
             "before=%r after=%r",
             request_id,
             os.getcwd(),
             recent_count,
+            len(semantic_commands),
             len(self._previous_completions),
             document.text_before_cursor,
             document.text_after_cursor,
@@ -340,7 +378,9 @@ class _StreamingAIAutoSuggest(AutoSuggest):
 
         try:
             return_code = await self._stream_request(
-                request_id, self._request_body(buffer, document), show_chunk
+                request_id,
+                self._request_body(buffer, document, semantic_commands),
+                show_chunk,
             )
         except asyncio.CancelledError:
             _ai_log.info(
