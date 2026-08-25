@@ -19,6 +19,7 @@ from wes_abbreviations import (  # noqa: E402
     abbr,
 )
 from wes_xonsh_abbreviations import (  # noqa: E402
+    XonshAbbreviationExpander,
     expand_abbreviation_on_space,
     command_path_from_args,
     context_from_completion,
@@ -136,6 +137,20 @@ def test_space_trigger_is_consumed_only_for_internal_cursor_expansions(
 
     assert buffer.text == expected_text
     assert buffer.cursor_position == expected_cursor
+
+
+def test_space_after_non_abbreviation_is_inserted_normally():
+    buffer = Buffer()
+    buffer.text = "z"
+    buffer.cursor_position = 1
+    expander = XonshAbbreviationExpander.__new__(XonshAbbreviationExpander)
+    expander.registry = AbbreviationRegistry()
+    expander.context = lambda _buffer: context("z", command_path=("z",))
+
+    expand_abbreviation_on_space(buffer, expander)
+
+    assert buffer.text == "z "
+    assert buffer.cursor_position == 2
 
 
 def test_exact_beats_regex_and_scoped_beats_global():

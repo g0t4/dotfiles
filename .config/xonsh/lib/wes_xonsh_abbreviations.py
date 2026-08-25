@@ -73,10 +73,10 @@ class XonshAbbreviationExpander:
     def expand(self, buffer) -> AbbreviationResult | None:
         context = self.context(buffer)
         if context is None:
-            return False
+            return None
         expansion = self.registry.expand(context)
         if expansion is None:
-            return False
+            return None
         result, _abbreviation = expansion
         buffer.cursor_position = context.token_end
         buffer.delete_before_cursor(count=context.token_end - context.token_start)
