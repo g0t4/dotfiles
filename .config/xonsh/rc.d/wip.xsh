@@ -20,3 +20,11 @@
 
 # TODO clear line (not new prompt) like ctrl+c I setup in fish (C+U,C+E like)
 # TODO review fish custom bindings
+
+
+###### DO NOT DO these from FISH setup:
+
+# - partial path completion like: ~/r/g/g/d/<TAB> => ~/repos/github/g0t4/dotfiles
+#   **use fzf pickers** INSTEAD
+#   fzf picker is WAY faster 99% of the time than component by component abbrevaited spelling out and then tab.
+#   plus `z` helps too and we already have that integrated with `z` from fish!
