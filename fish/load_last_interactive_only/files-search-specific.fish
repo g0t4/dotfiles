@@ -427,8 +427,6 @@ abbr -- sort_created "--sort=created"
 # -T  --type-not                  (Do not search files matching TYPE.)
 # -t  --type                        (Only search files matching TYPE.)
 
-# ***! rg END
-
 function rgimages
     # usage:
     #   rgimages /System/Library/CoreServices/ Picture
