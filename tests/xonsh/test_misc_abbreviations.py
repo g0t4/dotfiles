@@ -16,6 +16,10 @@ from generate_misc_abbreviations import (  # noqa: E402
 )
 from wes_abbreviations import AbbreviationContext, AbbreviationRegistry  # noqa: E402
 from wes_fish_bridge import UnsupportedFishFunctionError  # noqa: E402
+from wes_filetype_abbreviations import (  # noqa: E402
+    FILETYPE_GLOBS,
+    build_abbrs_for_filetype,
+)
 from wes_misc_functions import (  # noqa: E402
     fish_command_alias,
     unsupported_fish_alias,
@@ -101,6 +105,44 @@ def test_static_regex_command_scoped_and_cursor_examples():
     assert callable(matches[0].replacement)
 
 
+def test_build_abbrs_for_filetype_registers_dedicated_and_scoped_forms():
+    abbreviations = AbbreviationRegistry()
+
+    build_abbrs_for_filetype(abbreviations, "x", "xsh", sed_command="gsed")
+
+    result, _ = abbreviations.expand(context("sedx"))
+    assert result.text == "gsed -Ei 's///g' (rg -g '*.xsh' --files-with-matches '___')"
+    assert result.cursor == len("gsed -Ei 's/")
+
+    result, _ = abbreviations.expand(
+        context("*x", command_path=("rg",), command_position=False)
+    )
+    assert result.text == "-g '*.xsh'"
+    assert (
+        abbreviations.expand(
+            context("*x", command_path=("fd",), command_position=False)
+        )
+        is None
+    )
+
+    result, _ = abbreviations.expand(
+        context("*x", command_path=("gsed",), command_position=False)
+    )
+    assert result.text == "(rg -g '*.xsh' --files-with-matches '___')"
+
+    result, _ = abbreviations.expand(context("rgx"))
+    assert result.text == "rg -g '*.xsh'"
+
+
+def test_build_abbrs_for_filetype_preserves_brace_globs():
+    abbreviations = AbbreviationRegistry()
+
+    build_abbrs_for_filetype(abbreviations, "j", "{json,js}", sed_command="sed")
+
+    result, _ = abbreviations.expand(context("rgj"))
+    assert result.text == "rg -g '*.{json,js}'"
+
+
 def test_safe_function_alias_delegates_to_interactive_fish(monkeypatch):
     calls = []
 
@@ -155,4 +197,6 @@ def test_all_split_rc_files_load_together():
     )
 
     assert completed.returncode == 0, completed.stderr
-    assert completed.stdout.strip() == str(833 - len(SKIPPED_ABBREVIATION_LINES))
+    generated_count = 833 - len(SKIPPED_ABBREVIATION_LINES)
+    dynamic_filetype_count = len(FILETYPE_GLOBS) * 4
+    assert completed.stdout.strip() == str(generated_count + dynamic_filetype_count)

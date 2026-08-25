@@ -10,7 +10,6 @@ UNSUPPORTED_FISH_FUNCTIONS = {
     "_define_devtools_abbrs": "defines abbreviations in the current shell",
     "_expand_watch_last": "reads the current shell history",
     "_k3s_autocomplete": "reads the current command buffer",
-    "build_abbrs_for_filetype": "defines abbreviations in the current shell",
     "cd2": "changes the current shell directory",
     "custom-kill-command-word": "rewrites the current command buffer",
     "toggle-git_commit_command": "rewrites the current command buffer",
@@ -24,6 +23,8 @@ SKIPPED_FISH_FUNCTIONS = {
     "on_change_show_verbose_prompt",
     # z.xsh already provides a state-aware bridge that changes Xonsh's cwd.
     "z",
+    # processes.xsh installs the native current-shell implementation.
+    "build_abbrs_for_filetype",
 }
 
 

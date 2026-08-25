@@ -23,14 +23,14 @@ FISH_FUNCTIONS = (
     'pstreeX',  # Fish line 907
     'pstree',  # Fish line 917
     'build_abbrs_for_filetype',  # Fish line 946
-    '_cat_range_abbr',  # Fish line 988
-    '_flush_dns',  # Fish line 1005
-    'kill_hung_grc',  # Fish line 1010
-    'z',  # Fish line 1017
-    '_abbr_ze',  # Fish line 1057
-    'custom-kill-command-word',  # Fish line 1109
-    'toggle-grc',  # Fish line 1124
-    'toggle-git_commit_command',  # Fish line 1148
+    '_cat_range_abbr',  # Fish line 992
+    '_flush_dns',  # Fish line 1009
+    'kill_hung_grc',  # Fish line 1014
+    'z',  # Fish line 1021
+    '_abbr_ze',  # Fish line 1061
+    'custom-kill-command-word',  # Fish line 1113
+    'toggle-grc',  # Fish line 1128
+    'toggle-git_commit_command',  # Fish line 1152
 )
 
 
@@ -68,40 +68,40 @@ def register_processes_abbreviations(registry: AbbreviationRegistry):
     abbr(registry, 'sedd', "$XONSH_SED_COMMAND --debug -i 's/%//g'", cursor_marker="%")  # Fish line 934
     abbr(registry, 'sedi', "$XONSH_SED_COMMAND -i 's/%//g'", cursor_marker="%")  # Fish line 935
     abbr(registry, 'rg', '(rg --files-with-matches %)', position="anywhere", commands=(SED_COMMAND,), cursor_marker="%")  # Fish line 943
-    abbr(registry, '*nd', "--glob='!datasets'", position="anywhere", commands=('rg',))  # Fish line 979
-    abbr(registry, 'seda', "$XONSH_SED_COMMAND -Ei 's/%//g' (rg --files-with-matches ___) ", cursor_marker="%")  # Fish line 982
-    abbr(registry, '*a', '(rg --files-with-matches ___) ', position="anywhere", commands=(SED_COMMAND,))  # Fish line 983
-    abbr(registry, re.compile('(lines|catr|catrange|sedr|sedrange)\\d+[,_-]\\d+'), fish_abbreviation('_cat_range_abbr'))  # Fish line 987
-    abbr(registry, 'lua_logs', "rg -g '*.lua' '^\\s*log'")  # Fish line 998
-    abbr(registry, 'lua_logs_commented_out', "rg -g '*.lua' '^\\s*--\\s*log'")  # Fish line 999
-    abbr(registry, 'lua_prints', "rg -g '*.lua' '^\\s*print\\\\('")  # Fish line 1000
-    abbr(registry, 'lua_prints_commented_out', "rg -g '*.lua' '^\\s*--\\s*print\\\\('")  # Fish line 1001
-    abbr(registry, 'z_clean', 'z --clean')  # Fish line 1016
-    abbr(registry, 'ze', fish_abbreviation('_abbr_ze'), position="anywhere")  # Fish line 1056
-    abbr(registry, 'tf', 'terraform')  # Fish line 1078
-    abbr(registry, 'tfv', 'terraform validate')  # Fish line 1080
-    abbr(registry, 'tfi', 'terraform init')  # Fish line 1081
-    abbr(registry, 'tfimport', 'terraform import')  # Fish line 1082
-    abbr(registry, 'tff', 'terraform fmt')  # Fish line 1083
-    abbr(registry, 'tfa', 'terraform apply')  # Fish line 1084
-    abbr(registry, 'tfp', 'terraform plan')  # Fish line 1085
-    abbr(registry, 'tfo', 'terraform output')  # Fish line 1086
-    abbr(registry, 'tfshow', 'terraform show')  # Fish line 1088
-    abbr(registry, 'tfs', 'terraform state')  # Fish line 1090
-    abbr(registry, 'tfsl', 'terraform state list')  # Fish line 1091
-    abbr(registry, 'tfss', 'terraform state show')  # Fish line 1092
-    abbr(registry, 'tfsrm', 'terraform state rm')  # Fish line 1093
-    abbr(registry, 'tfr', 'terraform refresh')  # Fish line 1094
-    abbr(registry, 'tfd', 'terraform destroy')  # Fish line 1096
-    abbr(registry, 'tft', 'terraform taint')  # Fish line 1097
-    abbr(registry, 'tfu', 'terraform untaint')  # Fish line 1098
-    abbr(registry, 'lsofi', 'sudo lsof -i :8080%', cursor_marker="%")  # Fish line 2776
-    abbr(registry, 'lsof_process_for_port', 'sudo lsof -i :8080%', cursor_marker="%")  # Fish line 2777
-    abbr(registry, 'lsofp', 'sudo lsof -p $(pgrep -if "%" | head -1)', cursor_marker="%")  # Fish line 2781
-    abbr(registry, 'lsof_ports_for_process_pgrep', 'sudo lsof -p $(pgrep -if "%" | head -1)', cursor_marker="%")  # Fish line 2782
-    abbr(registry, 'lsofpi', 'sudo lsof -p $(pgrep -if "%" | head -1) -a -i', cursor_marker="%")  # Fish line 2783
-    abbr(registry, 'lsof_ports_for_pid', 'sudo lsof -p % -a -i', cursor_marker="%")  # Fish line 2784
-    abbr(registry, 'lsofp_watch', '$WATCH_COMMAND "sudo lsof -p \\$(pgrep -if \\"%\\" | head -1)"', cursor_marker="%")  # Fish line 2789
-    abbr(registry, 'ss_listening_ports', 'sudo ss -tunl')  # Fish line 2807
-    abbr(registry, 'ss_notlistening_ports', 'sudo ss -tun')  # Fish line 2808
-    abbr(registry, 'ss_all_ports', 'sudo ss -tuna')  # Fish line 2809
+    abbr(registry, '*nd', "--glob='!datasets'", position="anywhere", commands=('rg',))  # Fish line 983
+    abbr(registry, 'seda', "$XONSH_SED_COMMAND -Ei 's/%//g' (rg --files-with-matches ___) ", cursor_marker="%")  # Fish line 986
+    abbr(registry, '*a', '(rg --files-with-matches ___) ', position="anywhere", commands=(SED_COMMAND,))  # Fish line 987
+    abbr(registry, re.compile('(lines|catr|catrange|sedr|sedrange)\\d+[,_-]\\d+'), fish_abbreviation('_cat_range_abbr'))  # Fish line 991
+    abbr(registry, 'lua_logs', "rg -g '*.lua' '^\\s*log'")  # Fish line 1002
+    abbr(registry, 'lua_logs_commented_out', "rg -g '*.lua' '^\\s*--\\s*log'")  # Fish line 1003
+    abbr(registry, 'lua_prints', "rg -g '*.lua' '^\\s*print\\\\('")  # Fish line 1004
+    abbr(registry, 'lua_prints_commented_out', "rg -g '*.lua' '^\\s*--\\s*print\\\\('")  # Fish line 1005
+    abbr(registry, 'z_clean', 'z --clean')  # Fish line 1020
+    abbr(registry, 'ze', fish_abbreviation('_abbr_ze'), position="anywhere")  # Fish line 1060
+    abbr(registry, 'tf', 'terraform')  # Fish line 1082
+    abbr(registry, 'tfv', 'terraform validate')  # Fish line 1084
+    abbr(registry, 'tfi', 'terraform init')  # Fish line 1085
+    abbr(registry, 'tfimport', 'terraform import')  # Fish line 1086
+    abbr(registry, 'tff', 'terraform fmt')  # Fish line 1087
+    abbr(registry, 'tfa', 'terraform apply')  # Fish line 1088
+    abbr(registry, 'tfp', 'terraform plan')  # Fish line 1089
+    abbr(registry, 'tfo', 'terraform output')  # Fish line 1090
+    abbr(registry, 'tfshow', 'terraform show')  # Fish line 1092
+    abbr(registry, 'tfs', 'terraform state')  # Fish line 1094
+    abbr(registry, 'tfsl', 'terraform state list')  # Fish line 1095
+    abbr(registry, 'tfss', 'terraform state show')  # Fish line 1096
+    abbr(registry, 'tfsrm', 'terraform state rm')  # Fish line 1097
+    abbr(registry, 'tfr', 'terraform refresh')  # Fish line 1098
+    abbr(registry, 'tfd', 'terraform destroy')  # Fish line 1100
+    abbr(registry, 'tft', 'terraform taint')  # Fish line 1101
+    abbr(registry, 'tfu', 'terraform untaint')  # Fish line 1102
+    abbr(registry, 'lsofi', 'sudo lsof -i :8080%', cursor_marker="%")  # Fish line 2780
+    abbr(registry, 'lsof_process_for_port', 'sudo lsof -i :8080%', cursor_marker="%")  # Fish line 2781
+    abbr(registry, 'lsofp', 'sudo lsof -p $(pgrep -if "%" | head -1)', cursor_marker="%")  # Fish line 2785
+    abbr(registry, 'lsof_ports_for_process_pgrep', 'sudo lsof -p $(pgrep -if "%" | head -1)', cursor_marker="%")  # Fish line 2786
+    abbr(registry, 'lsofpi', 'sudo lsof -p $(pgrep -if "%" | head -1) -a -i', cursor_marker="%")  # Fish line 2787
+    abbr(registry, 'lsof_ports_for_pid', 'sudo lsof -p % -a -i', cursor_marker="%")  # Fish line 2788
+    abbr(registry, 'lsofp_watch', '$WATCH_COMMAND "sudo lsof -p \\$(pgrep -if \\"%\\" | head -1)"', cursor_marker="%")  # Fish line 2793
+    abbr(registry, 'ss_listening_ports', 'sudo ss -tunl')  # Fish line 2811
+    abbr(registry, 'ss_notlistening_ports', 'sudo ss -tun')  # Fish line 2812
+    abbr(registry, 'ss_all_ports', 'sudo ss -tuna')  # Fish line 2813

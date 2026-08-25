@@ -30,11 +30,11 @@ class Module:
 MODULES = (
     Module("system_services", ((47, 217),)),
     Module("kubernetes", ((218, 769),)),
-    Module("processes", ((770, 1175), (2771, 2811))),
-    Module("cloud_ai", ((1356, 1671), (2812, 3131), (3308, 3382), (3501, 3511))),
-    Module("media", ((1672, 2029), (2336, 2459), (2626, 2651), (3132, 3160), (3437, 3500))),
-    Module("packages_hardware", ((1176, 1355), (2030, 2335), (2460, 2770))),
-    Module("misc", ((3161, 3307), (3383, 3436), (3512, 3622))),
+    Module("processes", ((770, 1179), (2775, 2815))),
+    Module("cloud_ai", ((1360, 1675), (2816, 3135), (3312, 3386), (3505, 3515))),
+    Module("media", ((1676, 2033), (2340, 2463), (2630, 2655), (3136, 3164), (3441, 3504))),
+    Module("packages_hardware", ((1180, 1359), (2034, 2339), (2464, 2774))),
+    Module("misc", ((3165, 3311), (3387, 3440), (3516, 3626))),
 )
 
 SKIPPED_ABBREVIATION_LINES = {
@@ -46,23 +46,23 @@ SKIPPED_ABBREVIATION_LINES = {
     875,
     876,
     # Exact duplicate in the Fish source.
-    1527,
+    1531,
     # Templates executed by build_abbrs_for_filetype, not literal triggers.
     958,
     962,
     965,
     968,
     # Templates executed once per ~/.local/share/devtools/*.log file.
-    2875,
-    2878,
-    2881,
+    2879,
+    2882,
+    2885,
     # Folded into the platform-aware Linux lsusb declaration.
-    2746,
+    2750,
 }
 
 UNSUPPORTED_ABBREVIATION_LINES = {
-    3306: "uses Fish loop syntax to print the current shell PATH",
-    3438: "changes the current shell PATH",
+    3310: "uses Fish loop syntax to print the current shell PATH",
+    3442: "changes the current shell PATH",
 }
 
 REPLACEMENTS = {
@@ -77,8 +77,8 @@ REPLACEMENTS = {
 
 NAME_OVERRIDES = {
     # The Fish source accidentally declares man7 three times; preserve intent.
-    2206: "man8",
-    2207: "man9",
+    2210: "man8",
+    2211: "man9",
 }
 
 PLATFORM_REPLACEMENTS = {
@@ -86,7 +86,7 @@ PLATFORM_REPLACEMENTS = {
     856: ("pkill -9 -ilf", "pkill -9 -if"),
     857: ("pkill -U $USER -ilf", "pkill -U $USER -if"),
     858: ("pkill -9 -U $USER -ilf", "pkill -9 -U $USER -if"),
-    2734: ("system_profiler SPUSBDataType", "lsusb -tv"),
+    2738: ("system_profiler SPUSBDataType", "lsusb -tv"),
 }
 
 
