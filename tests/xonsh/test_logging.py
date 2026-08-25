@@ -19,12 +19,15 @@ def test_all_components_write_to_one_named_log(tmp_path):
 
     get_logger("ai_autosuggest").info("request id=%s", 7)
     get_logger("fzf_pickers").info("picker=%s", "files")
+    get_logger("test").info("long=%s", "x" * 5_000)
 
     contents = path.read_text()
     plain = ANSI.sub("", contents)
     assert contents.count("\x1b]1337;ClearScrollback\x07") == 1
     assert "\x1b[" in contents
     assert not re.search(r"\d{4}-\d{2}-\d{2}", plain)
+    assert all(line == line.rstrip(" ") for line in plain.splitlines())
+    assert len(plain.splitlines()) == 3
     assert "xonsh.ai_autosuggest request id=7" in plain
     assert "xonsh.fzf_pickers picker=files" in plain
 

@@ -12,6 +12,7 @@ from rich.logging import RichHandler
 
 DEFAULT_LOG_PATH = Path.home() / ".local/state/xonsh/xonsh.log"
 ITERM_CLEAR_SCROLLBACK = "\x1b]1337;ClearScrollback\x07"
+LOG_RENDER_WIDTH = 100_000
 
 _root_logger = logging.getLogger("xonsh")
 _root_logger.setLevel(logging.INFO)
@@ -21,6 +22,15 @@ _stream: TextIO | None = None
 _log_path: Path | None = None
 _rich_output: bool | None = None
 _cleared_paths: set[Path] = set()
+
+
+class _CompactRichHandler(RichHandler):
+    """Render Rich log tables only as wide as their contents."""
+
+    def render(self, **kwargs):
+        renderable = super().render(**kwargs)
+        renderable.expand = False
+        return renderable
 
 
 def configure_logging(
@@ -53,9 +63,9 @@ def configure_logging(
                 force_terminal=True,
                 color_system="truecolor",
                 soft_wrap=True,
-                width=4096,
+                width=LOG_RENDER_WIDTH,
             )
-            _handler = RichHandler(
+            _handler = _CompactRichHandler(
                 console=console,
                 show_time=False,
                 show_level=True,
