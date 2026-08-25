@@ -1,5 +1,12 @@
 """Custom interactive keybindings for Xonsh's Prompt Toolkit shell."""
 
+# Terminal input contract:
+# In iTerm2 Profiles > Keys, configure each Option key as Esc+, not Meta.
+# Raw 8-bit Meta turns Alt-Shift-F into byte 0xC6, which Python's incremental
+# UTF-8 decoder buffers as the start of a character until another key arrives.
+# Esc+ produces the portable Escape then F sequence expected by Prompt Toolkit.
+# This setting was verified with these Xonsh bindings, Fish, and Neovim.
+
 
 @events.on_ptk_create
 def _wes_undo_keybinding(bindings, **_):

@@ -479,6 +479,8 @@ async def _files_commit_picker_handler(event):
 
 @events.on_ptk_create
 def _files_fzf_picker_bindings(bindings, prompter=None, **_):
+    # Alt bindings rely on the iTerm2 Esc+ input contract documented in
+    # keybindings.xsh. Do not use raw 8-bit Meta bytes for these chords.
     _files_install_keypress_tee(prompter)
     insert_modes = ViInsertMode() | EmacsInsertMode()
     for key, picker in (
