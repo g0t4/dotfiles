@@ -412,6 +412,7 @@ return {
 
             -- TODO just write my own expander later... if I really want more than *_ one char after *
             local exts = {
+                -- FYI sync list with fish/xsh sed equiv: search for build_abbrs_for_filetype
                 f = "fish",
                 j = "{js,json}",
                 -- js = "{js,json}", -- fucking retarded rules can't have multiple key(word) chars after a non-keyword char (*)... WHO FUCKING MAKES THIS STUPID FUCKING SHIT UP
@@ -424,7 +425,8 @@ return {
                 -- ts = "ts",
                 r = "rs",
                 -- rs = "rs",
-                y = "{yaml,yml}"
+                y = "{yaml,yml}",
+                x = "xsh",
             }
             local log = require("devtools.logs.logger"):universal()
             vim.api.nvim_create_autocmd("FileType", {

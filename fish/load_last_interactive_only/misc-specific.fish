@@ -975,7 +975,11 @@ build_abbrs_for_filetype l lua
 build_abbrs_for_filetype m md
 build_abbrs_for_filetype p py
 build_abbrs_for_filetype t ts
+build_abbrs_for_filetype r rs
 build_abbrs_for_filetype y "{yaml,yml}"
+build_abbrs_for_filetype x xsh
+
+
 abbr --command rg -- "*nd" "--glob='!datasets'" # easily exlude datasets JSON files from shared traces
 
 # all -  use rg w/o a filter on language (no -g *.lua for example)
