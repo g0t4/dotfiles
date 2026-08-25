@@ -1,10 +1,13 @@
 import hashlib
+import os
+import shutil
 import subprocess
 import sys
 from pathlib import Path
 
 
 ROOT = Path(__file__).parents[2]
+XONSH = shutil.which("xonsh")
 sys.path.insert(0, str(ROOT / ".config/xonsh/lib"))
 
 from wes_fzf_pickers import (  # noqa: E402
@@ -86,12 +89,78 @@ def test_files_rc_registers_picker_bindings_and_parses_current_token():
         "bindings = KeyBindings(); "
         "before = len(bindings.bindings); "
         "events.on_ptk_create.fire(bindings=bindings); "
+        "from prompt_toolkit.input import ansi_escape_sequences; "
+        "from prompt_toolkit.keys import Keys; "
+        "assert ansi_escape_sequences.ANSI_SEQUENCES['\\x1b[100;4u'] "
+        "== (Keys.Escape, 'D'); "
+        "assert ansi_escape_sequences.ANSI_SEQUENCES['\\x1b[102;4u'] "
+        "== (Keys.Escape, 'F'); "
+        "assert ansi_escape_sequences.ANSI_SEQUENCES['\\x1b[27;4;102~'] "
+        "== (Keys.Escape, 'F'); "
         "b = Buffer(); b.text = 'cat partial tail'; b.cursor_position = 11; "
         "assert _files_current_token(b) == ('partial', 4, 11); "
+        "picker_keys = [binding.keys for binding in bindings.bindings[before:]]; "
+        "assert ('escape', 'D') in picker_keys; "
+        "assert ('escape', 'F') in picker_keys; "
+        "assert ('escape', 'G') in picker_keys; "
         "assert len(bindings.bindings) - before >= 5"
     )
     completed = subprocess.run(
-        ["xonsh", "--no-rc", "-c", command], capture_output=True, text=True
+        [XONSH, "--no-rc", "-c", command], capture_output=True, text=True
+    )
+
+    assert completed.returncode == 0, completed.stderr
+
+
+def test_picker_subprocess_uses_xonsh_path_not_stale_process_path():
+    env = os.environ.copy()
+    env["PATH"] = "/usr/bin:/bin:/usr/sbin:/sbin"
+    env["XONSH_CONFIG_DIR"] = str(ROOT / ".config/xonsh")
+    abbreviations = ROOT / ".config/xonsh/rc.d/abbreviations.xsh"
+    paths = ROOT / ".config/xonsh/rc.d/paths.xsh"
+    files_rc = ROOT / ".config/xonsh/rc.d/files-specific.xsh"
+    command = (
+        f"source {abbreviations}; source {paths}; source {files_rc}; "
+        "candidates, error = _files_picker_candidates('files', None, Path.cwd()); "
+        "assert error is None; assert candidates is not None; print(len(candidates))"
+    )
+
+    completed = subprocess.run(
+        [XONSH, "--no-rc", "-c", command],
+        capture_output=True,
+        text=True,
+        env=env,
+        cwd=ROOT,
+    )
+
+    assert completed.returncode == 0, completed.stderr
+    assert int(completed.stdout) > 0
+
+
+def test_keypress_debug_tee_forwards_keys_unchanged():
+    env = os.environ.copy()
+    env["XONSH_FZF_PICKER_LOG"] = os.devnull
+    abbreviations = ROOT / ".config/xonsh/rc.d/abbreviations.xsh"
+    files_rc = ROOT / ".config/xonsh/rc.d/files-specific.xsh"
+    command = (
+        f"source {abbreviations}; source {files_rc}; "
+        "from types import SimpleNamespace; "
+        "from prompt_toolkit.key_binding.key_processor import KeyPress; "
+        "calls = []; "
+        "kp = SimpleNamespace(feed_multiple=lambda keys, first=False: "
+        "calls.append((list(keys), first))); "
+        "prompter = SimpleNamespace(app=SimpleNamespace(key_processor=kp)); "
+        "_files_install_keypress_tee(prompter); "
+        "$XONSH_KEYPRESS_DEBUG = True; "
+        "key = KeyPress('x', 'x'); kp.feed_multiple([key], first=True); "
+        "assert calls == [([key], True)]"
+    )
+
+    completed = subprocess.run(
+        [XONSH, "--no-rc", "-c", command],
+        capture_output=True,
+        text=True,
+        env=env,
     )
 
     assert completed.returncode == 0, completed.stderr
