@@ -117,7 +117,7 @@ def test_picker_subprocess_uses_xonsh_path_not_stale_process_path():
     env["PATH"] = "/usr/bin:/bin:/usr/sbin:/sbin"
     env["XONSH_CONFIG_DIR"] = str(ROOT / ".config/xonsh")
     abbreviations = ROOT / ".config/xonsh/rc.d/abbreviations.xsh"
-    paths = ROOT / ".config/xonsh/rc.d/paths.xsh"
+    paths = ROOT / ".config/xonsh/rc.d/00-paths.xsh"
     files_rc = ROOT / ".config/xonsh/rc.d/files-specific.xsh"
     command = (
         f"source {abbreviations}; source {paths}; source {files_rc}; "

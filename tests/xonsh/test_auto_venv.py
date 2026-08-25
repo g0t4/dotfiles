@@ -8,6 +8,17 @@ sys.path.insert(0, str(XONSH_LIB))
 from wes_auto_venv import AutoVenv, find_venv  # noqa: E402
 
 
+RC_DIR = Path(__file__).parents[2] / ".config/xonsh/rc.d"
+
+
+def test_paths_load_before_auto_venv():
+    rc_files = sorted(path.name for path in RC_DIR.glob("*.xsh"))
+
+    assert rc_files.index("00-paths.xsh") < rc_files.index(
+        "auto-venv-on-cd-specific.xsh"
+    )
+
+
 def make_venv(directory):
     (directory / "bin").mkdir(parents=True)
     return directory

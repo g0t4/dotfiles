@@ -3,7 +3,7 @@
 import os
 import subprocess
 
-# ! this must run early, including before auto-venv-on-cd b/c otherwise deactivate venv removes these PATH changes (reverts to PATH before venv was activated)
+# ! 00- makes this run before auto-venv captures the PATH it later restores.
 
 def _path_move_prepend(*paths):
     """Put existing directories at the front of PATH, without duplicates."""
