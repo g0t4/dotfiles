@@ -57,12 +57,10 @@ def configure_logging(
             )
             _handler = RichHandler(
                 console=console,
-                show_time=True,
-                omit_repeated_times=False,
+                show_time=False,
                 show_level=True,
                 show_path=False,
                 rich_tracebacks=True,
-                log_time_format="%Y-%m-%d %H:%M:%S.%f",
             )
             _handler.setFormatter(logging.Formatter("%(name)s %(message)s"))
         else:

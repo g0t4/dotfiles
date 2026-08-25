@@ -24,6 +24,7 @@ def test_all_components_write_to_one_named_log(tmp_path):
     plain = ANSI.sub("", contents)
     assert contents.count("\x1b]1337;ClearScrollback\x07") == 1
     assert "\x1b[" in contents
+    assert not re.search(r"\d{4}-\d{2}-\d{2}", plain)
     assert "xonsh.ai_autosuggest request id=7" in plain
     assert "xonsh.fzf_pickers picker=files" in plain
 
