@@ -13,8 +13,10 @@ sys.path.insert(0, str(ROOT / ".config/xonsh/lib"))
 from wes_fzf_pickers import (  # noqa: E402
     FzfMru,
     apply_path_selection,
+    apply_variable_selection,
     ordered_candidates,
     parse_git_ref_token,
+    xonsh_env_candidates,
 )
 
 
@@ -79,6 +81,24 @@ def test_cancel_leaves_buffer_and_query_untouched():
     assert apply_path_selection("cat partial", 4, 11, None) == ("cat partial", 11)
 
 
+def test_xonsh_environment_candidates_include_dollar_and_skip_complex_names():
+    assert xonsh_env_candidates(["PATH", "HOME", "has-dash", "9INVALID"]) == [
+        "$HOME",
+        "$PATH",
+    ]
+
+
+def test_variable_selection_replaces_query_without_quoting_expansion():
+    assert apply_variable_selection("echo $HO tail", 5, 8, "$HOME") == (
+        "echo $HOME tail",
+        10,
+    )
+
+
+def test_cancelled_variable_selection_leaves_buffer_untouched():
+    assert apply_variable_selection("echo $HO", 5, 8, None) == ("echo $HO", 8)
+
+
 def test_files_rc_registers_picker_bindings_and_parses_current_token():
     abbreviations = ROOT / ".config/xonsh/rc.d/abbreviations.xsh"
     files_rc = ROOT / ".config/xonsh/rc.d/files-specific.xsh"
@@ -97,13 +117,18 @@ def test_files_rc_registers_picker_bindings_and_parses_current_token():
         "== (Keys.Escape, 'F'); "
         "assert ansi_escape_sequences.ANSI_SEQUENCES['\\x1b[27;4;102~'] "
         "== (Keys.Escape, 'F'); "
+        "assert ansi_escape_sequences.ANSI_SEQUENCES['\\x1b[118;4u'] "
+        "== (Keys.Escape, 'V'); "
         "b = Buffer(); b.text = 'cat partial tail'; b.cursor_position = 11; "
         "assert _files_current_token(b) == ('partial', 4, 11); "
+        "b.text = 'echo $HO tail'; b.cursor_position = 8; "
+        "assert _files_current_token(b) == ('$HO', 5, 8); "
         "picker_keys = [binding.keys for binding in bindings.bindings[before:]]; "
         "assert ('escape', 'D') in picker_keys; "
         "assert ('escape', 'F') in picker_keys; "
         "assert ('escape', 'G') in picker_keys; "
-        "assert len(bindings.bindings) - before >= 5"
+        "assert ('escape', 'V') in picker_keys; "
+        "assert len(bindings.bindings) - before >= 6"
     )
     completed = subprocess.run(
         [XONSH, "--no-rc", "-c", command], capture_output=True, text=True

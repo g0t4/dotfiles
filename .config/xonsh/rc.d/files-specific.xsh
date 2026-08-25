@@ -20,8 +20,10 @@ from wes_logging import DEFAULT_LOG_PATH, configure_logging, get_logger
 from wes_fzf_pickers import (
     FzfMru,
     apply_path_selection,
+    apply_variable_selection,
     ordered_candidates,
     parse_git_ref_token,
+    xonsh_env_candidates,
 )
 
 
@@ -323,7 +325,7 @@ _files_completion_parser = CompletionContextParser()
 # Enhanced keyboard protocols encode Alt-Shift-letter as one CSI sequence
 # instead of the legacy Escape + uppercase-letter pair Prompt Toolkit expects.
 # Translate both common encodings back into that portable key pair.
-for _files_picker_key in "DFUBG":
+for _files_picker_key in "DFUBGV":
     for _files_picker_codepoint in (
         ord(_files_picker_key),
         ord(_files_picker_key.lower()),
@@ -435,6 +437,27 @@ def _files_run_commit_picker(cwd):
     return fzf.stdout.strip() if fzf.returncode == 0 else None
 
 
+def _files_run_variable_picker(query, cwd):
+    candidates = xonsh_env_candidates(${...}.keys())
+    fzf = _files_run(
+        [
+            "fzf",
+            "--height",
+            "50%",
+            "--border",
+            "--header",
+            "Xonsh environment variables",
+            "--query",
+            query.lstrip("$"),
+        ],
+        input="".join(f"{candidate}\n" for candidate in candidates),
+        stdout=subprocess.PIPE,
+        text=True,
+        cwd=cwd,
+    )
+    return fzf.stdout.rstrip("\n") if fzf.returncode == 0 else None
+
+
 def _files_path_picker_handler(picker):
     async def pick(event):
         buffer = event.current_buffer
@@ -483,6 +506,32 @@ async def _files_commit_picker_handler(event):
     event.app.invalidate()
 
 
+async def _files_variable_picker_handler(event):
+    buffer = event.current_buffer
+    token, token_start, token_end = _files_current_token(buffer)
+    cwd = Path.cwd()
+    log = _files_picker_log()
+    log.info(
+        "picker_start picker=variables keys=%r cwd=%r buffer=%r token=%r",
+        _files_picker_key_event(event),
+        str(cwd),
+        buffer.text,
+        token,
+    )
+    selected = await run_in_terminal(
+        lambda: _files_run_variable_picker(token, cwd)
+    )
+    log.info("picker_result picker=variables selected=%r", selected)
+    if selected:
+        buffer.text, buffer.cursor_position = apply_variable_selection(
+            buffer.text,
+            token_start,
+            token_end,
+            selected,
+        )
+    event.app.invalidate()
+
+
 @events.on_ptk_create
 def _files_fzf_picker_bindings(bindings, prompter=None, **_):
     # Alt bindings rely on the iTerm2 Esc+ input contract documented in
@@ -499,6 +548,7 @@ def _files_fzf_picker_bindings(bindings, prompter=None, **_):
         bindings.add("escape", key, filter=insert_modes)(handler)
 
     bindings.add("escape", "G", filter=insert_modes)(_files_commit_picker_handler)
+    bindings.add("escape", "V", filter=insert_modes)(_files_variable_picker_handler)
 
 # TODO SKIPPED_MIGRATION: Fish's ls/cat/tree overrides. Delegating them through
 # `fish -ic` loses native TTY/streaming semantics, so stock Xonsh commands remain.

@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import hashlib
 import os
+import re
 import shlex
 import tempfile
 from pathlib import Path
@@ -83,3 +84,23 @@ def apply_path_selection(
     escaped = shlex.quote(value)
     updated = buffer[:token_start] + escaped + buffer[token_end:]
     return updated, token_start + len(escaped)
+
+
+_SIMPLE_XONSH_ENV_NAME = re.compile(r"[A-Za-z_][A-Za-z0-9_]*\Z")
+
+
+def xonsh_env_candidates(names: Iterable[str]) -> list[str]:
+    """Return sorted environment references valid in Xonsh's $NAME syntax."""
+    return [f"${name}" for name in sorted(names) if _SIMPLE_XONSH_ENV_NAME.fullmatch(name)]
+
+
+def apply_variable_selection(
+    buffer: str,
+    token_start: int,
+    token_end: int,
+    selected: str | None,
+) -> tuple[str, int]:
+    if not selected:
+        return buffer, token_end
+    updated = buffer[:token_start] + selected + buffer[token_end:]
+    return updated, token_start + len(selected)
