@@ -38,6 +38,7 @@ dependencies = [
     "typer>=0.15.3",
     "yapf>=0.43.0",
     "argcomplete>=3.7.0",
+    "pyright>=1.1.411",
 ]
 
 [project.optional-dependencies]
