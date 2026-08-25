@@ -69,10 +69,13 @@ async def prepare_new_profile(session: iterm2.Session, force_local_shell: bool) 
         else:
             # Wrap the original SSH command in a fish invocation, that way if the SSH connection dies (i.e. shutdown remote) the window/tab/pane won't close b/c fish will run on after SSH dies
             # this does mean I'll have to double exit to close these windows too, so we'll see if I like this or not
-            fish_path = "/opt/homebrew/bin/fish"
+            # default_shell = "/opt/homebrew/bin/fish"
+            default_shell = os.getenv("SHELL", None)
+            if default_shell == None:
+                raise Exception("SHELL environment variable not set, cannot open default shell")
             escaped_cmd = commandLine.replace('"', '\\"')
             # Use -C so the fish shell stays alive after running the SSH command.
-            new_profile.set_command(f"{fish_path} -C \"{escaped_cmd}\"")
+            new_profile.set_command(f"{default_shell} -C \"{escaped_cmd}\"")
             new_profile.set_use_custom_command("Yes")
             print(f"was_sshed:escaped_cmd {escaped_cmd=}")
             # PRN also replicate bash over ssh on build21 for strace demos there?
@@ -82,8 +85,18 @@ async def prepare_new_profile(session: iterm2.Session, force_local_shell: bool) 
         was_bash = jobName == "bash"
         if force_local_shell:
             # force fish when splitting from another local shell
-            new_profile.set_command("/opt/homebrew/bin/fish --login")
+            #
+            # * old, hardcoded fish path
+            # new_profile.set_command("/opt/homebrew/bin/fish --login")
+            # new_profile.set_use_custom_command("Yes")
+            #
+            # * use $SHELL instead
+            default_shell = os.getenv("SHELL", None)
+            if default_shell == None:
+                raise Exception("SHELL environment variable not set, cannot open default shell")
+            new_profile.set_command(f"{default_shell} --login")
             new_profile.set_use_custom_command("Yes")
+
             print("was local => force_local_shell")
         elif was_bash:
             HOME = os.getenv("HOME")
