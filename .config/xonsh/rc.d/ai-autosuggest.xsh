@@ -81,6 +81,7 @@ If no useful completion is clear, output nothing."""
 # cover Alt-Tab and Alt-Ctrl-I; Tab is Ctrl-I.
 _AI_REGENERATE_KEY = Keys.F24
 for _ai_regenerate_sequence in (
+    "\x1b\t",  # iTerm2 Option as Esc+: Alt-Tab
     "\x1b[27;3;9~",  # xterm modifyOtherKeys: Alt-Tab
     "\x1b[27;7;9~",  # xterm modifyOtherKeys: Alt-Ctrl-I
     "\x1b[9;3u",  # Kitty keyboard protocol: Alt-Tab
@@ -395,12 +396,6 @@ def _wes_install_ai_autosuggester(bindings, **_):
     ptk_shell.AutoSuggestFromHistory = lambda: _ai_autosuggester
 
     @bindings.add(Keys.F24, eager=True, save_before=lambda event: False)
-    # In the live iTerm session, Xonsh's input decoder can expose Meta-Tab as
-    # the legacy high-bit byte 0x89. With UTF-8 surrogate escaping that arrives
-    # as U+DC89; bind both representations so neither falls through to the
-    # catch-all self-insert handler.
-    @bindings.add("\udc89", eager=True, save_before=lambda event: False)
-    @bindings.add("\x89", eager=True, save_before=lambda event: False)
     @bindings.add("escape", "c-i", eager=True, save_before=lambda event: False)
     def _regenerate_ai_autosuggestion(event):
         # Keep the command buffer untouched and replace only the current

@@ -36,3 +36,26 @@ def test_submit_cancels_active_prediction_and_blocks_replacement_request():
     )
 
     assert completed.returncode == 0, completed.stderr
+
+
+def test_iterm_esc_plus_alt_tab_decodes_as_one_regeneration_key():
+    ai = ROOT / ".config/xonsh/rc.d/ai-autosuggest.xsh"
+    command = (
+        f"source {ai}; "
+        "from prompt_toolkit.input.vt100_parser import Vt100Parser; "
+        "from prompt_toolkit.keys import Keys; "
+        "pressed = []; parser = Vt100Parser(pressed.append); "
+        "parser.feed('\\x1b\\t'); "
+        "assert [key.key for key in pressed] == [Keys.F24]"
+    )
+    env = os.environ.copy()
+    env["XONSH_AI_AUTOSUGGEST_LOG"] = os.devnull
+
+    completed = subprocess.run(
+        ["xonsh", "--no-rc", "-c", command],
+        capture_output=True,
+        text=True,
+        env=env,
+    )
+
+    assert completed.returncode == 0, completed.stderr
