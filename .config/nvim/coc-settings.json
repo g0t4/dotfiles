@@ -225,13 +225,16 @@
     // FYI another persons' config: https://raw.githubusercontent.com/oppara/dotfiles/611ea809e380d5b4e3e374568a85e52e744a429e/config/nvim/coc-settings.json
     "languageserver": {
 
-        // "xonsh": {
-        //       "command": "xonsh-language-server",
-        //       "args": ["--stdio"],
-        //       "filetypes": ["xonsh"],
-        //       "rootPatterns": [".git"],
-        //       "settings": {}
-        // },
+        "xonsh": {
+              "command": "xonsh-lsp", // ["uvx", "-n", "xonsh-lsp" ] ??
+              "args": ["--stdio"],
+              "filetypes": ["xonsh"], // python too?
+              "rootPatterns": [".xonshrc", "xonshrc", ".git"],
+              "initializationOptions": {
+                "pythonBackend": "pyright"
+              },
+              "settings": {}
+        },
 
         "ansible": {
             "command": "ansible-language-server",
