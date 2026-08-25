@@ -6,7 +6,7 @@ import logging
 from pathlib import Path
 from typing import TextIO
 
-from rich.console import Console
+from rich.console import Console, Group
 from rich.logging import RichHandler
 
 
@@ -25,12 +25,33 @@ _cleared_paths: set[Path] = set()
 
 
 class _CompactRichHandler(RichHandler):
-    """Render Rich log tables only as wide as their contents."""
+    """Render compact severity markers without Rich's padded level column."""
+
+    LEVEL_STYLES = {
+        logging.DEBUG: ("·", "dim"),
+        logging.WARNING: ("!", "yellow"),
+        logging.ERROR: ("×", "red"),
+        logging.CRITICAL: ("×", "bold red"),
+    }
 
     def render(self, **kwargs):
-        renderable = super().render(**kwargs)
-        renderable.expand = False
-        return renderable
+        message = kwargs["message_renderable"]
+        traceback = kwargs["traceback"]
+        return message if traceback is None else Group(message, traceback)
+
+    def render_message(self, record, message):
+        message_text = super().render_message(record, message)
+        marker, style = self.LEVEL_STYLES.get(record.levelno, ("", ""))
+        if message_text.plain.startswith("xonsh."):
+            message_text.plain = message_text.plain.removeprefix("xonsh.")
+        prefix = f"{marker} " if marker else ""
+        message_text.plain = f"{prefix}{message_text.plain}"
+        if record.levelno == logging.DEBUG:
+            message_text.stylize(style)
+        elif style:
+            logger_end = message_text.plain.find(" ", len(prefix))
+            message_text.stylize(style, 0, logger_end)
+        return message_text
 
 
 def configure_logging(
@@ -62,13 +83,14 @@ def configure_logging(
                 file=_stream,
                 force_terminal=True,
                 color_system="truecolor",
+                no_color=False,
                 soft_wrap=True,
                 width=LOG_RENDER_WIDTH,
             )
             _handler = _CompactRichHandler(
                 console=console,
                 show_time=False,
-                show_level=True,
+                show_level=False,
                 show_path=False,
                 rich_tracebacks=True,
             )

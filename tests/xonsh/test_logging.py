@@ -1,3 +1,4 @@
+import logging
 import re
 import sys
 from pathlib import Path
@@ -28,8 +29,32 @@ def test_all_components_write_to_one_named_log(tmp_path):
     assert not re.search(r"\d{4}-\d{2}-\d{2}", plain)
     assert all(line == line.rstrip(" ") for line in plain.splitlines())
     assert len(plain.splitlines()) == 3
-    assert "xonsh.ai_autosuggest request id=7" in plain
-    assert "xonsh.fzf_pickers picker=files" in plain
+    assert "ai_autosuggest request id=7" in plain
+    assert "fzf_pickers picker=files" in plain
+
+
+def test_rich_levels_use_compact_markers_and_styles(tmp_path):
+    path = tmp_path / "xonsh.log"
+    configure_logging(path)
+
+    logger = get_logger("test")
+    logger.info("ordinary")
+    logger.warning("careful")
+    logger.error("broken")
+    logger.setLevel(logging.DEBUG)
+    logger.debug("details")
+    logger.setLevel(logging.NOTSET)
+
+    contents = path.read_text()
+    plain = ANSI.sub("", contents)
+    assert "test ordinary" in plain
+    assert "INFO" not in plain
+    assert "! test careful" in plain
+    assert "× test broken" in plain
+    assert "· test details" in plain
+    assert "\x1b[33m" in contents
+    assert "\x1b[31m" in contents
+    assert "\x1b[2m" in contents
 
 
 def test_reconfiguring_same_log_does_not_duplicate_handlers_or_clear(tmp_path):
