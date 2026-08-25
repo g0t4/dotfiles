@@ -56,6 +56,9 @@ def test_static_git_abbreviation_and_cursor_marker():
     assert result.text == 'git commit -m ""'
     assert result.cursor == 15
 
+    result, _ = git_abbreviations.expand(context("grstr", command_path=("grstr",)))
+    assert result.text == "git restore --staged $(_repo_root)"
+
 
 def test_git_diff_scoped_option_does_not_leak_to_git_show():
     git_abbreviations = registry()

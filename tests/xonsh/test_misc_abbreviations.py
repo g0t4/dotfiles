@@ -105,6 +105,22 @@ def test_static_regex_command_scoped_and_cursor_examples():
     assert callable(matches[0].replacement)
 
 
+def test_repo_root_command_substitutions_are_not_quoted_for_xonsh():
+    abbreviations = registry()
+
+    for trigger, command in (
+        ("cdr", "cd"),
+        ("orr", "open"),
+        ("cr", "code"),
+        ("cir", "code-insiders"),
+        ("zr", "zed"),
+        ("zpr", "zed-preview"),
+        ("csr", "cursor"),
+    ):
+        result, _ = abbreviations.expand(context(trigger))
+        assert result.text == f"{command} $(_repo_root)"
+
+
 def test_build_abbrs_for_filetype_registers_dedicated_and_scoped_forms():
     abbreviations = AbbreviationRegistry()
 

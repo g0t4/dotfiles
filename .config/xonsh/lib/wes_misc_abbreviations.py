@@ -62,21 +62,21 @@ def register_misc_abbreviations(registry: AbbreviationRegistry):
     abbr(registry, 'fishc', "fish -c '%'", cursor_marker="%")  # Fish line 3309
     abbr(registry, 'pPATH', unsupported_abbreviation('pPATH', 'uses Fish loop syntax to print the current shell PATH'))  # Fish line 3310
     abbr(registry, 'date_s', 'date +%s')  # Fish line 3387
-    abbr(registry, 'cdr', 'cd "$(_repo_root)"')  # Fish line 3391
-    abbr(registry, 'orr', 'open "$(_repo_root)"')  # Fish line 3394
+    abbr(registry, 'cdr', 'cd $(_repo_root)')  # Fish line 3391
+    abbr(registry, 'orr', 'open $(_repo_root)')  # Fish line 3394
     abbr(registry, 'oh', 'open .')  # Fish line 3395
     abbr(registry, 'ch', 'code .')  # Fish line 3398
     abbr(registry, 'cih', 'code-insiders .')  # Fish line 3399
-    abbr(registry, 'cr', 'code "$(_repo_root)"')  # Fish line 3400
-    abbr(registry, 'cir', 'code-insiders "$(_repo_root)"')  # Fish line 3401
+    abbr(registry, 'cr', 'code $(_repo_root)')  # Fish line 3400
+    abbr(registry, 'cir', 'code-insiders $(_repo_root)')  # Fish line 3401
     abbr(registry, 'cie', 'code --inspect-extensions=9229 .')  # Fish line 3403
     abbr(registry, 'cieb', 'code --inspect-brk-extensions=9229 .')  # Fish line 3404
     abbr(registry, 'zh', 'zed .')  # Fish line 3407
-    abbr(registry, 'zr', 'zed "$(_repo_root)"')  # Fish line 3408
+    abbr(registry, 'zr', 'zed $(_repo_root)')  # Fish line 3408
     abbr(registry, 'zph', 'zed-preview .')  # Fish line 3409
-    abbr(registry, 'zpr', 'zed-preview "$(_repo_root)"')  # Fish line 3410
+    abbr(registry, 'zpr', 'zed-preview $(_repo_root)')  # Fish line 3410
     abbr(registry, 'cs', 'cursor .')  # Fish line 3413
-    abbr(registry, 'csr', 'cursor "$(_repo_root)"')  # Fish line 3414
+    abbr(registry, 'csr', 'cursor $(_repo_root)')  # Fish line 3414
     abbr(registry, 'zx', 'z -x')  # Fish line 3417
     abbr(registry, 'tarx', 'tar -xf')  # Fish line 3420
     abbr(registry, 'tarx_stdout', 'tar -O -xf')  # Fish line 3421

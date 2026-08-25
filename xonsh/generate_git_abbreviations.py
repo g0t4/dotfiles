@@ -12,6 +12,7 @@ SOURCE = ROOT / "fish/load_last_interactive_only/git.fish"
 TARGET = ROOT / ".config/xonsh/lib/wes_git_abbreviations.py"
 
 VALUE_SUBSTITUTIONS = {
+    '"$(_repo_root)"': "$(_repo_root)",
     "$GIT_FULLY_AUTO_REBASE": "GIT_SEQUENCE_EDITOR=true",
     "$_unpushed_commits": "HEAD@{push}~1..HEAD",
     "$_unpushed_commits_without_last_pushed": "HEAD@{push}..HEAD",

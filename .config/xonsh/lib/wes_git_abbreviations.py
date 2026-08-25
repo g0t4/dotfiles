@@ -95,7 +95,7 @@ def register_git_abbreviations(registry: AbbreviationRegistry):
     abbr(registry, 'grmc', 'git rm --cached')  # Fish line 178
     abbr(registry, 'grst', 'git restore --staged')  # Fish line 181
     abbr(registry, 'grstp', 'git restore --staged --patch')  # Fish line 182
-    abbr(registry, 'grstr', 'git restore --staged "$(_repo_root)"')  # Fish line 183
+    abbr(registry, 'grstr', 'git restore --staged $(_repo_root)')  # Fish line 183
     abbr(registry, 'grp', 'git restore --patch')  # Fish line 186
     abbr(registry, 'grss', 'git restore --source')  # Fish line 187
     abbr(registry, 'grevp_upstream', 'git rev-parse @{upstream}')  # Fish line 194

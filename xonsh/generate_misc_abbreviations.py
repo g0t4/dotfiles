@@ -66,6 +66,7 @@ UNSUPPORTED_ABBREVIATION_LINES = {
 }
 
 REPLACEMENTS = {
+    '"$(_repo_root)"': "$(_repo_root)",
     "$sed_cmd": "$XONSH_SED_COMMAND",
     "$man_cmd": "$XONSH_MAN_COMMAND",
     "$_ls_http": "http paxy.lan:8016",
