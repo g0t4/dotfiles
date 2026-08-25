@@ -83,6 +83,9 @@ def test_rich_output_can_be_disabled_globally(tmp_path):
 def test_auto_venv_logs_path_mutations_to_shared_log(tmp_path):
     path = tmp_path / "xonsh.log"
     configure_logging(path)
+    logger = get_logger("auto_venv")
+    previous_level = logger.level
+    logger.setLevel(logging.INFO)
     project = tmp_path / "project"
     venv_bin = project / ".venv/bin"
     venv_bin.mkdir(parents=True)
@@ -90,12 +93,15 @@ def test_auto_venv_logs_path_mutations_to_shared_log(tmp_path):
     elsewhere.mkdir()
     env = {"PATH": ["/custom/bin", "/usr/bin"]}
 
-    auto_venv = AutoVenv(env)
-    auto_venv.update(project)
-    auto_venv.update(elsewhere)
+    try:
+        auto_venv = AutoVenv(env)
+        auto_venv.update(project)
+        auto_venv.update(elsewhere)
+    finally:
+        logger.setLevel(previous_level)
 
     contents = ANSI.sub("", path.read_text())
-    assert "xonsh.auto_venv update" in contents
+    assert "auto_venv update" in contents
     assert f"activated venv='{project / '.venv'}'" in contents
     assert "deactivated" in contents
     assert "path_removed=" in contents
