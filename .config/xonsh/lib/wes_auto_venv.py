@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import logging
 import os
 from collections.abc import MutableMapping
 from pathlib import Path
@@ -12,6 +13,9 @@ from wes_logging import get_logger
 
 VENV_DIRECTORY_NAMES = (".venv.local", ".venv")
 log = get_logger("auto_venv")
+log.setLevel(logging.ERROR) # only failures (effectively shuts up the logger)
+# log.setLevel(logging.NOTSET) # inherit
+# log.setLevel(logging.INFO)
 
 
 def _path_changes(before, after):
