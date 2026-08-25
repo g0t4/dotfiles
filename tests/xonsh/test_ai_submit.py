@@ -27,7 +27,7 @@ def test_submit_cancels_active_prediction_and_blocks_replacement_request():
         "assert result is None"
     )
     env = os.environ.copy()
-    env["XONSH_AI_AUTOSUGGEST_LOG"] = os.devnull
+    env["XONSH_LOG"] = os.devnull
     completed = subprocess.run(
         ["xonsh", "--no-rc", "-c", command],
         capture_output=True,
@@ -49,7 +49,7 @@ def test_iterm_esc_plus_alt_tab_decodes_as_one_regeneration_key():
         "assert [key.key for key in pressed] == [Keys.F24]"
     )
     env = os.environ.copy()
-    env["XONSH_AI_AUTOSUGGEST_LOG"] = os.devnull
+    env["XONSH_LOG"] = os.devnull
 
     completed = subprocess.run(
         ["xonsh", "--no-rc", "-c", command],
@@ -74,7 +74,7 @@ def test_semantic_history_is_included_as_a_separate_prompt_signal():
         "assert 'git diff --staged' in content"
     )
     env = os.environ.copy()
-    env["XONSH_AI_AUTOSUGGEST_LOG"] = os.devnull
+    env["XONSH_LOG"] = os.devnull
 
     completed = subprocess.run(
         ["xonsh", "--no-rc", "-c", command],

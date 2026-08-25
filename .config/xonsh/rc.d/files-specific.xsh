@@ -1,7 +1,6 @@
 """Filesystem abbreviations and Fish-backed file helpers."""
 
 import os
-import logging
 import shutil
 import subprocess
 import sys
@@ -17,6 +16,7 @@ from xonsh.parsers.completion_context import CompletionContextParser
 from wes_files_abbreviations import register_files_abbreviations
 from wes_fish_bridge import FishFunctionError, fish_function
 from wes_fish_z import FishZ, FishZError
+from wes_logging import DEFAULT_LOG_PATH, configure_logging, get_logger
 from wes_fzf_pickers import (
     FzfMru,
     apply_path_selection,
@@ -31,35 +31,17 @@ $EDITOR = "nvim"
 
 register_files_abbreviations(XONSH_ABBREVIATIONS)
 
-${...}.setdefault(
-    "XONSH_FZF_PICKER_LOG",
-    str(Path.home() / ".local/state/xonsh/fzf-pickers.log"),
-)
 ${...}.setdefault("XONSH_KEYPRESS_DEBUG", False)
-_files_picker_logger = None
+${...}.setdefault("XONSH_LOG", str(DEFAULT_LOG_PATH))
+configure_logging(
+    str(${...}["XONSH_LOG"]), clear_iterm_scrollback=True
+)
+_files_picker_logger = get_logger("fzf_pickers")
+_files_log = get_logger("files")
 
 
 def _files_picker_log():
-    global _files_picker_logger
-    if _files_picker_logger is not None:
-        return _files_picker_logger
-    log_path = Path(str(${...}["XONSH_FZF_PICKER_LOG"])).expanduser()
-    log_path.parent.mkdir(parents=True, exist_ok=True)
-    logger = logging.getLogger("xonsh.fzf_pickers")
-    logger.setLevel(logging.INFO)
-    logger.propagate = False
-    if not any(
-        isinstance(handler, logging.FileHandler)
-        and Path(handler.baseFilename) == log_path
-        for handler in logger.handlers
-    ):
-        handler = logging.FileHandler(log_path)
-        handler.setFormatter(
-            logging.Formatter("%(asctime)s %(levelname)s %(message)s")
-        )
-        logger.addHandler(handler)
-    _files_picker_logger = logger
-    return logger
+    return _files_picker_logger
 
 
 def _files_picker_key_event(event):
@@ -142,7 +124,29 @@ def _files_cd(args, stdin=None, **_):
     adjusted = list(args)
     if len(adjusted) == 1 and os.path.isfile(os.path.expanduser(adjusted[0])):
         adjusted[0] = os.path.dirname(os.path.expanduser(adjusted[0])) or "."
-    return _files_original_cd(adjusted, stdin=stdin)
+    olddir = os.getcwd()
+    path_before = [str(entry) for entry in $PATH]
+    _files_log.info(
+        "cd_start args=%r adjusted=%r cwd=%r path=%r",
+        args,
+        adjusted,
+        olddir,
+        path_before,
+    )
+    result = _files_original_cd(adjusted, stdin=stdin)
+    path_after = [str(entry) for entry in $PATH]
+    _files_log.info(
+        "cd_complete args=%r result=%r olddir=%r newdir=%r "
+        "path_added=%r path_removed=%r path=%r",
+        adjusted,
+        result,
+        olddir,
+        os.getcwd(),
+        [entry for entry in path_after if entry not in path_before],
+        [entry for entry in path_before if entry not in path_after],
+        path_after,
+    )
+    return result
 
 
 aliases["cd"] = _files_cd

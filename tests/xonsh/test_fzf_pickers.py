@@ -139,7 +139,7 @@ def test_picker_subprocess_uses_xonsh_path_not_stale_process_path():
 
 def test_keypress_debug_tee_forwards_keys_unchanged():
     env = os.environ.copy()
-    env["XONSH_FZF_PICKER_LOG"] = os.devnull
+    env["XONSH_LOG"] = os.devnull
     abbreviations = ROOT / ".config/xonsh/rc.d/abbreviations.xsh"
     files_rc = ROOT / ".config/xonsh/rc.d/files-specific.xsh"
     command = (

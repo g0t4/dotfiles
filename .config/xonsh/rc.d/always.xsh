@@ -1,5 +1,10 @@
 """Current-shell recording modes mirrored from Fish's always/always.fish."""
 
+from wes_logging import get_logger
+
+
+_always_log = get_logger("always")
+
 
 def _always_set_ai_autosuggest(enabled):
     ${...}["XONSH_AI_AUTOSUGGEST"] = enabled
@@ -12,9 +17,7 @@ def _always_set_ai_autosuggest(enabled):
         if not enabled and active_task is not None and not active_task.done():
             active_task.cancel()
 
-    logger = globals().get("_ai_log")
-    if logger is not None:
-        logger.info("recording_mode_autosuggest enabled=%s", enabled)
+    _always_log.info("recording_mode_autosuggest enabled=%s", enabled)
 
 
 def _always_recording(_args, **_):

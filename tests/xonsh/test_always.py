@@ -8,7 +8,7 @@ ROOT = Path(__file__).parents[2]
 
 def test_recording_and_shorts_modes_change_current_xonsh_environment():
     env = os.environ.copy()
-    env["XONSH_AI_AUTOSUGGEST_LOG"] = os.devnull
+    env["XONSH_LOG"] = os.devnull
     ai = ROOT / ".config/xonsh/rc.d/ai-autosuggest.xsh"
     always = ROOT / ".config/xonsh/rc.d/always.xsh"
     command = (

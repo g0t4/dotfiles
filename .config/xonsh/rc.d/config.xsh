@@ -21,6 +21,10 @@ $IS_ARCH = (
 if not ${...}.get("XDG_STATE_HOME"):
     $XDG_STATE_HOME = str(_wes_home / ".local/state")
 
+${...}.setdefault(
+    "XONSH_LOG", str(Path($XDG_STATE_HOME) / "xonsh/xonsh.log")
+)
+
 $WES_REPOS = str(_wes_home / "repos")
 $WES_BOOTSTRAP = str(Path($WES_REPOS) / "wes-config/wes-bootstrap")
 $WES_DOTFILES = str(Path($WES_REPOS) / "github/g0t4/dotfiles")

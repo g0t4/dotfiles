@@ -3,7 +3,6 @@
 import asyncio
 import itertools
 import json
-import logging
 import os
 import platform
 import sys
@@ -21,6 +20,7 @@ _ai_xonsh_lib = Path($XONSH_CONFIG_DIR) / "lib"
 if str(_ai_xonsh_lib) not in sys.path:
     sys.path.insert(0, str(_ai_xonsh_lib))
 
+from wes_logging import DEFAULT_LOG_PATH, configure_logging, get_logger
 from wes_semantic_history import InferenceClient, SemanticHistoryRetriever
 
 
@@ -37,44 +37,11 @@ ${...}.setdefault("XONSH_AI_AUTOSUGGEST_DEBUG", False)
 ${...}.setdefault("XONSH_AI_SEMANTIC_HISTORY", True)
 ${...}.setdefault("XONSH_AI_SEMANTIC_HISTORY_HOST", "build21.lan")
 ${...}.setdefault("XONSH_AI_SEMANTIC_HISTORY_PORT", 8015)
-${...}.setdefault(
-    "XONSH_AI_AUTOSUGGEST_LOG",
-    str(Path.home() / ".local/state/xonsh/ai-autosuggest.log"),
+${...}.setdefault("XONSH_LOG", str(DEFAULT_LOG_PATH))
+configure_logging(
+    str(${...}["XONSH_LOG"]), clear_iterm_scrollback=True
 )
-
-
-def _make_ai_logger():
-    log_path = Path(str(${...}["XONSH_AI_AUTOSUGGEST_LOG"])).expanduser()
-    log_path.parent.mkdir(parents=True, exist_ok=True)
-
-    logger = logging.getLogger("xonsh.ai_autosuggest")
-    logger.setLevel(logging.INFO)
-    logger.propagate = False
-    if not any(
-        isinstance(handler, logging.FileHandler)
-        and Path(handler.baseFilename) == log_path
-        for handler in logger.handlers
-    ):
-        handler = logging.FileHandler(log_path)
-        handler.setFormatter(
-            logging.Formatter("%(asctime)s %(levelname)s %(message)s")
-        )
-        logger.addHandler(handler)
-    return logger
-
-
-_ai_log = _make_ai_logger()
-
-
-def _clear_ai_log_iterm_scrollback(logger):
-    clear_scrollback = "\x1b]1337;ClearScrollback\a"
-    for handler in logger.handlers:
-        if isinstance(handler, logging.FileHandler):
-            handler.stream.write(clear_scrollback)
-            handler.flush()
-
-
-_clear_ai_log_iterm_scrollback(_ai_log)
+_ai_log = get_logger("ai_autosuggest")
 _ai_request_ids = itertools.count(1)
 
 
