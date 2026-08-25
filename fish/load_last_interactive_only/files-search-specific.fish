@@ -377,32 +377,6 @@ abbr --command rg -- -w --word-regexp
 abbr --command rg -- -g --glob
 abbr --command rg -- -U --multiline
 
-function rg_diff_files
-    # usage:
-    #   rg_diff_files '--hidden'
-
-    # KEEP IN MIND, ripgreprc applies to both sides in this case
-    diff_two_commands 'rg --files | sort' "rg --files $argv | sort"
-end
-
-function rg_diff_files_no_config
-    # TODO READ UP on --no-config... it isn't just disabling config
-    #   for exampe, these s/b similar and they are not:
-    #     rg --files --no-config --unrestricted
-    #     rg --files --unrestricted
-    #
-    # usage:
-    #   rg_diff_files_no_config --hidden
-
-    # TLDR exclude ripgreprc
-    diff_two_commands 'rg --files --no-config | sort' "rg --files --no-config $argv | sort"
-end
-
-# MOVED thes to ripgreprc file
-# function rg
-#     command rg --column --no-heading $argv
-#     # TODO add smth for ag's --color-match
-# end
 
 # * --mmap                     (Search with memory maps when possible.)
 #
