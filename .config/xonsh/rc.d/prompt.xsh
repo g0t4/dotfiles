@@ -71,7 +71,8 @@ def _prompt_login():
         return ""
 
     # parts = ["🪣"]
-    parts = ["🐽"]
+    # parts = ["🐽"]
+    parts = []
     virtual_env = ${...}.get("VIRTUAL_ENV")
     if virtual_env:
         parts.append("{CYAN}\ue73c")
@@ -184,7 +185,7 @@ $PROMPT_FIELDS["wes_login"] = _prompt_login
 $PROMPT_FIELDS["wes_pwd"] = _prompt_pwd
 
 # iTerm2's rc.d integration wraps this with its OSC 133 prompt markers.
-$PROMPT = "{wes_status}{wes_login} {wes_pwd}{RESET}) "
+$PROMPT = "{wes_status}{wes_login} {wes_pwd}{RESET} 🐽 "
 $RIGHT_PROMPT = ""
 $TITLE = "{user}"
 
