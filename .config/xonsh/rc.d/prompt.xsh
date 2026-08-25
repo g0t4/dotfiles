@@ -70,7 +70,8 @@ def _prompt_login():
     if _prompt_flag("wes_recording_youtube_shorts_need_small_prompt"):
         return ""
 
-    parts = []
+    # parts = ["🪣"]
+    parts = ["🐽"]
     virtual_env = ${...}.get("VIRTUAL_ENV")
     if virtual_env:
         parts.append("{CYAN}\ue73c")
