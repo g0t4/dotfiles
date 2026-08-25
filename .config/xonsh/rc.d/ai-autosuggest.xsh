@@ -20,6 +20,7 @@ _ai_xonsh_lib = Path($XONSH_CONFIG_DIR) / "lib"
 if str(_ai_xonsh_lib) not in sys.path:
     sys.path.insert(0, str(_ai_xonsh_lib))
 
+from wes_ai_traces import build_chat_trace, save_chat_trace
 from wes_logging import DEFAULT_LOG_PATH, configure_logging, get_logger
 from wes_semantic_history import InferenceClient, SemanticHistoryRetriever
 
@@ -235,6 +236,8 @@ class _StreamingAIAutoSuggest(AutoSuggest):
             get_app().invalidate()
 
     async def _stream_request(self, request_id, body, on_content):
+        last_sse = None
+        reasoning_content = ""
         process = await asyncio.create_subprocess_exec(
             "curl",
             "--silent",
@@ -270,14 +273,16 @@ class _StreamingAIAutoSuggest(AutoSuggest):
                     break
                 try:
                     event = json.loads(data)
+                    last_sse = event
                     delta = event["choices"][0].get("delta", {})
                     content = delta.get("content") or ""
+                    reasoning_content += delta.get("reasoning_content") or ""
                 except (KeyError, IndexError, TypeError, json.JSONDecodeError):
                     continue
                 if content:
                     on_content(content)
 
-            return await process.wait()
+            return await process.wait(), last_sse, reasoning_content
         except asyncio.CancelledError:
             _ai_log.info("curl_cancelled id=%s", request_id)
             if process.returncode is None:
@@ -346,9 +351,10 @@ class _StreamingAIAutoSuggest(AutoSuggest):
             get_app().invalidate()
 
         try:
-            return_code = await self._stream_request(
+            body = self._request_body(buffer, document, semantic_commands)
+            return_code, last_sse, reasoning_content = await self._stream_request(
                 request_id,
-                self._request_body(buffer, document, semantic_commands),
+                body,
                 show_chunk,
             )
         except asyncio.CancelledError:
@@ -376,6 +382,20 @@ class _StreamingAIAutoSuggest(AutoSuggest):
                 self._active_request_id = None
 
         suffix = self._clean_suffix(accumulated)
+        if return_code == 0:
+            try:
+                trace = build_chat_trace(
+                    messages=body["messages"],
+                    full_content=accumulated,
+                    reasoning_content=reasoning_content,
+                    model=body["model"],
+                    service="xonsh_ai_autosuggest",
+                    last_sse=last_sse,
+                )
+                trace_path = save_chat_trace(trace)
+                _ai_log.info("trace_saved id=%s path=%r", request_id, str(trace_path))
+            except OSError as error:
+                _ai_log.warning("trace_save_failed id=%s error=%r", request_id, error)
         _ai_log.info(
             "request_complete id=%s status=%s elapsed_ms=%d suffix=%r",
             request_id,
