@@ -103,6 +103,7 @@ class _StreamingAIAutoSuggest(AutoSuggest):
         self._history = AutoSuggestFromHistory()
         self._choice_buffer_text = None
         self._previous_completions = []
+        self._submitting_buffer = None
 
     def get_suggestion(self, buffer, document):
         # Prompt Toolkit calls the async implementation below.
@@ -114,6 +115,10 @@ class _StreamingAIAutoSuggest(AutoSuggest):
         self._bound_buffer = buffer
 
         def cancel_stale_request(_):
+            # The next text change after accepting a line is Prompt Toolkit
+            # resetting the editor for a fresh prompt.
+            if self._submitting_buffer is buffer:
+                self._submitting_buffer = None
             self._sync_choice_buffer(buffer.text)
             task = self._active_task
             if task is not None and not task.done():
@@ -123,6 +128,20 @@ class _StreamingAIAutoSuggest(AutoSuggest):
                 task.cancel()
 
         buffer.on_text_changed += cancel_stale_request
+
+    def cancel_for_submit(self, buffer):
+        """Make command acceptance independent of inference availability."""
+        self._submitting_buffer = buffer
+        task = self._active_task
+        if task is not None and not task.done():
+            _ai_log.info(
+                "submit_cancel_request id=%s buffer=%r",
+                self._active_request_id,
+                buffer.text,
+            )
+            task.cancel()
+        buffer.suggestion = None
+        buffer.on_suggestion_set.fire()
 
     def _sync_choice_buffer(self, text):
         if text == self._choice_buffer_text:
@@ -279,6 +298,9 @@ class _StreamingAIAutoSuggest(AutoSuggest):
 
     async def get_suggestion_async(self, buffer, document):
         self._sync_choice_buffer(document.text)
+        if self._submitting_buffer is buffer:
+            _ai_log.info("request_skipped_for_submit buffer=%r", document.text)
+            return None
         if not ${...}.get("XONSH_AI_AUTOSUGGEST", True):
             return self._history.get_suggestion(buffer, document)
 
@@ -357,6 +379,10 @@ class _StreamingAIAutoSuggest(AutoSuggest):
 
 
 _ai_autosuggester = _StreamingAIAutoSuggest()
+
+
+def _cancel_ai_autosuggestion_for_submit(buffer):
+    _ai_autosuggester.cancel_for_submit(buffer)
 
 
 @events.on_ptk_create

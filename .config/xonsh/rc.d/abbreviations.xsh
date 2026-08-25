@@ -48,4 +48,11 @@ def _wes_abbreviation_keybindings(bindings, **_):
     @bindings.add("c-m", filter=_submit_filter)
     def _expand_abbreviation_on_enter(event):
         _expand_xonsh_abbreviation(event.current_buffer)
+        # AI autosuggestions are disposable prompt decoration. If that module
+        # is loaded, keep its network request out of command submission's
+        # critical path. This runs after expansion so `gst` still submits as
+        # `git status`, while no request starts for the expanded text.
+        cancel_ai = globals().get("_cancel_ai_autosuggestion_for_submit")
+        if cancel_ai is not None:
+            cancel_ai(event.current_buffer)
         carriage_return(event.current_buffer, event.cli)
