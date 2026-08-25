@@ -94,3 +94,5 @@ def register_files_abbreviations(registry: AbbreviationRegistry):
     abbr(registry, 'nn', _fish_abbreviation('nn_expand'))  # Fish line 698
     abbr(registry, 'chmx', 'chmod +x')  # Fish line 949
     abbr(registry, 'chmR', 'chmod -R')  # Fish line 950
+    abbr(registry, 'f', 'fish')
+    abbr(registry, 'x', 'xonsh')

@@ -669,6 +669,9 @@ abbr nvim_client_open_files_in_new_tabs "nvim --server localhost:6666 --remote-t
 # TODO consider porting some/all "open with" functionality to using a server?
 # not yet in NVIM: --remote*-wait variants, and servername/list (from vim)
 
+abbr f fish
+abbr x xonsh
+
 # FYI I changed session restore to use passed files/paths to open after session restored, so now I want that to only be if I explicitly ask for a file to be opened and not show dir every time I open, show last file open in most cases... I might need to alter this later
 abbr n nvim # n<space> is perfect now
 abbr nr --function nr_expand

@@ -4,3 +4,5 @@ if command -v nvim > /dev/null; then
     abbr vimc "command vim"
 fi
 
+abbr f fish
+abbr x xonsh
