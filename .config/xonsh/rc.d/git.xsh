@@ -2,13 +2,49 @@
 
 import sys
 import subprocess
+from pathlib import Path
+
+from xonsh.completers.completer import add_one_completer
+from xonsh.completers.tools import RichCompletion, contextual_command_completer
 
 from wes_fish_bridge import FishFunctionError, fish_function
 from wes_git_abbreviations import register_git_abbreviations
-from wes_git_functions import format_line_numbers
+from wes_git_functions import (
+    format_line_numbers,
+    git_add_candidates,
+    matching_git_add_candidates,
+)
 
 
 register_git_abbreviations(XONSH_ABBREVIATIONS)
+
+
+@contextual_command_completer
+def _git_add_dirty_completer(command):
+    if (
+        command.command != "git"
+        or len(command.args) < 2
+        or command.args[1].value != "add"
+        or command.arg_index < 2
+        or command.prefix.startswith("-")
+    ):
+        return None
+
+    matches = matching_git_add_candidates(
+        git_add_candidates(Path.cwd()), command.prefix
+    )
+    return {
+        RichCompletion(
+            path,
+            prefix_len=len(command.prefix),
+            append_space=True,
+            provider="git-add-dirty",
+        )
+        for path in matches
+    }
+
+
+add_one_completer("git_add_dirty", _git_add_dirty_completer, "start")
 
 
 def _fish_compatibility_alias(function_name):
