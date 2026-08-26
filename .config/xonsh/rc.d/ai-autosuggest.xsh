@@ -231,7 +231,11 @@ class _StreamingAIAutoSuggest(AutoSuggest):
         return value.strip().splitlines()[0][:1000] if value.strip() else ""
 
     async def command_from_intent(
-        self, buffer, transcript, service="xonsh_voice_command"
+        self,
+        buffer,
+        transcript,
+        service="xonsh_voice_command",
+        execution_context=None,
     ):
         """Turn spoken intent into a complete, inspectable command."""
         request_id = next(_ai_request_ids)
@@ -246,6 +250,11 @@ class _StreamingAIAutoSuggest(AutoSuggest):
             "recent_commands_oldest_to_newest="
             f"{json.dumps(self._recent_commands(buffer), ensure_ascii=False)}"
         )
+        if execution_context is not None:
+            context += (
+                "\nprevious_command_result="
+                + json.dumps(execution_context, ensure_ascii=False)
+            )
         body = {
             "model": ${...}["XONSH_AI_AUTOSUGGEST_MODEL"],
             "stream": True,

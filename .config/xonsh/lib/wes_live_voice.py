@@ -5,7 +5,36 @@ from __future__ import annotations
 import asyncio
 import json
 import signal
-from pathlib import Path
+
+
+def bounded_command_result(
+    command: str,
+    return_code: int,
+    output: str | None,
+    *,
+    max_lines: int = 20,
+    preview_lines: int = 5,
+    max_bytes: int = 4096,
+) -> dict:
+    """Build bounded context for the next conversational command turn."""
+    result = {"command": command, "return_code": return_code}
+    if output is None:
+        result["output"] = None
+        result["output_notice"] = "stdout was not captured"
+        return result
+
+    encoded = output.encode("utf-8")
+    lines = output.splitlines()
+    if len(lines) <= max_lines and len(encoded) <= max_bytes:
+        result["output"] = output
+        return result
+
+    result["output"] = "\n".join(lines[:preview_lines])
+    result["output_notice"] = (
+        f"output truncated: {len(lines)} lines / {len(encoded)} bytes; "
+        f"showing first {min(preview_lines, len(lines))} lines"
+    )
+    return result
 
 
 class LiveVoice:
@@ -28,11 +57,20 @@ class LiveVoice:
         self.ready = asyncio.Event()
         self.process = await asyncio.create_subprocess_exec(
             *self.command,
+            stdin=asyncio.subprocess.PIPE,
             stdout=asyncio.subprocess.PIPE,
             stderr=asyncio.subprocess.PIPE,
         )
         self.reader_task = asyncio.create_task(self._read_events())
         await asyncio.wait_for(self.ready.wait(), timeout=15)
+
+    def reset_nowait(self):
+        """Begin a fresh utterance without unloading the resident model."""
+        if not self.running or self.process.stdin is None:
+            return False
+        self.final_text = ""
+        self.process.stdin.write(b"reset\n")
+        return True
 
     async def _read_events(self):
         async for raw_line in self.process.stdout:

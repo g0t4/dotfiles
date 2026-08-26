@@ -9,7 +9,7 @@
 
 
 @events.on_ptk_create
-def _wes_undo_keybinding(bindings, **_):
+def _wes_keybindings(bindings, **_):
     # Prompt Toolkit already binds Ctrl+/ (reported as Ctrl+_) to undo.
     # Add the conventional Ctrl+Z spelling without replacing that binding.
     @bindings.add("c-z", save_before=lambda event: False)
@@ -21,6 +21,12 @@ def _wes_undo_keybinding(bindings, **_):
     @bindings.add("c-y", save_before=lambda event: False)
     def _redo(event):
         event.current_buffer.redo()
+
+    # Prompt Toolkit provides this as Alt+. only in its Emacs bindings. Make
+    # the same history argument cycling available while Xonsh is in Vi mode.
+    @bindings.add("escape", ".", save_before=lambda event: False)
+    def _yank_last_argument(event):
+        event.current_buffer.yank_last_arg()
 
     @bindings.add("c-c", save_before=lambda event: False)
     def _clear_buffer_without_new_prompt(event):

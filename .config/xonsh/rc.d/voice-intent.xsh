@@ -20,7 +20,7 @@ _voice_lib = Path($XONSH_CONFIG_DIR) / "lib"
 if str(_voice_lib) not in sys.path:
     sys.path.insert(0, str(_voice_lib))
 
-from wes_live_voice import LiveVoice
+from wes_live_voice import LiveVoice, bounded_command_result
 from wes_voice_intent import DEFAULT_MODEL, VoiceIntent, insert_transcript, resolve_executable
 
 
@@ -47,6 +47,45 @@ _live_voice_state = {
 }
 _live_voice = None
 _live_voice_ai_task = None
+_persistent_voice_enabled = False
+_persistent_last_result = None
+_persistent_capture_settings = None
+
+
+def _set_persistent_capture(enabled):
+    global _persistent_capture_settings
+    names = ("XONSH_CAPTURE_ALWAYS", "XONSH_STORE_STDOUT")
+    if enabled:
+        _persistent_capture_settings = {
+            name: (name in ${...}, ${...}.get(name)) for name in names
+        }
+        for name in names:
+            ${...}[name] = True
+        return
+    if _persistent_capture_settings is None:
+        return
+    for name, (existed, value) in _persistent_capture_settings.items():
+        if existed:
+            ${...}[name] = value
+        elif name in ${...}:
+            del ${...}[name]
+    _persistent_capture_settings = None
+
+
+@events.on_postcommand
+def _wes_voice_remember_command_result(cmd, rtn, out=None, **_):
+    global _persistent_last_result
+    if not _persistent_voice_enabled:
+        return
+    _persistent_last_result = bounded_command_result(cmd, rtn, out)
+    if _live_voice is not None and _live_voice.running:
+        _live_voice.reset_nowait()
+    _live_voice_state.update(
+        status="listening — speak your next command",
+        transcript="",
+        command="",
+        phase="transcribing",
+    )
 
 
 def _live_voice_preview_text():
@@ -187,8 +226,110 @@ def _wes_voice_keybinding(bindings, prompter=None, **_):
 
     @bindings.add(Keys.F20, eager=True, save_before=lambda event: False)
     def _toggle_voice_command(event):
-        # Shift-F8: speech is intent, and the AI result replaces the buffer.
-        toggle(event, "command")
+        # Shift-F8: persistent conversational mode. The model and microphone
+        # remain active across submitted commands until Shift-F8 is pressed
+        # again; Enter executes the green preview directly.
+        global _live_voice, _live_voice_ai_task, _persistent_voice_enabled
+
+        async def generate_persistent(buffer, transcript, app):
+            global _live_voice_ai_task
+            try:
+                await asyncio.sleep(0.35)
+                command = await _ai_autosuggester.command_from_intent(
+                    buffer,
+                    transcript,
+                    service="xonsh_persistent_voice_command",
+                    execution_context=_persistent_last_result,
+                )
+            except asyncio.CancelledError:
+                return
+            except Exception as error:
+                _live_voice_state.update(
+                    status=f"AI error: {error}", phase="error"
+                )
+                app.invalidate()
+                return
+            if _live_voice_state["transcript"] == transcript:
+                _live_voice_state["command"] = command
+                _live_voice_state["phase"] = "ready" if command else "transcribing"
+                app.invalidate()
+
+        def on_persistent_partial(transcript):
+            global _live_voice_ai_task
+            _live_voice_state.update(
+                transcript=transcript,
+                command="",
+                status="persistent voice — Shift-F8 to stop",
+                phase="transcribing",
+            )
+            if _live_voice_ai_task is not None and not _live_voice_ai_task.done():
+                _live_voice_ai_task.cancel()
+            _live_voice_ai_task = event.app.create_background_task(
+                generate_persistent(event.app.current_buffer, transcript, event.app)
+            )
+            event.app.invalidate()
+
+        async def start_persistent():
+            global _live_voice, _persistent_voice_enabled
+            worker = Path($XONSH_CONFIG_DIR) / "lib/wes_voice_stream_worker.py"
+            command = [
+                str(${...}["XONSH_LIVE_VOICE_PYTHON"]),
+                str(worker),
+                "--model",
+                str(${...}["XONSH_LIVE_VOICE_MODEL"]),
+                "--ffmpeg",
+                resolve_executable("ffmpeg"),
+                "--audio-device",
+                str(${...}["XONSH_VOICE_AUDIO_DEVICE"]),
+                "--interval-ms",
+                str(${...}["XONSH_LIVE_VOICE_INTERVAL_MS"]),
+            ]
+            _set_persistent_capture(True)
+            _persistent_voice_enabled = True
+            _live_voice = LiveVoice(command, on_persistent_partial)
+            _live_voice_state.update(
+                status="loading persistent Tiny…",
+                transcript="",
+                command="",
+                phase="loading",
+            )
+            event.app.invalidate()
+            try:
+                await _live_voice.start()
+            except Exception as error:
+                _persistent_voice_enabled = False
+                _set_persistent_capture(False)
+                _live_voice_state.update(status=f"voice error: {error}", phase="error")
+                event.app.invalidate()
+                return
+            _live_voice_state.update(
+                status="persistent voice — Shift-F8 to stop",
+                phase="transcribing",
+            )
+            event.app.invalidate()
+
+        async def stop_persistent():
+            global _live_voice_ai_task, _persistent_voice_enabled
+            _persistent_voice_enabled = False
+            if _live_voice_ai_task is not None and not _live_voice_ai_task.done():
+                _live_voice_ai_task.cancel()
+            try:
+                await _live_voice.stop()
+            except Exception as error:
+                await _voice_notice(f"persistent voice cleanup: {error}")
+            finally:
+                _set_persistent_capture(False)
+                _live_voice_state.update(
+                    status="", transcript="", command="", phase="idle"
+                )
+                event.app.invalidate()
+
+        if _persistent_voice_enabled:
+            event.app.create_background_task(stop_persistent())
+        elif _live_voice is not None and _live_voice.running:
+            asyncio.create_task(_voice_notice("voice: stop Shift-F9 mode first"))
+        else:
+            event.app.create_background_task(start_persistent())
 
     @bindings.add(Keys.F21, eager=True, save_before=lambda event: False)
     def _toggle_live_voice_command(event):
@@ -304,8 +445,39 @@ def _wes_voice_keybinding(bindings, prompter=None, **_):
         return bool(
             _live_voice is not None
             and _live_voice.running
+            and not _persistent_voice_enabled
             and _live_voice_state["command"]
         )
+
+    def persistent_voice_has_command():
+        return bool(
+            _persistent_voice_enabled
+            and _live_voice is not None
+            and _live_voice.running
+            and _live_voice_state["command"]
+        )
+
+    @bindings.add(
+        "c-m",
+        filter=Condition(persistent_voice_has_command),
+        eager=True,
+        save_before=lambda event: False,
+    )
+    @bindings.add(
+        "c-j",
+        filter=Condition(persistent_voice_has_command),
+        eager=True,
+        save_before=lambda event: False,
+    )
+    def _run_persistent_voice_command(event):
+        command = _live_voice_state["command"]
+        buffer = event.app.current_buffer
+        buffer.save_to_undo_stack()
+        buffer.text = command
+        buffer.cursor_position = len(command)
+        _live_voice_state.update(status="executing…", command="", phase="loading")
+        event.app.invalidate()
+        buffer.validate_and_handle()
 
     async def stop_after_accept(app):
         global _live_voice_ai_task

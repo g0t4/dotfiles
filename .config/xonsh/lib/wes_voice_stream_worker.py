@@ -8,7 +8,6 @@ import signal
 import subprocess
 import sys
 import threading
-import time
 from pathlib import Path
 
 
@@ -69,6 +68,7 @@ def main() -> int:
     )
     audio = bytearray()
     audio_lock = threading.Lock()
+    reset_generation = 0
 
     def read_audio() -> None:
         while not stop.is_set():
@@ -80,19 +80,42 @@ def main() -> int:
 
     reader = threading.Thread(target=read_audio, daemon=True)
     reader.start()
+
+    def read_control() -> None:
+        nonlocal reset_generation
+        for line in sys.stdin:
+            if line.strip() != "reset":
+                continue
+            with audio_lock:
+                audio.clear()
+                reset_generation += 1
+
+    control = threading.Thread(target=read_control, daemon=True)
+    control.start()
     emit("ready")
     previous = ""
     last_size = 0
+    observed_generation = reset_generation
 
     try:
         while not stop.wait(args.interval_ms / 1000):
             with audio_lock:
                 snapshot = bytes(audio)
+                generation = reset_generation
+            if generation != observed_generation:
+                observed_generation = generation
+                previous = ""
+                last_size = 0
             if len(snapshot) == last_size or len(snapshot) < 16000 * 4:
                 continue
             last_size = len(snapshot)
             samples = np.frombuffer(snapshot, dtype=np.float32).copy()
             text = transcript_text(model.transcribe(samples))
+            with audio_lock:
+                if generation != reset_generation:
+                    previous = ""
+                    last_size = 0
+                    continue
             if text and text != previous:
                 previous = text
                 emit("partial", text=text, audio_ms=len(samples) * 1000 // 16000)
