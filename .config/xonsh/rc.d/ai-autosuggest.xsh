@@ -230,7 +230,9 @@ class _StreamingAIAutoSuggest(AutoSuggest):
         value = value.replace("```xonsh", "").replace("```sh", "").replace("```", "")
         return value.strip().splitlines()[0][:1000] if value.strip() else ""
 
-    async def command_from_intent(self, buffer, transcript):
+    async def command_from_intent(
+        self, buffer, transcript, service="xonsh_voice_command"
+    ):
         """Turn spoken intent into a complete, inspectable command."""
         request_id = next(_ai_request_ids)
         started_at = time.monotonic()
@@ -277,7 +279,7 @@ class _StreamingAIAutoSuggest(AutoSuggest):
                     full_content=accumulated,
                     reasoning_content=reasoning_content,
                     model=body["model"],
-                    service="xonsh_voice_command",
+                    service=service,
                     last_sse=last_sse,
                 )
                 trace_path = save_chat_trace(trace)
