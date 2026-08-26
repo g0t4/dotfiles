@@ -4,6 +4,7 @@ from wes_logging import get_logger
 
 
 _always_log = get_logger("always")
+_always_ai_autosuggest_before_recording = None
 
 
 def _always_set_ai_autosuggest(enabled):
@@ -21,12 +22,24 @@ def _always_set_ai_autosuggest(enabled):
 
 
 def _always_recording(_args, **_):
+    global _always_ai_autosuggest_before_recording
+    if _always_ai_autosuggest_before_recording is None:
+        _always_ai_autosuggest_before_recording = bool(
+            ${...}.get("XONSH_AI_AUTOSUGGEST", True)
+        )
     _always_set_ai_autosuggest(False)
     return 0
 
 
 def _always_not_recording(_args, **_):
-    _always_set_ai_autosuggest(True)
+    global _always_ai_autosuggest_before_recording
+    enabled = (
+        bool(${...}.get("XONSH_AI_AUTOSUGGEST", True))
+        if _always_ai_autosuggest_before_recording is None
+        else _always_ai_autosuggest_before_recording
+    )
+    _always_ai_autosuggest_before_recording = None
+    _always_set_ai_autosuggest(enabled)
     return 0
 
 

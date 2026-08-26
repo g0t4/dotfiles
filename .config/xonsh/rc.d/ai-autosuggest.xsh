@@ -21,11 +21,17 @@ if str(_ai_xonsh_lib) not in sys.path:
     sys.path.insert(0, str(_ai_xonsh_lib))
 
 from wes_ai_traces import build_chat_trace, save_chat_trace
+from wes_ai_autosuggest_state import (
+    read_autosuggest_enabled,
+    write_autosuggest_enabled,
+)
 from wes_logging import DEFAULT_LOG_PATH, configure_logging, get_logger
 from wes_semantic_history import InferenceClient, SemanticHistoryRetriever
 
 
-${...}.setdefault("XONSH_AI_AUTOSUGGEST", True)
+${...}.setdefault(
+    "XONSH_AI_AUTOSUGGEST", read_autosuggest_enabled(${...})
+)
 ${...}.setdefault(
     "XONSH_AI_AUTOSUGGEST_URL",
     "http://build21.lan:8013/v1/chat/completions",
@@ -445,6 +451,7 @@ def _wes_install_ai_autosuggester(bindings, prompter=None, **_):
         # xterm shifted-function-key sequence CSI 17;2~.
         enabled = not bool(${...}.get("XONSH_AI_AUTOSUGGEST", True))
         ${...}["XONSH_AI_AUTOSUGGEST"] = enabled
+        write_autosuggest_enabled(${...}, enabled)
         buffer = event.current_buffer
 
         active_task = _ai_autosuggester._active_task

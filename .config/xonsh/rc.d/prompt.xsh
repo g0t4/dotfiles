@@ -157,7 +157,7 @@ def _prompt_status():
 
 def _prompt_ai_snout():
     if not ${...}.get("XONSH_AI_AUTOSUGGEST", True):
-        return ""
+        return " )"
     return " 🐽"
 
 

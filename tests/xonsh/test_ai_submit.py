@@ -93,7 +93,7 @@ def test_prompt_snout_tracks_ai_autosuggest_master_toggle():
     command = (
         f"source {prompt}; "
         "$XONSH_AI_AUTOSUGGEST = True; assert _prompt_ai_snout() == ' 🐽'; "
-        "$XONSH_AI_AUTOSUGGEST = False; assert _prompt_ai_snout() == ''; "
+        "$XONSH_AI_AUTOSUGGEST = False; assert _prompt_ai_snout() == ' )'; "
         "assert '{wes_ai_snout}' in $PROMPT"
     )
     env = os.environ.copy()
@@ -108,7 +108,7 @@ def test_prompt_snout_tracks_ai_autosuggest_master_toggle():
     assert completed.returncode == 0, completed.stderr
 
 
-def test_shift_f6_refreshes_prompt_after_hiding_snout():
+def test_shift_f6_persists_toggle_and_refreshes_prompt_after_hiding_snout(tmp_path):
     ai = ROOT / ".config/xonsh/rc.d/ai-autosuggest.xsh"
     command = (
         f"source {ai}; "
@@ -132,6 +132,8 @@ def test_shift_f6_refreshes_prompt_after_hiding_snout():
     )
     env = os.environ.copy()
     env["XONSH_LOG"] = os.devnull
+    state_path = tmp_path / "ai-autosuggest"
+    env["XONSH_AI_AUTOSUGGEST_STATE"] = str(state_path)
     completed = subprocess.run(
         ["xonsh", "--no-rc", "-c", command],
         capture_output=True,
@@ -140,6 +142,27 @@ def test_shift_f6_refreshes_prompt_after_hiding_snout():
     )
 
     assert completed.returncode == 0, completed.stderr
+    assert state_path.read_text() == "off\n"
+
+
+def test_new_xonsh_session_loads_persisted_autosuggest_preference(tmp_path):
+    ai = ROOT / ".config/xonsh/rc.d/ai-autosuggest.xsh"
+    state_path = tmp_path / "ai-autosuggest"
+    state_path.write_text("off\n")
+    env = os.environ.copy()
+    env.pop("XONSH_AI_AUTOSUGGEST", None)
+    env["XONSH_AI_AUTOSUGGEST_STATE"] = str(state_path)
+    env["XONSH_LOG"] = os.devnull
+
+    completed = subprocess.run(
+        ["xonsh", "--no-rc", "-c", f"source {ai}; print($XONSH_AI_AUTOSUGGEST)"],
+        capture_output=True,
+        text=True,
+        env=env,
+    )
+
+    assert completed.returncode == 0, completed.stderr
+    assert completed.stdout.strip() == "False"
 
 
 def test_iterm_esc_plus_alt_tab_decodes_as_one_regeneration_key():
