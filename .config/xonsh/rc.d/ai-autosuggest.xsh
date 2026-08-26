@@ -62,6 +62,13 @@ Never repeat the command prefix. Never explain. No quotes, markdown, or newline.
 Prefer a short, likely completion over inventing a long command.
 If no useful completion is clear, output nothing."""
 
+_AI_VOICE_COMMAND_SYSTEM_PROMPT = """\
+You translate a spoken request into one complete Xonsh command for an expert user.
+Output ONLY the command to place in the shell buffer.
+Never explain, use markdown, or add surrounding quotes.
+Use an existing command prefix when it contains exact filenames or arguments.
+Do not execute anything. If the intent is unclear, output nothing."""
+
 
 # Prompt Toolkit 3.0 has no enum value for modified Tab. Route enhanced-keyboard
 # terminal encodings through an otherwise-unused named key. Modifiers 3 and 7
@@ -218,6 +225,81 @@ class _StreamingAIAutoSuggest(AutoSuggest):
         # leading spaces because they are often the first missing characters.
         value = value.replace("```xonsh", "").replace("```sh", "").replace("```", "")
         return value.splitlines()[0][:240] if value else ""
+
+    def _clean_command(self, value):
+        value = value.replace("```xonsh", "").replace("```sh", "").replace("```", "")
+        return value.strip().splitlines()[0][:1000] if value.strip() else ""
+
+    async def command_from_intent(self, buffer, transcript):
+        """Turn spoken intent into a complete, inspectable command."""
+        request_id = next(_ai_request_ids)
+        started_at = time.monotonic()
+        accumulated = ""
+        context = (
+            f"shell=xonsh\n"
+            f"os={platform.system()}\n"
+            f"cwd={os.getcwd()}\n"
+            f"existing_command={buffer.text}\n"
+            f"spoken_intent={transcript}\n"
+            "recent_commands_oldest_to_newest="
+            f"{json.dumps(self._recent_commands(buffer), ensure_ascii=False)}"
+        )
+        body = {
+            "model": ${...}["XONSH_AI_AUTOSUGGEST_MODEL"],
+            "stream": True,
+            "temperature": 0,
+            "max_tokens": 256,
+            "chat_template_kwargs": {"reasoning_effort": "low"},
+            "messages": [
+                {"role": "system", "content": _AI_VOICE_COMMAND_SYSTEM_PROMPT},
+                {"role": "user", "content": context},
+            ],
+        }
+
+        def collect(content):
+            nonlocal accumulated
+            accumulated += content
+
+        _ai_log.info(
+            "voice_command_start id=%s existing=%r transcript=%r",
+            request_id,
+            buffer.text,
+            transcript,
+        )
+        return_code, last_sse, reasoning_content = await self._stream_request(
+            request_id, body, collect
+        )
+        command = self._clean_command(accumulated)
+        if return_code == 0:
+            try:
+                trace = build_chat_trace(
+                    messages=body["messages"],
+                    full_content=accumulated,
+                    reasoning_content=reasoning_content,
+                    model=body["model"],
+                    service="xonsh_voice_command",
+                    last_sse=last_sse,
+                )
+                trace_path = save_chat_trace(trace)
+                _ai_log.info(
+                    "voice_command_trace_saved id=%s path=%r",
+                    request_id,
+                    str(trace_path),
+                )
+            except OSError as error:
+                _ai_log.warning(
+                    "voice_command_trace_save_failed id=%s error=%r",
+                    request_id,
+                    error,
+                )
+        _ai_log.info(
+            "voice_command_complete id=%s status=%s elapsed_ms=%d command=%r",
+            request_id,
+            return_code,
+            (time.monotonic() - started_at) * 1000,
+            command,
+        )
+        return command if return_code == 0 else ""
 
     async def regenerate(self, buffer):
         """Discard the current answer and request another for the same buffer."""
