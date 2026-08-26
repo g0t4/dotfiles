@@ -155,6 +155,12 @@ def _prompt_status():
     return "{RED}[" + "{RED}|".join(rendered) + "{RED}]{RESET}\n"
 
 
+def _prompt_ai_snout():
+    if not ${...}.get("XONSH_AI_AUTOSUGGEST", True):
+        return ""
+    return " 🐽"
+
+
 def _prompt_pipeline_status(rtn, cmd):
     pipeline = getattr(__xonsh__, "lastcmd", None)
     statuses = list(getattr(pipeline, "pipestatus", []) or [])
@@ -183,9 +189,10 @@ def _wes_prompt_choose_status(**_):
 $PROMPT_FIELDS["wes_status"] = _prompt_status
 $PROMPT_FIELDS["wes_login"] = _prompt_login
 $PROMPT_FIELDS["wes_pwd"] = _prompt_pwd
+$PROMPT_FIELDS["wes_ai_snout"] = _prompt_ai_snout
 
 # iTerm2's rc.d integration wraps this with its OSC 133 prompt markers.
-$PROMPT = "{wes_status}{wes_login} {wes_pwd}{RESET} 🐽 "
+$PROMPT = "{wes_status}{wes_login} {wes_pwd}{RESET}{wes_ai_snout} "
 $RIGHT_PROMPT = ""
 $TITLE = "{user}"
 

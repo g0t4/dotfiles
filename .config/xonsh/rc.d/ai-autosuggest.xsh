@@ -104,6 +104,11 @@ class _StreamingAIAutoSuggest(AutoSuggest):
         # Prompt Toolkit calls the async implementation below.
         return None
 
+    def _history_suggestion(self, buffer, document):
+        if not ${...}.get("AUTO_SUGGEST", True):
+            return None
+        return self._history.get_suggestion(buffer, document)
+
     def _bind_cancellation(self, buffer):
         if self._bound_buffer is buffer:
             return
@@ -303,7 +308,7 @@ class _StreamingAIAutoSuggest(AutoSuggest):
             _ai_log.info("request_skipped_for_submit buffer=%r", document.text)
             return None
         if not ${...}.get("XONSH_AI_AUTOSUGGEST", True):
-            return self._history.get_suggestion(buffer, document)
+            return None
 
         # Prompt Toolkit's Suggestion UI can append only at the end of the
         # buffer. It cannot represent a replacement in the middle of a line.
@@ -375,7 +380,7 @@ class _StreamingAIAutoSuggest(AutoSuggest):
                 from xonsh.tools import print_above_prompt
 
                 print_above_prompt(f"AI autosuggest: {type(error).__name__}: {error}")
-            return self._history.get_suggestion(buffer, document)
+            return self._history_suggestion(buffer, document)
         finally:
             if self._active_task is asyncio.current_task():
                 self._active_task = None
@@ -405,7 +410,7 @@ class _StreamingAIAutoSuggest(AutoSuggest):
         )
         if return_code == 0 and suffix:
             return Suggestion(suffix)
-        return self._history.get_suggestion(buffer, document)
+        return self._history_suggestion(buffer, document)
 
 
 _ai_autosuggester = _StreamingAIAutoSuggest()
@@ -416,7 +421,7 @@ def _cancel_ai_autosuggestion_for_submit(buffer):
 
 
 @events.on_ptk_create
-def _wes_install_ai_autosuggester(bindings, **_):
+def _wes_install_ai_autosuggester(bindings, prompter=None, **_):
     # Xonsh 0.23 constructs AutoSuggestFromHistory inside cmdloop after rc.d
     # has loaded. Replacing that factory lets Xonsh pass our implementation to
     # Prompt Toolkit without changing Xonsh or Prompt Toolkit source files.
@@ -451,6 +456,12 @@ def _wes_install_ai_autosuggester(bindings, **_):
 
         buffer.suggestion = None
         buffer.on_suggestion_set.fire()
+
+        # Xonsh normally formats the left prompt once per command. Refresh its
+        # cached tokens so the snout follows Shift-F6 immediately.
+        if prompter is not None:
+            ${...}["PROMPT_FIELDS"].reset()
+            prompter.message = __xonsh__.shell.shell.prompt_tokens()
         event.app.invalidate()
         _ai_log.info("autosuggest_toggled enabled=%s buffer=%r", enabled, buffer.text)
 
