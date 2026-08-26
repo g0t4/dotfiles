@@ -168,8 +168,8 @@ def _wes_voice_keybinding(bindings, prompter=None, **_):
         preview = ConditionalContainer(
             Window(
                 FormattedTextControl(_live_voice_preview_fragments),
-                height=1,
                 dont_extend_width=True,
+                wrap_lines=True,
                 style="bg:#202020 #f8f8f2",
             ),
             filter=Condition(lambda: bool(_live_voice_state["status"])),

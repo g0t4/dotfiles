@@ -63,7 +63,11 @@ Prefer a short, likely completion over inventing a long command.
 If no useful completion is clear, output nothing."""
 
 _AI_VOICE_COMMAND_SYSTEM_PROMPT = """\
-You translate a spoken request into one complete Xonsh command for an expert user.
+You produce commands specifically for Xonsh, a Python-powered shell, for an expert user.
+Every answer must be valid Xonsh syntax or an external command that Xonsh can run.
+The complete command may span multiple lines when Python or shell structure benefits from it.
+Do not substitute Bash, Zsh, Fish, or Readline built-ins such as `bind` for Xonsh features.
+For shell-internal behavior, use Xonsh syntax or its Python APIs.
 Output ONLY the command to place in the shell buffer.
 Never explain, use markdown, or add surrounding quotes.
 Use an existing command prefix when it contains exact filenames or arguments.
@@ -228,7 +232,27 @@ class _StreamingAIAutoSuggest(AutoSuggest):
 
     def _clean_command(self, value):
         value = value.replace("```xonsh", "").replace("```sh", "").replace("```", "")
-        return value.strip().splitlines()[0][:1000] if value.strip() else ""
+        return value.strip()[:4000] if value.strip() else ""
+
+    def _voice_command_context(self, buffer, transcript, execution_context=None):
+        context = (
+            f"You are working in Xonsh, a Python-powered shell, on "
+            f"{platform.system()}.\n"
+            f"The current working directory is {json.dumps(os.getcwd())}.\n"
+            "The existing command-line buffer is "
+            f"{json.dumps(buffer.text, ensure_ascii=False)}.\n"
+            "The user's spoken request is "
+            f"{json.dumps(transcript, ensure_ascii=False)}.\n"
+            "Their recent commands, from oldest to newest, are "
+            f"{json.dumps(self._recent_commands(buffer), ensure_ascii=False)}."
+        )
+        if execution_context is not None:
+            context += (
+                "\nThe previous command and its bounded result were "
+                + json.dumps(execution_context, ensure_ascii=False)
+                + "."
+            )
+        return context
 
     async def command_from_intent(
         self,
@@ -241,20 +265,7 @@ class _StreamingAIAutoSuggest(AutoSuggest):
         request_id = next(_ai_request_ids)
         started_at = time.monotonic()
         accumulated = ""
-        context = (
-            f"shell=xonsh\n"
-            f"os={platform.system()}\n"
-            f"cwd={os.getcwd()}\n"
-            f"existing_command={buffer.text}\n"
-            f"spoken_intent={transcript}\n"
-            "recent_commands_oldest_to_newest="
-            f"{json.dumps(self._recent_commands(buffer), ensure_ascii=False)}"
-        )
-        if execution_context is not None:
-            context += (
-                "\nprevious_command_result="
-                + json.dumps(execution_context, ensure_ascii=False)
-            )
+        context = self._voice_command_context(buffer, transcript, execution_context)
         body = {
             "model": ${...}["XONSH_AI_AUTOSUGGEST_MODEL"],
             "stream": True,

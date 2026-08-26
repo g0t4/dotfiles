@@ -213,11 +213,11 @@ def test_enter_accepts_visible_live_command_without_submitting():
         "accept = next(binding.handler for binding in bindings.bindings "
         "if binding.handler.__name__ == '_accept_live_voice_command'); "
         "_live_voice = SimpleNamespace(running=True); "
-        "_live_voice_state['command'] = 'du -ah . | sort -rh'; "
+        "_live_voice_state['command'] = 'for item in items:\\n    print(item)'; "
         "buffer = Buffer(); app = SimpleNamespace(current_buffer=buffer, "
         "create_background_task=lambda task: task.close(), invalidate=lambda: None); "
         "accept(SimpleNamespace(app=app)); "
-        "assert buffer.text == 'du -ah . | sort -rh'"
+        "assert buffer.text == 'for item in items:\\n    print(item)'"
     )
     completed = subprocess.run(
         ["xonsh", "--no-rc", "-c", command], capture_output=True, text=True
@@ -240,9 +240,9 @@ def test_persistent_enter_submits_visible_command():
         "if binding.handler.__name__ == '_run_persistent_voice_command'); "
         "submitted = []; buffer = Buffer(accept_handler=lambda value: submitted.append(value.text)); "
         "app = SimpleNamespace(current_buffer=buffer, invalidate=lambda: None); "
-        "_live_voice_state['command'] = 'git status'; "
+        "_live_voice_state['command'] = 'for item in items:\\n    print(item)'; "
         "run(SimpleNamespace(app=app)); "
-        "assert submitted == ['git status']; "
+        "assert submitted == ['for item in items:\\n    print(item)']; "
         "assert _live_voice_state['status'] == 'executing…'"
     )
     completed = subprocess.run(
