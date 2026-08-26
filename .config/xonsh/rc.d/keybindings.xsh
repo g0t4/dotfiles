@@ -16,6 +16,12 @@ def _wes_undo_keybinding(bindings, **_):
     def _undo(event):
         event.current_buffer.undo()
 
+    # Esc+K remains the yank binding, freeing the conventional Ctrl+Y chord
+    # for redo.
+    @bindings.add("c-y", save_before=lambda event: False)
+    def _redo(event):
+        event.current_buffer.redo()
+
     @bindings.add("c-c", save_before=lambda event: False)
     def _clear_buffer_without_new_prompt(event):
         # Xonsh's default raises KeyboardInterrupt, which finishes this prompt
