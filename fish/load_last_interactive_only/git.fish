@@ -378,8 +378,8 @@ function glX
     echo "$(string replace --regex '^gl?' 'git log --color=always -' $argv) | line_numbers"
 end
 
-set _unpushed_commits "HEAD@{push}~1..HEAD" # always show last pushed commit too (so if nothing unpushed the output isn't empty as if maybe broken)
-set _unpushed_commits_without_last_pushed "HEAD@{push}..HEAD" # in some cases I don't wanna show last pushed (i.e. gls --stat)
+set _unpushed_commits "'HEAD@{push}~1..HEAD'" # always show last pushed commit too (so if nothing unpushed the output isn't empty as if maybe broken)
+set _unpushed_commits_without_last_pushed "'HEAD@{push}..HEAD'" # in some cases I don't wanna show last pushed (i.e. gls --stat)
 #
 abbr gst 'git status' # I just can't stop using gst...
 #
