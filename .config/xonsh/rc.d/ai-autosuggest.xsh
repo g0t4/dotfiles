@@ -50,7 +50,7 @@ configure_logging(
     clear_iterm_scrollback=True,
     rich_output=${...}.get("XONSH_LOG_RICH", True),
 )
-_ai_log = get_logger("ai_autosuggest")
+log = get_logger("ai_autosuggest")
 _ai_request_ids = itertools.count(1)
 
 
@@ -109,7 +109,7 @@ class _StreamingAIAutoSuggest(AutoSuggest):
         )
         self._semantic_history = SemanticHistoryRetriever(
             semantic_client,
-            on_timing=lambda stage, count, elapsed_ms: _ai_log.info(
+            on_timing=lambda stage, count, elapsed_ms: log.info(
                 "semantic_history stage=%s count=%s elapsed_ms=%.1f",
                 stage,
                 count,
@@ -139,7 +139,7 @@ class _StreamingAIAutoSuggest(AutoSuggest):
             self._sync_choice_buffer(buffer.text)
             task = self._active_task
             if task is not None and not task.done():
-                _ai_log.info(
+                log.info(
                     "request_cancel_for_text_change id=%s", self._active_request_id
                 )
                 task.cancel()
@@ -151,7 +151,7 @@ class _StreamingAIAutoSuggest(AutoSuggest):
         self._submitting_buffer = buffer
         task = self._active_task
         if task is not None and not task.done():
-            _ai_log.info(
+            log.info(
                 "submit_cancel_request id=%s buffer=%r",
                 self._active_request_id,
                 buffer.text,
@@ -164,7 +164,7 @@ class _StreamingAIAutoSuggest(AutoSuggest):
         if text == self._choice_buffer_text:
             return
         if self._previous_completions:
-            _ai_log.info(
+            log.info(
                 "completion_choices_reset previous_count=%s new_buffer=%r",
                 len(self._previous_completions),
                 text,
@@ -178,7 +178,7 @@ class _StreamingAIAutoSuggest(AutoSuggest):
         suffix = suggestion.text if suggestion is not None else ""
         if suffix:
             self._previous_completions.append(suffix)
-            _ai_log.info(
+            log.info(
                 "completion_choice_rejected choice_count=%s suffix=%r",
                 len(self._previous_completions),
                 suffix,
@@ -282,7 +282,7 @@ class _StreamingAIAutoSuggest(AutoSuggest):
             nonlocal accumulated
             accumulated += content
 
-        _ai_log.info(
+        log.info(
             "voice_command_start id=%s existing=%r transcript=%r",
             request_id,
             buffer.text,
@@ -303,18 +303,18 @@ class _StreamingAIAutoSuggest(AutoSuggest):
                     last_sse=last_sse,
                 )
                 trace_path = save_chat_trace(trace)
-                _ai_log.info(
+                log.info(
                     "voice_command_trace_saved id=%s path=%r",
                     request_id,
                     str(trace_path),
                 )
             except OSError as error:
-                _ai_log.warning(
+                log.warning(
                     "voice_command_trace_save_failed id=%s error=%r",
                     request_id,
                     error,
                 )
-        _ai_log.info(
+        log.info(
             "voice_command_complete id=%s status=%s elapsed_ms=%d command=%r",
             request_id,
             return_code,
@@ -326,7 +326,7 @@ class _StreamingAIAutoSuggest(AutoSuggest):
     async def regenerate(self, buffer):
         """Discard the current answer and request another for the same buffer."""
         self._remember_visible_completion(buffer)
-        _ai_log.info(
+        log.info(
             "regenerate_start buffer=%r previous_count=%s",
             buffer.text,
             len(self._previous_completions),
@@ -372,7 +372,7 @@ class _StreamingAIAutoSuggest(AutoSuggest):
             stdout=asyncio.subprocess.PIPE,
             stderr=asyncio.subprocess.DEVNULL,
         )
-        _ai_log.info("curl_started id=%s pid=%s", request_id, process.pid)
+        log.info("curl_started id=%s pid=%s", request_id, process.pid)
 
         try:
             process.stdin.write(json.dumps(body).encode("utf-8"))
@@ -399,7 +399,7 @@ class _StreamingAIAutoSuggest(AutoSuggest):
 
             return await process.wait(), last_sse, reasoning_content
         except asyncio.CancelledError:
-            _ai_log.info("curl_cancelled id=%s", request_id)
+            log.info("curl_cancelled id=%s", request_id)
             if process.returncode is None:
                 process.terminate()
                 try:
@@ -415,7 +415,7 @@ class _StreamingAIAutoSuggest(AutoSuggest):
     async def get_suggestion_async(self, buffer, document):
         self._sync_choice_buffer(document.text)
         if self._submitting_buffer is buffer:
-            _ai_log.info("request_skipped_for_submit buffer=%r", document.text)
+            log.info("request_skipped_for_submit buffer=%r", document.text)
             return None
         if not ${...}.get("XONSH_AI_AUTOSUGGEST", True):
             return None
@@ -442,8 +442,8 @@ class _StreamingAIAutoSuggest(AutoSuggest):
             except asyncio.CancelledError:
                 raise
             except Exception as error:
-                _ai_log.info("semantic_history unavailable error=%r", error)
-        _ai_log.info(
+                log.info("semantic_history unavailable error=%r", error)
+        log.info(
             "request_start id=%s cwd=%r history_count=%s semantic_count=%s previous_count=%s "
             "before=%r after=%r",
             request_id,
@@ -473,14 +473,14 @@ class _StreamingAIAutoSuggest(AutoSuggest):
                 show_chunk,
             )
         except asyncio.CancelledError:
-            _ai_log.info(
+            log.info(
                 "request_cancelled id=%s elapsed_ms=%d",
                 request_id,
                 (time.monotonic() - started_at) * 1000,
             )
             return None
         except Exception as error:
-            _ai_log.exception(
+            log.exception(
                 "request_error id=%s elapsed_ms=%d error=%r",
                 request_id,
                 (time.monotonic() - started_at) * 1000,
@@ -508,10 +508,10 @@ class _StreamingAIAutoSuggest(AutoSuggest):
                     last_sse=last_sse,
                 )
                 trace_path = save_chat_trace(trace)
-                _ai_log.info("trace_saved id=%s path=%r", request_id, str(trace_path))
+                log.info("trace_saved id=%s path=%r", request_id, str(trace_path))
             except OSError as error:
-                _ai_log.warning("trace_save_failed id=%s error=%r", request_id, error)
-        _ai_log.info(
+                log.warning("trace_save_failed id=%s error=%r", request_id, error)
+        log.info(
             "request_complete id=%s status=%s elapsed_ms=%d suffix=%r",
             request_id,
             return_code,
@@ -544,7 +544,7 @@ def _wes_install_ai_autosuggester(bindings, prompter=None, **_):
     def _regenerate_ai_autosuggestion(event):
         # Keep the command buffer untouched and replace only the current
         # streamed suggestion.
-        _ai_log.info("alt_tab_handler buffer=%r", event.current_buffer.text)
+        log.info("alt_tab_handler buffer=%r", event.current_buffer.text)
         event.app.create_background_task(
             _ai_autosuggester.regenerate(event.current_buffer)
         )
@@ -560,7 +560,7 @@ def _wes_install_ai_autosuggester(bindings, prompter=None, **_):
 
         active_task = _ai_autosuggester._active_task
         if not enabled and active_task is not None and not active_task.done():
-            _ai_log.info(
+            log.info(
                 "toggle_cancel_request id=%s", _ai_autosuggester._active_request_id
             )
             active_task.cancel()
@@ -574,7 +574,7 @@ def _wes_install_ai_autosuggester(bindings, prompter=None, **_):
             ${...}["PROMPT_FIELDS"].reset()
             prompter.message = __xonsh__.shell.shell.prompt_tokens()
         event.app.invalidate()
-        _ai_log.info("autosuggest_toggled enabled=%s buffer=%r", enabled, buffer.text)
+        log.info("autosuggest_toggled enabled=%s buffer=%r", enabled, buffer.text)
 
         # Toggling on should work immediately without requiring a throwaway
         # edit to trigger Prompt Toolkit's autosuggestion machinery.
