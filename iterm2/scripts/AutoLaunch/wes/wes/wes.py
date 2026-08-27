@@ -43,10 +43,12 @@ async def main(connection: iterm2.Connection):
         # FYI also had to remap Cmd+N => Cmd+Shift+Control+N in Keyboard Maestro
         key_n = keystroke.keycode == iterm2.Keycode.ANSI_N
         if key_n and control and command and shift:
+            log("NEW WINDOW")
             await wes_new_window(connection, force_local=False)
             return
         #
         if key_n and control and command:
+            log("NEW WINDOW FORCE_LOCAL")
             await wes_new_window(connection, force_local=True)
             return
 
@@ -54,11 +56,13 @@ async def main(connection: iterm2.Connection):
         # FYI also had to remap Cmd+T => Cmd+Shift+Control+T in Keyboard Maestro
         key_t = keystroke.keycode == iterm2.Keycode.ANSI_T
         if key_t and control and command and shift:
+            log("NEW TAB")
             await wes_new_tab(connection, force_local=False)
             return
         # FYI also had to remap Cmd+Shift+T in KM => Cmd+Ctrl+T
         #    cannot remap to same keys, wouldn't work :)
         if key_t and control and command:
+            log("NEW TAB FORCE_LOCAL")
             await wes_new_tab(connection, force_local=True)
             return
 
@@ -72,10 +76,12 @@ async def main(connection: iterm2.Connection):
         #       (ctrl+alt+d == toggle dock)
         key_d = keystroke.keycode == iterm2.Keycode.ANSI_D
         if key_d and control and command and shift:
+            log("SPLIT PANE VERTICALLY")
             await wes_split_pane(connection, split_vert=True)
             return
         #
         if key_d and control and command and option:
+            log("SPLIT PANE HORIZONTALLY")
             await wes_split_pane(connection, split_vert=False)
             return
 
@@ -83,54 +89,64 @@ async def main(connection: iterm2.Connection):
         # FYI KM => remaps Cmd+R (replace) => Cmd+Shift+Control+R
         key_r = keystroke.keycode == iterm2.Keycode.ANSI_R
         if key_r and control and command and shift:
+            log("REPLACE PANE")
             await wes_replace_pane(connection)
             return
 
         key_b = keystroke.keycode == iterm2.Keycode.ANSI_B
         if key_b and control and command and shift:
+            log("ASK OPENAI")
             await ask_openai(connection)
             return
 
         # keymap doesn't matter, just update streamdeck button if change this:
         key_x = keystroke.keycode == iterm2.Keycode.ANSI_X
         if key_x and control and command and shift:
+            log("CLOSE OTHER TABS")
             await close_other_tabs(connection)
             return
 
         # keymap doesn't matter, just update streamdeck button if change this:
         key_y = keystroke.keycode == iterm2.Keycode.ANSI_Y
         if key_y and control and command and shift:
+            log("NEW TAB THEN CLOSE OTHERS")
             await new_tab_then_close_others(connection)
             return
 
         key_f = keystroke.keycode == iterm2.Keycode.ANSI_F
         if key_f and control and command and shift:
+            log("COPY SCREEN TO CLIPBOARD")
             # TODO merge with ANSI_B? should I just use this instead of ANSI_B approach?
             await copy_screen_to_clipboard(connection, history=False)
             return
 
         key_h = keystroke.keycode == iterm2.Keycode.ANSI_H
         if key_h and control and command and shift:
+            log("COPY SCREEN TO CLIPBOARD (HISTORY)")
             await copy_screen_to_clipboard(connection, history=True)
             return
 
         key_f9 = keystroke.keycode == iterm2.Keycode.F9
         if key_f9:
+            log("F9 PRESSED")
             await on_f9(connection)
             return
 
         key_minus = keystroke.keycode == iterm2.Keycode.ANSI_MINUS
         if key_minus and control and command and shift:
+            log("SMALLER FONT")
             await smaller_font_wes_stops(connection)
             return
         #
         key_equal = keystroke.keycode == iterm2.Keycode.ANSI_EQUAL
         if key_equal and control and command and shift:
+            log("BIGGER FONT")
             await bigger_font_wes_stops(connection)
             return
 
         key_a = keystroke.keycode == iterm2.Keycode.ANSI_A
         if key_a and control and command:
+            log("YANK LAST COMMAND OUTPUT AND PASTE")
             await yank_last_command_output_and_paste_to_commandline(connection)
 
     async def keystroke_monitor(connection):
