@@ -66,21 +66,20 @@ async def main(connection: iterm2.Connection):
             await wes_new_tab(connection, force_local=True)
             return
 
-        # *** Split panes helpers (ssh support)
-        # TODO for split pane, do I want an option to not do remote?
-        #    LETS wait for it to be annoying and for now just assume split panes are always remote
-        # FYI KM => remaps Cmd+D (split vert) => Cmd+Shift+Control+D
-        # FYI   and Cmd+Shift+D (split horiz) => Cmd+Ctrl+Option+D
+        # *** Split panes helpers
+        # FYI KM => remaps Cmd+D (split vert) and Cmd+Shift+D (split horiz) to use K below
         #     avoid:
+        #       FYI ctrl+d exits so that's a bad choice and I had issues with using D+modifiers in xonsh so I am going to K for now
         #       (cmd+ctrl+d == define universally)
         #       (ctrl+alt+d == toggle dock)
-        key_d = keystroke.keycode == iterm2.Keycode.ANSI_D
-        if key_d and control and command and shift:
+        key_k = keystroke.keycode == iterm2.Keycode.ANSI_K # DO NOT USE DIRECTLY
+        shared_k_combo = key_k and control and command
+        if shared_k_combo and shift:
             log("SPLIT PANE VERTICALLY")
             await wes_split_pane(connection, split_vert=True)
             return
         #
-        if key_d and control and command and option:
+        if shared_k_combo and option:
             log("SPLIT PANE HORIZONTALLY")
             await wes_split_pane(connection, split_vert=False)
             return
