@@ -3403,11 +3403,11 @@ abbr cir 'code-insiders "$(_repo_root)"'
 abbr cie 'code --inspect-extensions=9229 .' # attach then with devtools, mostly adding this so I remember it
 abbr cieb 'code --inspect-brk-extensions=9229 .' # attach, set breakpoints, then run!
 
-#### zed
-abbr zh 'zed .'
-abbr zr 'zed "$(_repo_root)"'
-abbr zph 'zed-preview .'
-abbr zpr 'zed-preview "$(_repo_root)"'
+# #### zed
+# abbr zh 'zed .'
+# abbr zr 'zed "$(_repo_root)"'
+# abbr zph 'zed-preview .'
+# abbr zpr 'zed-preview "$(_repo_root)"'
 
 ### cursor
 abbr cs 'cursor .'
