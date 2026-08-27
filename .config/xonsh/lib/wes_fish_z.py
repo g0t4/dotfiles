@@ -5,6 +5,7 @@ from __future__ import annotations
 import subprocess
 import sys
 from collections.abc import Callable, Sequence
+from dataclasses import dataclass
 from pathlib import Path
 
 from wes_fish_executable import find_fish
@@ -12,6 +13,12 @@ from wes_fish_executable import find_fish
 
 class FishZError(RuntimeError):
     pass
+
+
+@dataclass(frozen=True)
+class FishZEntry:
+    path: Path
+    frecency: float
 
 
 class FishZ:
@@ -49,6 +56,35 @@ class FishZ:
         if not destination.is_dir():
             raise FishZError(f"z result is not a directory: {destination}")
         return destination
+
+    def entries(self) -> list[FishZEntry]:
+        """Return existing directories and their current Fish-z frecency scores."""
+        try:
+            completed = self.runner(
+                [self._fish(), "-c", "__z --list"],
+                capture_output=True,
+                text=True,
+                timeout=self.timeout,
+            )
+        except (OSError, subprocess.TimeoutExpired) as error:
+            raise FishZError(f"could not list Fish z directories: {error}") from error
+        if completed.returncode:
+            detail = completed.stderr.strip() or "could not list Fish z directories"
+            raise FishZError(detail)
+
+        entries = []
+        for line in completed.stdout.splitlines():
+            score, separator, raw_path = line.strip().partition(" ")
+            if not separator:
+                continue
+            try:
+                frecency = float(score)
+            except ValueError:
+                continue
+            path = Path(raw_path.strip()).expanduser()
+            if path.is_dir():
+                entries.append(FishZEntry(path=path, frecency=frecency))
+        return entries
 
     def run(
         self,

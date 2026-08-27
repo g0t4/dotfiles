@@ -55,6 +55,19 @@ def test_resolve_preserves_rank_and_recency_options(tmp_path):
     assert runner.calls[0][0][-2:] == ["--recent", "repos"]
 
 
+def test_entries_parse_frecency_and_skip_missing_directories(tmp_path):
+    present = tmp_path / "ask-openai.nvim"
+    present.mkdir()
+    runner = RecordingRunner(
+        completed(stdout=f"42.5  {present}\n8 /definitely/missing\nnot-a-score nope\n")
+    )
+
+    entries = FishZ(runner=runner, fish_executable="/test/fish").entries()
+
+    assert [(entry.path, entry.frecency) for entry in entries] == [(present, 42.5)]
+    assert runner.calls[0][0] == ["/test/fish", "-c", "__z --list"]
+
+
 def test_resolve_rejects_missing_and_non_directory_results(tmp_path):
     runner = RecordingRunner(completed(returncode=1, stdout="no match\n"))
     with pytest.raises(FishZError, match="no match"):
