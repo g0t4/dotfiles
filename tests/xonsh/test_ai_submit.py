@@ -93,7 +93,7 @@ def test_prompt_snout_tracks_ai_autosuggest_master_toggle():
     command = (
         f"source {prompt}; "
         "$XONSH_AI_AUTOSUGGEST = True; assert _prompt_ai_snout() == ' 🐽'; "
-        "$XONSH_AI_AUTOSUGGEST = False; assert _prompt_ai_snout() == ' )'; "
+        "$XONSH_AI_AUTOSUGGEST = False; assert _prompt_ai_snout() == ')'; "
         "assert '{wes_ai_snout}' in $PROMPT"
     )
     env = os.environ.copy()
