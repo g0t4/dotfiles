@@ -248,8 +248,9 @@ class _StreamingAIAutoSuggest(AutoSuggest):
                 f"My current working directory is {json.dumps(os.getcwd())}.",
                 f"Here is the command I am working on: {json.dumps(buffer.text, ensure_ascii=False)}",
                 "",
-                "Here's my recent command history from oldest to newest:",
-                f"{json.dumps(self._recent_commands(buffer), ensure_ascii=False)}.",
+                "Here's my recent command history from oldest to newest (serialized with json to clearly identify each command):",
+                f"{json.dumps(self._recent_commands(buffer), ensure_ascii=False, indent=2)}.",
+
                 "",
                 f"Here's what I need help with:\n>{json.dumps(transcript, ensure_ascii=False)}.",
             ])
