@@ -75,7 +75,16 @@ async def prepare_new_profile(session: iterm2.Session, force_local_shell: bool) 
                 raise Exception("SHELL environment variable not set, cannot open default shell")
             escaped_cmd = commandLine.replace('"', '\\"')
             # Use -C so the fish shell stays alive after running the SSH command.
-            new_profile.set_command(f"{default_shell} -C \"{escaped_cmd}\"")
+            if default_shell.endswith("fish"):
+                new_profile.set_command(f"{default_shell} -C \"{escaped_cmd}\"")
+            elif default_shell.endswith("xonsh"):
+                # TODO in xonsh is there an equivalent of -C that will keep xonsh open when the escaped_cmd exits? that's why I use -C in fish (and not -c which will exit immediately) but I don't see -C or anything like it yet
+                # recall this is all about keeping the default shell open after closing SSH and not having windows vanish when a server is shutdown
+                new_profile.set_command(f"{default_shell} -c \"{escaped_cmd}\"")
+            else:
+                print(f"default shell {default_shell} is not supported yet, you need to find the equivlanet of `fish -C` for keeping shell open after command exits")
+                raise NotImplementedError(f"Shell {default_shell} not supported")
+
             new_profile.set_use_custom_command("Yes")
             print(f"was_sshed:escaped_cmd {escaped_cmd=}")
             # PRN also replicate bash over ssh on build21 for strace demos there?
