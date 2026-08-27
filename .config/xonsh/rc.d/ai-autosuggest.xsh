@@ -54,24 +54,31 @@ log = get_logger("ai_autosuggest")
 _ai_request_ids = itertools.count(1)
 
 
+# TODO add partial accept keymaps+handler for one word and one line (allow to continue partial accept after taking first word/line without generating a new completion) the goal is to let the user take only what they want instead of accept all + delete the parts they don't want.
+#
+#   * these are my neovim keymaps, let's mirror if possible:
+#   local KEYMAP_ACCEPT_ALL = '<Tab>'
+#   local KEYMAP_ACCEPT_LINE = '<C-right>'
+#   local KEYMAP_ACCEPT_WORD = '<M-right>'
+#   local KEYMAP_REDO_PREDICTION = '<M-Tab>'
+#
 _AI_AUTOSUGGEST_SYSTEM_PROMPT = """\
 You are an inline command-line autosuggester for an expert shell user.
 Infer the intended complete command from the shell context and current buffer.
 Output ONLY the exact characters that should be appended after the cursor.
 Never repeat the command prefix. Never explain. No quotes, markdown, or newline.
-Prefer a short, likely completion over inventing a long command.
+The user can partially accept the suggestion, so don't feel hestitant to suggest a full command.
 If no useful completion is clear, output nothing."""
 
 _AI_VOICE_COMMAND_SYSTEM_PROMPT = """\
 You produce commands specifically for Xonsh, a Python-powered shell, for an expert user.
 Every answer must be valid Xonsh syntax or an external command that Xonsh can run.
-The complete command may span multiple lines when Python or shell structure benefits from it.
+The complete command may span multiple lines.
 Do not substitute Bash, Zsh, Fish, or Readline built-ins such as `bind` for Xonsh features.
 For shell-internal behavior, use Xonsh syntax or its Python APIs.
 Output ONLY the command to place in the shell buffer.
 Never explain, use markdown, or add surrounding quotes.
-Use an existing command prefix when it contains exact filenames or arguments.
-Do not execute anything. If the intent is unclear, output nothing."""
+Use an existing command prefix when it contains exact filenames or arguments."""
 
 
 # Prompt Toolkit 3.0 has no enum value for modified Tab. Route enhanced-keyboard
@@ -236,15 +243,16 @@ class _StreamingAIAutoSuggest(AutoSuggest):
 
     def _voice_command_context(self, buffer, transcript, execution_context=None):
         context = (
-            f"You are working in Xonsh, a Python-powered shell, on "
-            f"{platform.system()}.\n"
-            f"The current working directory is {json.dumps(os.getcwd())}.\n"
-            "The existing command-line buffer is "
-            f"{json.dumps(buffer.text, ensure_ascii=False)}.\n"
-            "The user's spoken request is "
-            f"{json.dumps(transcript, ensure_ascii=False)}.\n"
-            "Their recent commands, from oldest to newest, are "
-            f"{json.dumps(self._recent_commands(buffer), ensure_ascii=False)}."
+            "\n".join([
+                f"I am working in Xonsh on {platform.system()}.",
+                f"My current working directory is {json.dumps(os.getcwd())}.",
+                f"Here is the command I am working on: {json.dumps(buffer.text, ensure_ascii=False)}",
+                "",
+                "Here's my recent command history from oldest to newest:",
+                f"{json.dumps(self._recent_commands(buffer), ensure_ascii=False)}.",
+                "",
+                f"Here's what I need help with:\n>{json.dumps(transcript, ensure_ascii=False)}.",
+            ])
         )
         if execution_context is not None:
             context += (
