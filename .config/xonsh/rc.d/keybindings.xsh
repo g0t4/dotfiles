@@ -1,5 +1,8 @@
 """Custom interactive keybindings for Xonsh's Prompt Toolkit shell."""
 
+from prompt_toolkit.filters import vi_insert_mode
+from prompt_toolkit.key_binding.bindings.named_commands import get_by_name
+
 # Terminal input contract:
 # In iTerm2 Profiles > Keys, configure each Option key as Esc+, not Meta.
 # Raw 8-bit Meta turns Alt-Shift-F into byte 0xC6, which Python's incremental
@@ -27,6 +30,18 @@ def _wes_keybindings(bindings, **_):
     @bindings.add("escape", ".", save_before=lambda event: False)
     def _yank_last_argument(event):
         event.current_buffer.yank_last_arg()
+
+    # Prompt Toolkit's default Ctrl-W uses whitespace-delimited WORDs even in
+    # Vi insert mode. Match Vim's small-word behavior so punctuation such as
+    # dots and @ signs forms its own deletion boundary.
+    @bindings.add(
+        "c-w",
+        filter=vi_insert_mode,
+        eager=True,
+        save_before=lambda event: False,
+    )
+    def _backward_kill_small_word(event):
+        get_by_name("backward-kill-word").handler(event)
 
     @bindings.add("c-c", save_before=lambda event: False)
     def _clear_buffer_without_new_prompt(event):

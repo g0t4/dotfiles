@@ -59,3 +59,33 @@ def test_alt_dot_cycles_previous_command_arguments_in_vi_mode():
     )
 
     assert completed.returncode == 0, completed.stderr
+
+
+def test_ctrl_w_uses_vim_small_word_boundaries_in_vi_insert_mode():
+    keybindings = ROOT / ".config/xonsh/rc.d/keybindings.xsh"
+    command = (
+        f"source {keybindings}; "
+        "from prompt_toolkit.buffer import Buffer; "
+        "from prompt_toolkit.clipboard import InMemoryClipboard; "
+        "from prompt_toolkit.key_binding import KeyBindings; "
+        "from types import SimpleNamespace; "
+        "bindings = KeyBindings(); events.on_ptk_create.fire(bindings=bindings); "
+        "ctrl_w = next(binding.handler for binding in bindings.bindings "
+        "if binding.handler.__name__ == '_backward_kill_small_word'); "
+        "buffer = Buffer(); buffer.text = 'foo.bar@example'; "
+        "buffer.cursor_position = len(buffer.text); "
+        "event = SimpleNamespace(current_buffer=buffer, arg=1, is_repeat=False, "
+        "app=SimpleNamespace(clipboard=InMemoryClipboard())); "
+        "ctrl_w(event); assert buffer.text == 'foo.bar@'; "
+        "ctrl_w(event); assert buffer.text == 'foo.bar'; "
+        "ctrl_w(event); assert buffer.text == 'foo.'; "
+        "ctrl_w(event); assert buffer.text == 'foo'"
+    )
+
+    completed = subprocess.run(
+        ["xonsh", "--no-rc", "-c", command],
+        capture_output=True,
+        text=True,
+    )
+
+    assert completed.returncode == 0, completed.stderr
