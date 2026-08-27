@@ -181,10 +181,10 @@ def register_git_abbreviations(registry: AbbreviationRegistry):
     abbr(registry, 'glp', 'git log --patch')  # Fish line 448
     abbr(registry, 'glpf', 'git log --pretty=full --patch')  # Fish line 449
     abbr(registry, re.compile('glpf?\\d+'), _fish_abbreviation('glp_x'))  # Fish line 450
-    abbr(registry, 'gls', 'git log --stat HEAD@{push}..HEAD')  # Fish line 462
-    abbr(registry, 'glsf', 'git log --pretty=full --stat HEAD@{push}..HEAD')  # Fish line 463
+    abbr(registry, 'gls', "git log --stat 'HEAD@{push}..HEAD'")  # Fish line 462
+    abbr(registry, 'glsf', "git log --pretty=full --stat 'HEAD@{push}..HEAD'")  # Fish line 463
     abbr(registry, re.compile('gls[f]{0,1}\\d+'), _fish_abbreviation('glsX'))  # Fish line 464
-    abbr(registry, 'glg', 'git log --graph HEAD@{push}~1..HEAD')  # Fish line 473
+    abbr(registry, 'glg', "git log --graph 'HEAD@{push}~1..HEAD'")  # Fish line 473
     abbr(registry, 'ggsup', 'git branch --set-upstream-to=origin/$(git_current_branch)')  # Fish line 485
     abbr(registry, 'git_delta_copyable', 'git -c delta.side-by-side=false -c delta.line-numbers=false')  # Fish line 492
     abbr(registry, 'git_delta_side_by_side', 'git -c delta.side-by-side=true')  # Fish line 493
@@ -195,7 +195,7 @@ def register_git_abbreviations(registry: AbbreviationRegistry):
     abbr(registry, 'gdlc', 'git log --patch HEAD~1..HEAD')  # Fish line 517
     abbr(registry, 'gdlcu', 'git -c delta.side-by-side=false log --patch HEAD~1..HEAD')  # Fish line 518
     abbr(registry, re.compile('gdlc[u]?\\d+'), _fish_abbreviation('gdlcX'))  # Fish line 519
-    abbr(registry, 'gd_stat', 'git diff --stat HEAD@{push}..HEAD')  # Fish line 533
+    abbr(registry, 'gd_stat', "git diff --stat 'HEAD@{push}..HEAD'")  # Fish line 533
     abbr(registry, 'glgrep', 'git log --grep="%"', cursor_marker="%")  # Fish line 542
     abbr(registry, 'gd_patch', 'git --no-pager diff --no-color')  # Fish line 545
     abbr(registry, 'rr', '_repo_root')  # Fish line 598
