@@ -71,10 +71,6 @@ def register_misc_abbreviations(registry: AbbreviationRegistry):
     abbr(registry, 'cir', 'code-insiders $(_repo_root)')  # Fish line 3401
     abbr(registry, 'cie', 'code --inspect-extensions=9229 .')  # Fish line 3403
     abbr(registry, 'cieb', 'code --inspect-brk-extensions=9229 .')  # Fish line 3404
-    abbr(registry, 'zh', 'zed .')  # Fish line 3407
-    abbr(registry, 'zr', 'zed $(_repo_root)')  # Fish line 3408
-    abbr(registry, 'zph', 'zed-preview .')  # Fish line 3409
-    abbr(registry, 'zpr', 'zed-preview $(_repo_root)')  # Fish line 3410
     abbr(registry, 'cs', 'cursor .')  # Fish line 3413
     abbr(registry, 'csr', 'cursor $(_repo_root)')  # Fish line 3414
     abbr(registry, 'zx', 'z -x')  # Fish line 3417
