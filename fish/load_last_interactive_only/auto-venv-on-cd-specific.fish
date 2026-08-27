@@ -78,54 +78,54 @@ end
 # run during startup to activate venv if initial PWD is in a venv
 _auto_venv_pwd_changed_handler
 
-# * auto nvm use
+# * auto nvm use (if nvm is in path)
+if command -q nvm
 
-# PRN could skip registering the PWD change handler if nvm not in path
-
-function find_upward --argument-names filename start_dir
-    if test -z "$start_dir"
-        set start_dir $PWD
-    end
-
-    set -l dir (path resolve "$start_dir")
-
-    while true
-        set -l candidate "$dir/$filename"
-
-        if test -e "$candidate"
-            echo "$candidate"
-            return 0
+    function find_upward --argument-names filename start_dir
+        if test -z "$start_dir"
+            set start_dir $PWD
         end
 
-        set -l parent (path dirname "$dir")
+        set -l dir (path resolve "$start_dir")
 
-        if test "$parent" = "$dir"
-            return 1
+        while true
+            set -l candidate "$dir/$filename"
+
+            if test -e "$candidate"
+                echo "$candidate"
+                return 0
+            end
+
+            set -l parent (path dirname "$dir")
+
+            if test "$parent" = "$dir"
+                return 1
+            end
+
+            set dir "$parent"
         end
-
-        set dir "$parent"
     end
+
+    function __auto_nvm_use --on-variable PWD
+
+        set -l nvmrc (find_upward .nvmrc)
+
+        if test -n "$nvmrc"
+            set -l requested_node_version (string trim <"$nvmrc")
+
+            # FYI if `nvm current` is ever slow then find a better way to evaluate if current version is requested
+            # with fish shell nvm functions, # FYI if `nvm current` is fast (path lookup + query)
+            if test (nvm current) != "$requested_node_version"
+                nvm use "$requested_node_version" >/dev/null
+            end
+        else
+            # no .nvmrc => use system version of node
+            if test (nvm current) != system
+                nvm use system >/dev/null
+            end
+        end
+    end
+
+    __auto_nvm_use
 end
 
-function __auto_nvm_use --on-variable PWD
-
-    set -l nvmrc (find_upward .nvmrc)
-
-    if test -n "$nvmrc"
-        set -l requested_node_version (string trim <"$nvmrc")
-
-        # FYI if `nvm current` is ever slow then find a better way to evaluate if current version is requested
-        # with fish shell nvm functions, # FYI if `nvm current` is fast (path lookup + query)
-        if test (nvm current) != "$requested_node_version"
-            nvm use "$requested_node_version" >/dev/null
-        end
-    else
-        # no .nvmrc => use system version of node
-        if test (nvm current) != system
-            nvm use system >/dev/null
-        end
-    end
-
-end
-
-__auto_nvm_use
