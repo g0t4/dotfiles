@@ -71,8 +71,8 @@ async def ask_openai(connection):
         current_command = await fix_xonsh_get_commandline(connection, session, prompt)
     log(f"{current_command=}")  # 18us to print
 
-    if current_command is None:
-        failure = "No current command, are you missing iterm2 shell integration?"
+    if current_command is None or current_command.strip() == "":
+        failure = "No current command, did you forget to type it out OR are you missing iterm2 shell integration?"
         log(failure)
         await session.async_send_text(failure)
         return
