@@ -37,19 +37,24 @@ async def ask_openai(connection):
     # * ask_shell
     ask_shell = await session.async_get_variable("user.ask_shell")
     if ask_shell is None:
-        log("WARNING missing variable for user.ask_shell, falling back to possibly stale iterm builtin 'shell' variable")
+        # TODO add ask_shell xonsh
+        log("WARNING missing variable for `user.ask_shell`, falling back to possibly stale iterm builtin `shell` variable")
         ask_shell = await session.async_get_variable("shell")
         if ask_shell is None:
-            ask_shell = "unknown"
+            failure = "WARNING missing variable for both `user.ask_shell` and `shell`, cannot tell the agent what your shell is, aborting..."
+            log(failure)
+            await session.async_send_text(failure)
+            return
 
     # * ask_os
     ask_os = await session.async_get_variable("user.ask_os")
     if ask_os is None:
         # FYI iterm's builtin `uname` doesn't work on remotes so there's no reason to use it
-        failure = f"WARNING missing variable for user.ask_os, cannot tell the agent what your OS is, aborting..."
+        failure = f"WARNING missing variable for `user.ask_os`, cannot tell the agent what your OS is, aborting..."
         log(failure)
-        await session.async_send_text(failure)
-        return
+        # TODO add ask_os to xonsh and then enable aborting with failure message below so you see it when it fails and isn't a silent log warning only
+        # await session.async_send_text(failure)
+        # return
 
     # * determine current shell
     commandLine = await session.async_get_variable("commandLine")
