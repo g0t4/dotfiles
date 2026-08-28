@@ -95,6 +95,9 @@ if status is-interactive
         end
 
         function iterm2_print_user_vars
+            # currently when I _DISCONNECT FROM SSH_ the "shell" variable is NOT updated to reflect the current shell
+            # - it appears to work when opening a new shell locally, opening ssh to diff shell remotely, and even opening a new shell remotely
+            # - almost as if iTerm only sets this variable one time
             # mostly to avoid stale values after exist SSH, to set back to values the host has
             # FYI this is called by iterm2_shell_integration.fish on every prompt
             iterm2_set_user_var ask_shell fish
