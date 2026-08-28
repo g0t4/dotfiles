@@ -32,3 +32,4 @@ $WES_DOTFILES = str(Path($WES_REPOS) / "github/g0t4/dotfiles")
 $WES_ASK_CAPTURES = str(Path($XDG_STATE_HOME) / "nvim/ask-openai")
 
 $VI_MODE = True
+$XONSH_HISTORY_MATCH_ANYWHERE = True
