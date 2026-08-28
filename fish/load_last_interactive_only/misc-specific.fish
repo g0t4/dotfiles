@@ -852,10 +852,8 @@ if $IS_MACOS
 
     # -l is only on macOS
     # -i/-f are same as pgrep
-    abbr pkill "pkill -ilf" # same options as pgrep (-l (long) shows underlying kill command used per PID)
-    abbr pkill9 'pkill -9 -ilf'
-    abbr pkillu 'pkill -U $USER -ilf'
-    abbr pkill9u 'pkill -9 -U $USER -ilf'
+    abbr pkill "pkill -9 -ilf" # same options as pgrep (-l (long) shows underlying kill command used per PID)
+    abbr pkillu 'pkill -9 -U $USER -ilf'
 
 else if $IS_LINUX
     # -i ignore case (same as mac)
@@ -870,14 +868,13 @@ else if $IS_LINUX
 
     # -l is NOT on linux version
     # -i/-f are same as pgrep
-    abbr pkill "pkill -if" # same options as pgrep (-l (long) shows underlying kill command used per PID)
-    abbr pkill9 'pkill -9 -if'
-    abbr pkillu 'pkill -U $USER -if'
-    abbr pkill9u 'pkill -9 -U $USER -if'
+    abbr pkill "pkill -9 -if" # same options as pgrep (-l (long) shows underlying kill command used per PID)
+    abbr pkillu 'pkill -9 -U $USER -if'
 
     # FYI I might still be missing some differences w/ linux... I didn't review all possible pgrep/pkill args
-
 end
+abbr kill9 "kill -9"
+
 abbr psfull "grc ps -o 'user,pid,pcpu,pmem,vsz,rss,tty,stat,start,time,comm' -ax"
 if $IS_LINUX
     # not sure I wanna even try to replicate this on mac as then I might habituate wanting a different command, I like this alot on linux for showing current shells and their hierarchy of processes
