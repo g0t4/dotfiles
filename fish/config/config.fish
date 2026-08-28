@@ -98,10 +98,12 @@ if status is-interactive
             # currently when I _DISCONNECT FROM SSH_ the "shell" variable is NOT updated to reflect the current shell
             # - it appears to work when opening a new shell locally, opening ssh to diff shell remotely, and even opening a new shell remotely
             # - almost as if iTerm only sets this variable one time
-            # mostly to avoid stale values after exist SSH, to set back to values the host has
+            # - AND IIRC this happens when you quit a nested shell (on a remote)
             # FYI this is called by iterm2_shell_integration.fish on every prompt
             iterm2_set_user_var ask_shell fish
-            # FYI caching value in $ask_os, to avoid penality on every prompt
+            # FYI caching OS value in $ask_os, to avoid penality on every prompt
+            # btw iterm2 provides a `uname` variable that is also wrong, doesn't even show correctly on a remote in my testing!
+            # and I am sure even if it did update on remote it would have the same stale issue on disconnecting/closing a shell
             iterm2_set_user_var ask_os "$ask_os"
         end
     end

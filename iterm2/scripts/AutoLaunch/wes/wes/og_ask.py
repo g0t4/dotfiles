@@ -35,7 +35,7 @@ async def ask_openai(connection):
         return
 
     # *** shell
-    #   user.ask_* variables are set in the shell (on prompt redraw) using iterm2_print_user_vars/iterm2_set_user_var via iterm2 shell integration
+
     ask_shell = await session.async_get_variable("user.ask_shell")
     if ask_shell is None:
         # fallback to iterm2's shell variable (not specific to a remote shell)
@@ -93,6 +93,8 @@ async def ask_openai(connection):
     # *** clear prompt (start)
     task_clear = clear_line()
 
+    #   TODO is "os" updated when on a remote? via iterm shell integration?
+    #   user.ask_* variables are set in the shell (on prompt redraw) using iterm2_print_user_vars/iterm2_set_user_var via iterm2 shell integration
     ask_os = await session.async_get_variable("user.ask_os")
     if ask_os is None:
         # fallback to iterm2's host os (not specific to a remote shell)
