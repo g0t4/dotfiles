@@ -16,6 +16,7 @@ from xonsh.parsers.completion_context import CompletionContextParser
 from wes_files_abbreviations import register_files_abbreviations
 from wes_fish_bridge import FishFunctionError, fish_function
 from wes_fish_z import FishZ, FishZError
+from wes_interactive_cat import InteractiveCat
 from wes_logging import DEFAULT_LOG_PATH, configure_logging, get_logger
 from wes_fzf_pickers import (
     FzfMru,
@@ -154,6 +155,12 @@ def _files_cd(args, stdin=None, **_):
 
 
 aliases["cd"] = _files_cd
+
+
+# This intentionally does not affect scripts or `xonsh -c`: the richer behavior
+# is a REPL affordance, while non-interactive callers retain the system cat.
+if bool(${...}.get("XONSH_INTERACTIVE", False)):
+    aliases["cat"] = InteractiveCat(env=${...})
 
 
 def _files_cd_to_path(path, stdout=None, stderr=None):
@@ -550,6 +557,6 @@ def _files_fzf_picker_bindings(bindings, prompter=None, **_):
     bindings.add("escape", "G", filter=insert_modes)(_files_commit_picker_handler)
     bindings.add("escape", "V", filter=insert_modes)(_files_variable_picker_handler)
 
-# TODO SKIPPED_MIGRATION: Fish's ls/cat/tree overrides. Delegating them through
+# TODO SKIPPED_MIGRATION: Fish's ls/tree overrides. Delegating them through
 # `fish -ic` loses native TTY/streaming semantics, so stock Xonsh commands remain.
 # TODO SKIPPED_MIGRATION: `complete -c batman -w man`; no Xonsh completion wrapper yet.
