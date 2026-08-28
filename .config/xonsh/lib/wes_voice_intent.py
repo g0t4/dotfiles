@@ -8,6 +8,7 @@ import signal
 import shutil
 import subprocess
 import tempfile
+from functools import cached_property
 from pathlib import Path
 from typing import Callable
 
@@ -44,16 +45,22 @@ class VoiceIntent:
         whisper: str = "whisper-cli",
         recorder_factory: Callable[..., subprocess.Popen] = subprocess.Popen,
         transcriber: Callable[..., subprocess.CompletedProcess] = subprocess.run,
+        executable_resolver: Callable[[str], str] = resolve_executable,
     ) -> None:
         self.audio_device = audio_device
         self.model = Path(model)
-        self.ffmpeg = resolve_executable(ffmpeg)
-        self.whisper = resolve_executable(whisper)
+        self._resolve_executable = executable_resolver
+        self.ffmpeg = self._resolve_executable(ffmpeg)
+        self._whisper_name = whisper
         self._recorder_factory = recorder_factory
         self._transcriber = transcriber
         self._recorder: subprocess.Popen | None = None
         self._audio_path: Path | None = None
         self._transcription_task: asyncio.Task | None = None
+
+    @cached_property
+    def whisper(self) -> str:
+        return self._resolve_executable(self._whisper_name)
 
     @property
     def recording(self) -> bool:
@@ -61,14 +68,18 @@ class VoiceIntent:
 
     @property
     def transcribing(self) -> bool:
-        return self._transcription_task is not None and not self._transcription_task.done()
+        return (
+            self._transcription_task is not None and not self._transcription_task.done()
+        )
 
     def start(self) -> Path:
         if self.recording:
             raise RuntimeError("voice recording is already active")
         if self.transcribing:
             raise RuntimeError("voice transcription is still active")
-        handle = tempfile.NamedTemporaryFile(prefix="xonsh-voice-", suffix=".wav", delete=False)
+        handle = tempfile.NamedTemporaryFile(
+            prefix="xonsh-voice-", suffix=".wav", delete=False
+        )
         handle.close()
         self._audio_path = Path(handle.name)
         self._recorder = self._recorder_factory(

@@ -1,5 +1,4 @@
 import asyncio
-import signal
 import subprocess
 from pathlib import Path
 from types import SimpleNamespace
@@ -46,14 +45,20 @@ def test_voice_intent_records_transcribes_and_removes_audio(tmp_path, monkeypatc
     recorder = FakeRecorder()
     model = tmp_path / "model.bin"
     model.touch()
-    monkeypatch.setattr(voice_module.tempfile, "NamedTemporaryFile", lambda **_: SimpleNamespace(
-        name=str(tmp_path / "voice.wav"), close=lambda: None
-    ))
+    monkeypatch.setattr(
+        voice_module.tempfile,
+        "NamedTemporaryFile",
+        lambda **_: SimpleNamespace(
+            name=str(tmp_path / "voice.wav"), close=lambda: None
+        ),
+    )
     commands = []
 
     def transcribe(command, **_):
         commands.append(command)
-        return subprocess.CompletedProcess(command, 0, "  cut this from one to two\n", "")
+        return subprocess.CompletedProcess(
+            command, 0, "  cut this from one to two\n", ""
+        )
 
     voice = voice_module.VoiceIntent(
         model=model,
@@ -87,6 +92,25 @@ def test_insert_transcript_preserves_existing_command():
     buffer = Buffer()
     voice_module.insert_transcript(buffer, "cut from 1:12 to 1:42")
     assert buffer.inserted == " cut from 1:12 to 1:42"
+
+
+def test_whisper_is_resolved_lazily_and_cached(tmp_path):
+    voice_module = _module()
+    resolutions = []
+
+    def resolve(name):
+        resolutions.append(name)
+        return f"/tools/{name}"
+
+    voice = voice_module.VoiceIntent(
+        model=tmp_path / "model.bin",
+        executable_resolver=resolve,
+    )
+
+    assert resolutions == ["ffmpeg"]
+    assert voice.whisper == "/tools/whisper-cli"
+    assert voice.whisper == "/tools/whisper-cli"
+    assert resolutions == ["ffmpeg", "whisper-cli"]
 
 
 def test_resolve_executable_finds_homebrew_when_path_does_not(monkeypatch):
