@@ -34,8 +34,7 @@ async def ask_openai(connection):
     if session is None:
         return
 
-    # *** shell
-
+    # * ask_shell
     ask_shell = await session.async_get_variable("user.ask_shell")
     if ask_shell is None:
         log("WARNING missing variable for user.ask_shell, falling back to possibly stale iterm builtin 'shell' variable")
@@ -43,7 +42,16 @@ async def ask_openai(connection):
         if ask_shell is None:
             ask_shell = "unknown"
 
-    # *** determine running shell
+    # * ask_os
+    ask_os = await session.async_get_variable("user.ask_os")
+    if ask_os is None:
+        # FYI iterm's builtin `uname` doesn't work on remotes so there's no reason to use it
+        failure = f"WARNING missing variable for user.ask_os, cannot tell the agent what your OS is, aborting..."
+        log(failure)
+        await session.async_send_text(failure)
+        return
+
+    # * determine current shell
     commandLine = await session.async_get_variable("commandLine")
     jobName = await session.async_get_variable("jobName")
     which_shell = jobName
@@ -91,15 +99,6 @@ async def ask_openai(connection):
 
     # *** clear prompt (start)
     task_clear = clear_line()
-
-    #   user.ask_* variables are set in the shell (on prompt redraw) using iterm2_print_user_vars/iterm2_set_user_var via iterm2 shell integration
-    ask_os = await session.async_get_variable("user.ask_os")
-    if ask_os is None:
-        # FYI iterm's builtin `uname` doesn't work on remotes so there's no reason to use it
-        failure = f"WARNING missing variable for user.ask_os, cannot tell the agent what your OS is, aborting..."
-        log(failure)
-        await session.async_send_text(failure)
-        return
 
     # FYI last_comand is not essential, sometimes it is useful to provide recent a recent command as context (and then I can just ask a question and it sees prior command to apply question to)
     env_last_command = await session.async_get_variable("lastCommand")  # FYI works on remotes w/ iterm2 shell integration
