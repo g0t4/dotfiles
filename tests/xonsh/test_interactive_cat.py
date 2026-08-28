@@ -24,10 +24,17 @@ class Env(dict):
         }
 
 
+class Spec:
+    def __init__(self, *, last=True, captured="hiddenobject", captured_stdout=object()):
+        self.last_in_pipeline = last
+        self.captured = captured
+        self.captured_stdout = captured_stdout
+
+
 def harness(tmp_path, monkeypatch):
     calls = []
     tools = tmp_path / "bin"
-    tools.mkdir()
+    tools.mkdir(parents=True)
     for name in ("cat", "bat", "eza", "file", "imgcat"):
         executable = tools / name
         executable.touch()
@@ -66,9 +73,7 @@ def test_interactive_operands_dispatch_files_directories_and_images(
 
     cat._run = run
 
-    assert cat(
-        [str(text), str(directory), str(image)], stdin=Tty(), stdout=Tty()
-    ) == 0
+    assert cat([str(text), str(directory), str(image)], stdin=Tty(), stdout=Tty()) == 0
     commands = [Path(argv[0]).name for argv, _ in calls]
     assert commands == ["file", "bat", "eza", "file", "imgcat"]
     assert calls[1][0][1:] == ["--color=always", "--", str(text)]
@@ -81,6 +86,25 @@ def test_bat_color_is_not_forced_when_output_is_piped(tmp_path, monkeypatch):
 
     assert cat([str(text)], stdin=Tty(), stdout=io.StringIO()) == 0
     assert calls[1][0][1:] == ["--", str(text)]
+
+
+def test_xonsh_capture_model_distinguishes_terminal_pipeline_and_redirect(
+    tmp_path, monkeypatch
+):
+    text = tmp_path / "notes.txt"
+    text.write_text("hello")
+
+    terminal_cat, terminal_calls = harness(tmp_path / "terminal", monkeypatch)
+    assert terminal_cat([str(text)], stdin=Tty(), spec=Spec()) == 0
+    assert terminal_calls[1][0][1] == "--color=always"
+
+    pipeline_cat, pipeline_calls = harness(tmp_path / "pipeline", monkeypatch)
+    assert pipeline_cat([str(text)], stdin=Tty(), spec=Spec(last=False)) == 0
+    assert "--color=always" not in pipeline_calls[1][0]
+
+    redirect_cat, redirect_calls = harness(tmp_path / "redirect", monkeypatch)
+    assert redirect_cat([str(text)], stdin=Tty(), spec=Spec(captured_stdout=None)) == 0
+    assert "--color=always" not in redirect_calls[1][0]
 
 
 def test_no_arguments_lists_current_directory(tmp_path, monkeypatch):

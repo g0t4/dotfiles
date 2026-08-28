@@ -57,14 +57,25 @@ class InteractiveCat:
             stderr=stderr,
         ).returncode
 
-    def _show_file(self, path, *, stdin=None, stdout=None, stderr=None):
+    @staticmethod
+    def _is_terminal_output(stdout, spec):
+        if spec is not None:
+            return bool(
+                spec.last_in_pipeline
+                and spec.captured == "hiddenobject"
+                and spec.captured_stdout is not None
+            )
+        return (stdout or sys.stdout).isatty()
+
+    def _show_file(self, path, *, stdin=None, stdout=None, stderr=None, spec=None):
         executable = self._command("bat", "batcat")
         if executable is None:
             return self._stock_cat(
                 [str(path)], stdin=stdin, stdout=stdout, stderr=stderr
             )
-        output_stream = stdout or sys.stdout
-        color_args = ["--color=always"] if output_stream.isatty() else []
+        color_args = (
+            ["--color=always"] if self._is_terminal_output(stdout, spec) else []
+        )
         return self._execute(
             [executable, *color_args, "--", str(path)],
             stdin=stdin,
@@ -95,7 +106,7 @@ class InteractiveCat:
             stderr=stderr,
         ).returncode
 
-    def __call__(self, args, stdin=None, stdout=None, stderr=None, **_):
+    def __call__(self, args, stdin=None, stdout=None, stderr=None, spec=None, **_):
         input_stream = stdin or sys.stdin
         if not input_stream.isatty() or any(arg.startswith("-") for arg in args):
             return self._stock_cat(args, stdin=stdin, stdout=stdout, stderr=stderr)
@@ -109,7 +120,11 @@ class InteractiveCat:
                     self._show_image(path, stdin=stdin, stdout=stdout, stderr=stderr)
                     if self._is_image(path)
                     else self._show_file(
-                        path, stdin=stdin, stdout=stdout, stderr=stderr
+                        path,
+                        stdin=stdin,
+                        stdout=stdout,
+                        stderr=stderr,
+                        spec=spec,
                     )
                 )
             elif path.is_dir():
