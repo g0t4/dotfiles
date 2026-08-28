@@ -38,8 +38,7 @@ async def ask_openai(connection):
 
     ask_shell = await session.async_get_variable("user.ask_shell")
     if ask_shell is None:
-        # fallback to iterm2's shell variable (not specific to a remote shell)
-        # IIUC this won't work on remotes?
+        log("WARNING missing variable for user.ask_shell, falling back to possibly stale iterm builtin 'shell' variable")
         ask_shell = await session.async_get_variable("shell")
         if ask_shell is None:
             ask_shell = "unknown"
@@ -51,7 +50,7 @@ async def ask_openai(connection):
     if commandLine == "xonsh":
         which_shell = "xonsh"
     if ask_shell == "xonsh":
-        # FYI "shell" variable is set to xonsh when ssh'd into remote machine w/ iterm integration so we don't need to set ask_shell in xonsh
+        # TODO set user.ask_shell and user.ask_os within xonsh too? point codex at your fish impl and ask for the same in xonsh
         # PRN? also how about use ask_shell variable (could be shell if ask_shell isn't set) to decide shell!
         which_shell = "xonsh"
     print(f'{jobName=} {commandLine=} {which_shell=} {ask_shell=}')
@@ -93,13 +92,14 @@ async def ask_openai(connection):
     # *** clear prompt (start)
     task_clear = clear_line()
 
-    #   TODO is "os" updated when on a remote? via iterm shell integration?
     #   user.ask_* variables are set in the shell (on prompt redraw) using iterm2_print_user_vars/iterm2_set_user_var via iterm2 shell integration
     ask_os = await session.async_get_variable("user.ask_os")
     if ask_os is None:
-        # fallback to iterm2's host os (not specific to a remote shell)
-        ask_os = platform.system()
-        # good use of ask_os is for `apt install` vs `brew install` vs `yum install` on RHEL, type "install netstat" and run on mac/debian and see the difference
+        # FYI iterm's builtin `uname` doesn't work on remotes so there's no reason to use it
+        failure = f"WARNING missing variable for user.ask_os, cannot tell the agent what your OS is, aborting..."
+        log(failure)
+        await session.async_send_text(failure)
+        return
 
     # FYI last_comand is not essential, sometimes it is useful to provide recent a recent command as context (and then I can just ask a question and it sees prior command to apply question to)
     env_last_command = await session.async_get_variable("lastCommand")  # FYI works on remotes w/ iterm2 shell integration
