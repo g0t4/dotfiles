@@ -100,6 +100,7 @@ if status is-interactive
             # - almost as if iTerm only sets this variable one time
             # - AND IIRC this happens when you quit a nested shell (on a remote)
             # FYI this is called by iterm2_shell_integration.fish on every prompt
+            # - even though the value is hardcoded, it needs to be set to refresh after a nested shell exits (i.e. ssh or local)
             iterm2_set_user_var ask_shell fish
             # FYI caching OS value in $ask_os, to avoid penality on every prompt
             # btw iterm2 provides a `uname` variable that is also wrong, doesn't even show correctly on a remote in my testing!
