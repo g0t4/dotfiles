@@ -1,5 +1,6 @@
 import importlib
 import platform
+import re
 import subprocess
 import sys
 from pathlib import Path
@@ -12,6 +13,7 @@ sys.path.insert(0, str(ROOT / "xonsh"))
 from generate_misc_abbreviations import (  # noqa: E402
     MODULES,
     SKIPPED_ABBREVIATION_LINES,
+    SOURCE,
     generate_all,
 )
 from wes_abbreviations import AbbreviationContext, AbbreviationRegistry  # noqa: E402
@@ -47,15 +49,37 @@ def registry():
     return result
 
 
+def generated_abbreviation_count():
+    fish_abbreviation_count = sum(
+        bool(re.match(r"^\s*abbr(?:\s|$)", line))
+        for line in SOURCE.read_text().splitlines()
+    )
+    return fish_abbreviation_count - len(SKIPPED_ABBREVIATION_LINES)
+
+
 def test_generated_misc_modules_are_in_sync_with_fish_source():
     for target, expected in generate_all().items():
         assert target.read_text() == expected
 
 
+def test_generated_pkill_abbreviations_preserve_platform_specific_flags():
+    processes_module = next(
+        content
+        for target, content in generate_all().items()
+        if target.name == "wes_processes_abbreviations.py"
+    )
+
+    assert "platform_abbreviation('pkill -9 -ilf', 'pkill -9 -if')" in processes_module
+    assert (
+        "platform_abbreviation('pkill -9 -U $USER -ilf', "
+        "'pkill -9 -U $USER -if')"
+    ) in processes_module
+
+
 def test_every_misc_fish_abbreviation_is_assigned_to_one_focused_module():
     entries = registry().abbreviations
 
-    assert len(entries) == 833 - len(SKIPPED_ABBREVIATION_LINES)
+    assert len(entries) == generated_abbreviation_count()
     for entry in entries:
         if entry.cursor_marker and isinstance(entry.replacement, str):
             assert entry.replacement.count(entry.cursor_marker) == 1, entry.trigger
@@ -97,8 +121,21 @@ def test_static_regex_command_scoped_and_cursor_examples():
     assert result.text.endswith(" 9")
 
     result, _ = abbreviations.expand(context("pkill"))
-    expected = "pkill -ilf" if platform.system() == "Darwin" else "pkill -if"
+    expected = "pkill -9 -ilf" if platform.system() == "Darwin" else "pkill -9 -if"
     assert result.text == expected
+
+    result, _ = abbreviations.expand(context("pkillu"))
+    expected = (
+        "pkill -9 -U $USER -ilf"
+        if platform.system() == "Darwin"
+        else "pkill -9 -U $USER -if"
+    )
+    assert result.text == expected
+
+    result, _ = abbreviations.expand(context("kill9"))
+    assert result.text == "kill -9"
+    assert abbreviations.expand(context("pkill9")) is None
+    assert abbreviations.expand(context("pkill9u")) is None
 
     matches = abbreviations.applicable(context("tail42"))
     assert len(matches) == 1
@@ -113,8 +150,6 @@ def test_repo_root_command_substitutions_are_not_quoted_for_xonsh():
         ("orr", "open"),
         ("cr", "code"),
         ("cir", "code-insiders"),
-        ("zr", "zed"),
-        ("zpr", "zed-preview"),
         ("csr", "cursor"),
     ):
         result, _ = abbreviations.expand(context(trigger))
@@ -213,6 +248,7 @@ def test_all_split_rc_files_load_together():
     )
 
     assert completed.returncode == 0, completed.stderr
-    generated_count = 833 - len(SKIPPED_ABBREVIATION_LINES)
     dynamic_filetype_count = len(FILETYPE_GLOBS) * 4
-    assert completed.stdout.strip() == str(generated_count + dynamic_filetype_count)
+    assert completed.stdout.strip() == str(
+        generated_abbreviation_count() + dynamic_filetype_count
+    )

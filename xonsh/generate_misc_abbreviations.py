@@ -30,39 +30,37 @@ class Module:
 MODULES = (
     Module("system_services", ((47, 217),)),
     Module("kubernetes", ((218, 769),)),
-    Module("processes", ((770, 1179), (2775, 2815))),
-    Module("cloud_ai", ((1360, 1675), (2816, 3135), (3312, 3386), (3505, 3515))),
-    Module("media", ((1676, 2033), (2340, 2463), (2630, 2655), (3136, 3164), (3441, 3504))),
-    Module("packages_hardware", ((1180, 1359), (2034, 2339), (2464, 2774))),
-    Module("misc", ((3165, 3311), (3387, 3440), (3516, 3626))),
+    Module("processes", ((770, 1176), (2772, 2812))),
+    Module("cloud_ai", ((1357, 1672), (2813, 3132), (3309, 3383), (3502, 3512))),
+    Module("media", ((1673, 2030), (2337, 2460), (2627, 2652), (3133, 3161), (3438, 3501))),
+    Module("packages_hardware", ((1177, 1356), (2031, 2336), (2461, 2771))),
+    Module("misc", ((3162, 3308), (3384, 3437), (3513, 3623))),
 )
 
 SKIPPED_ABBREVIATION_LINES = {
     # Linux alternatives are folded into platform-aware macOS declarations.
-    868,
-    869,
-    873,
-    874,
-    875,
-    876,
+    866,
+    867,
+    871,
+    872,
     # Exact duplicate in the Fish source.
-    1531,
+    1528,
     # Templates executed by build_abbrs_for_filetype, not literal triggers.
-    958,
+    955,
+    959,
     962,
     965,
-    968,
     # Templates executed once per ~/.local/share/devtools/*.log file.
+    2876,
     2879,
     2882,
-    2885,
     # Folded into the platform-aware Linux lsusb declaration.
-    2750,
+    2747,
 }
 
 UNSUPPORTED_ABBREVIATION_LINES = {
-    3310: "uses Fish loop syntax to print the current shell PATH",
-    3442: "changes the current shell PATH",
+    3307: "uses Fish loop syntax to print the current shell PATH",
+    3439: "changes the current shell PATH",
 }
 
 REPLACEMENTS = {
@@ -78,16 +76,14 @@ REPLACEMENTS = {
 
 NAME_OVERRIDES = {
     # The Fish source accidentally declares man7 three times; preserve intent.
-    2210: "man8",
-    2211: "man9",
+    2207: "man8",
+    2208: "man9",
 }
 
 PLATFORM_REPLACEMENTS = {
-    855: ("pkill -ilf", "pkill -if"),
-    856: ("pkill -9 -ilf", "pkill -9 -if"),
-    857: ("pkill -U $USER -ilf", "pkill -U $USER -if"),
-    858: ("pkill -9 -U $USER -ilf", "pkill -9 -U $USER -if"),
-    2738: ("system_profiler SPUSBDataType", "lsusb -tv"),
+    855: ("pkill -9 -ilf", "pkill -9 -if"),
+    856: ("pkill -9 -U $USER -ilf", "pkill -9 -U $USER -if"),
+    2735: ("system_profiler SPUSBDataType", "lsusb -tv"),
 }
 
 
