@@ -43,8 +43,15 @@ function StreamDeckITerm2ScriptingInspector()
                         "Manage" of menu item "Manage" of menu "Scripts" of menu bar 1 of proc
                     click consoleMenuItem
                 end if
-                set Inspector to button "Inspector" of window "Script Console" of ¬
-                    application process "iTerm2"
+
+                -- open inspector button:
+                --   app:window(1):button(3)
+                --   AXDescription: Inspector<string>
+                --   AXHelp: Inspector<string>
+                --   unique ref: app:window('Script Console'):button(desc='Inspector')
+
+                set Inspector to first button of window "Script Console" of ¬
+                    application process "iTerm2" whose description is "Inspector"
                 click Inspector
             else
                 perform action "AXRaise" of inspectorWindow
