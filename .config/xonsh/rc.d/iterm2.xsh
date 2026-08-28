@@ -72,9 +72,14 @@ class _iTerm2Xonsh:
                 self.print_err('iTerm2 Integration: tmux is not enabled.')
             return False
 
-        if 'iTerm' not in (term_program := @.env.get('TERM_PROGRAM', '')):
+        term_program = @.env.get('TERM_PROGRAM', '')
+        is_remote = bool(@.env.get('SSH_CONNECTION') or @.env.get('SSH_TTY'))
+        if 'iTerm' not in term_program and not is_remote:
             if $ITERM2_INTEGRATION_DEBUG:
-                self.print_err(f'iTerm2 Integration: iTerm not in $TERM_PROGRAM {term_program}.')
+                self.print_err(
+                    'iTerm2 Integration: neither a local iTerm shell nor an '
+                    f'interactive SSH shell ($TERM_PROGRAM={term_program!r}).'
+                )
             return False
 
         return True

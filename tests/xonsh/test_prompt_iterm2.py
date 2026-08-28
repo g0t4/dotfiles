@@ -48,3 +48,37 @@ def test_enabled_iterm2_integration_registers_fields_and_wraps_prompt(tmp_path):
     )
 
     assert completed.returncode == 0, completed.stderr
+
+
+def test_remote_ssh_session_enables_iterm2_without_term_program(tmp_path):
+    iterm2 = ROOT / ".config/xonsh/rc.d/iterm2.xsh"
+    prompt = ROOT / ".config/xonsh/rc.d/prompt.xsh"
+    completed = run_xonsh(
+        "$XONSH_INTERACTIVE = True; $TERM = 'xterm-256color'; "
+        "$SSH_CONNECTION = 'client 123 server 22'; "
+        f"source {iterm2}; source {prompt}; "
+        "assert $ITERM2_INTEGRATION; "
+        "assert 'iterm2_prompt_start' in $PROMPT_FIELDS; "
+        "assert 'iterm2_prompt_end' in $PROMPT_FIELDS; "
+        "assert 'iterm2_prompt_start' in $PROMPT; "
+        "assert 'iterm2_prompt_end' in $PROMPT",
+        tmp_path,
+    )
+
+    assert completed.returncode == 0, completed.stderr
+
+
+def test_local_non_iterm_terminal_remains_disabled(tmp_path):
+    iterm2 = ROOT / ".config/xonsh/rc.d/iterm2.xsh"
+    prompt = ROOT / ".config/xonsh/rc.d/prompt.xsh"
+    completed = run_xonsh(
+        "$XONSH_INTERACTIVE = True; $TERM = 'xterm-256color'; "
+        "$TERM_PROGRAM = 'Apple_Terminal'; "
+        f"source {iterm2}; source {prompt}; "
+        "assert not $ITERM2_INTEGRATION; "
+        "assert 'iterm2_prompt_start' not in $PROMPT; "
+        "assert 'iterm2_prompt_end' not in $PROMPT",
+        tmp_path,
+    )
+
+    assert completed.returncode == 0, completed.stderr
