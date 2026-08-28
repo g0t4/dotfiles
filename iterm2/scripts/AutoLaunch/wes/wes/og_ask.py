@@ -34,14 +34,27 @@ async def ask_openai(connection):
     if session is None:
         return
 
+    # *** shell
+    #   user.ask_* variables are set in the shell (on prompt redraw) using iterm2_print_user_vars/iterm2_set_user_var via iterm2 shell integration
+    ask_shell = await session.async_get_variable("user.ask_shell")
+    if ask_shell is None:
+        # fallback to iterm2's shell variable (not specific to a remote shell)
+        # IIUC this won't work on remotes?
+        ask_shell = await session.async_get_variable("shell")
+        if ask_shell is None:
+            ask_shell = "unknown"
+
     # *** determine running shell
     commandLine = await session.async_get_variable("commandLine")
-    is_xonsh = commandLine == "xonsh"
     jobName = await session.async_get_variable("jobName")
     which_shell = jobName
-    if is_xonsh:
+    if commandLine == "xonsh":
         which_shell = "xonsh"
-    print(f'{jobName=} {is_xonsh=} {which_shell=}')
+    if ask_shell == "xonsh":
+        # FYI "shell" variable is set to xonsh when ssh'd into remote machine w/ iterm integration so we don't need to set ask_shell in xonsh
+        # PRN? also how about use ask_shell variable (could be shell if ask_shell isn't set) to decide shell!
+        which_shell = "xonsh"
+    print(f'{jobName=} {commandLine=} {which_shell=} {ask_shell=}')
 
     async def clear_line():
         ctrl_c = "\x03"
@@ -67,7 +80,7 @@ async def ask_openai(connection):
         await session.async_send_text(failure)
         return
     current_command = prompt.command
-    if is_xonsh:
+    if which_shell == "xonsh":
         current_command = await fix_xonsh_get_commandline(connection, session, prompt)
     log(f"{current_command=}")  # 18us to print
 
@@ -79,15 +92,6 @@ async def ask_openai(connection):
 
     # *** clear prompt (start)
     task_clear = clear_line()
-
-    # *** read ask_* vars:
-    #   user.ask_* variables are set in the shell (on prompt redraw) using iterm2_print_user_vars/iterm2_set_user_var via iterm2 shell integration
-    ask_shell = await session.async_get_variable("user.ask_shell")
-    if ask_shell is None:
-        # fallback to iterm2's shell variable (not specific to a remote shell)
-        ask_shell = await session.async_get_variable("shell")
-        if ask_shell is None:
-            ask_shell = "unknown"
 
     ask_os = await session.async_get_variable("user.ask_os")
     if ask_os is None:
