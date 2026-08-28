@@ -35,7 +35,7 @@ def harness(tmp_path, monkeypatch):
 
     def run(argv, **kwargs):
         calls.append((argv, kwargs))
-        stdout = "image/png\n" if Path(argv[0]).name == "file" else ""
+        stdout = "text/plain\n" if Path(argv[0]).name == "file" else ""
         return subprocess.CompletedProcess(argv, 0, stdout=stdout, stderr="")
 
     cat = InteractiveCat(env=Env(PATH=[str(tools)]), run=run)
@@ -66,9 +66,21 @@ def test_interactive_operands_dispatch_files_directories_and_images(
 
     cat._run = run
 
-    assert cat([str(text), str(directory), str(image)], stdin=Tty()) == 0
+    assert cat(
+        [str(text), str(directory), str(image)], stdin=Tty(), stdout=Tty()
+    ) == 0
     commands = [Path(argv[0]).name for argv, _ in calls]
     assert commands == ["file", "bat", "eza", "file", "imgcat"]
+    assert calls[1][0][1:] == ["--color=always", "--", str(text)]
+
+
+def test_bat_color_is_not_forced_when_output_is_piped(tmp_path, monkeypatch):
+    cat, calls = harness(tmp_path, monkeypatch)
+    text = tmp_path / "notes.txt"
+    text.write_text("hello")
+
+    assert cat([str(text)], stdin=Tty(), stdout=io.StringIO()) == 0
+    assert calls[1][0][1:] == ["--", str(text)]
 
 
 def test_no_arguments_lists_current_directory(tmp_path, monkeypatch):

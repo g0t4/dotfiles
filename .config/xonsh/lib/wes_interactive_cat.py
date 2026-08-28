@@ -63,8 +63,10 @@ class InteractiveCat:
             return self._stock_cat(
                 [str(path)], stdin=stdin, stdout=stdout, stderr=stderr
             )
+        output_stream = stdout or sys.stdout
+        color_args = ["--color=always"] if output_stream.isatty() else []
         return self._execute(
-            [executable, "--", str(path)],
+            [executable, *color_args, "--", str(path)],
             stdin=stdin,
             stdout=stdout,
             stderr=stderr,
