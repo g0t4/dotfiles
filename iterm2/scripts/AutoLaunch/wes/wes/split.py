@@ -78,12 +78,10 @@ async def prepare_new_profile(session: iterm2.Session, force_local_shell: bool) 
             if default_shell.endswith("fish"):
                 new_profile.set_command(f"{default_shell} -C \"{escaped_cmd}\"")
             elif default_shell.endswith("xonsh"):
-                # FYI in xonsh is there an equivalent of -C that will keep xonsh open when the escaped_cmd exits? that's why I use -C in fish (and not -c which will exit immediately) but I don't see -C or anything like it yet
-                # recall this is all about keeping the default shell open after closing SSH and not having windows vanish when a server is shutdown
-                # so I added my own INIT env var to do this
-                # FYI do this later... not now wes...
-                # new_profile.set_command(f"$XONSH_WES_INTERACTIVE_INIT_COMMAND=\"{escaped_cmd}\" {default_shell}")
-                new_profile.set_command(f"{default_shell} -c \"{escaped_cmd}\"")
+                # Set env var to run init command and keep xonsh open after SSH exits
+                # b/c xonsh has no equivalent `fish -C` arg that lets you run an init command + then keeping shell open after command exits (interactive shell)
+                # FYI wrap full "name=value" in the ""s... not just the value
+                new_profile.set_command(f"/usr/bin/env \"XONSH_WES_INTERACTIVE_INIT_COMMAND={escaped_cmd}\" {default_shell}")
             else:
                 print(f"default shell {default_shell} is not supported yet, you need to find the equivlanet of `fish -C` for keeping shell open after command exits")
                 raise NotImplementedError(f"Shell {default_shell} not supported")
