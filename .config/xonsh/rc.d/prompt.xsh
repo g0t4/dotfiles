@@ -196,6 +196,7 @@ $PROMPT = "{wes_status}{wes_login} {wes_pwd}{RESET}{wes_ai_snout} "
 $RIGHT_PROMPT = ""
 $TITLE = "{user}"
 
-# iterm2.xsh sorts before this file, so re-wrap the newly assigned prompt now.
-if hasattr(__xonsh__, "iterm2"):
+# iterm2.xsh always exposes its helper object, including on unsupported or
+# non-iTerm terminals. Only wrap when it actually registered the OSC fields.
+if bool(${...}.get("ITERM2_INTEGRATION", False)):
     __xonsh__.iterm2.add_iterm2_to_prompt()
