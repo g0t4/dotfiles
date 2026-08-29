@@ -5,5 +5,11 @@ import sys
 from pathlib import Path
 
 
-if len(sys.argv) >= 4 and sys.argv[3] == "1":
-    subprocess.run([sys.executable, Path(__file__).with_name("core.py")], check=False)
+# Git passes: previous HEAD, new HEAD, and 1 for a branch checkout or 0 for a
+# file checkout. Skip file-only operations such as `git checkout -- file` and
+# `git restore --staged`, since the repository itself did not change versions.
+_previous_head, _new_head, branch_checkout = sys.argv[1:4]
+shared_hook = Path(__file__).with_name("core.py")
+
+if branch_checkout == "1":
+    subprocess.run([sys.executable, shared_hook], check=False)

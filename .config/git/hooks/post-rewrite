@@ -5,5 +5,10 @@ import sys
 from pathlib import Path
 
 
-if len(sys.argv) < 2 or sys.argv[1] != "amend":
-    subprocess.run([sys.executable, Path(__file__).with_name("core.py")], check=False)
+# Git passes the rewrite command as argv[1]: currently `amend` or `rebase`.
+# Amend already invokes post-commit, so only rebase needs shared work here.
+rewrite_command = sys.argv[1]
+shared_hook = Path(__file__).with_name("core.py")
+
+if rewrite_command != "amend":
+    subprocess.run([sys.executable, shared_hook], check=False)

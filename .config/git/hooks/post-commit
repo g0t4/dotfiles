@@ -5,13 +5,18 @@ import sys
 from pathlib import Path
 
 
+# Skip commits made while Git still reports an active rebase or merge. This
+# avoids repeated work during a rebase and work against an intermediate state.
 git_dir_result = subprocess.run(
     ["git", "rev-parse", "--git-dir"], capture_output=True, text=True
 )
 if git_dir_result.returncode == 0:
     git_dir = Path(git_dir_result.stdout.strip())
-    if not any(
-        path.exists()
-        for path in (git_dir / "rebase-merge", git_dir / "rebase-apply", git_dir / "MERGE_HEAD")
-    ):
-        subprocess.run([sys.executable, Path(__file__).with_name("core.py")], check=False)
+    operation_markers = (
+        git_dir / "rebase-merge",
+        git_dir / "rebase-apply",
+        git_dir / "MERGE_HEAD",
+    )
+    if not any(marker.exists() for marker in operation_markers):
+        shared_hook = Path(__file__).with_name("core.py")
+        subprocess.run([sys.executable, shared_hook], check=False)
