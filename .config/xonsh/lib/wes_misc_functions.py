@@ -25,6 +25,8 @@ SKIPPED_FISH_FUNCTIONS = {
     "z",
     # processes.xsh installs the native current-shell implementation.
     "build_abbrs_for_filetype",
+    # python-specific.xsh installs a native wrapper that can change Xonsh's cwd.
+    "wcl",
 }
 
 
