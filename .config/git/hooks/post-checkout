@@ -1,16 +1,9 @@
-#!/usr/bin/env fish
+#!/usr/bin/env python3
 
-# rich --print "[bold]hook[$(status basename)] $argv"
+import subprocess
+import sys
+from pathlib import Path
 
-# Skip when it's not a branch checkout
-#   i.e. grstr  == git restore --staged
-#   also, git checkout -- file
-set is_branch "$argv[3]" # 1 means branch, 0 means no
-if test "$is_branch" = 0
-    # FYI get rid of this output once I am happy with this hook not triggering
-    echo "skipping post-checkout hook b/c no branch set: '$is_branch'"
-    exit 0
-end
 
-set parent_dir (dirname (status current-filename))
-"$parent_dir/core.fish"
+if len(sys.argv) >= 4 and sys.argv[3] == "1":
+    subprocess.run([sys.executable, Path(__file__).with_name("core.py")], check=False)

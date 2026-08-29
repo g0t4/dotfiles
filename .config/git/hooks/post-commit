@@ -1,15 +1,17 @@
-#!/usr/bin/env fish
+#!/usr/bin/env python3
 
-# rich --print "[bold]hook[$(status basename)] $argv"
+import subprocess
+import sys
+from pathlib import Path
 
-if test -d "$(git rev-parse --git-dir)/rebase-merge"
-    or test -d "$(git rev-parse --git-dir)/rebase-apply"
-    or test -f "$(git rev-parse --git-dir)/MERGE_HEAD"
-    # skip for rebase/merge
-    exit
-    # by the way $1 seems to have # commits affected? during rebase?
-    #   3)  2)
-end
 
-set parent_dir (dirname (status current-filename))
-"$parent_dir/core.fish"
+git_dir_result = subprocess.run(
+    ["git", "rev-parse", "--git-dir"], capture_output=True, text=True
+)
+if git_dir_result.returncode == 0:
+    git_dir = Path(git_dir_result.stdout.strip())
+    if not any(
+        path.exists()
+        for path in (git_dir / "rebase-merge", git_dir / "rebase-apply", git_dir / "MERGE_HEAD")
+    ):
+        subprocess.run([sys.executable, Path(__file__).with_name("core.py")], check=False)

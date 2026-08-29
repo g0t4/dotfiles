@@ -1,14 +1,9 @@
-#!/usr/bin/env fish
+#!/usr/bin/env python3
 
-# rich --print "[bold]hook[$(status basename)] $argv"
+import subprocess
+import sys
+from pathlib import Path
 
-# $1 == amend/rebase
-# post-rewrite is called for amend and rebase
-if test $argv[1] = amend
-    # amend will also trigger post-commit
-    # echo "  skipping '$argv[1]'"
-    exit
-end
 
-set parent_dir (dirname (status current-filename))
-"$parent_dir/core.fish"
+if len(sys.argv) < 2 or sys.argv[1] != "amend":
+    subprocess.run([sys.executable, Path(__file__).with_name("core.py")], check=False)
