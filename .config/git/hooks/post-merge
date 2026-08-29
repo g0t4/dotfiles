@@ -1,0 +1,15 @@
+#!/usr/bin/env python3
+
+import subprocess
+import sys
+from pathlib import Path
+
+
+# Git passes 1 when the merge was a squash and 0 otherwise. Both kinds can
+# change files used by tags or RAG, so the distinction is documented but does
+# not affect the refresh. Git invokes post-merge for `git pull` too, including
+# the common fast-forward case.
+squash_merge = sys.argv[1] == "1"
+shared_hook = Path(__file__).with_name("core.py")
+
+subprocess.run([sys.executable, shared_hook], check=False)
