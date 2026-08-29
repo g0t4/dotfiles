@@ -167,7 +167,7 @@ def _prompt_failure_assist():
 
 def _prompt_ai_snout():
     if not ${...}.get("XONSH_AI_AUTOSUGGEST", True):
-        return ")"
+        return " @"
     return " 🐽"
 
 
