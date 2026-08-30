@@ -1,11 +1,22 @@
 """GitHub repository helpers migrated from interactive Fish config."""
 
+import os
+import shutil
 import subprocess
 import sys
 
 from wes_github_functions import run_gitignore_commit
 from wes_abbreviations import abbr
 from wes_misc_functions import fish_command_alias
+
+
+def _github_executable(name):
+    """Resolve against Xonsh's live PATH, which may differ from os.environ."""
+    live_path = os.pathsep.join(map(str, ${...}.get("PATH", ())))
+    executable = shutil.which(name, path=live_path)
+    if executable is None:
+        raise FileNotFoundError(f"{name}: executable not found in Xonsh PATH")
+    return executable
 
 
 def _github_run(command, *, error, stdout=None, stderr=None):
@@ -38,8 +49,13 @@ def _gh_repo_create(args, *, private, stdout=None, stderr=None):
     if private and not repository_name.startswith("private-"):
         repository_name = f"private-{repository_name}"
     visibility = "--private" if private else "--public"
+    try:
+        gh = _github_executable("gh")
+    except FileNotFoundError as error:
+        print(error, file=stderr or sys.stderr)
+        return 127
     if _github_run(
-        ["gh", "repo", "create", visibility, repository_name],
+        [gh, "repo", "create", visibility, repository_name],
         error="Failed to create repo...",
         stdout=stdout,
         stderr=stderr,
