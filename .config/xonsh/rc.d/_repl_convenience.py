@@ -13,7 +13,6 @@ rich = LazyObject(lambda: importlib.import_module("rich"), globals(), "rich")
 inspect = LazyObject(lambda: rich.inspect, globals(), "inspect")
 #   => `inspect(@)`
 
-
 # * maybes
 # httpx = LazyObject(lambda: importlib.import_module("httpx"), globals(), "httpx")
 # np = LazyObject(lambda: importlib.import_module("numpy"), globals(), "np")
@@ -28,5 +27,36 @@ inspect = LazyObject(lambda: rich.inspect, globals(), "inspect")
 # json = LazyObject(lambda: importlib.import_module("json"), globals(), "json")
 
 
-# def dottable(obj):
-#     if isinstance( obj, dict):
+class DotableDict(dict):
+
+    def __init__(self, dict):
+        super().__init__(dict)
+        self.__dict__ = self
+
+    def __getattr__(self, name):
+        try:
+            return self[name]
+        except KeyError:
+            raise AttributeError(name)
+
+    def __setattr__(self, name, value):
+        self[name] = value
+
+    def __delattr__(self, name):
+        try:
+            del self[name]
+        except KeyError:
+            raise AttributeError(name)
+
+
+def dotable(obj):
+    """
+    ensure obj is dotable (dot-able)
+    and by dottable I mean: `foo.bar`
+    instead of annoying syntax like dict: `foo["bar"]`
+    """
+    if isinstance(obj, dict):
+        return DotableDict(obj)
+    # TODO other types that are inherently a PITA?
+    return obj
+
