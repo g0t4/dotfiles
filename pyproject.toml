@@ -55,7 +55,7 @@ macos = [
 [tool.uv.sources]
 langchain-llama-server = { path = "../langchain-llama-server", editable = true }
 
-[dependency-groups]
-dev = [
-    "xonsh-lsp==0.2.1",
-]
+# [dependency-groups]
+# dev = [
+#     "xonsh-lsp==0.2.1",
+# ]
