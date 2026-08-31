@@ -77,7 +77,7 @@ def test_rich_output_can_be_disabled_globally(tmp_path):
 
     contents = path.read_text()
     assert "\x1b[" not in contents
-    assert "WARNING xonsh.test plain value={'answer': 42}" in contents
+    assert "xonsh.test plain value={'answer': 42}" in contents
 
 
 def test_auto_venv_logs_path_mutations_to_shared_log(tmp_path):

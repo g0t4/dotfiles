@@ -107,9 +107,7 @@ def _configure_logging(
         else:
             _handler = logging.StreamHandler(_stream)
             _handler.setFormatter(
-                logging.Formatter(
-                    "%(asctime)s %(levelname)s %(name)s %(message)s"
-                )
+                logging.Formatter("%(name)s %(message)s")
             )
         _root_logger.addHandler(_handler)
         _log_path = resolved
