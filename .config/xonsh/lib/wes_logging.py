@@ -10,7 +10,6 @@ from rich.console import Console, Group
 from rich.logging import RichHandler
 
 
-DEFAULT_LOG_PATH = Path.home() / ".local/state/xonsh/xonsh.log"
 ITERM_CLEAR_SCROLLBACK = "\x1b]1337;ClearScrollback\x07"
 LOG_RENDER_WIDTH = 100_000
 
@@ -56,13 +55,13 @@ class _CompactRichHandler(RichHandler):
 def ensure_logger_is_setup():
     # TODO move to just call this once in entrypoint / shell config early on
     import os
-    where = os.getenv("XONSH_LOG") or DEFAULT_LOG_PATH
     use_rich = os.getenv("XONSH_LOG_RICH") or True
     _configure_logging(
-        where,
         clear_iterm_scrollback=True,
         rich_output=use_rich
     )
+
+DEFAULT_LOG_PATH = Path.home() / ".local/state/xonsh/xonsh.log"
 
 def _configure_logging(
     path: str | Path = DEFAULT_LOG_PATH,
