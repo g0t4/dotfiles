@@ -69,29 +69,6 @@ def search_abbreviations(
     return [item for item in listings if query in item.search_text]
 
 
-def render_abbreviation_list(
-    listings: list[AbbreviationListing],
-    *,
-    stream: TextIO | None = None,
-):
-    stream = stream or sys.stdout
-    table = Table(
-        show_header=True,
-        header_style="bold cyan",
-        box=None,
-        collapse_padding=True,
-        padding=(0, 1),
-    )
-    table.add_column("Trigger", style="bold bright_cyan", no_wrap=True)
-    table.add_column("│", style="dim cyan", no_wrap=True, width=1)
-    table.add_column("Expansion")
-    table.add_column("│", style="dim cyan", no_wrap=True, width=1)
-    table.add_column("Scope", style="dim")
-    for item in listings:
-        table.add_row(item.trigger, "│", item.expansion, "│", item.scope)
-    Console(file=stream).print(table)
-
-
 def abbreviation_list_alias(
     registry: AbbreviationRegistry, args, stdout=None, spec=None, **_
 ):
@@ -120,6 +97,30 @@ def abbreviation_list_alias(
     query = " ".join(query_parts)
     listings = search_abbreviations(registry, query, prefix=mode == "prefix")
     # piped = spec is not None and not spec.last_in_pipeline
+
+    def render_abbreviation_list(
+        listings: list[AbbreviationListing],
+        *,
+        stream: TextIO | None = None,
+    ):
+        stream = stream or sys.stdout
+        table = Table(
+            show_header=True,
+            header_style="bold cyan",
+            box=None,
+            collapse_padding=True,
+            padding=(0, 1),
+        )
+        table.add_column("Trigger", style="bold bright_cyan", no_wrap=True)
+        table.add_column("│", style="dim cyan", no_wrap=True, width=1)
+        table.add_column("Expansion")
+        table.add_column("│", style="dim cyan", no_wrap=True, width=1)
+        table.add_column("Scope", style="dim")
+        for item in listings:
+            table.add_row(item.trigger, "│", item.expansion, "│", item.scope)
+        Console(file=stream).print(table)
+
+
     render_abbreviation_list(
         listings,
         stream=stdout,
