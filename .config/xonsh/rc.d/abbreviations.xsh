@@ -36,14 +36,8 @@ from wes_xonsh_abbreviations import (
     expand_abbreviation_on_space,
 )
 
-from wes_logging import DEFAULT_LOG_PATH, configure_logging, get_logger
-# TODO make a helper method for xonsh_log so I can just import that
-${...}.setdefault("XONSH_LOG", str(DEFAULT_LOG_PATH))
-configure_logging(
-    str(${...}["XONSH_LOG"]),
-    clear_iterm_scrollback=True,
-    rich_output=${...}.get("XONSH_LOG_RICH", True),
-)
+from wes_logging import ensure_logger_is_setup, get_logger
+ensure_logger_is_setup()
 log = get_logger("abbrs")
 log.info("ABBR LOGS")
 

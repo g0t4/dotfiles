@@ -53,6 +53,16 @@ class _CompactRichHandler(RichHandler):
             message_text.stylize(style, 0, logger_end)
         return message_text
 
+def ensure_logger_is_setup():
+    # TODO move to just call this once in entrypoint / shell config early on
+    import os
+    where = os.getenv("XONSH_LOG") or DEFAULT_LOG_PATH
+    use_rich = os.getenv("XONSH_LOG_RICH") or True
+    configure_logging(
+        where,
+        clear_iterm_scrollback=True,
+        rich_output=use_rich
+    )
 
 def configure_logging(
     path: str | Path = DEFAULT_LOG_PATH,
