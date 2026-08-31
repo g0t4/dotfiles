@@ -93,16 +93,9 @@ def test_abbreviation_help_resolves_then_native_help_can_fall_through():
     assert short.replace_buffer
     assert full.replace_buffer
     assert registry.expand(context("str??", command_path=("str??",))) is None
-    assert (
-        registry.expand(
-            context("gst??", command_path=("gst??",)),
-            include_submit_only=False,
-        )
-        is None
-    )
 
 
-def test_abbreviation_help_waits_for_enter_instead_of_expanding_on_space():
+def test_abbreviation_help_expands_on_space_as_a_reminder_command():
     registry = AbbreviationRegistry()
     abbr(registry, "gst", "git status")
     register_abbreviation_help(registry)
@@ -115,14 +108,7 @@ def test_abbreviation_help_waits_for_enter_instead_of_expanding_on_space():
 
     expand_abbreviation_on_space(buffer, expander)
 
-    assert buffer.text == "gst?? "
-
-    expander.context = lambda _buffer, cursor=None: context(
-        "gst??", command_path=("gst??",)
-    )
-    result = expander.expand(buffer)
-
-    assert result.text == "_abbr_help --full gst"
+    assert buffer.text == "_abbr_help --full gst "
 
 
 def test_abbreviation_help_uses_command_context():

@@ -57,7 +57,7 @@ def register_abbreviation_help(registry: AbbreviationRegistry):
         _HELP_TRIGGER,
         resolve,
         position="anywhere",
-        submit_only=True,
+        internal=True,
     )
 
 

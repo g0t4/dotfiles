@@ -71,26 +71,11 @@ class XonshAbbreviationExpander:
             document.text, cursor, completion.command
         )
 
-    def expand(self, buffer, *, include_submit_only=True) -> AbbreviationResult | None:
+    def expand(self, buffer) -> AbbreviationResult | None:
         context = self.context(buffer)
         if context is None:
             return None
-        expansion = self.registry.expand(
-            context, include_submit_only=include_submit_only
-        )
-        # A trailing space still leaves ``name??`` as the sole submitted
-        # command, just as it does for Xonsh's native help syntax. The active
-        # completion token is empty in that state, so retry at the last
-        # non-whitespace character, accepting only a submit-only resolver.
-        if expansion is None and include_submit_only:
-            trimmed_cursor = len(buffer.text.rstrip())
-            if trimmed_cursor < buffer.cursor_position:
-                prior_context = self.context(buffer, cursor=trimmed_cursor)
-                if prior_context is not None:
-                    candidate = self.registry.expand(prior_context)
-                    if candidate is not None and candidate[1].submit_only:
-                        context = prior_context
-                        expansion = candidate
+        expansion = self.registry.expand(context)
         if expansion is None:
             return None
         result, _abbreviation = expansion
@@ -112,6 +97,6 @@ class XonshAbbreviationExpander:
 
 def expand_abbreviation_on_space(buffer, expander) -> None:
     """Expand and insert the triggering space unless it would move the cursor."""
-    result = expander.expand(buffer, include_submit_only=False)
+    result = expander.expand(buffer)
     if result is None or result.cursor is None:
         buffer.insert_text(" ")

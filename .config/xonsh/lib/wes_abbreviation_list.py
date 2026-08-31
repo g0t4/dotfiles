@@ -48,8 +48,7 @@ def abbreviation_listings(
 ) -> list[AbbreviationListing]:
     listings = []
     for abbreviation in registry.abbreviations:
-        # Submit-only entries are internal resolvers, not user abbreviations.
-        if abbreviation.submit_only:
+        if abbreviation.internal:
             continue
         trigger = _trigger_text(abbreviation)
         expansion = _replacement_text(abbreviation)

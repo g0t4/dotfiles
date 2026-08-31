@@ -51,7 +51,7 @@ class Abbreviation:
     commands: tuple[str, ...] = ()
     cursor_marker: str | None = None
     expand_quoted: bool = False
-    submit_only: bool = False
+    internal: bool = False
     source_file: str | None = None
     source_line: int | None = None
 
@@ -119,27 +119,19 @@ class AbbreviationRegistry:
             abbreviation.position == "command",
         )
 
-    def applicable(
-        self, context: AbbreviationContext, *, include_submit_only=True
-    ) -> list[Abbreviation]:
+    def applicable(self, context: AbbreviationContext) -> list[Abbreviation]:
         """Return matches in expansion order.
 
         This is intentionally the one applicability entry point for both the
         keybinding and any future abbreviation suggestions/completions.
         """
-        matches = [
-            a
-            for a in self.abbreviations
-            if (include_submit_only or not a.submit_only) and a.match(context)
-        ]
+        matches = [a for a in self.abbreviations if a.match(context)]
         return sorted(matches, key=self._priority, reverse=True)
 
     def expand(
-        self, context: AbbreviationContext, *, include_submit_only=True
+        self, context: AbbreviationContext
     ) -> tuple[AbbreviationResult, Abbreviation] | None:
-        for abbreviation in self.applicable(
-            context, include_submit_only=include_submit_only
-        ):
+        for abbreviation in self.applicable(context):
             match = abbreviation.match(context)
             assert match is not None
             result = abbreviation.expand(context, match)

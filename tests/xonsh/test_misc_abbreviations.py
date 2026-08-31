@@ -242,7 +242,7 @@ def test_all_split_rc_files_load_together():
     )
     command = "; ".join(f"source {path}" for path in rc_files)
     command += (
-        "; print(sum(not item.submit_only "
+        "; print(sum(not item.internal "
         "for item in XONSH_ABBREVIATIONS.abbreviations))"
     )
 

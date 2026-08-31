@@ -24,7 +24,7 @@ def registry():
     abbr(result, "pcp", "| pbcopy", position="anywhere")
     abbr(result, "codex", "--author codex", commands=("git",))
     abbr(result, re.compile(r"ph(\d+)"), lambda *_: "| head")
-    abbr(result, re.compile(r".+?\?{1,2}"), lambda *_: None, submit_only=True)
+    abbr(result, re.compile(r".+?\?{1,2}"), lambda *_: None, internal=True)
     return result
 
 
