@@ -149,4 +149,5 @@ def test_cat_override_is_installed_only_for_interactive_xonsh():
     assert noninteractive.returncode == 0, noninteractive.stderr
     assert noninteractive.stdout.strip() == "False"
     assert interactive.returncode == 0, interactive.stderr
-    assert interactive.stdout.strip() == "True"
+    # Interactive Xonsh may emit terminal-title OSC sequences before output.
+    assert interactive.stdout.strip().endswith("True")

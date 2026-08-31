@@ -73,4 +73,4 @@ def test_ansible_rc_loads_with_abbreviations_and_bridged_functions():
     )
 
     assert completed.returncode == 0, completed.stderr
-    assert completed.stdout.splitlines() == ["61", "True"]
+    assert completed.stdout.splitlines() == ["62", "True"]

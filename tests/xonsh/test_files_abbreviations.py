@@ -39,7 +39,7 @@ def test_generated_module_is_in_sync_with_files_fish_source():
 def test_inventory_contains_static_regex_scoped_and_cursor_abbreviations():
     entries = registry().abbreviations
 
-    assert len(entries) == 53
+    assert len(entries) == 55
     assert any(isinstance(entry.trigger, re.Pattern) for entry in entries)
     assert any(entry.commands == ("dust",) for entry in entries)
     assert sum(entry.cursor_marker is not None for entry in entries) == 2

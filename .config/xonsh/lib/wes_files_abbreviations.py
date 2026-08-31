@@ -87,12 +87,12 @@ def register_files_abbreviations(registry: AbbreviationRegistry):
     abbr(registry, 'nvim_client_send_command', 'nvim --server localhost:6666 --remote-send')  # Fish line 664
     abbr(registry, 'nvim_client_eval_expr', 'nvim --server localhost:6666 --remote-expr')  # Fish line 665
     abbr(registry, 'nvim_client_open_files_in_new_tabs', 'nvim --server localhost:6666 --remote-tab')  # Fish line 666
-    abbr(registry, 'n', 'nvim')  # Fish line 673
-    abbr(registry, 'nr', _fish_abbreviation('nr_expand'))  # Fish line 674
-    abbr(registry, 'nd', _fish_abbreviation('nd_expand'))  # Fish line 682
-    abbr(registry, 'nh', _fish_abbreviation('nh_expand'))  # Fish line 690
-    abbr(registry, 'nn', _fish_abbreviation('nn_expand'))  # Fish line 698
-    abbr(registry, 'chmx', 'chmod +x')  # Fish line 949
-    abbr(registry, 'chmR', 'chmod -R')  # Fish line 950
-    abbr(registry, 'f', 'fish')
-    abbr(registry, 'x', 'xonsh')
+    abbr(registry, 'f', 'fish')  # Fish line 672
+    abbr(registry, 'x', 'xonsh')  # Fish line 673
+    abbr(registry, 'n', 'nvim')  # Fish line 676
+    abbr(registry, 'nr', _fish_abbreviation('nr_expand'))  # Fish line 677
+    abbr(registry, 'nd', _fish_abbreviation('nd_expand'))  # Fish line 685
+    abbr(registry, 'nh', _fish_abbreviation('nh_expand'))  # Fish line 693
+    abbr(registry, 'nn', _fish_abbreviation('nn_expand'))  # Fish line 701
+    abbr(registry, 'chmx', 'chmod +x')  # Fish line 952
+    abbr(registry, 'chmR', 'chmod -R')  # Fish line 953

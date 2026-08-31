@@ -18,8 +18,8 @@ def test_voice_prompt_prominently_requires_xonsh_and_uses_english_context():
         "assert 'specifically for Xonsh' in _AI_VOICE_COMMAND_SYSTEM_PROMPT; "
         "assert 'Do not substitute Bash, Zsh, Fish' in _AI_VOICE_COMMAND_SYSTEM_PROMPT; "
         "assert 'may span multiple lines' in _AI_VOICE_COMMAND_SYSTEM_PROMPT; "
-        "assert 'Python-powered shell' in context; "
-        "assert \"user's spoken request is \\\"list shell bindings\\\"\" in context; "
+        "assert 'I am working in Xonsh' in context; "
+        "assert '>\\\"list shell bindings\\\"' in context; "
         "assert 'previous command and its bounded result' in context"
     )
 
