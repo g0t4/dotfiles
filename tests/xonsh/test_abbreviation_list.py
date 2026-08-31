@@ -5,6 +5,8 @@ import subprocess
 import sys
 from pathlib import Path
 
+from rich.console import Console
+
 
 ROOT = Path(__file__).parents[2]
 sys.path.insert(0, str(ROOT / ".config/xonsh/lib"))
@@ -63,7 +65,7 @@ def test_rich_output_visibly_separates_trigger_expansion_and_scope():
     output = io.StringIO()
 
     abbreviation_list_alias(
-        registry(), ["--prefix", "pb"], stdout=output
+        registry(), ["--prefix", "pb"], Console(file=output)
     )
 
     rendered = output.getvalue()
@@ -76,16 +78,16 @@ def test_rich_output_visibly_separates_trigger_expansion_and_scope():
 def test_alias_supports_any_prefix_and_help():
     output = io.StringIO()
     abbreviation_list_alias(
-        registry(), ["--any", "pbpaste"], stdout=output
+        registry(), ["--any", "pbpaste"], Console(file=output)
     )
     assert re.search(r"pb\s*|\s*pbpaste", output.getvalue())
 
     output = io.StringIO()
     abbreviation_list_alias(
-        registry(), ["--prefix", "pc"], stdout=output
+        registry(), ["--prefix", "pc"], Console(file=output)
     )
     assert re.search(r"pcp\s*|\s*pbcopy\s*|\s*anywhere\n", output.getvalue())
 
     output = io.StringIO()
-    abbreviation_list_alias(registry(), ["--help"], stdout=output)
+    abbreviation_list_alias(registry(), ["--help"], Console(file=output))
     assert output.getvalue().startswith("usage: _abbr_list")

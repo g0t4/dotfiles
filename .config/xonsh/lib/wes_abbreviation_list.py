@@ -70,9 +70,8 @@ def search_abbreviations(
 
 
 def abbreviation_list_alias(
-    registry: AbbreviationRegistry, args, stdout=None, spec=None, **_
+    registry: AbbreviationRegistry, args, console: Console, **_
 ):
-    stdout = stdout or sys.stdout
     values = list(args)
     plain = False
     mode = "any"
@@ -85,9 +84,8 @@ def abbreviation_list_alias(
         elif value == "--prefix":
             mode = "prefix"
         elif value in ("-h", "--help"):
-            print(
+            console.print(
                 "usage: _abbr_list [--any | --prefix] [--plain] [QUERY]",
-                file=stdout,
             )
             return
         elif value.startswith("-"):
@@ -113,6 +111,6 @@ def abbreviation_list_alias(
         table.add_column("Scope", style="dim")
         for item in listings:
             table.add_row(item.trigger, "│", item.expansion, "│", item.scope)
-        Console(file=stdout).print(table)
+        console.print(table)
 
     render_abbreviation_list()

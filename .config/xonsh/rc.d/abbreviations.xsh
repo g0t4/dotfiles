@@ -4,6 +4,7 @@ import subprocess
 import sys
 from pathlib import Path
 
+from rich.console import Console
 
 _wes_xonsh_lib = Path($XONSH_CONFIG_DIR) / "lib"
 if str(_wes_xonsh_lib) not in sys.path:
@@ -53,8 +54,9 @@ def _abbr_list_alias(args, stdout=None, spec=None):
     # FYI stdout from xonsh is _io.TextIOWrapper
     # log.info(stdout)
     # piped = spec is not None and not spec.last_in_pipeline
+    console = Console(file=stdout)
     return abbreviation_list_alias(
-        XONSH_ABBREVIATIONS, args, stdout=stdout, spec=spec
+        XONSH_ABBREVIATIONS, args, console
     )
 
 
