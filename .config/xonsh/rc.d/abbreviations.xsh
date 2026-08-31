@@ -39,7 +39,6 @@ from wes_xonsh_abbreviations import (
 from wes_logging import ensure_logger_is_setup, get_logger
 ensure_logger_is_setup()
 log = get_logger("abbrs")
-log.info("ABBR LOGS")
 
 XONSH_ABBREVIATIONS = AbbreviationRegistry()
 register_abbreviation_help(XONSH_ABBREVIATIONS)
