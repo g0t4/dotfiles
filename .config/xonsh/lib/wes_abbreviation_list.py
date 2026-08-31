@@ -97,7 +97,6 @@ def abbreviation_list_alias(
 
     query = " ".join(query_parts)
     listings = search_abbreviations(registry, query, prefix=mode == "prefix")
-    # piped = spec is not None and not spec.last_in_pipeline
 
     def render_abbreviation_list():
         table = Table(
