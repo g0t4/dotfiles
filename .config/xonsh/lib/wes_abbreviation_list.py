@@ -72,6 +72,7 @@ def search_abbreviations(
 def abbreviation_list_alias(
     registry: AbbreviationRegistry, args, stdout=None, spec=None, **_
 ):
+    stdout = stdout or sys.stdout
     values = list(args)
     plain = False
     mode = "any"
@@ -86,7 +87,7 @@ def abbreviation_list_alias(
         elif value in ("-h", "--help"):
             print(
                 "usage: _abbr_list [--any | --prefix] [--plain] [QUERY]",
-                file=stdout or sys.stdout,
+                file=stdout,
             )
             return
         elif value.startswith("-"):
@@ -99,7 +100,7 @@ def abbreviation_list_alias(
     # piped = spec is not None and not spec.last_in_pipeline
 
     def render_abbreviation_list():
-        stream = stdout or sys.stdout
+        stream = stdout
         table = Table(
             show_header=True,
             header_style="bold cyan",
