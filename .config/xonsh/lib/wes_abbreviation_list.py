@@ -98,12 +98,8 @@ def abbreviation_list_alias(
     listings = search_abbreviations(registry, query, prefix=mode == "prefix")
     # piped = spec is not None and not spec.last_in_pipeline
 
-    def render_abbreviation_list(
-        listings: list[AbbreviationListing],
-        *,
-        stream: TextIO | None = None,
-    ):
-        stream = stream or sys.stdout
+    def render_abbreviation_list():
+        stream = stdout or sys.stdout
         table = Table(
             show_header=True,
             header_style="bold cyan",
@@ -120,8 +116,4 @@ def abbreviation_list_alias(
             table.add_row(item.trigger, "│", item.expansion, "│", item.scope)
         Console(file=stream).print(table)
 
-
-    render_abbreviation_list(
-        listings,
-        stream=stdout,
-    )
+    render_abbreviation_list()
