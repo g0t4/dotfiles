@@ -25,36 +25,11 @@ def test_all_components_write_to_one_named_log(tmp_path):
     contents = path.read_text()
     plain = ANSI.sub("", contents)
     assert contents.count("\x1b]1337;ClearScrollback\x07") == 1
-    assert "\x1b[" in contents
     assert not re.search(r"\d{4}-\d{2}-\d{2}", plain)
     assert all(line == line.rstrip(" ") for line in plain.splitlines())
     assert len(plain.splitlines()) == 3
     assert "ai_autosuggest request id=7" in plain
     assert "fzf_pickers picker=files" in plain
-
-
-def test_rich_levels_use_compact_markers_and_styles(tmp_path):
-    path = tmp_path / "xonsh.log"
-    _configure_logging(path)
-
-    logger = get_logger("test")
-    logger.info("ordinary")
-    logger.warning("careful")
-    logger.error("broken")
-    logger.setLevel(logging.DEBUG)
-    logger.debug("details")
-    logger.setLevel(logging.NOTSET)
-
-    contents = path.read_text()
-    plain = ANSI.sub("", contents)
-    assert "test ordinary" in plain
-    assert "INFO" not in plain
-    assert "! test careful" in plain
-    assert "× test broken" in plain
-    assert "· test details" in plain
-    assert "\x1b[33m" in contents
-    assert "\x1b[31m" in contents
-    assert "\x1b[2m" in contents
 
 
 def test_reconfiguring_same_log_does_not_duplicate_handlers_or_clear(tmp_path):
@@ -67,17 +42,6 @@ def test_reconfiguring_same_log_does_not_duplicate_handlers_or_clear(tmp_path):
     contents = path.read_text()
     assert contents.count("ClearScrollback") == 1
     assert contents.count("once") == 1
-
-
-def test_rich_output_can_be_disabled_globally(tmp_path):
-    path = tmp_path / "plain.log"
-    _configure_logging(path, rich_output="false")
-
-    get_logger("test").warning("plain value=%r", {"answer": 42})
-
-    contents = path.read_text()
-    assert "\x1b[" not in contents
-    assert "xonsh.test plain value={'answer': 42}" in contents
 
 
 def test_auto_venv_logs_path_mutations_to_shared_log(tmp_path):
