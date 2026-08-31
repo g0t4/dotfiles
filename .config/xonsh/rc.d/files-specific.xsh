@@ -17,7 +17,7 @@ from wes_files_abbreviations import register_files_abbreviations
 from wes_fish_bridge import FishFunctionError, fish_function
 from wes_fish_z import FishZ, FishZError
 from wes_interactive_cat import InteractiveCat
-from wes_logging import DEFAULT_LOG_PATH, configure_logging, get_logger
+from wes_logging import ensure_logger_is_setup, get_logger
 from wes_fzf_pickers import (
     FzfMru,
     apply_path_selection,
@@ -35,12 +35,7 @@ $EDITOR = "nvim"
 register_files_abbreviations(XONSH_ABBREVIATIONS)
 
 ${...}.setdefault("XONSH_KEYPRESS_DEBUG", False)
-${...}.setdefault("XONSH_LOG", str(DEFAULT_LOG_PATH))
-configure_logging(
-    str(${...}["XONSH_LOG"]),
-    clear_iterm_scrollback=True,
-    rich_output=${...}.get("XONSH_LOG_RICH", True),
-)
+ensure_logger_is_setup()
 _files_picker_logger = get_logger("fzf_pickers")
 _files_log = get_logger("files")
 

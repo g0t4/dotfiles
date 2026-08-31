@@ -10,15 +10,10 @@ if str(_wes_xonsh_lib) not in sys.path:
     sys.path.insert(0, str(_wes_xonsh_lib))
 
 from wes_auto_venv import AutoVenv
-from wes_logging import DEFAULT_LOG_PATH, configure_logging, get_logger
+from wes_logging import ensure_logger_is_setup, get_logger
 
 
-${...}.setdefault("XONSH_LOG", str(DEFAULT_LOG_PATH))
-configure_logging(
-    str(${...}["XONSH_LOG"]),
-    clear_iterm_scrollback=True,
-    rich_output=${...}.get("XONSH_LOG_RICH", True),
-)
+ensure_logger_is_setup()
 _auto_venv_log = get_logger("auto_venv.events")
 _wes_auto_venv = AutoVenv(${...})
 

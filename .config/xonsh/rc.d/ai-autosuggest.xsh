@@ -25,7 +25,7 @@ from wes_ai_autosuggest_state import (
     read_autosuggest_enabled,
     write_autosuggest_enabled,
 )
-from wes_logging import DEFAULT_LOG_PATH, configure_logging, get_logger
+from wes_logging import ensure_logger_is_setup, get_logger
 from wes_semantic_history import InferenceClient, SemanticHistoryRetriever
 
 
@@ -44,12 +44,7 @@ ${...}.setdefault("XONSH_AI_AUTOSUGGEST_DEBUG", False)
 ${...}.setdefault("XONSH_AI_SEMANTIC_HISTORY", True)
 ${...}.setdefault("XONSH_AI_SEMANTIC_HISTORY_HOST", "build21.lan")
 ${...}.setdefault("XONSH_AI_SEMANTIC_HISTORY_PORT", 8015)
-${...}.setdefault("XONSH_LOG", str(DEFAULT_LOG_PATH))
-configure_logging(
-    str(${...}["XONSH_LOG"]),
-    clear_iterm_scrollback=True,
-    rich_output=${...}.get("XONSH_LOG_RICH", True),
-)
+ensure_logger_is_setup()
 log = get_logger("ai_autosuggest")
 _ai_request_ids = itertools.count(1)
 
