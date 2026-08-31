@@ -73,16 +73,8 @@ def render_abbreviation_list(
     listings: list[AbbreviationListing],
     *,
     stream: TextIO | None = None,
-    plain: bool | None = None,
 ):
     stream = stream or sys.stdout
-    if plain is None:
-        plain = not bool(getattr(stream, "isatty", lambda: False)())
-    if plain:
-        for item in listings:
-            print(f"{item.trigger}\t{item.expansion}\t{item.scope}", file=stream)
-        return
-
     table = Table(
         show_header=True,
         header_style="bold cyan",
@@ -127,9 +119,8 @@ def abbreviation_list_alias(
 
     query = " ".join(query_parts)
     listings = search_abbreviations(registry, query, prefix=mode == "prefix")
-    piped = spec is not None and not spec.last_in_pipeline
+    # piped = spec is not None and not spec.last_in_pipeline
     render_abbreviation_list(
         listings,
         stream=stdout,
-        plain=True if plain or piped else False,
     )

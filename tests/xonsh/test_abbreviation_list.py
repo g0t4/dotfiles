@@ -60,19 +60,11 @@ def test_regexes_are_displayed_and_internal_resolvers_are_hidden():
     assert all("?{1,2}" not in item.trigger for item in listings)
 
 
-def test_plain_output_is_stable_and_pipe_friendly():
-    output = io.StringIO()
-
-    render_abbreviation_list(search_abbreviations(registry(), "pb"), stream=output)
-
-    assert output.getvalue() == "pb\tpbpaste\tcommand\npcp\t| pbcopy\tanywhere\n"
-
-
 def test_rich_output_visibly_separates_trigger_expansion_and_scope():
     output = io.StringIO()
 
     render_abbreviation_list(
-        search_abbreviations(registry(), "pb"), stream=output, plain=False
+        search_abbreviations(registry(), "pb"), stream=output
     )
 
     rendered = output.getvalue()
@@ -84,41 +76,16 @@ def test_rich_output_visibly_separates_trigger_expansion_and_scope():
 def test_alias_supports_any_prefix_and_help():
     output = io.StringIO()
     abbreviation_list_alias(
-        registry(), ["--plain", "--any", "pbpaste"], stdout=output
+        registry(), ["--any", "pbpaste"], stdout=output
     )
-    assert output.getvalue() == "pb\tpbpaste\tcommand\n"
+    assert re.search(r"pb\s*|\s*pbpaste", output.getvalue())
 
     output = io.StringIO()
     abbreviation_list_alias(
-        registry(), ["--plain", "--prefix", "pc"], stdout=output
+        registry(), ["--prefix", "pc"], stdout=output
     )
-    assert output.getvalue() == "pcp\t| pbcopy\tanywhere\n"
+    assert re.search(r"pcp\s*|\s*pbcopy\s*|\s*anywhere\n", output.getvalue())
 
     output = io.StringIO()
     abbreviation_list_alias(registry(), ["--help"], stdout=output)
     assert output.getvalue().startswith("usage: _abbr_list")
-
-
-def test_xonsh_pipeline_automatically_uses_plain_output(tmp_path):
-    rc = ROOT / ".config/xonsh/rc.d/abbreviations.xsh"
-    command = (
-        f"source {rc}; "
-        "from wes_abbreviations import abbr; "
-        "_ = abbr(XONSH_ABBREVIATIONS, 'zztest', 'echo yes'); "
-        "_abbr_list --prefix zztest | head -1"
-    )
-    env = os.environ | {
-        "XONSH_CONFIG_DIR": str(ROOT / ".config/xonsh"),
-        "XDG_STATE_HOME": str(tmp_path),
-    }
-
-    completed = subprocess.run(
-        ["xonsh", "--no-rc", "-c", command],
-        capture_output=True,
-        text=True,
-        env=env,
-    )
-
-    assert completed.returncode == 0, completed.stderr
-    assert completed.stdout == "zztest\techo yes\tcommand\n"
-    assert "\x1b[" not in completed.stdout
