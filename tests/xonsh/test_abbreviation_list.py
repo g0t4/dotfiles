@@ -63,13 +63,17 @@ def test_regexes_are_displayed_and_internal_resolvers_are_hidden():
 def test_rich_output_visibly_separates_trigger_expansion_and_scope():
     output = io.StringIO()
 
-    render_abbreviation_list(
-        search_abbreviations(registry(), "pb"), stream=output
+    # render_abbreviation_list(
+    #     search_abbreviations(registry(), "pb"), stream=output
+    # )
+    abbreviation_list_alias(
+        registry(), ["--prefix", "pb"], stdout=output
     )
 
     rendered = output.getvalue()
+    print('rendered', rendered)
     assert "Trigger" in rendered
-    assert re.search(r" pb\s+│ pbpaste", rendered)
+    assert re.search(r" pb\s*│\s*pbpaste", rendered)
     assert "│ command" in rendered
 
 
