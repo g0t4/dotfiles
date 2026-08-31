@@ -10,7 +10,11 @@ from typing import TextIO
 from rich.console import Console
 from rich.table import Table
 
-from wes_abbreviations import Abbreviation, AbbreviationRegistry
+from wes_abbreviations import (
+    Abbreviation,
+    AbbreviationRegistry,
+    abbreviation_replacement_text,
+)
 
 
 @dataclass(frozen=True)
@@ -25,13 +29,6 @@ def _trigger_text(abbreviation: Abbreviation) -> str:
     if isinstance(abbreviation.trigger, str):
         return abbreviation.trigger
     return f"/{abbreviation.trigger.pattern}/"
-
-
-def _replacement_text(abbreviation: Abbreviation) -> str:
-    replacement = abbreviation.replacement
-    if isinstance(replacement, str):
-        return replacement
-    return getattr(replacement, "__qualname__", type(replacement).__name__)
 
 
 def _callback_source(abbreviation: Abbreviation) -> str:
@@ -51,7 +48,7 @@ def abbreviation_listings(
         if abbreviation.internal:
             continue
         trigger = _trigger_text(abbreviation)
-        expansion = _replacement_text(abbreviation)
+        expansion = abbreviation_replacement_text(abbreviation)
         scope = " ".join(abbreviation.commands) or abbreviation.position
         search_text = "\n".join(
             (trigger, expansion, scope, _callback_source(abbreviation))

@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from dataclasses import replace
 import re
 from typing import Any, Iterable
 
@@ -9,6 +10,7 @@ from wes_abbreviations import (
     AbbreviationContext,
     AbbreviationRegistry,
     AbbreviationResult,
+    abbreviation_replacement_text,
 )
 
 
@@ -50,6 +52,27 @@ def context_from_completion(buffer_text: str, cursor: int, command: Any):
         command_position=command.arg_index == 0,
         quoted=bool(command.opening_quote or command.closing_quote),
     )
+
+
+def abbreviation_completion_candidates(
+    registry: AbbreviationRegistry, context: AbbreviationContext
+) -> list[tuple[str, str]]:
+    """Return literal abbreviation triggers applicable to a partial token."""
+    candidates = []
+    for abbreviation in registry.abbreviations:
+        if abbreviation.internal or not isinstance(abbreviation.trigger, str):
+            continue
+        if not abbreviation.trigger.startswith(context.token):
+            continue
+        candidate_context = replace(context, token=abbreviation.trigger)
+        if abbreviation.match(candidate_context):
+            candidates.append(
+                (
+                    abbreviation.trigger,
+                    abbreviation_replacement_text(abbreviation),
+                )
+            )
+    return candidates
 
 
 class XonshAbbreviationExpander:

@@ -27,6 +27,7 @@ from wes_abbreviations import (  # noqa: E402
 )
 from wes_xonsh_abbreviations import (  # noqa: E402
     XonshAbbreviationExpander,
+    abbreviation_completion_candidates,
     expand_abbreviation_on_space,
     command_path_from_args,
     context_from_completion,
@@ -332,6 +333,29 @@ def test_xonsh_completion_context_is_adapted_without_relexing():
     assert adapted.token_end == 24
     assert adapted.command_path == ("git", "diff")
     assert not adapted.command_position
+
+
+def test_abbreviation_completion_matches_literal_prefix_and_scope():
+    registry = AbbreviationRegistry(
+        [
+            Abbreviation("pbsse", "pbpaste | sed"),
+            Abbreviation("pbsse_verbose", "pbpaste | verbose"),
+            Abbreviation("private", "hidden", internal=True),
+            Abbreviation("codex", "--author codex", commands=("git",)),
+            Abbreviation(re.compile(r"p[0-9]+"), "dynamic"),
+        ]
+    )
+
+    assert abbreviation_completion_candidates(registry, context("pbs")) == [
+        ("pbsse", "pbpaste | sed"),
+        ("pbsse_verbose", "pbpaste | verbose"),
+    ]
+    assert abbreviation_completion_candidates(
+        registry, context("git co", command_path=("git",))
+    ) == [("codex", "--author codex")]
+    assert abbreviation_completion_candidates(
+        registry, context("ls co", command_path=("ls",))
+    ) == []
 
 
 def test_command_path_skips_assignments_env_options_and_redirections():

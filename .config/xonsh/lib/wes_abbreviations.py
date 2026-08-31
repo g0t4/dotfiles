@@ -140,6 +140,14 @@ class AbbreviationRegistry:
         return None
 
 
+def abbreviation_replacement_text(abbreviation: Abbreviation) -> str:
+    """Describe a replacement without executing a dynamic callback."""
+    replacement = abbreviation.replacement
+    if isinstance(replacement, str):
+        return replacement
+    return getattr(replacement, "__qualname__", type(replacement).__name__)
+
+
 def abbr(
     registry: AbbreviationRegistry,
     trigger: str | Pattern[str],

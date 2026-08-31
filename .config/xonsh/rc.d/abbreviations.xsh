@@ -9,6 +9,8 @@ if str(_wes_xonsh_lib) not in sys.path:
     sys.path.insert(0, str(_wes_xonsh_lib))
 
 from prompt_toolkit.filters import EmacsInsertMode, IsSearching, ViInsertMode
+from xonsh.completers.completer import add_one_completer
+from xonsh.completers.tools import RichCompletion, contextual_command_completer
 from xonsh.shells.ptk_shell.key_bindings import (
     carriage_return,
     should_confirm_completion,
@@ -22,6 +24,8 @@ from wes_abbreviation_help import (
 from wes_abbreviation_list import abbreviation_list_alias
 from wes_xonsh_abbreviations import (
     XonshAbbreviationExpander,
+    abbreviation_completion_candidates,
+    context_from_completion,
     expand_abbreviation_on_space,
 )
 
@@ -42,6 +46,30 @@ def _abbr_list_alias(args, stdout=None, spec=None):
 aliases["_abbr_list"] = _abbr_list_alias
 
 _wes_abbreviation_expander = XonshAbbreviationExpander(XONSH_ABBREVIATIONS)
+
+
+@contextual_command_completer
+def _wes_abbreviation_completer(command):
+    context = context_from_completion(
+        command.prefix + command.suffix,
+        len(command.prefix),
+        command,
+    )
+    return {
+        RichCompletion(
+            trigger,
+            prefix_len=len(command.prefix),
+            description=expansion,
+            append_space=False,
+            provider="abbreviation",
+        )
+        for trigger, expansion in abbreviation_completion_candidates(
+            XONSH_ABBREVIATIONS, context
+        )
+    }
+
+
+add_one_completer("wes_abbreviations", _wes_abbreviation_completer, "start")
 
 
 def _expand_xonsh_abbreviation(buffer):
