@@ -124,6 +124,12 @@ def _configure_logging(
 
 
 def get_console():
+    """
+    Use this for rich console logging, just bypass logger entirely
+    i.e. rich.inspect(thing, console=get_console())
+    TODO I'd prefer to subclass logger and attach log.inspect() or log.inspect_info(...) with various levels
+    this is going to be superior to having everything flow through rich most likely
+    """
     if isinstance(_handler, _CompactRichHandler):
         return _handler.console
     raise RuntimeError("Rich console not configured")
