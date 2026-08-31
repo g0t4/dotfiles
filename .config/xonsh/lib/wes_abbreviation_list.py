@@ -100,7 +100,6 @@ def abbreviation_list_alias(
     # piped = spec is not None and not spec.last_in_pipeline
 
     def render_abbreviation_list():
-        stream = stdout
         table = Table(
             show_header=True,
             header_style="bold cyan",
@@ -115,6 +114,6 @@ def abbreviation_list_alias(
         table.add_column("Scope", style="dim")
         for item in listings:
             table.add_row(item.trigger, "│", item.expansion, "│", item.scope)
-        Console(file=stream).print(table)
+        Console(file=stdout).print(table)
 
     render_abbreviation_list()
