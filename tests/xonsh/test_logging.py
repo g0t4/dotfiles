@@ -7,7 +7,7 @@ from pathlib import Path
 XONSH_LIB = Path(__file__).parents[2] / ".config/xonsh/lib"
 sys.path.insert(0, str(XONSH_LIB))
 
-from wes_logging import configure_logging, get_logger  # noqa: E402
+from wes_logging import _configure_logging, get_logger  # noqa: E402
 from wes_auto_venv import AutoVenv  # noqa: E402
 
 
@@ -16,7 +16,7 @@ ANSI = re.compile(r"\x1b\[[0-?]*[ -/]*[@-~]")
 
 def test_all_components_write_to_one_named_log(tmp_path):
     path = tmp_path / "xonsh.log"
-    configure_logging(path, clear_iterm_scrollback=True)
+    _configure_logging(path, clear_iterm_scrollback=True)
 
     get_logger("ai_autosuggest").info("request id=%s", 7)
     get_logger("fzf_pickers").info("picker=%s", "files")
@@ -35,7 +35,7 @@ def test_all_components_write_to_one_named_log(tmp_path):
 
 def test_rich_levels_use_compact_markers_and_styles(tmp_path):
     path = tmp_path / "xonsh.log"
-    configure_logging(path)
+    _configure_logging(path)
 
     logger = get_logger("test")
     logger.info("ordinary")
@@ -59,8 +59,8 @@ def test_rich_levels_use_compact_markers_and_styles(tmp_path):
 
 def test_reconfiguring_same_log_does_not_duplicate_handlers_or_clear(tmp_path):
     path = tmp_path / "xonsh.log"
-    configure_logging(path, clear_iterm_scrollback=True)
-    configure_logging(path, clear_iterm_scrollback=True)
+    _configure_logging(path, clear_iterm_scrollback=True)
+    _configure_logging(path, clear_iterm_scrollback=True)
 
     get_logger("test").info("once")
 
@@ -71,7 +71,7 @@ def test_reconfiguring_same_log_does_not_duplicate_handlers_or_clear(tmp_path):
 
 def test_rich_output_can_be_disabled_globally(tmp_path):
     path = tmp_path / "plain.log"
-    configure_logging(path, rich_output="false")
+    _configure_logging(path, rich_output="false")
 
     get_logger("test").warning("plain value=%r", {"answer": 42})
 
@@ -82,7 +82,7 @@ def test_rich_output_can_be_disabled_globally(tmp_path):
 
 def test_auto_venv_logs_path_mutations_to_shared_log(tmp_path):
     path = tmp_path / "xonsh.log"
-    configure_logging(path)
+    _configure_logging(path)
     logger = get_logger("auto_venv")
     previous_level = logger.level
     logger.setLevel(logging.INFO)

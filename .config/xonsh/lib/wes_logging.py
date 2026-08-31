@@ -58,13 +58,13 @@ def ensure_logger_is_setup():
     import os
     where = os.getenv("XONSH_LOG") or DEFAULT_LOG_PATH
     use_rich = os.getenv("XONSH_LOG_RICH") or True
-    configure_logging(
+    _configure_logging(
         where,
         clear_iterm_scrollback=True,
         rich_output=use_rich
     )
 
-def configure_logging(
+def _configure_logging(
     path: str | Path = DEFAULT_LOG_PATH,
     *,
     clear_iterm_scrollback: bool = False,
