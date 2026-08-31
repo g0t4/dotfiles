@@ -8,8 +8,10 @@ matcher independent makes its edge cases cheap to exercise with pytest.
 from __future__ import annotations
 
 from dataclasses import dataclass
+import inspect
 from re import Pattern
 from typing import Callable, Literal, Match, TypeAlias
+import warnings
 
 
 @dataclass(frozen=True)
@@ -32,6 +34,7 @@ class AbbreviationContext:
 class AbbreviationResult:
     text: str
     cursor: int | None = None
+    replace_buffer: bool = False
 
 
 ExpansionValue: TypeAlias = str | AbbreviationResult
@@ -48,6 +51,9 @@ class Abbreviation:
     commands: tuple[str, ...] = ()
     cursor_marker: str | None = None
     expand_quoted: bool = False
+    submit_only: bool = False
+    source_file: str | None = None
+    source_line: int | None = None
 
     @property
     def is_regex(self) -> bool:
@@ -93,6 +99,7 @@ class Abbreviation:
         return AbbreviationResult(
             result.text[:marker_at] + result.text[marker_at + len(self.cursor_marker) :],
             cursor=marker_at,
+            replace_buffer=result.replace_buffer,
         )
 
 
@@ -112,19 +119,27 @@ class AbbreviationRegistry:
             abbreviation.position == "command",
         )
 
-    def applicable(self, context: AbbreviationContext) -> list[Abbreviation]:
+    def applicable(
+        self, context: AbbreviationContext, *, include_submit_only=True
+    ) -> list[Abbreviation]:
         """Return matches in expansion order.
 
         This is intentionally the one applicability entry point for both the
         keybinding and any future abbreviation suggestions/completions.
         """
-        matches = [a for a in self.abbreviations if a.match(context)]
+        matches = [
+            a
+            for a in self.abbreviations
+            if (include_submit_only or not a.submit_only) and a.match(context)
+        ]
         return sorted(matches, key=self._priority, reverse=True)
 
     def expand(
-        self, context: AbbreviationContext
+        self, context: AbbreviationContext, *, include_submit_only=True
     ) -> tuple[AbbreviationResult, Abbreviation] | None:
-        for abbreviation in self.applicable(context):
+        for abbreviation in self.applicable(
+            context, include_submit_only=include_submit_only
+        ):
             match = abbreviation.match(context)
             assert match is not None
             result = abbreviation.expand(context, match)
@@ -140,4 +155,17 @@ def abbr(
     **options,
 ) -> Abbreviation:
     """Register an abbreviation with declaration syntax close to Fish's."""
+    if isinstance(trigger, str) and trigger.endswith("?"):
+        warnings.warn(
+            f"abbreviation {trigger!r} ends in '?' and shadows abbreviation help",
+            UserWarning,
+            stacklevel=2,
+        )
+    caller = inspect.currentframe()
+    try:
+        caller = caller.f_back if caller is not None else None
+        options.setdefault("source_file", caller.f_code.co_filename if caller else None)
+        options.setdefault("source_line", caller.f_lineno if caller else None)
+    finally:
+        del caller
     return registry.add(Abbreviation(trigger, replacement, **options))

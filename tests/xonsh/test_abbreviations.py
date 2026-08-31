@@ -5,12 +5,17 @@ from pathlib import Path
 
 import pytest
 from prompt_toolkit.buffer import Buffer
+from rich.console import Console
 
 
 XONSH_LIB = Path(__file__).parents[2] / ".config" / "xonsh" / "lib"
 sys.path.insert(0, str(XONSH_LIB))
 
 import wes_fish_bridge  # noqa: E402
+from wes_abbreviation_help import (  # noqa: E402
+    register_abbreviation_help,
+    render_abbreviation_help,
+)
 from wes_abbreviations import (  # noqa: E402
     Abbreviation,
     AbbreviationContext,
@@ -62,6 +67,107 @@ def test_abbr_helper_registers_and_returns_dot_accessible_entry():
     assert entry.trigger == "gst"
     assert entry.replacement == "git status"
     assert registry.abbreviations == [entry]
+    assert entry.source_file == __file__
+    assert entry.source_line is not None
+
+
+def test_question_suffix_warns_because_it_shadows_help():
+    registry = AbbreviationRegistry()
+
+    with pytest.warns(UserWarning, match="shadows abbreviation help"):
+        abbr(registry, "why?", "because")
+
+
+def test_abbreviation_help_resolves_then_native_help_can_fall_through():
+    registry = AbbreviationRegistry()
+    target = abbr(registry, "gst", "git status")
+    register_abbreviation_help(registry)
+
+    short, _ = registry.expand(context("gst?", command_path=("gst?",)))
+    full, _ = registry.expand(context("gst??", command_path=("gst??",)))
+
+    assert short.text == f"_abbr_help {registry.abbreviations.index(target)}"
+    assert full.text == f"_abbr_help --full {registry.abbreviations.index(target)}"
+    assert short.replace_buffer
+    assert full.replace_buffer
+    assert registry.expand(context("str??", command_path=("str??",))) is None
+    assert (
+        registry.expand(
+            context("gst??", command_path=("gst??",)),
+            include_submit_only=False,
+        )
+        is None
+    )
+
+
+def test_abbreviation_help_waits_for_enter_instead_of_expanding_on_space():
+    registry = AbbreviationRegistry()
+    abbr(registry, "gst", "git status")
+    register_abbreviation_help(registry)
+    expander = XonshAbbreviationExpander.__new__(XonshAbbreviationExpander)
+    expander.registry = registry
+    expander.context = lambda _buffer: context("gst??", command_path=("gst??",))
+    buffer = Buffer()
+    buffer.text = "gst??"
+    buffer.cursor_position = len(buffer.text)
+
+    expand_abbreviation_on_space(buffer, expander)
+
+    assert buffer.text == "gst?? "
+
+    expander.context = lambda _buffer, cursor=None: context(
+        "gst??", command_path=("gst??",)
+    )
+    result = expander.expand(buffer)
+
+    assert result.text.startswith("_abbr_help --full ")
+
+
+def test_abbreviation_help_uses_command_context():
+    registry = AbbreviationRegistry()
+    target = abbr(registry, "codex", "--author codex", commands=("git",))
+    register_abbreviation_help(registry)
+
+    result, _ = registry.expand(
+        context("git codex??", command_path=("git",))
+    )
+
+    assert result.text == f"_abbr_help --full {registry.abbreviations.index(target)}"
+    assert result.replace_buffer
+    assert (
+        registry.expand(context("ls codex??", command_path=("ls",))) is None
+    )
+
+    expander = XonshAbbreviationExpander.__new__(XonshAbbreviationExpander)
+    expander.registry = registry
+    expander.context = lambda _buffer, cursor=None: context(
+        "git codex??", command_path=("git",)
+    )
+    buffer = Buffer()
+    buffer.text = "git codex??"
+    buffer.cursor_position = len(buffer.text)
+    expander.expand(buffer)
+
+    assert buffer.text == f"_abbr_help --full {registry.abbreviations.index(target)}"
+
+
+def test_full_abbreviation_help_renders_metadata_and_callback_source():
+    def dynamic(_context, _match):
+        return "git status"
+
+    registry = AbbreviationRegistry()
+    target = abbr(registry, "gst", dynamic, cursor_marker="%")
+    console = Console(record=True, width=120, color_system=None)
+
+    render_abbreviation_help(target, full=True, console=console)
+    rendered = console.export_text()
+
+    assert "abbreviation gst" in rendered
+    assert "Expansion: dynamic" in rendered
+    assert "Position:  command" in rendered
+    assert "Cursor:    '%'" in rendered
+    assert f"Source:    {__file__}:" in rendered
+    assert "def dynamic" in rendered
 
 
 def test_command_scoped_abbreviation_uses_shared_applicability():
@@ -128,7 +234,7 @@ def test_space_trigger_is_consumed_only_for_internal_cursor_expansions(
     buffer.text = "abbr"
 
     class StubExpander:
-        def expand(self, target_buffer):
+        def expand(self, target_buffer, **_):
             target_buffer.text = replacement
             target_buffer.cursor_position = len(replacement) if cursor is None else cursor
             return AbbreviationResult(replacement, cursor=cursor)
