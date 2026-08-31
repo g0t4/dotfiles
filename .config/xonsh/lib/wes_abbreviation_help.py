@@ -5,6 +5,7 @@ from __future__ import annotations
 from dataclasses import replace
 import inspect
 import re
+import shlex
 import textwrap
 
 from rich.console import Console, Group
@@ -14,6 +15,7 @@ from rich.text import Text
 
 from wes_abbreviations import (
     Abbreviation,
+    AbbreviationContext,
     AbbreviationRegistry,
     AbbreviationResult,
     abbr,
@@ -39,10 +41,15 @@ def register_abbreviation_help(registry: AbbreviationRegistry):
         matches = registry.applicable(target)
         if not matches:
             return None
-        index = registry.abbreviations.index(matches[0])
         detail = " --full" if full else ""
+        words = (
+            [target.token]
+            if target.command_position
+            else [*target.command_path, target.token]
+        )
+        invocation = " ".join(shlex.quote(word) for word in words)
         return AbbreviationResult(
-            f"_abbr_help{detail} {index}", replace_buffer=True
+            f"_abbr_help{detail} {invocation}", replace_buffer=True
         )
 
     return abbr(
@@ -113,11 +120,22 @@ def abbreviation_help_alias(registry: AbbreviationRegistry, args, **_):
     if values and values[0] == "--full":
         full = True
         values.pop(0)
-    if len(values) != 1 or not values[0].isdigit():
-        raise ValueError("usage: _abbr_help [--full] INDEX")
-    index = int(values[0])
-    try:
-        abbreviation = registry.abbreviations[index]
-    except IndexError as error:
-        raise ValueError(f"unknown abbreviation index: {index}") from error
+    if not values:
+        raise ValueError("usage: _abbr_help [--full] [COMMAND ...] ABBREVIATION")
+    token = values[-1]
+    command_position = len(values) == 1
+    command_path = (token,) if command_position else tuple(values[:-1])
+    context = AbbreviationContext(
+        buffer=" ".join(values),
+        cursor=len(" ".join(values)),
+        token_start=sum(len(value) + 1 for value in values[:-1]),
+        token_end=len(" ".join(values)),
+        token=token,
+        command_path=command_path,
+        command_position=command_position,
+    )
+    matches = registry.applicable(context)
+    if not matches:
+        raise ValueError(f"no abbreviation matches: {' '.join(values)}")
+    abbreviation = matches[0]
     render_abbreviation_help(abbreviation, full=full)

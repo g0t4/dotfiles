@@ -12,7 +12,9 @@ XONSH_LIB = Path(__file__).parents[2] / ".config" / "xonsh" / "lib"
 sys.path.insert(0, str(XONSH_LIB))
 
 import wes_fish_bridge  # noqa: E402
+import wes_abbreviation_help  # noqa: E402
 from wes_abbreviation_help import (  # noqa: E402
+    abbreviation_help_alias,
     register_abbreviation_help,
     render_abbreviation_help,
 )
@@ -80,14 +82,14 @@ def test_question_suffix_warns_because_it_shadows_help():
 
 def test_abbreviation_help_resolves_then_native_help_can_fall_through():
     registry = AbbreviationRegistry()
-    target = abbr(registry, "gst", "git status")
+    abbr(registry, "gst", "git status")
     register_abbreviation_help(registry)
 
     short, _ = registry.expand(context("gst?", command_path=("gst?",)))
     full, _ = registry.expand(context("gst??", command_path=("gst??",)))
 
-    assert short.text == f"_abbr_help {registry.abbreviations.index(target)}"
-    assert full.text == f"_abbr_help --full {registry.abbreviations.index(target)}"
+    assert short.text == "_abbr_help gst"
+    assert full.text == "_abbr_help --full gst"
     assert short.replace_buffer
     assert full.replace_buffer
     assert registry.expand(context("str??", command_path=("str??",))) is None
@@ -120,19 +122,19 @@ def test_abbreviation_help_waits_for_enter_instead_of_expanding_on_space():
     )
     result = expander.expand(buffer)
 
-    assert result.text.startswith("_abbr_help --full ")
+    assert result.text == "_abbr_help --full gst"
 
 
 def test_abbreviation_help_uses_command_context():
     registry = AbbreviationRegistry()
-    target = abbr(registry, "codex", "--author codex", commands=("git",))
+    abbr(registry, "codex", "--author codex", commands=("git",))
     register_abbreviation_help(registry)
 
     result, _ = registry.expand(
         context("git codex??", command_path=("git",))
     )
 
-    assert result.text == f"_abbr_help --full {registry.abbreviations.index(target)}"
+    assert result.text == "_abbr_help --full git codex"
     assert result.replace_buffer
     assert (
         registry.expand(context("ls codex??", command_path=("ls",))) is None
@@ -148,7 +150,22 @@ def test_abbreviation_help_uses_command_context():
     buffer.cursor_position = len(buffer.text)
     expander.expand(buffer)
 
-    assert buffer.text == f"_abbr_help --full {registry.abbreviations.index(target)}"
+    assert buffer.text == "_abbr_help --full git codex"
+
+
+def test_abbreviation_help_alias_looks_up_readable_context_after_submit(monkeypatch):
+    registry = AbbreviationRegistry()
+    target = abbr(registry, "codex", "--author codex", commands=("git",))
+    rendered = []
+    monkeypatch.setattr(
+        wes_abbreviation_help,
+        "render_abbreviation_help",
+        lambda abbreviation, **options: rendered.append((abbreviation, options)),
+    )
+
+    abbreviation_help_alias(registry, ["--full", "git", "codex"])
+
+    assert rendered == [(target, {"full": True})]
 
 
 def test_full_abbreviation_help_renders_metadata_and_callback_source():
