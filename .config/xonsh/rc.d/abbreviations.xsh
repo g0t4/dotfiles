@@ -1,5 +1,6 @@
 """Visible command abbreviations backed by Xonsh's completion parser."""
 
+import subprocess
 import sys
 from pathlib import Path
 
@@ -8,7 +9,11 @@ _wes_xonsh_lib = Path($XONSH_CONFIG_DIR) / "lib"
 if str(_wes_xonsh_lib) not in sys.path:
     sys.path.insert(0, str(_wes_xonsh_lib))
 
+from prompt_toolkit.application import run_in_terminal
 from prompt_toolkit.filters import EmacsInsertMode, IsSearching, ViInsertMode
+from prompt_toolkit.input import ansi_escape_sequences
+from prompt_toolkit.input.vt100_parser import _IS_PREFIX_OF_LONGER_MATCH_CACHE
+from prompt_toolkit.keys import Keys
 from xonsh.completers.completer import add_one_completer
 from xonsh.completers.tools import RichCompletion, contextual_command_completer
 from xonsh.shells.ptk_shell.key_bindings import (
@@ -25,6 +30,8 @@ from wes_abbreviation_list import abbreviation_list_alias
 from wes_xonsh_abbreviations import (
     XonshAbbreviationExpander,
     abbreviation_completion_candidates,
+    abbreviation_picker_rows,
+    apply_abbreviation_selection,
     context_from_completion,
     expand_abbreviation_on_space,
 )
@@ -72,12 +79,71 @@ def _wes_abbreviation_completer(command):
 add_one_completer("wes_abbreviations", _wes_abbreviation_completer, "start")
 
 
+# Enhanced keyboard protocols encode Alt-Shift-A as one CSI sequence instead
+# of the legacy Escape + A pair Prompt Toolkit expects.
+for _abbr_picker_codepoint in (ord("A"), ord("a")):
+    ansi_escape_sequences.ANSI_SEQUENCES[
+        f"\x1b[{_abbr_picker_codepoint};4u"
+    ] = (Keys.Escape, "A")
+    ansi_escape_sequences.ANSI_SEQUENCES[
+        f"\x1b[27;4;{_abbr_picker_codepoint}~"
+    ] = (Keys.Escape, "A")
+_IS_PREFIX_OF_LONGER_MATCH_CACHE.clear()
+
+
+def _run_abbreviation_picker(rows, query):
+    completed = subprocess.run(
+        [
+            "fzf",
+            "--height",
+            "50%",
+            "--border",
+            "--delimiter=\t",
+            "--with-nth=1,2",
+            "--accept-nth=1",
+            "--header",
+            "Choose trigger  |  then Space expands  |  Enter runs",
+            "--query",
+            query,
+        ],
+        input="".join(f"{row}\n" for row in rows),
+        stdout=subprocess.PIPE,
+        text=True,
+        env=${...}.detype(),
+    )
+    return completed.stdout.rstrip("\n") if completed.returncode == 0 else None
+
+
+async def _abbreviation_picker_handler(event):
+    buffer = event.current_buffer
+    context = _wes_abbreviation_expander.context(buffer)
+    if context is None:
+        return
+    rows = abbreviation_picker_rows(XONSH_ABBREVIATIONS, context)
+    selected = await run_in_terminal(
+        lambda: _run_abbreviation_picker(rows, context.token)
+    )
+    if selected:
+        buffer.text, buffer.cursor_position = apply_abbreviation_selection(
+            buffer.text,
+            context.token_start,
+            context.token_end,
+            selected,
+        )
+    event.app.invalidate()
+
+
 def _expand_xonsh_abbreviation(buffer):
     return _wes_abbreviation_expander.expand(buffer)
 
 
 @events.on_ptk_create
 def _wes_abbreviation_keybindings(bindings, **_):
+    _insert_mode = ViInsertMode() | EmacsInsertMode()
+    bindings.add("escape", "A", filter=_insert_mode)(
+        _abbreviation_picker_handler
+    )
+
     @bindings.add(" ")
     def _expand_abbreviation_on_space(event):
         # Prompt Toolkit snapshots once before this handler, so replacement and
@@ -86,7 +152,6 @@ def _wes_abbreviation_keybindings(bindings, **_):
             event.current_buffer, _wes_abbreviation_expander
         )
 
-    _insert_mode = ViInsertMode() | EmacsInsertMode()
     _submit_filter = (
         _insert_mode
         & ~IsSearching()

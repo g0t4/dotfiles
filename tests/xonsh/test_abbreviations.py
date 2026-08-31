@@ -28,6 +28,8 @@ from wes_abbreviations import (  # noqa: E402
 from wes_xonsh_abbreviations import (  # noqa: E402
     XonshAbbreviationExpander,
     abbreviation_completion_candidates,
+    abbreviation_picker_rows,
+    apply_abbreviation_selection,
     expand_abbreviation_on_space,
     command_path_from_args,
     context_from_completion,
@@ -356,6 +358,28 @@ def test_abbreviation_completion_matches_literal_prefix_and_scope():
     assert abbreviation_completion_candidates(
         registry, context("ls co", command_path=("ls",))
     ) == []
+
+
+def test_abbreviation_picker_lists_namespace_and_replaces_current_token():
+    registry = AbbreviationRegistry(
+        [
+            Abbreviation("pbsse", "pbpaste | sed"),
+            Abbreviation("pbsse_verbose", "pbpaste  |\n verbose"),
+            Abbreviation("codex", "--author codex", commands=("git",)),
+        ]
+    )
+
+    assert abbreviation_picker_rows(registry, context("pbs")) == [
+        "pbsse\tpbpaste | sed",
+        "pbsse_verbose\tpbpaste | verbose",
+    ]
+    assert apply_abbreviation_selection(
+        "echo pbs tail", 5, 8, "pbsse_verbose"
+    ) == ("echo pbsse_verbose tail", 18)
+    assert apply_abbreviation_selection("echo pbs", 5, 8, None) == (
+        "echo pbs",
+        8,
+    )
 
 
 def test_command_path_skips_assignments_env_options_and_redirections():

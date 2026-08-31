@@ -75,6 +75,32 @@ def abbreviation_completion_candidates(
     return candidates
 
 
+def abbreviation_picker_rows(
+    registry: AbbreviationRegistry, context: AbbreviationContext
+) -> list[str]:
+    """Format applicable abbreviation triggers for a tab-delimited FZF view."""
+    unfiltered = replace(context, token="")
+    return [
+        f"{trigger}\t{' '.join(expansion.split()).replace(chr(9), ' ')}"
+        for trigger, expansion in abbreviation_completion_candidates(
+            registry, unfiltered
+        )
+    ]
+
+
+def apply_abbreviation_selection(
+    buffer: str,
+    token_start: int,
+    token_end: int,
+    selected: str | None,
+) -> tuple[str, int]:
+    """Replace the current token with an FZF-selected abbreviation trigger."""
+    if not selected:
+        return buffer, token_end
+    updated = buffer[:token_start] + selected + buffer[token_end:]
+    return updated, token_start + len(selected)
+
+
 class XonshAbbreviationExpander:
     def __init__(self, registry: AbbreviationRegistry):
         from xonsh.parsers.completion_context import CompletionContextParser
