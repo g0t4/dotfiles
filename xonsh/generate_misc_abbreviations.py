@@ -86,6 +86,13 @@ PLATFORM_REPLACEMENTS = {
     2735: ("system_profiler SPUSBDataType", "lsusb -tv"),
 }
 
+# Fish-native implementations whose Xonsh ports intentionally use structured
+# helpers instead of reproducing the source command literally.
+MIGRATION_REPLACEMENTS = {
+    783: "_abbr_list --any '%'",
+    784: "_abbr_list --prefix '%'",
+}
+
 
 def parse_abbreviation(line_number: int, line: str):
     # Fish accepts backslash-escaped single quotes inside single-quoted text;
@@ -136,6 +143,7 @@ def declaration(line_number, name, replacement, options):
     elif "function" in options:
         replacement_expression = f"fish_abbreviation({options['function']!r})"
     else:
+        replacement = MIGRATION_REPLACEMENTS.get(line_number, replacement)
         for old, new in REPLACEMENTS.items():
             replacement = replacement.replace(old, new)
         replacement_expression = repr(replacement)

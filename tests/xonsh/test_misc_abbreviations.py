@@ -76,6 +76,19 @@ def test_generated_pkill_abbreviations_preserve_platform_specific_flags():
     ) in processes_module
 
 
+def test_fish_abbreviation_search_stays_native_while_xonsh_uses_registry():
+    fish_source = SOURCE.read_text()
+    processes_module = next(
+        content
+        for target, content in generate_all().items()
+        if target.name == "wes_processes_abbreviations.py"
+    )
+
+    assert 'abbr --add agr --set-cursor "abbr | rg_grep -i \'%\'"' in fish_source
+    assert "abbr(registry, 'agr', \"_abbr_list --any '%'\"" in processes_module
+    assert "abbr(registry, 'agrs', \"_abbr_list --prefix '%'\"" in processes_module
+
+
 def test_every_misc_fish_abbreviation_is_assigned_to_one_focused_module():
     entries = registry().abbreviations
 

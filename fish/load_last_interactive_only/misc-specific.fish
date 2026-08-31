@@ -780,8 +780,8 @@ abbr vls "set | bat --language ini -p"
 abbr vgr "set | rg_grep -i "
 #
 # abbr's
-abbr --add agr --set-cursor "_abbr_list --any '%'"
-abbr --add agrs --set-cursor "_abbr_list --prefix '%'"
+abbr --add agr --set-cursor "abbr | rg_grep -i '%'"
+abbr --add agrs --set-cursor "abbr | rg_grep -i '\-\- %'" # starts with b/c `-- name` is consistent format of abbr's list output
 #
 # complete's
 abbr --set-cursor completeC "complete -C '%'"
