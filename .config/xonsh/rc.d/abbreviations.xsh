@@ -33,8 +33,10 @@ aliases["_abbr_help"] = lambda args, **kwargs: abbreviation_help_alias(
 )
 
 
-def _abbr_list_alias(args, stdout=None):
-    return abbreviation_list_alias(XONSH_ABBREVIATIONS, args, stdout=stdout)
+def _abbr_list_alias(args, stdout=None, spec=None):
+    return abbreviation_list_alias(
+        XONSH_ABBREVIATIONS, args, stdout=stdout, spec=spec
+    )
 
 
 aliases["_abbr_list"] = _abbr_list_alias

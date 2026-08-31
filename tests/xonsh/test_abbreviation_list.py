@@ -68,13 +68,30 @@ def test_plain_output_is_stable_and_pipe_friendly():
     assert output.getvalue() == "pb\tpbpaste\tcommand\npcp\t| pbcopy\tanywhere\n"
 
 
+def test_rich_output_visibly_separates_trigger_expansion_and_scope():
+    output = io.StringIO()
+
+    render_abbreviation_list(
+        search_abbreviations(registry(), "pb"), stream=output, plain=False
+    )
+
+    rendered = output.getvalue()
+    assert "Trigger" in rendered
+    assert re.search(r" pb\s+│ pbpaste", rendered)
+    assert "│ command" in rendered
+
+
 def test_alias_supports_any_prefix_and_help():
     output = io.StringIO()
-    abbreviation_list_alias(registry(), ["--any", "pbpaste"], stdout=output)
+    abbreviation_list_alias(
+        registry(), ["--plain", "--any", "pbpaste"], stdout=output
+    )
     assert output.getvalue() == "pb\tpbpaste\tcommand\n"
 
     output = io.StringIO()
-    abbreviation_list_alias(registry(), ["--prefix", "pc"], stdout=output)
+    abbreviation_list_alias(
+        registry(), ["--plain", "--prefix", "pc"], stdout=output
+    )
     assert output.getvalue() == "pcp\t| pbcopy\tanywhere\n"
 
     output = io.StringIO()

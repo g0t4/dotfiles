@@ -87,16 +87,26 @@ def render_abbreviation_list(
             print(f"{item.trigger}\t{item.expansion}\t{item.scope}", file=stream)
         return
 
-    table = Table(show_header=True, header_style="bold cyan", box=None)
-    table.add_column("Trigger", style="bold")
+    table = Table(
+        show_header=True,
+        header_style="bold cyan",
+        box=None,
+        collapse_padding=True,
+        padding=(0, 1),
+    )
+    table.add_column("Trigger", style="bold bright_cyan", no_wrap=True)
+    table.add_column("│", style="dim cyan", no_wrap=True, width=1)
     table.add_column("Expansion")
+    table.add_column("│", style="dim cyan", no_wrap=True, width=1)
     table.add_column("Scope", style="dim")
     for item in listings:
-        table.add_row(item.trigger, item.expansion, item.scope)
+        table.add_row(item.trigger, "│", item.expansion, "│", item.scope)
     Console(file=stream).print(table)
 
 
-def abbreviation_list_alias(registry: AbbreviationRegistry, args, stdout=None, **_):
+def abbreviation_list_alias(
+    registry: AbbreviationRegistry, args, stdout=None, spec=None, **_
+):
     values = list(args)
     plain = False
     mode = "any"
@@ -121,8 +131,9 @@ def abbreviation_list_alias(registry: AbbreviationRegistry, args, stdout=None, *
 
     query = " ".join(query_parts)
     listings = search_abbreviations(registry, query, prefix=mode == "prefix")
+    piped = spec is not None and not spec.last_in_pipeline
     render_abbreviation_list(
         listings,
         stream=stdout,
-        plain=True if plain else None,
+        plain=True if plain or piped else False,
     )
