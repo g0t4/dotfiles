@@ -36,7 +36,7 @@ from wes_xonsh_abbreviations import (
     expand_abbreviation_on_space,
 )
 
-from wes_logging import ensure_logger_is_setup, get_logger
+from wes_logging import ensure_logger_is_setup, get_logger, get_console
 ensure_logger_is_setup()
 log = get_logger("abbrs")
 
@@ -48,6 +48,9 @@ aliases["_abbr_help"] = lambda args, **kwargs: abbreviation_help_alias(
 
 
 def _abbr_list_alias(args, stdout=None, spec=None):
+    import rich
+    rich.inspect(stdout, console=get_console())
+    # log.info(stdout)
     return abbreviation_list_alias(
         XONSH_ABBREVIATIONS, args, stdout=stdout, spec=spec
     )

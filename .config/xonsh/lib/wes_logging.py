@@ -124,6 +124,12 @@ def configure_logging(
     return _root_logger
 
 
+def get_console():
+    if isinstance(_handler, _CompactRichHandler):
+        return _handler.console
+    raise RuntimeError("Rich console not configured")
+
+
 def get_logger(component: str) -> logging.Logger:
     """Return a component logger routed through the shared ``xonsh`` logger."""
     return logging.getLogger(f"xonsh.{component}")
