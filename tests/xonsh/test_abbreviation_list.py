@@ -12,7 +12,6 @@ sys.path.insert(0, str(ROOT / ".config/xonsh/lib"))
 from wes_abbreviation_list import (  # noqa: E402
     abbreviation_list_alias,
     abbreviation_listings,
-    render_abbreviation_list,
     search_abbreviations,
 )
 from wes_abbreviations import AbbreviationRegistry, abbr  # noqa: E402
@@ -63,9 +62,6 @@ def test_regexes_are_displayed_and_internal_resolvers_are_hidden():
 def test_rich_output_visibly_separates_trigger_expansion_and_scope():
     output = io.StringIO()
 
-    # render_abbreviation_list(
-    #     search_abbreviations(registry(), "pb"), stream=output
-    # )
     abbreviation_list_alias(
         registry(), ["--prefix", "pb"], stdout=output
     )
