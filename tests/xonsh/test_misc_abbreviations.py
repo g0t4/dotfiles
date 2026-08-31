@@ -241,7 +241,10 @@ def test_all_split_rc_files_load_together():
         )
     )
     command = "; ".join(f"source {path}" for path in rc_files)
-    command += "; print(len(XONSH_ABBREVIATIONS.abbreviations))"
+    command += (
+        "; print(sum(not item.submit_only "
+        "for item in XONSH_ABBREVIATIONS.abbreviations))"
+    )
 
     completed = subprocess.run(
         ["xonsh", "--no-rc", "-c", command], capture_output=True, text=True

@@ -19,6 +19,7 @@ from wes_abbreviation_help import (
     abbreviation_help_alias,
     register_abbreviation_help,
 )
+from wes_abbreviation_list import abbreviation_list_alias
 from wes_xonsh_abbreviations import (
     XonshAbbreviationExpander,
     expand_abbreviation_on_space,
@@ -30,6 +31,13 @@ register_abbreviation_help(XONSH_ABBREVIATIONS)
 aliases["_abbr_help"] = lambda args, **kwargs: abbreviation_help_alias(
     XONSH_ABBREVIATIONS, args, **kwargs
 )
+
+
+def _abbr_list_alias(args, stdout=None):
+    return abbreviation_list_alias(XONSH_ABBREVIATIONS, args, stdout=stdout)
+
+
+aliases["_abbr_list"] = _abbr_list_alias
 
 _wes_abbreviation_expander = XonshAbbreviationExpander(XONSH_ABBREVIATIONS)
 

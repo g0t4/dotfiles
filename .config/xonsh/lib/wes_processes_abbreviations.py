@@ -40,8 +40,8 @@ def register_processes_abbreviations(registry: AbbreviationRegistry):
     abbr(registry, 'envb', 'env | bat -l env')  # Fish line 774
     abbr(registry, 'vls', 'set | bat --language ini -p')  # Fish line 779
     abbr(registry, 'vgr', 'set | rg_grep -i ')  # Fish line 780
-    abbr(registry, 'agr', "abbr | rg_grep -i '%'", cursor_marker="%")  # Fish line 783
-    abbr(registry, 'agrs', "abbr | rg_grep -i '\\-\\- %'", cursor_marker="%")  # Fish line 784
+    abbr(registry, 'agr', "_abbr_list --any '%'", cursor_marker="%")  # Fish line 783
+    abbr(registry, 'agrs', "_abbr_list --prefix '%'", cursor_marker="%")  # Fish line 784
     abbr(registry, 'completeC', "complete -C '%'", cursor_marker="%")  # Fish line 787
     abbr(registry, 'psg', 'grc ps aux | rg_grep -i ')  # Fish line 815
     abbr(registry, 'enable_fish_tracing', 'set fish_trace 1')  # Fish line 837
