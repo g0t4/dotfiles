@@ -67,7 +67,9 @@ class ProcessSubstitutionFiles:
 
 
 def last_commands(history: Iterable[str], count: int = 2) -> tuple[str, ...]:
-    commands = [command for command in history if command.strip()]
+    commands = [
+        command.removesuffix("\n") for command in history if command.strip()
+    ]
     return tuple(commands[-count:])
 
 

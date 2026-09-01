@@ -52,6 +52,11 @@ def test_last_commands_ignores_blank_entries_and_preserves_oldest_first():
     assert last_commands(["old", "", "new", "   "], count=2) == ("old", "new")
 
 
+def test_last_commands_removes_one_history_record_newline():
+    assert last_commands(["false\n", "true\n"]) == ("false", "true")
+    assert last_commands(["printf 'one\ntwo'\n"]) == ("printf 'one\ntwo'",)
+
+
 def test_diff_expansions_quote_each_whole_command():
     history = ["echo 'old value'", "printf '%s\\n' new"]
 
@@ -110,3 +115,41 @@ def test_diff_rc_uses_xonsh_ptk_event_signature_and_live_command_cache():
 
     assert completed.returncode == 0, completed.stderr
     assert "AttributeError" not in completed.stderr
+
+
+def test_diff_command_capture_keeps_output_from_nonzero_command(tmp_path):
+    rc = ROOT / ".config/xonsh/rc.d/diff-specific.xsh"
+    abbreviations = ROOT / ".config/xonsh/rc.d/abbreviations.xsh"
+    output = tmp_path / "failed-command-output"
+    command = (
+        f"source {abbreviations}; source {rc}; "
+        f"path = p'{output}'; "
+        "_write_xonsh_command_output("
+        "\"sh -c 'printf failed-output; exit 2'\", path); "
+        "assert path.read_text() == 'failed-output'; "
+        "assert $XONSH_SUBPROC_RAISE_ERROR is True; true"
+    )
+    completed = subprocess.run(
+        ["xonsh", "--no-rc", "-c", command], capture_output=True, text=True
+    )
+
+    assert completed.returncode == 0, completed.stderr
+    assert "CalledProcessError" not in completed.stderr
+
+
+def test_diff_command_capture_removes_one_final_newline(tmp_path):
+    rc = ROOT / ".config/xonsh/rc.d/diff-specific.xsh"
+    abbreviations = ROOT / ".config/xonsh/rc.d/abbreviations.xsh"
+    output = tmp_path / "normalized-output"
+    command = (
+        f"source {abbreviations}; source {rc}; "
+        f"path = p'{output}'; "
+        "_write_xonsh_command_output("
+        "\"sh -c 'echo first; echo \\\"second  \\\"; echo'\", path); "
+        "assert path.read_text() == 'first\\nsecond  \\n'"
+    )
+    completed = subprocess.run(
+        ["xonsh", "--no-rc", "-c", command], capture_output=True, text=True
+    )
+
+    assert completed.returncode == 0, completed.stderr

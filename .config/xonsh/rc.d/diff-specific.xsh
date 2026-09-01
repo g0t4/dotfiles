@@ -84,12 +84,19 @@ abbr(
 def _write_xonsh_command_output(command, path):
     # Evaluate inside this Xonsh process so current aliases, environment, and
     # working directory behave like Fish's `eval`, rather than a child shell.
-    output = XSH.execer.eval(
-        f"$({command})",
-        glbs=globals(),
-        locs=locals(),
-    )
-    path.write_text(output or "")
+    # A failed command still has useful output to compare. Suppress Xonsh's
+    # subprocess exceptions only for this capture; preserve the user's global
+    # failure settings everywhere else.
+    with XSH.env.swap(
+        XONSH_SUBPROC_CMD_RAISE_ERROR=False,
+        XONSH_SUBPROC_RAISE_ERROR=False,
+    ):
+        output = XSH.execer.eval(
+            f"$({command})",
+            glbs=globals(),
+            locs=locals(),
+        )
+    path.write_text((output or "").removesuffix("\n"))
 
 
 def _diff_two_commands(args, stdout=None, stderr=None, **_):
