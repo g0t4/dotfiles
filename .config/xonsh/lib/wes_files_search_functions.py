@@ -91,7 +91,7 @@ def fd_depth_alias(args, stdout=None, stderr=None, **_):
     return 0
 
 
-def register_files_search_functions(aliases, env):
+def register_files_search_functions(aliases):
     aliases["fd"] = ["fd", "--hidden"]
     aliases["delta_rg"] = ["delta", "--features", "rg"]
     aliases["rg_grep"] = [
