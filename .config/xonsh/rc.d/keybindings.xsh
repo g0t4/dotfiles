@@ -149,3 +149,13 @@ def _wes_keybindings(bindings, prompter, **_):
     #
     # FYI if you set both timeoutlen+ttimeoutlen==0 => escape instantly goes into normal mode (from insert mode) but then `dd` and keymaps like it won't work ;) cuz can't do the with zero lag (IIUC)
 
+
+    # TODO wish list of keybinds (not urgent)
+    #
+    #  TODO make sure testing of key bind changes!
+    # - Ctrl+A/X to _increment/decrement the nearest (on or after cursor) number just like in neovim
+    # - surround keymaps (i.e. `ysiw` and `ysiW` and then what to wrap with...), test case:
+    #   => `ysiw"` puts quotes around inner little word
+    #   => `ysiW"` puts quotes around inner little word
+    # - ?PRN? add test for timeoutlen change?
+
