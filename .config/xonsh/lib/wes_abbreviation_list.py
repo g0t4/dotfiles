@@ -99,18 +99,16 @@ def abbreviation_list_alias(
     def render_abbreviation_list():
         table = Table(
             show_header=True,
-            header_style="bold cyan",
+            header_style="bold",
             box=None,
             collapse_padding=True,
             padding=(0, 1),
         )
-        table.add_column("Trigger", style="bold bright_cyan", no_wrap=True)
-        table.add_column("│", style="dim cyan", no_wrap=True, width=1)
-        table.add_column("Expansion")
-        table.add_column("│", style="dim cyan", no_wrap=True, width=1)
-        table.add_column("Scope", style="dim")
+        table.add_column("Trigger", style="cyan", header_style="cyan", no_wrap=True)
+        table.add_column("Expansion", style="white", header_style="white")
+        table.add_column("Scope", style="dim", header_style="dim")
         for item in listings:
-            table.add_row(item.trigger, "│", item.expansion, "│", item.scope)
+            table.add_row(item.trigger, item.expansion, item.scope)
         console.print(table)
 
     render_abbreviation_list()
