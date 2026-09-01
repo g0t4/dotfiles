@@ -16,7 +16,11 @@ from prompt_toolkit.input import ansi_escape_sequences
 from prompt_toolkit.input.vt100_parser import _IS_PREFIX_OF_LONGER_MATCH_CACHE
 from prompt_toolkit.keys import Keys
 from xonsh.completers.completer import add_one_completer
-from xonsh.completers.tools import RichCompletion, contextual_command_completer
+from xonsh.completers.tools import (
+    RichCompletion,
+    contextual_command_completer,
+    non_exclusive_completer,
+)
 from xonsh.shells.ptk_shell.key_bindings import (
     carriage_return,
     should_confirm_completion,
@@ -64,6 +68,7 @@ aliases["_abbr_list"] = _abbr_list_alias
 _wes_abbreviation_expander = XonshAbbreviationExpander(XONSH_ABBREVIATIONS)
 
 
+@non_exclusive_completer
 @contextual_command_completer
 def _wes_abbreviation_completer(command):
     context = context_from_completion(

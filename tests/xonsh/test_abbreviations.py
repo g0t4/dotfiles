@@ -1,4 +1,5 @@
 from dataclasses import replace
+import os
 import re
 import subprocess
 import sys
@@ -424,6 +425,29 @@ def test_abbreviation_picker_lists_namespace_and_replaces_current_token():
         "echo pbs",
         8,
     )
+
+
+def test_xonsh_abbreviation_completer_is_non_exclusive(tmp_path):
+    rc = Path(__file__).parents[2] / ".config/xonsh/rc.d/abbreviations.xsh"
+    env = os.environ | {
+        "XONSH_CONFIG_DIR": str(rc.parents[1]),
+        "XDG_STATE_HOME": str(tmp_path),
+    }
+    command = (
+        f"source {rc}; "
+        "from xonsh.completers.tools import is_exclusive_completer; "
+        "print(is_exclusive_completer(__xonsh__.completers['wes_abbreviations']))"
+    )
+
+    completed = subprocess.run(
+        ["xonsh", "--no-rc", "-c", command],
+        capture_output=True,
+        text=True,
+        env=env,
+    )
+
+    assert completed.returncode == 0, completed.stderr
+    assert completed.stdout == "False\n"
 
 
 def test_command_path_skips_assignments_env_options_and_redirections():
