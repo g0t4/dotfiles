@@ -2,7 +2,7 @@
 
 import os
 
-from prompt_toolkit.filters import vi_insert_mode
+from prompt_toolkit.filters import vi_insert_mode, vi_navigation_mode
 from prompt_toolkit.key_binding.bindings.named_commands import get_by_name
 from xonsh.dirstack import cd as _xonsh_cd
 from xonsh.tools import print_above_prompt
@@ -110,3 +110,15 @@ def _wes_keybindings(bindings, **_):
         # directly from the terminal because Prompt Toolkit is not reading then.
         event.current_buffer.reset()
         event.app.invalidate()
+
+    # Vim-mode additions -------------------------------------------------
+    # Match Vim/Neovim: Ctrl-R redoes the most recently undone change in
+    # normal mode. This intentionally replaces reverse history search there.
+    @bindings.add(
+        "c-r",
+        filter=vi_navigation_mode,
+        eager=True,
+        save_before=lambda event: False,
+    )
+    def _vim_redo(event):
+        event.current_buffer.redo()
