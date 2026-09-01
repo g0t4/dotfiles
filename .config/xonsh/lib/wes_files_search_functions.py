@@ -108,6 +108,14 @@ def register_files_search_functions(aliases):
         "--no-line-number",
         "--no-column",
     ]
+    # TODO is this an ok spot to add new functions too?
+    aliases["grep"] = [
+        "grep",
+        # fish itself overrides grep with a function to add color auto
+        # so, replicating that here:
+        "--color=auto",
+    ]
+    # PRN override ripgrep to add color by default too? i.e. RIPGREP_CONFIG_PATH
     for function_name in STREAMED_FISH_FUNCTIONS:
         aliases[function_name] = fish_alias(function_name)
     for function_name in CAPTURED_FISH_FUNCTIONS:
