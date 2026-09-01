@@ -54,7 +54,7 @@ def _wes_navigate_directory(event, *, forward):
 
 
 @events.on_ptk_create
-def _wes_keybindings(bindings, **_):
+def _wes_keybindings(bindings, prompter, **_):
     # Match Fish: on an empty command line Alt-Left/Right navigate a
     # bidirectional cwd timeline in place. With input present they retain
     # punctuation-aware word movement.
@@ -122,3 +122,30 @@ def _wes_keybindings(bindings, **_):
     )
     def _vim_redo(event):
         event.current_buffer.redo()
+
+    # * set propmt_toolkit's timeout keychord intervals
+    # FYI same settings as in vim!
+    # *** https://python-prompt-toolkit.readthedocs.io/en/master/pages/advanced_topics/key_bindings.html#timeouts
+    #
+    # import rich
+    # rich.inspect(prompter.app)
+    # rich.print(f"{prompter.app.timeoutlen=} {prompter.app.ttimeoutlen=}")
+    #
+    # * timeoutlen => default 1 (time to differentiate overlapping key bindings)
+    #    A + AB defined => press A then have to wait a bit of time if we want to detect AB and not just fire A and ignore B (or chain with next keypress)
+    #    1 IIAC == 1 second? (one difference, vim configures this in ms)
+    prompter.app.timeoutlen = 0.3 # mirror neovim values in early.lua for now (I don't need 1 second!)
+    #
+    # ***** FYI this is all an attempt to make insert=>normal mode faster (one key press too) *****
+    #       + not trigger alt(esc)+shift+letter keymaps when leaving insert mode
+    #
+    # * ttimeoutlen => default 0.5
+    #   (for ansi escape codes IIUC)
+    #   leave as-is for now, just double press Escape if it annoys you!
+    # prompter.app.ttimeoutlen = 0.25 # LEAVE ALONE FOR NOW
+    #
+    # TODO maybe I should avoid using Escape (alt) for keypresses?
+    #   these conflict for sure with my Shift+Alt+B/F/U etc fzf pickers, those could be remapped TBH
+    #
+    # FYI if you set both timeoutlen+ttimeoutlen==0 => escape instantly goes into normal mode (from insert mode) but then `dd` and keymaps like it won't work ;) cuz can't do the with zero lag (IIUC)
+
