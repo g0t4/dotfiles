@@ -15,6 +15,7 @@ from wes_abbreviations import (
 
 
 _ASSIGNMENT = re.compile(r"[A-Za-z_][A-Za-z0-9_]*=.*", re.DOTALL)
+MIN_ANYWHERE_COMPLETION_PREFIX_LENGTH = 1
 
 
 def command_path_from_args(args: Iterable[Any]) -> tuple[str, ...]:
@@ -55,12 +56,21 @@ def context_from_completion(buffer_text: str, cursor: int, command: Any):
 
 
 def abbreviation_completion_candidates(
-    registry: AbbreviationRegistry, context: AbbreviationContext
+    registry: AbbreviationRegistry,
+    context: AbbreviationContext,
+    *,
+    minimum_anywhere_prefix_length=MIN_ANYWHERE_COMPLETION_PREFIX_LENGTH,
 ) -> list[tuple[str, str]]:
     """Return literal abbreviation triggers applicable to a partial token."""
     candidates = []
     for abbreviation in registry.abbreviations:
         if abbreviation.internal or not isinstance(abbreviation.trigger, str):
+            continue
+        if (
+            abbreviation.position == "anywhere"
+            and not context.is_command_position
+            and len(context.token) < minimum_anywhere_prefix_length
+        ):
             continue
         if not abbreviation.trigger.startswith(context.token):
             continue
@@ -83,7 +93,9 @@ def abbreviation_picker_rows(
     return [
         f"{trigger}\t{' '.join(expansion.split()).replace(chr(9), ' ')}"
         for trigger, expansion in abbreviation_completion_candidates(
-            registry, unfiltered
+            registry,
+            unfiltered,
+            minimum_anywhere_prefix_length=0,
         )
     ]
 

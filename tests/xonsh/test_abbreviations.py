@@ -1,3 +1,4 @@
+from dataclasses import replace
 import re
 import subprocess
 import sys
@@ -358,6 +359,49 @@ def test_abbreviation_completion_matches_literal_prefix_and_scope():
     assert abbreviation_completion_candidates(
         registry, context("ls co", command_path=("ls",))
     ) == []
+
+
+def test_empty_argument_completion_hides_global_anywhere_abbreviations():
+    registry = AbbreviationRegistry(
+        [
+            Abbreviation("pjq", "| jq", position="anywhere"),
+            Abbreviation("codex", "--author codex", commands=("git",)),
+        ]
+    )
+    empty_argument = AbbreviationContext(
+        buffer="git ",
+        cursor=4,
+        token_start=4,
+        token_end=4,
+        token="",
+        command_path=("git",),
+        command_position=False,
+    )
+
+    assert abbreviation_completion_candidates(registry, empty_argument) == [
+        ("codex", "--author codex")
+    ]
+    assert abbreviation_completion_candidates(
+        registry,
+        replace(empty_argument, buffer="git p", cursor=5, token_end=5, token="p"),
+    ) == [("pjq", "| jq")]
+
+
+def test_picker_still_lists_anywhere_abbreviations_for_an_empty_argument():
+    registry = AbbreviationRegistry(
+        [Abbreviation("pjq", "| jq", position="anywhere")]
+    )
+    empty_argument = AbbreviationContext(
+        buffer="echo ",
+        cursor=5,
+        token_start=5,
+        token_end=5,
+        token="",
+        command_path=("echo",),
+        command_position=False,
+    )
+
+    assert abbreviation_picker_rows(registry, empty_argument) == ["pjq\t| jq"]
 
 
 def test_abbreviation_picker_lists_namespace_and_replaces_current_token():
