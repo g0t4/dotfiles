@@ -122,8 +122,10 @@ def _prompt_pwd():
 
     if cwd == os.path.join(home, "repos/github/g0t4/course-ansible-admin"):
         return color + "course"
-    if cwd == os.path.join(home, "repos/github/g0t4/private-course-ansible-admin"):
-        return color + "PRIVATE"
+    private_repo_prefix = os.path.join(home, "repos/github/g0t4/private")
+    if cwd.startswith(private_repo_prefix):
+        # shows as PRIVATE-foo-repo/bar/baz so it is always clear where I am at but also never loses PRIVATE label
+        return color + "PRIVATE" + cwd[len(private_repo_prefix):]
 
     repo_root, prefix = _prompt_repo_info(cwd)
     if not prefix and re.match(r".*/(?:bitbucket|github|gitlab)/.+", repo_root):
