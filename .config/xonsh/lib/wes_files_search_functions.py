@@ -46,24 +46,6 @@ UNSUPPORTED_FUNCTIONS = {
 }
 
 
-def external_alias(command, prefix=(), environment=None):
-    def invoke(args, stdin=None, stdout=None, stderr=None, **_):
-        runtime_env = (
-            environment.detype()
-            if hasattr(environment, "detype")
-            else environment
-        )
-        return subprocess.run(
-            [command, *prefix, *args],
-            stdin=stdin,
-            stdout=stdout,
-            stderr=stderr,
-            env=runtime_env,
-        ).returncode
-
-    return invoke
-
-
 def fish_alias(function_name):
     def invoke(args, stdin=None, stdout=None, stderr=None, **_):
         return fish_function_command(

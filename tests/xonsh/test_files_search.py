@@ -21,7 +21,6 @@ from wes_files_search_functions import (  # noqa: E402
     FISH_BRIDGE_FUNCTIONS,
     NATIVE_FUNCTIONS,
     UNSUPPORTED_FUNCTIONS,
-    external_alias,
     unsupported_alias,
 )
 
@@ -114,34 +113,6 @@ def test_unsupported_stateful_function_abbreviation_fails_loudly():
 
     with pytest.raises(UnsupportedFishFunctionError, match="md_open.*changes directory"):
         abbreviations.expand(context("mdo"))
-
-
-def test_fd_wrapper_adds_hidden_and_uses_live_environment(monkeypatch):
-    calls = []
-
-    def fake_run(argv, **kwargs):
-        calls.append((argv, kwargs))
-        return subprocess.CompletedProcess(argv, 7)
-
-    monkeypatch.setattr("wes_files_search_functions.subprocess.run", fake_run)
-    environment = {"PATH": "/current/xonsh/path"}
-
-    result = external_alias("fd", ("--hidden",), environment)(
-        ["lua"], stdin="in", stdout="out", stderr="err"
-    )
-
-    assert result == 7
-    assert calls == [
-        (
-            ["fd", "--hidden", "lua"],
-            {
-                "stdin": "in",
-                "stdout": "out",
-                "stderr": "err",
-                "env": environment,
-            },
-        )
-    ]
 
 
 def test_unsupported_stateful_function_alias_fails_loudly():
