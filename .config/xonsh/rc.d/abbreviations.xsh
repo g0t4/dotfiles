@@ -54,7 +54,7 @@ def _abbr_list_alias(args, stdout=None, spec=None):
     # FYI stdout from xonsh is _io.TextIOWrapper
     # log.info(stdout)
     # piped = spec is not None and not spec.last_in_pipeline
-    console = Console(file=stdout)
+    console = Console(file=stdout, force_terminal=True)
     return abbreviation_list_alias(
         XONSH_ABBREVIATIONS, args, console
     )
