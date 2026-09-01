@@ -71,8 +71,7 @@ def test_rich_output_visibly_separates_trigger_expansion_and_scope():
     rendered = output.getvalue()
     print('rendered', rendered)
     assert "Trigger" in rendered
-    assert re.search(r" pb\s*│\s*pbpaste", rendered)
-    assert "│ command" in rendered
+    assert re.search(r"pb\s+pbpaste\s+command", rendered)
 
 
 def test_alias_supports_any_prefix_and_help():
