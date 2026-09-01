@@ -82,9 +82,29 @@ def diff_expansion(history: Iterable[str], suffix: str = "") -> str | None:
     )
 
 
+def restore_quoted_newline_escapes(command: str) -> str:
+    """Make decoded newlines in quoted arguments safe to parse as Xonsh again."""
+    source = []
+    quote = None
+    escaped = False
+    for character in command:
+        if character == "\n" and quote is not None:
+            source.append("\\n")
+            escaped = False
+            continue
+        source.append(character)
+        if escaped:
+            escaped = False
+        elif character == "\\":
+            escaped = True
+        elif character in {"'", '"'}:
+            quote = None if quote == character else character if quote is None else quote
+    return "".join(source)
+
+
 def sanitize_icdiff_label(command: str) -> str:
     # icdiff treats braces in -L labels as {path}/{basename} interpolation.
-    return command.replace("{", "_").replace("}", "_")
+    return command.replace("\n", "\\n").replace("{", "_").replace("}", "_")
 
 
 def copied_patch_sides(patch: str) -> tuple[str, str]:

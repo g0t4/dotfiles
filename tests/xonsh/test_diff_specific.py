@@ -12,6 +12,7 @@ from wes_diff import (  # noqa: E402
     copied_patch_sides,
     diff_expansion,
     last_commands,
+    restore_quoted_newline_escapes,
     sanitize_icdiff_label,
 )
 
@@ -75,6 +76,15 @@ def test_diff_expansion_requires_two_commands():
 
 def test_icdiff_labels_do_not_interpolate_braces():
     assert sanitize_icdiff_label("awk '{print $1}'") == "awk '_print $1_'"
+
+
+def test_quoted_newlines_survive_command_source_round_trip():
+    command = 'echo "1\n2\n3"\nprintf done'
+
+    assert restore_quoted_newline_escapes(command) == (
+        'echo "1\\n2\\n3"\nprintf done'
+    )
+    assert sanitize_icdiff_label(command) == 'echo "1\\n2\\n3"\\nprintf done'
 
 
 def test_pipeline_process_substitution_lives_until_postcommand_cleanup(tmp_path):

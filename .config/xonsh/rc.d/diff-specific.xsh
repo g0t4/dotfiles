@@ -13,6 +13,7 @@ from wes_diff import (
     copied_patch_sides,
     diff_expansion,
     psub,
+    restore_quoted_newline_escapes,
     sanitize_icdiff_label,
 )
 
@@ -91,6 +92,7 @@ def _write_xonsh_command_output(command, path):
         XONSH_SUBPROC_CMD_RAISE_ERROR=False,
         XONSH_SUBPROC_RAISE_ERROR=False,
     ):
+        command = restore_quoted_newline_escapes(command)
         output = XSH.execer.eval(
             f"$({command})",
             glbs=globals(),
