@@ -49,12 +49,11 @@ aliases["_abbr_help"] = lambda args, **kwargs: abbreviation_help_alias(
 
 
 def _abbr_list_alias(args, stdout=None, spec=None):
-    import rich
-    # rich.inspect(stdout, console=get_console())
-    # FYI stdout from xonsh is _io.TextIOWrapper
-    # log.info(stdout)
-    # piped = spec is not None and not spec.last_in_pipeline
-    console = Console(file=stdout, force_terminal=True)
+    # import rich
+    # rich.inspect(stdout, console=get_console()) # FYI stdout from xonsh is _io.TextIOWrapper
+    # rich.inspect(spec, console=get_console())
+    use_color = spec is not None and spec.last_in_pipeline
+    console = Console(file=stdout, force_terminal=use_color)
     return abbreviation_list_alias(
         XONSH_ABBREVIATIONS, args, console
     )
