@@ -516,6 +516,7 @@ function rg_grep --wraps rg --description "rg as a grep replacement"
         --no-config \
         --no-heading \
         --hidden \
+        --color always \
         # allow smart case matching which is a key feature of rg and is reasonable to apply in this "grep" mode even though "grep" doesn't include this
         --smart-case \
         # grep like output (no filename:line:column)

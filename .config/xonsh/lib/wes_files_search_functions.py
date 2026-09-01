@@ -117,6 +117,9 @@ def register_files_search_functions(aliases, env):
     aliases["rg_grep"] = external_alias(
         "rg",
         (
+            # force color for now, ideally would use smth like spec.last_in_pipeline
+            # that said, part of me likes keeping color from grep matches in subsequent pipeline stages... hrmmm
+            "--color", "always",
             "--no-config",
             "--no-heading",
             "--hidden",
