@@ -110,7 +110,7 @@ def fd_depth_alias(args, stdout=None, stderr=None, **_):
 
 
 def register_files_search_functions(aliases, env):
-    aliases["fd"] = external_alias("fd", ("--hidden",), env)
+    aliases["fd"] = ["fd", "--hidden"]
     aliases["delta_rg"] = external_alias(
         "delta", ("--features", "rg"), env
     )
