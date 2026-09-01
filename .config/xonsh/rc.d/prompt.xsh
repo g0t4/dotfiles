@@ -8,6 +8,9 @@ import signal
 import socket
 import subprocess
 
+# from wes_logging import get_logger
+# log = get_logger("prompt")
+
 
 _prompt_state = {
     "command_generation": 0,
