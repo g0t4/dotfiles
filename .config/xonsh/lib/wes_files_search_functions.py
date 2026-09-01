@@ -111,25 +111,21 @@ def fd_depth_alias(args, stdout=None, stderr=None, **_):
 
 def register_files_search_functions(aliases, env):
     aliases["fd"] = ["fd", "--hidden"]
-    aliases["delta_rg"] = external_alias(
-        "delta", ("--features", "rg"), env
-    )
-    aliases["rg_grep"] = external_alias(
+    aliases["delta_rg"] = ["delta", "--features", "rg"]
+    aliases["rg_grep"] = [
         "rg",
-        (
-            # force color for now, ideally would use smth like spec.last_in_pipeline
-            # that said, part of me likes keeping color from grep matches in subsequent pipeline stages... hrmmm
-            "--color", "always",
-            "--no-config",
-            "--no-heading",
-            "--hidden",
-            "--smart-case",
-            "--no-filename",
-            "--no-line-number",
-            "--no-column",
-        ),
-        env,
-    )
+        # force color for now, ideally would use smth like spec.last_in_pipeline
+        # that said, part of me likes keeping color from grep matches in subsequent pipeline stages... hrmmm
+        "--color",
+        "always",
+        "--no-config",
+        "--no-heading",
+        "--hidden",
+        "--smart-case",
+        "--no-filename",
+        "--no-line-number",
+        "--no-column",
+    ]
     for function_name in STREAMED_FISH_FUNCTIONS:
         aliases[function_name] = fish_alias(function_name)
     for function_name in CAPTURED_FISH_FUNCTIONS:
