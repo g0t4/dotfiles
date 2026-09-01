@@ -40,7 +40,7 @@ class FishZ:
     def resolve(self, args: Sequence[str]) -> Path:
         try:
             completed = self.runner(
-                [self._fish(), "-c", '__z --echo "$argv"', "--", *map(str, args)],
+                [self._fish(), "-c", "__z --echo $argv", "--", *map(str, args)],
                 capture_output=True,
                 text=True,
                 timeout=self.timeout,
@@ -96,7 +96,7 @@ class FishZ:
     ):
         """Run a non-jumping z operation and preserve its output and status."""
         return self.runner(
-            [self._fish(), "-c", '__z "$argv"', "--", *map(str, args)],
+            [self._fish(), "-c", "__z $argv", "--", *map(str, args)],
             cwd=cwd,
             stdin=stdin,
             stdout=stdout,

@@ -38,7 +38,7 @@ def test_resolve_asks_fish_z_to_echo_the_destination(tmp_path):
     assert runner.calls[0][0] == [
         "/test/fish",
         "-c",
-        '__z --echo "$argv"',
+        "__z --echo $argv",
         "--",
         "github",
         "project",
@@ -53,6 +53,24 @@ def test_resolve_preserves_rank_and_recency_options(tmp_path):
     )
 
     assert runner.calls[0][0][-2:] == ["--recent", "repos"]
+
+
+def test_non_jumping_operation_passes_each_argument_to_fish_z():
+    runner = RecordingRunner(completed())
+
+    FishZ(runner=runner, fish_executable="/test/fish").run(
+        ["--list", "ans", "ans"]
+    )
+
+    assert runner.calls[0][0] == [
+        "/test/fish",
+        "-c",
+        "__z $argv",
+        "--",
+        "--list",
+        "ans",
+        "ans",
+    ]
 
 
 def test_entries_parse_frecency_and_skip_missing_directories(tmp_path):
