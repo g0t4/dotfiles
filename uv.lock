@@ -432,6 +432,7 @@ dependencies = [
     { name = "transformers" },
     { name = "ty" },
     { name = "typer" },
+    { name = "xonsh" },
     { name = "yapf" },
 ]
 
@@ -476,6 +477,7 @@ requires-dist = [
     { name = "transformers", specifier = ">=4.52.4" },
     { name = "ty", specifier = ">=0.0.1a13" },
     { name = "typer", specifier = ">=0.15.3" },
+    { name = "xonsh", specifier = ">=0.24.2" },
     { name = "yapf", specifier = ">=0.43.0" },
 ]
 provides-extras = ["macos"]
@@ -2684,6 +2686,18 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/c9/4a/44d3c295350d776427904d73c189e10aeae66d7f555bb2feee16d1e4ba5a/wsproto-1.2.0.tar.gz", hash = "sha256:ad565f26ecb92588a3e43bc3d96164de84cd9902482b130d0ddbaa9664a85065", size = 53425, upload-time = "2022-08-23T19:58:21.447Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/78/58/e860788190eba3bcce367f74d29c4675466ce8dddfba85f7827588416f01/wsproto-1.2.0-py3-none-any.whl", hash = "sha256:b9acddd652b585d75b20477888c56642fdade28bdfd3579aa24a4d2c037dd736", size = 24226, upload-time = "2022-08-23T19:58:19.96Z" },
+]
+
+[[package]]
+name = "xonsh"
+version = "0.24.2"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/c1/28/974f44afd5c05bcfb012d52a91b514e629706048c85d669a29eab2f0369a/xonsh-0.24.2.tar.gz", hash = "sha256:461244cf1de8ed28d0c07cc548342b9e7969d46e17ef8d71b5d3064307930a25", size = 1217004, upload-time = "2026-08-23T15:41:03.929Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/16/32/2dc9f6142d6744fa584a59507030a851971e4088af86f187437344f60315/xonsh-0.24.2-py311-none-any.whl", hash = "sha256:60015217f74663d52c4038e495546710ecdffeb0beae96834b4ac3ea970a3927", size = 821746, upload-time = "2026-08-23T15:41:02.525Z" },
+    { url = "https://files.pythonhosted.org/packages/b0/77/9a9b1e1fcf377b412bb45626be1af9a97414f8a3aa96df566e06b8ebb092/xonsh-0.24.2-py312-none-any.whl", hash = "sha256:68e93b77bbf9e2a26f70bf323a1c311014dc2aed9ebcf036e68e7fe59ed0849c", size = 821749, upload-time = "2026-08-23T15:40:25.865Z" },
+    { url = "https://files.pythonhosted.org/packages/08/6a/aaae1f889eec7f015aa8b7041f807871cb18a2c2bc8f0564c5ca70f4bc16/xonsh-0.24.2-py313-none-any.whl", hash = "sha256:da19e84ad0361c0c8052f5119fd08bd111995df60fa233b8a61a3d66ea253d78", size = 822213, upload-time = "2026-08-23T15:40:24.572Z" },
+    { url = "https://files.pythonhosted.org/packages/5f/63/7a0e86b907ee1ff7d0e20d0e90777d261abed2e15da1896d3ca76cfef76e/xonsh-0.24.2-py314-none-any.whl", hash = "sha256:158c155a179b6883f2289b3788bb12d18988feb59c6ab6224009306c0214b83d", size = 822278, upload-time = "2026-08-23T15:40:22.085Z" },
 ]
 
 [[package]]

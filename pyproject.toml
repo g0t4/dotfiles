@@ -39,6 +39,7 @@ dependencies = [
     "yapf>=0.43.0",
     "argcomplete>=3.7.0",
     "pyright>=1.1.411",
+    "xonsh>=0.24.2",
 ]
 
 [project.optional-dependencies]
