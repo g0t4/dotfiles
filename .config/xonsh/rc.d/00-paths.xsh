@@ -48,9 +48,9 @@ def _path_move_append(*paths):
 
 def _env_path_prepend(name, *paths):
     """Prepend unique entries to an EnvPath-style environment variable."""
-    current = list(${...}.get(name, []))
+    current = list(@.env.get(name, []))
     current = [path for path in current if path not in paths]
-    ${...}[name] = list(paths) + current
+    @.env[name] = list(paths) + current
 
 
 if os.path.isfile("/opt/homebrew/bin/brew"):
@@ -60,7 +60,7 @@ if os.path.isfile("/opt/homebrew/bin/brew"):
     _path_move_prepend("/opt/homebrew/bin", "/opt/homebrew/sbin")
 
     # This is the static equivalent of the remaining `brew shellenv` output.
-    if ${...}.get("MANPATH"):
+    if @.env.get("MANPATH"):
         manpath = list($MANPATH)
         if not manpath or manpath[0] != "":
             $MANPATH = [""] + manpath
