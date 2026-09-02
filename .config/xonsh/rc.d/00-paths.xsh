@@ -8,6 +8,14 @@ from pathlib import Path
 # FYI use manual PATH sync if this falls apart
 #  you can manually sync a list of vars yourself (handle PATH type lists vs string values)
 $UPDATE_OS_ENVIRON = True
+# consequently:
+#   os.environ['PATH'] == ":".join($PATH)
+#   when $PATH is changed (one-way sync => os.environ)
+#   BUT, NOT when os.environ['PATH'] is changed
+#
+# also other env vars are synced (which in xonsh all vars are env vars, hence why sync is off by default)
+# my thought process is... if Xonsh launches subprocess (in its subprocess mode) using this full env, then why can't it work to sync it back to python native environ?
+# that way using python APIs like `import subprocess` or `import shutil` work with the same $PATH
 
 # add lib dir to sys.path (early) => i.e. to locate my wes_logging python module
 # => leave this here for other files (even if you aren't using logger currently)
