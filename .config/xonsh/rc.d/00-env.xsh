@@ -5,7 +5,7 @@ import platform
 from pathlib import Path
 
 
-_wes_home = Path(os.path.expanduser("~"))
+_home = Path(os.path.expanduser("~"))
 _wes_is_macos = platform.system() == "Darwin"
 
 # Keep Fish's executable true/false string convention for compatibility with
@@ -18,10 +18,16 @@ $IS_ARCH = (
     else "false"
 )
 
-if not ${...}.get("XDG_STATE_HOME"):
-    $XDG_STATE_HOME = str(_wes_home / ".local/state")
+if not "XDG_STATE_HOME" in @.env:
+    $XDG_STATE_HOME = str(_home / ".local/state")
+if not "XDG_DATA_HOME" in @.env:
+    $XDG_DATA_HOME = str(_home / ".local/share")
+if not "XDG_CONFIG_HOME" in @.env:
+    $XDG_CONFIG_HOME = str(_home / ".config")
+if not "XDG_CACHE_HOME" in @.env:
+    $XDG_CACHE_HOME = str(_home / ".cache")
 
-$WES_REPOS = str(_wes_home / "repos")
+$WES_REPOS = str(_home / "repos")
 $WES_BOOTSTRAP = str(Path($WES_REPOS) / "wes-config/wes-bootstrap")
 $WES_DOTFILES = str(Path($WES_REPOS) / "github/g0t4/dotfiles")
 $WES_ASK_CAPTURES = str(Path($XDG_STATE_HOME) / "nvim/ask-openai")
