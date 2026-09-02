@@ -2,8 +2,12 @@
 # * ssh-agent
 # using ssh-agent for ssh key passphrases (for git repos push/pull)
 if $IS_ARCH:
-    # need to set socket env var:
-    $SSH_AUTH_SOCK=f"{$XDG_RUNTIME_DIR}/ssh-agent.socket"
+    if not "XDG_RUNTIME_DIR" in @.env:
+        import rich
+        rich.print("[yellow]No XDG_RUNTIME_DIR set, cannot setup SSH_AUTH_SOCK[/]")
+    else:
+        # need to set socket env var:
+        $SSH_AUTH_SOCK=f"{$XDG_RUNTIME_DIR}/ssh-agent.socket"
 
     # FYI one time must enable socket (for socket activation)
     # systemctl --user enable ssh-agent.socket
