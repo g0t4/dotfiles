@@ -1,34 +1,40 @@
-"""Environment and executable paths shared with fish/load_first/paths.fish."""
-
 import os
 import subprocess
 import sys
-from typing import Any
 from pathlib import Path
-from xonsh.events import events
 
 # ! 00- makes this run before auto-venv captures the PATH it later restores.
 
+# FYI use manual PATH sync if this falls apart
+#  you can manually sync a list of vars yourself (handle PATH type lists vs string values)
+$UPDATE_OS_ENVIRON = True
+
+# add lib dir to sys.path (early) => i.e. to locate my wes_logging python module
+# => leave this here for other files (even if you aren't using logger currently)
 XONSH_LIB = Path(__file__).parents[1] / "lib"
 sys.path.insert(0, str(XONSH_LIB))
+# TODO does xonsh have a packaging mechanism for my config, to handle relative imports within my "config package"
 
-from wes_logging import ensure_logger_is_setup, get_logger
-ensure_logger_is_setup()
-log = get_logger("path")
+# from wes_logging import ensure_logger_is_setup, get_logger
+# ensure_logger_is_setup()
+# log = get_logger("path")
 
-@events.on_envvar_change
-def on_env_updated(name: str, oldvalue: Any, newvalue: Any) -> None:
-    log.info(f"env_updated {name=} {oldvalue=} {newvalue=}")
-    # FYI w/o this os.getenv("PATH")/os.environ["PATH"] == '/usr/local/sbin:/usr/local/bin:/usr/bin'
-    # consequently, shutil.which("tool") returns nothing even when you fully setup $PATH and even when you can resolve commands just fine in subprocess mode!
-    # also python subprocess fails to find commands
-    # b/c python's PATH env var diverges from xonsh shell's $PATH changes
-    # they share a PATH value only when xonsh first starts but once my rc config files have run and changed env then the xonsh env variables differ
-    #
-    # next I'll try `$UPDATE_OS_ENVIRON = True` to keep full env in sync
-    if name == "PATH":
-        # one way sync XONSH $PATH => os.environ["PATH"]
-        os.environ["PATH"] = ":".join($PATH)
+# from typing import Any
+# from xonsh.events import events
+#
+# @events.on_envvar_change
+# def on_env_updated(name: str, oldvalue: Any, newvalue: Any) -> None:
+#     log.info(f"env_updated {name=} {oldvalue=} {newvalue=}")
+#     # FYI w/o this os.getenv("PATH")/os.environ["PATH"] == '/usr/local/sbin:/usr/local/bin:/usr/bin'
+#     # consequently, shutil.which("tool") returns nothing even when you fully setup $PATH and even when you can resolve commands just fine in subprocess mode!
+#     # also python subprocess fails to find commands
+#     # b/c python's PATH env var diverges from xonsh shell's $PATH changes
+#     # they share a PATH value only when xonsh first starts but once my rc config files have run and changed env then the xonsh env variables differ
+#     #
+#     # next I'll try `$UPDATE_OS_ENVIRON = True` to keep full env in sync
+#     if name == "PATH":
+#         # one way sync XONSH $PATH => os.environ["PATH"]
+#         os.environ["PATH"] = ":".join($PATH)
 
 def _path_move_prepend(*paths):
     """Put existing directories at the front of PATH, without duplicates."""
