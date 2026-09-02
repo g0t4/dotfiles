@@ -13,7 +13,7 @@ return {
         -- cons: adjusting the gutter can be annoying/jarring when you make a first change
 
         'lewis6991/gitsigns.nvim',
-        enabled = true,
+        enabled = false,
 
         -- comment out event and uncomment lazy to load on demand
         event = 'BufRead',
