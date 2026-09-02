@@ -6,17 +6,15 @@ from pathlib import Path
 
 
 _home = Path(os.path.expanduser("~"))
-_wes_is_macos = platform.system() == "Darwin"
 
-# Keep Fish's executable true/false string convention for compatibility with
-# tools and snippets shared between shells.
-$IS_MACOS = "true" if _wes_is_macos else "false"
-$IS_LINUX = "false" if _wes_is_macos else "true"
-$IS_ARCH = (
-    "true"
-    if not _wes_is_macos and Path("/etc/arch-release").is_file()
-    else "false"
-)
+# these are NOT env vars traditionally, these are xonsh only
+#  that is part of the confusion with xonsh, that you cannot differentiate "internal" or xonsh only variables from env vars...
+#  these are not used by downstream subprocesses to determine OS, I guess they could be but I don't already so just use boolean values in xonsh
+#  that way `if $IS_MACOS:` just works
+_is_darwin = platform.system() == "Darwin"
+$IS_MACOS = _is_darwin
+$IS_LINUX = not _is_darwin
+$IS_ARCH = not _is_darwin and Path("/etc/arch-release").is_file()
 
 if not "XDG_STATE_HOME" in @.env:
     $XDG_STATE_HOME = str(_home / ".local/state")
