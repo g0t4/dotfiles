@@ -1,9 +1,8 @@
-#
-# * ssh-agent
+import rich
+
 # using ssh-agent for ssh key passphrases (for git repos push/pull)
 if $IS_ARCH:
     if not "XDG_RUNTIME_DIR" in @.env:
-        import rich
         rich.print("[yellow]No XDG_RUNTIME_DIR set, cannot setup SSH_AUTH_SOCK[/]")
     else:
         # need to set socket env var:
