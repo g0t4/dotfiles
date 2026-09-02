@@ -2,8 +2,33 @@
 
 import os
 import subprocess
+import sys
+from typing import Any
+from pathlib import Path
+from xonsh.events import events
 
 # ! 00- makes this run before auto-venv captures the PATH it later restores.
+
+XONSH_LIB = Path(__file__).parents[1] / "lib"
+sys.path.insert(0, str(XONSH_LIB))
+
+from wes_logging import ensure_logger_is_setup, get_logger
+ensure_logger_is_setup()
+log = get_logger("path")
+
+@events.on_envvar_change
+def on_env_updated(name: str, oldvalue: Any, newvalue: Any) -> None:
+    log.info(f"env_updated {name=} {oldvalue=} {newvalue=}")
+    # FYI w/o this os.getenv("PATH")/os.environ["PATH"] == '/usr/local/sbin:/usr/local/bin:/usr/bin'
+    # consequently, shutil.which("tool") returns nothing even when you fully setup $PATH and even when you can resolve commands just fine in subprocess mode!
+    # also python subprocess fails to find commands
+    # b/c python's PATH env var diverges from xonsh shell's $PATH changes
+    # they share a PATH value only when xonsh first starts but once my rc config files have run and changed env then the xonsh env variables differ
+    #
+    # next I'll try `$UPDATE_OS_ENVIRON = True` to keep full env in sync
+    if name == "PATH":
+        # one way sync XONSH $PATH => os.environ["PATH"]
+        os.environ["PATH"] = ":".join($PATH)
 
 def _path_move_prepend(*paths):
     """Put existing directories at the front of PATH, without duplicates."""
