@@ -51,6 +51,10 @@ def _clipboard_paste():
         return None
     return result.stdout
 
+# prompt_toolkit uses pyperclip, so just replace its copy/paste mechanism with mine (works in my initial testing)
+import pyperclip
+pyperclip.copy = _clipboard_copy
+pyperclip.paste = _clipboard_paste
 
 def _cppath_value(args):
     if len(args) > 1:
