@@ -2,20 +2,13 @@
 
 from __future__ import annotations
 
-import platform
 import re
-
 
 from wes_abbreviations import AbbreviationRegistry, abbr
 from wes_misc_abbreviation_bridge import (
     fish_abbreviation,
     unsupported_abbreviation,
 )
-
-
-
-MAN_COMMAND = "gman" if platform.system() == "Darwin" else "man"
-SED_COMMAND = "gsed" if platform.system() == "Darwin" else "sed"
 
 
 FISH_FUNCTIONS = (

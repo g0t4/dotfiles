@@ -2,15 +2,7 @@
 
 from __future__ import annotations
 
-import platform
-
-
 from wes_abbreviations import AbbreviationRegistry, abbr
-
-
-
-MAN_COMMAND = "gman" if platform.system() == "Darwin" else "man"
-SED_COMMAND = "gsed" if platform.system() == "Darwin" else "sed"
 
 
 FISH_FUNCTIONS = (

@@ -180,7 +180,26 @@ def generate(module: Module) -> str:
     title = module.name.replace("_", " ").title()
     function_name = f"register_{module.name}_abbreviations"
     declaration_text = "\n".join(declarations)
-    re_import = "import re\n" if "re.compile" in declaration_text else ""
+    stdlib_imports = []
+    if "re.compile" in declaration_text:
+        stdlib_imports.append("import re")
+    platform_constants = []
+    if "MAN_COMMAND" in declaration_text:
+        platform_constants.append(
+            'MAN_COMMAND = "gman" if platform.system() == "Darwin" else "man"'
+        )
+    if "SED_COMMAND" in declaration_text:
+        platform_constants.append(
+            'SED_COMMAND = "gsed" if platform.system() == "Darwin" else "sed"'
+        )
+    if platform_constants:
+        stdlib_imports.insert(0, "import platform")
+    stdlib_imports_text = (
+        "\n".join(stdlib_imports) + "\n\n" if stdlib_imports else ""
+    )
+    platform_constants_text = (
+        "\n".join(platform_constants) + "\n\n" if platform_constants else ""
+    )
     bridge_names = [
         name
         for name in (
@@ -201,17 +220,11 @@ def generate(module: Module) -> str:
 
 from __future__ import annotations
 
-import platform
-{re_import}
-
+{stdlib_imports_text}\
 from wes_abbreviations import AbbreviationRegistry, abbr
 {bridge_import}
 
-
-MAN_COMMAND = "gman" if platform.system() == "Darwin" else "man"
-SED_COMMAND = "gsed" if platform.system() == "Darwin" else "sed"
-
-
+{platform_constants_text}\
 FISH_FUNCTIONS = (
 '''
     function_inventory = "".join(

@@ -62,6 +62,15 @@ def test_generated_misc_modules_are_in_sync_with_fish_source():
         assert target.read_text() == expected
 
 
+def test_generated_platform_commands_exist_only_where_used():
+    generated = {target.stem: content for target, content in generate_all().items()}
+
+    assert sum('MAN_COMMAND = "gman"' in content for content in generated.values()) == 1
+    assert sum('SED_COMMAND = "gsed"' in content for content in generated.values()) == 1
+    assert 'MAN_COMMAND = "gman"' in generated["wes_packages_hardware_abbreviations"]
+    assert 'SED_COMMAND = "gsed"' in generated["wes_processes_abbreviations"]
+
+
 def test_generated_pkill_abbreviations_preserve_platform_specific_flags():
     processes_module = next(
         content
