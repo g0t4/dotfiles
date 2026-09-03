@@ -131,4 +131,8 @@ mkdir -p $HOME/.config/nix
 ln -f -s $dotfiles_dir/nix/nix.conf $HOME/.config/nix/nix.conf
 
 # * xonsh
+if test -d $HOME/.config/xonsh
+    trash $HOME/.config/xonsh
+end
+
 ln -f -s $dotfiles_dir/.config/xonsh $HOME/.config/. # DIR SYMLINK
