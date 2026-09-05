@@ -4,6 +4,7 @@ import os
 import sys
 from pathlib import Path
 
+from xonsh.events import events
 
 _wes_xonsh_lib = Path($XONSH_CONFIG_DIR) / "lib"
 if str(_wes_xonsh_lib) not in sys.path:
