@@ -6,6 +6,7 @@ from prompt_toolkit.filters import vi_insert_mode, vi_navigation_mode
 from prompt_toolkit.key_binding.bindings.named_commands import get_by_name
 from xonsh.dirstack import cd as _xonsh_cd
 from xonsh.tools import print_above_prompt
+from xonsh.events import events
 
 from wes_directory_history import DirectoryHistory
 

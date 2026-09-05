@@ -14,6 +14,7 @@ from prompt_toolkit.auto_suggest import AutoSuggest, AutoSuggestFromHistory, Sug
 from prompt_toolkit.input import ansi_escape_sequences
 from prompt_toolkit.input.vt100_parser import _IS_PREFIX_OF_LONGER_MATCH_CACHE
 from prompt_toolkit.keys import Keys
+from xonsh.events import events
 
 
 _ai_xonsh_lib = Path($XONSH_CONFIG_DIR) / "lib"
