@@ -10,6 +10,8 @@
     "reportPrivateImportUsage": "information",
 
     "extraPaths": [
-        ".config/xonsh/lib"
+        // TODO setup package for my xonsh/python modules instead of hacks w/ paths? that way pytest/pyright/etc all just work! (and no need for PYTHONPATH in a fish wrapper func or script)
+        "./.config/xonsh/lib",
+        "./xonsh"
     ]
 }
