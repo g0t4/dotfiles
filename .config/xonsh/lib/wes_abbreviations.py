@@ -161,28 +161,7 @@ def reset_registry():
     XONSH_ABBREVIATIONS = AbbreviationRegistry()
     return XONSH_ABBREVIATIONS
 
-def abbr(*args, **options):
-
-    # TODO! change abbr signature to abbr(trigger, replacement, registry=None) once registry is no longer passed as a positional arg
-    #  just make it into an optional kwarg!
-    # FYI this is for a temporary exploration of getting rid of registry parameter but not doing it all at once
-    # Determine registry, trigger, and replacement from positional args.
-    if args and isinstance(args[0], AbbreviationRegistry):
-        # * first arg is registry
-        registry = args[0]
-        if len(args) < 3:
-            raise TypeError("abbr() missing trigger and replacement")
-        trigger = args[1]
-        replacement = args[2]
-    else:
-        # * no registry arg (ideally the final destination of my refactoring)
-        registry = XONSH_ABBREVIATIONS
-        if len(args) < 2:
-            raise TypeError("abbr() missing trigger and replacement")
-        trigger = args[0]
-        replacement = args[1]
-    # Original function body continues here, using registry, trigger, replacement, and options.
-
+def abbr(trigger, replacement, **options):
     """Register an abbreviation with declaration syntax close to Fish's."""
     if isinstance(trigger, str) and trigger.endswith("?"):
         warnings.warn(
@@ -197,4 +176,5 @@ def abbr(*args, **options):
         options.setdefault("source_line", caller.f_lineno if caller else None)
     finally:
         del caller
-    return registry.add(Abbreviation(trigger, replacement, **options))
+
+    return XONSH_ABBREVIATIONS.add(Abbreviation(trigger, replacement, **options))
