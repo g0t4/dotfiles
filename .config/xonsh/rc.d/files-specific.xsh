@@ -36,12 +36,9 @@ register_files_abbreviations(XONSH_ABBREVIATIONS)
 
 ${...}.setdefault("XONSH_KEYPRESS_DEBUG", False)
 ensure_logger_is_setup()
-_files_picker_logger = get_logger("fzf_pickers")
-_files_log = get_logger("files")
+log = get_logger("fzf_pickers")
+log = get_logger("files")
 
-
-def _files_picker_log():
-    return _files_picker_logger
 
 
 def _files_picker_key_event(event):
@@ -62,7 +59,7 @@ def _files_install_keypress_tee(prompter):
     def feed_multiple(key_presses, first=False):
         keys = list(key_presses)
         if bool(${...}.get("XONSH_KEYPRESS_DEBUG", False)):
-            _files_picker_log().info(
+            log.info(
                 "key_feed first=%s keys=%r",
                 first,
                 [
@@ -126,7 +123,7 @@ def _files_cd(args, stdin=None, **_):
         adjusted[0] = os.path.dirname(os.path.expanduser(adjusted[0])) or "."
     olddir = os.getcwd()
     path_before = [str(entry) for entry in $PATH]
-    _files_log.info(
+    log.info(
         "cd_start args=%r adjusted=%r cwd=%r path=%r",
         args,
         adjusted,
@@ -135,7 +132,7 @@ def _files_cd(args, stdin=None, **_):
     )
     result = _files_original_cd(adjusted, stdin=stdin)
     path_after = [str(entry) for entry in $PATH]
-    _files_log.info(
+    log.info(
         "cd_complete args=%r result=%r olddir=%r newdir=%r "
         "path_added=%r path_removed=%r path=%r",
         adjusted,
@@ -465,7 +462,6 @@ def _files_path_picker_handler(picker):
         buffer = event.current_buffer
         token, token_start, token_end = _files_current_token(buffer)
         cwd = Path.cwd()
-        log = _files_picker_log()
         log.info(
             "picker_start picker=%s keys=%r cwd=%r buffer=%r token=%r",
             picker,
@@ -494,7 +490,6 @@ def _files_path_picker_handler(picker):
 
 
 async def _files_commit_picker_handler(event):
-    log = _files_picker_log()
     log.info(
         "picker_start picker=commits keys=%r cwd=%r buffer=%r",
         _files_picker_key_event(event),
@@ -512,7 +507,6 @@ async def _files_variable_picker_handler(event):
     buffer = event.current_buffer
     token, token_start, token_end = _files_current_token(buffer)
     cwd = Path.cwd()
-    log = _files_picker_log()
     log.info(
         "picker_start picker=variables keys=%r cwd=%r buffer=%r token=%r",
         _files_picker_key_event(event),

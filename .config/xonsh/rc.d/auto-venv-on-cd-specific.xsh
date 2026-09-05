@@ -14,13 +14,13 @@ from wes_logging import ensure_logger_is_setup, get_logger
 
 
 ensure_logger_is_setup()
-_auto_venv_log = get_logger("auto_venv.events")
+log = get_logger("auto_venv.events")
 _wes_auto_venv = AutoVenv(${...})
 
 
 @events.on_chdir
 def _wes_auto_venv_on_chdir(olddir, newdir, **_):
-    _auto_venv_log.info("on_chdir olddir=%r newdir=%r", olddir, newdir)
+    log.info("on_chdir olddir=%r newdir=%r", olddir, newdir)
     _wes_auto_venv.update(newdir)
 
 
