@@ -1,5 +1,9 @@
 """GitHub repository helpers migrated from interactive Fish config."""
 
+from xonsh.built_ins import XSH
+
+aliases = XSH.aliases
+
 import os
 import shutil
 import subprocess

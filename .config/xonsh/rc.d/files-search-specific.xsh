@@ -1,5 +1,9 @@
 """File-search environment shared with Fish."""
 
+from xonsh.built_ins import XSH
+
+aliases = XSH.aliases
+
 import sys
 from pathlib import Path
 

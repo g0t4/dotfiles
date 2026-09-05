@@ -1,5 +1,10 @@
 """Share Fish z history with Xonsh and offer semantic directory retrieval."""
 
+from xonsh.built_ins import XSH
+from xonsh.events import events
+
+aliases = XSH.aliases
+
 import asyncio
 import os
 import sys

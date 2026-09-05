@@ -1,5 +1,9 @@
 """General abbreviations that do not yet justify another focused module."""
 
+from xonsh.built_ins import XSH
+
+aliases = XSH.aliases
+
 from wes_misc_abbreviations import FISH_FUNCTIONS, register_misc_abbreviations
 from wes_misc_functions import register_misc_fish_functions
 

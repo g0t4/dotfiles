@@ -1,5 +1,8 @@
 """Xonsh port of fish/load_last_interactive_only/prompt.fish."""
 
+from xonsh.built_ins import XSH
+from xonsh.events import events
+
 import getpass
 import os
 import re
@@ -177,7 +180,7 @@ def _prompt_ai_snout():
 
 
 def _prompt_pipeline_status(rtn, cmd):
-    pipeline = getattr(__xonsh__, "lastcmd", None)
+    pipeline = getattr(XSH, "lastcmd", None)
     statuses = list(getattr(pipeline, "pipestatus", []) or [])
     # Python commands leave the previous subprocess pipeline in lastcmd.
     if "|" not in cmd or not statuses:
@@ -221,5 +224,5 @@ $TITLE = "{user}"
 
 # iterm2.xsh always exposes its helper object, including on unsupported or
 # non-iTerm terminals. Only wrap when it actually registered the OSC fields.
-if bool(${...}.get("ITERM2_INTEGRATION", False)) and hasattr(__xonsh__, "iterm2"):
-    __xonsh__.iterm2.add_iterm2_to_prompt()
+if bool(${...}.get("ITERM2_INTEGRATION", False)) and hasattr(XSH, "iterm2"):
+    XSH.iterm2.add_iterm2_to_prompt()

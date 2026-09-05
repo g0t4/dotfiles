@@ -1,5 +1,10 @@
 """Visible command abbreviations backed by Xonsh's completion parser."""
 
+from xonsh.built_ins import XSH
+from xonsh.events import events
+
+aliases = XSH.aliases
+
 import subprocess
 import sys
 from pathlib import Path

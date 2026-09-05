@@ -1,5 +1,9 @@
 """Python and uv abbreviations migrated from interactive Fish config."""
 
+from xonsh.built_ins import XSH
+
+aliases = XSH.aliases
+
 import subprocess
 import sys
 from pathlib import Path

@@ -1,5 +1,9 @@
 """Executable checks for terminal assumptions relied on by this config."""
 
+from xonsh.built_ins import XSH
+
+aliases = XSH.aliases
+
 import sys
 
 from wes_terminal_doctor import (

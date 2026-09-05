@@ -1,5 +1,7 @@
 """Streaming AI command-line autosuggestions for Xonsh/Prompt Toolkit."""
 
+from xonsh.built_ins import XSH
+
 import asyncio
 import itertools
 import json
@@ -577,7 +579,7 @@ def _wes_install_ai_autosuggester(bindings, prompter=None, **_):
         # cached tokens so the snout follows Shift-F6 immediately.
         if prompter is not None:
             ${...}["PROMPT_FIELDS"].reset()
-            prompter.message = __xonsh__.shell.shell.prompt_tokens()
+            prompter.message = XSH.shell.shell.prompt_tokens()
         event.app.invalidate()
         log.info("autosuggest_toggled enabled=%s buffer=%r", enabled, buffer.text)
 

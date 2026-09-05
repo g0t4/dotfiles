@@ -1,5 +1,7 @@
 """Native push-to-talk voice input for the Xonsh command buffer."""
 
+from xonsh.events import events
+
 import asyncio
 import sys
 from pathlib import Path

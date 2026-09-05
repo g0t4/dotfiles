@@ -1,5 +1,9 @@
 """Process inspection, search, and tracing abbreviations."""
 
+from xonsh.built_ins import XSH
+
+aliases = XSH.aliases
+
 import platform
 
 from wes_filetype_abbreviations import (

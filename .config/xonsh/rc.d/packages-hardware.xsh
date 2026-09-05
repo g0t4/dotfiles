@@ -1,5 +1,9 @@
 """Package-manager and hardware-inspection abbreviations."""
 
+from xonsh.built_ins import XSH
+
+aliases = XSH.aliases
+
 import platform
 import shutil
 

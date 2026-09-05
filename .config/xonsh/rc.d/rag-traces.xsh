@@ -1,5 +1,9 @@
 """Human-friendly semantic grep trace viewer."""
 
+from xonsh.built_ins import XSH
+
+aliases = XSH.aliases
+
 from wes_rag_trace_viewer import main as _rag_trace_viewer
 
 

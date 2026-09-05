@@ -1,5 +1,10 @@
 """Clipboard helpers ported from pbcopy-specific.fish."""
 
+from xonsh.built_ins import XSH
+from xonsh.events import events
+
+aliases = XSH.aliases
+
 import os
 import platform
 import shlex

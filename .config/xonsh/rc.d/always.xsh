@@ -1,5 +1,9 @@
 """Current-shell recording modes mirrored from Fish's always/always.fish."""
 
+from xonsh.built_ins import XSH
+
+aliases = XSH.aliases
+
 from wes_logging import get_logger
 
 

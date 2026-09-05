@@ -1,10 +1,12 @@
+from xonsh.built_ins import XSH
+
 from prompt_toolkit.keys import Keys
 
 def dump_keymaps():
-    return __xonsh__.shell.shell.prompter.app.key_bindings.bindings
+    return XSH.shell.shell.prompter.app.key_bindings.bindings
 
 
-# app = __xonsh__.shell.prompter.app
+# app = XSH.shell.prompter.app
 # bindings = app.key_bindings.bindings
 #
 # for binding in bindings:

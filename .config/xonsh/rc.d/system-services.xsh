@@ -1,5 +1,9 @@
 """Service-manager and container-runtime abbreviations."""
 
+from xonsh.built_ins import XSH
+
+aliases = XSH.aliases
+
 from wes_misc_functions import register_misc_fish_functions
 from wes_system_services_abbreviations import (
     FISH_FUNCTIONS,

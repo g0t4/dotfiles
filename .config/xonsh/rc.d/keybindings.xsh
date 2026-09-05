@@ -1,5 +1,7 @@
 """Custom interactive keybindings for Xonsh's Prompt Toolkit shell."""
 
+from xonsh.built_ins import XSH
+
 import os
 
 from prompt_toolkit.filters import vi_insert_mode, vi_navigation_mode
@@ -28,7 +30,7 @@ def _wes_record_directory_change(olddir, newdir, **_):
 
 def _wes_refresh_prompt(event):
     """Repaint changed prompt fields without adding a prompt to history."""
-    shell = __xonsh__.shell.shell
+    shell = XSH.shell.shell
     prompter = getattr(shell, "prompter", None)
     if prompter is not None:
         ${...}["PROMPT_FIELDS"].reset()

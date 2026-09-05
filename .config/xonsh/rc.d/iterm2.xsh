@@ -14,6 +14,12 @@
 
 # ShellIntegrationVersion=2;shell=xonsh
 
+
+from xonsh.built_ins import XSH
+from xonsh.events import events
+
+aliases = XSH.aliases
+
 class _iTerm2Xonsh:
     """iTerm2 integration with Xonsh shell."""
 
@@ -220,7 +226,7 @@ class _iTerm2Xonsh:
             self._event_post_command(**kwargs)
 
 
-__xonsh__.iterm2 = _iTerm2Xonsh()
+XSH.iterm2 = _iTerm2Xonsh()
 
 # it2 CLI over iTerm2 SSH integration: materialize the embedded copy (named by
 # content hash, so a shipped update replaces a stale one) and register an it2 alias

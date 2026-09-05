@@ -1,5 +1,9 @@
 """Git abbreviations and Fish-backed compatibility functions."""
 
+from xonsh.built_ins import XSH
+
+aliases = XSH.aliases
+
 import sys
 import subprocess
 from pathlib import Path

@@ -1,5 +1,10 @@
 """Filesystem abbreviations and Fish-backed file helpers."""
 
+from xonsh.built_ins import XSH
+from xonsh.events import events
+
+aliases = XSH.aliases
+
 import os
 import shutil
 import subprocess
