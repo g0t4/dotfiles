@@ -147,13 +147,33 @@ def abbreviation_replacement_text(abbreviation: Abbreviation) -> str:
         return replacement
     return getattr(replacement, "__qualname__", type(replacement).__name__)
 
+# TODO move away from consumers using global XONSH_ABBREVIATIONS and instead just pass None for the registry
+#  OR have them import it at least so it is clean where it comes from
+#  even if XONSH has one global NS for all modules... I can still insist on only module imports to get globals
+XONSH_ABBREVIATIONS = AbbreviationRegistry()
 
-def abbr(
-    registry: AbbreviationRegistry,
-    trigger: str | Pattern[str],
-    replacement: ExpansionValue | ExpansionCallback,
-    **options,
-) -> Abbreviation:
+def abbr(*args, **options):
+
+    # TODO! change abbr signature to abbr(trigger, replacement, registry=None) once registry is no longer passed as a positional arg
+    #  just make it into an optional kwarg!
+    # FYI this is for a temporary exploration of getting rid of registry parameter but not doing it all at once
+    # Determine registry, trigger, and replacement from positional args.
+    if args and isinstance(args[0], AbbreviationRegistry):
+        # * first arg is registry
+        registry = args[0]
+        if len(args) < 3:
+            raise TypeError("abbr() missing trigger and replacement")
+        trigger = args[1]
+        replacement = args[2]
+    else:
+        # * no registry arg (ideally the final destination of my refactoring)
+        registry = XONSH_ABBREVIATIONS
+        if len(args) < 2:
+            raise TypeError("abbr() missing trigger and replacement")
+        trigger = args[0]
+        replacement = args[1]
+    # Original function body continues here, using registry, trigger, replacement, and options.
+
     """Register an abbreviation with declaration syntax close to Fish's."""
     if isinstance(trigger, str) and trigger.endswith("?"):
         warnings.warn(
