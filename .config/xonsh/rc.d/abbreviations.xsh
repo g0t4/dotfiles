@@ -45,6 +45,9 @@ from wes_logging import ensure_logger_is_setup, get_logger, get_console
 ensure_logger_is_setup()
 log = get_logger("abbrs")
 
+# TODO move away from consumers using global XONSH_ABBREVIATIONS and instead just pass None for the registry
+#  OR have them import it at least so it is clean where it comes from
+#  even if XONSH has one global NS for all modules... I can still insist on only module imports to get globals
 XONSH_ABBREVIATIONS = AbbreviationRegistry()
 register_abbreviation_help(XONSH_ABBREVIATIONS)
 aliases["_abbr_help"] = lambda args, **kwargs: abbreviation_help_alias(
