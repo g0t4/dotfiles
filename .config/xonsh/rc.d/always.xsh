@@ -8,7 +8,7 @@ _always_ai_autosuggest_before_recording = None
 
 
 def _always_set_ai_autosuggest(enabled):
-    ${...}["XONSH_AI_AUTOSUGGEST"] = enabled
+    @.env["XONSH_AI_AUTOSUGGEST"] = enabled
 
     # A recording-mode change can happen while a prediction is streaming.
     # Cancel it immediately instead of waiting for another buffer edit.
@@ -25,7 +25,7 @@ def _always_recording(_args, **_):
     global _always_ai_autosuggest_before_recording
     if _always_ai_autosuggest_before_recording is None:
         _always_ai_autosuggest_before_recording = bool(
-            ${...}.get("XONSH_AI_AUTOSUGGEST", True)
+            @.env.get("XONSH_AI_AUTOSUGGEST", True)
         )
     _always_set_ai_autosuggest(False)
     return 0
@@ -34,7 +34,7 @@ def _always_recording(_args, **_):
 def _always_not_recording(_args, **_):
     global _always_ai_autosuggest_before_recording
     enabled = (
-        bool(${...}.get("XONSH_AI_AUTOSUGGEST", True))
+        bool(@.env.get("XONSH_AI_AUTOSUGGEST", True))
         if _always_ai_autosuggest_before_recording is None
         else _always_ai_autosuggest_before_recording
     )
@@ -44,12 +44,12 @@ def _always_not_recording(_args, **_):
 
 
 def _always_shorts(_args, **_):
-    ${...}["wes_recording_youtube_shorts_need_small_prompt"] = True
+    @.env["wes_recording_youtube_shorts_need_small_prompt"] = True
     return 0
 
 
 def _always_not_shorts(_args, **_):
-    ${...}.pop("wes_recording_youtube_shorts_need_small_prompt", None)
+    @.env.pop("wes_recording_youtube_shorts_need_small_prompt", None)
     return 0
 
 
