@@ -3,7 +3,7 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).parents[2]
-CONFIG = ROOT / ".config/xonsh/rc.d/config.xsh"
+CONFIG = ROOT / ".config/xonsh/rc.d/00-env.xsh"
 PRIVATE = ROOT / ".config/xonsh/rc.d/zz-private.xsh"
 
 

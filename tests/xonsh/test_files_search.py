@@ -126,7 +126,7 @@ def test_ripgrep_searches_hidden_config_without_an_inherited_fish_environment():
     env = os.environ.copy()
     env.pop("RIPGREP_CONFIG_PATH", None)
     env["XONSH_CONFIG_DIR"] = str(ROOT / ".config/xonsh")
-    config_rc = ROOT / ".config/xonsh/rc.d/config.xsh"
+    config_rc = ROOT / ".config/xonsh/rc.d/00-env.xsh"
     abbreviations_rc = ROOT / ".config/xonsh/rc.d/abbreviations.xsh"
     rc = ROOT / ".config/xonsh/rc.d/files-search-specific.xsh"
 

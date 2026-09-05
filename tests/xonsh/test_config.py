@@ -24,7 +24,7 @@ def test_common_variables_do_not_require_an_inherited_shell_environment():
     ):
         env.pop(name, None)
     env["XONSH_CONFIG_DIR"] = str(ROOT / ".config/xonsh")
-    rc = ROOT / ".config/xonsh/rc.d/config.xsh"
+    rc = ROOT / ".config/xonsh/rc.d/00-env.xsh"
     command = (
         f"source {rc}; "
         "print($IS_MACOS); print($IS_LINUX); print($IS_ARCH); "
