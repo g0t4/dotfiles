@@ -4,7 +4,7 @@ from wes_ansible_abbreviations import FISH_FUNCTIONS, register_ansible_abbreviat
 from wes_misc_functions import register_misc_fish_functions
 
 
-register_ansible_abbreviations(XONSH_ABBREVIATIONS)
+register_ansible_abbreviations()
 register_misc_fish_functions(aliases, FISH_FUNCTIONS)
 
 

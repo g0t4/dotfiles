@@ -9,6 +9,7 @@ sys.path.insert(0, str(ROOT / "xonsh"))
 
 from generate_ansible_abbreviations import TARGET, generate  # noqa: E402
 from wes_abbreviations import AbbreviationContext, AbbreviationRegistry  # noqa: E402
+import wes_abbreviations
 from wes_ansible_abbreviations import (  # noqa: E402
     FISH_FUNCTIONS,
     register_ansible_abbreviations,
@@ -27,9 +28,9 @@ def context(token):
 
 
 def registry():
-    result = AbbreviationRegistry()
-    register_ansible_abbreviations(result)
-    return result
+    wes_abbreviations.XONSH_ABBREVIATIONS = AbbreviationRegistry()
+    register_ansible_abbreviations()
+    return wes_abbreviations.XONSH_ABBREVIATIONS
 
 
 def test_generated_module_is_in_sync_with_ansibles_fish_source():

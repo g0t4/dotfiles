@@ -32,7 +32,7 @@ def generate() -> str:
     for line_number, line in enumerate(SOURCE.read_text().splitlines(), 1):
         if re.match(r"^\s*abbr(?:\s|$)", line):
             number, name, replacement, cursor = parse_abbreviation(line_number, line)
-            arguments = ["registry", repr(name), repr(replacement)]
+            arguments = [repr(name), repr(replacement)]
             if cursor:
                 arguments.append('cursor_marker="%"')
             declarations.append(
@@ -60,7 +60,7 @@ FISH_FUNCTIONS = (
 )
 
 
-def register_ansible_abbreviations(registry: AbbreviationRegistry):
+def register_ansible_abbreviations():
 '''
     return header + function_inventory + footer + "\n".join(declarations) + "\n"
 
