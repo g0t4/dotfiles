@@ -16,7 +16,7 @@ from wes_git_functions import (
 )
 
 
-register_git_abbreviations(XONSH_ABBREVIATIONS)
+register_git_abbreviations()
 
 
 @contextual_command_completer

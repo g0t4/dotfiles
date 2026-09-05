@@ -37,7 +37,7 @@ def parse_abbreviation(line_number: int, line: str):
 
 
 def declaration(line_number, name, replacement, options):
-    arguments = ["registry", repr(name), repr(replacement)]
+    arguments = [repr(name), repr(replacement)]
     if options.get("cursor"):
         arguments.append('cursor_marker="%"')
     return f"    abbr({', '.join(arguments)})  # Fish line {line_number}"
@@ -54,10 +54,10 @@ def generate() -> str:
 
 from __future__ import annotations
 
-from wes_abbreviations import AbbreviationRegistry, abbr
+from wes_abbreviations import abbr
 
 
-def register_docker_abbreviations(registry: AbbreviationRegistry):
+def register_docker_abbreviations():
 '''
     return header + "\n".join(declarations) + "\n"
 

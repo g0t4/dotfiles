@@ -60,7 +60,7 @@ def declaration(line_number, name, replacement, options):
         return None
 
     if name == "-W" and options.get("function") == "_abbr_git_short_to_long":
-        return '    abbr(registry, "-W", "--function-context", commands=("git", "diff"))'
+        return '    abbr("-W", "--function-context", commands=("git", "diff"))'
 
     trigger = f"re.compile({options['regex']!r})" if "regex" in options else repr(name)
     replacement_expr = (
@@ -68,7 +68,7 @@ def declaration(line_number, name, replacement, options):
         if "function" in options
         else repr(replacement)
     )
-    arguments = ["registry", trigger, replacement_expr]
+    arguments = [trigger, replacement_expr]
     if options.get("position") == "anywhere":
         arguments.append('position="anywhere"')
     if command:
@@ -95,7 +95,7 @@ from __future__ import annotations
 
 import re
 
-from wes_abbreviations import AbbreviationRegistry, abbr
+from wes_abbreviations import abbr
 from wes_fish_bridge import fish_function
 
 
@@ -106,7 +106,7 @@ def _fish_abbreviation(function_name):
     return expand
 
 
-def register_git_abbreviations(registry: AbbreviationRegistry):
+def register_git_abbreviations():
 '''
     return header + "\n".join(declarations) + "\n"
 

@@ -16,30 +16,30 @@ from wes_abbreviation_list import (  # noqa: E402
     abbreviation_listings,
     search_abbreviations,
 )
-from wes_abbreviations import AbbreviationRegistry, abbr  # noqa: E402
+from wes_abbreviations import abbr, reset_registry  # noqa: E402
 
 
 def registry():
-    result = AbbreviationRegistry()
-    abbr(result, "pb", "pbpaste")
-    abbr(result, "pcp", "| pbcopy", position="anywhere")
-    abbr(result, "codex", "--author codex", commands=("git",))
-    abbr(result, re.compile(r"ph(\d+)"), lambda *_: "| head")
-    abbr(result, re.compile(r".+?\?{1,2}"), lambda *_: None, internal=True)
-    return result
+    registry = reset_registry()
+    abbr("pb", "pbpaste")
+    abbr("pcp", "| pbcopy", position="anywhere")
+    abbr("codex", "--author codex", commands=("git",))
+    abbr(re.compile(r"ph(\d+)"), lambda *_: "| head")
+    abbr(re.compile(r".+?\?{1,2}"), lambda *_: None, internal=True)
+    return registry
 
 
 def test_any_search_covers_trigger_expansion_and_scope():
     abbreviations = registry()
 
-    assert [item.trigger for item in search_abbreviations(abbreviations, "pb")] == [
+    assert [item.trigger for item in search_abbreviations("pb")] == [
         "pb",
         "pcp",
     ]
     assert [
-        item.trigger for item in search_abbreviations(abbreviations, "pbpaste")
+        item.trigger for item in search_abbreviations("pbpaste")
     ] == ["pb"]
-    assert [item.trigger for item in search_abbreviations(abbreviations, "git")] == [
+    assert [item.trigger for item in search_abbreviations("git")] == [
         "codex"
     ]
 
@@ -49,23 +49,26 @@ def test_prefix_search_only_uses_displayed_trigger():
 
     assert [
         item.trigger
-        for item in search_abbreviations(abbreviations, "p", prefix=True)
+        for item in search_abbreviations("p", prefix=True)
     ] == ["pb", "pcp"]
-    assert search_abbreviations(abbreviations, "pbpaste", prefix=True) == []
+    assert search_abbreviations("pbpaste", prefix=True) == []
 
 
 def test_regexes_are_displayed_and_internal_resolvers_are_hidden():
-    listings = abbreviation_listings(registry())
+    registry()
+
+    listings = abbreviation_listings()
 
     assert "/ph(\\d+)/" in [item.trigger for item in listings]
     assert all("?{1,2}" not in item.trigger for item in listings)
 
 
 def test_rich_output_visibly_separates_trigger_expansion_and_scope():
+    registry()
     output = io.StringIO()
 
     abbreviation_list_alias(
-        registry(), ["--prefix", "pb"], Console(file=output)
+        ["--prefix", "pb"], Console(file=output)
     )
 
     rendered = output.getvalue()
@@ -75,18 +78,19 @@ def test_rich_output_visibly_separates_trigger_expansion_and_scope():
 
 
 def test_alias_supports_any_prefix_and_help():
+    registry()
     output = io.StringIO()
     abbreviation_list_alias(
-        registry(), ["--any", "pbpaste"], Console(file=output)
+        ["--any", "pbpaste"], Console(file=output)
     )
     assert re.search(r"pb\s*|\s*pbpaste", output.getvalue())
 
     output = io.StringIO()
     abbreviation_list_alias(
-        registry(), ["--prefix", "pc"], Console(file=output)
+        ["--prefix", "pc"], Console(file=output)
     )
     assert re.search(r"pcp\s*|\s*pbcopy\s*|\s*anywhere\n", output.getvalue())
 
     output = io.StringIO()
-    abbreviation_list_alias(registry(), ["--help"], Console(file=output))
+    abbreviation_list_alias(["--help"], Console(file=output))
     assert output.getvalue().startswith("usage: _abbr_list")

@@ -10,7 +10,7 @@ sys.path.insert(0, str(ROOT / ".config/xonsh/lib"))
 sys.path.insert(0, str(ROOT / "xonsh"))
 
 from generate_python_abbreviations import SOURCE, TARGET, generate  # noqa: E402
-from wes_abbreviations import AbbreviationContext, AbbreviationRegistry  # noqa: E402
+from wes_abbreviations import AbbreviationContext, reset_registry  # noqa: E402
 from wes_python_functions import run_wcl, wcl_completion_candidates  # noqa: E402
 
 
@@ -28,8 +28,8 @@ def context(token, *, command_path=(), command_position=True):
 
 def registry():
     generated = importlib.import_module("wes_python_abbreviations")
-    result = AbbreviationRegistry()
-    generated.register_python_abbreviations(result)
+    result = reset_registry()
+    generated.register_python_abbreviations()
     return result
 
 
@@ -103,7 +103,7 @@ def test_python_rc_loads_with_native_wcl():
         f"source {abbreviations}; source {python_rc}; "
         "assert $PYTEST_ADDOPTS == '-o verbosity_assertions=2'; "
         "assert callable(aliases['wcl']); "
-        "print(len(XONSH_ABBREVIATIONS.abbreviations))"
+        "print(len(wes_abbreviations.XONSH_ABBREVIATIONS.abbreviations))"
     )
 
     completed = subprocess.run(

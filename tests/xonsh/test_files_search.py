@@ -12,7 +12,7 @@ sys.path.insert(0, str(ROOT / ".config/xonsh/lib"))
 sys.path.insert(0, str(ROOT / "xonsh"))
 
 from generate_files_search_abbreviations import TARGET, generate  # noqa: E402
-from wes_abbreviations import AbbreviationContext, AbbreviationRegistry  # noqa: E402
+from wes_abbreviations import AbbreviationContext, reset_registry  # noqa: E402
 from wes_fish_bridge import UnsupportedFishFunctionError  # noqa: E402
 from wes_files_search_abbreviations import (  # noqa: E402
     register_files_search_abbreviations,
@@ -40,8 +40,8 @@ def context(text, *, command_path=(), cursor=None):
 
 
 def registry():
-    result = AbbreviationRegistry()
-    register_files_search_abbreviations(result)
+    result = reset_registry()
+    register_files_search_abbreviations()
     return result
 
 

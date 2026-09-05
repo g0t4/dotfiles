@@ -51,7 +51,7 @@ def generate() -> str:
 
 from __future__ import annotations
 
-from wes_abbreviations import AbbreviationRegistry, abbr
+from wes_abbreviations import abbr
 
 
 FISH_FUNCTIONS = (

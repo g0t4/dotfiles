@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import re
 
-from wes_abbreviations import AbbreviationRegistry, abbr
+from wes_abbreviations import abbr
 
 
 EMOJI_ABBREVIATIONS = {
@@ -38,9 +38,9 @@ def _numbered_command(command, *, pipe=False):
     return expand
 
 
-def register_globals_abbreviations(registry: AbbreviationRegistry):
+def register_globals_abbreviations():
     for trigger, emoji in EMOJI_ABBREVIATIONS.items():
-        abbr(registry, trigger, emoji)
+        abbr(trigger, emoji)
 
     for trigger, replacement in {
         "pgr": "| rg_grep -i",
@@ -65,34 +65,30 @@ def register_globals_abbreviations(registry: AbbreviationRegistry):
         "hC": "| hexdump -C",
         "pcp": "| pbcopy",
     }.items():
-        abbr(registry, trigger, replacement, position="anywhere")
+        abbr(trigger, replacement, position="anywhere")
 
     abbr(
-        registry,
         re.compile(r"ph(\d+)"),
         _numbered_command("head", pipe=True),
         position="anywhere",
     )
-    abbr(registry, re.compile(r"h(\d+)"), _numbered_command("head"))
+    abbr(re.compile(r"h(\d+)"), _numbered_command("head"))
     abbr(
-        registry,
         re.compile(r"pt(\d+)"),
         _numbered_command("tail", pipe=True),
         position="anywhere",
     )
 
     abbr(
-        registry,
         "px",
         "| xargs --verbose -I_ -- % _",
         position="anywhere",
         cursor_marker="%",
     )
     abbr(
-        registry,
         "pxi",
         "| xargs --interactive -I_ -- % _",
         position="anywhere",
         cursor_marker="%",
     )
-    abbr(registry, "xargs", "gxargs")
+    abbr("xargs", "gxargs")

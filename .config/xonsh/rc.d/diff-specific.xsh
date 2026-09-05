@@ -19,8 +19,6 @@ from wes_diff import (
 
 
 aliases = XSH.aliases
-_diff_abbreviations = globals()["XONSH_ABBREVIATIONS"]
-
 
 _ICDIFF_COLOR_MAP = (
     "add:green_bold,change:white_bold,description:blue,meta:magenta,"
@@ -46,12 +44,12 @@ aliases["ic"] = ["icdiff"]
 aliases["icr"] = ["icdiff", "--recursive"]
 aliases["icg"] = ["git-icdiff"]
 
-abbr(_diff_abbreviations, "ic", "icdiff")
-abbr(_diff_abbreviations, "icr", "icdiff --recursive")
-abbr(_diff_abbreviations, "icg", "git-icdiff")
-abbr(_diff_abbreviations, "pba", "pbpaste > a")
-abbr(_diff_abbreviations, "pbb", "pbpaste > b")
-abbr(_diff_abbreviations, "icab", "icdiff a b")
+abbr("ic", "icdiff")
+abbr("icr", "icdiff --recursive")
+abbr("icg", "git-icdiff")
+abbr("pba", "pbpaste > a")
+abbr("pbb", "pbpaste > b")
+abbr("icab", "icdiff a b")
 
 
 def _xonsh_history_inputs():
@@ -66,17 +64,14 @@ def _diff_history_expansion(suffix=""):
 
 
 abbr(
-    _diff_abbreviations,
     "diff_last_two_commands",
     _diff_history_expansion(),
 )
 abbr(
-    _diff_abbreviations,
     "diff_last_two_commands_sorted",
     _diff_history_expansion(" | sort -h"),
 )
 abbr(
-    _diff_abbreviations,
     "diff_last_two_commands_stderr_too",
     _diff_history_expansion(" 2>&1"),
 )

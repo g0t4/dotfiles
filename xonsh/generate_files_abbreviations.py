@@ -63,7 +63,7 @@ def declaration(line_number, name, replacement, options):
     else:
         replacement_expression = repr(replacement)
 
-    arguments = ["registry", trigger, replacement_expression]
+    arguments = [trigger, replacement_expression]
     if options.get("position") == "anywhere" or options.get("command"):
         arguments.append('position="anywhere"')
     if options.get("command"):
@@ -88,7 +88,7 @@ import re
 import shlex
 import shutil
 
-from wes_abbreviations import AbbreviationRegistry, abbr
+from wes_abbreviations import abbr
 from wes_fish_bridge import fish_function
 
 
@@ -122,7 +122,7 @@ def _ask_status(_context, _match):
     return "; ".join(f"git -C {shlex.quote(path)} status" for path in paths)
 
 
-def register_files_abbreviations(registry: AbbreviationRegistry):
+def register_files_abbreviations():
 '''
     return header + "\n".join(declarations) + "\n"
 

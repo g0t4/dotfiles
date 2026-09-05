@@ -20,7 +20,7 @@ def generate() -> str:
         tokens = shlex.split(line, comments=True, posix=True)
         trigger, replacement = tokens[1:3]
         declarations.append(
-            f"    abbr(registry, {trigger!r}, {replacement!r})"
+            f"    abbr({trigger!r}, {replacement!r})"
             f"  # HashiCorp line {line_number}"
         )
 
@@ -29,10 +29,10 @@ def generate() -> str:
 
 from __future__ import annotations
 
-from wes_abbreviations import AbbreviationRegistry, abbr
+from wes_abbreviations import abbr
 
 
-def register_hashicorp_abbreviations(registry: AbbreviationRegistry):
+def register_hashicorp_abbreviations():
 ''' + "\n".join(declarations) + "\n"
 
 

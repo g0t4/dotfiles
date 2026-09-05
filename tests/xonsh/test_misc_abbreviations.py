@@ -16,7 +16,7 @@ from generate_misc_abbreviations import (  # noqa: E402
     SOURCE,
     generate_all,
 )
-from wes_abbreviations import AbbreviationContext, AbbreviationRegistry  # noqa: E402
+from wes_abbreviations import AbbreviationContext, reset_registry  # noqa: E402
 from wes_fish_bridge import UnsupportedFishFunctionError  # noqa: E402
 from wes_filetype_abbreviations import (  # noqa: E402
     FILETYPE_GLOBS,
@@ -41,12 +41,12 @@ def context(token, *, command_path=(), command_position=True):
 
 
 def registry():
-    result = AbbreviationRegistry()
+    registry = reset_registry()
     for module in MODULES:
         generated = importlib.import_module(f"wes_{module.name}_abbreviations")
         register = getattr(generated, f"register_{module.name}_abbreviations")
-        register(result)
-    return result
+        register()
+    return registry
 
 
 def generated_abbreviation_count():
@@ -94,8 +94,8 @@ def test_fish_abbreviation_search_stays_native_while_xonsh_uses_registry():
     )
 
     assert 'abbr --add agr --set-cursor "abbr | rg_grep -i \'%\'"' in fish_source
-    assert "abbr(registry, 'agr', \"_abbr_list --any '%'\"" in processes_module
-    assert "abbr(registry, 'agrs', \"_abbr_list --prefix '%'\"" in processes_module
+    assert "abbr('agr', \"_abbr_list --any '%'\"" in processes_module
+    assert "abbr('agrs', \"_abbr_list --prefix '%'\"" in processes_module
 
 
 def test_every_misc_fish_abbreviation_is_assigned_to_one_focused_module():
@@ -179,9 +179,9 @@ def test_repo_root_command_substitutions_are_not_quoted_for_xonsh():
 
 
 def test_build_abbrs_for_filetype_registers_dedicated_and_scoped_forms():
-    abbreviations = AbbreviationRegistry()
+    abbreviations = reset_registry()
 
-    build_abbrs_for_filetype(abbreviations, "x", "xsh", sed_command="gsed")
+    build_abbrs_for_filetype("x", "xsh", sed_command="gsed")
 
     result, _ = abbreviations.expand(context("sedx"))
     assert result.text == "gsed -Ei 's///g' (rg -g '*.xsh' --files-with-matches '___')"
@@ -208,9 +208,9 @@ def test_build_abbrs_for_filetype_registers_dedicated_and_scoped_forms():
 
 
 def test_build_abbrs_for_filetype_preserves_brace_globs():
-    abbreviations = AbbreviationRegistry()
+    abbreviations = reset_registry()
 
-    build_abbrs_for_filetype(abbreviations, "j", "{json,js}", sed_command="sed")
+    build_abbrs_for_filetype("j", "{json,js}", sed_command="sed")
 
     result, _ = abbreviations.expand(context("rgj"))
     assert result.text == "rg -g '*.{json,js}'"
@@ -265,7 +265,7 @@ def test_all_split_rc_files_load_together():
     command = "; ".join(f"source {path}" for path in rc_files)
     command += (
         "; print(sum(not item.internal "
-        "for item in XONSH_ABBREVIATIONS.abbreviations))"
+        "for item in wes_abbreviations.XONSH_ABBREVIATIONS.abbreviations))"
     )
 
     completed = subprocess.run(

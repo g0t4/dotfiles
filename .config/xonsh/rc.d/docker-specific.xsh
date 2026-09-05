@@ -4,7 +4,7 @@ from wes_docker_abbreviations import register_docker_abbreviations
 
 
 $DOCKER_HIDE_LEGACY_COMMANDS = "1"
-register_docker_abbreviations(XONSH_ABBREVIATIONS)
+register_docker_abbreviations()
 
 
 # TODO SKIPPED_MIGRATION: hub-tool hard-coded Fish completions. hub-tool v0.4.6

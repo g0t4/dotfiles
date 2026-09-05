@@ -6,7 +6,7 @@ from pathlib import Path
 ROOT = Path(__file__).parents[2]
 sys.path.insert(0, str(ROOT / ".config/xonsh/lib"))
 
-from wes_abbreviations import AbbreviationContext, AbbreviationRegistry  # noqa: E402
+from wes_abbreviations import AbbreviationContext, reset_registry  # noqa: E402
 from wes_globals_abbreviations import (  # noqa: E402
     EMOJI_ABBREVIATIONS,
     register_globals_abbreviations,
@@ -25,8 +25,8 @@ def context(token, *, command_position=True):
 
 
 def registry():
-    result = AbbreviationRegistry()
-    register_globals_abbreviations(result)
+    result = reset_registry()
+    register_globals_abbreviations()
     return result
 
 

@@ -15,7 +15,7 @@ from wes_python_functions import run_wcl, wcl_completion_candidates
 
 $PYTEST_ADDOPTS = "-o verbosity_assertions=2"
 
-register_python_abbreviations(XONSH_ABBREVIATIONS)
+register_python_abbreviations()
 register_misc_fish_functions(aliases, FISH_FUNCTIONS)
 
 

@@ -147,7 +147,7 @@ def declaration(line_number, name, replacement, options):
         for old, new in REPLACEMENTS.items():
             replacement = replacement.replace(old, new)
         replacement_expression = repr(replacement)
-    arguments = ["registry", trigger, replacement_expression]
+    arguments = [trigger, replacement_expression]
     if options.get("position") == "anywhere" or options.get("command"):
         arguments.append('position="anywhere"')
     if options.get("command"):
@@ -221,7 +221,7 @@ def generate(module: Module) -> str:
 from __future__ import annotations
 
 {stdlib_imports_text}\
-from wes_abbreviations import AbbreviationRegistry, abbr
+from wes_abbreviations import abbr
 {bridge_import}
 
 {platform_constants_text}\
@@ -235,7 +235,7 @@ FISH_FUNCTIONS = (
 )
 
 
-def {function_name}(registry: AbbreviationRegistry):
+def {function_name}():
 '''
     return header + function_inventory + footer + declaration_text + "\n"
 

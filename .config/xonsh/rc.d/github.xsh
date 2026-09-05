@@ -94,5 +94,5 @@ for _github_fish_function in (
 ):
     aliases[_github_fish_function] = fish_command_alias(_github_fish_function)
 
-abbr(XONSH_ABBREVIATIONS, "ghrc", "gh_repo_create_private")
-abbr(XONSH_ABBREVIATIONS, "ghrcp", "gh_repo_create_public")
+abbr("ghrc", "gh_repo_create_private")
+abbr("ghrcp", "gh_repo_create_public")

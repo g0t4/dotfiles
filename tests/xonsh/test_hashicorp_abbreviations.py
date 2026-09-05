@@ -8,7 +8,7 @@ sys.path.insert(0, str(ROOT / ".config/xonsh/lib"))
 sys.path.insert(0, str(ROOT / "xonsh"))
 
 from generate_hashicorp_abbreviations import TARGET, generate  # noqa: E402
-from wes_abbreviations import AbbreviationContext, AbbreviationRegistry  # noqa: E402
+from wes_abbreviations import AbbreviationContext, reset_registry  # noqa: E402
 from wes_hashicorp_abbreviations import register_hashicorp_abbreviations  # noqa: E402
 
 
@@ -25,8 +25,8 @@ def context(token):
 
 
 def registry():
-    result = AbbreviationRegistry()
-    register_hashicorp_abbreviations(result)
+    result = reset_registry()
+    register_hashicorp_abbreviations()
     return result
 
 
@@ -51,7 +51,7 @@ def test_hashicorp_rc_registers_with_the_live_abbreviation_registry():
     hashicorp = ROOT / ".config/xonsh/rc.d/hashicorp.xsh"
     command = (
         f"source {abbreviations}; source {hashicorp}; "
-        "matches = [entry for entry in XONSH_ABBREVIATIONS.abbreviations "
+        "matches = [entry for entry in wes_abbreviations.XONSH_ABBREVIATIONS.abbreviations "
         "if entry.trigger == 'v' and entry.replacement == 'vagrant']; "
         "assert matches"
     )

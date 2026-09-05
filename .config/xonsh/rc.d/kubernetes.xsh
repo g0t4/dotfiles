@@ -8,7 +8,7 @@ from wes_misc_functions import register_misc_fish_functions
 
 
 $KUBECTL_EXTERNAL_DIFF = "icdiff -r"
-register_kubernetes_abbreviations(XONSH_ABBREVIATIONS)
+register_kubernetes_abbreviations()
 register_misc_fish_functions(aliases, FISH_FUNCTIONS)
 
 

@@ -32,7 +32,7 @@ from wes_fzf_pickers import (
 $AUTO_CD = True
 $EDITOR = "nvim"
 
-register_files_abbreviations(XONSH_ABBREVIATIONS)
+register_files_abbreviations()
 
 ${...}.setdefault("XONSH_KEYPRESS_DEBUG", False)
 ensure_logger_is_setup()

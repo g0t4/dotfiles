@@ -37,7 +37,7 @@ def _declaration(line_number: int, name: str, replacement: str, options: dict) -
     else:
         replacement_expression = repr(replacement)
 
-    arguments = ["registry", repr(name), replacement_expression]
+    arguments = [repr(name), replacement_expression]
     if options.get("command"):
         arguments.extend((
             'position="anywhere"',
@@ -85,7 +85,7 @@ def generate() -> str:
 
 from __future__ import annotations
 
-from wes_abbreviations import AbbreviationRegistry, abbr
+from wes_abbreviations import abbr
 from wes_misc_abbreviation_bridge import fish_abbreviation, platform_abbreviation
 
 
@@ -93,7 +93,7 @@ FISH_FUNCTIONS = (
 {function_inventory})
 
 
-def register_python_abbreviations(registry: AbbreviationRegistry):
+def register_python_abbreviations():
 {declaration_text}
 '''
 

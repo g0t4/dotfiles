@@ -72,7 +72,7 @@ def declaration(name, replacement, options):
             f"f{replacement!r}" if "{FIND_COMMAND}" in replacement else repr(replacement)
         )
 
-    arguments = ["registry", trigger, replacement_expression]
+    arguments = [trigger, replacement_expression]
     command = options.get("command")
     if command:
         arguments.append('position="anywhere"')
@@ -101,7 +101,7 @@ from __future__ import annotations
 import platform
 import re
 
-from wes_abbreviations import AbbreviationRegistry, AbbreviationResult, abbr
+from wes_abbreviations import AbbreviationResult, abbr
 from wes_fish_bridge import UnsupportedFishFunctionError, fish_function
 
 
@@ -135,7 +135,7 @@ def _expand_rgu(context, _match):
     return AbbreviationResult('rg -u ""', cursor=len('rg -u "'))
 
 
-def register_files_search_abbreviations(registry: AbbreviationRegistry):
+def register_files_search_abbreviations():
 '''
     return header + "\n".join(declarations) + "\n"
 

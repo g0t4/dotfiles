@@ -4,7 +4,7 @@ from wes_cloud_ai_abbreviations import FISH_FUNCTIONS, register_cloud_ai_abbrevi
 from wes_misc_functions import register_misc_fish_functions
 
 
-register_cloud_ai_abbreviations(XONSH_ABBREVIATIONS)
+register_cloud_ai_abbreviations()
 register_misc_fish_functions(aliases, FISH_FUNCTIONS)
 
 

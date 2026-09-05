@@ -26,7 +26,7 @@ from xonsh.shells.ptk_shell.key_bindings import (
     should_confirm_completion,
 )
 
-from wes_abbreviations import AbbreviationRegistry, XONSH_ABBREVIATIONS
+import wes_abbreviations
 from wes_abbreviation_help import (
     abbreviation_help_alias,
     register_abbreviation_help,
@@ -45,9 +45,9 @@ from wes_logging import ensure_logger_is_setup, get_logger, get_console
 ensure_logger_is_setup()
 log = get_logger("abbrs")
 
-register_abbreviation_help(XONSH_ABBREVIATIONS)
+register_abbreviation_help()
 aliases["_abbr_help"] = lambda args, **kwargs: abbreviation_help_alias(
-    XONSH_ABBREVIATIONS, args, **kwargs
+    wes_abbreviations.XONSH_ABBREVIATIONS, args, **kwargs
 )
 
 
@@ -58,13 +58,13 @@ def _abbr_list_alias(args, stdout=None, spec=None):
     use_color = spec is not None and spec.last_in_pipeline
     console = Console(file=stdout, force_terminal=use_color)
     return abbreviation_list_alias(
-        XONSH_ABBREVIATIONS, args, console
+        wes_abbreviations.XONSH_ABBREVIATIONS, args, console
     )
 
 
 aliases["_abbr_list"] = _abbr_list_alias
 
-_wes_abbreviation_expander = XonshAbbreviationExpander(XONSH_ABBREVIATIONS)
+_wes_abbreviation_expander = XonshAbbreviationExpander(wes_abbreviations.XONSH_ABBREVIATIONS)
 
 
 @non_exclusive_completer
@@ -84,7 +84,7 @@ def _wes_abbreviation_completer(command):
             provider="abbreviation",
         )
         for trigger, expansion in abbreviation_completion_candidates(
-            XONSH_ABBREVIATIONS, context
+            wes_abbreviations.XONSH_ABBREVIATIONS, context
         )
     }
 
@@ -132,7 +132,7 @@ async def _abbreviation_picker_handler(event):
     context = _wes_abbreviation_expander.context(buffer)
     if context is None:
         return
-    rows = abbreviation_picker_rows(XONSH_ABBREVIATIONS, context)
+    rows = abbreviation_picker_rows(wes_abbreviations.XONSH_ABBREVIATIONS, context)
     selected = await run_in_terminal(
         lambda: _run_abbreviation_picker(rows, context.token)
     )

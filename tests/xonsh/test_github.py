@@ -13,7 +13,7 @@ def test_github_rc_loads_aliases_and_abbreviations():
         f"source {abbreviations}; source {github}; "
         "assert callable(aliases['gh_repo_create_private']); "
         "assert callable(aliases['copy_github_link']); "
-        "assert any(a.trigger == 'ghrc' for a in XONSH_ABBREVIATIONS.abbreviations)"
+        "assert any(a.trigger == 'ghrc' for a in wes_abbreviations.XONSH_ABBREVIATIONS.abbreviations)"
     )
     completed = subprocess.run(
         ["xonsh", "--no-rc", "-c", command], capture_output=True, text=True

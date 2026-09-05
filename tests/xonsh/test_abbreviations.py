@@ -26,6 +26,7 @@ from wes_abbreviations import (  # noqa: E402
     AbbreviationRegistry,
     AbbreviationResult,
     abbr,
+    reset_registry,
 )
 from wes_xonsh_abbreviations import (  # noqa: E402
     XonshAbbreviationExpander,
@@ -68,8 +69,8 @@ def test_exact_command_abbreviation_expands():
 
 
 def test_abbr_helper_registers_and_returns_dot_accessible_entry():
-    registry = AbbreviationRegistry()
-    entry = abbr(registry, "gst", "git status")
+    registry = reset_registry()
+    entry = abbr("gst", "git status")
 
     assert entry.trigger == "gst"
     assert entry.replacement == "git status"
@@ -79,16 +80,16 @@ def test_abbr_helper_registers_and_returns_dot_accessible_entry():
 
 
 def test_question_suffix_warns_because_it_shadows_help():
-    registry = AbbreviationRegistry()
+    registry = reset_registry()
 
     with pytest.warns(UserWarning, match="shadows abbreviation help"):
-        abbr(registry, "why?", "because")
+        abbr("why?", "because")
 
 
 def test_abbreviation_help_resolves_then_native_help_can_fall_through():
-    registry = AbbreviationRegistry()
-    abbr(registry, "gst", "git status")
-    register_abbreviation_help(registry)
+    registry = reset_registry()
+    abbr("gst", "git status")
+    register_abbreviation_help()
 
     short, _ = registry.expand(context("gst?", command_path=("gst?",)))
     full, _ = registry.expand(context("gst??", command_path=("gst??",)))
@@ -101,9 +102,9 @@ def test_abbreviation_help_resolves_then_native_help_can_fall_through():
 
 
 def test_abbreviation_help_expands_on_space_as_a_reminder_command():
-    registry = AbbreviationRegistry()
-    abbr(registry, "gst", "git status")
-    register_abbreviation_help(registry)
+    registry = reset_registry()
+    abbr("gst", "git status")
+    register_abbreviation_help()
     expander = XonshAbbreviationExpander.__new__(XonshAbbreviationExpander)
     expander.registry = registry
     expander.context = lambda _buffer: context("gst??", command_path=("gst??",))
@@ -117,9 +118,9 @@ def test_abbreviation_help_expands_on_space_as_a_reminder_command():
 
 
 def test_abbreviation_help_uses_command_context():
-    registry = AbbreviationRegistry()
-    abbr(registry, "codex", "--author codex", commands=("git",))
-    register_abbreviation_help(registry)
+    registry = reset_registry()
+    abbr("codex", "--author codex", commands=("git",))
+    register_abbreviation_help()
 
     result, _ = registry.expand(
         context("git codex??", command_path=("git",))
@@ -145,8 +146,8 @@ def test_abbreviation_help_uses_command_context():
 
 
 def test_abbreviation_help_alias_looks_up_readable_context_after_submit(monkeypatch):
-    registry = AbbreviationRegistry()
-    target = abbr(registry, "codex", "--author codex", commands=("git",))
+    registry = reset_registry()
+    target = abbr("codex", "--author codex", commands=("git",))
     rendered = []
     monkeypatch.setattr(
         wes_abbreviation_help,
@@ -163,8 +164,8 @@ def test_full_abbreviation_help_renders_metadata_and_callback_source():
     def dynamic(_context, _match):
         return "git status"
 
-    registry = AbbreviationRegistry()
-    target = abbr(registry, "gst", dynamic, cursor_marker="%")
+    registry = reset_registry()
+    target = abbr("gst", dynamic, cursor_marker="%")
     console = Console(record=True, width=120, color_system=None)
 
     render_abbreviation_help(target, full=True, console=console)

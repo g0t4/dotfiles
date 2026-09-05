@@ -152,6 +152,15 @@ def abbreviation_replacement_text(abbreviation: Abbreviation) -> str:
 #  even if XONSH has one global NS for all modules... I can still insist on only module imports to get globals
 XONSH_ABBREVIATIONS = AbbreviationRegistry()
 
+def reset_registry():
+    """
+    Intended for testing to create a new, yet still global, registry instance
+    - to keep a clean registration contract behind a global instance
+    """
+    global XONSH_ABBREVIATIONS
+    XONSH_ABBREVIATIONS = AbbreviationRegistry()
+    return XONSH_ABBREVIATIONS
+
 def abbr(*args, **options):
 
     # TODO! change abbr signature to abbr(trigger, replacement, registry=None) once registry is no longer passed as a positional arg

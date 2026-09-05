@@ -12,7 +12,7 @@ from wes_files_search_abbreviations import register_files_search_abbreviations
 from wes_files_search_functions import register_files_search_functions
 
 
-register_files_search_abbreviations(XONSH_ABBREVIATIONS)
+register_files_search_abbreviations()
 register_files_search_functions(aliases)
 
 _wes_ripgrep_config = Path($WES_DOTFILES) / ".config/ripgrep/ripgreprc"

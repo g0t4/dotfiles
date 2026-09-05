@@ -8,7 +8,7 @@ sys.path.insert(0, str(ROOT / ".config/xonsh/lib"))
 sys.path.insert(0, str(ROOT / "xonsh"))
 
 from generate_ansible_abbreviations import TARGET, generate  # noqa: E402
-from wes_abbreviations import AbbreviationContext, AbbreviationRegistry  # noqa: E402
+from wes_abbreviations import AbbreviationContext, reset_registry  # noqa: E402
 import wes_abbreviations
 from wes_ansible_abbreviations import (  # noqa: E402
     FISH_FUNCTIONS,
@@ -28,9 +28,9 @@ def context(token):
 
 
 def registry():
-    wes_abbreviations.XONSH_ABBREVIATIONS = AbbreviationRegistry()
+    registry = reset_registry()
     register_ansible_abbreviations()
-    return wes_abbreviations.XONSH_ABBREVIATIONS
+    return registry
 
 
 def test_generated_module_is_in_sync_with_ansibles_fish_source():
@@ -66,7 +66,7 @@ def test_ansible_rc_loads_with_abbreviations_and_bridged_functions():
     ansibles = ROOT / ".config/xonsh/rc.d/ansibles.xsh"
     command = (
         f"source {abbreviations}; source {ansibles}; "
-        "print(len(XONSH_ABBREVIATIONS.abbreviations)); "
+        "print(len(wes_abbreviations.XONSH_ABBREVIATIONS.abbreviations)); "
         "print('_ansible-config_options_name_contains' in aliases)"
     )
     completed = subprocess.run(

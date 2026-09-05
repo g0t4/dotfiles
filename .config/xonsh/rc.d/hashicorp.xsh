@@ -3,4 +3,4 @@
 from wes_hashicorp_abbreviations import register_hashicorp_abbreviations
 
 
-register_hashicorp_abbreviations(XONSH_ABBREVIATIONS)
+register_hashicorp_abbreviations()

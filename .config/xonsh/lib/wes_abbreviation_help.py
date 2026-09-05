@@ -13,6 +13,7 @@ from rich.panel import Panel
 from rich.syntax import Syntax
 from rich.text import Text
 
+import wes_abbreviations
 from wes_abbreviations import (
     Abbreviation,
     AbbreviationContext,
@@ -35,9 +36,10 @@ def _target_context(context):
     return replace(context, token=token, command_path=command_path), full
 
 
-def register_abbreviation_help(registry: AbbreviationRegistry):
+def register_abbreviation_help():
     def resolve(context, _match):
         target, full = _target_context(context)
+        registry = wes_abbreviations.XONSH_ABBREVIATIONS
         matches = registry.applicable(target)
         if not matches:
             return None
@@ -53,7 +55,6 @@ def register_abbreviation_help(registry: AbbreviationRegistry):
         )
 
     return abbr(
-        registry,
         _HELP_TRIGGER,
         resolve,
         position="anywhere",

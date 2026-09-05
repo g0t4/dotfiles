@@ -12,9 +12,9 @@ from rich.table import Table
 
 from wes_abbreviations import (
     Abbreviation,
-    AbbreviationRegistry,
     abbreviation_replacement_text,
 )
+import wes_abbreviations
 
 
 @dataclass(frozen=True)
@@ -40,10 +40,9 @@ def _callback_source(abbreviation: Abbreviation) -> str:
         return ""
 
 
-def abbreviation_listings(
-    registry: AbbreviationRegistry,
-) -> list[AbbreviationListing]:
+def abbreviation_listings() -> list[AbbreviationListing]:
     listings = []
+    registry = wes_abbreviations.XONSH_ABBREVIATIONS
     for abbreviation in registry.abbreviations:
         if abbreviation.internal:
             continue
@@ -58,10 +57,10 @@ def abbreviation_listings(
 
 
 def search_abbreviations(
-    registry: AbbreviationRegistry, query="", *, prefix=False
+    query="", *, prefix=False
 ) -> list[AbbreviationListing]:
     query = query.casefold()
-    listings = abbreviation_listings(registry)
+    listings = abbreviation_listings()
     if not query:
         return listings
     if prefix:
@@ -70,7 +69,7 @@ def search_abbreviations(
 
 
 def abbreviation_list_alias(
-    registry: AbbreviationRegistry, args, console: Console, **_
+    args, console: Console, **_
 ):
     values = list(args)
     plain = False
@@ -94,7 +93,7 @@ def abbreviation_list_alias(
             query_parts.append(value)
 
     query = " ".join(query_parts)
-    listings = search_abbreviations(registry, query, prefix=mode == "prefix")
+    listings = search_abbreviations(query, prefix=mode == "prefix")
 
     def render_abbreviation_list():
         table = Table(

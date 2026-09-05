@@ -7,7 +7,7 @@ sys.path.insert(0, str(ROOT / ".config/xonsh/lib"))
 sys.path.insert(0, str(ROOT / "xonsh"))
 
 from generate_git_abbreviations import TARGET, generate  # noqa: E402
-from wes_abbreviations import AbbreviationContext, AbbreviationRegistry  # noqa: E402
+from wes_abbreviations import AbbreviationContext, reset_registry  # noqa: E402
 import wes_git_abbreviations  # noqa: E402
 from wes_git_functions import format_line_numbers  # noqa: E402
 
@@ -28,8 +28,8 @@ def context(text, *, command_path=(), command_position=None):
 
 
 def registry():
-    result = AbbreviationRegistry()
-    wes_git_abbreviations.register_git_abbreviations(result)
+    result = reset_registry()
+    wes_git_abbreviations.register_git_abbreviations()
     return result
 
 

@@ -10,7 +10,7 @@ sys.path.insert(0, str(ROOT / ".config/xonsh/lib"))
 sys.path.insert(0, str(ROOT / "xonsh"))
 
 from generate_files_abbreviations import TARGET, generate  # noqa: E402
-from wes_abbreviations import AbbreviationContext, AbbreviationRegistry  # noqa: E402
+from wes_abbreviations import AbbreviationContext, reset_registry  # noqa: E402
 from wes_files_abbreviations import register_files_abbreviations  # noqa: E402
 
 
@@ -27,8 +27,8 @@ def context(token, *, command_position=True, command_path=()):
 
 
 def registry():
-    result = AbbreviationRegistry()
-    register_files_abbreviations(result)
+    result = reset_registry()
+    register_files_abbreviations()
     return result
 
 

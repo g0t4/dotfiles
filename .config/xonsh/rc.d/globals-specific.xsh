@@ -3,4 +3,4 @@
 from wes_globals_abbreviations import register_globals_abbreviations
 
 
-register_globals_abbreviations(XONSH_ABBREVIATIONS)
+register_globals_abbreviations()
