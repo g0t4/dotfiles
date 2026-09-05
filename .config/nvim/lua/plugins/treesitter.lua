@@ -78,6 +78,8 @@ return {
                 "bash",
                 "fish",
                 "zsh",
+                "toml",
+                "xonsh",
                 -- "cst", "test", -- TODO where did I install these from? (both are part of treesitter test file testing
             }
             -- * list installed parsers/queries
