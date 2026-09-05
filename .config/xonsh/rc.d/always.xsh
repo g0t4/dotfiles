@@ -3,7 +3,7 @@
 from wes_logging import get_logger
 
 
-_always_log = get_logger("always")
+log = get_logger("always")
 _always_ai_autosuggest_before_recording = None
 
 
@@ -18,7 +18,7 @@ def _always_set_ai_autosuggest(enabled):
         if not enabled and active_task is not None and not active_task.done():
             active_task.cancel()
 
-    _always_log.info("recording_mode_autosuggest enabled=%s", enabled)
+    log.info("recording_mode_autosuggest enabled=%s", enabled)
 
 
 def _always_recording(_args, **_):
