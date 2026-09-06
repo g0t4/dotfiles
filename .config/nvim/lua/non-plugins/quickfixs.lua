@@ -53,8 +53,8 @@ function set_quickfix_from_clipboard_lua_error()
 end
 
 function set_quickfix_from_clipboard_AUTO_DETECT()
-    local clippy = vim.fn.getreg('+')
-    if clippy:find("stack traceback:\n") then -- assume \n after means it was on its own line and dont care if it is first or not (which is why I don't require \n at start)
+    local what = vim.fn.getreg('+') -- clipboard
+    if what:find("stack traceback:\n") then -- assume \n after means it was on its own line and dont care if it is first or not (which is why I don't require \n at start)
         log:info('detected lua stack trace')
         print('detected lua stacktrace... parsing, can take a few seconds to fix paths')
         -- FYI \n b/c stack traceback label is not first line and has lines after, if you copy the wrong part it might not match
