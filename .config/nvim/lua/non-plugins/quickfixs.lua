@@ -1,5 +1,5 @@
 local log = require('devtools.logs.logger').universal()
-local traces = require("devtools.traces.traces")
+local lua_traces = require("devtools.traces.lua_traces")
 
 -- <leader>h - keys for hammerspoon too...
 -- <leader>hf =>
@@ -69,7 +69,7 @@ end
 
 function fix_clipboard_lua_error_paths()
     local text = vim.fn.getreg("+")
-    text = traces.fix_paths_in_error(text)
+    text = lua_traces.fix_paths_in_error(text)
     vim.fn.setreg('+', text)
     return text
 end
@@ -79,7 +79,7 @@ function set_quickfix_from_clipboard_IIRC_HAMMERSPOON(reg)
     -- ?? there has to be builtin ways for this already?
     reg = reg or "+"
     local text = vim.fn.getreg(reg)
-    text = traces.fix_paths_in_error(text)
+    text = lua_traces.fix_paths_in_error(text)
     local lines = vim.split(text, "\n")
 
     vim.fn.setqflist({}, " ", {
