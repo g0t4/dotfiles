@@ -318,7 +318,7 @@ abbr --set-cursor -- gcam 'git commit -a -m "%"'
 abbr --command git -- gptoss '--author "gptoss120b<wes.mcclure+gptoss120b@gmail.com>"'
 abbr --command git -- qwen3 '--author "qwen3.6-35b-a3b<wes.mcclure+qwen3.6-35b-a3b@gmail.com>"'
 abbr --command git -- agentworld '--author "qwen-agentworld-35b-a3b<wes.mcclure+qwen-agentworld-35b-a3b@gmail.com>"'
-abbr --command git -- codex '--author "codex-gpt5<wes.mcclure+codex-gpt5@gmail.com>"'
+abbr --command git -- codex '--author "codex-gpt6<wes.mcclure+codex-gpt6@gmail.com>"'
 abbr --command git -- deepseek '--author "deepseek-v4-flash-0731<wes.mcclure+deepseek-v4-flash-0731@gmail.com>"'
 abbr --command git -- muse '--author "muse-glimmer-30b-dspark<wes.mcclure+muse-glimmer-30b-dspark@gmail.com>"'
 #
