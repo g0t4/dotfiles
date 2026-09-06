@@ -25,53 +25,11 @@ function open_hammerspoon_failure_in_quickfix()
     }):start()
 end
 
--- * WIP for quick fix / location-list
-function set_quickfix_from_clipboard_lua_error()
-    local text = fix_clipboard_lua_error_paths()
-    local lines = vim.split(text, "\n")
-
-    -- build the entries yourself
-    local items = {}
-    for line in text:gmatch("[^\n]+") do
-        local file, lnum, msg = line:match("^%s*(.-):(%d+):%s*(.*)$")
-        if file then
-            table.insert(items, {
-                filename = file,
-                lnum = tonumber(lnum),
-                text = msg,
-            })
-        end
-    end
-    log:info(items)
-
-    vim.fn.setqflist({}, " ", {
-        title = "Lua Traceback",
-        items = items,
-    })
-
-    vim.cmd("copen")
-end
+local to_quickfix = require("devtools.traces.to_quickfix")
 
 function set_quickfix_from_clipboard_AUTO_DETECT()
     local what = vim.fn.getreg('+') -- clipboard
-    if what:find("stack traceback:\n") then -- assume \n after means it was on its own line and dont care if it is first or not (which is why I don't require \n at start)
-        log:info('detected lua stack trace')
-        print('detected lua stacktrace... parsing, can take a few seconds to fix paths')
-        -- FYI \n b/c stack traceback label is not first line and has lines after, if you copy the wrong part it might not match
-        set_quickfix_from_clipboard_lua_error()
-        return
-    end
-    -- TODO add other cases here!
-    -- TODO hammerspoon will need lua fixes but not with vim.rtp, instead needs HS specific roots to look through
-    --     SEE devtools trace for notes about hammerspoon paths (I could run hs command to do this)
-    vim.notify("did not recognize the clipboard format for quickfix purposes", vim.log.levels.INFO)
-end
-
-function fix_clipboard_lua_error_paths()
-    local text = vim.fn.getreg("+")
-    text = lua_traces.fix_paths_in_error(text)
-    vim.fn.setreg('+', text)
-    return text
+    to_quickfix.set_quickfix_from(what)
 end
 
 function set_quickfix_from_clipboard_IIRC_HAMMERSPOON(reg)
