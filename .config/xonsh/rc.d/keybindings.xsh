@@ -58,20 +58,22 @@ def _wes_navigate_directory_history_intra_prompt(event, *, forward):
 
 @events.on_ptk_create
 def _wes_keybindings(bindings, prompter, **_):
+
     # Match Fish prevd-or-backward-word/nextd-or-forward-word
-    # on an empty command line Alt-Left/Right navigate a
-    # bidirectional cwd timeline in place. With input present they retain
-    # punctuation-aware word movement.
+    # On an _Empty Command Line_ Alt-Left/Right navigate cwd history in place
+    # With input present they retain punctuation-aware word movement.
     @bindings.add("escape", "left", eager=True, save_before=lambda event: False)
     def _previous_directory_or_backward_word(event):
-        if event.current_buffer.text:
+        has_input = bool(event.current_buffer.text)
+        if has_input:
             get_by_name("backward-word").handler(event)
         else:
             _wes_navigate_directory_history_intra_prompt(event, forward=False)
 
     @bindings.add("escape", "right", eager=True, save_before=lambda event: False)
     def _next_directory_or_forward_word(event):
-        if event.current_buffer.text:
+        has_input = bool(event.current_buffer.text)
+        if has_input:
             get_by_name("forward-word").handler(event)
         else:
             _wes_navigate_directory_history_intra_prompt(event, forward=True)
