@@ -13,17 +13,17 @@ from wes_terminal_doctor import (
 )
 
 
-${...}.setdefault("XONSH_ITERM_OPTION_KEY_CHECK", True)
+@.env.setdefault("XONSH_ITERM_OPTION_KEY_CHECK", True)
 
 
 def _iterm_option_profile():
     profiles = read_iterm_option_profiles()
-    return select_iterm_profile(profiles, ${...}.get("ITERM_PROFILE"))
+    return select_iterm_profile(profiles, @.env.get("ITERM_PROFILE"))
 
 
 def _xonsh_doctor_report():
     """Report executable assumptions made by the Xonsh configuration."""
-    if ${...}.get("TERM_PROGRAM") != "iTerm.app":
+    if @.env.get("TERM_PROGRAM") != "iTerm.app":
         print("○ iTerm Option keys: not running under iTerm2")
         return 0
     try:
@@ -55,8 +55,8 @@ aliases["xonsh_doctor"] = _xonsh_doctor_alias
 
 
 if (
-    bool(${...}.get("XONSH_ITERM_OPTION_KEY_CHECK", True))
-    and ${...}.get("TERM_PROGRAM") == "iTerm.app"
+    bool(@.env.get("XONSH_ITERM_OPTION_KEY_CHECK", True))
+    and @.env.get("TERM_PROGRAM") == "iTerm.app"
 ):
     try:
         _wes_iterm_profile = _iterm_option_profile()

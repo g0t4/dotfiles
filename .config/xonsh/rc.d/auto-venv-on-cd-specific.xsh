@@ -16,7 +16,7 @@ from wes_logging import ensure_logger_is_setup, get_logger
 
 ensure_logger_is_setup()
 log = get_logger("auto_venv.events")
-_wes_auto_venv = AutoVenv(${...})
+_wes_auto_venv = AutoVenv(@.env)
 
 
 @events.on_chdir

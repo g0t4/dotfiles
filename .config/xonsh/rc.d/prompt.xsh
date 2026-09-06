@@ -27,7 +27,7 @@ _prompt_state = {
 
 def _prompt_flag(name):
     """Accept both the original Fish-style name and an uppercase Xonsh name."""
-    return bool(${...}.get(name) or ${...}.get(name.upper()))
+    return bool(@.env.get(name) or @.env.get(name.upper()))
 
 
 def _prompt_repo_info(cwd):
@@ -81,7 +81,7 @@ def _prompt_login():
     # parts = ["🪣"]
     # parts = ["🐽"]
     parts = []
-    virtual_env = ${...}.get("VIRTUAL_ENV")
+    virtual_env = @.env.get("VIRTUAL_ENV")
     if virtual_env:
         parts.append("{CYAN}\ue73c")
         if _prompt_flag("show_verbose_prompt"):
@@ -96,7 +96,7 @@ def _prompt_login():
         return "".join(parts)
 
     if hostname.startswith("mbp"):
-        if ${...}.get("SSH_CONNECTION"):
+        if @.env.get("SSH_CONNECTION"):
             parts.append("{CYAN}󰌘 {RESET}")
         parts.append("mac")
     else:
@@ -168,13 +168,13 @@ def _prompt_status():
 def _prompt_failure_assist():
     if not _prompt_state["show_failure_assist"]:
         return ""
-    if not ${...}.get("XONSH_AI_AUTOSUGGEST", True):
+    if not @.env.get("XONSH_AI_AUTOSUGGEST", True):
         return ""
     return "{INTENSE_BLACK}◌ two commands failed in a row — want help?{RESET}\n"
 
 
 def _prompt_ai_snout():
-    if not ${...}.get("XONSH_AI_AUTOSUGGEST", True):
+    if not @.env.get("XONSH_AI_AUTOSUGGEST", True):
         return " @"
     return " 🐽"
 
@@ -224,5 +224,5 @@ $TITLE = "{user}"
 
 # iterm2.xsh always exposes its helper object, including on unsupported or
 # non-iTerm terminals. Only wrap when it actually registered the OSC fields.
-if bool(${...}.get("ITERM2_INTEGRATION", False)) and hasattr(XSH, "iterm2"):
+if bool(@.env.get("ITERM2_INTEGRATION", False)) and hasattr(XSH, "iterm2"):
     XSH.iterm2.add_iterm2_to_prompt()

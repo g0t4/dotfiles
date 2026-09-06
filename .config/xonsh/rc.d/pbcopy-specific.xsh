@@ -17,9 +17,9 @@ def _clipboard_copy(data):
     """Copy text using native macOS tools or the best available remote/Linux tool."""
     if platform.system() == "Darwin" and shutil.which("pbcopy"):
         command = ["pbcopy"]
-    elif ${...}.get("SSH_CLIENT") and shutil.which("osc"):
+    elif @.env.get("SSH_CLIENT") and shutil.which("osc"):
         command = ["osc", "copy"]
-    elif ${...}.get("SSH_CLIENT") and shutil.which("osc-copy"):
+    elif @.env.get("SSH_CLIENT") and shutil.which("osc-copy"):
         command = ["osc-copy"]
     elif shutil.which("wl-copy"):
         command = ["wl-copy"]
@@ -37,7 +37,7 @@ def _clipboard_copy(data):
 def _clipboard_paste():
     if platform.system() == "Darwin" and shutil.which("pbpaste"):
         command = ["pbpaste"]
-    elif ${...}.get("SSH_CLIENT") and shutil.which("osc"):
+    elif @.env.get("SSH_CLIENT") and shutil.which("osc"):
         command = ["osc", "paste"]
     elif shutil.which("wl-paste"):
         command = ["wl-paste", "--no-newline"]

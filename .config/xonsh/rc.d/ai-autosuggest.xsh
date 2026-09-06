@@ -32,21 +32,21 @@ from wes_logging import ensure_logger_is_setup, get_logger
 from wes_semantic_history import InferenceClient, SemanticHistoryRetriever
 
 
-${...}.setdefault(
-    "XONSH_AI_AUTOSUGGEST", read_autosuggest_enabled(${...})
+@.env.setdefault(
+    "XONSH_AI_AUTOSUGGEST", read_autosuggest_enabled(@.env)
 )
-${...}.setdefault(
+@.env.setdefault(
     "XONSH_AI_AUTOSUGGEST_URL",
     "http://build21.lan:8013/v1/chat/completions",
 )
-${...}.setdefault(
+@.env.setdefault(
     "XONSH_AI_AUTOSUGGEST_MODEL",
     "ggml-org/gpt-oss-120b-GGUF",
 )
-${...}.setdefault("XONSH_AI_AUTOSUGGEST_DEBUG", False)
-${...}.setdefault("XONSH_AI_SEMANTIC_HISTORY", True)
-${...}.setdefault("XONSH_AI_SEMANTIC_HISTORY_HOST", "build21.lan")
-${...}.setdefault("XONSH_AI_SEMANTIC_HISTORY_PORT", 8015)
+@.env.setdefault("XONSH_AI_AUTOSUGGEST_DEBUG", False)
+@.env.setdefault("XONSH_AI_SEMANTIC_HISTORY", True)
+@.env.setdefault("XONSH_AI_SEMANTIC_HISTORY_HOST", "build21.lan")
+@.env.setdefault("XONSH_AI_SEMANTIC_HISTORY_PORT", 8015)
 ensure_logger_is_setup()
 log = get_logger("ai_autosuggest")
 _ai_request_ids = itertools.count(1)
@@ -109,8 +109,8 @@ class _StreamingAIAutoSuggest(AutoSuggest):
         self._previous_completions = []
         self._submitting_buffer = None
         semantic_client = InferenceClient(
-            str(${...}["XONSH_AI_SEMANTIC_HISTORY_HOST"]),
-            int(${...}["XONSH_AI_SEMANTIC_HISTORY_PORT"]),
+            str($XONSH_AI_SEMANTIC_HISTORY_HOST),
+            int($XONSH_AI_SEMANTIC_HISTORY_PORT),
         )
         self._semantic_history = SemanticHistoryRetriever(
             semantic_client,
@@ -127,7 +127,7 @@ class _StreamingAIAutoSuggest(AutoSuggest):
         return None
 
     def _history_suggestion(self, buffer, document):
-        if not ${...}.get("AUTO_SUGGEST", True):
+        if not @.env.get("AUTO_SUGGEST", True):
             return None
         return self._history.get_suggestion(buffer, document)
 
@@ -218,7 +218,7 @@ class _StreamingAIAutoSuggest(AutoSuggest):
                 + json.dumps(self._previous_completions, ensure_ascii=False)
             )
         return {
-            "model": ${...}["XONSH_AI_AUTOSUGGEST_MODEL"],
+            "model": $XONSH_AI_AUTOSUGGEST_MODEL,
             "stream": True,
             "temperature": 0,
             "max_tokens": 96,
@@ -274,7 +274,7 @@ class _StreamingAIAutoSuggest(AutoSuggest):
         accumulated = ""
         context = self._voice_command_context(buffer, transcript, execution_context)
         body = {
-            "model": ${...}["XONSH_AI_AUTOSUGGEST_MODEL"],
+            "model": $XONSH_AI_AUTOSUGGEST_MODEL,
             "stream": True,
             "temperature": 0,
             "max_tokens": 256,
@@ -370,7 +370,7 @@ class _StreamingAIAutoSuggest(AutoSuggest):
             "1",
             "--max-time",
             "8",
-            ${...}["XONSH_AI_AUTOSUGGEST_URL"],
+            $XONSH_AI_AUTOSUGGEST_URL,
             "-H",
             "Content-Type: application/json",
             "--data-binary",
@@ -424,7 +424,7 @@ class _StreamingAIAutoSuggest(AutoSuggest):
         if self._submitting_buffer is buffer:
             log.info("request_skipped_for_submit buffer=%r", document.text)
             return None
-        if not ${...}.get("XONSH_AI_AUTOSUGGEST", True):
+        if not @.env.get("XONSH_AI_AUTOSUGGEST", True):
             return None
 
         # Prompt Toolkit's Suggestion UI can append only at the end of the
@@ -440,7 +440,7 @@ class _StreamingAIAutoSuggest(AutoSuggest):
         accumulated = ""
         recent_count = len(self._recent_commands(buffer))
         semantic_commands = []
-        if ${...}.get("XONSH_AI_SEMANTIC_HISTORY", True):
+        if @.env.get("XONSH_AI_SEMANTIC_HISTORY", True):
             try:
                 history = list(buffer.history.get_strings())
                 semantic_commands = await self._semantic_history.retrieve(
@@ -493,7 +493,7 @@ class _StreamingAIAutoSuggest(AutoSuggest):
                 (time.monotonic() - started_at) * 1000,
                 error,
             )
-            if ${...}.get("XONSH_AI_AUTOSUGGEST_DEBUG"):
+            if @.env.get("XONSH_AI_AUTOSUGGEST_DEBUG"):
                 from xonsh.tools import print_above_prompt
 
                 print_above_prompt(f"AI autosuggest: {type(error).__name__}: {error}")
@@ -560,9 +560,9 @@ def _wes_install_ai_autosuggester(bindings, prompter=None, **_):
     def _toggle_ai_autosuggestion(event):
         # Prompt Toolkit represents Shift-F6 as F18, matching the standard
         # xterm shifted-function-key sequence CSI 17;2~.
-        enabled = not bool(${...}.get("XONSH_AI_AUTOSUGGEST", True))
-        ${...}["XONSH_AI_AUTOSUGGEST"] = enabled
-        write_autosuggest_enabled(${...}, enabled)
+        enabled = not bool(@.env.get("XONSH_AI_AUTOSUGGEST", True))
+        $XONSH_AI_AUTOSUGGEST = enabled
+        write_autosuggest_enabled(@.env, enabled)
         buffer = event.current_buffer
 
         active_task = _ai_autosuggester._active_task
@@ -578,7 +578,7 @@ def _wes_install_ai_autosuggester(bindings, prompter=None, **_):
         # Xonsh normally formats the left prompt once per command. Refresh its
         # cached tokens so the snout follows Shift-F6 immediately.
         if prompter is not None:
-            ${...}["PROMPT_FIELDS"].reset()
+            $PROMPT_FIELDS.reset()
             prompter.message = XSH.shell.shell.prompt_tokens()
         event.app.invalidate()
         log.info("autosuggest_toggled enabled=%s buffer=%r", enabled, buffer.text)

@@ -12,7 +12,7 @@ def run_bridge(bootstrap: Path):
         f"source {CONFIG}; "
         f"$WES_BOOTSTRAP = {str(bootstrap)!r}; "
         f"source {PRIVATE}; "
-        "print(${...}.get('PRIVATE_CONFIG_PROBE', 'missing'))"
+        "print(@.env.get('PRIVATE_CONFIG_PROBE', 'missing'))"
     )
     return subprocess.run(
         ["xonsh", "--no-rc", "-c", command],

@@ -16,7 +16,7 @@ from wes_misc_functions import fish_command_alias
 
 def _github_executable(name):
     """Resolve against Xonsh's live PATH, which may differ from os.environ."""
-    live_path = os.pathsep.join(map(str, ${...}.get("PATH", ())))
+    live_path = os.pathsep.join(map(str, @.env.get("PATH", ())))
     executable = shutil.which(name, path=live_path)
     if executable is None:
         raise FileNotFoundError(f"{name}: executable not found in Xonsh PATH")

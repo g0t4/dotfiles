@@ -5,7 +5,7 @@
 
 import subprocess, shlex
 
-if cmd := ${...}.pop('XONSH_WES_INTERACTIVE_INIT_COMMAND', None):
+if cmd := @.env.pop('XONSH_WES_INTERACTIVE_INIT_COMMAND', None):
     # print("cmd", cmd)
     args = shlex.split(cmd)
     # print("args after shlex", args)

@@ -33,7 +33,7 @@ def _wes_refresh_prompt(event):
     shell = XSH.shell.shell
     prompter = getattr(shell, "prompter", None)
     if prompter is not None:
-        ${...}["PROMPT_FIELDS"].reset()
+        $PROMPT_FIELDS.reset()
         prompter.message = shell.prompt_tokens()
     event.app.invalidate()
 

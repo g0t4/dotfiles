@@ -127,7 +127,7 @@ def _run_abbreviation_picker(rows, query):
         input="".join(f"{row}\n" for row in rows),
         stdout=subprocess.PIPE,
         text=True,
-        env=${...}.detype(),
+        env=@.env.detype(),
     )
     return completed.stdout.rstrip("\n") if completed.returncode == 0 else None
 

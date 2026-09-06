@@ -39,7 +39,7 @@ $EDITOR = "nvim"
 
 register_files_abbreviations()
 
-${...}.setdefault("XONSH_KEYPRESS_DEBUG", False)
+@.env.setdefault("XONSH_KEYPRESS_DEBUG", False)
 ensure_logger_is_setup()
 log = get_logger("fzf_pickers")
 log = get_logger("files")
@@ -63,7 +63,7 @@ def _files_install_keypress_tee(prompter):
 
     def feed_multiple(key_presses, first=False):
         keys = list(key_presses)
-        if bool(${...}.get("XONSH_KEYPRESS_DEBUG", False)):
+        if bool(@.env.get("XONSH_KEYPRESS_DEBUG", False)):
             log.info(
                 "key_feed first=%s keys=%r",
                 first,
@@ -80,7 +80,7 @@ def _files_install_keypress_tee(prompter):
 
 def _files_run(*args, **kwargs):
     """Run with the live Xonsh environment, including its current PATH."""
-    kwargs.setdefault("env", ${...}.detype())
+    kwargs.setdefault("env", @.env.detype())
     return subprocess.run(*args, **kwargs)
 
 
@@ -156,8 +156,8 @@ aliases["cd"] = _files_cd
 
 # This intentionally does not affect scripts or `xonsh -c`: the richer behavior
 # is a REPL affordance, while non-interactive callers retain the system cat.
-if bool(${...}.get("XONSH_INTERACTIVE", False)):
-    aliases["cat"] = InteractiveCat(env=${...})
+if bool(@.env.get("XONSH_INTERACTIVE", False)):
+    aliases["cat"] = InteractiveCat(env=@.env)
 
 
 def _files_cd_to_path(path, stdout=None, stderr=None):
@@ -442,7 +442,7 @@ def _files_run_commit_picker(cwd):
 
 
 def _files_run_variable_picker(query, cwd):
-    candidates = xonsh_env_candidates(${...}.keys())
+    candidates = xonsh_env_candidates(@.env.keys())
     fzf = _files_run(
         [
             "fzf",

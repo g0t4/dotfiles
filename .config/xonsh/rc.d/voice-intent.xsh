@@ -26,20 +26,20 @@ from wes_live_voice import LiveVoice, bounded_command_result
 from wes_voice_intent import DEFAULT_MODEL, VoiceIntent, insert_transcript, resolve_executable
 
 
-${...}.setdefault("XONSH_VOICE_AUDIO_DEVICE", "0")
-${...}.setdefault("XONSH_VOICE_MODEL", str(DEFAULT_MODEL))
-${...}.setdefault(
+@.env.setdefault("XONSH_VOICE_AUDIO_DEVICE", "0")
+@.env.setdefault("XONSH_VOICE_MODEL", str(DEFAULT_MODEL))
+@.env.setdefault(
     "XONSH_LIVE_VOICE_PYTHON",
     str(Path.home() / "repos/github/g0t4/auto-edit-suggests/.venv/bin/python"),
 )
-${...}.setdefault(
+@.env.setdefault(
     "XONSH_LIVE_VOICE_MODEL",
     str(Path.home() / "repos/github/ggml-org/whisper.cpp/models/ggml-tiny.en.bin"),
 )
-${...}.setdefault("XONSH_LIVE_VOICE_INTERVAL_MS", 500)
+@.env.setdefault("XONSH_LIVE_VOICE_INTERVAL_MS", 500)
 _voice_intent = VoiceIntent(
-    audio_device=str(${...}["XONSH_VOICE_AUDIO_DEVICE"]),
-    model=Path(${...}["XONSH_VOICE_MODEL"]),
+    audio_device=str($XONSH_VOICE_AUDIO_DEVICE),
+    model=Path($XONSH_VOICE_MODEL),
 )
 _live_voice_state = {
     "transcript": "",
@@ -59,18 +59,18 @@ def _set_persistent_capture(enabled):
     names = ("XONSH_CAPTURE_ALWAYS", "XONSH_STORE_STDOUT")
     if enabled:
         _persistent_capture_settings = {
-            name: (name in ${...}, ${...}.get(name)) for name in names
+            name: (name in @.env, @.env.get(name)) for name in names
         }
         for name in names:
-            ${...}[name] = True
+            @.env[name] = True
         return
     if _persistent_capture_settings is None:
         return
     for name, (existed, value) in _persistent_capture_settings.items():
         if existed:
-            ${...}[name] = value
-        elif name in ${...}:
-            del ${...}[name]
+            @.env[name] = value
+        elif name in @.env:
+            del @.env[name]
     _persistent_capture_settings = None
 
 
@@ -275,16 +275,16 @@ def _wes_voice_keybinding(bindings, prompter=None, **_):
             global _live_voice, _persistent_voice_enabled
             worker = Path($XONSH_CONFIG_DIR) / "lib/wes_voice_stream_worker.py"
             command = [
-                str(${...}["XONSH_LIVE_VOICE_PYTHON"]),
+                str($XONSH_LIVE_VOICE_PYTHON),
                 str(worker),
                 "--model",
-                str(${...}["XONSH_LIVE_VOICE_MODEL"]),
+                str($XONSH_LIVE_VOICE_MODEL),
                 "--ffmpeg",
                 resolve_executable("ffmpeg"),
                 "--audio-device",
-                str(${...}["XONSH_VOICE_AUDIO_DEVICE"]),
+                str($XONSH_VOICE_AUDIO_DEVICE),
                 "--interval-ms",
-                str(${...}["XONSH_LIVE_VOICE_INTERVAL_MS"]),
+                str($XONSH_LIVE_VOICE_INTERVAL_MS),
             ]
             _set_persistent_capture(True)
             _persistent_voice_enabled = True
@@ -375,16 +375,16 @@ def _wes_voice_keybinding(bindings, prompter=None, **_):
             global _live_voice
             worker = Path($XONSH_CONFIG_DIR) / "lib/wes_voice_stream_worker.py"
             command = [
-                str(${...}["XONSH_LIVE_VOICE_PYTHON"]),
+                str($XONSH_LIVE_VOICE_PYTHON),
                 str(worker),
                 "--model",
-                str(${...}["XONSH_LIVE_VOICE_MODEL"]),
+                str($XONSH_LIVE_VOICE_MODEL),
                 "--ffmpeg",
                 resolve_executable("ffmpeg"),
                 "--audio-device",
-                str(${...}["XONSH_VOICE_AUDIO_DEVICE"]),
+                str($XONSH_VOICE_AUDIO_DEVICE),
                 "--interval-ms",
-                str(${...}["XONSH_LIVE_VOICE_INTERVAL_MS"]),
+                str($XONSH_LIVE_VOICE_INTERVAL_MS),
             ]
             _live_voice = LiveVoice(command, on_partial)
             _live_voice_state.update(
