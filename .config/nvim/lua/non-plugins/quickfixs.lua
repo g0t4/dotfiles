@@ -1,5 +1,6 @@
 local log = require('devtools.logs.logger').universal()
 local lua_traces = require("devtools.traces.lua_traces")
+local quickfix = require("devtools.traces.quickfix")
 
 -- <leader>h - keys for hammerspoon too...
 -- <leader>hf =>
@@ -25,11 +26,10 @@ function open_hammerspoon_failure_in_quickfix()
     }):start()
 end
 
-local to_quickfix = require("devtools.traces.to_quickfix")
 
 function set_quickfix_from_clipboard_AUTO_DETECT()
     local clipboard = vim.fn.getreg('+')
-    to_quickfix.set_quickfix_from(clipboard)
+    quickfix.set_quickfix_from(clipboard)
 end
 
 function set_quickfix_from_clipboard_IIRC_HAMMERSPOON(reg)
