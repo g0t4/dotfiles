@@ -5,6 +5,9 @@
 --theme OneHalfDark
 
 ## File associations
+# Override bat's built-in Python associations for Xonsh.
+--map-syntax "*.xsh:Xonsh"
+--map-syntax "*.xonshrc:Xonsh"
 # bat --list-languages to see builtin mappings for examples (esp dir matching too)
 --map-syntax "*.repo:INI"
 --map-syntax "*.vbproj:XML"

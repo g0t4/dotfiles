@@ -1,0 +1,112 @@
+%YAML 1.2
+---
+# Standalone bat/syntect grammar. Bare command detection is necessarily heuristic:
+# Xonsh itself uses runtime name resolution to distinguish Python from commands.
+name: Xonsh
+file_extensions: [xsh, xonshrc, .xonshrc]
+first_line_match: '^#!.*\bxonsh\b'
+scope: source.xonsh
+contexts:
+  main:
+    - include: xonsh
+    # Preserve Python statements, assignments, calls, and attribute expressions.
+    # Recognize command-shaped lines, including paths and command flags.
+    - match: '^(\s*)(?!(?:and|as|assert|async|await|break|class|continue|def|del|elif|else|except|False|finally|for|from|global|if|import|in|is|lambda|None|nonlocal|not|or|pass|raise|return|True|try|while|with|yield)\b)(?![A-Za-z_]\w*\s*(?:[.(\[=:]|[-+*/%@&|^]=))([A-Za-z_./~][\w./~+-]*)(?=\s|$)'
+      captures:
+        2: entity.name.function.command.xonsh
+      push: shell-line
+    - include: scope:source.python
+  xonsh:
+    - match: '(?:@\$|[$!])\('
+      scope: keyword.operator.subprocess.xonsh
+      push: shell-parens
+    - match: '[$!]\['
+      scope: keyword.operator.subprocess.xonsh
+      push: shell-brackets
+    - match: '@\('
+      scope: keyword.operator.interpolation.xonsh
+      push: python-parens
+    - match: '\$\{'
+      scope: punctuation.section.interpolation.begin.xonsh
+      push: python-env
+    - match: '\$[A-Za-z_]\w*'
+      scope: variable.other.environment.xonsh
+    - match: '(?:@[A-Za-z_][\w.]*|[rgpf]+)?`'
+      scope: punctuation.definition.string.begin.xonsh
+      push: backtick
+  shell-line:
+    - match: '$'
+      pop: true
+    - include: shell
+  shell-parens:
+    - meta_scope: meta.subprocess.xonsh
+    - match: '\)'
+      scope: keyword.operator.subprocess.xonsh
+      pop: true
+    - include: shell
+  shell-brackets:
+    - meta_scope: meta.subprocess.xonsh
+    - match: '\]'
+      scope: keyword.operator.subprocess.xonsh
+      pop: true
+    - include: shell
+  shell:
+    - include: xonsh
+    - match: '#.*$'
+      scope: comment.line.number-sign.xonsh
+    - match: '"'
+      scope: punctuation.definition.string.begin.xonsh
+      push: double-string
+    - match: "'"
+      scope: punctuation.definition.string.begin.xonsh
+      push: single-string
+    - match: '\\\n'
+      scope: punctuation.separator.continuation.xonsh
+    - match: '\\.'
+      scope: constant.character.escape.xonsh
+    - match: '&&|\|\||[|<>;&]+'
+      scope: keyword.operator.shell.xonsh
+    - match: '(?<!\S)--?[\w-]+'
+      scope: variable.parameter.option.xonsh
+    - match: '[*?]'
+      scope: keyword.operator.glob.xonsh
+    - match: '[^\s\)\]\x27"$@`#|<>;&*?\\]+'
+      scope: string.unquoted.argument.xonsh
+  double-string:
+    - meta_scope: string.quoted.double.xonsh
+    - match: '"'
+      scope: punctuation.definition.string.end.xonsh
+      pop: true
+    - match: '\\.'
+      scope: constant.character.escape.xonsh
+    - include: xonsh
+  single-string:
+    - meta_scope: string.quoted.single.xonsh
+    - match: "'"
+      scope: punctuation.definition.string.end.xonsh
+      pop: true
+    - match: '\\.'
+      scope: constant.character.escape.xonsh
+  backtick:
+    - meta_scope: string.quoted.other.backtick.xonsh
+    - match: '`'
+      scope: punctuation.definition.string.end.xonsh
+      pop: true
+    - match: '\\.'
+      scope: constant.character.escape.xonsh
+  python-parens:
+    - match: '\)'
+      scope: punctuation.section.interpolation.end.xonsh
+      pop: true
+    - match: '\('
+      push: python-parens
+    - include: xonsh
+    - include: scope:source.python
+  python-env:
+    - match: '\}'
+      scope: punctuation.section.interpolation.end.xonsh
+      pop: true
+    - match: '\{'
+      push: python-env
+    - include: xonsh
+    - include: scope:source.python
