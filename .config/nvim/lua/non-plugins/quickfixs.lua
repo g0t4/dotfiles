@@ -28,11 +28,12 @@ end
 local to_quickfix = require("devtools.traces.to_quickfix")
 
 function set_quickfix_from_clipboard_AUTO_DETECT()
-    local what = vim.fn.getreg('+') -- clipboard
-    to_quickfix.set_quickfix_from(what)
+    local clipboard = vim.fn.getreg('+')
+    to_quickfix.set_quickfix_from(clipboard)
 end
 
 function set_quickfix_from_clipboard_IIRC_HAMMERSPOON(reg)
+    -- TODO move to devtools.nvim... then update callers too?
     -- TODO was this error format for hammerspoon?
     -- ?? there has to be builtin ways for this already?
     reg = reg or "+"
