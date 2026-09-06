@@ -38,7 +38,7 @@ def _wes_refresh_prompt(event):
     event.app.invalidate()
 
 
-def _wes_navigate_directory(event, *, forward):
+def _wes_navigate_directory_history_intra_prompt(event, *, forward):
     navigate = (
         _wes_directory_history.forward if forward else _wes_directory_history.back
     )
@@ -58,7 +58,8 @@ def _wes_navigate_directory(event, *, forward):
 
 @events.on_ptk_create
 def _wes_keybindings(bindings, prompter, **_):
-    # Match Fish: on an empty command line Alt-Left/Right navigate a
+    # Match Fish prevd-or-backward-word/nextd-or-forward-word
+    # on an empty command line Alt-Left/Right navigate a
     # bidirectional cwd timeline in place. With input present they retain
     # punctuation-aware word movement.
     @bindings.add("escape", "left", eager=True, save_before=lambda event: False)
@@ -66,14 +67,14 @@ def _wes_keybindings(bindings, prompter, **_):
         if event.current_buffer.text:
             get_by_name("backward-word").handler(event)
         else:
-            _wes_navigate_directory(event, forward=False)
+            _wes_navigate_directory_history_intra_prompt(event, forward=False)
 
     @bindings.add("escape", "right", eager=True, save_before=lambda event: False)
     def _next_directory_or_forward_word(event):
         if event.current_buffer.text:
             get_by_name("forward-word").handler(event)
         else:
-            _wes_navigate_directory(event, forward=True)
+            _wes_navigate_directory_history_intra_prompt(event, forward=True)
 
     # Prompt Toolkit already binds Ctrl+/ (reported as Ctrl+_) to undo.
     # Add the conventional Ctrl+Z spelling without replacing that binding.
