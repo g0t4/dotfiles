@@ -16,7 +16,7 @@ if str(_wes_xonsh_lib) not in sys.path:
     sys.path.insert(0, str(_wes_xonsh_lib))
 
 from prompt_toolkit.application import run_in_terminal
-from prompt_toolkit.filters import EmacsInsertMode, IsSearching, ViInsertMode
+from prompt_toolkit.filters import Condition, EmacsInsertMode, IsSearching, ViInsertMode
 from prompt_toolkit.input import ansi_escape_sequences
 from prompt_toolkit.input.vt100_parser import _IS_PREFIX_OF_LONGER_MATCH_CACHE
 from prompt_toolkit.keys import Keys
@@ -174,6 +174,9 @@ def _wes_abbreviation_keybindings(bindings, **_):
         _insert_mode
         & ~IsSearching()
         & ~should_confirm_completion
+        # Event handlers are not ordered: let voice own Enter whenever its
+        # preview can be accepted, regardless of which binding registered last.
+        & ~Condition(lambda: globals().get("_voice_preview_has_command", lambda: False)())
     )
 
     @bindings.add("c-j", filter=_submit_filter, eager=True)

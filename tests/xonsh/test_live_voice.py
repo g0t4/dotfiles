@@ -1,8 +1,10 @@
 import asyncio
+import os
 import subprocess
 import sys
 from pathlib import Path
 
+import pytest
 
 ROOT = Path(__file__).parents[2]
 LIB = ROOT / ".config/xonsh/lib"
@@ -10,6 +12,44 @@ sys.path.insert(0, str(LIB))
 
 from wes_voice_stream_worker import transcript_text  # noqa: E402
 from wes_live_voice import bounded_command_result  # noqa: E402
+
+
+@pytest.mark.parametrize("voice_first", [True, False])
+@pytest.mark.parametrize("persistent", [True, False])
+@pytest.mark.parametrize("key", ["ControlM", "ControlJ"])
+def test_voice_enter_wins_over_abbreviations(voice_first, persistent, key):
+    rc = ROOT / ".config/xonsh/rc.d"
+    registration = ["_wes_voice_keybinding", "_wes_abbreviation_keybindings"]
+    if not voice_first:
+        registration.reverse()
+    command = (
+        f"source {rc / 'abbreviations.xsh'}; source {rc / 'voice-intent.xsh'}; "
+        "from prompt_toolkit import PromptSession; "
+        "from prompt_toolkit.application.current import set_app; "
+        "from prompt_toolkit.key_binding import KeyBindings; "
+        "from prompt_toolkit.key_binding.key_processor import KeyPress; "
+        "from prompt_toolkit.keys import Keys; "
+        "from types import SimpleNamespace; "
+        "bindings = KeyBindings(); session = PromptSession(key_bindings=bindings); "
+        + "; ".join(f"{name}(bindings=bindings)" for name in registration)
+        + "; _live_voice = SimpleNamespace(running=True); "
+        f"_persistent_voice_enabled = {persistent}; "
+        "_live_voice_state.update(command='echo voice', status='listening', phase='ready'); "
+        "submitted = []; "
+        "session.default_buffer.accept_handler = lambda buffer: submitted.append(buffer.text); "
+        "session.app.create_background_task = lambda task: task.close(); "
+        "app_context = set_app(session.app); app_context.__enter__(); "
+        f"session.app.key_processor.feed(KeyPress(Keys.{key})); "
+        "session.app.key_processor.process_keys(); "
+        + ("assert submitted == ['echo voice']; " if persistent else
+           "assert submitted == []; assert session.default_buffer.text == 'echo voice'; ")
+        + "app_context.__exit__(None, None, None)"
+    )
+    env = os.environ | {"XONSH_CONFIG_DIR": str(rc.parent)}
+    completed = subprocess.run(
+        ["xonsh", "--no-rc", "-c", command], capture_output=True, text=True, env=env
+    )
+    assert completed.returncode == 0, completed.stderr
 
 
 def test_bounded_command_result_preserves_short_output():

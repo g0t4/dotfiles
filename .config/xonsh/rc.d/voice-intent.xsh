@@ -54,6 +54,15 @@ _persistent_last_result = None
 _persistent_capture_settings = None
 
 
+def _voice_preview_has_command():
+    """Whether Enter belongs to a live or persistent voice preview."""
+    return bool(
+        _live_voice is not None
+        and _live_voice.running
+        and _live_voice_state["command"]
+    )
+
+
 def _set_persistent_capture(enabled):
     global _persistent_capture_settings
     names = ("XONSH_CAPTURE_ALWAYS", "XONSH_STORE_STDOUT")
@@ -444,20 +453,10 @@ def _wes_voice_keybinding(bindings, prompter=None, **_):
             event.app.create_background_task(start_live())
 
     def live_voice_has_command():
-        return bool(
-            _live_voice is not None
-            and _live_voice.running
-            and not _persistent_voice_enabled
-            and _live_voice_state["command"]
-        )
+        return _voice_preview_has_command() and not _persistent_voice_enabled
 
     def persistent_voice_has_command():
-        return bool(
-            _persistent_voice_enabled
-            and _live_voice is not None
-            and _live_voice.running
-            and _live_voice_state["command"]
-        )
+        return _voice_preview_has_command() and _persistent_voice_enabled
 
     @bindings.add(
         "c-m",
