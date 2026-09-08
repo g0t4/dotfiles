@@ -1235,12 +1235,14 @@ function SPal_Timeline_ZoomAndJumpToStart()
         -- TODO then can add move_to_video_start() for this, to the timeline too
         win:zoom_off() -- zoom out so start is visible w/o scrolling
         sleep_ms(10)
+        local original_mouse_pos = hs.mouse.absolutePosition()
 
         -- FYI jumping to start/end unzoomed doesn't need PPS:
         win:timeline_controller():move_playhead_to_timeline_start()
 
         sleep_ms(10)
         win:zoom2()
+        hs.mouse.absolutePosition(original_mouse_pos)
     end)
 end
 
@@ -1249,11 +1251,13 @@ function SPal_Timeline_ZoomAndJumpToEnd()
         local win = get_cached_editor_window()
         win:zoom_off()
         sleep_ms(10)
+        local original_mouse_pos = hs.mouse.absolutePosition()
 
         win:timeline_controller():move_playhead_to_timeline_end()
 
         sleep_ms(10)
         win:zoom2()
+        hs.mouse.absolutePosition(original_mouse_pos)
     end)
 end
 
