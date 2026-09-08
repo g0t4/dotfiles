@@ -695,7 +695,7 @@ function SPAL_Add_Shape(shape_type)
     ensure_in_coroutine(function()
         local canvas_spinner = require("config.ui.canvas_spinner")
         canvas_spinner:start()
-        
+
         _click2LevelTool("Overlay", "Shape") -- FYI WORKING!
 
         -- * set shape type
@@ -722,7 +722,7 @@ function SPAL_Add_Shape(shape_type)
         else
             shapes:wait_for_shape_type_checkbox_then_press_it(shape_type)
         end
-        
+
         canvas_spinner:stop()
     end)
 end
@@ -1230,12 +1230,12 @@ end
 function SPal_Timeline_ZoomAndJumpToStart()
     -- FYI using ensure_in_coroutine (coroutines under hood) to avoid blocking (i.e. during sleep calls)
     ensure_in_coroutine(function()
+        local original_mouse_pos = hs.mouse.absolutePosition()
         local win = get_cached_editor_window()
         -- TODO move zoom controls to timeline class?
         -- TODO then can add move_to_video_start() for this, to the timeline too
         win:zoom_off() -- zoom out so start is visible w/o scrolling
         sleep_ms(10)
-        local original_mouse_pos = hs.mouse.absolutePosition()
 
         -- FYI jumping to start/end unzoomed doesn't need PPS:
         win:timeline_controller():move_playhead_to_timeline_start()
@@ -1248,10 +1248,10 @@ end
 
 function SPal_Timeline_ZoomAndJumpToEnd()
     ensure_in_coroutine(function()
+        local original_mouse_pos = hs.mouse.absolutePosition()
         local win = get_cached_editor_window()
         win:zoom_off()
         sleep_ms(10)
-        local original_mouse_pos = hs.mouse.absolutePosition()
 
         win:timeline_controller():move_playhead_to_timeline_end()
 
