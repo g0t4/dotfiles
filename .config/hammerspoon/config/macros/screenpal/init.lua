@@ -1230,34 +1230,41 @@ end
 function SPal_Timeline_ZoomAndJumpToStart()
     -- FYI using ensure_in_coroutine (coroutines under hood) to avoid blocking (i.e. during sleep calls)
     ensure_in_coroutine(function()
-        local original_mouse_pos = hs.mouse.absolutePosition()
-        local win = get_cached_editor_window()
-        -- TODO move zoom controls to timeline class?
-        -- TODO then can add move_to_video_start() for this, to the timeline too
-        win:zoom_off() -- zoom out so start is visible w/o scrolling
-        sleep_ms(10)
+        with_restore_mouse_position(function()
+            local win = get_cached_editor_window()
+            -- TODO move zoom controls to timeline class?
+            -- TODO then can add move_to_video_start() for this, to the timeline too
+            win:zoom_off() -- zoom out so start is visible w/o scrolling
+            sleep_ms(10)
 
-        -- FYI jumping to start/end unzoomed doesn't need PPS:
-        win:timeline_controller():move_playhead_to_timeline_start()
+            -- FYI jumping to start/end unzoomed doesn't need PPS:
+            win:timeline_controller():move_playhead_to_timeline_start()
 
-        sleep_ms(10)
-        win:zoom2()
-        hs.mouse.absolutePosition(original_mouse_pos)
+            sleep_ms(10)
+            win:zoom2()
+        end)
     end)
+end
+
+---@param what fun()
+function with_restore_mouse_position(what)
+    local original_mouse_pos = hs.mouse.absolutePosition()
+    what()
+    hs.mouse.absolutePosition(original_mouse_pos)
 end
 
 function SPal_Timeline_ZoomAndJumpToEnd()
     ensure_in_coroutine(function()
-        local original_mouse_pos = hs.mouse.absolutePosition()
-        local win = get_cached_editor_window()
-        win:zoom_off()
-        sleep_ms(10)
+        with_restore_mouse_position(function()
+            local win = get_cached_editor_window()
+            win:zoom_off()
+            sleep_ms(10)
 
-        win:timeline_controller():move_playhead_to_timeline_end()
+            win:timeline_controller():move_playhead_to_timeline_end()
 
-        sleep_ms(10)
-        win:zoom2()
-        hs.mouse.absolutePosition(original_mouse_pos)
+            sleep_ms(10)
+            win:zoom2()
+        end)
     end)
 end
 

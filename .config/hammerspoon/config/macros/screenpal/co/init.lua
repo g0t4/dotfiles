@@ -6,6 +6,7 @@ local CoroutineStateTracker = require("devtools.co.state")
 --   else wind up swallowing errors!
 
 --- ensure we are running inside a non main coroutine
+---@param what fun(...): any
 function ensure_in_coroutine(what, ...)
     local function ensure_timer(co)
         if CoroutineStateTracker._get("timer", co) == nil then
