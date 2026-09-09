@@ -9,6 +9,7 @@ from prompt_toolkit.key_binding.bindings.named_commands import get_by_name
 from xonsh.dirstack import cd as _xonsh_cd
 from xonsh.tools import print_above_prompt
 from xonsh.events import events
+from prompt_toolkit.key_binding.key_processor import KeyPressEvent
 
 from wes_directory_history import DirectoryHistory
 
@@ -94,7 +95,7 @@ def _wes_keybindings(bindings, prompter, **_):
     # the same history argument cycling available while Xonsh is in Vi mode.
     @bindings.add("escape", ".", save_before=lambda event: False)
     @bindings.add("escape", "up", save_before=lambda event: False)
-    def _yank_last_argument(event):
+    def _yank_last_argument(event: KeyPressEvent):
         event.current_buffer.yank_last_arg()
 
     # Prompt Toolkit's default Ctrl-W uses whitespace-delimited WORDs even in
