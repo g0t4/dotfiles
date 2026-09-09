@@ -93,6 +93,7 @@ def _wes_keybindings(bindings, prompter, **_):
     # Prompt Toolkit provides this as Alt+. only in its Emacs bindings. Make
     # the same history argument cycling available while Xonsh is in Vi mode.
     @bindings.add("escape", ".", save_before=lambda event: False)
+    @bindings.add("escape", "up", save_before=lambda event: False)
     def _yank_last_argument(event):
         event.current_buffer.yank_last_arg()
 
