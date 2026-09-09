@@ -154,13 +154,13 @@ def register_git_abbreviations():
     abbr('qwen3', '--author "qwen3.6-35b-a3b<wes.mcclure+qwen3.6-35b-a3b@gmail.com>"', commands=('git',))  # Fish line 319
     abbr('agentworld', '--author "qwen-agentworld-35b-a3b<wes.mcclure+qwen-agentworld-35b-a3b@gmail.com>"', commands=('git',))  # Fish line 320
     abbr('codex', '--author "codex-gpt5<wes.mcclure+codex-gpt5@gmail.com>"', commands=('git',))  # Fish line 321
-    abbr('deepseek', '--author "deepseek-v4-flash-0731<wes.mcclure+deepseek-v4-flash-0731@gmail.com>"', commands=('git',))  # Fish line 322
+    abbr('deepseek', '--author "deepseek-v4-flash<wes.mcclure+deepseek-v4-flash@gmail.com>"', commands=('git',))  # Fish line 322
     abbr('muse', '--author "muse-glimmer-30b-dspark<wes.mcclure+muse-glimmer-30b-dspark@gmail.com>"', commands=('git',))  # Fish line 323
     abbr('amend_n_gptoss', 'GIT_SEQUENCE_EDITOR=true git rebase -i --exec "git commit --amend --no-edit --author \\"gptoss120b<wes.mcclure+gptoss120b@gmail.com>\\"" HEAD~%', cursor_marker="%")  # Fish line 327
     abbr('amend_n_qwen3', 'GIT_SEQUENCE_EDITOR=true git rebase -i --exec "git commit --amend --no-edit --author \\"qwen3.6-35b-a3b<wes.mcclure+qwen3.6-35b-a3b@gmail.com>\\"" HEAD~%', cursor_marker="%")  # Fish line 328
     abbr('amend_n_agentworld', 'GIT_SEQUENCE_EDITOR=true git rebase -i --exec "git commit --amend --no-edit --author \\"qwen-agentworld-35b-a3b<wes.mcclure+qwen-agentworld-35b-a3b@gmail.com>\\"" HEAD~%', cursor_marker="%")  # Fish line 329
     abbr('amend_n_codex', 'GIT_SEQUENCE_EDITOR=true git rebase -i --exec "git commit --amend --no-edit --author \\"codex-gpt5<wes.mcclure+codex-gpt5@gmail.com>\\"" HEAD~%', cursor_marker="%")  # Fish line 330
-    abbr('amend_n_deepseek', 'GIT_SEQUENCE_EDITOR=true git rebase -i --exec "git commit --amend --no-edit --author \\"deepseek-v4-flash-0731<wes.mcclure+deepseek-v4-flash-0731@gmail.com>\\"" HEAD~%', cursor_marker="%")  # Fish line 331
+    abbr('amend_n_deepseek', 'GIT_SEQUENCE_EDITOR=true git rebase -i --exec "git commit --amend --no-edit --author \\"deepseek-v4-flash<wes.mcclure+deepseek-v4-flash@gmail.com>\\"" HEAD~%', cursor_marker="%")  # Fish line 331
     abbr('amend_n_muse', 'GIT_SEQUENCE_EDITOR=true git rebase -i --exec "git commit --amend --no-edit --author \\"muse-glimmer-30b-dspark<wes.mcclure+muse-glimmer-30b-dspark@gmail.com>\\"" HEAD~%', cursor_marker="%")  # Fish line 332
     abbr('amend_last_msg', 'git commit --amend -m "%"', cursor_marker="%")  # Fish line 336
     abbr('yolo', 'git commit --all -m "%" && git push', cursor_marker="%")  # Fish line 339

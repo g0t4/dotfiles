@@ -319,7 +319,7 @@ abbr --command git -- gptoss '--author "gptoss120b<wes.mcclure+gptoss120b@gmail.
 abbr --command git -- qwen3 '--author "qwen3.6-35b-a3b<wes.mcclure+qwen3.6-35b-a3b@gmail.com>"'
 abbr --command git -- agentworld '--author "qwen-agentworld-35b-a3b<wes.mcclure+qwen-agentworld-35b-a3b@gmail.com>"'
 abbr --command git -- codex '--author "codex-gpt6<wes.mcclure+codex-gpt6@gmail.com>"'
-abbr --command git -- deepseek '--author "deepseek-v4-flash-0731<wes.mcclure+deepseek-v4-flash-0731@gmail.com>"'
+abbr --command git -- deepseek '--author "deepseek-v4-flash<wes.mcclure+deepseek-v4-flash@gmail.com>"'
 abbr --command git -- muse '--author "muse-glimmer-30b-dspark<wes.mcclure+muse-glimmer-30b-dspark@gmail.com>"'
 #
 # amend last N commits
@@ -328,7 +328,7 @@ abbr --set-cursor -- amend_n_gptoss $GIT_FULLY_AUTO_REBASE 'git rebase -i --exec
 abbr --set-cursor -- amend_n_qwen3 $GIT_FULLY_AUTO_REBASE 'git rebase -i --exec "git commit --amend --no-edit --author \"qwen3.6-35b-a3b<wes.mcclure+qwen3.6-35b-a3b@gmail.com>\"" HEAD~%'
 abbr --set-cursor -- amend_n_agentworld $GIT_FULLY_AUTO_REBASE 'git rebase -i --exec "git commit --amend --no-edit --author \"qwen-agentworld-35b-a3b<wes.mcclure+qwen-agentworld-35b-a3b@gmail.com>\"" HEAD~%'
 abbr --set-cursor -- amend_n_codex $GIT_FULLY_AUTO_REBASE 'git rebase -i --exec "git commit --amend --no-edit --author \"codex-gpt5<wes.mcclure+codex-gpt5@gmail.com>\"" HEAD~%'
-abbr --set-cursor -- amend_n_deepseek $GIT_FULLY_AUTO_REBASE 'git rebase -i --exec "git commit --amend --no-edit --author \"deepseek-v4-flash-0731<wes.mcclure+deepseek-v4-flash-0731@gmail.com>\"" HEAD~%'
+abbr --set-cursor -- amend_n_deepseek $GIT_FULLY_AUTO_REBASE 'git rebase -i --exec "git commit --amend --no-edit --author \"deepseek-v4-flash<wes.mcclure+deepseek-v4-flash@gmail.com>\"" HEAD~%'
 abbr --set-cursor -- amend_n_muse $GIT_FULLY_AUTO_REBASE 'git rebase -i --exec "git commit --amend --no-edit --author \"muse-glimmer-30b-dspark<wes.mcclure+muse-glimmer-30b-dspark@gmail.com>\"" HEAD~%'
 
 
