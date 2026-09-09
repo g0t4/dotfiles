@@ -1227,6 +1227,13 @@ function SPal_CopyOverlayEdit(number)
     -- 	clickIfExists(btnPasteOverlay)
 end
 
+---@param what fun()
+local function with_restore_mouse_position(what)
+    local original_mouse_pos = hs.mouse.absolutePosition()
+    what()
+    hs.mouse.absolutePosition(original_mouse_pos)
+end
+
 function SPal_Timeline_ZoomAndJumpToStart()
     -- FYI using ensure_in_coroutine (coroutines under hood) to avoid blocking (i.e. during sleep calls)
     ensure_in_coroutine(function()
@@ -1244,13 +1251,6 @@ function SPal_Timeline_ZoomAndJumpToStart()
             win:zoom2()
         end)
     end)
-end
-
----@param what fun()
-function with_restore_mouse_position(what)
-    local original_mouse_pos = hs.mouse.absolutePosition()
-    what()
-    hs.mouse.absolutePosition(original_mouse_pos)
 end
 
 function SPal_Timeline_ZoomAndJumpToEnd()
