@@ -63,7 +63,7 @@ def register_processes_abbreviations():
     abbr('sedd', "$XONSH_SED_COMMAND --debug -i 's/%//g'", cursor_marker="%")  # Fish line 931
     abbr('sedi', "$XONSH_SED_COMMAND -i 's/%//g'", cursor_marker="%")  # Fish line 932
     abbr('rg', '(rg --files-with-matches %)', position="anywhere", commands=(SED_COMMAND,), cursor_marker="%")  # Fish line 940
-    abbr('*nd', "--glob='!datasets'", position="anywhere", commands=('rg',))  # Fish line 980
+    abbr('*nd', "--glob '!datasets'", position="anywhere", commands=('rg',))  # Fish line 980
     abbr('seda', "$XONSH_SED_COMMAND -Ei 's/%//g' (rg --files-with-matches ___) ", cursor_marker="%")  # Fish line 983
     abbr('*a', '(rg --files-with-matches ___) ', position="anywhere", commands=(SED_COMMAND,))  # Fish line 984
     abbr(re.compile('(lines|catr|catrange|sedr|sedrange)\\d+[,_-]\\d+'), fish_abbreviation('_cat_range_abbr'))  # Fish line 988

@@ -74,7 +74,7 @@ def register_cloud_ai_abbreviations():
     abbr('ls_test_chat_sync', 'http paxy.lan:8016/chat/completions verbose:=true stream:=false max_tokens:=100 \'messages:=[ {"role": "user", "content": "what is 11*2"} ]\'')  # Fish line 1578
     abbr('olc', 'ollama create')  # Fish line 1582
     abbr('olcp', 'ollama cp')  # Fish line 1583
-    abbr('ole', "export OLLAMA_HOST='ollama.lan:11434'")  # Fish line 1584
+    abbr('ole', 'export OLLAMA_HOST=ollama.lan:11434')  # Fish line 1584
     abbr('olh', 'ollama help')  # Fish line 1587
     abbr('ollnaked', 'grc ollama list')  # Fish line 1589
     abbr('oll', 'ollama list | awk \'{OFS="\\t" } /%/ { print $3$4,$1,$2,$5" "$6" "$7" "$8" "$9 }\' | sort -h | column -t | grcat conf.ollama_list', cursor_marker="%")  # Fish line 1593

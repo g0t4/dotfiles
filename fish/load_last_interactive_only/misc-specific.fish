@@ -278,7 +278,7 @@ end
 
 if command -q kubectl
     alias kubectl "grc kubectl" # ! EVALUATING if I like this, would be sufficient for short term most likely
-    export KUBECTL_EXTERNAL_DIFF="icdiff -r" # use icdiff for kubectl diff (slick!)... FYI $1 and $2 are directories to compare (hence the -r)
+    export "KUBECTL_EXTERNAL_DIFF=icdiff -r" # use icdiff for kubectl diff (slick!)... FYI $1 and $2 are directories to compare (hence the -r)
 
     abbr --command kubectl -- oy '-o yaml' # I used to pipe to yq... but I wrapped 'grc kubectl' to be 'kubectl' and don't need yq now
     abbr --command kubectl -- ow '-o wide' # I don't believe this will cause collisions b/c it is not a word I expect to use in other contexts, lets see
@@ -977,7 +977,7 @@ build_abbrs_for_filetype y "{yaml,yml}"
 build_abbrs_for_filetype x xsh
 
 
-abbr --command rg -- "*nd" "--glob='!datasets'" # easily exlude datasets JSON files from shared traces
+abbr --command rg -- "*nd" "--glob '!datasets'" # easily exlude datasets JSON files from shared traces
 
 # all -  use rg w/o a filter on language (no -g *.lua for example)
 abbr --set-cursor seda "$sed_cmd -Ei 's/%//g' (rg --files-with-matches ___) "
@@ -1568,7 +1568,7 @@ set --local _ls_http 'http $_ls_test_host' # FYI AFAICT verbose only works on ch
 #
 # FYI same as /v1/completions
 #  TODO is verbose not a param on legacy /completions?
-set --local _ls_prompt "prompt='what is 11*2'"
+set --local _ls_prompt "'prompt=what is 11*2'"
 abbr ls_test_completions_stream "$_ls_http/completions stream:=true max_tokens:=10 $_ls_prompt"
 abbr ls_test_completions_sync "$_ls_http/completions stream:=false max_tokens:=100 $_ls_prompt"
 #
@@ -1581,7 +1581,7 @@ abbr ls_test_chat_sync "$_ls_http/chat/completions verbose:=true stream:=false m
 if command -q ollama
     abbr olc "ollama create"
     abbr olcp "ollama cp"
-    abbr ole "export OLLAMA_HOST='ollama.lan:11434'"
+    abbr ole "export OLLAMA_HOST=ollama.lan:11434"
 
     # * list
     abbr olh "ollama help"
@@ -3436,7 +3436,7 @@ abbr unzipl 'unzip -l' # lis(t) / (t)est
 #   PRN make all these abbrs via zip and unzip? same set and just use respective command based on action? (unlike tar which has one command for all ops)
 
 # *** java abbrs
-abbr java19 'export PATH="$(/usr/libexec/java_home -v 19)/bin:$PATH"'
+abbr java19 'export "PATH=$(/usr/libexec/java_home -v 19)/bin:$PATH"'
 
 # *** jcmd
 abbr jcmd_screenpal "jcmd \$(screenpal_pid) " # get PID with `jcmd` or `jps` or `ps aux | rg_grep ScreenPal`
