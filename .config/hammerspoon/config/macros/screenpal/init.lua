@@ -1230,6 +1230,7 @@ end
 ---@param what fun()
 local function restore_mouse_position(what)
     local start_position = hs.mouse.absolutePosition()
+    -- PRN add recovery handler to always restore position?
     what()
     hs.mouse.absolutePosition(start_position)
 end
