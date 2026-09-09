@@ -1228,16 +1228,16 @@ function SPal_CopyOverlayEdit(number)
 end
 
 ---@param what fun()
-local function with_restore_mouse_position(what)
-    local original_mouse_pos = hs.mouse.absolutePosition()
+local function restore_mouse_position(what)
+    local start_position = hs.mouse.absolutePosition()
     what()
-    hs.mouse.absolutePosition(original_mouse_pos)
+    hs.mouse.absolutePosition(start_position)
 end
 
 function SPal_Timeline_ZoomAndJumpToStart()
     -- FYI using ensure_in_coroutine (coroutines under hood) to avoid blocking (i.e. during sleep calls)
     ensure_in_coroutine(function()
-        with_restore_mouse_position(function()
+        restore_mouse_position(function()
             local win = get_cached_editor_window()
             -- TODO move zoom controls to timeline class?
             -- TODO then can add move_to_video_start() for this, to the timeline too
@@ -1255,7 +1255,7 @@ end
 
 function SPal_Timeline_ZoomAndJumpToEnd()
     ensure_in_coroutine(function()
-        with_restore_mouse_position(function()
+        restore_mouse_position(function()
             local win = get_cached_editor_window()
             win:zoom_off()
             sleep_ms(10)
