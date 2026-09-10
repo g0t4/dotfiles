@@ -4,13 +4,19 @@ from __future__ import annotations
 
 import inspect
 import shlex
+import sys
 import textwrap
 
 from rich.console import Console
 from rich.syntax import Syntax
 from rich.text import Text
 
-from wes_fish_bridge import UnsupportedFishFunctionError, fish_function_command
+from wes_fish_bridge import (
+    FishFunctionError,
+    UnsupportedFishFunctionError,
+    fish_function,
+    fish_function_command,
+)
 from wes_abbreviations import abbr
 from wes_logging import get_logger
 log = get_logger(__name__)
@@ -105,3 +111,30 @@ def register_misc_fish_functions(aliases, function_names):
         )
         # register enhanced "superhelp" that includes the fish function body
         abbr(function_name + "??", f"_fish_help {shlex.quote(function_name)}")
+
+
+def register_value_fish_functions(aliases, function_names):
+    """Register Fish functions that *return a value* (a string for capture).
+
+    These are functions whose stdout is captured into a variable or command
+    substitution (``$()``), e.g. ``_get_ask_traces_dir``. They must use the
+    capturing bridge (``fish_function``) which sets ``TERM=dumb`` and strips
+    terminal escape sequences (vi-mode cursor codes, OSC, etc.). The raw
+    ``fish_function_command`` bridge passes those escapes through, which pollutes
+    captured output.
+    """
+    def value_fish_alias(function_name):
+        def invoke(args, stdin=None, stdout=None, stderr=None, **_):
+            input_text = stdin.read() if stdin is not None else None
+            try:
+                output = fish_function(function_name, *args, input_text=input_text)
+            except FishFunctionError as error:
+                print(error, file=stderr or sys.stderr)
+                return 1
+            if output:
+                print(output, file=stdout or sys.stdout)
+            return 0
+        return invoke
+
+    for function_name in function_names:
+        aliases[function_name] = value_fish_alias(function_name)
