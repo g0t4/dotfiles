@@ -68,7 +68,7 @@ if test -f $HOME/.config/fish/config-private.fish
     source $HOME/.config/fish/config-private.fish
 end
 
-if status is-interactive
+if status is-interactive and isatty stdin
     # optional, iterm2 shell integration (must be installed here, i.e. by installing via iterm menus)
     if test -e $HOME/.iterm2_shell_integration.fish
 
