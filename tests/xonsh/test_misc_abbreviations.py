@@ -13,7 +13,10 @@ sys.path.insert(0, str(ROOT / "xonsh"))
 
 from generate_misc_abbreviations import (  # noqa: E402
     MODULES,
-    SKIPPED_ABBREVIATION_LINES,
+    AbbreviationSelector,
+    declaration,
+    matching_rule,
+    should_skip,
     SOURCE,
     generate_all,
 )
@@ -57,7 +60,30 @@ def generated_abbreviation_count():
         bool(re.match(r"^\s*abbr(?:\s|$)", line))
         for line in SOURCE.read_text().splitlines()
     )
-    return fish_abbreviation_count - len(SKIPPED_ABBREVIATION_LINES)
+    # 13 source declarations are intentionally skipped or deduplicated.
+    return fish_abbreviation_count - 13
+
+
+def test_migration_rules_do_not_depend_on_source_line_numbers():
+    for name, replacement, options in [
+        ("agr", "old %", {"cursor": True}),
+        ("agrs", "old %", {"cursor": True}),
+        ("man7", "$man_cmd 8", {}),
+        ("pkill", "pkill -9 -ilf", {}),
+        ("java19", "old", {}),
+    ]:
+        original = declaration(1, name, replacement, options)
+        shifted = declaration(9999, name, replacement, options)
+        assert original.split("  # Fish line")[0] == shifted.split("  # Fish line")[0]
+
+
+def test_trigger_rules_can_distinguish_scopes_and_replacements():
+    rules = {"rg": "general", AbbreviationSelector("rg", command="$sed_cmd"): "scoped"}
+    assert matching_rule(rules, "rg", "", {"command": "$sed_cmd"}) == "scoped"
+    assert matching_rule(rules, "rg", "", {"command": "other"}) == "general"
+    assert should_skip("pkill", "pkill -9 -if", {})
+    assert not should_skip("pkill", "pkill -9 -ilf", {})
+    assert should_skip("*$filetype_letter", "anything", {"command": "rg"})
 
 
 def test_generated_misc_modules_are_in_sync_with_fish_source():

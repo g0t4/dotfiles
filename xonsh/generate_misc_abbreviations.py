@@ -37,30 +37,56 @@ MODULES = (
     Module("misc", ((3162, 3308), (3384, 3437), (3513, 3623))),
 )
 
-SKIPPED_ABBREVIATION_LINES = {
-    # Linux alternatives are folded into platform-aware macOS declarations.
-    866,
-    867,
-    871,
-    872,
-    # Exact duplicate in the Fish source.
-    1528,
-    # Templates executed by build_abbrs_for_filetype, not literal triggers.
-    955,
-    959,
-    962,
-    965,
-    # Templates executed once per ~/.local/share/devtools/*.log file.
-    2876,
-    2879,
-    2882,
-    # Folded into the platform-aware Linux lsusb declaration.
-    2747,
+@dataclass(frozen=True)
+class AbbreviationSelector:
+    """Narrow a trigger rule by Fish command scope or original replacement."""
+
+    trigger: str
+    command: str | None = None
+    replacement: str | None = None
+
+    def matches(self, name, replacement, options):
+        return (
+            self.trigger == name
+            and (self.command is None or self.command == options.get("command"))
+            and (self.replacement is None or self.replacement == replacement)
+        )
+
+
+def matching_rule(rules, name, replacement, options, default=None):
+    # Qualified rules take precedence over a plain trigger rule.
+    for selector, value in rules.items():
+        if isinstance(selector, AbbreviationSelector) and selector.matches(name, replacement, options):
+            return value
+    return rules.get(name, default)
+
+
+SKIPPED_ABBREVIATIONS = {
+    # Linux alternatives folded into platform-aware declarations.
+    AbbreviationSelector("pkill", replacement="pkill -9 -if"),
+    AbbreviationSelector("pkillu", replacement="pkill -9 -U $USER -if"),
+    AbbreviationSelector("lsusb", replacement="system_profiler SPUSBDataType"),
+    # Templates have native registration helpers, not literal triggers.
+    "$_abbr", "*$filetype_letter", "rg$filetype_letter",
+    "tt_devtools_$name", "tail_all_devtools_$name", "tail_devtools_$name",
 }
 
-UNSUPPORTED_ABBREVIATION_LINES = {
-    3307: "uses Fish loop syntax to print the current shell PATH",
-    3439: "changes the current shell PATH",
+# Keep one copy of these identical declarations across Fish platform branches
+# (or accidental duplicates). No occurrence numbers or source positions needed.
+DEDUPLICATED_ABBREVIATIONS = {"pgrep", "pgrepu", "hfmls_ggml_org"}
+
+
+def should_skip(name, replacement, options):
+    return any(
+        selector.matches(name, replacement, options)
+        if isinstance(selector, AbbreviationSelector) else selector == name
+        for selector in SKIPPED_ABBREVIATIONS
+    )
+
+
+UNSUPPORTED_ABBREVIATIONS = {
+    "pPATH": "uses Fish loop syntax to print the current shell PATH",
+    "java19": "changes the current shell PATH",
 }
 
 REPLACEMENTS = {
@@ -76,21 +102,21 @@ REPLACEMENTS = {
 
 NAME_OVERRIDES = {
     # The Fish source accidentally declares man7 three times; preserve intent.
-    2207: "man8",
-    2208: "man9",
+    AbbreviationSelector("man7", replacement="$man_cmd 8"): "man8",
+    AbbreviationSelector("man7", replacement="$man_cmd 9"): "man9",
 }
 
 PLATFORM_REPLACEMENTS = {
-    855: ("pkill -9 -ilf", "pkill -9 -if"),
-    856: ("pkill -9 -U $USER -ilf", "pkill -9 -U $USER -if"),
-    2735: ("system_profiler SPUSBDataType", "lsusb -tv"),
+    "pkill": ("pkill -9 -ilf", "pkill -9 -if"),
+    "pkillu": ("pkill -9 -U $USER -ilf", "pkill -9 -U $USER -if"),
+    "lsusb": ("system_profiler SPUSBDataType", "lsusb -tv"),
 }
 
 # Fish-native implementations whose Xonsh ports intentionally use structured
 # helpers instead of reproducing the source command literally.
 MIGRATION_REPLACEMENTS = {
-    783: "_abbr_list --any '%'",
-    784: "_abbr_list --prefix '%'",
+    "agr": "_abbr_list --any '%'",
+    "agrs": "_abbr_list --prefix '%'",
 }
 
 
@@ -131,19 +157,21 @@ def parse_abbreviation(line_number: int, line: str):
 
 
 def declaration(line_number, name, replacement, options):
-    name = NAME_OVERRIDES.get(line_number, name)
+    name = matching_rule(NAME_OVERRIDES, name, replacement, options, name)
     trigger = f"re.compile({options['regex']!r})" if "regex" in options else repr(name)
-    if line_number in UNSUPPORTED_ABBREVIATION_LINES:
+    unsupported = matching_rule(UNSUPPORTED_ABBREVIATIONS, name, replacement, options)
+    platform = matching_rule(PLATFORM_REPLACEMENTS, name, replacement, options)
+    if unsupported is not None:
         replacement_expression = (
             f"unsupported_abbreviation({name!r}, "
-            f"{UNSUPPORTED_ABBREVIATION_LINES[line_number]!r})"
+            f"{unsupported!r})"
         )
-    elif line_number in PLATFORM_REPLACEMENTS:
-        replacement_expression = f"platform_abbreviation{PLATFORM_REPLACEMENTS[line_number]!r}"
+    elif platform is not None:
+        replacement_expression = f"platform_abbreviation{platform!r}"
     elif "function" in options:
         replacement_expression = f"fish_abbreviation({options['function']!r})"
     else:
-        replacement = MIGRATION_REPLACEMENTS.get(line_number, replacement)
+        replacement = matching_rule(MIGRATION_REPLACEMENTS, name, replacement, options, replacement)
         for old, new in REPLACEMENTS.items():
             replacement = replacement.replace(old, new)
         replacement_expression = repr(replacement)
@@ -165,14 +193,18 @@ def declaration(line_number, name, replacement, options):
 def generate(module: Module) -> str:
     declarations = []
     functions = []
+    seen = set()
     for line_number, line in enumerate(SOURCE.read_text().splitlines(), 1):
         if not module.contains(line_number):
             continue
-        if (
-            re.match(r"^\s*abbr(?:\s|$)", line)
-            and line_number not in SKIPPED_ABBREVIATION_LINES
-        ):
-            declarations.append(declaration(*parse_abbreviation(line_number, line)))
+        if re.match(r"^\s*abbr(?:\s|$)", line):
+            parsed = parse_abbreviation(line_number, line)
+            _, name, replacement, options = parsed
+            identity = (name, replacement, tuple(sorted(options.items())))
+            duplicate = name in DEDUPLICATED_ABBREVIATIONS and identity in seen
+            if not should_skip(name, replacement, options) and not duplicate:
+                declarations.append(declaration(*parsed))
+            seen.add(identity)
         function_match = re.match(r"^\s*function\s+([^\s]+)", line)
         if function_match:
             functions.append((function_match.group(1), line_number))
