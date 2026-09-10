@@ -213,7 +213,7 @@ def test_build_abbrs_for_filetype_registers_dedicated_and_scoped_forms():
     build_abbrs_for_filetype("x", "xsh", sed_command="gsed")
 
     result, _ = abbreviations.expand(context("sedx"))
-    assert result.text == "gsed -Ei 's///g' (rg -g '*.xsh' --files-with-matches '___')"
+    assert result.text == "gsed -Ei 's///g' (@lines rg -g '*.xsh' --files-with-matches '___')"
     assert result.cursor == len("gsed -Ei 's/")
 
     result, _ = abbreviations.expand(
@@ -230,7 +230,7 @@ def test_build_abbrs_for_filetype_registers_dedicated_and_scoped_forms():
     result, _ = abbreviations.expand(
         context("*x", command_path=("gsed",), command_position=False)
     )
-    assert result.text == "(rg -g '*.xsh' --files-with-matches '___')"
+    assert result.text == "(@lines rg -g '*.xsh' --files-with-matches '___')"
 
     result, _ = abbreviations.expand(context("rgx"))
     assert result.text == "rg -g '*.xsh'"

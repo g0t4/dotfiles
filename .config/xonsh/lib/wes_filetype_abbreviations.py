@@ -25,7 +25,7 @@ def build_abbrs_for_filetype(
     sed_command: str,
 ) -> None:
     """Register the four Fish-style abbreviations for one file type."""
-    rg_filter = f"(rg -g '*.{glob_end}' --files-with-matches '___')"
+    rg_filter = f"(@lines rg -g '*.{glob_end}' --files-with-matches '___')"
 
     abbr(
         f"sed{filetype_letter}",
