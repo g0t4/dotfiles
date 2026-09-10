@@ -1,3 +1,9 @@
+if set -q ONLY_CALL_FISH_WRAP_FUNC
+    # do not modify prompt... i.e. no OSC codes
+    return
+end
+
+
 # # TODO after I get used to vi-mode drop the mode reminder (at left of prompt) by uncommenting this:
 function fish_mode_prompt
     # by default, if you have vi-mode enabled in fish, it will show the mode
