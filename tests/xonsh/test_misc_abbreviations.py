@@ -1,4 +1,5 @@
 import importlib
+import io
 import platform
 import re
 import subprocess
@@ -23,7 +24,9 @@ from wes_filetype_abbreviations import (  # noqa: E402
     build_abbrs_for_filetype,
 )
 from wes_misc_functions import (  # noqa: E402
+    SKIPPED_FISH_FUNCTIONS,
     fish_command_alias,
+    register_misc_fish_functions,
     unsupported_fish_alias,
 )
 
@@ -274,6 +277,60 @@ def test_all_split_rc_files_load_together():
 
     assert completed.returncode == 0, completed.stderr
     dynamic_filetype_count = len(FILETYPE_GLOBS) * 4
-    assert completed.stdout.strip() == str(
-        generated_abbreviation_count() + dynamic_filetype_count
+    help_count = sum(
+        name not in SKIPPED_FISH_FUNCTIONS
+        for module in MODULES
+        for name in importlib.import_module(
+            f"wes_{module.name}_abbreviations"
+        ).FISH_FUNCTIONS
     )
+    assert completed.stdout.strip() == str(
+        generated_abbreviation_count() + dynamic_filetype_count + help_count
+    )
+
+
+def test_fish_help_reminder_and_independent_source_views(monkeypatch):
+    registry = reset_registry()
+    aliases = {}
+    register_misc_fish_functions(aliases, ["which_versions"])
+    result, _ = registry.expand(context("which_versions??"))
+    assert result.text == "_fish_help which_versions"
+    assert registry.expand(context("??which_versions")) is None
+    calls = []
+    monkeypatch.setattr(
+        "wes_misc_functions.fish_function_command",
+        lambda *args, **kwargs: calls.append((args, kwargs)) or 0,
+    )
+    output = io.StringIO()
+    assert aliases["_fish_help"](["which_versions"], stdout=output) == 0
+    assert "Xonsh wrapper: which_versions" in output.getvalue()
+    assert "def invoke" in output.getvalue()
+    assert "Fish implementation: which_versions" in output.getvalue()
+    assert calls[0][0] == ("type", "--color=never", "which_versions")
+    del aliases["which_versions"]
+    assert aliases["_fish_help"](["which_versions"], stdout=output) == 0
+    assert "Source unavailable" in output.getvalue()
+    assert len(calls) == 2
+
+
+def test_fish_help_colors_last_pipeline_command_including_redirects(monkeypatch):
+    from types import SimpleNamespace
+
+    monkeypatch.setenv("TERM", "xterm-256color")
+    monkeypatch.delenv("NO_COLOR", raising=False)
+    reset_registry()
+    aliases = {}
+    register_misc_fish_functions(aliases, ["which_versions"])
+    calls = []
+    monkeypatch.setattr(
+        "wes_misc_functions.fish_function_command",
+        lambda *args, **kwargs: calls.append(args) or 0,
+    )
+    for last, redirect, colored in [(True, None, True), (False, None, False), (True, "file", True)]:
+        output = io.StringIO()
+        aliases["_fish_help"](
+            ["which_versions"], stdout=output,
+            spec=SimpleNamespace(last_in_pipeline=last, stdout=redirect),
+        )
+        assert ("\x1b[" in output.getvalue()) == colored
+        assert calls[-1][1] == ("--color=always" if colored else "--color=never")

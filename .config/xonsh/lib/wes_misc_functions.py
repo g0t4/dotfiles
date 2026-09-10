@@ -2,8 +2,18 @@
 
 from __future__ import annotations
 
+import inspect
+import shlex
+import textwrap
+
+from rich.console import Console
+from rich.syntax import Syntax
+from rich.text import Text
+
 from wes_fish_bridge import UnsupportedFishFunctionError, fish_function_command
 from wes_abbreviations import abbr
+from wes_logging import get_logger
+log = get_logger(__name__)
 
 
 UNSUPPORTED_FISH_FUNCTIONS = {
@@ -55,6 +65,35 @@ def unsupported_fish_alias(function_name, reason):
 
 
 def register_misc_fish_functions(aliases, function_names):
+    def fish_help(args, stdin=None, stdout=None, stderr=None, spec=None, **_):
+        if len(args) != 1:
+            print("usage: _fish_help FUNCTION", file=stderr)
+            return 2
+        name = args[0]
+        # Xonsh's REPL dispatcher stream may not report itself as a TTY.
+        # Color the last pipeline command, including explicit file redirects.
+        use_color = spec and bool(spec.last_in_pipeline)
+        log.info(f'{use_color=} {spec=}')
+        console = Console(file=stdout, force_terminal=use_color)
+        console.rule(Text(f"Xonsh wrapper: {name}", style="bold cyan"), style="cyan")
+        try:
+            wrapper = aliases[name]
+            wrapper = getattr(wrapper, "func", wrapper)
+            console.print(Syntax(
+                textwrap.dedent(inspect.getsource(wrapper)).rstrip(),
+                "python", theme="ansi_dark", background_color="default",
+            ))
+        except (KeyError, OSError, TypeError) as error:
+            console.print(Text(f"Source unavailable: {error}", style="dim"))
+        console.print()
+        console.rule(Text(f"Fish implementation: {name}", style="bold green"), style="green")
+        console.file.flush()
+        return fish_function_command(
+            "type", "--color=" + ("always" if console.is_terminal else "never"),
+            name, stdin=stdin, stdout=stdout, stderr=stderr
+        )
+
+    aliases["_fish_help"] = fish_help
     for function_name in function_names:
         if function_name in SKIPPED_FISH_FUNCTIONS:
             continue
@@ -65,5 +104,4 @@ def register_misc_fish_functions(aliases, function_names):
             else fish_command_alias(function_name)
         )
         # register enhanced "superhelp" that includes the fish function body
-        abbr("??" + function_name, f"{function_name}?? and fish -ic 'type {function_name}'")
-
+        abbr(function_name + "??", f"_fish_help {shlex.quote(function_name)}")

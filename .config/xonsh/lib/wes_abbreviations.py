@@ -11,7 +11,6 @@ from dataclasses import dataclass
 import inspect
 from re import Pattern
 from typing import Callable, Literal, Match, TypeAlias
-import warnings
 
 
 @dataclass(frozen=True)
@@ -163,12 +162,6 @@ def reset_registry():
 
 def abbr(trigger, replacement, **options):
     """Register an abbreviation with declaration syntax close to Fish's."""
-    if isinstance(trigger, str) and trigger.endswith("?"):
-        warnings.warn(
-            f"abbreviation {trigger!r} ends in '?' and shadows abbreviation help",
-            UserWarning,
-            stacklevel=2,
-        )
     caller = inspect.currentframe()
     try:
         caller = caller.f_back if caller is not None else None

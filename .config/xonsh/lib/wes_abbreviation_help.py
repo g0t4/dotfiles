@@ -40,6 +40,10 @@ def register_abbreviation_help():
     def resolve(context, _match):
         target, full = _target_context(context)
         registry = wes_abbreviations.XONSH_ABBREVIATIONS
+        # Explicit reminder abbreviations own their spelling, including ?/??.
+        # Check applicability, not just registration, to preserve command scopes.
+        if any(a.trigger == context.token for a in registry.applicable(context)):
+            return None
         matches = registry.applicable(target)
         if not matches:
             return None

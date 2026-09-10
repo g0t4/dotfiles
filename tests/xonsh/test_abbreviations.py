@@ -79,11 +79,18 @@ def test_abbr_helper_registers_and_returns_dot_accessible_entry():
     assert entry.source_line is not None
 
 
-def test_question_suffix_warns_because_it_shadows_help():
+@pytest.mark.parametrize("suffix", ["?", "??"])
+@pytest.mark.parametrize("help_first", [True, False])
+def test_explicit_question_suffix_owns_help_spelling(suffix, help_first):
     registry = reset_registry()
-
-    with pytest.warns(UserWarning, match="shadows abbreviation help"):
-        abbr("why?", "because")
+    if help_first:
+        register_abbreviation_help()
+    abbr("why", "ordinary expansion")
+    abbr("why" + suffix, "custom help")
+    if not help_first:
+        register_abbreviation_help()
+    result, _ = registry.expand(context("why" + suffix))
+    assert result.text == "custom help"
 
 
 def test_abbreviation_help_resolves_then_native_help_can_fall_through():
