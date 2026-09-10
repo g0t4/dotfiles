@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from wes_fish_bridge import UnsupportedFishFunctionError, fish_function_command
+from wes_abbreviations import abbr
 
 
 UNSUPPORTED_FISH_FUNCTIONS = {
@@ -63,3 +64,6 @@ def register_misc_fish_functions(aliases, function_names):
             if reason
             else fish_command_alias(function_name)
         )
+        # register enhanced "superhelp" that includes the fish function body
+        abbr("??" + function_name, f"{function_name}?? and fish -ic 'type {function_name}'")
+
