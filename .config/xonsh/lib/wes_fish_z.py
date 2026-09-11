@@ -54,7 +54,7 @@ class FishZ:
 
         destination = Path(output).expanduser()
         if not destination.is_dir():
-            raise FishZError(f"z result is not a directory: {destination}")
+            raise FishZError(f"z result is not a directory: {destination}\n run `z --clean` to remove non-existant dirs from z cache")
         return destination
 
     def entries(self) -> list[FishZEntry]:
