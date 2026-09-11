@@ -73,10 +73,10 @@ if test -d "$HOME/repos/github/zed-industries/zed/target/debug"
     fish_add_path --global --prepend "$HOME/repos/github/zed-industries/zed/target/release"
 end
 
-if test -d "$HOME/repos/github/openai/codex/codex-rs/target/release"
-    # apply_patch tool, among others
-    fish_add_path --global --prepend "$HOME/repos/github/openai/codex/codex-rs/target/release"
-end
+# if test -d "$HOME/repos/github/openai/codex/codex-rs/target/release"
+#     # apply_patch tool, among others
+#     fish_add_path --global --prepend "$HOME/repos/github/openai/codex/codex-rs/target/release"
+# end
 
 # fish-lsp (i.e. on arch)... brew on macOS
 if test -d "$HOME/repos/github/ndonfris/fish-lsp/bin"

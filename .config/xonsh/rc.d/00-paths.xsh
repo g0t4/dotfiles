@@ -112,7 +112,7 @@ if os.path.isdir(os.path.join(home, "repos/github/zed-industries/zed/target/debu
     )
 
 for path in (
-    os.path.join(home, "repos/github/openai/codex/codex-rs/target/release"),
+    # os.path.join(home, "repos/github/openai/codex/codex-rs/target/release"),
     os.path.join(home, "repos/github/ndonfris/fish-lsp/bin"),
     os.path.join(home, ".krew/bin"),
     "/snap/bin",
