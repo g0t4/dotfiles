@@ -12,7 +12,7 @@ function M.NotifyDaemonOfSessionQuit()
     local session_id = os.getenv("ITERM_SESSION_ID")
 
     if session_id == nil then
-        log:warn("[semantic-client] No session id, aborting...")
+        log:warn("[semantic-client] No session id, skipping quit notification...")
         return
     end
 
