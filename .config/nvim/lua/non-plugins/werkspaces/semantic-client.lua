@@ -16,14 +16,14 @@ function M.NotifyDaemonOfSessionQuit()
         return
     end
 
-    local done_or_failed = false
+    local is_finished = false
     local client = uv.new_pipe(false)
 
     local function finish(err)
-        if done_or_failed then
+        if is_finished then
             return
         end
-        done_or_failed = true
+        is_finished = true
         if err ~= nil then
             log:error("[semantic-client]", err)
         end
@@ -77,8 +77,8 @@ function M.NotifyDaemonOfSessionQuit()
     -- PRN switch to a synchronous socket library (luarocks install luasocket?)... no reason for the client to be async
 
     local timed_out = not vim.wait(notify_timeout_ms, function()
-        -- check if complete (done or fail)
-        return done_or_failed
+        -- return true to vim.wait if the operation is finished, so we stop waiting!
+        return is_finished
     end, 10)
 
     if timed_out then
