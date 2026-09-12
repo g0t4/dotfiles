@@ -354,8 +354,7 @@ vim.keymap.set({ 'n', 'i', 'v', 'c' }, '<M-S-F6>', function() require('ask-opena
 vim.keymap.set({ 'n', 'i', 'v', 'c' }, '<M-S-F7>', function() require('ask-openai.config').cycle_agents_reasoning_level() end, { noremap = true, silent = true })
 --
 -- misc:
-vim.keymap.set({ 'n', 'i', 'v', 'c' }, '<F16>', function() require('ask-openai.config').cycle_log_verbosity() end, { noremap = true, silent = true })
-vim.keymap.set({ 'n', 'i', 'v', 'c' }, '<F20>', function() require('ask-openai.config').toggle_rag() end, { noremap = true, silent = true })
+vim.keymap.set({ 'n', 'i', 'v', 'c' }, '<F17>', function() require('ask-openai.config').toggle_rag() end, { noremap = true, silent = true })
 
 
 function EnableAllCopilots()
