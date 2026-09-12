@@ -2,6 +2,7 @@
 
 from xonsh.built_ins import XSH
 from xonsh.events import events
+from wes_abbreviations import abbr
 
 aliases = XSH.aliases
 
@@ -126,12 +127,6 @@ def _pbj_toolcall_args_alias(args, stdout=None, **_):
 def _pby_alias(args, stdout=None, **_):
     return _clipboard_filter(["yq"] + args, stdout)
 
-
-def _pbwc_alias(args, stdout=None, **_):
-    command = ["wordcount"] if shutil.which("wordcount") else ["wc", "-w"]
-    return _clipboard_filter(command + args, stdout)
-
-
 def _pbn_alias(args, stdout=None, **_):
     if args:
         print("pbn: arguments are not supported", file=sys.stderr)
@@ -177,7 +172,7 @@ aliases["pb"] = _pbpaste_alias
 aliases["pbj"] = _pbj_alias
 aliases["pbj_toolcall_args"] = _pbj_toolcall_args_alias
 aliases["pby"] = _pby_alias
-aliases["pbwc"] = _pbwc_alias
+abbr("pbwc", "pbpaste | wordcount")
 aliases["pbn"] = _pbn_alias
 aliases["pbcommand"] = _pbcommand_alias
 
