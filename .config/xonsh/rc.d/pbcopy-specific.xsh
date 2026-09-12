@@ -114,30 +114,6 @@ def _clipboard_filter(command, stdout=None):
     return subprocess.run(command, input=value, text=True, stdout=stdout).returncode
 
 
-def _pbj_alias(args, stdout=None, **_):
-    return _clipboard_filter(["jq"] + args, stdout)
-
-
-def _pbj_toolcall_args_alias(args, stdout=None, **_):
-    return _clipboard_filter(
-        ["jq", ".tool_calls[0].function.arguments", "-r"] + args, stdout
-    )
-
-
-def _pby_alias(args, stdout=None, **_):
-    return _clipboard_filter(["yq"] + args, stdout)
-
-def _pbn_alias(args, stdout=None, **_):
-    if args:
-        print("pbn: arguments are not supported", file=sys.stderr)
-        return 1
-    value = _clipboard_paste()
-    if value is None:
-        return 1
-    print(value.rstrip("\n"), file=stdout or sys.stdout)
-    return 0
-
-
 def _pbcommand_alias(args, stdout=None, stderr=None, **_):
     if not args:
         print("usage: pbcommand COMMAND [ARG ...]", file=stderr or sys.stderr)
@@ -168,12 +144,18 @@ def _pbcommand_alias(args, stdout=None, stderr=None, **_):
 
 aliases["cppath"] = _cppath_alias
 aliases["pwdcp"] = _cppath_alias
-aliases["pb"] = _pbpaste_alias
-aliases["pbj"] = _pbj_alias
-aliases["pbj_toolcall_args"] = _pbj_toolcall_args_alias
-aliases["pby"] = _pby_alias
+
+abbr("pb", "pbpaste")
+abbr("pbj", "pbpaste | jq")
+#
+# abbrs for openai compatible json parsing
+abbr("pbj_toolcall_args", "pbpaste | jq '.tool_calls[0].function.arguments' -r")
+#
+abbr("pby", "pbpaste | yq")
 abbr("pbwc", "pbpaste | wordcount")
-aliases["pbn"] = _pbn_alias
+abbr("pbn", "pbpaste | string split '\n'") # TODO string split not in xonsh
+
+
 aliases["pbcommand"] = _pbcommand_alias
 
 # macOS already supplies these executables. On other platforms, present the

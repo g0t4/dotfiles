@@ -63,7 +63,6 @@ if not $IS_MACOS
     # don't alias on mac (b/c f_*_copy/paste uses pbcopy/paste... infinte loop fun)
 end
 
-# abbr pbp pbpaste
 abbr pb pbpaste
 abbr pbj "pbpaste | jq"
 #
