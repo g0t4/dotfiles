@@ -1,5 +1,6 @@
 from datetime import datetime
 from pathlib import Path
+from logs import log
 import subprocess
 
 
@@ -27,6 +28,7 @@ def slap_human(title: str, details: str) -> None:
     #     f'display notification {details!r} with title "Rare iTerm Event" sound name "Sosumi"',
     # ])
 
+    log(title + details) # also log it
     subprocess.run([
         "osascript",
         "-e",

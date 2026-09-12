@@ -1,5 +1,6 @@
 import iterm2
 from common import get_current_session
+from logs import log
 
 async def on_f9(connection: iterm2.Connection):
     # this started out with how I use F9 to quit nvim
@@ -13,12 +14,16 @@ async def on_f9(connection: iterm2.Connection):
         return
 
     jobName = await session.async_get_variable("jobName")  # see inspector for vars
-    if jobName is "nvim":
+    if jobName == "nvim":
         # already handled by nvim
         return
-    if jobName in ["fish", "bash", "zsh"]:
+    if jobName in ["fish", "bash", "zsh", "xonsh", "Python", "lldb", "gdb"]:
         # shell command line must be empty to quit
         await session.async_send_text("\x03")  # ctrl+c (clear)
         await session.async_send_text("\x04")  # ctrl+d (exit)
         return
-    # TODO others?
+
+    from rare_alerts import slap_human
+    slap_human("F9 quit failed", f"F9 handler doesn't know how to exit when: {jobName=}")
+
+
