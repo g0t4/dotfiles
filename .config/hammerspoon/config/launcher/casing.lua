@@ -83,7 +83,7 @@ function M.sentence_case(original_text)
         --
         local words = {}
         for match_word, sep in text:gmatch("([^%s]+)(%s*)") do
-            log:info("word", vim.inspect(match_word))
+            -- log:info("word", vim.inspect(match_word))
             local word = match_word
             local is_acronym = word:match("^%u+$") and #word > 1
             if perserved_dict[word] or is_acronym then
