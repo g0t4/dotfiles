@@ -126,7 +126,7 @@ async def main(connection: iterm2.Connection):
             return
 
         key_f9 = keystroke.keycode == iterm2.Keycode.F9
-        if key_f9:
+        if key_f9 and not shift and not command and not option:
             log("F9 PRESSED")
             await on_f9(connection)
             return
