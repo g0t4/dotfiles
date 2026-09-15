@@ -78,9 +78,9 @@ abbr gai 'git add --interactive' # patch but w/ initial menu
 # branch read:
 # don't use pager on git branch (read commands)
 abbr gb 'git branch'
-abbr gbv 'PAGER= git branch -vv' # -v for last commmit (sha+message) & -vv adds remote tracked branch
-abbr gba 'PAGER= git branch --all -vv'
-abbr gbr 'PAGER= git branch --remotes -vv'
+abbr gbv 'git branch -vv' # -v for last commmit (sha+message) & -vv adds remote tracked branch
+abbr gba 'git branch --all -vv'
+abbr gbr 'git branch --remotes -vv'
 # branch delete:
 abbr gbd 'git branch --delete'
 abbr gbD 'git branch -D'

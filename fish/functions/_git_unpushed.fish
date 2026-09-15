@@ -63,7 +63,7 @@ function _git_unpushed --description "Prints all branches to assess any unpushed
         # !  PRN get fetch all? before list/test branches
 
         # show local branches (i.e. is the latest commit pushed to a remote (tracking or otherwise)
-        #PAGER= git -C $repo_dir branch -vv # add --all? shouldn't need to see all remove branches
+        #git -C $repo_dir branch -vv # add --all? shouldn't need to see all remove branches
         # ideas for tests to replace just dumping branches:
         #   any local branches that don't have a tracked remotee
         #   any local branch that is ahead/behind its tracked remote
