@@ -44,9 +44,9 @@ def register_git_abbreviations():
     abbr('gap', 'git add --patch')  # Fish line 75
     abbr('gai', 'git add --interactive')  # Fish line 76
     abbr('gb', 'git branch')  # Fish line 80
-    abbr('gbv', 'PAGER= git branch -vv')  # Fish line 81
-    abbr('gba', 'PAGER= git branch --all -vv')  # Fish line 82
-    abbr('gbr', 'PAGER= git branch --remotes -vv')  # Fish line 83
+    abbr('gbv', 'git branch -vv')  # Fish line 81
+    abbr('gba', 'git branch --all -vv')  # Fish line 82
+    abbr('gbr', 'git branch --remotes -vv')  # Fish line 83
     abbr('gbd', 'git branch --delete')  # Fish line 85
     abbr('gbD', 'git branch -D')  # Fish line 86
     abbr('gbdf', 'git branch --delete --force')  # Fish line 87
@@ -153,7 +153,7 @@ def register_git_abbreviations():
     abbr('gptoss', '--author "gptoss120b<wes.mcclure+gptoss120b@gmail.com>"', commands=('git',))  # Fish line 318
     abbr('qwen3', '--author "qwen3.6-35b-a3b<wes.mcclure+qwen3.6-35b-a3b@gmail.com>"', commands=('git',))  # Fish line 319
     abbr('agentworld', '--author "qwen-agentworld-35b-a3b<wes.mcclure+qwen-agentworld-35b-a3b@gmail.com>"', commands=('git',))  # Fish line 320
-    abbr('codex', '--author "codex-gpt5<wes.mcclure+codex-gpt5@gmail.com>"', commands=('git',))  # Fish line 321
+    abbr('codex', '--author "codex-gpt6<wes.mcclure+codex-gpt6@gmail.com>"', commands=('git',))  # Fish line 321
     abbr('deepseek', '--author "deepseek-v4-flash<wes.mcclure+deepseek-v4-flash@gmail.com>"', commands=('git',))  # Fish line 322
     abbr('muse', '--author "muse-glimmer-30b-dspark<wes.mcclure+muse-glimmer-30b-dspark@gmail.com>"', commands=('git',))  # Fish line 323
     abbr('amend_n_gptoss', 'GIT_SEQUENCE_EDITOR=true git rebase -i --exec "git commit --amend --no-edit --author \\"gptoss120b<wes.mcclure+gptoss120b@gmail.com>\\"" HEAD~%', cursor_marker="%")  # Fish line 327
