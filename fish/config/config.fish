@@ -21,7 +21,8 @@ end
 # FYI stick with WES_ prefix to namespace my variables
 export WES_REPOS="$HOME/repos"
 set -g WES_BOOTSTRAP "$WES_REPOS/wes-config/wes-bootstrap"
-set -g WES_DOTFILES "$WES_REPOS/github/g0t4/dotfiles"
+export WES_g0t4="$WES_REPOS/github/g0t4"
+set -g WES_DOTFILES "$WES_g0t4/dotfiles"
 export WES_DOTFILES=$WES_DOTFILES
 export WES_ASK_CAPTURES="$XDG_STATE_HOME/nvim/ask-openai"
 
