@@ -6,14 +6,17 @@ local M = {}
 ---@return string
 local function strip_metadata(text)
     local result = text
-
+    -- log:info("start    ", result)
     -- Strip prefix patterns:
     -- 1. m2-04, M2-04, etc. optionally followed by a 3+ all-caps word
     result = result:gsub("^[mM][0-9]+-[0-9]+%s+([A-Z][A-Z][A-Z]+%s+)", "")
+    result = result:gsub("^[mM][0-9]+-[0-9]+%s+", "")
     -- 2. m01a10, M01A10, etc. optionally followed by a 3+ all-caps word
     result = result:gsub("^[mM][0-9]+[aA][0-9]+%s+([A-Z][A-Z][A-Z]+%s+)", "")
+    result = result:gsub("^[mM][0-9]+[aA][0-9]+%s", "")
     -- 3. M2 02, m2 04, etc. optionally followed by a 3+ all-caps word
     result = result:gsub("^[mM][0-9]+%s+[0-9]+%s+([A-Z][A-Z][A-Z]+%s+)", "")
+    result = result:gsub("^[mM][0-9]+%s+[0-9]+%s+", "")
 
     -- Strip suffix patterns:
     -- 1. .30fps, .60fps, etc. (fps metadata) - strip from words like checklist.30fps -> checklist
