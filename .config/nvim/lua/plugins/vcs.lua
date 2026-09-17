@@ -1,4 +1,7 @@
-return {
+-- list of defined plugins for Lazy
+
+---@type LazySpec[]
+local plugins = {
 
     {
         -- benefits:
@@ -109,3 +112,4 @@ return {
     },
 
 }
+return plugins
