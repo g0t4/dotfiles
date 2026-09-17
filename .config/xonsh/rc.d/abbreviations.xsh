@@ -63,7 +63,7 @@ def _abbr_list_alias(args, stdout=None, spec=None):
     use_color = spec is not None and spec.last_in_pipeline
     console = Console(file=stdout, force_terminal=use_color)
     return abbreviation_list_alias(
-        wes_abbreviations.XONSH_ABBREVIATIONS, args, console
+        args, console
     )
 
 
