@@ -157,6 +157,7 @@ abbr uvtr 'uv tool run'
 #abbr uvtd 'uv tool dir'
 #   uv tool dir --bin # ~/.local/bin (many apps use this)
 abbr uvtls 'uv tool list'
+abbr uvtlso 'uv tool list --outdated'
 abbr uvti 'uv tool install'
 abbr uvtup 'uv tool upgrade --all'
 abbr uvtun 'uv tool uninstall'
