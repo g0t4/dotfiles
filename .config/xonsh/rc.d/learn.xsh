@@ -1,4 +1,5 @@
 from xonsh.built_ins import XSH
+from xonsh.events import events
 
 from prompt_toolkit.keys import Keys
 
@@ -17,3 +18,13 @@ def dump_keymaps():
 
 def what_shell():
     return "xonsh"
+
+# @events.on_ptk_create
+# def _wes_learn(bindings, **_):
+#     print("_wes_learn bindings registered")
+#
+#     @bindings.add('a', 'b')
+#     def _(event):
+#         " Do something if 'a' is pressed and then 'b' is pressed. "
+#         print("this is why timeoutlen matters :)")
+
