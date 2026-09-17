@@ -12,15 +12,15 @@ FISH_FUNCTIONS = (
     'uv_add',  # Fish line 68
     'uv_remove',  # Fish line 100
     'uv_reinstall_package',  # Fish line 113
-    'pstree_grep',  # Fish line 175
-    'detect_encoding',  # Fish line 181
-    'wcl',  # Fish line 188
-    'wrc',  # Fish line 228
-    'rich_colors',  # Fish line 234
-    'rich_emoji',  # Fish line 239
-    'matplotlib_colors',  # Fish line 244
-    'apply_patch_multi',  # Fish line 255
-    '__ptw_one',  # Fish line 286
+    'pstree_grep',  # Fish line 176
+    'detect_encoding',  # Fish line 182
+    'wcl',  # Fish line 189
+    'wrc',  # Fish line 229
+    'rich_colors',  # Fish line 235
+    'rich_emoji',  # Fish line 240
+    'matplotlib_colors',  # Fish line 245
+    'apply_patch_multi',  # Fish line 256
+    '__ptw_one',  # Fish line 287
 )
 
 
@@ -75,19 +75,20 @@ def register_python_abbreviations():
     abbr('uvt', 'uv tool')  # Fish line 155
     abbr('uvtr', 'uv tool run')  # Fish line 156
     abbr('uvtls', 'uv tool list')  # Fish line 159
-    abbr('uvti', 'uv tool install')  # Fish line 160
-    abbr('uvtup', 'uv tool upgrade --all')  # Fish line 161
-    abbr('uvtun', 'uv tool uninstall')  # Fish line 162
-    abbr('uvx', 'uv tool run')  # Fish line 163
-    abbr('uvpy', 'uv python list')  # Fish line 167
-    abbr('uv_build', 'uv build --no-sources')  # Fish line 171
-    abbr('uv_publish', 'uv publish')  # Fish line 172
-    abbr('uv_clean', 'uv clean')  # Fish line 173
-    abbr('ptw_prints', 'ptw --clear -- --capture=no --log-cli-level=INFO')  # Fish line 272
-    abbr('ptw_one', fish_abbreviation('__ptw_one'), cursor_marker="%")  # Fish line 284
-    abbr('pt', 'pytest')  # Fish line 307
-    abbr('ptc', 'pytest --collect-only')  # Fish line 308
-    abbr('ptk', 'pytest -k "%"', cursor_marker="%")  # Fish line 309
-    abbr('pytest_nocapture', 'pytest --capture=no')  # Fish line 311
-    abbr('pytest_info_logs', 'pytest --log-cli-level=INFO')  # Fish line 312
-    abbr('-s', '--capture=no', position="anywhere", commands=('pytest',))  # Fish line 314
+    abbr('uvtlso', 'uv tool list --outdated')  # Fish line 160
+    abbr('uvti', 'uv tool install')  # Fish line 161
+    abbr('uvtup', 'uv tool upgrade --all')  # Fish line 162
+    abbr('uvtun', 'uv tool uninstall')  # Fish line 163
+    abbr('uvx', 'uv tool run')  # Fish line 164
+    abbr('uvpy', 'uv python list')  # Fish line 168
+    abbr('uv_build', 'uv build --no-sources')  # Fish line 172
+    abbr('uv_publish', 'uv publish')  # Fish line 173
+    abbr('uv_clean', 'uv clean')  # Fish line 174
+    abbr('ptw_prints', 'ptw --clear -- --capture=no --log-cli-level=INFO')  # Fish line 273
+    abbr('ptw_one', fish_abbreviation('__ptw_one'), cursor_marker="%")  # Fish line 285
+    abbr('pt', 'pytest')  # Fish line 308
+    abbr('ptc', 'pytest --collect-only')  # Fish line 309
+    abbr('ptk', 'pytest -k "%"', cursor_marker="%")  # Fish line 310
+    abbr('pytest_nocapture', 'pytest --capture=no')  # Fish line 312
+    abbr('pytest_info_logs', 'pytest --log-cli-level=INFO')  # Fish line 313
+    abbr('-s', '--capture=no', position="anywhere", commands=('pytest',))  # Fish line 315
