@@ -28,3 +28,9 @@ def what_shell():
 #         " Do something if 'a' is pressed and then 'b' is pressed. "
 #         print("this is why timeoutlen matters :)")
 
+@events.on_command_not_found
+def test(cmd, **kwargs):
+    import rich
+    rich.print(f"[red]Stupid mother fucker...[/] Command not found: {cmd=} {kwargs=}")
+    return 1
+
