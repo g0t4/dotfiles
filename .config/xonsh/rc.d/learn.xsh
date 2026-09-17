@@ -34,3 +34,21 @@ def test(cmd, **kwargs):
     rich.print(f"[red]Stupid mother fucker...[/] Command not found: {cmd=} {kwargs=}")
     return 1
 
+# @events.on_precommand
+@events.on_transform_command
+def wes_colorful_output(cmd: str, **kwargs):
+    # print(f"precommand: {cmd=}, {type(cmd)=}, {kwargs=}")
+    #
+    if cmd.startswith("hf datasets info"):
+        if not "| bat -l json" in cmd:
+        # pipe to bat for coloring
+        # hf datasets info roneneldan/TinyStories
+            return f"{cmd.strip()} | bat -l json"
+    # IIAC return nothing is preferred for no change?
+
+# @events.on_pre_cmdloop
+# def _event_show_tip(**kw):
+#     import random
+#     tips = ["Use Tab for completion", "Try 'xonfig' to configure xonsh"]
+#     print("Tip:", random.choice(tips))
+
