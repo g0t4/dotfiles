@@ -33,12 +33,7 @@ async def main(connection: iterm2.Connection):
         #   - that means, if no iTerm2 windows are open, then keystroke monitor won't work
         #   WORKAROUND: use keyboard maestro to remap key combos and run an exteral script that uses iterm's python API... s/b fine
         #      one benefit: I don't have to reload the builtin wes.py script!
-
-        key_b = keystroke.keycode == iterm2.Keycode.ANSI_B
-        if key_b and control and command and shift:
-            log("ASK OPENAI")
-            await ask_openai(connection)
-            return
+        #      YUCK!
 
         # keymap doesn't matter, just update streamdeck button if change this:
         key_x = keystroke.keycode == iterm2.Keycode.ANSI_X
@@ -147,6 +142,11 @@ async def main(connection: iterm2.Connection):
     async def wes_keymap_bigger_font():
         await bigger_font_wes_stops(connection)
 
+    @iterm2.RPC
+    async def wes_keymap_ask_openai():
+        log("ASK OPENAI")
+        await ask_openai(connection)
+
     # * registers
     await wes_keymap_split_vertical_pane.async_register(connection)
     await wes_keymap_split_horizontal_pane.async_register(connection)
@@ -161,6 +161,8 @@ async def main(connection: iterm2.Connection):
     await wes_keymap_replace_pane.async_register(connection)
     await wes_keymap_smaller_font.async_register(connection)
     await wes_keymap_bigger_font.async_register(connection)
+    #
+    await wes_keymap_ask_openai.async_register(connection)
 
 
 iterm2.run_forever(main)
