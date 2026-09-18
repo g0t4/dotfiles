@@ -229,6 +229,7 @@ def register_packages_hardware_abbreviations():
     abbr('lsusb', platform_abbreviation('system_profiler SPUSBDataType', 'lsusb -tv'))
     abbr('lsusbv', 'lsusb -v')
     abbr('dmesgg', "sudo dmesg | rg_grep -i '%'", cursor_marker="%")
+    abbr('sp', 'system_profiler')
     abbr('sp_list_datatypes', 'system_profiler -listDataTypes')
     abbr('lsusb', platform_abbreviation('system_profiler SPUSBDataType', 'lsusb -tv'))
     abbr('lspci', 'system_profiler SPPCIDataType')
