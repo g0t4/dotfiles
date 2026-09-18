@@ -268,7 +268,6 @@ abbr gds "git diff --staged"
 abbr gdics "git-icdiff --staged"
 
 abbr gds_summary "git diff --staged --summary" # --summary will show rename % similarity but squelches diff
-abbr gd_index "git diff --staged" # show staged (index) changes
 #
 abbr git_diff_two_files "git diff --no-index" # reminder abbr
 abbr gdni "git diff --no-index" # compare two files

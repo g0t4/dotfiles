@@ -132,7 +132,6 @@ def register_git_abbreviations():
     abbr('gds', 'git diff --staged')
     abbr('gdics', 'git-icdiff --staged')
     abbr('gds_summary', 'git diff --staged --summary')
-    abbr('gd_index', 'git diff --staged')
     abbr('git_diff_two_files', 'git diff --no-index')
     abbr('gdni', 'git diff --no-index')
     abbr('git_diff_two_dirs', "git diff --no-index __dir1__ __dir2__ '*foo*'")
