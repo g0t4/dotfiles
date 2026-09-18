@@ -42,13 +42,6 @@ async def main(connection: iterm2.Connection):
             await close_other_tabs(connection)
             return
 
-        # keymap doesn't matter, just update streamdeck button if change this:
-        key_y = keystroke.keycode == iterm2.Keycode.ANSI_Y
-        if key_y and control and command and shift:
-            log("NEW TAB THEN CLOSE OTHERS")
-            await new_tab_then_close_others(connection)
-            return
-
         key_f = keystroke.keycode == iterm2.Keycode.ANSI_F
         if key_f and control and command and shift:
             log("COPY SCREEN TO CLIPBOARD")
@@ -116,6 +109,8 @@ async def main(connection: iterm2.Connection):
 
     @iterm2.RPC
     async def wes_keymap_new_tab_then_close_others():
+        # FYI IIRC only use this via streamdeck button (use keymap as intermediary)
+        #  probably could have streamdeck button call some python code to invoke this?
         log("NEW TAB THEN CLOSE OTHERS")
         await new_tab_then_close_others(connection)
 
