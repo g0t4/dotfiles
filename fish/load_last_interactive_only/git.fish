@@ -515,7 +515,14 @@ abbr -- git_ignore_space_changes "git diff --ignore-space-change"
 abbr -- git_ignore_all_space "git diff --ignore-all-space"
 #
 abbr gdlc "git log --patch HEAD~1..HEAD"
-abbr gdlcu "git -c delta.side-by-side=false log --patch HEAD~1..HEAD"
+# sometimes (at least) icdiff does a better job with a side by side diff
+#   I haven't done extensive testing of icdiff for git diffs... largely cuz I forgot icdiff supports this
+# examples to consider when picking a diff tool:
+#   git diff d5c3411f4~1..d4c3411f4 # delta chokes, icdiff is a champ (end of line comments changed across genereated lines + some new lines added)
+# TODO make icdiff my default?
+# abbr gdlc_icdiff "git difftool --no-prompt '--extcmd=icdiff --highlight --line-numbers'  HEAD~1..HEAD"
+abbr gdlc_icdiff "git-icdiff HEAD~1..HEAD"
+abbr gdlcu "git -c delta.side-by-side=false log --patch HEAD~2..HEAD"
 abbr --regex 'gdlc[u]?\d+' --function gdlcX _gdlcX
 function gdlcX
     echo -n git
