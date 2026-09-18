@@ -22,6 +22,8 @@ async def main(connection: iterm2.Connection):
         command = iterm2.Modifier.COMMAND in keystroke.modifiers
         option = iterm2.Modifier.OPTION in keystroke.modifiers
 
+        log("UNLESS GOOD REASON NOT TO => MOVE TO RPC ASAP, stop using monitor for vanilla keymaps!")
+
         # print_keystroke(keystroke)
 
         # FYI keystroke monitor only works if:
