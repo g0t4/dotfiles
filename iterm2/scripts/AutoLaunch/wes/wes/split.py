@@ -15,8 +15,7 @@ async def close_other_tabs(connection):
 async def new_tab_then_close_others(connection):
     window = await get_current_window_throw_if_none(connection)
 
-    # make new tab and close all other tabs in current window
-    new_tab = await window.async_create_tab()
+    new_tab = await wes_new_tab(connection, force_local=False)
     for tab in window.tabs:
         if tab != new_tab:
             await tab.async_close(force=True)
@@ -199,7 +198,7 @@ async def wes_new_tab(connection, force_local=False):
         raise Exception("UNEXPECTED NO TAB CREATED")
 
     if force_local or not is_ssh:
-        return
+        return new_tab
 
     new_session = get_current_session_for_current_tab_throw_if_none(new_tab)
 
@@ -215,6 +214,7 @@ async def wes_new_tab(connection, force_local=False):
     #     must be a shell integration issue?
 
     await new_session.async_send_text(f"cd {path}; clear\n")
+    return new_tab
 
 
 # *** split panes:
