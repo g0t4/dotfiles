@@ -519,6 +519,7 @@ abbr gdlc "git log --patch HEAD~1..HEAD"
 #   I haven't done extensive testing of icdiff for git diffs... largely cuz I forgot icdiff supports this
 # examples to consider when picking a diff tool:
 #   git diff d5c3411f4~1..d4c3411f4 # delta chokes, icdiff is a champ (end of line comments changed across genereated lines + some new lines added)
+#   git diff 0165c7854d~1..0165c7854d# just dropping trailing line number comment => delta chokes, icdiff does awesome
 # TODO make icdiff my default?
 # abbr gdlc_icdiff "git difftool --no-prompt '--extcmd=icdiff --highlight --line-numbers'  HEAD~1..HEAD"
 abbr gdlc_icdiff "git-icdiff HEAD~1..HEAD"
