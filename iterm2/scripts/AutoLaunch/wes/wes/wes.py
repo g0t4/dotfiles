@@ -22,7 +22,8 @@ async def main(connection: iterm2.Connection):
         command = iterm2.Modifier.COMMAND in keystroke.modifiers
         option = iterm2.Modifier.OPTION in keystroke.modifiers
 
-        log("UNLESS GOOD REASON NOT TO => MOVE TO RPC ASAP, stop using monitor for vanilla keymaps!")
+        log("TODO... UNLESS GOOD REASON NOT => MOVE TO RPC ASAP, stop using monitor for vanilla keymaps!")
+        # TODO! RPC EVERYTHING HERE unless an issue with RPC approach
 
         # print_keystroke(keystroke)
 
@@ -32,49 +33,6 @@ async def main(connection: iterm2.Connection):
         #   - that means, if no iTerm2 windows are open, then keystroke monitor won't work
         #   WORKAROUND: use keyboard maestro to remap key combos and run an exteral script that uses iterm's python API... s/b fine
         #      one benefit: I don't have to reload the builtin wes.py script!
-
-        # notes:
-        #   AFAICT iterm won't let me remap builtin keys using a keystroke monitor alone
-        #   there is an "Ignore" in Settings => Keys but then my monitor doesn't receive it either
-        #     there is a "Script function" section but I cannot find any docs about what it does
-        #     otherwise, pretty much can only remap to another existing command (limited subset too) and that sucks
-        #     they should have a python handler alterantive or "Do Nothing" vs "Ignore" which squelches it
-        #   so, in KMaestro I remap Cmd+N => Cmd+Shift+Control+N
-        #     also Cmd+T => Cmd+Shift+Control+T
-        # *** New Window helpers
-        # FYI also had to remap Cmd+N => Cmd+Shift+Control+N in Keyboard Maestro
-        key_n = keystroke.keycode == iterm2.Keycode.ANSI_N
-        if key_n and control and command and shift:
-            log("NEW WINDOW")
-            await wes_new_window(connection, force_local=False)
-            return
-        #
-        if key_n and control and command:
-            log("NEW WINDOW FORCE_LOCAL")
-            await wes_new_window(connection, force_local=True)
-            return
-
-        # *** New Tab helpers
-        # FYI also had to remap Cmd+T => Cmd+Shift+Control+T in Keyboard Maestro
-        key_t = keystroke.keycode == iterm2.Keycode.ANSI_T
-        if key_t and control and command and shift:
-            log("NEW TAB")
-            await wes_new_tab(connection, force_local=False)
-            return
-        # FYI also had to remap Cmd+Shift+T in KM => Cmd+Ctrl+T
-        #    cannot remap to same keys, wouldn't work :)
-        if key_t and control and command:
-            log("NEW TAB FORCE_LOCAL")
-            await wes_new_tab(connection, force_local=True)
-            return
-
-        # *** Replace pane helper (split + close original) — "R" for [R]eplace
-        # FYI KM => remaps Cmd+R (replace) => Cmd+Shift+Control+R
-        key_r = keystroke.keycode == iterm2.Keycode.ANSI_R
-        if key_r and control and command and shift:
-            log("REPLACE PANE")
-            await wes_replace_pane(connection)
-            return
 
         key_b = keystroke.keycode == iterm2.Keycode.ANSI_B
         if key_b and control and command and shift:
@@ -111,6 +69,8 @@ async def main(connection: iterm2.Connection):
 
         key_f9 = keystroke.keycode == iterm2.Keycode.F9
         if key_f9 and not shift and not command and not option:
+            # FYI maybe leave as-is b/c neovim handles F9 when it is open (esp useful on remotes)...
+            #  OR if I RPC this then have RPC inject the F9 in the event that nvim is running?
             log("F9 PRESSED")
             await on_f9(connection)
             return
@@ -161,8 +121,48 @@ async def main(connection: iterm2.Connection):
     async def wes_keymap_split_horizontal_pane():
         await wes_split_pane(connection, split_vert=False)
 
+    @iterm2.RPC
+    async def wes_keymap_new_tab():
+        log("NEW TAB")
+        await wes_new_tab(connection, force_local=False)
+
+    @iterm2.RPC
+    async def wes_keymap_new_tab_force_local():
+        log("NEW TAB FORCE_LOCAL")
+        await wes_new_tab(connection, force_local=True)
+
+    @iterm2.RPC
+    async def wes_keymap_new_tab_then_close_others():
+        log("NEW TAB THEN CLOSE OTHERS")
+        await new_tab_then_close_others(connection)
+
+    @iterm2.RPC
+    async def wes_keymap_new_window():
+        log("NEW WINDOW")
+        await wes_new_window(connection, force_local=False)
+
+    @iterm2.RPC
+    async def wes_keymap_new_window_force_local():
+        log("NEW WINDOW FORCE_LOCAL")
+        await wes_new_window(connection, force_local=True)
+
+    @iterm2.RPC
+    async def wes_keymap_replace_pane():
+        log("REPLACE PANE")
+        await wes_replace_pane(connection, force_local=False)
+
+    # * registers
     await wes_keymap_split_vertical_pane.async_register(connection)
     await wes_keymap_split_horizontal_pane.async_register(connection)
+    #
+    await wes_keymap_new_tab.async_register(connection)
+    await wes_keymap_new_tab_force_local.async_register(connection)
+    await wes_keymap_new_tab_then_close_others.async_register(connection)
+    #
+    await wes_keymap_new_window.async_register(connection)
+    await wes_keymap_new_window_force_local.async_register(connection)
+    #
+    await wes_keymap_replace_pane.async_register(connection)
 
 
 iterm2.run_forever(main)
