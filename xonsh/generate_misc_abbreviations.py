@@ -28,6 +28,8 @@ class Module:
 
 
 MODULES = (
+    # LINE offsets to split this up... TBF you can see when things get moved around into a new file so this isn't terrible
+    # TODO how about just split the fish file into several!
     Module("system_services", ((47, 217),)),
     Module("kubernetes", ((218, 769),)),
     Module("processes", ((770, 1176), (2772, 2812))),
