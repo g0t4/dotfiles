@@ -10,7 +10,7 @@ end
 
 abbr ic icdiff
 abbr icr "icdiff --recursive" # diff all files in two dirs
-abbr icg git-icdiff
+abbr icg "see gdic* abbrs for git-icdiff abbrs"
 #
 # faster way to compare a/b
 abbr pba "pbpaste > a"

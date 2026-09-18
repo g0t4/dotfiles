@@ -530,6 +530,7 @@ abbr gdlc "git log --patch HEAD~1..HEAD"
 #   git diff d5c3411f4~1..d4c3411f4 # delta chokes, icdiff is a champ (end of line comments changed across genereated lines + some new lines added)
 #   git diff 0165c7854d~1..0165c7854d# just dropping trailing line number comment => delta chokes, icdiff does awesome
 # TODO make icdiff my default?
+#  FYI git-icdiff is a wrapper around `git difftool`... FYI `git-icdiff` == `git icdiff`
 # abbr gdiclc "git difftool --no-prompt '--extcmd=icdiff --highlight --line-numbers'  HEAD~1..HEAD"
 abbr gdiclc "git-icdiff HEAD~1..HEAD"
 abbr gdlcu "git -c delta.side-by-side=false log --patch HEAD~2..HEAD"
