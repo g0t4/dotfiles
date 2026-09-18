@@ -36,14 +36,14 @@ def generate() -> str:
             if cursor:
                 arguments.append('cursor_marker="%"')
             declarations.append(
-                f"    abbr({', '.join(arguments)})  # Fish line {number}"
+                f"    abbr({', '.join(arguments)})"
             )
         function_match = re.match(r"^\s*function\s+([^\s]+)", line)
         if function_match:
             functions.append((function_match.group(1), line_number))
 
     function_inventory = "".join(
-        f"    {name!r},  # Fish line {line_number}\n"
+        f"    {name!r},\n"
         for name, line_number in functions
     )
     header = f'''\
