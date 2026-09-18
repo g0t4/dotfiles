@@ -2873,6 +2873,9 @@ abbr tailr 'tail -r' # reverse order
 # *** frequently tailed files
 abbr tt trash_n_tail
 #
+# trash+tail b/c these quickly become unruly in size... I should setup truncation
+abbr tt_xonsh "trash_n_tail -F ~/.local/state/xonsh/xonsh.log"
+#
 function _define_devtools_abbrs --argument-names name log_path
     # abbreviation to trash and tail the log (used by nvim plugin)
     abbr tt_devtools_$name "trash_n_tail $log_path" # nvim plugin

@@ -88,4 +88,4 @@ def get_console():
 
 def get_logger(component: str) -> logging.Logger:
     """Return a component logger routed through the shared ``xonsh`` logger."""
-    return logging.getLogger(f"xonsh.{component}")
+    return logging.getLogger(component)
