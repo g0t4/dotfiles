@@ -238,6 +238,7 @@ abbr gassumels 'git ls-files -v | rg_grep ^h'
 # * --color-words fubar's delta diffs (let delta handle the styling)
 # makes me wonder if this was also what I was hating about diff-so-fancy
 abbr gd "git diff" # show unstaged (worktree) changes
+abbr gdic "git-icdiff HEAD" # show unstaged (worktree) changes
 abbr gdu "git -c delta.side-by-side=false diff " # u == ~unified diff (not side by side) - can copy easier
 abbr --regex 'gd[u]*\d+' --function gdX _gdX
 function gdX
@@ -257,6 +258,8 @@ abbr gd_summary "git diff --summary" # --summary shows % similarity but squelche
 abbr gd_worktree "git diff" # show worktree changes
 #
 abbr gds "git diff --staged"
+abbr gdics "git-icdiff --staged"
+
 abbr gds_summary "git diff --staged --summary" # --summary will show rename % similarity but squelches diff
 abbr gd_index "git diff --staged" # show staged (index) changes
 #
