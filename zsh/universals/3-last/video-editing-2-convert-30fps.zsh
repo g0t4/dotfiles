@@ -38,14 +38,14 @@ function video_editing_2_convert_30fps() {
     fi
 
     # storing the original shasum in metadata so I can tie back to the original file if needed
-    local _shasum_original=$(shasum -a 256 "$clip_file" | cut -c -8)
+    local _shasum_original=$(sha256sum "$clip_file" | cut -c -8)
     exiftool -overwrite_original \
       -Comment="original_shasum=${_shasum_original}" \
       "$dest_file"
     # FYI must modify tag before sha256sum is calculated (otherwise it will differ and would throw me off in future) IIUC about metadata anyways
 
     #   FYI I can re-run ffmpeg conversion (assuming same parameters) then it will produce same output so I could figure it out in a pinch that way too
-    local _shasum=$(shasum -a 256 "$dest_file" | cut -c -8)
+    local _shasum=$(sha256sum "$dest_file" | cut -c -8)
     # use spaces around shasum in name - easier to select with textsniper and double click in iTerm/browser
     local _dest_file_with_shasum="${dest_file:r} ${_shasum} .mp4" # wow copilot suggested this, and its good!
     echo "  saving to ${_dest_file_with_shasum}"

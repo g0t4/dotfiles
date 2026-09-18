@@ -742,7 +742,7 @@ set -g FZF_MRU_DIR ~/.cache/fzf-mru
 set -g FZF_MRU_CAP 30 # per dir limit, only most recent are gonna matter anyways
 
 function __fzf_mru_key
-    pwd | shasum | string split ' ' | head -n 1
+    pwd | sha1sum | string split ' ' | head -n 1
 end
 
 function __fzf_mru_dump --argument-names picker
