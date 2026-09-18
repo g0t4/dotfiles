@@ -241,7 +241,15 @@ abbr gd "git diff" # show unstaged (worktree) changes
 abbr gdic "git-icdiff HEAD" # show unstaged (worktree) changes
 abbr gdu "git -c delta.side-by-side=false diff " # u == ~unified diff (not side by side) - can copy easier
 abbr --regex 'gd[u]*\d+' --function gdX _gdX
+abbr --regex 'gdic\d+' --function gdX _gdicX
 function gdX
+    # cumulative diff (see my gdlc for just one commit)
+    set num (string replace --regex 'gd(ic)?[su]*' '' $argv)
+    if string match --quiet --regex 'gdic' $argv # gdic == git diff w/ icdiff
+        echo "git-icdiff HEAD~$num..HEAD"
+        return
+    end
+
     # show the diff _ACROSS_ X commits back
     # gd5 => git diff HEAD~5..HEAD
     echo -n git
@@ -249,7 +257,6 @@ function gdX
         # u == unified (not side by side) diff
         echo -n " -c delta.side-by-side=false"
     end
-    set num (string replace --regex 'gd[su]*' '' $argv)
     # unlike gdlc, we don't do this across one commit, but across N
     echo " diff HEAD~$num..HEAD"
 end
@@ -528,7 +535,7 @@ abbr gdlc "git log --patch HEAD~1..HEAD"
 abbr gdiclc "git-icdiff HEAD~1..HEAD"
 abbr gdlcu "git -c delta.side-by-side=false log --patch HEAD~2..HEAD"
 abbr --regex 'gdlc[u]?\d+' --function gdlcX _gdlcX
-abbr --regex 'gdiclc\d+' --function gdlcX _gdlcX_icdiff
+abbr --regex 'gdiclc\d+' --function gdlcX _gdiclcX
 function gdlcX
     set num (string replace --regex '^gd(ic)?lc[u]?' '' $argv)
     set prev (math $num - 1)

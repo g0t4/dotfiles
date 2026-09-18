@@ -126,6 +126,7 @@ def register_git_abbreviations():
     abbr('gdic', 'git-icdiff HEAD')
     abbr('gdu', 'git -c delta.side-by-side=false diff')
     abbr(re.compile('gd[u]*\\d+'), _fish_abbreviation('gdX'))
+    abbr(re.compile('gdic\\d+'), _fish_abbreviation('gdX'))
     abbr('gd_summary', 'git diff --summary')
     abbr('gd_worktree', 'git diff')
     abbr('gds', 'git diff --staged')

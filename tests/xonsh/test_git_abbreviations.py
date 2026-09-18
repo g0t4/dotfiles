@@ -40,7 +40,7 @@ def test_generated_git_module_is_in_sync_with_fish_source():
 def test_git_only_inventory_count_and_cursor_markers():
     entries = registry().abbreviations
 
-    assert len(entries) == 218
+    assert len(entries) == 219
     for entry in entries:
         if entry.cursor_marker and isinstance(entry.replacement, str):
             assert entry.replacement.count(entry.cursor_marker) == 1, entry.trigger
