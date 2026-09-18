@@ -2745,7 +2745,7 @@ if $IS_MACOS
     # map some abbrs so I can get similar info on my mac to what I am used to using on linux/arch
     # FYI these are just a first take, ok to change and/or nuke
     abbr sp_list_datatypes "system_profiler -listDataTypes"
-    abbr lsusb "system_profiler SPUSBHostDataType"
+    abbr lsusb "system_profiler SPUSBHostDataType" # FYI macos Tahoe renamed SPUSBDataType => SPUSBHostDataType
     abbr lspci "system_profiler SPPCIDataType"
     abbr lscpu "sysctl -n machdep.cpu.brand_string; sysctl -n hw.physicalcpu; sysctl -n hw.logicalcpu"
     abbr lsblk "diskutil list"
