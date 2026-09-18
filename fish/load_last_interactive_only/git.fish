@@ -524,15 +524,15 @@ abbr gdlc "git log --patch HEAD~1..HEAD"
 #   git diff d5c3411f4~1..d4c3411f4 # delta chokes, icdiff is a champ (end of line comments changed across genereated lines + some new lines added)
 #   git diff 0165c7854d~1..0165c7854d# just dropping trailing line number comment => delta chokes, icdiff does awesome
 # TODO make icdiff my default?
-# abbr gdlc_icdiff "git difftool --no-prompt '--extcmd=icdiff --highlight --line-numbers'  HEAD~1..HEAD"
-abbr gdlc_icdiff "git-icdiff HEAD~1..HEAD"
+# abbr gdiclc "git difftool --no-prompt '--extcmd=icdiff --highlight --line-numbers'  HEAD~1..HEAD"
+abbr gdiclc "git-icdiff HEAD~1..HEAD"
 abbr gdlcu "git -c delta.side-by-side=false log --patch HEAD~2..HEAD"
 abbr --regex 'gdlc[u]?\d+' --function gdlcX _gdlcX
-abbr --regex 'gdlc_icdiff?\d+' --function gdlcX _gdlc_icdiff_X
+abbr --regex 'gdiclc\d+' --function gdlcX _gdlcX_icdiff
 function gdlcX
-    set num (string replace --regex '^gdlc[u]?(_icdiff)?' '' $argv)
+    set num (string replace --regex '^gd(ic)?lc[u]?' '' $argv)
     set prev (math $num - 1)
-    if string match --quiet --regex 'icdiff'
+    if string match --quiet --regex 'gdic' $argv # gdic == git diff w/ icdiff
         echo "git-icdiff HEAD~$num..HEAD~$prev"
         return
     end
