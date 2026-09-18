@@ -524,17 +524,20 @@ abbr gdlc "git log --patch HEAD~1..HEAD"
 abbr gdlc_icdiff "git-icdiff HEAD~1..HEAD"
 abbr gdlcu "git -c delta.side-by-side=false log --patch HEAD~2..HEAD"
 abbr --regex 'gdlc[u]?\d+' --function gdlcX _gdlcX
+abbr --regex 'gdlc_icdiff?\d+' --function gdlcX _gdlc_icdiff_X
 function gdlcX
-    # echo -n git
+    set num (string replace --regex '^gdlc[u]?(_icdiff)?' '' $argv)
+    set prev (math $num - 1)
+    if string match --quiet --regex 'icdiff'
+        echo "git-icdiff HEAD~$num..HEAD~$prev"
+        return
+    end
+    echo -n git
     if string match --quiet --regex u $argv
         # u == unified (not side by side) diff
-        # echo -n " -c delta.side-by-side=false"
-        echo "Universal not supported with git-icdiff (yet?)"
+        echo -n " -c delta.side-by-side=false"
     end
-    set num (string replace --regex '^gdlc[u]?' '' $argv)
-    set prev (math $num - 1)
-    # echo " log --patch HEAD~$num..HEAD~$prev"
-    echo "git-icdiff HEAD~$num..HEAD~$prev"
+    echo " log --patch HEAD~$num..HEAD~$prev"
 end
 #
 # gd_stat - single list of files ACROSS range of commits
