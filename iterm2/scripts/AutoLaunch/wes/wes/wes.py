@@ -75,18 +75,6 @@ async def main(connection: iterm2.Connection):
             await on_f9(connection)
             return
 
-        key_minus = keystroke.keycode == iterm2.Keycode.ANSI_MINUS
-        if key_minus and control and command and shift:
-            log("SMALLER FONT")
-            await smaller_font_wes_stops(connection)
-            return
-        #
-        key_equal = keystroke.keycode == iterm2.Keycode.ANSI_EQUAL
-        if key_equal and control and command and shift:
-            log("BIGGER FONT")
-            await bigger_font_wes_stops(connection)
-            return
-
         key_a = keystroke.keycode == iterm2.Keycode.ANSI_A
         if key_a and control and command:
             log("YANK LAST COMMAND OUTPUT AND PASTE")
@@ -151,6 +139,14 @@ async def main(connection: iterm2.Connection):
         log("REPLACE PANE")
         await wes_replace_pane(connection, force_local=False)
 
+    @iterm2.RPC
+    async def wes_keymap_smaller_font():
+        await smaller_font_wes_stops(connection)
+
+    @iterm2.RPC
+    async def wes_keymap_bigger_font():
+        await bigger_font_wes_stops(connection)
+
     # * registers
     await wes_keymap_split_vertical_pane.async_register(connection)
     await wes_keymap_split_horizontal_pane.async_register(connection)
@@ -163,6 +159,8 @@ async def main(connection: iterm2.Connection):
     await wes_keymap_new_window_force_local.async_register(connection)
     #
     await wes_keymap_replace_pane.async_register(connection)
+    await wes_keymap_smaller_font.async_register(connection)
+    await wes_keymap_bigger_font.async_register(connection)
 
 
 iterm2.run_forever(main)
