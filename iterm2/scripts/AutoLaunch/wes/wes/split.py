@@ -220,6 +220,7 @@ async def wes_new_tab(connection, force_local=False):
 # *** split panes:
 async def wes_split_pane(connection: iterm2.Connection, split_vert: bool = False, force_local=False):
     # *** FYI force_local not passed to this func yet by any wes.py handlers
+    log(f"Splitting pane, vertical={split_vert}" )
 
     current_session = await get_current_session_throw_if_none(connection)
     new_profile, is_ssh = await prepare_new_profile(current_session, force_local)

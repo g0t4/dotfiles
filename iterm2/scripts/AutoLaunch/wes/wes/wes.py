@@ -66,24 +66,6 @@ async def main(connection: iterm2.Connection):
             await wes_new_tab(connection, force_local=True)
             return
 
-        # *** Split panes helpers
-        # FYI KM => remaps Cmd+D (split vert) and Cmd+Shift+D (split horiz) to use K below
-        #     avoid:
-        #       FYI ctrl+d exits so that's a bad choice and I had issues with using D+modifiers in xonsh so I am going to K for now
-        #       (cmd+ctrl+d == define universally)
-        #       (ctrl+alt+d == toggle dock)
-        key_k = keystroke.keycode == iterm2.Keycode.ANSI_K # DO NOT USE DIRECTLY
-        shared_k_combo = key_k and control and command
-        if shared_k_combo and shift:
-            log("SPLIT PANE VERTICALLY")
-            await wes_split_pane(connection, split_vert=True)
-            return
-        #
-        if shared_k_combo and option:
-            log("SPLIT PANE HORIZONTALLY")
-            await wes_split_pane(connection, split_vert=False)
-            return
-
         # *** Replace pane helper (split + close original) — "R" for [R]eplace
         # FYI KM => remaps Cmd+R (replace) => Cmd+Shift+Control+R
         key_r = keystroke.keycode == iterm2.Keycode.ANSI_R
@@ -154,6 +136,7 @@ async def main(connection: iterm2.Connection):
                 # unhandled exceptions take down the monitor so don't let that happen anymore!
                 try:
                     keystroke = await mon.async_get()
+                    # log(keystroke)
                     await keystroke_handler(keystroke)
                 except Exception as e:
                     log(f"unhandled exception in keystroke_monitor: {e}")
@@ -162,6 +145,22 @@ async def main(connection: iterm2.Connection):
 
     asyncio.create_task(keystroke_monitor(connection))
     asyncio.create_task(semantic_daemon(connection))
+
+    # * map these into keymaps in iterm settings so there's no need for KM remapping nonsense
+    # FYI I mapped
+    #  cmd+d => vertical split (replaces builtin keymap)
+    #  cmd+d+shift => horizontal split (replaces builtin keymap to do this with current profile and/or just no profile)
+
+    @iterm2.RPC
+    async def wes_keymap_split_vertical_pane():
+        await wes_split_pane(connection, split_vert=True)
+
+    @iterm2.RPC
+    async def wes_keymap_split_horizontal_pane():
+        await wes_split_pane(connection, split_vert=False)
+
+    await wes_keymap_split_vertical_pane.async_register(connection)
+    await wes_keymap_split_horizontal_pane.async_register(connection)
 
 
 iterm2.run_forever(main)
