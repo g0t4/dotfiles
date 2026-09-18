@@ -193,40 +193,42 @@ def register_git_abbreviations():
     abbr('git_ignore_space_changes', 'git diff --ignore-space-change')  # Fish line 514
     abbr('git_ignore_all_space', 'git diff --ignore-all-space')  # Fish line 515
     abbr('gdlc', 'git log --patch HEAD~1..HEAD')  # Fish line 517
-    abbr('gdlcu', 'git -c delta.side-by-side=false log --patch HEAD~1..HEAD')  # Fish line 518
-    abbr(re.compile('gdlc[u]?\\d+'), _fish_abbreviation('gdlcX'))  # Fish line 519
-    abbr('gd_stat', "git diff --stat 'HEAD@{push}..HEAD'")  # Fish line 533
-    abbr('glgrep', 'git log --grep="%"', cursor_marker="%")  # Fish line 542
-    abbr('gd_patch', 'git --no-pager diff --no-color')  # Fish line 545
-    abbr('rr', '_repo_root')  # Fish line 598
-    abbr('gwt', 'git worktree')  # Fish line 619
-    abbr('gwtls', 'git worktree list')  # Fish line 620
-    abbr('gwta', 'git worktree add')  # Fish line 621
-    abbr('gwtab', 'git worktree add -b')  # Fish line 622
-    abbr('gwtrm', 'git worktree remove')  # Fish line 623
-    abbr('gwtm', 'git worktree move')  # Fish line 624
-    abbr('grb', 'git rebase')  # Fish line 628
-    abbr('grba', 'git rebase --abort')  # Fish line 629
-    abbr('grbc', 'git rebase --continue')  # Fish line 630
-    abbr('grbs', 'git rebase --skip')  # Fish line 631
-    abbr('grbi', 'git rebase -i')  # Fish line 632
-    abbr('grbias', 'git rebase -i --autostash')  # Fish line 633
-    abbr(re.compile('grbi\\d+'), _fish_abbreviation('_abbr_expand_grbi_d'))  # Fish line 635
-    abbr('gstash', 'git stash')  # Fish line 657
-    abbr('git_stash_list', 'git stash list --pretty=stash-list')  # Fish line 658
-    abbr('git_stash_show', 'git stash show --text 0')  # Fish line 660
-    abbr('git_stash_drop', 'git stash drop 0')  # Fish line 663
-    abbr('git_stash_pop', 'git stash pop 0')  # Fish line 664
-    abbr('git_stash_apply', 'git stash apply')  # Fish line 665
-    abbr('git_stash_branch', 'git stash branch')  # Fish line 666
-    abbr('git_stash_patch', 'git stash push --patch --no-keep-index')  # Fish line 667
-    abbr(re.compile('gap\\d*'), _fish_abbreviation('gapX'))  # Fish line 671
-    abbr('git_stash_push', 'git stash push --message "%"', cursor_marker="%")  # Fish line 682
-    abbr('git_stash_save', 'git stash push --message "%"', cursor_marker="%")  # Fish line 683
-    abbr('git_stash_clear', 'git stash clear')  # Fish line 684
-    abbr('git_archive_tgz', 'git archive --format=tgz --output repo.tgz HEAD')  # Fish line 715
-    abbr('git_archive_zip', 'git archive --format=zip --output repo.zip HEAD')  # Fish line 716
-    abbr('git_archive_everything', 'git bundle create repo.bundle --all')  # Fish line 717
-    abbr('gg', "git grep -Ee '%' $(git rev-list --all)", cursor_marker="%")  # Fish line 722
-    abbr('ggc', "git grep -C10 -Ee '%' $(git rev-list --all)", cursor_marker="%")  # Fish line 723
-    abbr('ggf', "git grep --function-context -Ee '%' $(git rev-list --all)", cursor_marker="%")  # Fish line 724
+    abbr('gdlc_icdiff', 'git-icdiff HEAD~1..HEAD')  # Fish line 524
+    abbr('gdlcu', 'git -c delta.side-by-side=false log --patch HEAD~2..HEAD')  # Fish line 525
+    abbr(re.compile('gdlc[u]?\\d+'), _fish_abbreviation('gdlcX'))  # Fish line 526
+    abbr(re.compile('gdlc_icdiff?\\d+'), _fish_abbreviation('gdlcX'))  # Fish line 527
+    abbr('gd_stat', "git diff --stat 'HEAD@{push}..HEAD'")  # Fish line 545
+    abbr('glgrep', 'git log --grep="%"', cursor_marker="%")  # Fish line 554
+    abbr('gd_patch', 'git --no-pager diff --no-color')  # Fish line 557
+    abbr('rr', '_repo_root')  # Fish line 610
+    abbr('gwt', 'git worktree')  # Fish line 631
+    abbr('gwtls', 'git worktree list')  # Fish line 632
+    abbr('gwta', 'git worktree add')  # Fish line 633
+    abbr('gwtab', 'git worktree add -b')  # Fish line 634
+    abbr('gwtrm', 'git worktree remove')  # Fish line 635
+    abbr('gwtm', 'git worktree move')  # Fish line 636
+    abbr('grb', 'git rebase')  # Fish line 640
+    abbr('grba', 'git rebase --abort')  # Fish line 641
+    abbr('grbc', 'git rebase --continue')  # Fish line 642
+    abbr('grbs', 'git rebase --skip')  # Fish line 643
+    abbr('grbi', 'git rebase -i')  # Fish line 644
+    abbr('grbias', 'git rebase -i --autostash')  # Fish line 645
+    abbr(re.compile('grbi\\d+'), _fish_abbreviation('_abbr_expand_grbi_d'))  # Fish line 647
+    abbr('gstash', 'git stash')  # Fish line 669
+    abbr('git_stash_list', 'git stash list --pretty=stash-list')  # Fish line 670
+    abbr('git_stash_show', 'git stash show --text 0')  # Fish line 672
+    abbr('git_stash_drop', 'git stash drop 0')  # Fish line 675
+    abbr('git_stash_pop', 'git stash pop 0')  # Fish line 676
+    abbr('git_stash_apply', 'git stash apply')  # Fish line 677
+    abbr('git_stash_branch', 'git stash branch')  # Fish line 678
+    abbr('git_stash_patch', 'git stash push --patch --no-keep-index')  # Fish line 679
+    abbr(re.compile('gap\\d*'), _fish_abbreviation('gapX'))  # Fish line 683
+    abbr('git_stash_push', 'git stash push --message "%"', cursor_marker="%")  # Fish line 694
+    abbr('git_stash_save', 'git stash push --message "%"', cursor_marker="%")  # Fish line 695
+    abbr('git_stash_clear', 'git stash clear')  # Fish line 696
+    abbr('git_archive_tgz', 'git archive --format=tgz --output repo.tgz HEAD')  # Fish line 727
+    abbr('git_archive_zip', 'git archive --format=zip --output repo.zip HEAD')  # Fish line 728
+    abbr('git_archive_everything', 'git bundle create repo.bundle --all')  # Fish line 729
+    abbr('gg', "git grep -Ee '%' $(git rev-list --all)", cursor_marker="%")  # Fish line 734
+    abbr('ggc', "git grep -C10 -Ee '%' $(git rev-list --all)", cursor_marker="%")  # Fish line 735
+    abbr('ggf', "git grep --function-context -Ee '%' $(git rev-list --all)", cursor_marker="%")  # Fish line 736
