@@ -187,7 +187,7 @@ def declaration(line_number, name, replacement, options):
         arguments.append(f"commands=({command_expression},)")
     if options.get("cursor") and replacement.count("%") == 1:
         arguments.append('cursor_marker="%"')
-    return f"    abbr({', '.join(arguments)})  # Fish line {line_number}"
+    return f"    abbr({', '.join(arguments)})"
 
 
 def generate(module: Module) -> str:
@@ -260,7 +260,7 @@ from wes_abbreviations import abbr
 FISH_FUNCTIONS = (
 '''
     function_inventory = "".join(
-        f"    {name!r},  # Fish line {line_number}\n"
+        f"    {name!r},\n"
         for name, line_number in functions
     )
     footer = f'''\

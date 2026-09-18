@@ -45,7 +45,7 @@ def _declaration(line_number: int, name: str, replacement: str, options: dict) -
         ))
     if options.get("cursor") and (replacement.count("%") == 1 or "function" in options):
         arguments.append('cursor_marker="%"')
-    return f"    abbr({', '.join(arguments)})  # Fish line {line_number}"
+    return f"    abbr({', '.join(arguments)})"
 
 
 def _source_inventory():
@@ -75,7 +75,8 @@ def generate() -> str:
         if last_declaration_by_name[abbreviation[1]] == index
     ]
     function_inventory = "".join(
-        f"    {name!r},  # Fish line {line_number}\n"
+        f"    {name!r},\n"
+        # TODO cleanup old line_number across all generators (can't I reuse some of the gen logic? look at what I setup in that other example)
         for name, line_number in functions
     )
     declaration_text = "\n".join(declarations)

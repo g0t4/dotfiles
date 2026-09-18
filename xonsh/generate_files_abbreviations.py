@@ -70,7 +70,7 @@ def declaration(line_number, name, replacement, options):
         arguments.append(f"commands=({options['command']!r},)")
     if options.get("cursor"):
         arguments.append('cursor_marker="%"')
-    return f"    abbr({', '.join(arguments)})  # Fish line {line_number}"
+    return f"    abbr({', '.join(arguments)})"
 
 
 def generate() -> str:
