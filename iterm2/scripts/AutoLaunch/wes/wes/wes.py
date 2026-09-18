@@ -7,81 +7,23 @@ from scrape_ask import copy_screen_to_clipboard
 from f9command import on_f9
 from logs import log
 from og_ask import ask_openai
-from split import close_other_tabs, new_tab_then_close_others, wes_split_pane, wes_replace_pane, wes_new_tab, wes_new_window
+from split import (
+    close_other_tabs,
+    new_tab_then_close_others,
+    wes_split_pane,
+    wes_replace_pane,
+    wes_new_tab,
+    wes_new_window,
+)
 from semantic_daemon import semantic_daemon
 from font_zooms import bigger_font_wes_stops, smaller_font_wes_stops
 
 
 async def main(connection: iterm2.Connection):
 
-    async def keystroke_handler(keystroke: iterm2.Keystroke):
-        # *** by registering a keystroke monitor in an iterm2 daemon, and reacting to just my keycombos... this script is warmed up and can immediately dispatch!!! shaves 1-2 seconds off of running a python script on keycombo instead... this is awesome
-
-        control = iterm2.Modifier.CONTROL in keystroke.modifiers
-        shift = iterm2.Modifier.SHIFT in keystroke.modifiers
-        command = iterm2.Modifier.COMMAND in keystroke.modifiers
-        option = iterm2.Modifier.OPTION in keystroke.modifiers
-
-        log("TODO... UNLESS GOOD REASON NOT => MOVE TO RPC ASAP, stop using monitor for vanilla keymaps!")
-        # TODO! RPC EVERYTHING HERE unless an issue with RPC approach
-
-        # print_keystroke(keystroke)
-
-        # FYI keystroke monitor only works if:
-        #   - Script Console is not focused
-        #   - iTerm2 window is focused
-        #   - that means, if no iTerm2 windows are open, then keystroke monitor won't work
-        #   WORKAROUND: use keyboard maestro to remap key combos and run an exteral script that uses iterm's python API... s/b fine
-        #      one benefit: I don't have to reload the builtin wes.py script!
-        #      YUCK!
-
-        # keymap doesn't matter, just update streamdeck button if change this:
-        key_x = keystroke.keycode == iterm2.Keycode.ANSI_X
-        if key_x and control and command and shift:
-            log("CLOSE OTHER TABS")
-            await close_other_tabs(connection)
-            return
-
-        key_f = keystroke.keycode == iterm2.Keycode.ANSI_F
-        if key_f and control and command and shift:
-            log("COPY SCREEN TO CLIPBOARD")
-            # TODO merge with ANSI_B? should I just use this instead of ANSI_B approach?
-            await copy_screen_to_clipboard(connection, history=False)
-            return
-
-        key_h = keystroke.keycode == iterm2.Keycode.ANSI_H
-        if key_h and control and command and shift:
-            log("COPY SCREEN TO CLIPBOARD (HISTORY)")
-            await copy_screen_to_clipboard(connection, history=True)
-            return
-
-        key_f9 = keystroke.keycode == iterm2.Keycode.F9
-        if key_f9 and not shift and not command and not option:
-            # FYI maybe leave as-is b/c neovim handles F9 when it is open (esp useful on remotes)...
-            #  OR if I RPC this then have RPC inject the F9 in the event that nvim is running?
-            log("F9 PRESSED")
-            await on_f9(connection)
-            return
-
-        key_a = keystroke.keycode == iterm2.Keycode.ANSI_A
-        if key_a and control and command:
-            log("YANK LAST COMMAND OUTPUT AND PASTE")
-            await yank_last_command_output_and_paste_to_commandline(connection)
-
-    async def keystroke_monitor(connection):
-        async with iterm2.KeystrokeMonitor(connection) as mon:
-            while True:
-                # unhandled exceptions take down the monitor so don't let that happen anymore!
-                try:
-                    keystroke = await mon.async_get()
-                    # log(keystroke)
-                    await keystroke_handler(keystroke)
-                except Exception as e:
-                    log(f"unhandled exception in keystroke_monitor: {e}")
-                    # dump stack trace
-                    traceback.print_exc()
-
-    asyncio.create_task(keystroke_monitor(connection))
+    # The original implementation used a keystroke monitor to trigger actions.
+    # All functionality is now exposed via RPC calls, allowing external tools
+    # (e.g., Stream Deck, Keyboard Maestro) to invoke the actions directly.
     asyncio.create_task(semantic_daemon(connection))
 
     # * map these into keymaps in iterm settings so there's no need for KM remapping nonsense
@@ -142,6 +84,31 @@ async def main(connection: iterm2.Connection):
         log("ASK OPENAI")
         await ask_openai(connection)
 
+    @iterm2.RPC
+    async def wes_keymap_close_other_tabs():
+        # key_x and control and command and shift
+        await close_other_tabs(connection)
+
+    @iterm2.RPC
+    async def wes_keymap_copy_screen_to_clipboard():
+        # key_f and control and command and shift
+        await copy_screen_to_clipboard(connection, history=False)
+
+    @iterm2.RPC
+    async def wes_keymap_copy_screen_to_clipboard_history():
+        # key_h and control and command and shift
+        await copy_screen_to_clipboard(connection, history=True)
+
+    @iterm2.RPC
+    async def wes_keymap_f9():
+        # TODO map F9 so it can fall through to neovim too?
+        await on_f9(connection)
+
+    @iterm2.RPC
+    async def wes_keymap_yank_last_command_output():
+        # key_a and control and command
+        await yank_last_command_output_and_paste_to_commandline(connection)
+
     # * registers
     await wes_keymap_split_vertical_pane.async_register(connection)
     await wes_keymap_split_horizontal_pane.async_register(connection)
@@ -158,6 +125,13 @@ async def main(connection: iterm2.Connection):
     await wes_keymap_bigger_font.async_register(connection)
     #
     await wes_keymap_ask_openai.async_register(connection)
+
+    # Register additional RPCs formerly bound to keystrokes
+    await wes_keymap_close_other_tabs.async_register(connection)
+    await wes_keymap_copy_screen_to_clipboard.async_register(connection)
+    await wes_keymap_copy_screen_to_clipboard_history.async_register(connection)
+    await wes_keymap_f9.async_register(connection)
+    await wes_keymap_yank_last_command_output.async_register(connection)
 
 
 iterm2.run_forever(main)
