@@ -181,3 +181,4 @@ def register_cloud_ai_abbreviations():
     abbr('cld', 'claude --dangerously-skip-permissions')
     abbr('-h', '--help', position="anywhere", commands=('nix',))
     abbr('nixh', 'nix --help')
+    abbr('nixpls', 'nix profile list')

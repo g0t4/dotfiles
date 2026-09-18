@@ -79,6 +79,5 @@ def register_misc_abbreviations():
     abbr('jarc', 'jar -cf')
     abbr('unzipx_stdout', 'unzip -p')
     abbr('unzipl', 'unzip -l')
-    abbr('nixpls', 'nix profile list')
     abbr('trim_trailing_new_line', 'perl -pe "chomp if eof" -i')
     abbr('whicha', 'which -a')

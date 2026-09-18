@@ -32,11 +32,11 @@ MODULES = (
     # TODO how about just split the fish file into several!
     Module("system_services", ((47, 217),)),
     Module("kubernetes", ((218, 769),)),
-    Module("processes", ((770, 1176), (2772, 2812))),
-    Module("cloud_ai", ((1357, 1672), (2813, 3132), (3309, 3383), (3502, 3512))),
-    Module("media", ((1673, 2030), (2337, 2460), (2627, 2652), (3133, 3161), (3438, 3501))),
-    Module("packages_hardware", ((1177, 1356), (2031, 2336), (2461, 2771))),
-    Module("misc", ((3162, 3308), (3384, 3437), (3513, 3623))),
+    Module("processes", ((770, 1176), (2774, 2814))),
+    Module("cloud_ai", ((1357, 1672), (2815, 3134), (3311, 3385), (3504, 3514))),
+    Module("media", ((1673, 2030), (2337, 2460), (2627, 2652), (3135, 3163), (3440, 3503))),
+    Module("packages_hardware", ((1177, 1356), (2031, 2336), (2461, 2773))),
+    Module("misc", ((3164, 3310), (3386, 3439), (3515, 3625))),
 )
 
 @dataclass(frozen=True)
