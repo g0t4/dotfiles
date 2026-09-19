@@ -9,7 +9,7 @@ import logging
 from wes_logging import ensure_logger_is_setup, get_wes_logger
 
 log = get_wes_logger("learn")
-log.setLevel(logging.INFO) # only failures (effectively shuts up the logger)
+log.setLevel(logging.INFO)  # only failures (effectively shuts up the logger)
 
 def dump_keymaps():
     return XSH.shell.shell.prompter.app.key_bindings.bindings
@@ -51,7 +51,7 @@ def wes_colorful_output(cmd: str, **kwargs):
     #
     # TODO parse the command?
     # log.info(f"{cmd=}")
-    cmd = cmd.strip() # strip trailing \n on submit
+    cmd = cmd.strip()  # strip trailing \n on submit
     if cmd.strip().startswith("env"):
         if not "| bat -l env" in cmd:
             return f"{cmd} | bat -l env"
@@ -67,4 +67,3 @@ def wes_colorful_output(cmd: str, **kwargs):
 #     import random
 #     tips = ["Use Tab for completion", "Try 'xonfig' to configure xonsh"]
 #     print("Tip:", random.choice(tips))
-
