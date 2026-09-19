@@ -102,6 +102,26 @@ vim.keymap.set('n', '<leader>gru', '<Plug>(coc-references-used)', { silent = tru
 vim.keymap.set('n', '<F24>', '<Plug>(coc-references)', { silent = true })
 -- vim.keymap.set('n', '<F24>', '<Cmd>Telescope coc references<CR>', { silent = true })
 
+local function xonsh_format()
+    -- TODO format selection vs entire file?
+    local lines = vim.api.nvim_buf_get_lines(0, 0, -1, false)
+    local input = table.concat(lines, '\n') .. '\n'
+    local out = vim.fn.systemlist('xonsh format -', input)
+    if vim.v.shell_error ~= 0 then
+        vim.notify('xonsh format failed:\n' .. table.concat(out, '\n'), vim.log.levels.ERROR)
+        return
+    end
+    vim.api.nvim_buf_set_lines(0, 0, -1, false, out)
+end
+
+-- -- PRN buffer overrides?
+-- vim.api.nvim_create_autocmd('FileType', {
+--   pattern = 'xonsh',
+--   callback = function()
+--     vim.keymap.set('n', '<leader>f', xonsh_format, { buffer = 0, desc = 'Format xonsh' })
+--   end,
+-- })
+
 -- * formatting
 local function format_selected()
     if vim.bo.filetype == "gitconfig" then
@@ -142,7 +162,10 @@ local function suck_a_dick_formatter()
 end
 
 local function format_normal()
-    if vim.tbl_contains({ "gitconfig", "make", "zsh" }, vim.bo.filetype) then
+    if vim.tbl_contains({ "xonsh", }, vim.bo.filetype) then
+        -- use xonsh's builtin formatter
+        xonsh_format()
+    elseif vim.tbl_contains({ "gitconfig", "make", "zsh", }, vim.bo.filetype) then
         -- suck_a_dick_formatter()
         vim.cmd("normal! gg=G")
     else
