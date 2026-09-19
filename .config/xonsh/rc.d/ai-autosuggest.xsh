@@ -28,7 +28,7 @@ from wes_ai_autosuggest_state import (
     read_autosuggest_enabled,
     write_autosuggest_enabled,
 )
-from wes_logging import ensure_logger_is_setup, get_logger
+from wes_logging import ensure_logger_is_setup, get_wes_logger
 from wes_semantic_history import InferenceClient, SemanticHistoryRetriever
 
 
@@ -48,7 +48,7 @@ from wes_semantic_history import InferenceClient, SemanticHistoryRetriever
 @.env.setdefault("XONSH_AI_SEMANTIC_HISTORY_HOST", "build21.lan")
 @.env.setdefault("XONSH_AI_SEMANTIC_HISTORY_PORT", 8015)
 ensure_logger_is_setup()
-log = get_logger("ai_autosuggest")
+log = get_wes_logger("ai_autosuggest")
 _ai_request_ids = itertools.count(1)
 
 

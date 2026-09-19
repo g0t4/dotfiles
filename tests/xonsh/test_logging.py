@@ -7,7 +7,7 @@ from pathlib import Path
 XONSH_LIB = Path(__file__).parents[2] / ".config/xonsh/lib"
 sys.path.insert(0, str(XONSH_LIB))
 
-from wes_logging import _configure_logging, get_logger  # noqa: E402
+from wes_logging import _configure_logging, get_wes_logger  # noqa: E402
 from wes_auto_venv import AutoVenv  # noqa: E402
 
 
@@ -18,9 +18,9 @@ def test_all_components_write_to_one_named_log(tmp_path):
     path = tmp_path / "xonsh.log"
     _configure_logging(path, clear_iterm_scrollback=True)
 
-    get_logger("ai_autosuggest").info("request id=%s", 7)
-    get_logger("fzf_pickers").info("picker=%s", "files")
-    get_logger("test").info("long=%s", "x" * 5_000)
+    get_wes_logger("ai_autosuggest").info("request id=%s", 7)
+    get_wes_logger("fzf_pickers").info("picker=%s", "files")
+    get_wes_logger("test").info("long=%s", "x" * 5_000)
 
     contents = path.read_text()
     plain = ANSI.sub("", contents)
@@ -37,7 +37,7 @@ def test_reconfiguring_same_log_does_not_duplicate_handlers_or_clear(tmp_path):
     _configure_logging(path, clear_iterm_scrollback=True)
     _configure_logging(path, clear_iterm_scrollback=True)
 
-    get_logger("test").info("once")
+    get_wes_logger("test").info("once")
 
     contents = path.read_text()
     assert contents.count("ClearScrollback") == 1
@@ -47,7 +47,7 @@ def test_reconfiguring_same_log_does_not_duplicate_handlers_or_clear(tmp_path):
 def test_auto_venv_logs_path_mutations_to_shared_log(tmp_path):
     path = tmp_path / "xonsh.log"
     _configure_logging(path)
-    logger = get_logger("auto_venv")
+    logger = get_wes_logger("auto_venv")
     previous_level = logger.level
     logger.setLevel(logging.INFO)
     project = tmp_path / "project"

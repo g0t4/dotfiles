@@ -11,11 +11,11 @@ if str(_wes_xonsh_lib) not in sys.path:
     sys.path.insert(0, str(_wes_xonsh_lib))
 
 from wes_auto_venv import AutoVenv
-from wes_logging import ensure_logger_is_setup, get_logger
+from wes_logging import ensure_logger_is_setup, get_wes_logger
 
 
 ensure_logger_is_setup()
-log = get_logger("auto_venv.events")
+log = get_wes_logger("auto_venv.events")
 _wes_auto_venv = AutoVenv(@.env)
 
 

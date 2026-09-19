@@ -4,9 +4,9 @@ from xonsh.events import events
 from prompt_toolkit.keys import Keys
 
 import logging
-from wes_logging import ensure_logger_is_setup, get_logger
+from wes_logging import ensure_logger_is_setup, get_wes_logger
 
-log = get_logger("learn")
+log = get_wes_logger("learn")
 log.setLevel(logging.INFO) # only failures (effectively shuts up the logger)
 
 def dump_keymaps():

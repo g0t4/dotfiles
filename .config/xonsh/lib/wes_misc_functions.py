@@ -18,8 +18,8 @@ from wes_fish_bridge import (
     fish_function_command,
 )
 from wes_abbreviations import abbr
-from wes_logging import get_logger
-log = get_logger(__name__)
+from wes_logging import get_wes_logger
+log = get_wes_logger(__name__)
 
 
 UNSUPPORTED_FISH_FUNCTIONS = {

@@ -8,11 +8,11 @@ from collections.abc import MutableMapping
 from pathlib import Path
 from typing import Any
 
-from wes_logging import get_logger
+from wes_logging import get_wes_logger
 
 
 VENV_DIRECTORY_NAMES = (".venv.local", ".venv")
-log = get_logger("auto_venv")
+log = get_wes_logger("auto_venv")
 log.setLevel(logging.ERROR) # only failures (effectively shuts up the logger)
 # log.setLevel(logging.NOTSET) # inherit
 # log.setLevel(logging.INFO)

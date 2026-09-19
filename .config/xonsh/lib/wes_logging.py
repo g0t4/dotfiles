@@ -86,5 +86,5 @@ def get_console():
     raise RuntimeError("Rich console not configured")
 
 
-def get_logger(component: str) -> logging.Logger:
+def get_wes_logger(component: str) -> logging.Logger:
     return _root_logger.getChild(component)

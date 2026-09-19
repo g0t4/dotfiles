@@ -11,8 +11,8 @@ import signal
 import socket
 import subprocess
 
-# from wes_logging import get_logger
-# log = get_logger("prompt")
+# from wes_logging import get_wes_logger
+# log = get_wes_logger("prompt")
 
 
 _prompt_state = {

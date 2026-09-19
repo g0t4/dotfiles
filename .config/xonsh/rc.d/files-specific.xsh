@@ -22,7 +22,7 @@ from wes_files_abbreviations import register_files_abbreviations
 from wes_fish_bridge import FishFunctionError, fish_function
 from wes_fish_z import FishZ, FishZError
 from wes_interactive_cat import InteractiveCat
-from wes_logging import ensure_logger_is_setup, get_logger
+from wes_logging import ensure_logger_is_setup, get_wes_logger
 from wes_fzf_pickers import (
     FzfMru,
     apply_path_selection,
@@ -41,8 +41,8 @@ register_files_abbreviations()
 
 @.env.setdefault("XONSH_KEYPRESS_DEBUG", False)
 ensure_logger_is_setup()
-log = get_logger("fzf_pickers")
-log = get_logger("files")
+log = get_wes_logger("fzf_pickers")
+log = get_wes_logger("files")
 
 
 

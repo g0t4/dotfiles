@@ -46,9 +46,9 @@ from wes_xonsh_abbreviations import (
     expand_abbreviation_on_space,
 )
 
-from wes_logging import ensure_logger_is_setup, get_logger, get_console
+from wes_logging import ensure_logger_is_setup, get_wes_logger, get_console
 ensure_logger_is_setup()
-log = get_logger("abbrs")
+log = get_wes_logger("abbrs")
 
 register_abbreviation_help()
 aliases["_abbr_help"] = lambda args, **kwargs: abbreviation_help_alias(

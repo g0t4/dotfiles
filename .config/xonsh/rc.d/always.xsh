@@ -4,10 +4,10 @@ from xonsh.built_ins import XSH
 
 aliases = XSH.aliases
 
-from wes_logging import get_logger
+from wes_logging import get_wes_logger
 
 
-log = get_logger("always")
+log = get_wes_logger("always")
 _always_ai_autosuggest_before_recording = None
 
 

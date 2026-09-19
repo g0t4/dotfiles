@@ -23,9 +23,9 @@ XONSH_LIB = Path(__file__).parents[1] / "lib"
 sys.path.insert(0, str(XONSH_LIB))
 # TODO does xonsh have a packaging mechanism for my config, to handle relative imports within my "config package"
 
-from wes_logging import ensure_logger_is_setup, get_logger
+from wes_logging import ensure_logger_is_setup, get_wes_logger
 ensure_logger_is_setup()
-# log = get_logger("path")
+# log = get_wes_logger("path")
 
 # from typing import Any
 # from xonsh.events import events
