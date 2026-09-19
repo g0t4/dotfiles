@@ -1,3 +1,5 @@
+import rich
+
 from xonsh.built_ins import XSH
 from xonsh.events import events
 
@@ -36,7 +38,6 @@ def what_shell():
 
 @events.on_command_not_found
 def wes_command_not_found(cmd, **kwargs):
-    import rich
     rich.print(f"[red]Command not found...[/]\n    {cmd=}\n")
     if kwargs:
         rich.print(f"    {kwargs=}")
