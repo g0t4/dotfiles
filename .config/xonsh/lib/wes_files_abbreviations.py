@@ -60,6 +60,7 @@ def register_files_abbreviations():
     abbr('cdc', 'cd_dir_of_command')
     abbr('cdd', 'cd_dir_of_path')
     abbr('cdl', 'cd_last_dir__in_current_dir')
+    abbr('batll', 'bat --list-languages')
     abbr('bath', 'bat --style=header')
     abbr('batf', 'bat --style=full')
     abbr(re.compile('(du|dust)\\d+'), _fish_abbreviation('dustX'))

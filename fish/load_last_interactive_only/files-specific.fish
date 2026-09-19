@@ -315,6 +315,8 @@ function batman
     BAT_THEME="Monokai Extended" command batman
 end
 
+abbr batll 'bat --list-languages'
+
 # abbr cat bat # PRN go back to this if I don't like batls
 abbr bath 'bat --style=header' # == header-filename (i.e. for multi files show names)
 abbr batf 'bat --style=full'
