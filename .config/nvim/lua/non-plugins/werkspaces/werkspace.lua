@@ -357,28 +357,27 @@ function setup_werkspace()
     -- --   if open multiple instances, all bets are off but that is fine b/c its rare (usually just if I wanna test dotfiles w/o quitting nvim editing instance)... also vscode always would reopen in already open instance so I dont know there is any logic for multiple instances when there is a "shared" session...
     -- --   I LOVE RESUMING the last open file!!!
 
-    if not is_lazy_open() then
-        vim.cmd [[
-            call RestoreSession()
-            " instead of auto load session, can use Ctrl+I to go back to last file
-            " new comment coloring with treesitter queries seems to work fine w/ session restore
-            " FYI old regex syntax based comment colors were a hot mess when loading sessions (never colored initial buffer/files correctly)
-
-            augroup SaveSessionOnQuit
-                autocmd!
-                autocmd VimLeavePre * call OnLeaveSaveSession()
-                autocmd VimLeavePre * call OnLeaveSaveWindowState()
-            augroup END
-
-            augroup SaveLastFocusedFile
-                " TODO not running on startup, only on focus changed
-                autocmd!
-                autocmd WinEnter * lua vim.g.last_focused_file = vim.fn.bufname(vim.fn.winbufnr(0))
-            augroup END
-        ]]
-    else
+    if is_lazy_open() then
         vim.notify("Lazy open => no session restore / autosave, restart to restore prior session", vim.log.levels.WARN)
     end
+    vim.cmd [[
+        call RestoreSession()
+        " instead of auto load session, can use Ctrl+I to go back to last file
+        " new comment coloring with treesitter queries seems to work fine w/ session restore
+        " FYI old regex syntax based comment colors were a hot mess when loading sessions (never colored initial buffer/files correctly)
+
+        augroup SaveSessionOnQuit
+            autocmd!
+            "autocmd VimLeavePre * call OnLeaveSaveSession()
+            "autocmd VimLeavePre * call OnLeaveSaveWindowState()
+        augroup END
+
+        augroup SaveLastFocusedFile
+            " TODO not running on startup, only on focus changed
+            autocmd!
+            autocmd WinEnter * lua vim.g.last_focused_file = vim.fn.bufname(vim.fn.winbufnr(0))
+        augroup END
+    ]]
 end
 
 function FocusLastFocusedFile()
