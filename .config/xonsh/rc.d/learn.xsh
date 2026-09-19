@@ -35,11 +35,11 @@ def what_shell():
 #         print("this is why timeoutlen matters :)")
 
 @events.on_command_not_found
-def test(cmd, **kwargs):
+def wes_command_not_found(cmd, **kwargs):
     import rich
     rich.print(f"[red]Command not found...[/]\n    {cmd=}\n")
     if kwargs:
-       rich.print(f"    {kwargs=}")
+        rich.print(f"    {kwargs=}")
     # return {"cmd": ["echo","do", "something", "else" ...] + cmd, "env": {"FOO": "BAR"}}
 
 
