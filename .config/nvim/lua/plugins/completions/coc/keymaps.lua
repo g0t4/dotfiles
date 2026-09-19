@@ -103,6 +103,8 @@ vim.keymap.set('n', '<F24>', '<Plug>(coc-references)', { silent = true })
 -- vim.keymap.set('n', '<F24>', '<Cmd>Telescope coc references<CR>', { silent = true })
 
 local function xonsh_format()
+    -- FYI using `xonsh format` b/c it supports subprocess mode (standard python would be fine in yapf but not subprocess mode)...
+    --  assume if I am using `*.xsh` it's only because I want subprocess mode, otherwise I intend to use python for xonsh config
     -- TODO format selection vs entire file?
     local lines = vim.api.nvim_buf_get_lines(0, 0, -1, false)
     local input = table.concat(lines, '\n') .. '\n'

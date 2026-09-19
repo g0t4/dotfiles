@@ -26,8 +26,8 @@ async def on_f9(connection: iterm2.Connection):
         await session.async_send_text("\x04")  # ctrl+d (exit)
         return
 
-    # TODO just pass F9? by default?
-    log("FYI F9 not handled by iterm handler... if nvim handled it then great but otherwise you might need to setup a custom mapping for other programs (within the program or in your iterm handler")
+    # TODO just pass F9 by default?
+    log("FYI F9 not handled by iterm handler... either add a handler or forward F9")
     # alerting me was just dumb, pestering the fuck out of me whenever using ssh=>nvim nevermind nvim on remote closed just fine
     # from rare_alerts import slap_human
     # slap_human("F9 quit failed", f"F9 handler doesn't know how to exit when: {jobName=}")
