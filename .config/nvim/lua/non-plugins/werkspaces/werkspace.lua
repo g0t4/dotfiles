@@ -209,7 +209,8 @@ end, {
 })
 
 function close_temp_windows_so_they_do_not_reopen()
-    local log = require("devtools.logs.logger").universal()
+    -- not sure why but getting logger was randomly hanging shutdown... not happening now so move on with the day
+    -- local log = require("devtools.logs.logger").universal() -- * can make nvim hang on shutdow slow (not sure how this causes hang when a dozen other things should've loaded it already, so then it would be cached and not slow?)
     -- TODO! close buffers for "list:///location" [Not edited] --No lines in buffer--
     --  IIRC this is opened by coc references (etc)
     --  see :buffers to find it on restarts (sometimes)
