@@ -40,7 +40,8 @@ def wes_colorful_output(cmd: str, **kwargs):
     # print(f"precommand: {cmd=}, {type(cmd)=}, {kwargs=}")
     #
     # TODO parse the command?
-    cmd = cmd.strip()
+    # log.info(f"{cmd=}")
+    cmd = cmd.strip() # strip trailing \n on submit
     if cmd.strip().startswith("env"):
         if not "| bat -l env" in cmd:
             return f"{cmd} | bat -l env"
