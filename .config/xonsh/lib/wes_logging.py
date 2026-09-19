@@ -12,7 +12,7 @@ from rich.console import Console, Group
 ITERM_CLEAR_SCROLLBACK = "\x1b]1337;ClearScrollback\x07"
 LOG_RENDER_WIDTH = 100_000
 
-_root_logger = logging.getLogger("xonsh")
+_root_logger = logging.getLogger("") # empty name for root logger to avoid prefixing all logs, could do "wes"
 _root_logger.setLevel(logging.INFO)
 _root_logger.propagate = False
 _handler: logging.Handler | None = None
