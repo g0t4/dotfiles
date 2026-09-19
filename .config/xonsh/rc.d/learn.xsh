@@ -39,11 +39,16 @@ def test(cmd, **kwargs):
 def wes_colorful_output(cmd: str, **kwargs):
     # print(f"precommand: {cmd=}, {type(cmd)=}, {kwargs=}")
     #
+    # TODO parse the command?
+    cmd = cmd.strip()
+    if cmd.strip().startswith("env"):
+        if not "| bat -l env" in cmd:
+            return f"{cmd} | bat -l env"
     if cmd.startswith("hf datasets info"):
         if not "| bat -l json" in cmd:
         # pipe to bat for coloring
         # hf datasets info roneneldan/TinyStories
-            return f"{cmd.strip()} | bat -l json"
+            return f"{cmd} | bat -l json"
     # IIAC return nothing is preferred for no change?
 
 # @events.on_pre_cmdloop
