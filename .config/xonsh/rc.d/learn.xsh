@@ -31,8 +31,11 @@ def what_shell():
 @events.on_command_not_found
 def test(cmd, **kwargs):
     import rich
-    rich.print(f"[red]Stupid mother fucker...[/] Command not found: {cmd=} {kwargs=}")
-    return 1
+    rich.print(f"[red]Command not found...[/]\n    {cmd=}\n")
+    if kwargs:
+       rich.print(f"    {kwargs=}")
+    # return {"cmd": ["echo","do", "something", "else" ...] + cmd, "env": {"FOO": "BAR"}}
+
 
 # @events.on_precommand
 @events.on_transform_command
