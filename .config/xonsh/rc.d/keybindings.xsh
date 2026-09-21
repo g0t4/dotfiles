@@ -3,6 +3,8 @@
 from xonsh.built_ins import XSH
 
 import os
+import subprocess
+import sys
 
 from prompt_toolkit.filters import vi_insert_mode, vi_navigation_mode
 from prompt_toolkit.key_binding.bindings.named_commands import get_by_name
@@ -207,4 +209,12 @@ def _wes_keybindings(bindings: KeyBindings, prompter: PromptSession, **_):
 
         app.input.read_keys = read_keys
 
-    low_level_observe_keyboard_events()
+    # low_level_observe_keyboard_events()
+
+
+def current_xonsh_version():
+    version = subprocess.check_output(
+        [sys.argv[0], "--version"],
+        text=True,
+    ).strip()
+    return version
