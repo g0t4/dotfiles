@@ -97,12 +97,25 @@ def _wes_keybindings(bindings: KeyBindings, prompter: PromptSession, **_):
     def _redo(event):
         event.current_buffer.redo()
 
+    # FYI ptk differentiates alt+i vs shift+alt+i
+    # shift+alt+"i"
     @bindings.add("escape", "I", save_before=lambda event: False)
-    def _inspect(event: KeyPressEvent):
+    def _inspect_in_commandline(event: KeyPressEvent):
         event.current_buffer.text = f"rich.inspect({event.current_buffer.text})"
         event.current_buffer.cursor_position = len(event.current_buffer.text) # cursor to end of buffer
         # event.current_buffer.insert_text("FOO") # moves cursor too
         # run_in_terminal(event.current_buffer.text)
+
+    # alt+"i"
+    @bindings.add("escape", "i", save_before=lambda event: False)
+    def _inspect_live(event: KeyPressEvent):
+        cmd_line = event.current_buffer.text
+        # how do I compile it into python and wrap with inspect?
+        code = f"rich.inspect({cmd_line})"
+        print("\n", code)
+        # run it live
+        func = lambda: XSH.execer.eval(code, globals(), locals())
+        run_in_terminal(func)
 
     # Prompt Toolkit provides this as Alt+. only in its Emacs bindings. Make
     # the same history argument cycling available while Xonsh is in Vi mode.
@@ -194,4 +207,4 @@ def _wes_keybindings(bindings: KeyBindings, prompter: PromptSession, **_):
 
         app.input.read_keys = read_keys
 
-    low_level_observe_keyboard_events()
+    # low_level_observe_keyboard_events()
