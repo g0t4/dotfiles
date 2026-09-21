@@ -9,7 +9,9 @@ from prompt_toolkit.key_binding.bindings.named_commands import get_by_name
 from xonsh.dirstack import cd as _xonsh_cd
 from xonsh.tools import print_above_prompt
 from xonsh.events import events
-from prompt_toolkit.key_binding.key_processor import KeyPressEvent
+from prompt_toolkit.key_binding import KeyBindings, KeyPressEvent
+from prompt_toolkit.application import run_in_terminal
+from prompt_toolkit.shortcuts import PromptSession
 
 from wes_directory_history import DirectoryHistory
 
@@ -58,7 +60,7 @@ def _wes_navigate_directory_history_intra_prompt(event, *, forward):
 
 
 @events.on_ptk_create
-def _wes_keybindings(bindings, prompter, **_):
+def _wes_keybindings(bindings: KeyBindings, prompter: PromptSession, **_):
 
     # Match Fish prevd-or-backward-word/nextd-or-forward-word
     # On an _Empty Command Line_ Alt-Left/Right navigate cwd history in place
@@ -90,6 +92,13 @@ def _wes_keybindings(bindings, prompter, **_):
     @bindings.add("c-y", save_before=lambda event: False)
     def _redo(event):
         event.current_buffer.redo()
+
+    @bindings.add("escape", "I", save_before=lambda event: False)
+    def _inspect(event: KeyPressEvent):
+        event.current_buffer.text = f"rich.inspect({event.current_buffer.text})"
+        event.current_buffer.cursor_position = len(event.current_buffer.text) # cursor to end of buffer
+        # event.current_buffer.insert_text("FOO") # moves cursor too
+        # run_in_terminal(event.current_buffer.text)
 
     # Prompt Toolkit provides this as Alt+. only in its Emacs bindings. Make
     # the same history argument cycling available while Xonsh is in Vi mode.
