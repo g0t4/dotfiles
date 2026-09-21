@@ -15,6 +15,9 @@ from prompt_toolkit.application import run_in_terminal
 from prompt_toolkit.shortcuts import PromptSession
 
 from wes_directory_history import DirectoryHistory
+from wes_logging import get_wes_logger
+
+log = get_wes_logger(__name__)
 
 # Terminal input contract:
 # In iTerm2 Profiles > Keys, configure each Option key as Esc+, not Meta.
