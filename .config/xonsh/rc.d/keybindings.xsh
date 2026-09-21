@@ -10,6 +10,7 @@ from xonsh.dirstack import cd as _xonsh_cd
 from xonsh.tools import print_above_prompt
 from xonsh.events import events
 from prompt_toolkit.key_binding import KeyBindings, KeyPressEvent
+from prompt_toolkit.keys import Keys
 from prompt_toolkit.application import run_in_terminal
 from prompt_toolkit.shortcuts import PromptSession
 
@@ -175,4 +176,17 @@ def _wes_keybindings(bindings: KeyBindings, prompter: PromptSession, **_):
     #   => `ysiw"` puts quotes around inner little word
     #   => `ysiW"` puts quotes around inner little word
     # - ?PRN? add test for timeoutlen change?
+
+    # low level hook to inspect keyboard inputs (b/c `bindings.add(Keys.Any)` barely captures anything)
+    app = prompter.app
+
+    original_read_keys = app.input.read_keys
+
+    def read_keys():
+        keys = original_read_keys()
+        for k in keys:
+            print("KEY:", repr(k.key), "DATA:", repr(k.data))
+        return keys
+
+    app.input.read_keys = read_keys
 
