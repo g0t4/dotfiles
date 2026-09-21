@@ -21,66 +21,71 @@ from font_zooms import bigger_font_wes_stops, smaller_font_wes_stops
 
 async def main(connection: iterm2.Connection):
 
-    # The original implementation used a keystroke monitor to trigger actions.
-    # All functionality is now exposed via RPC calls, allowing external tools
-    # (e.g., Stream Deck, Keyboard Maestro) to invoke the actions directly.
     asyncio.create_task(semantic_daemon(connection))
 
-    # * map these into keymaps in iterm settings so there's no need for KM remapping nonsense
-    # FYI I mapped
-    #  cmd+d => vertical split (replaces builtin keymap)
-    #  cmd+d+shift => horizontal split (replaces builtin keymap to do this with current profile and/or just no profile)
+    # *** see iTerm2 => Settings => Keys  for actual keymaps, notes below are just a reminder of what I had at one point
 
     @iterm2.RPC
     async def wes_keymap_split_vertical_pane():
+        #  cmd+d => vertical split (replaces builtin keymap)
         await wes_split_pane(connection, split_vert=True)
 
     @iterm2.RPC
     async def wes_keymap_split_horizontal_pane():
+        #  cmd+d+shift => horizontal split (replaces builtin keymap to do this with current profile and/or just no profile)
         await wes_split_pane(connection, split_vert=False)
 
     @iterm2.RPC
     async def wes_keymap_new_tab():
         log("NEW TAB")
+        # cmd+t
         await wes_new_tab(connection, force_local=False)
 
     @iterm2.RPC
     async def wes_keymap_new_tab_force_local():
         log("NEW TAB FORCE_LOCAL")
+        # cmd+t+shift
         await wes_new_tab(connection, force_local=True)
 
     @iterm2.RPC
     async def wes_keymap_new_tab_then_close_others():
         # FYI IIRC only use this via streamdeck button (use keymap as intermediary)
         #  probably could have streamdeck button call some python code to invoke this?
+        #  key_y and control and command and shift
         log("NEW TAB THEN CLOSE OTHERS")
         await new_tab_then_close_others(connection)
 
     @iterm2.RPC
     async def wes_keymap_new_window():
         log("NEW WINDOW")
+        # cmd+n
         await wes_new_window(connection, force_local=False)
 
     @iterm2.RPC
     async def wes_keymap_new_window_force_local():
         log("NEW WINDOW FORCE_LOCAL")
+        # cmd+n+shift
         await wes_new_window(connection, force_local=True)
 
     @iterm2.RPC
     async def wes_keymap_replace_pane():
         log("REPLACE PANE")
+        # cmd+r
         await wes_replace_pane(connection, force_local=False)
 
     @iterm2.RPC
     async def wes_keymap_smaller_font():
+        # key_minus and control and command and shift
         await smaller_font_wes_stops(connection)
 
     @iterm2.RPC
     async def wes_keymap_bigger_font():
+        # key_equal and control and command and shift
         await bigger_font_wes_stops(connection)
 
     @iterm2.RPC
     async def wes_keymap_ask_openai():
+        # key_b and control and command and shift
         log("ASK OPENAI")
         await ask_openai(connection)
 
@@ -101,7 +106,6 @@ async def main(connection: iterm2.Connection):
 
     @iterm2.RPC
     async def wes_keymap_f9():
-        # TODO map F9 so it can fall through to neovim too?
         await on_f9(connection)
 
     @iterm2.RPC
