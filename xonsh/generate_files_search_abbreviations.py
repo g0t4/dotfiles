@@ -48,7 +48,7 @@ def declaration(name, replacement, options):
         "finduw": "f\"{FIND_COMMAND} '%' -user wes\"",
         "h": repr("history show all | bat -l xonsh --color always | less -F"),
         "hgr": repr('history show all | rg_grep "%"'),
-        "hm": repr("history pull"),
+        "hm": repr("history pull --show-commands"),
         "hd": repr('history delete "%"'),
         "list_filetype_extensions": repr(
             "fd --type file | awk -F. 'NF > 1 {print $NF}' | sort | uniq -c | sort"
