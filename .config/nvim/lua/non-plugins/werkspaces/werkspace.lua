@@ -369,8 +369,8 @@ function setup_werkspace()
 
         augroup SaveSessionOnQuit
             autocmd!
-            "autocmd VimLeavePre * call OnLeaveSaveSession()
-            "autocmd VimLeavePre * call OnLeaveSaveWindowState()
+            autocmd VimLeavePre * call OnLeaveSaveSession()
+            autocmd VimLeavePre * call OnLeaveSaveWindowState()
         augroup END
 
         augroup SaveLastFocusedFile
