@@ -15,6 +15,8 @@ from prompt_toolkit.key_binding import KeyBindings, KeyPressEvent
 from prompt_toolkit.keys import Keys
 from prompt_toolkit.application import run_in_terminal
 from prompt_toolkit.shortcuts import PromptSession
+from prompt_toolkit.filters import Never
+
 
 from wes_directory_history import DirectoryHistory
 from wes_logging import get_wes_logger
@@ -235,6 +237,16 @@ def _wes_keybindings(bindings: KeyBindings, prompter: PromptSession, **_):
     #
     #     key_processor.feed_multiple = feed_multiple
     #     key_processor._wes_keypress_tee_installed = True
+
+    def override_v0_24_eager_escape_in_vi_mode():
+        for b in bindings.bindings:
+            if (
+                b.keys == (Keys.Escape,)
+                and b.handler.__name__ == "_back_to_navigation"
+            ):
+                b.eager = Never()
+
+    override_v0_24_eager_escape_in_vi_mode()
 
 
 def current_xonsh_version():
