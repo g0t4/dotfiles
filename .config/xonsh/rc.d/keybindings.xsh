@@ -103,7 +103,7 @@ def _wes_keybindings(bindings: KeyBindings, prompter: PromptSession, **_):
     @bindings.add("escape", "i", save_before=lambda event: False)
     def _inspect_in_commandline(event: KeyPressEvent):
         event.current_buffer.text = f"rich.inspect({event.current_buffer.text})"
-        event.current_buffer.cursor_position = len(event.current_buffer.text) # cursor to end of buffer
+        event.current_buffer.cursor_position = len(event.current_buffer.text)  # cursor to end of buffer
         # event.current_buffer.insert_text("FOO") # moves cursor too
         # run_in_terminal(event.current_buffer.text)
     #
@@ -169,7 +169,7 @@ def _wes_keybindings(bindings: KeyBindings, prompter: PromptSession, **_):
     # * timeoutlen => default 1 (time to differentiate overlapping key bindings)
     #    A + AB defined => press A then have to wait a bit of time if we want to detect AB and not just fire A and ignore B (or chain with next keypress)
     #    1 IIAC == 1 second? (one difference, vim configures this in ms)
-    prompter.app.timeoutlen = 0.3 # mirror neovim values in early.lua for now (I don't need 1 second!)
+    prompter.app.timeoutlen = 0.3  # mirror neovim values in early.lua for now (I don't need 1 second!)
     #
     # ***** FYI this is all an attempt to make insert=>normal mode faster (one key press too) *****
     #       + not trigger alt(esc)+shift+letter keymaps when leaving insert mode
@@ -183,7 +183,6 @@ def _wes_keybindings(bindings: KeyBindings, prompter: PromptSession, **_):
     #   these conflict for sure with my Shift+Alt+B/F/U etc fzf pickers, those could be remapped TBH
     #
     # FYI if you set both timeoutlen+ttimeoutlen==0 => escape instantly goes into normal mode (from insert mode) but then `dd` and keymaps like it won't work ;) cuz can't do the with zero lag (IIUC)
-
 
     # TODO wish list of keybinds (not urgent)
     #
