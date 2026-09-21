@@ -239,6 +239,15 @@ def _wes_keybindings(bindings: KeyBindings, prompter: PromptSession, **_):
     #     key_processor._wes_keypress_tee_installed = True
 
     def override_v0_24_eager_escape_in_vi_mode():
+        # FYI this is not needed in v0.23, just v0.24
+        version = current_xonsh_version()
+        if version.startswith("xonsh/0.23"):
+            return
+        if not version.startswith("xonsh/0.24"):
+            print(f"""applying eager escape fix to a version ({version=}) of xonsh that may not need it?
+            next major version is a good time to check if my 0.24 fix is still necessary...
+            update warning code accordingly...""")
+            return
         for b in bindings.bindings:
             if (
                 b.keys == (Keys.Escape,)
