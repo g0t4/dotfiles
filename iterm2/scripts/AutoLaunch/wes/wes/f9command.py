@@ -2,6 +2,10 @@ import iterm2
 from common import get_current_session
 from logs import log
 
+
+async def forward_f9(session):
+    await session.async_send_text("\x1b[20~")
+
 async def on_f9(connection: iterm2.Connection):
     # this started out with how I use F9 to quit nvim
     #   might be nice to F9 nvim and F9 again to close iterm pane (not all of iterm though)
@@ -18,7 +22,7 @@ async def on_f9(connection: iterm2.Connection):
         # send to neovim to handle it
         # await session.async_send_text(":qa\r")
         # send F9 to neovim...
-        await session.async_send_text("\x1b[20~")  # send F9 key to neovim
+        await forward_f9(session)
         return
     if jobName in ["fish", "bash", "zsh", "xonsh", "Python", "lldb", "gdb"]:
         # shell command line must be empty to quit
@@ -26,10 +30,5 @@ async def on_f9(connection: iterm2.Connection):
         await session.async_send_text("\x04")  # ctrl+d (exit)
         return
 
-    # TODO just pass F9 by default?
-    log("FYI F9 not handled by iterm handler... either add a handler or forward F9")
-    # alerting me was just dumb, pestering the fuck out of me whenever using ssh=>nvim nevermind nvim on remote closed just fine
-    # from rare_alerts import slap_human
-    # slap_human("F9 quit failed", f"F9 handler doesn't know how to exit when: {jobName=}")
-
-
+    await forward_f9(session)
+    log(f"forwarding F9, jobName not mapped to explicit action: {jobName}")
