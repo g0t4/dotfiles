@@ -207,4 +207,4 @@ def _wes_keybindings(bindings: KeyBindings, prompter: PromptSession, **_):
 
         app.input.read_keys = read_keys
 
-    # low_level_observe_keyboard_events()
+    low_level_observe_keyboard_events()
