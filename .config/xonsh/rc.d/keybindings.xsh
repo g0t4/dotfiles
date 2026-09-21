@@ -202,7 +202,7 @@ def _wes_keybindings(bindings: KeyBindings, prompter: PromptSession, **_):
         def read_keys():
             keys = original_read_keys()
             for k in keys:
-                print("KEY:", repr(k.key), "DATA:", repr(k.data))
+                log.info(f"Key: {k.key}, Data: {k.data}")
             return keys
 
         app.input.read_keys = read_keys
