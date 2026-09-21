@@ -180,16 +180,18 @@ def _wes_keybindings(bindings: KeyBindings, prompter: PromptSession, **_):
     #   => `ysiW"` puts quotes around inner little word
     # - ?PRN? add test for timeoutlen change?
 
-    # low level hook to inspect keyboard inputs (b/c `bindings.add(Keys.Any)` barely captures anything)
-    app = prompter.app
+    def low_level_observe_keyboard_events():
+        # low level hook to inspect keyboard inputs (b/c `bindings.add(Keys.Any)` barely captures anything)
+        app = prompter.app
 
-    original_read_keys = app.input.read_keys
+        original_read_keys = app.input.read_keys
 
-    def read_keys():
-        keys = original_read_keys()
-        for k in keys:
-            print("KEY:", repr(k.key), "DATA:", repr(k.data))
-        return keys
+        def read_keys():
+            keys = original_read_keys()
+            for k in keys:
+                print("KEY:", repr(k.key), "DATA:", repr(k.data))
+            return keys
 
-    app.input.read_keys = read_keys
+        app.input.read_keys = read_keys
 
+    low_level_observe_keyboard_events()
