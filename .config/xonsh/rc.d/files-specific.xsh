@@ -53,31 +53,6 @@ def _files_picker_key_event(event):
     ]
 
 
-def _files_install_keypress_tee(prompter):
-    if prompter is None:
-        return
-    key_processor = prompter.app.key_processor
-    if getattr(key_processor, "_wes_keypress_tee_installed", False):
-        return
-    original_feed_multiple = key_processor.feed_multiple
-
-    def feed_multiple(key_presses, first=False):
-        keys = list(key_presses)
-        if bool(@.env.get("XONSH_KEYPRESS_DEBUG", False)):
-            log.info(
-                "key_feed first=%s keys=%r",
-                first,
-                [
-                    {"key": str(key_press.key), "data": repr(key_press.data)}
-                    for key_press in keys
-                ],
-            )
-        return original_feed_multiple(keys, first=first)
-
-    key_processor.feed_multiple = feed_multiple
-    key_processor._wes_keypress_tee_installed = True
-
-
 def _files_run(*args, **kwargs):
     """Run with the live Xonsh environment, including its current PATH."""
     kwargs.setdefault("env", @.env.detype())
@@ -326,6 +301,7 @@ aliases["supercd"] = _files_unsupported(
 _files_fzf_mru = FzfMru()
 _files_completion_parser = CompletionContextParser()
 
+# * map CSI => my bindings for file pickers
 # Enhanced keyboard protocols encode Alt-Shift-letter as one CSI sequence
 # instead of the legacy Escape + uppercase-letter pair Prompt Toolkit expects.
 # Translate both common encodings back into that portable key pair.
@@ -537,7 +513,6 @@ async def _files_variable_picker_handler(event):
 def _files_fzf_picker_bindings(bindings, prompter=None, **_):
     # Alt bindings rely on the iTerm2 Esc+ input contract documented in
     # keybindings.xsh. Do not use raw 8-bit Meta bytes for these chords.
-    _files_install_keypress_tee(prompter)
     insert_modes = ViInsertMode() | EmacsInsertMode()
     for key, picker in (
         ("D", "dirs"),

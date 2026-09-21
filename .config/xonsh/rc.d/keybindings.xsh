@@ -209,6 +209,31 @@ def _wes_keybindings(bindings: KeyBindings, prompter: PromptSession, **_):
 
         app.input.read_keys = read_keys
 
+    # def _keypress_tee_from_codex(prompter):
+    #     """ shows some of the same info as my low_level_observe_keyboard_events above """
+    #     if prompter is None:
+    #         return
+    #     key_processor = prompter.app.key_processor
+    #     if getattr(key_processor, "_wes_keypress_tee_installed", False):
+    #         return
+    #     original_feed_multiple = key_processor.feed_multiple
+    #
+    #     def feed_multiple(key_presses, first=False):
+    #         keys = list(key_presses)
+    #         if bool(@.env.get("XONSH_KEYPRESS_DEBUG", False)):
+    #             log.info(
+    #                 "key_feed first=%s keys=%r",
+    #                 first,
+    #                 [
+    #                     {"key": str(key_press.key), "data": repr(key_press.data)}
+    #                     for key_press in keys
+    #                 ],
+    #             )
+    #         return original_feed_multiple(keys, first=first)
+    #
+    #     key_processor.feed_multiple = feed_multiple
+    #     key_processor._wes_keypress_tee_installed = True
+    #
     # low_level_observe_keyboard_events()
 
 
