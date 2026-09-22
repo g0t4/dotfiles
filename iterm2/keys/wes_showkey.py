@@ -124,8 +124,11 @@ def main() -> int:
                     text = None
 
                 if text is not None and len(text) == 1:
-                    sys.stdout.write(visualize_char(ord(text)))
-                    decoded = visualize_pua(ord(text))
+                    number = ord(text)
+                    char = visualize_char(number)
+                    # if char == "<ESC>": print("CONSIDER")
+                    sys.stdout.write(char)
+                    decoded = visualize_pua(number)
                     if decoded:
                         rich.print(f"[bold] {decoded}[/]", end="")
                 else:
