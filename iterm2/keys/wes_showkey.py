@@ -12,6 +12,8 @@ import os
 import sys
 import termios
 
+from custom_keys import PUA_BASE, PUA_END, decode_key
+
 ALT = 0x80
 
 # Names for the ASCII control characters (index 0..32).
@@ -48,6 +50,13 @@ def visualize_char(codepoint: int) -> str:
             return f"\\u{codepoint:04x}"
         return f"\\U{codepoint:08x}"
     return chr(codepoint)
+
+def visualize_pua(codepoint: int) -> str | None:
+    if codepoint < PUA_BASE:
+        return None
+    if codepoint > PUA_END:
+        return None
+    return decode_key(chr(codepoint))
 
 
 def visualize_byte(byte: int) -> str:
@@ -115,6 +124,9 @@ def main() -> int:
 
                 if text is not None and len(text) == 1:
                     sys.stdout.write(visualize_char(ord(text)))
+                    decoded = visualize_pua(ord(text))
+                    if decoded:
+                        sys.stdout.write(f" {decoded}")
                 else:
                     for byte in seq:
                         sys.stdout.write(visualize_byte(byte))

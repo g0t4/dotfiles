@@ -191,15 +191,17 @@ def decode_key(ch):
     key_id = value >> 4
     modifier_mask = value & 0xF
 
+    # TODO fix KEY_IDS to map upper case back correctly? or no?
+    #  also means giving uppercase a diff set of #s than 1-26?
     key = chr(ord("a") + key_id)
 
-    mods = {
+    mods = [
         name
         for bit, name in MODS.items()
         if modifier_mask & bit
-    }
+    ]
 
-    return key, mods
+    return str.join('+', mods + [key])
 
 def list_pua_keys():
         #     cp = binding_codepoint(new)
