@@ -202,6 +202,6 @@ def list_pua_keys():
 
 if __name__ == "__main__":
     import sys
-    if sys.argv[0] == "list_pua_keys":
+    if sys.argv[1] == "list_pua_keys":
         list_pua_keys()
 

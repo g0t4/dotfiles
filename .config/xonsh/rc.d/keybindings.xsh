@@ -21,6 +21,7 @@ from xonsh.formatter import format_source
 
 from wes_directory_history import DirectoryHistory
 from wes_logging import get_wes_logger
+from wes_abbreviations import abbr
 
 log = get_wes_logger(__name__)
 
@@ -267,6 +268,11 @@ def _wes_keybindings(bindings: KeyBindings, prompter: PromptSession, **_):
 
     override_v0_24_eager_escape_in_vi_mode()
 
+abbr("pua", "list_pua_keys()")
+def list_pua_keys():
+    env f"PYTHONPATH={$WES_DOTFILES}/" \
+        f"{$WES_DOTFILES}/.venv/bin/python3" \
+        f"{$WES_DOTFILES}/iterm2/keys/custom_keys.py" list_pua_keys
 
 def current_xonsh_version():
     version = subprocess.check_output(
