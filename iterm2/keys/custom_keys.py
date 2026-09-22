@@ -180,7 +180,7 @@ def decode_key(ch):
 
     return key, mods
 
-def list_keys():
+def list_pua_keys():
         #     cp = binding_codepoint(new)
         # print(
         #     f"ADD     {chord:20} "
