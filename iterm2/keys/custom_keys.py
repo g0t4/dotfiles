@@ -1,4 +1,7 @@
 import iterm2
+import rich
+
+from rich.table import Table
 
 PUA_BASE = 0xE000
 PUA_END = 0xEFFF
@@ -210,13 +213,6 @@ def decode_key(ch):
     return str.join('+', mods + [key])
 
 def list_pua_keys():
-        #     cp = binding_codepoint(new)
-        # print(
-        #     f"ADD     {chord:20} "
-        #     f"U+{cp:04X}  {new.param}"
-        # )
-    import rich
-    from rich.table import Table
 
     table = Table()
     table.add_column("Chord")
@@ -224,7 +220,6 @@ def list_pua_keys():
     table.add_column("Param")
     for chord in sorted(CUSTOM_KEYS):
         binding = make_binding(chord)
-        # print(chord, f"U+{binding_codepoint(binding):04X}")
         table.add_row(chord, f"U+{binding_codepoint(binding):04X}", binding.param)
     rich.print(table)
 
