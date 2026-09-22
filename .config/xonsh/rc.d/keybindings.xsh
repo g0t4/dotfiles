@@ -279,6 +279,11 @@ def list_iterm_keys():
         f"{$WES_DOTFILES}/.venv/bin/python3" \
         f"list_iterm2_global_keys.py"
 
+def wes_showkey():
+    env f"PYTHONPATH={$WES_DOTFILES}/iterm2/keys" \
+        f"{$WES_DOTFILES}/.venv/bin/python3" \
+        f"wes_showkey.py"
+
 def current_xonsh_version():
     version = subprocess.check_output(
         [sys.argv[0], "--version"],
