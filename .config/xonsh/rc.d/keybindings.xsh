@@ -266,21 +266,21 @@ def _wes_keybindings(bindings: KeyBindings, prompter: PromptSession, **_):
 
     override_v0_24_eager_escape_in_vi_mode()
 
-abbr("pua", "list_pua_keys()")
-def list_pua_keys():
+abbr("pua", "doctor_list_pua_keys()")
+def doctor_list_pua_keys():
     env f"PYTHONPATH={$WES_DOTFILES}/iterm2/keys" \
         f"{$WES_DOTFILES}/.venv/bin/python3" \
         "-c" \
         f"import custom_keys; custom_keys.list_pua_keys()" list_pua_keys
 
-abbr("list_iterm_keys", "list_iterm_keys()")
-def list_iterm_keys():
+abbr("doctor_list_iterm_keys", "doctor_list_iterm_keys()")
+def doctor_list_iterm_keys():
     env f"PYTHONPATH={$WES_DOTFILES}/iterm2/keys" \
         f"{$WES_DOTFILES}/.venv/bin/python3" \
         f"list_iterm2_global_keys.py"
 
-abbr('wes_showkey', 'wes_showkey()')
-def wes_showkey():
+abbr('showkey', 'doctor_wes_showkey()')
+def doctor_wes_showkey():
     env f"PYTHONPATH={$WES_DOTFILES}/iterm2/keys" \
         f"{$WES_DOTFILES}/.venv/bin/python3" \
         f"{$WES_DOTFILES}/iterm2/keys/wes_showkey.py"
