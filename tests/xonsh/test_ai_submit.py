@@ -116,7 +116,8 @@ def test_shift_f6_persists_toggle_and_refreshes_prompt_after_hiding_snout(tmp_pa
         "from prompt_toolkit.key_binding import KeyBindings; "
         "from prompt_toolkit.keys import Keys; "
         "from types import SimpleNamespace; "
-        "bindings = KeyBindings(); prompter = SimpleNamespace(message=None); "
+        "bindings = KeyBindings(); "
+        "prompter = SimpleNamespace(message=None, bottom_toolbar='visible'); "
         "events.on_ptk_create.fire(bindings=bindings, prompter=prompter); "
         "handler = next(binding.handler for binding in bindings.bindings "
         "if binding.keys == (Keys.F18,)); "
@@ -127,6 +128,7 @@ def test_shift_f6_persists_toggle_and_refreshes_prompt_after_hiding_snout(tmp_pa
         "event = SimpleNamespace(current_buffer=Buffer(), app=app); "
         "$XONSH_AI_AUTOSUGGEST = True; handler(event); "
         "assert $XONSH_AI_AUTOSUGGEST is False; "
+        "assert prompter.bottom_toolbar is None; "
         "assert prompter.message == [('prompt', 'without snout')]; "
         "assert state['invalidated']"
     )
@@ -199,6 +201,65 @@ def test_semantic_history_is_included_as_a_separate_prompt_signal():
         "content = body['messages'][1]['content']; "
         "assert 'semantic_history_commands_most_relevant_first=' in content; "
         "assert 'git diff --staged' in content"
+    )
+    env = os.environ.copy()
+    env["XONSH_LOG"] = os.devnull
+
+    completed = subprocess.run(
+        ["xonsh", "--no-rc", "-c", command],
+        capture_output=True,
+        text=True,
+        env=env,
+    )
+
+    assert completed.returncode == 0, completed.stderr
+
+
+def test_reasoning_toolbar_survives_xonsh_prompt_setup_and_shows_live_tail():
+    ai = ROOT / ".config/xonsh/rc.d/ai-autosuggest.xsh"
+    command = (
+        f"source {ai}; "
+        "from prompt_toolkit.key_binding import KeyBindings; "
+        "from types import SimpleNamespace; "
+        "bindings = KeyBindings(); prompter = SimpleNamespace(bottom_toolbar=None); "
+        "events.on_ptk_create.fire(bindings=bindings, prompter=prompter); "
+        "assert prompter.bottom_toolbar is None; "
+        "_wes_install_reasoning_toolbar_after_xonsh_clears_it(); "
+        "toolbar_provider = prompter.bottom_toolbar; "
+        "assert toolbar_provider == _ai_autosuggester._reasoning_toolbar; "
+        "assert toolbar_provider() is None; "
+        "_ai_autosuggester._reasoning_request_id = 7; "
+        "assert toolbar_provider()[0][1] == 'prefill…'; "
+        "_ai_autosuggester._reasoning_content = 'first\\n' + ('x' * 260); "
+        "toolbar = toolbar_provider(); "
+        "assert toolbar[0][0] == 'fg:#888888 italic'; "
+        "assert toolbar[0][1].startswith('thinking › '); "
+        "assert len(toolbar[0][1]) == len('thinking › ') + 240"
+    )
+    env = os.environ.copy()
+    env["XONSH_LOG"] = os.devnull
+
+    completed = subprocess.run(
+        ["xonsh", "--no-rc", "-c", command],
+        capture_output=True,
+        text=True,
+        env=env,
+    )
+
+    assert completed.returncode == 0, completed.stderr
+
+
+def test_reasoning_toolbar_waits_until_prompter_exists():
+    ai = ROOT / ".config/xonsh/rc.d/ai-autosuggest.xsh"
+    command = (
+        f"source {ai}; "
+        "from types import SimpleNamespace; global _ai_prompter; "
+        "_ai_prompter = None; "
+        "assert _install_reasoning_toolbar() is False; "
+        "_ai_prompter = SimpleNamespace(bottom_toolbar=None); "
+        "_wes_install_reasoning_toolbar_after_xonsh_clears_it(); "
+        "assert _ai_prompter.bottom_toolbar == "
+        "_ai_autosuggester._reasoning_toolbar"
     )
     env = os.environ.copy()
     env["XONSH_LOG"] = os.devnull

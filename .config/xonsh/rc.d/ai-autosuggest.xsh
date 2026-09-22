@@ -35,14 +35,21 @@ from wes_semantic_history import InferenceClient, SemanticHistoryRetriever
 @.env.setdefault(
     "XONSH_AI_AUTOSUGGEST", read_autosuggest_enabled(@.env)
 )
-@.env.setdefault(
-    "XONSH_AI_AUTOSUGGEST_URL",
-    "http://paxy:8014/v1/chat/completions",
-)
-@.env.setdefault(
-    "XONSH_AI_AUTOSUGGEST_MODEL",
+_AI_AUTOSUGGEST_URL = "http://paxy:8014/v1/chat/completions"
+_AI_AUTOSUGGEST_MODEL = "ggml-org/DeepSeek-V4-Flash-Vision-Exp-GGUF"
+
+# Migrate the former defaults even when an existing iTerm/Xonsh parent process
+# exported them. Preserve any other explicit endpoint or model override.
+if @.env.get("XONSH_AI_AUTOSUGGEST_URL") in (
+    None,
+    "http://build21.lan:8013/v1/chat/completions",
+):
+    $XONSH_AI_AUTOSUGGEST_URL = _AI_AUTOSUGGEST_URL
+if @.env.get("XONSH_AI_AUTOSUGGEST_MODEL") in (
+    None,
     "ggml-org/gpt-oss-120b-GGUF",
-)
+):
+    $XONSH_AI_AUTOSUGGEST_MODEL = _AI_AUTOSUGGEST_MODEL
 @.env.setdefault("XONSH_AI_AUTOSUGGEST_DEBUG", False)
 @.env.setdefault("XONSH_AI_SEMANTIC_HISTORY", True)
 @.env.setdefault("XONSH_AI_SEMANTIC_HISTORY_HOST", "build21.lan")
@@ -108,6 +115,8 @@ class _StreamingAIAutoSuggest(AutoSuggest):
         self._choice_buffer_text = None
         self._previous_completions = []
         self._submitting_buffer = None
+        self._reasoning_request_id = None
+        self._reasoning_content = ""
         semantic_client = InferenceClient(
             str($XONSH_AI_SEMANTIC_HISTORY_HOST),
             int($XONSH_AI_SEMANTIC_HISTORY_PORT),
@@ -125,6 +134,31 @@ class _StreamingAIAutoSuggest(AutoSuggest):
     def get_suggestion(self, buffer, document):
         # Prompt Toolkit calls the async implementation below.
         return None
+
+    def _reasoning_toolbar(self):
+        if self._reasoning_request_id is None:
+            return None
+        visible = " ".join(self._reasoning_content.split())[-240:]
+        text = f"thinking › {visible}" if visible else "prefill…"
+        return [("fg:#888888 italic", text)]
+
+    def _start_reasoning(self, request_id):
+        self._reasoning_request_id = request_id
+        self._reasoning_content = ""
+        get_app().invalidate()
+
+    def _append_reasoning(self, request_id, content):
+        if self._reasoning_request_id != request_id:
+            return
+        self._reasoning_content += content
+        get_app().invalidate()
+
+    def _finish_reasoning(self, request_id):
+        if self._reasoning_request_id != request_id:
+            return
+        self._reasoning_request_id = None
+        self._reasoning_content = ""
+        get_app().invalidate()
 
     def _history_suggestion(self, buffer, document):
         if not @.env.get("AUTO_SUGGEST", True):
@@ -295,9 +329,16 @@ class _StreamingAIAutoSuggest(AutoSuggest):
             buffer.text,
             transcript,
         )
-        return_code, last_sse, reasoning_content = await self._stream_request(
-            request_id, body, collect
-        )
+        self._start_reasoning(request_id)
+        try:
+            return_code, last_sse, reasoning_content = await self._stream_request(
+                request_id,
+                body,
+                collect,
+                lambda content: self._append_reasoning(request_id, content),
+            )
+        finally:
+            self._finish_reasoning(request_id)
         command = self._clean_command(accumulated)
         if return_code == 0:
             try:
@@ -357,7 +398,9 @@ class _StreamingAIAutoSuggest(AutoSuggest):
             buffer.on_suggestion_set.fire()
             get_app().invalidate()
 
-    async def _stream_request(self, request_id, body, on_content):
+    async def _stream_request(
+        self, request_id, body, on_content, on_reasoning=None
+    ):
         last_sse = None
         reasoning_content = ""
         process = await asyncio.create_subprocess_exec(
@@ -398,11 +441,18 @@ class _StreamingAIAutoSuggest(AutoSuggest):
                     last_sse = event
                     delta = event["choices"][0].get("delta", {})
                     content = delta.get("content") or ""
-                    reasoning_content += delta.get("reasoning_content") or ""
+                    reasoning = (
+                        delta.get("reasoning_content")
+                        or delta.get("reasoning")
+                        or ""
+                    )
+                    reasoning_content += reasoning
                 except (KeyError, IndexError, TypeError, json.JSONDecodeError):
                     continue
                 if content:
                     on_content(content)
+                if reasoning and on_reasoning is not None:
+                    on_reasoning(reasoning)
 
             return await process.wait(), last_sse, reasoning_content
         except asyncio.CancelledError:
@@ -474,10 +524,12 @@ class _StreamingAIAutoSuggest(AutoSuggest):
 
         try:
             body = self._request_body(buffer, document, semantic_commands)
+            self._start_reasoning(request_id)
             return_code, last_sse, reasoning_content = await self._stream_request(
                 request_id,
                 body,
                 show_chunk,
+                lambda content: self._append_reasoning(request_id, content),
             )
         except asyncio.CancelledError:
             log.info(
@@ -499,6 +551,7 @@ class _StreamingAIAutoSuggest(AutoSuggest):
                 print_above_prompt(f"AI autosuggest: {type(error).__name__}: {error}")
             return self._history_suggestion(buffer, document)
         finally:
+            self._finish_reasoning(request_id)
             if self._active_task is asyncio.current_task():
                 self._active_task = None
                 self._active_request_id = None
@@ -531,20 +584,45 @@ class _StreamingAIAutoSuggest(AutoSuggest):
 
 
 _ai_autosuggester = _StreamingAIAutoSuggest()
+_ai_prompter = None
 
 
 def _cancel_ai_autosuggestion_for_submit(buffer):
     _ai_autosuggester.cancel_for_submit(buffer)
 
 
+def _install_reasoning_toolbar():
+    if _ai_prompter is None:
+        return False
+    _ai_prompter.bottom_toolbar = (
+        _ai_autosuggester._reasoning_toolbar
+        if @.env.get("XONSH_AI_AUTOSUGGEST", True)
+        else None
+    )
+    return True
+
+
+@events.on_pre_prompt
+def _wes_install_reasoning_toolbar_after_xonsh_clears_it(**_):
+    _install_reasoning_toolbar()
+
+
 @events.on_ptk_create
 def _wes_install_ai_autosuggester(bindings, prompter=None, **_):
+    global _ai_prompter
     # Xonsh 0.23 constructs AutoSuggestFromHistory inside cmdloop after rc.d
     # has loaded. Replacing that factory lets Xonsh pass our implementation to
     # Prompt Toolkit without changing Xonsh or Prompt Toolkit source files.
     import xonsh.shells.ptk_shell as ptk_shell
 
     ptk_shell.AutoSuggestFromHistory = lambda: _ai_autosuggester
+
+    if prompter is not None:
+        _ai_prompter = prompter
+        # This renders beneath the prompt without putting model reasoning in
+        # the editable buffer, undo history, or shell history. Xonsh clears a
+        # dynamic PromptSession toolbar during singleline() setup, so the
+        # on_pre_prompt handler restores it immediately afterward.
 
     @bindings.add(Keys.F24, eager=True, save_before=lambda event: False)
     @bindings.add("escape", "c-i", eager=True, save_before=lambda event: False)
@@ -563,6 +641,7 @@ def _wes_install_ai_autosuggester(bindings, prompter=None, **_):
         enabled = not bool(@.env.get("XONSH_AI_AUTOSUGGEST", True))
         $XONSH_AI_AUTOSUGGEST = enabled
         write_autosuggest_enabled(@.env, enabled)
+        _install_reasoning_toolbar()
         buffer = event.current_buffer
 
         active_task = _ai_autosuggester._active_task
