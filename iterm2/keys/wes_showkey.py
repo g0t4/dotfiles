@@ -118,6 +118,7 @@ def main() -> int:
                 else:
                     for byte in seq:
                         sys.stdout.write(visualize_byte(byte))
+                sys.stdout.write("\n")
                 sys.stdout.flush()
         except KeyboardInterrupt:
             pass
