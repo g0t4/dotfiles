@@ -16,6 +16,7 @@ from prompt_toolkit.keys import Keys
 from prompt_toolkit.application import run_in_terminal
 from prompt_toolkit.shortcuts import PromptSession
 from prompt_toolkit.filters import Never
+from xonsh.formatter import format_source
 
 
 from wes_directory_history import DirectoryHistory
@@ -101,12 +102,16 @@ def _wes_keybindings(bindings: KeyBindings, prompter: PromptSession, **_):
     def _redo(event):
         event.current_buffer.redo()
 
+    def _inspectify(expression: str) -> str:
+        expression = format_source(expression).strip()
+        return f"rich.inspect({expression})"
+
     # TODO probably will settle on one of these in time and get rid of the other:
     # FYI ptk differentiates alt+i vs shift+alt+i
     # alt+"i"
     @bindings.add("escape", "i", save_before=lambda event: False)
     def _inspect_in_commandline(event: KeyPressEvent):
-        event.current_buffer.text = f"rich.inspect({event.current_buffer.text})"
+        event.current_buffer.text = _inspectify(event.current_buffer.text)
         event.current_buffer.cursor_position = len(event.current_buffer.text)  # cursor to end of buffer
         # event.current_buffer.insert_text("FOO") # moves cursor too
         # run_in_terminal(event.current_buffer.text)
@@ -114,11 +119,8 @@ def _wes_keybindings(bindings: KeyBindings, prompter: PromptSession, **_):
     # shift+alt+"i"
     @bindings.add("escape", "I", save_before=lambda event: False)
     def _inspect_live(event: KeyPressEvent):
-        cmd_line = event.current_buffer.text
-        # how do I compile it into python and wrap with inspect?
-        code = f"rich.inspect({cmd_line})"
-        print("\n", code)
-        # run it live
+        code = _inspectify(event.current_buffer.text)
+        print("\n", code) # show what is evaluated (for scrollback purposes + to make sure I understand what's evaluated)
         func = lambda: XSH.execer.eval(code, globals(), locals())
         run_in_terminal(func)
 
