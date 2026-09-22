@@ -18,7 +18,7 @@ ITERM_MODIFIERS = {
 
 CUSTOM_KEYS = {
     "cmd+j",
-    "cmd+k",
+    # "cmd+k",
     "cmd+l",
 
     "cmd+shift+j",
@@ -75,37 +75,51 @@ def same_chord(a, b):
         and a.keycode == b.keycode
     )
 
+def is_ours(binding):
+    if binding.action != iterm2.BindingAction.HEX_CODE:
+        return False
+
+    try:
+        raw = bytes.fromhex(binding.param)
+        text = raw.decode("utf-8")
+    except (ValueError, UnicodeDecodeError):
+        return False
+
+    return (
+        len(text) == 1
+        and 0xE000 <= ord(text) <= 0xF8FF
+    )
 
 async def install_custom_keys(connection):
     existing = list(
         await iterm2.async_get_global_key_bindings(connection)
     )
 
-    generated = [make_binding(chord) for chord in sorted(CUSTOM_KEYS)]
-
-    # Explicit CUSTOM_KEYS take ownership of exactly their chords.
-    preserved = [
-        binding
-        for binding in existing
-        if not any(same_chord(binding, ours) for ours in generated)
-    ]
-
-    await iterm2.async_set_global_key_bindings(
-        connection,
-        preserved + generated,
-    )
-
     for chord in sorted(CUSTOM_KEYS):
-        binding = make_binding(chord)
-        cp = PUA_BASE + (
-            KEY_IDS[chord.split("+")[-1]] << 4
-        ) + sum(
-            MOD_BITS[x]
-            for x in chord.split("+")[:-1]
+        new = make_binding(chord)
+
+        old = next(
+            (x for x in existing if same_chord(x, new)),
+            None,
         )
 
-        print(
-            f"{chord:20} "
-            f"U+{cp:04X}  "
-            f"{binding.param}"
-        )
+        if old is None:
+            existing.append(new)
+            print(f"ADD     {chord:20} {new.param}")
+            continue
+
+        if not is_ours(old):
+            print(
+                f"SKIP    {chord:20} existing non-managed binding: "
+                f"{old.action} {old.param!r}"
+            )
+            continue
+
+        existing[existing.index(old)] = new
+
+        if old == new:
+            print(f"KEEP    {chord:20} {new.param}")
+        else:
+            print(f"UPDATE  {chord:20} {old.param} -> {new.param}")
+
+    await iterm2.async_set_global_key_bindings(connection, existing)
