@@ -127,7 +127,7 @@ def main() -> int:
                     sys.stdout.write(visualize_char(ord(text)))
                     decoded = visualize_pua(ord(text))
                     if decoded:
-                        sys.stdout.write(f" {decoded}")
+                        rich.print(f"[bold] {decoded}[/]", end="")
                 else:
                     for byte in seq:
                         sys.stdout.write(visualize_byte(byte))
