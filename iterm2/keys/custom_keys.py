@@ -199,3 +199,9 @@ def list_pua_keys():
         table.add_row(chord, f"U+{binding_codepoint(binding):04X}", binding.param)
     rich.print(table)
 
+
+if __name__ == "__main__":
+    import sys
+    if sys.argv[0] == "list_pua_keys":
+        list_pua_keys()
+
