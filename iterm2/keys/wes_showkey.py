@@ -22,32 +22,56 @@ LOWCHARS = [
 ]
 
 
-def visualize(byte: int) -> str:
-    """Render a single byte the way ``showkey`` does."""
+def utf8_continuations(byte: int) -> int:
+    """Return how many continuation bytes follow the given UTF-8 lead byte."""
+    if byte < 0x80:
+        return 0
+    if 0xC0 <= byte <= 0xDF:
+        return 1
+    if 0xE0 <= byte <= 0xEF:
+        return 2
+    if 0xF0 <= byte <= 0xF7:
+        return 3
+    return -1
+
+
+def visualize_char(codepoint: int) -> str:
+    """Render a decoded character the way ``showkey`` does."""
+    if codepoint <= 0x20:
+        if 0 < codepoint < 27:
+            return f"<CTL-{chr(codepoint + 0x40)}={LOWCHARS[codepoint]}>"
+        return f"<{LOWCHARS[codepoint]}>"
+    if codepoint == 0x7F:
+        return "<DEL>"
+    return chr(codepoint)
+
+
+def visualize_byte(byte: int) -> str:
+    """Render a raw byte (fallback for invalid UTF-8, e.g. old Alt keys)."""
     buf: list[str] = []
-    cookie = False
+    opened = False
 
     if byte & ALT:
-        cookie = True
+        opened = True
         byte &= ~ALT
         buf.append("<ALT-")
 
     if byte <= 0x20:
-        cookie = True
-        if not buf or buf[0] != "<":
-            buf.insert(0, "<")
+        if not opened:
+            opened = True
+            buf.append("<")
         if 0 < byte < 27:
             buf.append(f"CTL-{chr(byte + 0x40)}=")
         buf.append(LOWCHARS[byte])
     elif byte == 0x7F:
-        cookie = True
-        if not buf or buf[0] != "<":
-            buf.insert(0, "<")
+        if not opened:
+            opened = True
+            buf.append("<")
         buf.append("DEL")
     else:
         buf.append(chr(byte))
 
-    if cookie:
+    if opened:
         buf.append(">")
 
     return "".join(buf)
@@ -70,10 +94,26 @@ def main() -> int:
         print("Terminate with your shell interrupt character.")
         try:
             while True:
-                byte = os.read(fd, 1)
-                if not byte:
+                first = os.read(fd, 1)
+                if not first:
                     break
-                sys.stdout.write(visualize(byte[0]))
+                seq = first
+                for _ in range(utf8_continuations(first[0])):
+                    chunk = os.read(fd, 1)
+                    if not chunk:
+                        break
+                    seq += chunk
+
+                try:
+                    text = seq.decode("utf-8")
+                except UnicodeDecodeError:
+                    text = None
+
+                if text is not None and len(text) == 1:
+                    sys.stdout.write(visualize_char(ord(text)))
+                else:
+                    for byte in seq:
+                        sys.stdout.write(visualize_byte(byte))
                 sys.stdout.flush()
         except KeyboardInterrupt:
             pass
