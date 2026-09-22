@@ -1,6 +1,7 @@
 import iterm2
 
 PUA_BASE = 0xE000
+PUA_END = 0xEFFF
 
 MOD_BITS = {
     "shift": 1 << 0,
@@ -14,6 +15,11 @@ ITERM_MODIFIERS = {
     "ctrl":  iterm2.Modifier.CONTROL,
     "alt":   iterm2.Modifier.OPTION,
     "cmd":   iterm2.Modifier.COMMAND,
+}
+
+KEY_IDS = {
+    chr(ord("a") + i): i
+    for i in range(26)
 }
 
 CUSTOM_KEYS = {
@@ -34,38 +40,56 @@ def parse_chord(chord):
     key = parts[-1]
     modifier_names = parts[:-1]
 
-    if len(key) != 1:
+    if key not in KEY_IDS:
         raise ValueError(f"Unsupported key: {key!r}")
 
-    modifiers = [ITERM_MODIFIERS[name] for name in modifier_names]
-    modifier_mask = sum(MOD_BITS[name] for name in modifier_names)
+    unknown = set(modifier_names) - MOD_BITS.keys()
+    if unknown:
+        raise ValueError(f"Unknown modifiers: {unknown}")
+
+    modifiers = [ITERM_MODIFIERS[x] for x in modifier_names]
+    modifier_mask = sum(MOD_BITS[x] for x in modifier_names)
 
     return key, modifiers, modifier_mask
 
 
-# Stable physical-key IDs. Add keys here without changing existing IDs.
-KEY_IDS = {
-    chr(ord("a") + i): i
-    for i in range(26)
-}
-
-
 def make_binding(chord):
     key, modifiers, modifier_mask = parse_chord(chord)
-    key_id = KEY_IDS[key]
 
-    cp = PUA_BASE + (key_id << 4) + modifier_mask
-    payload = chr(cp).encode("utf-8").hex(" ")
+    cp = PUA_BASE + (KEY_IDS[key] << 4) + modifier_mask
+
+    if cp > PUA_END:
+        raise ValueError(f"{chord}: U+{cp:04X} outside managed range")
 
     return iterm2.KeyBinding(
         character=ord(key),
         modifiers=modifiers,
         keycode=None,
         action=iterm2.BindingAction.HEX_CODE,
-        param=payload,
+        param=chr(cp).encode("utf-8").hex(" "),
         version=None,
         label=None,
     )
+
+
+def binding_codepoint(binding):
+    if binding.action != iterm2.BindingAction.HEX_CODE:
+        return None
+
+    try:
+        text = bytes.fromhex(binding.param).decode("utf-8")
+    except (TypeError, ValueError, UnicodeDecodeError):
+        return None
+
+    if len(text) != 1:
+        return None
+
+    return ord(text)
+
+
+def is_ours(binding):
+    cp = binding_codepoint(binding)
+    return cp is not None and PUA_BASE <= cp <= PUA_END
 
 
 def same_chord(a, b):
@@ -75,51 +99,43 @@ def same_chord(a, b):
         and a.keycode == b.keycode
     )
 
-def is_ours(binding):
-    if binding.action != iterm2.BindingAction.HEX_CODE:
-        return False
-
-    try:
-        raw = bytes.fromhex(binding.param)
-        text = raw.decode("utf-8")
-    except (ValueError, UnicodeDecodeError):
-        return False
-
-    return (
-        len(text) == 1
-        and 0xE000 <= ord(text) <= 0xF8FF
-    )
 
 async def install_custom_keys(connection):
     existing = list(
         await iterm2.async_get_global_key_bindings(connection)
     )
 
+    ours = [b for b in existing if is_ours(b)]
+    bindings = [b for b in existing if not is_ours(b)]
+
+    for binding in ours:
+        cp = binding_codepoint(binding)
+        print(f"REMOVE  U+{cp:04X}  {binding.param}")
+
     for chord in sorted(CUSTOM_KEYS):
         new = make_binding(chord)
 
-        old = next(
-            (x for x in existing if same_chord(x, new)),
+        collision = next(
+            (b for b in bindings if same_chord(b, new)),
             None,
         )
 
-        if old is None:
-            existing.append(new)
-            print(f"ADD     {chord:20} {new.param}")
-            continue
-
-        if not is_ours(old):
+        if collision is not None:
             print(
-                f"SKIP    {chord:20} existing non-managed binding: "
-                f"{old.action} {old.param!r}"
+                f"SKIP    {chord:20} existing binding: "
+                f"{collision.action} {collision.param!r}"
             )
             continue
 
-        existing[existing.index(old)] = new
+        bindings.append(new)
 
-        if old == new:
-            print(f"KEEP    {chord:20} {new.param}")
-        else:
-            print(f"UPDATE  {chord:20} {old.param} -> {new.param}")
+        cp = binding_codepoint(new)
+        print(
+            f"ADD     {chord:20} "
+            f"U+{cp:04X}  {new.param}"
+        )
 
-    await iterm2.async_set_global_key_bindings(connection, existing)
+    await iterm2.async_set_global_key_bindings(
+        connection,
+        bindings,
+    )
