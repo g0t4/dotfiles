@@ -18,8 +18,12 @@ ITERM_MODIFIERS = {
 }
 
 LOWER_ALPHA = {
-    chr(ord("a") + i): i
-    for i in range(26)
+    chr(number): number
+    for number in
+    [
+        ord("a") + i
+        for i in range(26)
+    ]
 }
 # iterm2 when I manually set `shift+alt+i` => results in this mapping:
 # BTW test with `showkey` => press alt+i, shift+alt+i
@@ -28,8 +32,12 @@ LOWER_ALPHA = {
 #  * ipython3 list_iterm2_global_keys.py # shows values from manually settting
 #
 UPPER_ALPHA = {
-   chr(ord("A") + i):
-   i for i in range(26)
+    chr(number): number
+    for number in
+    [
+        ord("A") + i
+        for i in range(26)
+    ]
 }
 KEY_IDS = {**LOWER_ALPHA, **UPPER_ALPHA}
 
@@ -193,7 +201,7 @@ def decode_key(ch):
 
     # TODO fix KEY_IDS to map upper case back correctly? or no?
     #  also means giving uppercase a diff set of #s than 1-26?
-    key = chr(ord("a") + key_id)
+    key = chr(key_id)
 
     mods = [
         name

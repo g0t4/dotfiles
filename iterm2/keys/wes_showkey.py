@@ -105,6 +105,7 @@ def main() -> int:
     try:
         print("Type any key to see the sequence it sends.")
         print("Terminate with your shell interrupt character.")
+        sys.stdout.flush()
         try:
             while True:
                 first = os.read(fd, 1)
