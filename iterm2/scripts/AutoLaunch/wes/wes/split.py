@@ -251,6 +251,15 @@ async def wes_replace_pane(connection: iterm2.Connection, force_local=False):
     if new_session is None:
         raise Exception("UNEXPECTED NO SESSION CREATED")
 
+    jobName = await current_session.async_get_variable("jobName")  # see inspector for vars
+    if jobName in ["fish", "bash", "zsh", "xonsh", "Python", "lldb", "gdb"]:
+        # * quit shell so history saves in xonsh
+        # shell command line must be empty to quit
+        await current_session.async_send_text("\x03")  # ctrl+c (clear)
+        await current_session.async_send_text("\x04")  # ctrl+d (exit)
+    else:
+        log(f"do not have a mechanism to quit {jobName=}, skipping to just close pane")
+
     # Close the original session (focus is now on new_session after split)
     await current_session.async_close()
 
