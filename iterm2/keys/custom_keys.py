@@ -23,15 +23,18 @@ KEY_IDS = {
 }
 
 CUSTOM_KEYS = {
-    "cmd+j",
-    # "cmd+k",
-    "cmd+l",
 
-    "cmd+shift+j",
-    "cmd+shift+k",
-    "cmd+shift+l",
+    # maybes:
+    # "cmd+j",
+    # "cmd+l",
 
-    "cmd+ctrl+k",
+    "cmd+shift+j", # unused
+    "cmd+shift+k", # unused
+    "cmd+shift+l", # unused
+
+    "cmd+ctrl+k", # unused
+    "cmd+ctrl+i",
+
 }
 
 
