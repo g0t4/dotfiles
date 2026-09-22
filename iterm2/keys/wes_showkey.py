@@ -43,6 +43,10 @@ def visualize_char(codepoint: int) -> str:
         return f"<{LOWCHARS[codepoint]}>"
     if codepoint == 0x7F:
         return "<DEL>"
+    if codepoint > 0x7F:
+        if codepoint <= 0xFFFF:
+            return f"\\u{codepoint:04x}"
+        return f"\\U{codepoint:08x}"
     return chr(codepoint)
 
 
