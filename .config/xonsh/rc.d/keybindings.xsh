@@ -277,7 +277,7 @@ abbr("doctor_list_iterm_keys", "doctor_list_iterm_keys()")
 def doctor_list_iterm_keys():
     env f"PYTHONPATH={$WES_DOTFILES}/iterm2/keys" \
         f"{$WES_DOTFILES}/.venv/bin/python3" \
-        f"list_iterm2_global_keys.py"
+        f"{$WES_DOTFILES}/iterm2/keys/list_iterm2_global_keys.py"
 
 abbr('showkey', 'doctor_wes_showkey()')
 def doctor_wes_showkey():
