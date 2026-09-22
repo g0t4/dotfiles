@@ -37,7 +37,7 @@ from wes_semantic_history import InferenceClient, SemanticHistoryRetriever
 )
 @.env.setdefault(
     "XONSH_AI_AUTOSUGGEST_URL",
-    "http://build21.lan:8013/v1/chat/completions",
+    "http://paxy:8014/v1/chat/completions",
 )
 @.env.setdefault(
     "XONSH_AI_AUTOSUGGEST_MODEL",
