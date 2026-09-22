@@ -139,3 +139,60 @@ async def install_custom_keys(connection):
         connection,
         bindings,
     )
+
+MODS = {
+    1 << 0: "shift",
+    1 << 1: "ctrl",
+    1 << 2: "alt",
+    1 << 3: "cmd",
+}
+
+def decode_key(ch):
+    """
+    Decode a character from the private‑use area into its base key and a set of modifier names.
+
+    Parameters
+    ----------
+    ch: str
+        A single‑character string representing the encoded key.
+
+    Returns
+    -------
+    tuple[str, set[str]]
+
+    The base key (a‑z) and a set containing any of ``"shift"``, ``"ctrl"``, ``"alt"``, ``"cmd"`` that were encoded.
+    """
+    value = ord(ch) - PUA_BASE
+
+    key_id = value >> 4
+    modifier_mask = value & 0xF
+
+    key = chr(ord("a") + key_id)
+
+    mods = {
+        name
+        for bit, name in MODS.items()
+        if modifier_mask & bit
+    }
+
+    return key, mods
+
+def list_keys():
+        #     cp = binding_codepoint(new)
+        # print(
+        #     f"ADD     {chord:20} "
+        #     f"U+{cp:04X}  {new.param}"
+        # )
+    import rich
+    from rich.table import Table
+
+    table = Table()
+    table.add_column("Chord")
+    table.add_column("U+ code")
+    table.add_column("Param")
+    for chord in sorted(CUSTOM_KEYS):
+        binding = make_binding(chord)
+        # print(chord, f"U+{binding_codepoint(binding):04X}")
+        table.add_row(chord, f"U+{binding_codepoint(binding):04X}", binding.param)
+    rich.print(table)
+
