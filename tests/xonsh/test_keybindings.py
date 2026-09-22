@@ -121,7 +121,7 @@ def test_ctrl_r_invokes_redo_only_in_vi_normal_mode():
     assert completed.returncode == 0, completed.stderr
 
 
-def test_alt_dot_cycles_previous_command_arguments_in_vi_mode():
+def test_alt_up_and_down_cycle_every_history_token_reversibly():
     keybindings = ROOT / ".config/xonsh/rc.d/keybindings.xsh"
     command = (
         f"source {keybindings}; "
@@ -133,16 +133,22 @@ def test_alt_dot_cycles_previous_command_arguments_in_vi_mode():
         "bindings = KeyBindings(); "
         "prompter = SimpleNamespace(app=SimpleNamespace(timeoutlen=1)); "
         "events.on_ptk_create.fire(bindings=bindings, prompter=prompter); "
-        "alt_dot = next(binding.handler for binding in bindings.bindings "
-        "if binding.keys == (Keys.Escape, '.')); "
+        "alt_up = next(binding.handler for binding in bindings.bindings "
+        "if binding.keys == (Keys.Escape, Keys.Up)); "
+        "alt_down = next(binding.handler for binding in bindings.bindings "
+        "if binding.keys == (Keys.Escape, Keys.Down)); "
         "history = InMemoryHistory(); "
         "history.append_string('git add first.txt'); "
         "history.append_string('nvim second.py'); "
         "buffer = Buffer(history=history); buffer.text = 'echo '; "
         "buffer.cursor_position = len(buffer.text); "
         "event = SimpleNamespace(current_buffer=buffer); "
-        "alt_dot(event); assert buffer.text == 'echo second.py'; "
-        "alt_dot(event); assert buffer.text == 'echo first.txt'"
+        "alt_up(event); assert buffer.text == 'echo second.py'; "
+        "alt_up(event); assert buffer.text == 'echo nvim'; "
+        "alt_up(event); assert buffer.text == 'echo first.txt'; "
+        "alt_down(event); assert buffer.text == 'echo nvim'; "
+        "alt_down(event); assert buffer.text == 'echo second.py'; "
+        "alt_down(event); assert buffer.text == 'echo '"
     )
 
     completed = subprocess.run(

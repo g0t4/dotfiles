@@ -20,6 +20,7 @@ from xonsh.formatter import format_source
 
 
 from wes_directory_history import DirectoryHistory
+from wes_history_tokens import history_token_search
 from wes_logging import get_wes_logger
 from wes_abbreviations import abbr
 
@@ -131,12 +132,17 @@ def _wes_keybindings(bindings: KeyBindings, prompter: PromptSession, **_):
         func = lambda: XSH.execer.eval(code, globals(), locals())
         run_in_terminal(func)
 
-    # Prompt Toolkit provides this as Alt+. only in its Emacs bindings. Make
-    # the same history argument cycling available while Xonsh is in Vi mode.
+    # Match Fish's reversible history-token-search-backward/forward. Unlike
+    # Prompt Toolkit's yank_last_arg(), this visits every token, not only the
+    # final argument of each command.
     @bindings.add("escape", ".", save_before=lambda event: False)
     @bindings.add("escape", "up", save_before=lambda event: False)
-    def _yank_last_argument(event: KeyPressEvent):
-        event.current_buffer.yank_last_arg()
+    def _history_token_backward(event: KeyPressEvent):
+        history_token_search(event.current_buffer, forward=False)
+
+    @bindings.add("escape", "down", save_before=lambda event: False)
+    def _history_token_forward(event: KeyPressEvent):
+        history_token_search(event.current_buffer, forward=True)
 
     # Prompt Toolkit's default Ctrl-W uses whitespace-delimited WORDs even in
     # Vi insert mode. Match Vim's small-word behavior so punctuation such as
