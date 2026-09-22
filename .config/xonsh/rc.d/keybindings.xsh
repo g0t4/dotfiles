@@ -270,9 +270,10 @@ def _wes_keybindings(bindings: KeyBindings, prompter: PromptSession, **_):
 
 abbr("pua", "list_pua_keys()")
 def list_pua_keys():
-    env f"PYTHONPATH={$WES_DOTFILES}/" \
+    env f"PYTHONPATH={$WES_DOTFILES}/iterm2/keys" \
         f"{$WES_DOTFILES}/.venv/bin/python3" \
-        f"{$WES_DOTFILES}/iterm2/keys/custom_keys.py" list_pua_keys
+        "-c" \
+        f"import custom_keys; custom_keys.list_pua_keys()" list_pua_keys
 
 def current_xonsh_version():
     version = subprocess.check_output(
