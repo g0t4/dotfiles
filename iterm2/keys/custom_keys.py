@@ -199,9 +199,7 @@ def decode_key(ch):
     key_id = value >> 4
     modifier_mask = value & 0xF
 
-    # TODO fix KEY_IDS to map upper case back correctly? or no?
-    #  also means giving uppercase a diff set of #s than 1-26?
-    key = chr(key_id)
+    key = next(k for k, v in KEY_IDS.items() if v == key_id)
 
     mods = [
         name
