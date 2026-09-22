@@ -11,6 +11,7 @@ from __future__ import annotations
 import os
 import sys
 import termios
+import rich
 
 from custom_keys import PUA_BASE, PUA_END, decode_key
 
@@ -103,9 +104,8 @@ def main() -> int:
     termios.tcsetattr(fd, termios.TCSANOW, raw)
 
     try:
-        print("Type any key to see the sequence it sends.")
-        print("Terminate with your shell interrupt character.")
-        sys.stdout.flush()
+        rich.print("[dim]Type any key to see the sequence it sends.[/]")
+        rich.print("[dim]Terminate with your shell interrupt character.[/]")
         try:
             while True:
                 first = os.read(fd, 1)
@@ -138,7 +138,7 @@ def main() -> int:
     finally:
         termios.tcsetattr(fd, termios.TCSANOW, cooked)
 
-    print("\nBye...")
+    rich.print("[dim]Bye...[/]")
     return 0
 
 
