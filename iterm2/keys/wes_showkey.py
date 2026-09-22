@@ -93,7 +93,7 @@ def visualize_byte(byte: int) -> str:
 
 def main() -> int:
     if not sys.stdin.isatty():
-        print("stdin is not a tty", file=sys.stderr)
+        print("[red]stdin is not a tty[/]", file=sys.stderr)
         return 1
 
     fd = sys.stdin.fileno()
