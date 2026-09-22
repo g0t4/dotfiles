@@ -24,16 +24,26 @@ KEY_IDS = {
 
 CUSTOM_KEYS = {
 
+    # alt is now alt! (not escape)
+    # btw this means I can go back to eager escape in xonsh/fish/etc and not need to have to wait for escape to in insert to transition to normal mode
+
+    "alt+i",       # │ alt+i       │ U+E084  │ ee 82 84 │
+    "alt+shift+i", # │ alt+shift+i │ U+E085  │ ee 82 85 │
+    # "alt+I",
+
     # maybes:
+
+    # maybes:
+    #
     # "cmd+j",
     # "cmd+l",
-
-    "cmd+shift+j", # unused
-    "cmd+shift+k", # unused
-    "cmd+shift+l", # unused
-
-    "cmd+ctrl+k", # unused
-    "cmd+ctrl+i",
+    #
+    # "cmd+shift+j",
+    # "cmd+shift+k",
+    # "cmd+shift+l",
+    #
+    # "cmd+ctrl+k",
+    # "cmd+ctrl+i",
 
 }
 

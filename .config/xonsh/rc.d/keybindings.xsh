@@ -109,24 +109,22 @@ def _wes_keybindings(bindings: KeyBindings, prompter: PromptSession, **_):
 
     # TODO probably will settle on one of these in time and get rid of the other:
     # FYI ptk differentiates alt+i vs shift+alt+i
-    # alt+"i"
-    # @bindings.add("escape", "i", save_before=lambda event: False)
+    # @bindings.add("escape", "i", save_before=lambda event: False) # alt+"i" (when using alt==esc)
     #
     # FYI new PUA unicode scheme is composable
     # @bindings.add("\ue0aa", "i", save_before=lambda event: False)
     #
     # ctrl+cmd+k using my new PUA+send_hex_code scheme so iTerm2 can receive rich key event info and project it to preserve it into my client apps
     # => see iterm2/keys/*.py
-    @bindings.add("\ue0aa", save_before=lambda event: False)
+    @bindings.add("\uE084", save_before=lambda event: False)
     def _inspect_in_commandline(event: KeyPressEvent):
-        print("FUCKYEA")
         event.current_buffer.text = _inspectify(event.current_buffer.text)
         event.current_buffer.cursor_position = len(event.current_buffer.text)  # cursor to end of buffer
         # event.current_buffer.insert_text("FOO") # moves cursor too
         # run_in_terminal(event.current_buffer.text)
     #
     # shift+alt+"i"
-    @bindings.add("escape", "I", save_before=lambda event: False)
+    @bindings.add("\uE085", save_before=lambda event: False)
     def _inspect_live(event: KeyPressEvent):
         code = _inspectify(event.current_buffer.text)
         print("\n", code) # show what is evaluated (for scrollback purposes + to make sure I understand what's evaluated)
