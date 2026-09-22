@@ -273,7 +273,6 @@ def list_pua_keys():
         "-c" \
         f"import custom_keys; custom_keys.list_pua_keys()" list_pua_keys
 
-abbr("iterm_keys", "list_iterm_keys()")
 def list_iterm_keys():
     env f"PYTHONPATH={$WES_DOTFILES}/iterm2/keys" \
         f"{$WES_DOTFILES}/.venv/bin/python3" \
