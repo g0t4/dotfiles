@@ -17,10 +17,21 @@ ITERM_MODIFIERS = {
     "cmd":   iterm2.Modifier.COMMAND,
 }
 
-KEY_IDS = {
+LOWER_ALPHA = {
     chr(ord("a") + i): i
     for i in range(26)
 }
+# iterm2 when I manually set `shift+alt+i` => results in this mapping:
+# BTW test with `showkey` => press alt+i, shift+alt+i
+#    should NOT show `alt+i` which is what it will show for both w/o my hexcode iterm keymaps
+#
+#  * ipython3 list_iterm2_global_keys.py # shows values from manually settting
+#
+UPPER_ALPHA = {
+   chr(ord("A") + i):
+   i for i in range(26)
+}
+KEY_IDS = {**LOWER_ALPHA, **UPPER_ALPHA}
 
 CUSTOM_KEYS = {
 
@@ -28,7 +39,7 @@ CUSTOM_KEYS = {
     # btw this means I can go back to eager escape in xonsh/fish/etc and not need to have to wait for escape to in insert to transition to normal mode
 
     "alt+i",       # │ alt+i       │ U+E084  │ ee 82 84 │
-    "alt+shift+i", # │ alt+shift+i │ U+E085  │ ee 82 85 │
+    "alt+shift+I", # │ alt+shift+i │ U+E085  │ ee 82 85 │
     # "alt+I",
 
     # maybes:
@@ -49,7 +60,7 @@ CUSTOM_KEYS = {
 
 
 def parse_chord(chord):
-    parts = chord.lower().split("+")
+    parts = chord.split("+")
     key = parts[-1]
     modifier_names = parts[:-1]
 

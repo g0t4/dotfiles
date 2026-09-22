@@ -6,6 +6,7 @@ async def main(connection):
     session = app.current_terminal_window.current_tab.current_session
     profile = await session.async_get_profile()
 
+    # * TODO show from profile keys too? I don't really use this currently though there are defaults
     # maps = profile.key_mappings.items()
     # rich.print(maps)
     # print()
@@ -21,7 +22,6 @@ async def main(connection):
     binding = await iterm2.async_get_global_key_bindings(connection)
     for action in binding:
         rich.print(action)
-        rich.print(type(action))
 
 iterm2.run_until_complete(main)
 
