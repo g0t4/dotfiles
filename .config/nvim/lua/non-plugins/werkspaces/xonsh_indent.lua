@@ -4,6 +4,14 @@
 -- Deliberately does NOT scan backwards for brackets/parens (that's what makes
 -- python#GetIndent run away on xonsh's $(...)/!(...) lines). Instead it only
 -- looks at the immediate previous non-blank line, so indent can never compound.
+--
+-- Known limitations (deliberate simplifications):
+--   * `d = {'a':` (dict opener + first key on one line) ends in ':' -> indents once.
+--     The normal `d = {` form works fine.
+--   * Multi-line triple-quoted strings are not special-cased; interior lines just
+--     match the previous line's indent.
+--   * `with` / `async def` / `async for` / `try` all end in ':' so they work as
+--     block openers already.
 
 local M = {}
 
