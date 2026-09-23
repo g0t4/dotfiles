@@ -2,7 +2,7 @@
 
 from xonsh.built_ins import XSH
 from wes_audio_video_tool_abbreviations import SOURCE_FUNCTIONS, register_audio_video_abbreviations
-from wes_misc_functions import fish_command_alias
+from wes_fish_migration import fish_command_alias
 from wes_abbreviations import abbr
 
 register_audio_video_abbreviations()

@@ -10,7 +10,7 @@ from wes_filetype_abbreviations import (
     build_abbrs_for_filetype,
     register_filetype_abbreviations,
 )
-from wes_misc_functions import register_misc_fish_functions
+from wes_fish_migration import register_misc_fish_functions
 from wes_processes_abbreviations import FISH_FUNCTIONS, register_processes_abbreviations
 
 

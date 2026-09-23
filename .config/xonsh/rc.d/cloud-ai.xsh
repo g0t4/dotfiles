@@ -5,7 +5,7 @@ from xonsh.built_ins import XSH
 aliases = XSH.aliases
 
 from wes_cloud_ai_abbreviations import FISH_FUNCTIONS, register_cloud_ai_abbreviations
-from wes_misc_functions import register_misc_fish_functions
+from wes_fish_migration import register_misc_fish_functions
 
 
 register_cloud_ai_abbreviations()

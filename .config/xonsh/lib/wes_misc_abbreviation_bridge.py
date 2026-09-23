@@ -5,7 +5,7 @@ from __future__ import annotations
 import platform
 
 from wes_fish_bridge import UnsupportedFishFunctionError, fish_function
-from wes_misc_functions import UNSUPPORTED_FISH_FUNCTIONS
+from wes_fish_migration import UNSUPPORTED_FISH_FUNCTIONS
 
 
 def fish_abbreviation(function_name):

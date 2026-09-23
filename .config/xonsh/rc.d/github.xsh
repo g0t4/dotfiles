@@ -11,7 +11,7 @@ import sys
 
 from wes_github_functions import run_gitignore_commit
 from wes_abbreviations import abbr
-from wes_misc_functions import fish_command_alias
+from wes_fish_migration import fish_command_alias
 
 
 def _github_executable(name):

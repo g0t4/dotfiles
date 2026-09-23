@@ -8,7 +8,7 @@ from pathlib import Path
 
 from wes_abbreviations import abbr
 from wes_fish_executable import find_fish
-from wes_misc_functions import fish_command_alias
+from wes_fish_migration import fish_command_alias
 
 
 FISH_FUNCTIONS = (

@@ -27,7 +27,7 @@ from wes_filetype_abbreviations import (  # noqa: E402
     FILETYPE_GLOBS,
     build_abbrs_for_filetype,
 )
-from wes_misc_functions import (  # noqa: E402
+from wes_fish_migration import (  # noqa: E402
     SKIPPED_FISH_FUNCTIONS,
     fish_command_alias,
     register_misc_fish_functions,
@@ -283,7 +283,7 @@ def test_safe_function_alias_delegates_to_interactive_fish(monkeypatch):
         calls.append((name, args, kwargs))
         return 4
 
-    monkeypatch.setattr("wes_misc_functions.fish_function_command", fake_command)
+    monkeypatch.setattr("wes_fish_migration.fish_function_command", fake_command)
     alias = fish_command_alias("which_versions")
 
     assert alias(["python"], stdin="in", stdout="out", stderr="err") == 4
@@ -355,7 +355,7 @@ def test_fish_help_reminder_and_independent_source_views(monkeypatch):
     assert registry.expand(context("??which_versions")) is None
     calls = []
     monkeypatch.setattr(
-        "wes_misc_functions.fish_function_command",
+        "wes_fish_migration.fish_function_command",
         lambda *args, **kwargs: calls.append((args, kwargs)) or 0,
     )
     output = io.StringIO()
@@ -380,7 +380,7 @@ def test_fish_help_colors_last_pipeline_command_including_redirects(monkeypatch)
     register_misc_fish_functions(aliases, ["which_versions"])
     calls = []
     monkeypatch.setattr(
-        "wes_misc_functions.fish_function_command",
+        "wes_fish_migration.fish_function_command",
         lambda *args, **kwargs: calls.append(args) or 0,
     )
     for last, redirect, colored in [(True, None, True), (False, None, False), (True, "file", True)]:

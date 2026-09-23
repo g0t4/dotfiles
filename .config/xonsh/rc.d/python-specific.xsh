@@ -12,7 +12,7 @@ from xonsh.completers.completer import add_one_completer
 from xonsh.completers.tools import RichCompletion, contextual_command_completer
 from xonsh.dirstack import cd as _xonsh_cd
 
-from wes_misc_functions import register_misc_fish_functions
+from wes_fish_migration import register_misc_fish_functions
 from wes_python_abbreviations import FISH_FUNCTIONS, register_python_abbreviations
 from wes_python_functions import run_wcl, wcl_completion_candidates
 
