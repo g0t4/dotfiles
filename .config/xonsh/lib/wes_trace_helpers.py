@@ -43,7 +43,7 @@ abbr('nreadme', "nvim README.md -c ':tabonly'")
 abbr('nNOTES', "nvim NOTES.yml -c ':tabonly'")
 
 
-def quote(value):
+def single_quote(value):
     """Xonsh/Fish single-quoted literal (POSIX quote concatenation is invalid here)."""
     return "'" + value.replace("\\", "\\\\").replace("'", "\\'") + "'"
 
@@ -72,14 +72,14 @@ def expand_trace_file(context, match):
         if selected is not None:
             # AskViewTrace forwards its raw arguments to `terminal view_trace`.
             # Quote once for that shell, then again below for `nvim -c`.
-            parts.append(quote("./" + str(selected)))
+            parts.append(single_quote("./" + str(selected)))
 
         # example:
         #   nvim -c 'AskViewTrace \'./1790154300-trace.json\''
 
         # Always close the quote. The abbreviation engine preserves text following
         # this token; no Fish commandline call or dangling quote is needed.
-        return "nvim -c " + quote(" ".join(["AskViewTrace"] + parts))
+        return "nvim -c " + single_quote(" ".join(["AskViewTrace"] + parts))
 
     # vt / vtt
     command = "view_trace" if cmd_prefix == "vt" else "view_trace_tui"
@@ -95,8 +95,8 @@ def expand_trace_message(context, match):
     query = f".request_body.messages | .[([{index}, length - 1] | min)]"
     if match.group(1) == "tc":
         query += ".tool_calls[].function.arguments"
-        return "jq -r " + quote(query) + " ./*-trace.json | jq -r '.command_line // .code'"
-    return "jq " + quote(query) + " ./*-trace.json"
+        return "jq -r " + single_quote(query) + " ./*-trace.json | jq -r '.command_line // .code'"
+    return "jq " + single_quote(query) + " ./*-trace.json"
 
 
 def expand_message_field(context, match):
@@ -113,7 +113,7 @@ def expand_message_field(context, match):
         "patch": (".tool_calls[0].function.arguments", " -r | jq '.patch' -r | bat -l patch"),
     }[suffix or ""]
     query = f".request_body.messages[{int(index)}]{field}"
-    return "cat " + quote("./" + str(files[0])) + " | jq " + quote(query) + tail
+    return "cat " + single_quote("./" + str(files[0])) + " | jq " + single_quote(query) + tail
 
 
 def register_trace_helpers(aliases, dotfiles):
@@ -143,5 +143,5 @@ def register_trace_helpers(aliases, dotfiles):
     abbr(re.compile(r"msg(r|f|c|args|patch)?(\d+)"), expand_message_field, position="anywhere")
     timing_query = ".request_body.messages[].timings | select(.) | [.cache_n, .prompt_n, .predicted_n] | @tsv"
     totals = '{a+=$1; b+=$2; c+=$3} END {print a "\\t" b "\\t" c}'
-    abbr("trace_timings", "jq -r " + quote(timing_query)
-         + " ./*-trace.json | awk " + quote(totals))
+    abbr("trace_timings", "jq -r " + single_quote(timing_query)
+         + " ./*-trace.json | awk " + single_quote(totals))
