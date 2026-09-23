@@ -32,28 +32,28 @@ function abbr_expand_trace_nth_file_nvim --argument-names abbreviation
         echo "nvim -c 'AskViewTrace "
         return
     end
-        # extract the numeric part after the leading 't'
-        set index_part (string replace --regex '^t' '' $abbreviation)
-        set opts ""
-        if string match --quiet --regex a $index_part
-            set index_part (string replace --regex 'a' '' $index_part)
-            set opts "--all"
-        end
-        # default to the first file if no number was provided
-        if test -z "$index_part"
-            set index_part 1
-        end
-        # find all trace files, sort them, and pick the Nth one
-        set sorted_trace_files (fd --max-depth=1 ".*-trace\.json" . | sort)
-        set selected_trace_file $sorted_trace_files[$index_part]
+    # extract the numeric part after the leading 't'
+    set index_part (string replace --regex '^t' '' $abbreviation)
+    set opts ""
+    if string match --quiet --regex a $index_part
+        set index_part (string replace --regex 'a' '' $index_part)
+        set opts --all
+    end
+    # default to the first file if no number was provided
+    if test -z "$index_part"
+        set index_part 1
+    end
+    # find all trace files, sort them, and pick the Nth one
+    set sorted_trace_files (fd --max-depth=1 ".*-trace\.json" . | sort)
+    set selected_trace_file $sorted_trace_files[$index_part]
 
-        if test -n "$selected_trace_file"
-            echo "nvim -c 'AskViewTrace $opts $selected_trace_file'"
-            # echo "view_trace $opts $file"
-        else
-            echo "nvim -c 'AskViewTrace $opts'"
-            # echo "view_trace $opts"
-        end
+    if test -n "$selected_trace_file"
+        echo "nvim -c 'AskViewTrace $opts $selected_trace_file'"
+        # echo "view_trace $opts $file"
+    else
+        echo "nvim -c 'AskViewTrace $opts'"
+        # echo "view_trace $opts"
+    end
 end
 
 function strip_trailing_newline --description "trim trailing \\n - last only"
