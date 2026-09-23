@@ -43,7 +43,22 @@ describe("xonsh_indent", function()
 
     it("dedents on block-closing keywords", function()
         assert.equal(0, indent_at({ "def foo():", "    x = 1", "else:" }, 3))
-        assert.equal(0, indent_at({ "def foo():", "    return" }, 2))
+        assert.equal(0, indent_at({ "if x:", "    y = 1", "elif y:" }, 3))
+    end)
+
+    it("keeps return/break/pass at the body indent (not dedented)", function()
+        assert.equal(4, indent_at({ "def foo():", "    return" }, 2))
+        assert.equal(4, indent_at({ "def foo():", "    break" }, 2))
+        assert.equal(4, indent_at({ "def foo():", "    pass" }, 2))
+    end)
+
+    it("does not indent after a comment line", function()
+        assert.equal(0, indent_at({ "# note:", "" }, 2))
+        assert.equal(4, indent_at({ "    # note:", "" }, 2))
+    end)
+
+    it("detects an opener even with trailing whitespace", function()
+        assert.equal(4, indent_at({ "func( ", "" }, 2))
     end)
 
     it("returns 0 at the start of the buffer", function()

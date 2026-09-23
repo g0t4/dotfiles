@@ -22,16 +22,23 @@ function M.indent(lnum)
     local prev_line = vim.fn.getline(prev)
     local prev_indent = vim.fn.indent(prev)
 
-    -- Dedent when the line being indented already begins with a block-closing
-    -- keyword or bracket (e.g. Enter mid-line, or typing `else:`/`return`).
+    -- A comment line never opens a block or continuation; just match its indent
+    -- (otherwise a comment like `# note:` would wrongly indent the next line).
+    if prev_line:match("^%s*#") then
+        return prev_indent
+    end
+
+    -- Dedent when the line being indented already begins with a block-continuation
+    -- keyword (else/elif/except/finally/case) or a closing bracket.
+    -- NOTE: return/raise/break/continue/pass are NOT dedent keywords -- they stay
+    -- at the body's indent level. Only else/elif/except/finally/case dedent.
     local cur_line = vim.fn.getline(lnum)
     local first_char = cur_line:match("^%s*(.)")
     local is_closing_bracket = first_char == ")" or first_char == "]" or first_char == "}"
     local first_keyword = cur_line:match("^%s*(%a+)")
     local dedent_keywords = {
         ["else"] = true, ["elif"] = true, ["except"] = true, ["finally"] = true,
-        ["return"] = true, ["raise"] = true, ["break"] = true, ["continue"] = true,
-        ["pass"] = true,
+        ["case"] = true,
     }
     if is_closing_bracket or dedent_keywords[first_keyword] then
         return math.max(prev_indent - sw, 0)
@@ -39,7 +46,7 @@ function M.indent(lnum)
 
     -- Continuation: previous line ends with an unclosed opener (or a backslash).
     -- Only ever adds one level, so it can't run away like python#GetIndent.
-    local last_char = prev_line:sub(-1)
+    local last_char = prev_line:gsub("%s+$", ""):sub(-1) -- ignore trailing whitespace
     local is_opener = last_char == "(" or last_char == "[" or last_char == "{"
     if is_opener or prev_line:match("\\%s*$") then
         return prev_indent + sw
