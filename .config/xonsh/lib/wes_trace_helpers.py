@@ -34,8 +34,6 @@ abbr('btr', 'browse_traces rewrite')
 abbr('btf', 'browse_traces fim')
 abbr('btsh', 'browse_traces fish')
 abbr('btx', 'browse_traces xonsh')
-abbr('vt', 'view_trace')
-abbr('vtt', 'view_trace_tui')
 abbr('td', 'trace_dump')
 abbr('pii', 'pii_scanner')
 abbr('ri', 'rag_indexer')
@@ -61,19 +59,29 @@ def trace_files(*, recursive=False):
 
 
 def expand_trace_file(context, match):
-    index = int(match.group(1) or 1)
+    index = int(match.group(2) or 1)
     files = trace_files()
     selected = files[index - 1] if 1 <= index <= len(files) else None
-    command = "AskViewTrace"
-    if match.group(2):
-        command += " --all"
+
+    parts: list[str] = []
+    if match.group(3):
+        parts.append("--all")
+
+    cmd_prefix = match.group(1)
+    if cmd_prefix == "t":
+        if selected is not None:
+            # AskViewTrace forwards its raw arguments to `terminal view_trace`.
+            # Quote once for that shell, then again below for `nvim -c`.
+            parts.append(quote("./" + str(selected)))
+        # Always close the quote. The abbreviation engine preserves text following
+        # this token; no Fish commandline call or dangling quote is needed.
+        return "nvim -c " + quote(" ".join(["AskViewTrace"] + parts))
+
+    # vt / vtt
+    command = "view_trace" if cmd_prefix == "vt" else "view_trace_tui"
     if selected is not None:
-        # AskViewTrace forwards its raw arguments to `terminal view_trace`.
-        # Quote once for that shell, then again below for `nvim -c`.
-        command += " " + quote("./" + str(selected))
-    # Always close the quote. The abbreviation engine preserves text following
-    # this token; no Fish commandline call or dangling quote is needed.
-    return "nvim -c " + quote(command)
+        parts.append(str(selected))
+    return f"{command} {' '.join(parts)}"
 
 
 def expand_trace_message(context, match):
@@ -126,7 +134,7 @@ def register_trace_helpers(aliases, dotfiles):
                          else trace_fish_alias(name))
     for trigger in ("nat", "notes_about_trace"):
         abbr(trigger, "notes_about_trace '%'", cursor_marker="%")
-    abbr(re.compile(r"t(\d*)(a?)"), expand_trace_file)
+    abbr(re.compile(r"(t|vt|vtt)(\d*)(a?)"), expand_trace_file)
     abbr(re.compile(r"(tm|tc)(\d+)"), expand_trace_message)
     abbr(re.compile(r"msg(r|f|c|args|patch)?(\d+)"), expand_message_field, position="anywhere")
     timing_query = ".request_body.messages[].timings | select(.) | [.cache_n, .prompt_n, .predicted_n] | @tsv"
