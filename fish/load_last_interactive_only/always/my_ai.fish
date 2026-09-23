@@ -54,6 +54,11 @@ end
 function abbr_expand_trace_nth_file_nvim --argument-names abbreviation
     echo "nvim -c 'AskViewTrace $(_abbr_expand_trace_nth_file_args $abbreviation)'"
 end
+abbr --add abbr_trace_nth_file_vt --regex 'vt\d*a?' --function abbr_expand_trace_nth_file_vt
+function abbr_expand_trace_nth_file_vt --argument-names abbreviation
+    set abbreviation (string replace --regex '^v' '' $abbreviation) # strip `v` prefix
+    echo "view_trace $(_abbr_expand_trace_nth_file_args $abbreviation)"
+end
 
 function strip_trailing_newline --description "trim trailing \\n - last only"
     perl -0777 -pe 'chop if substr($_, -1) eq "\n"'
