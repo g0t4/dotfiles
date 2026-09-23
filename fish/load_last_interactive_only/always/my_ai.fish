@@ -20,7 +20,7 @@ function ask_rewrite_diff_reviewer
 end
 
 abbr --add abbr_trace_nth_file --regex 't\d*a?' --function abbr_expand_trace_nth_file_nvim
-function abbr_expand_trace_nth_file_nvim --argument-names abbreviation
+function _abbr_expand_trace_nth_file_args --argument-names abbreviation
     set current_command_line (commandline)
     set current_cursor_position (commandline --cursor)
     set text_after_cursor (string sub --start (math $current_cursor_position + 1) $current_command_line)
@@ -48,8 +48,11 @@ function abbr_expand_trace_nth_file_nvim --argument-names abbreviation
     set selected_trace_file $sorted_trace_files[$index_part]
 
     # FYI if no selected_trace_file then meh, doesn't matter much so don't do anythign special
-    echo "nvim -c 'AskViewTrace $opts $selected_trace_file'"
+    echo "$opts $selected_trace_file"
     # echo "view_trace $opts $file"
+end
+function abbr_expand_trace_nth_file_nvim --argument-names abbreviation
+    echo "nvim -c 'AskViewTrace $(_abbr_expand_trace_nth_file_args $abbreviation)'"
 end
 
 function strip_trailing_newline --description "trim trailing \\n - last only"
