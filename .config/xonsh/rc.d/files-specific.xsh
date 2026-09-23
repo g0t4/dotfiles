@@ -239,7 +239,8 @@ def _take(args, stdout=None, stderr=None, **_):
     destination = Path(args[0]).expanduser()
     destination.mkdir(parents=True, exist_ok=True)
     for source in args[1:]:
-        shutil.move(source, destination)
+        # use `mv` command to keep semantics from fish IMPL (clobber if exists)
+        mv @(source) @(str(destination))
     return _files_cd_to_path(destination, stdout=stdout, stderr=stderr)
 
 
