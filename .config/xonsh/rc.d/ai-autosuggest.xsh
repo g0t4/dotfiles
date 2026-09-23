@@ -13,9 +13,17 @@ from pathlib import Path
 
 from prompt_toolkit.application import get_app
 from prompt_toolkit.auto_suggest import AutoSuggest, AutoSuggestFromHistory, Suggestion
+from prompt_toolkit.filters import Condition
 from prompt_toolkit.input import ansi_escape_sequences
 from prompt_toolkit.input.vt100_parser import _IS_PREFIX_OF_LONGER_MATCH_CACHE
 from prompt_toolkit.keys import Keys
+from prompt_toolkit.layout.containers import (
+    ConditionalContainer,
+    FloatContainer,
+    HSplit,
+    Window,
+)
+from prompt_toolkit.layout.controls import FormattedTextControl
 from xonsh.events import events
 
 
@@ -135,12 +143,21 @@ class _StreamingAIAutoSuggest(AutoSuggest):
         # Prompt Toolkit calls the async implementation below.
         return None
 
-    def _reasoning_toolbar(self):
+    def _reasoning_display(self):
         if self._reasoning_request_id is None:
-            return None
-        visible = " ".join(self._reasoning_content.split())[-240:]
-        text = f"thinking › {visible}" if visible else "prefill…"
+            return []
+        text = (
+            f"thinking › {self._reasoning_content}"
+            if self._reasoning_content
+            else "prefill…"
+        )
         return [("fg:#888888 italic", text)]
+
+    def _reasoning_is_visible(self):
+        return (
+            self._reasoning_request_id is not None
+            and bool(@.env.get("XONSH_AI_AUTOSUGGEST", True))
+        )
 
     def _start_reasoning(self, request_id):
         self._reasoning_request_id = request_id
@@ -584,45 +601,58 @@ class _StreamingAIAutoSuggest(AutoSuggest):
 
 
 _ai_autosuggester = _StreamingAIAutoSuggest()
-_ai_prompter = None
+_ai_reasoning_prompters = set()
+
+
+def _find_prompt_float(container):
+    if isinstance(container, FloatContainer) and isinstance(container.content, HSplit):
+        return container
+    for child in getattr(container, "children", ()):
+        found = _find_prompt_float(child)
+        if found is not None:
+            return found
+    return None
 
 
 def _cancel_ai_autosuggestion_for_submit(buffer):
     _ai_autosuggester.cancel_for_submit(buffer)
 
 
-def _install_reasoning_toolbar():
-    if _ai_prompter is None:
+def _install_reasoning_window(prompter):
+    if prompter is None:
         return False
-    _ai_prompter.bottom_toolbar = (
-        _ai_autosuggester._reasoning_toolbar
-        if @.env.get("XONSH_AI_AUTOSUGGEST", True)
-        else None
+    app = getattr(prompter, "app", None)
+    if app is None:
+        return False
+    if prompter in _ai_reasoning_prompters:
+        return False
+    root = app.layout.container
+    prompt_container = _find_prompt_float(root)
+    if prompt_container is None:
+        return False
+    reasoning_window = ConditionalContainer(
+        Window(
+            FormattedTextControl(_ai_autosuggester._reasoning_display),
+            wrap_lines=True,
+            dont_extend_height=True,
+            always_hide_cursor=True,
+        ),
+        Condition(_ai_autosuggester._reasoning_is_visible),
     )
+    prompt_container.content.children.append(reasoning_window)
+    _ai_reasoning_prompters.add(prompter)
     return True
-
-
-@events.on_pre_prompt
-def _wes_install_reasoning_toolbar_after_xonsh_clears_it(**_):
-    _install_reasoning_toolbar()
 
 
 @events.on_ptk_create
 def _wes_install_ai_autosuggester(bindings, prompter=None, **_):
-    global _ai_prompter
     # Xonsh 0.23 constructs AutoSuggestFromHistory inside cmdloop after rc.d
     # has loaded. Replacing that factory lets Xonsh pass our implementation to
     # Prompt Toolkit without changing Xonsh or Prompt Toolkit source files.
     import xonsh.shells.ptk_shell as ptk_shell
 
     ptk_shell.AutoSuggestFromHistory = lambda: _ai_autosuggester
-
-    if prompter is not None:
-        _ai_prompter = prompter
-        # This renders beneath the prompt without putting model reasoning in
-        # the editable buffer, undo history, or shell history. Xonsh clears a
-        # dynamic PromptSession toolbar during singleline() setup, so the
-        # on_pre_prompt handler restores it immediately afterward.
+    _install_reasoning_window(prompter)
 
     @bindings.add(Keys.F24, eager=True, save_before=lambda event: False)
     @bindings.add("escape", "c-i", eager=True, save_before=lambda event: False)
@@ -641,7 +671,6 @@ def _wes_install_ai_autosuggester(bindings, prompter=None, **_):
         enabled = not bool(@.env.get("XONSH_AI_AUTOSUGGEST", True))
         $XONSH_AI_AUTOSUGGEST = enabled
         write_autosuggest_enabled(@.env, enabled)
-        _install_reasoning_toolbar()
         buffer = event.current_buffer
 
         active_task = _ai_autosuggester._active_task

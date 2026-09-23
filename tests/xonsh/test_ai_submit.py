@@ -116,8 +116,7 @@ def test_shift_f6_persists_toggle_and_refreshes_prompt_after_hiding_snout(tmp_pa
         "from prompt_toolkit.key_binding import KeyBindings; "
         "from prompt_toolkit.keys import Keys; "
         "from types import SimpleNamespace; "
-        "bindings = KeyBindings(); "
-        "prompter = SimpleNamespace(message=None, bottom_toolbar='visible'); "
+        "bindings = KeyBindings(); prompter = SimpleNamespace(message=None); "
         "events.on_ptk_create.fire(bindings=bindings, prompter=prompter); "
         "handler = next(binding.handler for binding in bindings.bindings "
         "if binding.keys == (Keys.F18,)); "
@@ -128,7 +127,6 @@ def test_shift_f6_persists_toggle_and_refreshes_prompt_after_hiding_snout(tmp_pa
         "event = SimpleNamespace(current_buffer=Buffer(), app=app); "
         "$XONSH_AI_AUTOSUGGEST = True; handler(event); "
         "assert $XONSH_AI_AUTOSUGGEST is False; "
-        "assert prompter.bottom_toolbar is None; "
         "assert prompter.message == [('prompt', 'without snout')]; "
         "assert state['invalidated']"
     )
@@ -215,26 +213,28 @@ def test_semantic_history_is_included_as_a_separate_prompt_signal():
     assert completed.returncode == 0, completed.stderr
 
 
-def test_reasoning_toolbar_survives_xonsh_prompt_setup_and_shows_live_tail():
+def test_reasoning_window_is_below_command_and_shows_full_wrapped_stream():
     ai = ROOT / ".config/xonsh/rc.d/ai-autosuggest.xsh"
     command = (
         f"source {ai}; "
-        "from prompt_toolkit.key_binding import KeyBindings; "
-        "from types import SimpleNamespace; "
-        "bindings = KeyBindings(); prompter = SimpleNamespace(bottom_toolbar=None); "
-        "events.on_ptk_create.fire(bindings=bindings, prompter=prompter); "
-        "assert prompter.bottom_toolbar is None; "
-        "_wes_install_reasoning_toolbar_after_xonsh_clears_it(); "
-        "toolbar_provider = prompter.bottom_toolbar; "
-        "assert toolbar_provider == _ai_autosuggester._reasoning_toolbar; "
-        "assert toolbar_provider() is None; "
+        "from prompt_toolkit.shortcuts import PromptSession; "
+        "from prompt_toolkit.layout.containers import ConditionalContainer; "
+        "prompter = PromptSession(); "
+        "live_root_shape = prompter.app.layout.container.children[0]; "
+        "assert _find_prompt_float(live_root_shape) is live_root_shape; "
+        "assert _install_reasoning_window(prompter); "
+        "assert not _install_reasoning_window(prompter); "
+        "prompt_stack = prompter.app.layout.container.children[0].content; "
+        "reasoning = prompt_stack.children[-1]; "
+        "assert isinstance(reasoning, ConditionalContainer); "
         "_ai_autosuggester._reasoning_request_id = 7; "
-        "assert toolbar_provider()[0][1] == 'prefill…'; "
-        "_ai_autosuggester._reasoning_content = 'first\\n' + ('x' * 260); "
-        "toolbar = toolbar_provider(); "
-        "assert toolbar[0][0] == 'fg:#888888 italic'; "
-        "assert toolbar[0][1].startswith('thinking › '); "
-        "assert len(toolbar[0][1]) == len('thinking › ') + 240"
+        "assert _ai_autosuggester._reasoning_display()[0][1] == 'prefill…'; "
+        "full = 'first\\n' + ('x' * 500); "
+        "_ai_autosuggester._reasoning_content = full; "
+        "display = _ai_autosuggester._reasoning_display(); "
+        "assert display[0][0] == 'fg:#888888 italic'; "
+        "assert display[0][1] == 'thinking › ' + full; "
+        "assert reasoning.content.wrap_lines()"
     )
     env = os.environ.copy()
     env["XONSH_LOG"] = os.devnull
@@ -249,17 +249,17 @@ def test_reasoning_toolbar_survives_xonsh_prompt_setup_and_shows_live_tail():
     assert completed.returncode == 0, completed.stderr
 
 
-def test_reasoning_toolbar_waits_until_prompter_exists():
+def test_reasoning_window_visibility_tracks_ai_mode_and_active_request():
     ai = ROOT / ".config/xonsh/rc.d/ai-autosuggest.xsh"
     command = (
         f"source {ai}; "
-        "from types import SimpleNamespace; global _ai_prompter; "
-        "_ai_prompter = None; "
-        "assert _install_reasoning_toolbar() is False; "
-        "_ai_prompter = SimpleNamespace(bottom_toolbar=None); "
-        "_wes_install_reasoning_toolbar_after_xonsh_clears_it(); "
-        "assert _ai_prompter.bottom_toolbar == "
-        "_ai_autosuggester._reasoning_toolbar"
+        "_ai_autosuggester._reasoning_request_id = None; "
+        "$XONSH_AI_AUTOSUGGEST = True; "
+        "assert not _ai_autosuggester._reasoning_is_visible(); "
+        "_ai_autosuggester._reasoning_request_id = 9; "
+        "assert _ai_autosuggester._reasoning_is_visible(); "
+        "$XONSH_AI_AUTOSUGGEST = False; "
+        "assert not _ai_autosuggester._reasoning_is_visible()"
     )
     env = os.environ.copy()
     env["XONSH_LOG"] = os.devnull
