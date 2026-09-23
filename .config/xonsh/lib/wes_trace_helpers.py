@@ -59,9 +59,9 @@ def trace_files(*, recursive=False):
 
 
 def expand_trace_file(context, match):
-    index = int(match.group(2) or 1)
+    trace_number = int(match.group(2) or 1)
     files = trace_files()
-    selected = files[index - 1] if 1 <= index <= len(files) else None
+    selected = files[trace_number - 1] if 1 <= trace_number <= len(files) else None
 
     parts: list[str] = []
     if match.group(3):
