@@ -13,19 +13,19 @@ from wes_misc_functions import fish_command_alias
 
 FISH_FUNCTIONS = (
     "ask_rewrite_diff_reviewer",
-    "strip_trailing_newline",
     "browse_traces",
-    "view_trace",
-    "view_trace_tui",
-    "trace_dump",
+    "love_agents",
+    "love_fim",
+    "love_rewrites",
+    "love_shell",
+    "notes_about_trace",
     "pii_scanner",
     "rag_indexer",
     "rag_validate_index",
-    "notes_about_trace",
-    "love_fim",
-    "love_rewrites",
-    "love_agents",
-    "love_shell",
+    "strip_trailing_newline",
+    "trace_dump",
+    "view_trace",
+    "view_trace_tui",
 )
 
 abbr('bt', 'browse_traces')
