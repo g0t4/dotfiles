@@ -30,7 +30,8 @@ function abbr_expand_trace_nth_file_nvim --argument-names abbreviation
         # SO, don't close the quoted command... I'll have to do that myself
         # TODO can I schedule something to run after the abbr expands :)... if so I could end the quoted command that way (and maybe move cursor to end of line)
         echo "nvim -c 'AskViewTrace "
-    else
+        return
+    end
         # extract the numeric part after the leading 't'
         set index_part (string replace --regex '^t' '' $abbreviation)
         set opts ""
@@ -53,7 +54,6 @@ function abbr_expand_trace_nth_file_nvim --argument-names abbreviation
             echo "nvim -c 'AskViewTrace $opts'"
             # echo "view_trace $opts"
         end
-    end
 end
 
 function strip_trailing_newline --description "trim trailing \\n - last only"
