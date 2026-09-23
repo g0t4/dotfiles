@@ -70,7 +70,7 @@ def unsupported_fish_alias(function_name, reason):
     return invoke
 
 
-def register_misc_fish_functions(aliases, function_names):
+def wrap_fish_functions(aliases, function_names):
     def fish_help(args, stdin=None, stdout=None, stderr=None, spec=None, **_):
         if len(args) != 1:
             print("usage: _fish_help FUNCTION", file=stderr)

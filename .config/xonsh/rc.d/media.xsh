@@ -5,8 +5,8 @@ from xonsh.built_ins import XSH
 aliases = XSH.aliases
 
 from wes_media_abbreviations import FISH_FUNCTIONS, register_media_abbreviations
-from wes_fish_migration import register_misc_fish_functions
+from wes_fish_migration import wrap_fish_functions
 
 
 register_media_abbreviations()
-register_misc_fish_functions(aliases, FISH_FUNCTIONS)
+wrap_fish_functions(aliases, FISH_FUNCTIONS)

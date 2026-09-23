@@ -5,11 +5,11 @@ from xonsh.built_ins import XSH
 aliases = XSH.aliases
 
 from wes_cloud_ai_abbreviations import FISH_FUNCTIONS, register_cloud_ai_abbreviations
-from wes_fish_migration import register_misc_fish_functions
+from wes_fish_migration import wrap_fish_functions
 
 
 register_cloud_ai_abbreviations()
-register_misc_fish_functions(aliases, FISH_FUNCTIONS)
+wrap_fish_functions(aliases, FISH_FUNCTIONS)
 
 
 # TODO SKIPPED_MIGRATION: per-file devtools log abbreviations generated from

@@ -30,7 +30,7 @@ from wes_filetype_abbreviations import (  # noqa: E402
 from wes_fish_migration import (  # noqa: E402
     SKIPPED_FISH_FUNCTIONS,
     fish_command_alias,
-    register_misc_fish_functions,
+    wrap_fish_functions,
     unsupported_fish_alias,
 )
 
@@ -349,7 +349,7 @@ def test_all_split_rc_files_load_together():
 def test_fish_help_reminder_and_independent_source_views(monkeypatch):
     registry = reset_registry()
     aliases = {}
-    register_misc_fish_functions(aliases, ["which_versions"])
+    wrap_fish_functions(aliases, ["which_versions"])
     result, _ = registry.expand(context("which_versions??"))
     assert result.text == "_fish_help which_versions"
     assert registry.expand(context("??which_versions")) is None
@@ -377,7 +377,7 @@ def test_fish_help_colors_last_pipeline_command_including_redirects(monkeypatch)
     monkeypatch.delenv("NO_COLOR", raising=False)
     reset_registry()
     aliases = {}
-    register_misc_fish_functions(aliases, ["which_versions"])
+    wrap_fish_functions(aliases, ["which_versions"])
     calls = []
     monkeypatch.setattr(
         "wes_fish_migration.fish_function_command",
