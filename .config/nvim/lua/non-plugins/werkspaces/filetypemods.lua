@@ -116,9 +116,9 @@ _G.xonsh_indent = function()
     local is_closing_bracket = first_char == ")" or first_char == "]" or first_char == "}"
     local first_keyword = cur_line:match("^%s*(%a+)")
     local dedent_keywords = {
-        else = true, elif = true, except = true, finally = true,
-        return = true, raise = true, break = true, continue = true,
-        pass = true,
+        ["else"] = true, ["elif"] = true, ["except"] = true, ["finally"] = true,
+        ["return"] = true, ["raise"] = true, ["break"] = true, ["continue"] = true,
+        ["pass"] = true,
     }
     if is_closing_bracket or dedent_keywords[first_keyword] then
         return math.max(prev_indent - sw, 0)
