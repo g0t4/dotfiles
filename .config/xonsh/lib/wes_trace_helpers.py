@@ -47,6 +47,9 @@ def single_quote(value):
     """Xonsh/Fish single-quoted literal (POSIX quote concatenation is invalid here)."""
     return "'" + value.replace("\\", "\\\\").replace("'", "\\'") + "'"
 
+def double_quote(value):
+    return '"' + value.replace('\\', '\\\\').replace('"', '\\"') + '"'
+
 
 def trace_files(*, recursive=False):
     # Deterministic selection, including names containing spaces. Avoid walking
@@ -79,7 +82,7 @@ def expand_trace_file(context, match):
 
         # Always close the quote. The abbreviation engine preserves text following
         # this token; no Fish commandline call or dangling quote is needed.
-        return "nvim -c " + single_quote(" ".join(["AskViewTrace"] + parts))
+        return "nvim -c " + double_quote(" ".join(["AskViewTrace"] + parts))
 
     # vt / vtt
     command = "view_trace" if cmd_prefix == "vt" else "view_trace_tui"
