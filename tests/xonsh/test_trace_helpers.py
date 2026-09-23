@@ -82,7 +82,7 @@ def test_source_function_inventory_is_accounted_for():
     sources = [ROOT / "fish/load_last_interactive_only/always/my_ai.fish",
                ROOT / "fish/load_last_interactive_only/rag_captures.fish"]
     names = {name for source in sources for name in re.findall(r"^function (\S+)", source.read_text(), re.M)}
-    native = {"abbr_expand_trace_nth_file_nvim", "_abbr_trace_message", "_abbr_trace_command", "_abbr_msg_num"}
+    native = {"_abbr_expand_trace_nth_file_args", "abbr_expand_trace_nth_file_vt","abbr_expand_trace_nth_file_nvim", "_abbr_trace_message", "_abbr_trace_command", "_abbr_msg_num"}
     assert names == set(FISH_FUNCTIONS) | native | {"mcp_server_semantic_grep"}
 
 

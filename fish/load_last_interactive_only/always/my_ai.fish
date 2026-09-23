@@ -58,6 +58,7 @@ abbr bta browse_traces agents
 abbr btr browse_traces rewrite
 abbr btf browse_traces fim
 abbr btsh browse_traces fish
+abbr btx browse_traces xonsh
 function browse_traces
     set _python3 "$ASK_REPO/.venv/bin/python3"
     env PYTHONPATH="$ASK_REPO" $_python3 -m tools.chat_viewer.browser $argv
