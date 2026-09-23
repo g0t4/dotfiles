@@ -47,13 +47,9 @@ function abbr_expand_trace_nth_file_nvim --argument-names abbreviation
     set sorted_trace_files (fd --max-depth=1 ".*-trace\.json" . | sort)
     set selected_trace_file $sorted_trace_files[$index_part]
 
-    if test -n "$selected_trace_file"
-        echo "nvim -c 'AskViewTrace $opts $selected_trace_file'"
-        # echo "view_trace $opts $file"
-    else
-        echo "nvim -c 'AskViewTrace $opts'"
-        # echo "view_trace $opts"
-    end
+    # FYI if no selected_trace_file then meh, doesn't matter much so don't do anythign special
+    echo "nvim -c 'AskViewTrace $opts $selected_trace_file'"
+    # echo "view_trace $opts $file"
 end
 
 function strip_trailing_newline --description "trim trailing \\n - last only"
