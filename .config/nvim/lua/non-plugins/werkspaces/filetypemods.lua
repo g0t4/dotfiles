@@ -94,51 +94,14 @@ vim.filetype.add({
     },
 })
 
--- xonsh indentation: Python-style block indentation, tolerant of xonsh subprocess syntax.
---   Avoids python#GetIndent, which scans backwards for brackets/parens and runs away
---   ("10 indents") on xonsh's $(...)/!(...) subprocess lines.
---   Rule: indent +sw after a line ending in ':' (block opener), dedent on closing
---   keywords, otherwise match the previous line's indent.
-_G.xonsh_indent = function()
-    local lnum = vim.v.lnum
-    local prev = vim.fn.prevnonblank(lnum - 1)
-    if prev == 0 then
-        return 0
-    end
-
-    local sw = vim.bo.shiftwidth
-    local prev_line = vim.fn.getline(prev)
-    local prev_indent = vim.fn.indent(prev)
-
-    -- dedent when the current line begins with a block-closing keyword or bracket
-    local cur_line = vim.fn.getline(lnum)
-    local first_char = cur_line:match("^%s*(.)")
-    local is_closing_bracket = first_char == ")" or first_char == "]" or first_char == "}"
-    local first_keyword = cur_line:match("^%s*(%a+)")
-    local dedent_keywords = {
-        ["else"] = true, ["elif"] = true, ["except"] = true, ["finally"] = true,
-        ["return"] = true, ["raise"] = true, ["break"] = true, ["continue"] = true,
-        ["pass"] = true,
-    }
-    if is_closing_bracket or dedent_keywords[first_keyword] then
-        return math.max(prev_indent - sw, 0)
-    end
-
-    -- indent after a compound-statement block opener (line ends with ':')
-    if prev_line:match(":%s*$") then
-        return prev_indent + sw
-    end
-
-    -- otherwise match the previous line's indent
-    return prev_indent
-end
-
 vim.api.nvim_create_autocmd("FileType", {
     group = "filetypemods",
     pattern = "xonsh",
     callback = function()
         vim.bo.commentstring = "# %s" -- %s is original text
-        vim.bo.indentexpr = "v:lua.xonsh_indent()"
+        vim.bo.indentexpr = "v:lua.require('non-plugins.werkspaces.xonsh_indent').indent()"
+        -- re-evaluate indentexpr when ':' is typed so `else:`/`elif:`/`except:` auto-dedent
+        vim.bo.indentkeys = "o,O,*<Return>,<>>,<BS>,0,:"
     end,
 })
 
