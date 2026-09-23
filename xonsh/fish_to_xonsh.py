@@ -55,7 +55,6 @@ def generate(
     title: str,
     function_name: str,
     declaration_factory: DeclarationFactory,
-    include_line: Callable[[int], bool] = lambda _line_number: True,
     should_skip: Callable[[str, str, dict[str, str | bool]], bool] = (
         lambda _name, _replacement, _options: False
     ),
@@ -66,7 +65,7 @@ def generate(
     functions = []
     seen = set()
     for line_number, line in enumerate(source.read_text().splitlines(), 1):
-        if not include_line(line_number) or "# fish-only" in line:
+        if "# fish-only" in line:
             continue
         if re.match(r"^\s*abbr(?:\s|$)", line):
             parsed = parse_abbreviation(line_number, line)

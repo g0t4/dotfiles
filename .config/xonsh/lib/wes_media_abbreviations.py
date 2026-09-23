@@ -1,4 +1,4 @@
-"""Media abbreviations generated from Fish misc-specific.fish."""
+"""Media abbreviations generated from Fish media-specific.fish."""
 
 from __future__ import annotations
 

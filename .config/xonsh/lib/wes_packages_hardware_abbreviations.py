@@ -1,4 +1,4 @@
-"""Packages Hardware abbreviations generated from Fish misc-specific.fish."""
+"""Packages Hardware abbreviations generated from Fish packages-hardware-specific.fish."""
 
 from __future__ import annotations
 
@@ -33,8 +33,6 @@ FISH_FUNCTIONS = (
     'show_hex_rgb_color',
     'treeify_with_icons',
     '__pactree_depth',
-    'zedraw',
-    'zedfull',
     'trash',
     '_fish_from_source',
 )

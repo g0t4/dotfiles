@@ -1,4 +1,4 @@
-"""System Services abbreviations generated from Fish misc-specific.fish."""
+"""System Services abbreviations generated from Fish system-services-specific.fish."""
 
 from __future__ import annotations
 

@@ -1,53 +1,9 @@
-#!/usr/bin/env python3
-"""Generate focused Xonsh modules from the historical Fish misc file."""
+"""Dotfiles-specific policies for generating Xonsh from Fish abbreviations."""
 
 from __future__ import annotations
 
 import re
 from dataclasses import dataclass
-from pathlib import Path
-
-from fish_to_xonsh import generate as generate_from_fish
-from fish_to_xonsh import parse_abbreviation
-
-
-ROOT = Path(__file__).resolve().parents[1]
-MISC_SOURCE = ROOT / "fish/load_last_interactive_only/misc-specific.fish"
-CLOUD_AI_SOURCE = ROOT / "fish/load_last_interactive_only/cloud-ai-specific.fish"
-SOURCE = MISC_SOURCE
-TARGET_DIR = ROOT / ".config/xonsh/lib"
-
-
-@dataclass(frozen=True)
-class Module:
-    name: str
-    ranges: tuple[tuple[int, int], ...] | None
-    source: Path = MISC_SOURCE
-
-    def contains(self, line_number: int) -> bool:
-        return self.ranges is None or any(
-            start <= line_number <= end for start, end in self.ranges
-        )
-
-    @property
-    def target(self) -> Path:
-        return TARGET_DIR / f"wes_{self.name}_abbreviations.py"
-
-
-MODULES = (
-    # The remaining offsets split the historical misc file into focused modules.
-    # Prefer a dedicated Fish source, as cloud_ai has, when extracting a domain.
-    Module("system_services", ((47, 217),)),
-    Module("kubernetes", ((218, 769),)),
-    Module("processes", ((770, 1176), (2458, 2498))),
-    Module("cloud_ai", None, CLOUD_AI_SOURCE),
-    Module(
-        "media",
-        ((1357, 1714), (2021, 2144), (2311, 2336), (2499, 2527), (2729, 2792)),
-    ),
-    Module("packages_hardware", ((1177, 1356), (1715, 2020), (2145, 2457))),
-    Module("misc", ((2528, 2674), (2675, 2728), (2793, 2903))),
-)
 
 @dataclass(frozen=True)
 class AbbreviationSelector:
@@ -164,29 +120,3 @@ def declaration(line_number, name, replacement, options):
     if options.get("cursor") and replacement.count("%") == 1:
         arguments.append('cursor_marker="%"')
     return f"    abbr({', '.join(arguments)})"
-
-
-def generate(module: Module) -> str:
-    title = module.name.replace("_", " ").title()
-    function_name = f"register_{module.name}_abbreviations"
-    source_name = module.source.name
-    return generate_from_fish(
-        module.source,
-        title=f"{title} abbreviations generated from Fish {source_name}.",
-        function_name=function_name,
-        declaration_factory=declaration,
-        include_line=module.contains,
-        should_skip=should_skip,
-        deduplicated_names=frozenset(DEDUPLICATED_ABBREVIATIONS),
-    )
-
-
-def generate_all() -> dict[Path, str]:
-    return {module.target: generate(module) for module in MODULES}
-
-
-if __name__ == "__main__":
-    for module in MODULES:
-        if module.source == CLOUD_AI_SOURCE:
-            continue
-        module.target.write_text(generate(module))

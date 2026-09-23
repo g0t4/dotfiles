@@ -1,4 +1,4 @@
-"""Processes abbreviations generated from Fish misc-specific.fish."""
+"""Processes abbreviations generated from Fish processes-specific.fish."""
 
 from __future__ import annotations
 

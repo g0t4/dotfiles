@@ -3,10 +3,11 @@
 
 from __future__ import annotations
 
+from dataclasses import dataclass
 from pathlib import Path
 
 from fish_to_xonsh import generate
-from generate_misc_abbreviations import (
+from fish_to_xonsh_policy import (
     DEDUPLICATED_ABBREVIATIONS,
     declaration,
     should_skip,
@@ -14,23 +15,51 @@ from generate_misc_abbreviations import (
 
 
 ROOT = Path(__file__).resolve().parents[1]
+FISH_DIR = ROOT / "fish/load_last_interactive_only"
+TARGET_DIR = ROOT / ".config/xonsh/lib"
 
 
-def gen(fish_file: str, xonsh_module: str) -> None:
-    fish_source = ROOT / "fish/load_last_interactive_only" / fish_file
-    xonsh_target = ROOT / ".config/xonsh/lib" / f"wes_{xonsh_module}_abbreviations.py"
-    content = generate(
-        fish_source,
-        title=f"{xonsh_module.replace('_', ' ').title()} abbreviations generated "
-        f"from Fish {fish_file}.",
-        function_name=f"register_{xonsh_module}_abbreviations",
+@dataclass(frozen=True)
+class FishMapping:
+    fish_file: str
+    xonsh_module: str
+
+    @property
+    def source(self) -> Path:
+        return FISH_DIR / self.fish_file
+
+    @property
+    def target(self) -> Path:
+        return TARGET_DIR / f"wes_{self.xonsh_module}_abbreviations.py"
+
+
+MAPPINGS = (
+    FishMapping("system-services-specific.fish", "system_services"),
+    FishMapping("kubernetes-specific.fish", "kubernetes"),
+    FishMapping("processes-specific.fish", "processes"),
+    FishMapping("cloud-ai-specific.fish", "cloud_ai"),
+    FishMapping("media-specific.fish", "media"),
+    FishMapping("packages-hardware-specific.fish", "packages_hardware"),
+    FishMapping("misc-specific.fish", "misc"),
+)
+
+
+def render(mapping: FishMapping) -> str:
+    return generate(
+        mapping.source,
+        title=f"{mapping.xonsh_module.replace('_', ' ').title()} abbreviations "
+        f"generated from Fish {mapping.fish_file}.",
+        function_name=f"register_{mapping.xonsh_module}_abbreviations",
         declaration_factory=declaration,
         should_skip=should_skip,
         deduplicated_names=frozenset(DEDUPLICATED_ABBREVIATIONS),
     )
-    xonsh_target.write_text(content)
+
+
+def generate_all() -> dict[Path, str]:
+    return {mapping.target: render(mapping) for mapping in MAPPINGS}
 
 
 if __name__ == "__main__":
-    # Keep this as the single list of dedicated Fish -> Xonsh mappings.
-    gen("cloud-ai-specific.fish", "cloud_ai")
+    for target, content in generate_all().items():
+        target.write_text(content)

@@ -6,7 +6,7 @@ from __future__ import annotations
 import re
 from pathlib import Path
 
-from generate_misc_abbreviations import parse_abbreviation
+from fish_to_xonsh import parse_abbreviation
 
 
 ROOT = Path(__file__).resolve().parents[1]

@@ -11,14 +11,14 @@ ROOT = Path(__file__).parents[2]
 sys.path.insert(0, str(ROOT / ".config/xonsh/lib"))
 sys.path.insert(0, str(ROOT / "xonsh"))
 
-from generate_misc_abbreviations import (  # noqa: E402
-    CLOUD_AI_SOURCE,
-    MODULES,
+from fish_to_xonsh_policy import (  # noqa: E402
     AbbreviationSelector,
     declaration,
     matching_rule,
     should_skip,
-    SOURCE,
+)
+from generate_from_fish import (  # noqa: E402
+    MAPPINGS,
     generate_all,
 )
 from wes_abbreviations import AbbreviationContext, reset_registry  # noqa: E402
@@ -49,9 +49,13 @@ def context(token, *, command_path=(), command_position=True):
 
 def registry():
     registry = reset_registry()
-    for module in MODULES:
-        generated = importlib.import_module(f"wes_{module.name}_abbreviations")
-        register = getattr(generated, f"register_{module.name}_abbreviations")
+    for mapping in MAPPINGS:
+        generated = importlib.import_module(
+            f"wes_{mapping.xonsh_module}_abbreviations"
+        )
+        register = getattr(
+            generated, f"register_{mapping.xonsh_module}_abbreviations"
+        )
         register()
     return registry
 
@@ -59,8 +63,8 @@ def registry():
 def generated_abbreviation_count():
     fish_abbreviation_count = sum(
         bool(re.match(r"^\s*abbr(?:\s|$)", line))
-        for source in {module.source for module in MODULES}
-        for line in source.read_text().splitlines()
+        for mapping in MAPPINGS
+        for line in mapping.source.read_text().splitlines()
     )
     # 12 source declarations are intentionally skipped or deduplicated.
     return fish_abbreviation_count - 12
@@ -93,14 +97,13 @@ def test_generated_misc_modules_are_in_sync_with_fish_source():
         assert target.read_text() == expected
 
 
-def test_cloud_ai_has_a_dedicated_fish_source_without_line_offsets():
-    cloud_ai = next(module for module in MODULES if module.name == "cloud_ai")
+def test_every_generated_module_has_a_dedicated_fish_source():
+    assert len(MAPPINGS) == 7
+    assert len({mapping.source for mapping in MAPPINGS}) == len(MAPPINGS)
+    assert all(mapping.source.is_file() for mapping in MAPPINGS)
 
-    assert cloud_ai.source == CLOUD_AI_SOURCE
-    assert cloud_ai.ranges is None
 
-
-def test_dedicated_fish_generator_reproduces_cloud_ai_module():
+def test_one_to_one_fish_generator_reproduces_all_modules():
     completed = subprocess.run(
         [sys.executable, str(ROOT / "xonsh/generate_from_fish.py")],
         cwd=ROOT,
@@ -109,11 +112,8 @@ def test_dedicated_fish_generator_reproduces_cloud_ai_module():
     )
 
     assert completed.returncode == 0, completed.stderr
-    assert (
-        ROOT / ".config/xonsh/lib/wes_cloud_ai_abbreviations.py"
-    ).read_text() == generate_all()[
-        ROOT / ".config/xonsh/lib/wes_cloud_ai_abbreviations.py"
-    ]
+    for target, expected in generate_all().items():
+        assert target.read_text() == expected
 
 
 def test_generated_platform_commands_exist_only_where_used():
@@ -140,7 +140,11 @@ def test_generated_pkill_abbreviations_preserve_platform_specific_flags():
 
 
 def test_fish_abbreviation_search_stays_native_while_xonsh_uses_registry():
-    fish_source = SOURCE.read_text()
+    fish_source = next(
+        mapping.source.read_text()
+        for mapping in MAPPINGS
+        if mapping.xonsh_module == "processes"
+    )
     processes_module = next(
         content
         for target, content in generate_all().items()
@@ -163,11 +167,13 @@ def test_every_misc_fish_abbreviation_is_assigned_to_one_focused_module():
 
 def test_every_misc_function_definition_is_assigned_to_a_focused_module():
     functions = []
-    for module in MODULES:
-        generated = importlib.import_module(f"wes_{module.name}_abbreviations")
+    for mapping in MAPPINGS:
+        generated = importlib.import_module(
+            f"wes_{mapping.xonsh_module}_abbreviations"
+        )
         functions.extend(generated.FISH_FUNCTIONS)
 
-    assert len(functions) == 109
+    assert len(functions) == 107
     assert len(set(functions)) == 107
 
 
@@ -330,9 +336,9 @@ def test_all_split_rc_files_load_together():
     dynamic_filetype_count = len(FILETYPE_GLOBS) * 4
     help_count = sum(
         name not in SKIPPED_FISH_FUNCTIONS
-        for module in MODULES
+        for mapping in MAPPINGS
         for name in importlib.import_module(
-            f"wes_{module.name}_abbreviations"
+            f"wes_{mapping.xonsh_module}_abbreviations"
         ).FISH_FUNCTIONS
     )
     assert completed.stdout.strip() == str(

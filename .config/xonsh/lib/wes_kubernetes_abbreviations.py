@@ -1,4 +1,4 @@
-"""Kubernetes abbreviations generated from Fish misc-specific.fish."""
+"""Kubernetes abbreviations generated from Fish kubernetes-specific.fish."""
 
 from __future__ import annotations
 
