@@ -18,23 +18,21 @@ FISH_FUNCTIONS = (
     "love_agents", "love_shell",
 )
 
-SHORTCUTS = {
-    "bt": "browse_traces",
-    "bta": "browse_traces agents",
-    "btr": "browse_traces rewrite",
-    "btf": "browse_traces fim",
-    "btsh": "browse_traces fish",
-    "btx": "browse_traces xonsh",
-    "vt": "view_trace",
-    "vtt": "view_trace_tui",
-    "td": "trace_dump",
-    "pii": "pii_scanner",
-    "ri": "rag_indexer",
-    "rvi": "rag_validate_index",
-    "rag_rebuilder": "time rag_indexer --rebuild --info",
-    "nreadme": "nvim README.md -c ':tabonly'",
-    "nNOTES": "nvim NOTES.yml -c ':tabonly'",
-}
+abbr('bt', 'browse_traces')
+abbr('bta', 'browse_traces agents')
+abbr('btr', 'browse_traces rewrite')
+abbr('btf', 'browse_traces fim')
+abbr('btsh', 'browse_traces fish')
+abbr('btx', 'browse_traces xonsh')
+abbr('vt', 'view_trace')
+abbr('vtt', 'view_trace_tui')
+abbr('td', 'trace_dump')
+abbr('pii', 'pii_scanner')
+abbr('ri', 'rag_indexer')
+abbr('rvi', 'rag_validate_index')
+abbr('rag_rebuilder', 'time rag_indexer --rebuild --info')
+abbr('nreadme', "nvim README.md -c ':tabonly'")
+abbr('nNOTES', "nvim NOTES.yml -c ':tabonly'")
 
 
 def quote(value):
@@ -116,8 +114,6 @@ def register_trace_helpers(aliases, dotfiles):
         aliases[name] = (fish_command_alias(name)
                          if name in {"ask_rewrite_diff_reviewer", "rag_validate_index"}
                          else trace_fish_alias(name))
-    for trigger, replacement in SHORTCUTS.items():
-        abbr(trigger, replacement)
     for trigger in ("nat", "notes_about_trace"):
         abbr(trigger, "notes_about_trace '%'", cursor_marker="%")
     abbr(re.compile(r"t(\d*)(a?)"), expand_trace_file)
