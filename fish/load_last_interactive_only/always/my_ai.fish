@@ -21,17 +21,6 @@ end
 
 abbr --add abbr_trace_nth_file_nvim --regex 't\d*a?' --function abbr_expand_trace_nth_file_nvim
 function _abbr_expand_trace_nth_file_args --argument-names abbreviation
-    set current_command_line (commandline)
-    set current_cursor_position (commandline --cursor)
-    set text_after_cursor (string sub --start (math $current_cursor_position + 1) $current_command_line)
-
-    if test -n "$text_after_cursor"
-        # AFAICT I cannot modify commandline (either blocked in abbrs OR when abbr is triggered fish snapshots commandline and then the expansion is inserted in the expanded word and the rest remains the same)
-        # SO, don't close the quoted command... I'll have to do that myself
-        # TODO can I schedule something to run after the abbr expands :)... if so I could end the quoted command that way (and maybe move cursor to end of line)
-        echo "nvim -c 'AskViewTrace "
-        return
-    end
     # extract the numeric part after the leading 't'
     set index_part (string replace --regex '^t' '' $abbreviation)
     set opts ""
