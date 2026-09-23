@@ -29,7 +29,7 @@ function abbr_expand_trace_nth_file_nvim --argument-names abbreviation
         # AFAICT I cannot modify commandline (either blocked in abbrs OR when abbr is triggered fish snapshots commandline and then the expansion is inserted in the expanded word and the rest remains the same)
         # SO, don't close the quoted command... I'll have to do that myself
         # TODO can I schedule something to run after the abbr expands :)... if so I could end the quoted command that way (and maybe move cursor to end of line)
-        echo "nvim -c 'AskViewTrace $assumed_file"
+        echo "nvim -c 'AskViewTrace "
     else
         # extract the numeric part after the leading 't'
         set index_part (string replace --regex '^t' '' $abbreviation)
