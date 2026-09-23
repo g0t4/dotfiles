@@ -12,6 +12,7 @@ sys.path.insert(0, str(ROOT / ".config/xonsh/lib"))
 sys.path.insert(0, str(ROOT / "xonsh"))
 
 from generate_misc_abbreviations import (  # noqa: E402
+    CLOUD_AI_SOURCE,
     MODULES,
     AbbreviationSelector,
     declaration,
@@ -58,10 +59,11 @@ def registry():
 def generated_abbreviation_count():
     fish_abbreviation_count = sum(
         bool(re.match(r"^\s*abbr(?:\s|$)", line))
-        for line in SOURCE.read_text().splitlines()
+        for source in {module.source for module in MODULES}
+        for line in source.read_text().splitlines()
     )
-    # 13 source declarations are intentionally skipped or deduplicated.
-    return fish_abbreviation_count - 13
+    # 12 source declarations are intentionally skipped or deduplicated.
+    return fish_abbreviation_count - 12
 
 
 def test_migration_rules_do_not_depend_on_source_line_numbers():
@@ -89,6 +91,29 @@ def test_trigger_rules_can_distinguish_scopes_and_replacements():
 def test_generated_misc_modules_are_in_sync_with_fish_source():
     for target, expected in generate_all().items():
         assert target.read_text() == expected
+
+
+def test_cloud_ai_has_a_dedicated_fish_source_without_line_offsets():
+    cloud_ai = next(module for module in MODULES if module.name == "cloud_ai")
+
+    assert cloud_ai.source == CLOUD_AI_SOURCE
+    assert cloud_ai.ranges is None
+
+
+def test_dedicated_fish_generator_reproduces_cloud_ai_module():
+    completed = subprocess.run(
+        [sys.executable, str(ROOT / "xonsh/generate_from_fish.py")],
+        cwd=ROOT,
+        capture_output=True,
+        text=True,
+    )
+
+    assert completed.returncode == 0, completed.stderr
+    assert (
+        ROOT / ".config/xonsh/lib/wes_cloud_ai_abbreviations.py"
+    ).read_text() == generate_all()[
+        ROOT / ".config/xonsh/lib/wes_cloud_ai_abbreviations.py"
+    ]
 
 
 def test_generated_platform_commands_exist_only_where_used():

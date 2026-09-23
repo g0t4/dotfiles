@@ -1,4 +1,4 @@
-"""Cloud Ai abbreviations generated from Fish misc-specific.fish."""
+"""Cloud Ai abbreviations generated from Fish cloud-ai-specific.fish."""
 
 from __future__ import annotations
 
@@ -111,6 +111,7 @@ def register_cloud_ai_abbreviations():
     abbr('tailn', 'tail -n 1000')
     abbr('tailr', 'tail -r')
     abbr('tt', 'trash_n_tail')
+    abbr('tt_xonsh', 'trash_n_tail -F ~/.local/state/xonsh/xonsh.log')
     abbr('tt_mcp_server_commands', 'tail -F ~/.local/state/mcp-server-commands/commands.log')
     abbr('tail_mcp_server_commands', 'tail -F ~/.local/state/mcp-server-commands/commands.log')
     abbr('commands_log_review', 'commands_log_executable_mode; commands_log_shell_mode')
