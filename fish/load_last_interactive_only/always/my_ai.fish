@@ -19,8 +19,8 @@ function ask_rewrite_diff_reviewer
     diff_two_commands "jq .request_body.messages[-1].content -r $trace_file" "jq .response_message.content -r $trace_file"
 end
 
-abbr --add abbr_trace_nth_file --regex 't\d*a?' --function abbr_expand_trace_nth_file
-function abbr_expand_trace_nth_file --argument-names abbreviation
+abbr --add abbr_trace_nth_file --regex 't\d*a?' --function abbr_expand_trace_nth_file_nvim
+function abbr_expand_trace_nth_file_nvim --argument-names abbreviation
     set current_command_line (commandline)
     set current_cursor_position (commandline --cursor)
     set text_after_cursor (string sub --start (math $current_cursor_position + 1) $current_command_line)
