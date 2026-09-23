@@ -40,7 +40,6 @@ MAPPINGS = (
     FishMapping("cloud-ai-specific.fish", "cloud_ai"),
     FishMapping("media-specific.fish", "media"),
     FishMapping("packages-hardware-specific.fish", "packages_hardware"),
-    FishMapping("misc-specific.fish", "misc"),
 )
 
 

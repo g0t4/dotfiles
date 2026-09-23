@@ -21,6 +21,10 @@ from generate_from_fish import (  # noqa: E402
     MAPPINGS,
     generate_all,
 )
+from generate_misc_fish_abbreviations import (  # noqa: E402
+    TARGET as MISC_FISH_TARGET,
+    render as render_misc_fish,
+)
 from wes_abbreviations import AbbreviationContext, reset_registry  # noqa: E402
 from wes_fish_bridge import UnsupportedFishFunctionError  # noqa: E402
 from wes_filetype_abbreviations import (  # noqa: E402
@@ -57,6 +61,7 @@ def registry():
             generated, f"register_{mapping.xonsh_module}_abbreviations"
         )
         register()
+    importlib.import_module("wes_misc_abbreviations").register_misc_abbreviations()
     return registry
 
 
@@ -67,7 +72,11 @@ def generated_abbreviation_count():
         for line in mapping.source.read_text().splitlines()
     )
     # 12 source declarations are intentionally skipped or deduplicated.
-    return fish_abbreviation_count - 12
+    misc_count = sum(
+        line.lstrip().startswith("abbr(")
+        for line in (ROOT / ".config/xonsh/lib/wes_misc_abbreviations.py").read_text().splitlines()
+    )
+    return fish_abbreviation_count - 12 + misc_count
 
 
 def test_migration_rules_do_not_depend_on_source_line_numbers():
@@ -98,7 +107,7 @@ def test_generated_misc_modules_are_in_sync_with_fish_source():
 
 
 def test_every_generated_module_has_a_dedicated_fish_source():
-    assert len(MAPPINGS) == 7
+    assert len(MAPPINGS) == 6
     assert len({mapping.source for mapping in MAPPINGS}) == len(MAPPINGS)
     assert all(mapping.source.is_file() for mapping in MAPPINGS)
 
@@ -114,6 +123,32 @@ def test_one_to_one_fish_generator_reproduces_all_modules():
     assert completed.returncode == 0, completed.stderr
     for target, expected in generate_all().items():
         assert target.read_text() == expected
+
+
+def test_misc_fish_abbreviations_are_generated_from_xonsh():
+    assert MISC_FISH_TARGET.read_text() == render_misc_fish()
+    source = (ROOT / "fish/load_last_interactive_only/misc-specific.fish").read_text()
+    assert "source $WES_DOTFILES/fish/generated/misc-abbreviations.fish" in source
+    completed = subprocess.run(
+        [
+            "fish", "--no-config", "-c",
+            f"set -g WES_DOTFILES {ROOT}; "
+            "function reminder_abbr; abbr $argv; end; "
+            "source $WES_DOTFILES/fish/load_last_interactive_only/misc-specific.fish; "
+            "abbr --show",
+        ],
+        capture_output=True,
+        text=True,
+    )
+    assert completed.returncode == 0, completed.stderr
+    assert "abbr -a -- rsync_quick 'rsync --archive --delete --progress --stats --dry-run'" in completed.stdout
+    assert "abbr -a --position anywhere --command string -- -a --all" in completed.stdout
+    assert "abbr -a --set-cursor='%' -- fishc" in completed.stdout
+    assert "abbr -a --set-cursor='%' -- strace_process" in completed.stdout
+    assert "abbr -a -- cdr 'cd \"$(_repo_root)\"'" in completed.stdout
+    assert "abbr -a -- pPATH" in completed.stdout
+    assert "abbr -a -- date_unixtime" in completed.stdout
+    assert len(completed.stdout.splitlines()) == 64
 
 
 def test_generated_platform_commands_exist_only_where_used():
@@ -172,6 +207,7 @@ def test_every_misc_function_definition_is_assigned_to_a_focused_module():
             f"wes_{mapping.xonsh_module}_abbreviations"
         )
         functions.extend(generated.FISH_FUNCTIONS)
+    functions.extend(importlib.import_module("wes_misc_abbreviations").FISH_FUNCTIONS)
 
     assert len(functions) == 107
     assert len(set(functions)) == 107
@@ -336,9 +372,12 @@ def test_all_split_rc_files_load_together():
     dynamic_filetype_count = len(FILETYPE_GLOBS) * 4
     help_count = sum(
         name not in SKIPPED_FISH_FUNCTIONS
-        for mapping in MAPPINGS
+        for module_name in [
+            *(f"wes_{mapping.xonsh_module}_abbreviations" for mapping in MAPPINGS),
+            "wes_misc_abbreviations",
+        ]
         for name in importlib.import_module(
-            f"wes_{mapping.xonsh_module}_abbreviations"
+            module_name
         ).FISH_FUNCTIONS
     )
     assert completed.stdout.strip() == str(
