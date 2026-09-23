@@ -73,6 +73,10 @@ def expand_trace_file(context, match):
             # AskViewTrace forwards its raw arguments to `terminal view_trace`.
             # Quote once for that shell, then again below for `nvim -c`.
             parts.append(quote("./" + str(selected)))
+
+        # example:
+        #   nvim -c 'AskViewTrace \'./1790154300-trace.json\''
+
         # Always close the quote. The abbreviation engine preserves text following
         # this token; no Fish commandline call or dangling quote is needed.
         return "nvim -c " + quote(" ".join(["AskViewTrace"] + parts))
