@@ -19,11 +19,18 @@ FISH_FUNCTIONS = (
 )
 
 SHORTCUTS = {
-    "bt": "browse_traces", "bta": "browse_traces agents",
-    "btr": "browse_traces rewrite", "btf": "browse_traces fim",
-    "btsh": "browse_traces fish", "btx": "browse_traces xonsh",
-    "vt": "view_trace", "vtt": "view_trace_tui", "td": "trace_dump",
-    "pii": "pii_scanner", "ri": "rag_indexer", "rvi": "rag_validate_index",
+    "bt": "browse_traces",
+    "bta": "browse_traces agents",
+    "btr": "browse_traces rewrite",
+    "btf": "browse_traces fim",
+    "btsh": "browse_traces fish",
+    "btx": "browse_traces xonsh",
+    "vt": "view_trace",
+    "vtt": "view_trace_tui",
+    "td": "trace_dump",
+    "pii": "pii_scanner",
+    "ri": "rag_indexer",
+    "rvi": "rag_validate_index",
     "rag_rebuilder": "time rag_indexer --rebuild --info",
     "nreadme": "nvim README.md -c ':tabonly'",
     "nNOTES": "nvim NOTES.yml -c ':tabonly'",
