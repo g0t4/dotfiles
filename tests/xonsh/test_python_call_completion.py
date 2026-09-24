@@ -1,5 +1,6 @@
 """Python call completions must leave shell command names untouched."""
 
+import ast
 import os
 from pathlib import Path
 import subprocess
@@ -8,6 +9,44 @@ import subprocess
 ROOT = Path(__file__).parents[2]
 RC = ROOT / ".config/xonsh/rc.d/python-call-completions.xsh"
 LIB = ROOT / ".config/xonsh/lib"
+
+
+def test_python_function_and_shell_function_alias_with_same_name_show_both_choices():
+    """dualmo<Tab> offers dualmode() for Python and dualmode for the alias."""
+    script = f"""
+from xonsh.built_ins import XSH
+from xonsh.completer import Completer
+source {RC}
+
+def dualmode():
+    pass
+
+XSH.ctx['dualmode'] = dualmode
+XSH.aliases['dualmode'] = lambda args: None
+line = 'dualmo'
+completions, _ = Completer().complete(
+    line, line, 0, len(line), ctx=XSH.ctx,
+    multiline_text=line, cursor_index=len(line),
+)
+print(repr([(str(c), c.display, c.provider) for c in completions
+            if str(c).startswith('dualmode')]))
+"""
+    env = os.environ.copy()
+    env["PYTHONPATH"] = str(LIB)
+    env["XONSH_LOG"] = os.devnull
+    result = subprocess.run(
+        ["xonsh", "--no-rc", "-c", script],
+        cwd=ROOT,
+        env=env,
+        text=True,
+        capture_output=True,
+        check=True,
+    )
+
+    candidates = ast.literal_eval(result.stdout.strip())
+    assert ("dualmode()", "dualmode()", "python") in candidates
+    assert ("dualmode ", None, "alias") in candidates
+    assert len(candidates) == 2
 
 
 def test_python_call_completions_preserve_command_and_data_candidates():
