@@ -39,6 +39,7 @@ def register_processes_abbreviations():
     abbr('agr', "_abbr_list --any '%'", cursor_marker="%")
     abbr('agrs', "_abbr_list --prefix '%'", cursor_marker="%")
     abbr('completeC', "complete -C '%'", cursor_marker="%")
+    abbr('pid', '@(os.getpid())', position="anywhere")
     abbr('psg', 'grc ps aux | rg_grep -i ')
     abbr('enable_fish_tracing', 'set fish_trace 1')
     abbr('disable_fish_tracing', 'set --erase fish_trace')

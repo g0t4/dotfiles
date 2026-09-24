@@ -43,6 +43,7 @@ abbr --set-cursor completeC "complete -C '%'"
 #   bind_both_modes_default_and_insert escape,. history-token-search-backward
 
 # *** processes ***
+abbr --position anywhere --add pid -- '$fish_pid'
 abbr psg "grc ps aux | rg_grep -i "
 function ps_dump_env_vars_when_process_started --argument-names pid
     if $IS_MACOS

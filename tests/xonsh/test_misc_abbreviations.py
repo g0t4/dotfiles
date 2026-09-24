@@ -191,6 +191,23 @@ def test_fish_abbreviation_search_stays_native_while_xonsh_uses_registry():
     assert "abbr('agrs', \"_abbr_list --prefix '%'\"" in processes_module
 
 
+def test_pid_abbreviation_expands_anywhere_without_capturing_a_pid():
+    fish_source = next(
+        mapping.source.read_text()
+        for mapping in MAPPINGS
+        if mapping.xonsh_module == "processes"
+    )
+    assert "abbr --position anywhere --add pid -- '$fish_pid'" in fish_source
+
+    abbreviations = registry()
+    for command_position in (True, False):
+        result, abbreviation = abbreviations.expand(
+            context("pid", command_path=("echo",), command_position=command_position)
+        )
+        assert result.text == "@(os.getpid())"
+        assert abbreviation.position == "anywhere"
+
+
 def test_every_misc_fish_abbreviation_is_assigned_to_one_focused_module():
     entries = registry().abbreviations
 

@@ -58,6 +58,7 @@ UNSUPPORTED_ABBREVIATIONS = {
 }
 
 REPLACEMENTS = {
+    "$fish_pid": "@(os.getpid())",
     '"$(_repo_root)"': "$(_repo_root)",
     "$sed_cmd": "$XONSH_SED_COMMAND",
     "$man_cmd": "$XONSH_MAN_COMMAND",

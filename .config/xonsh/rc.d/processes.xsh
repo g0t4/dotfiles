@@ -4,6 +4,7 @@ from xonsh.built_ins import XSH
 
 aliases = XSH.aliases
 
+import os
 import platform
 
 from wes_filetype_abbreviations import (
