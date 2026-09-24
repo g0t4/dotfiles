@@ -126,7 +126,7 @@ def _prompt_pwd():
         category, separator, rest = relative.partition(os.sep)
         return color + category + ((":" + rest) if separator else "")
 
-    if cwd == os.path.join(home, "repos/github/g0t4/course-ansible-admin"):
+    if cwd.startswith(os.path.join(home, "repos/github/g0t4/course")):
         return color + "course"
     private_repo_prefix = os.path.join(home, "repos/github/g0t4/private")
     if cwd.startswith(private_repo_prefix):
