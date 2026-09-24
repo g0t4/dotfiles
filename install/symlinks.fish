@@ -62,9 +62,9 @@ if command -q zed
     ln -f -s $dotfiles_dir/.config/zed/settings.json $HOME/.config/zed/settings.json
 end
 
-# *** bat
-mkdir -p $HOME/.config/bat
-ln -f -s $dotfiles_dir/.config/bat/config $HOME/.config/bat/config
+# *** bat (entire config dir now for config+syntaxes, can go back to one-off if this is problematic)
+# FYI if not match then `trash $HOME/.config/bat`
+ln -f -s $dotfiles_dir/.config/bat $HOME/.config/. # DIR SYMLINK
 
 # *** fish
 if ! test -d $HOME/.config/fish
