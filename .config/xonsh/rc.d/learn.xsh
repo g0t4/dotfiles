@@ -46,28 +46,20 @@ def wes_command_not_found(cmd, **kwargs):
     # return {"cmd": ["echo","do", "something", "else" ...] + cmd, "env": {"FOO": "BAR"}}
 
 
-# @events.on_precommand
 @events.on_transform_command
 def wes_colorful_output(cmd: str, **kwargs):
-    # print(f"precommand: {cmd=}, {type(cmd)=}, {kwargs=}")
-    #
-    # TODO parse the command?
-    # log.info(f"{cmd=}")
     cmd = cmd.strip()  # strip trailing \n on submit
-    if cmd.strip().startswith("kubectl"):
+    if cmd.startswith("kubectl"):
         if "-o yaml" in cmd:
             if not "| bat -l yaml" in cmd:
                 return f"{cmd} | bat -l yaml"
         elif "-o json" in cmd:
             if not "| bat -l json" in cmd:
                 return f"{cmd} | bat -l json"
-        return cmd
+        return # nothing == no changes
     if cmd.startswith("hf datasets info"):
         if not "| bat -l json" in cmd:
-        # pipe to bat for coloring
-        # hf datasets info roneneldan/TinyStories
             return f"{cmd} | bat -l json"
-    # IIAC return nothing is preferred for no change?
 
 # @events.on_pre_cmdloop
 # def _event_show_tip(**kw):
