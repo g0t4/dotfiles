@@ -53,6 +53,9 @@ CUSTOM_KEYS = {
     "alt+shift+I", # │ alt+shift+i │ U+E085  │ ee 82 85 │
     # "alt+I",
 
+    # * FYI make sure to set key char (D) in this case to upper case when using `shift` modifier... doing just `shift+d` won't work, nor will just `D`... must be `shift+D`
+    "cmd+ctrl+shift+D", # debugger
+
     # maybes:
 
     # maybes:

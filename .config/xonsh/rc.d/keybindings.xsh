@@ -70,6 +70,21 @@ def _wes_navigate_directory_history_intra_prompt(event, *, forward):
         _wes_refresh_prompt(event)
 
 
+# $XONSH_DEBUG_BREAKPOINT_ENGINE = 'ipdb' # default if not specified
+# @.debug.replace_builtin_breakpoint() # take over @debug entirely
+def start_debugger():
+    # tab completion:
+    # - confirmed these engines can tab complete: ipdb,
+    #    IIUC execer and eval should work too
+    # - some can't tab complete, b/c of how they're run:
+    # - https://xon.sh/debug.html#tab-completion-in-callable-aliases
+    #
+    # @.debug.breakpoint('ipdb')
+    @.debug.breakpoint(engine='ipdb', frame=@.imp.sys._getframe().f_back)
+    # TODO setup ipdb (or w/e I choose) to work with vim like bindings (IIAC it's mostly all prompt_toolkit across backends?)
+    # TODO how can I fix how the debugger mangles output of it and the current prompt?
+
+
 @events.on_ptk_create
 def _wes_keybindings(bindings: KeyBindings, prompter: PromptSession, **_):
 
@@ -107,6 +122,17 @@ def _wes_keybindings(bindings: KeyBindings, prompter: PromptSession, **_):
     def _inspectify(expression: str) -> str:
         expression = format_source(expression).strip()
         return f"rich.inspect({expression})"
+
+    abbr("debugger", "start_debugger()")
+    abbr("break", "start_debugger()")
+
+    # cmd+ctrl+shift+D
+    @bindings.add("\uE44B", save_before=lambda event: False)
+    def _start_debugger(event: KeyPressEvent):
+        # TODO look into extra chars injected when using this binding? and after you quit
+        start_debugger()
+        # event.current_buffer.insert_text("FOO") # moves cursor too
+        # run_in_terminal(event.current_buffer.text)
 
     # TODO probably will settle on one of these in time and get rid of the other:
     # FYI ptk differentiates alt+i vs shift+alt+i

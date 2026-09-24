@@ -1,2 +1,6 @@
 rich
 pip # so xpip list works
+#
+# debuggers (prune when I pick one):
+ipdb # ipython based, xonsh compat debugger (https://xon.sh/debug.html) => @.debug.breakpoint("ipdb")
+pdbp
