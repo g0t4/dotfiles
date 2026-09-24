@@ -19,6 +19,9 @@ source {RC}
 def sample(value):
     return value
 
+def dump_events():
+    pass
+
 class Thing:
     field = 1
     def method(self, value):
@@ -28,10 +31,12 @@ class Thing:
         return cls()
 
 XSH.ctx['sample'] = sample
+XSH.ctx['dump_events'] = dump_events
 XSH.ctx['thing'] = Thing()
-for line in ('sam', 'x = sam', 'print(sam', 'echo @(sam',
+XSH.aliases['shell_widget'] = lambda args: None
+for line in ('sam', 'dump_e', '@.debug.break', 'x = sam', 'print(sam', 'echo @(sam',
              'print(thing.met', 'print(thing.fie', 'print(len',
-             'print(Thing.mak', 'echo sam'):
+             'print(Thing.mak', 'echo sam', 'shell_wid'):
     completions, _ = Completer().complete(
         line.split()[-1], line, 0, len(line), ctx=XSH.ctx,
         multiline_text=line, cursor_index=len(line),
@@ -39,7 +44,9 @@ for line in ('sam', 'x = sam', 'print(sam', 'echo @(sam',
     print(repr(line), repr([(str(c), getattr(c, 'display', None),
                             getattr(c, 'provider', None))
                            for c in completions
-                           if str(c).startswith(('sample', 'thing.', 'len', 'Thing.'))]))
+                           if str(c).startswith(('sample', 'dump_events', '@.debug.',
+                                                 'shell_widget',
+                                                 'thing.', 'len', 'Thing.'))]))
 """
     env = os.environ.copy()
     env["PYTHONPATH"] = str(LIB)
@@ -53,12 +60,17 @@ for line in ('sam', 'x = sam', 'print(sam', 'echo @(sam',
         check=True,
     )
     lines = result.stdout.splitlines()
-    assert "sample()" not in lines[0]  # bare command/function alias position
-    assert "('sample()', 'sample()'" in lines[1]
-    assert "('sample()', 'sample()'" in lines[2]
+    assert "('sample()', 'sample()', 'python')" in lines[0]
+    assert "('sample ', None, 'command')" in lines[0]
+    assert "('dump_events()', 'dump_events()', 'python')" in lines[1]
+    assert "('@.debug.breakpoint()', '@.debug.breakpoint()', 'python')" in lines[2]
     assert "('sample()', 'sample()'" in lines[3]
-    assert "('thing.method()', 'thing.method()'" in lines[4]
-    assert "('thing.field', None" in lines[5]
-    assert "('len()', 'len()'" in lines[6]
-    assert "('Thing.make()', 'Thing.make()'" in lines[7]
-    assert "sample()" not in lines[8]  # ordinary command argument
+    assert "('sample()', 'sample()'" in lines[4]
+    assert "('sample()', 'sample()'" in lines[5]
+    assert "('thing.method()', 'thing.method()'" in lines[6]
+    assert "('thing.field', None" in lines[7]
+    assert "('len()', 'len()'" in lines[8]
+    assert "('Thing.make()', 'Thing.make()'" in lines[9]
+    assert "sample()" not in lines[10]  # ordinary command argument
+    assert "('shell_widget ', None, 'alias')" in lines[11]
+    assert "shell_widget()" not in lines[11]

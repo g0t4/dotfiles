@@ -8,20 +8,26 @@ import inspect
 import re
 from typing import Any
 
+from xonsh.built_ins import XSH
 from xonsh.completers.tools import RichCompletion, contextual_completer
 
 
-_PYTHON_NAME = re.compile(r"[A-Za-z_]\w*(?:\.[A-Za-z_]\w*)*")
+_PYTHON_NAME = re.compile(r"(?:@\.)?[A-Za-z_]\w*(?:\.[A-Za-z_]\w*)*")
 _MISSING = object()
 
 
 def _resolve_python_name(name: str, namespace: dict[str, Any]) -> Any:
     """Look up a name without evaluating code or invoking descriptors."""
-    parts = name.split(".")
-    value = namespace.get(parts[0], _MISSING)
-    if value is _MISSING:
-        value = vars(builtins).get(parts[0], _MISSING)
-    for part in parts[1:]:
+    if name.startswith("@."):
+        parts = name[2:].split(".")
+        value = XSH.interface
+    else:
+        parts = name.split(".")
+        value = namespace.get(parts[0], _MISSING)
+        if value is _MISSING:
+            value = vars(builtins).get(parts[0], _MISSING)
+        parts = parts[1:]
+    for part in parts:
         if value is _MISSING:
             break
         try:
@@ -43,17 +49,6 @@ def _call_completion(candidate, context):
     value = str(candidate)
     name = value.removesuffix("(")
     if not _PYTHON_NAME.fullmatch(name):
-        return candidate
-
-    # At the first bare token Xonsh offers Python names alongside aliases and
-    # executables. Keep that command surface exactly as it was.
-    if (
-        context.command is not None
-        and context.command.arg_index == 0
-        and "." not in name
-        and not python.is_sub_expression
-        and _PYTHON_NAME.fullmatch(python.prefix.rsplit("\n", 1)[-1].strip())
-    ):
         return candidate
 
     target = _resolve_python_name(name, python.ctx)
