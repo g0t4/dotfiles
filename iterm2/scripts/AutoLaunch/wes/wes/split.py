@@ -120,7 +120,9 @@ async def prepare_new_profile(session: iterm2.Session, force_local_shell: bool) 
             print("was local => was_bash")
         elif was_xonsh:
             # need full path to xonsh
-            new_profile.set_command("/opt/homebrew/bin/xonsh") # iterm is only macOS, so its safe to do this :)
+            HOME = os.getenv("HOME")
+            xonsh_cmd = f"{HOME}/.local/bin/xonsh"
+            new_profile.set_command(xonsh_cmd) # iterm is only macOS, so its safe to do this :)
             new_profile.set_use_custom_command("Yes")
             print("was local => was_xonsh")
         else:
