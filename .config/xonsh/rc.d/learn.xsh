@@ -54,9 +54,14 @@ def wes_colorful_output(cmd: str, **kwargs):
     # TODO parse the command?
     # log.info(f"{cmd=}")
     cmd = cmd.strip()  # strip trailing \n on submit
-    if cmd.strip().startswith("env"):
-        if not "| bat -l env" in cmd:
-            return f"{cmd} | bat -l env"
+    if cmd.strip().startswith("kubectl"):
+        if "-o yaml" in cmd:
+            if not "| bat -l yaml" in cmd:
+                return f"{cmd} | bat -l yaml"
+        elif "-o json" in cmd:
+            if not "| bat -l json" in cmd:
+                return f"{cmd} | bat -l json"
+        return cmd
     if cmd.startswith("hf datasets info"):
         if not "| bat -l json" in cmd:
         # pipe to bat for coloring
