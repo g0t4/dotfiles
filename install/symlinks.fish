@@ -65,6 +65,7 @@ end
 # *** bat (entire config dir now for config+syntaxes, can go back to one-off if this is problematic)
 # FYI if not match then `trash $HOME/.config/bat`
 ln -f -s $dotfiles_dir/.config/bat $HOME/.config/. # DIR SYMLINK
+# bat cache --build # TODO
 
 # *** fish
 if ! test -d $HOME/.config/fish
