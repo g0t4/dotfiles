@@ -18,6 +18,7 @@ VALUE_SUBSTITUTIONS = {
 
 
 def declaration(name, replacement, options):
+    # TODO! consoldate this too? like parse_abbreviation?
     trigger = f"re.compile({options['regex']!r})" if "regex" in options else repr(name)
     if name == "ask_status":
         replacement_expression = "_ask_status"
