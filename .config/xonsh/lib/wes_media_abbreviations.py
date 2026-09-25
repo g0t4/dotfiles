@@ -5,7 +5,7 @@ from __future__ import annotations
 import re
 
 from wes_abbreviations import abbr
-from wes_misc_abbreviation_bridge import (
+from wes_fish_migration import (
     fish_abbreviation,
     unsupported_abbreviation,
 )

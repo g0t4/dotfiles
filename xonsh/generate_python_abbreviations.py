@@ -87,7 +87,7 @@ def generate() -> str:
 from __future__ import annotations
 
 from wes_abbreviations import abbr
-from wes_misc_abbreviation_bridge import fish_abbreviation, platform_abbreviation
+from wes_fish_migration import fish_abbreviation, platform_abbreviation
 
 
 FISH_FUNCTIONS = (

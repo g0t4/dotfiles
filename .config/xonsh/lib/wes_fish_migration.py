@@ -6,6 +6,7 @@ import inspect
 import shlex
 import sys
 import textwrap
+import platform
 
 from rich.console import Console
 from rich.syntax import Syntax
@@ -46,6 +47,31 @@ SKIPPED_FISH_FUNCTIONS = {
     "wcl",
 }
 
+def fish_abbreviation(function_name):
+    def expand(context, _match):
+        reason = UNSUPPORTED_FISH_FUNCTIONS.get(function_name)
+        if reason:
+            raise UnsupportedFishFunctionError(
+                f"Fish abbreviation function {function_name!r} requires a native "
+                f"Xonsh migration: {reason}"
+            )
+        return fish_function(function_name, context.token)
+
+    return expand
+
+
+def unsupported_abbreviation(name, reason):
+    def expand(_context, _match):
+        raise UnsupportedFishFunctionError(
+            f"Fish abbreviation {name!r} requires a native Xonsh migration: "
+            f"{reason}"
+        )
+
+    return expand
+
+
+def platform_abbreviation(darwin, other):
+    return darwin if platform.system() == "Darwin" else other
 
 def fish_command_alias(function_name):
     def invoke(args, stdin=None, stdout=None, stderr=None, **_):

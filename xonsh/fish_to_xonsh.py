@@ -113,7 +113,7 @@ def generate(
     if bridge_names:
         names = "\n".join(f"    {name}," for name in bridge_names)
         bridge_import = (
-            "from wes_misc_abbreviation_bridge import (\n" + names + "\n)\n"
+            "from wes_fish_migration import (\n" + names + "\n)\n"
         )
 
     return f'''\
