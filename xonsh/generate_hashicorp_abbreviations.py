@@ -14,14 +14,13 @@ TARGET = ROOT / ".config/xonsh/lib/wes_hashicorp_abbreviations.py"
 
 def generate() -> str:
     declarations = []
-    for line_number, line in enumerate(SOURCE.read_text().splitlines(), 1):
+    for line in SOURCE.read_text().splitlines():
         if not line.lstrip().startswith("abbr "):
             continue
         tokens = shlex.split(line, comments=True, posix=True)
         trigger, replacement = tokens[1:3]
         declarations.append(
             f"    abbr({trigger!r}, {replacement!r})"
-            f"  # HashiCorp line {line_number}"
         )
 
     return '''\
