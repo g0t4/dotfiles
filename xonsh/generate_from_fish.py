@@ -6,11 +6,9 @@ from __future__ import annotations
 from pathlib import Path
 import re
 
-from fish_to_xonsh_policy import (
+from fish_to_xonsh import (
     FishMapping,
-    declaration,
     generate_wrapped,
-    should_skip,
 )
 
 ROOT = Path(__file__).resolve().parents[1]
