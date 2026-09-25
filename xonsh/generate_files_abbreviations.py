@@ -24,6 +24,7 @@ def declaration(name, replacement, options):
         replacement_expression = "_ask_status"
     elif "function" in options:
         function_name = options["function"]
+        # TODO! don't we have a better "native" approach?
         native = {
             "_expand_dots_in_command_position": "_expand_dots_command",
             "_expand_dots_only": "_expand_dots_only",
