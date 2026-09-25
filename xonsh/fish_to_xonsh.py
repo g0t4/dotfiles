@@ -8,7 +8,7 @@ from pathlib import Path
 from typing import Callable
 
 
-DeclarationFactory = Callable[[int, str, str, dict[str, str | bool]], str]
+DeclarationFactory = Callable[[str, str, dict[str, str | bool]], str]
 
 
 def parse_abbreviation(line: str, VALUE_SUBSTITUTIONS:dict[str, str] = {}):
