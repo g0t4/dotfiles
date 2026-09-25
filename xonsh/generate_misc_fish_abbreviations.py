@@ -30,6 +30,7 @@ FISH_ONLY = {"pPATH"}
 def fish_quote(value: str) -> str:
     return "'" + value.replace("\\", "\\\\").replace("'", "\\'") + "'"
 
+# !!! THIS IS A FIRST XONSH native config that is migrated to fish
 
 def render() -> str:
     registry = reset_registry()
