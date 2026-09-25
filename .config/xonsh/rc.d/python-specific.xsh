@@ -13,15 +13,13 @@ from xonsh.completers.tools import RichCompletion, contextual_command_completer
 from xonsh.dirstack import cd as _xonsh_cd
 
 from wes_fish_migration import wrap_fish_functions
-from wes_python_abbreviations import FISH_FUNCTIONS, register_python_abbreviations
+from wes_python_abbreviations import FISH_FUNCTIONS, register_python
 from wes_python_functions import run_wcl, wcl_completion_candidates
 
 
 $PYTEST_ADDOPTS = "-o verbosity_assertions=2"
 
-register_python_abbreviations()
-wrap_fish_functions(aliases, FISH_FUNCTIONS)
-
+register_python()
 
 _wcl_script = Path($WES_DOTFILES) / "zsh/compat_fish/pythons/wcl.py"
 _wcl_python = Path($WES_DOTFILES) / ".venv/bin/python3"

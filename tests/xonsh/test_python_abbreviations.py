@@ -29,7 +29,7 @@ def context(token, *, command_path=(), command_position=True):
 def registry():
     generated = importlib.import_module("wes_python_abbreviations")
     result = reset_registry()
-    generated.register_python_abbreviations()
+    generated.register_python()
     return result
 
 

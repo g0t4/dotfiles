@@ -2,7 +2,10 @@
 
 from __future__ import annotations
 
+from xonsh.built_ins import XSH
+
 from wes_abbreviations import abbr
+from wes_fish_migration import wrap_fish_functions
 
 
 FISH_FUNCTIONS = (
@@ -11,7 +14,8 @@ FISH_FUNCTIONS = (
 )
 
 
-def register_ansible_abbreviations():
+def register_ansible():
+    wrap_fish_functions(XSH.aliases, FISH_FUNCTIONS)
     abbr('aclsn', '_ansible-config_options_name_contains')
     abbr('aclsd', '_ansible-config_option_details_contains')
     abbr('ap', 'ansible-playbook')

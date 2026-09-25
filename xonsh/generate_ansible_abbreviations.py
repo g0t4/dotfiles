@@ -51,7 +51,10 @@ def generate() -> str:
 
 from __future__ import annotations
 
+from xonsh.built_ins import XSH
+
 from wes_abbreviations import abbr
+from wes_fish_migration import wrap_fish_functions
 
 
 FISH_FUNCTIONS = (
@@ -60,7 +63,8 @@ FISH_FUNCTIONS = (
 )
 
 
-def register_ansible_abbreviations():
+def register_ansible():
+    wrap_fish_functions(XSH.aliases, FISH_FUNCTIONS)
 '''
     return header + function_inventory + footer + "\n".join(declarations) + "\n"
 

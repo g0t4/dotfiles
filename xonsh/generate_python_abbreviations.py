@@ -86,15 +86,18 @@ def generate() -> str:
 
 from __future__ import annotations
 
+from xonsh.built_ins import XSH
+
 from wes_abbreviations import abbr
-from wes_fish_migration import abbr_from_fish_function, platform_abbreviation
+from wes_fish_migration import wrap_fish_functions, abbr_from_fish_function, platform_abbreviation
 
 
 FISH_FUNCTIONS = (
 {function_inventory})
 
 
-def register_python_abbreviations():
+def register_python():
+    wrap_fish_functions(XSH.aliases, FISH_FUNCTIONS)
 {declaration_text}
 '''
 

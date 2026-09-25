@@ -12,7 +12,7 @@ from wes_abbreviations import AbbreviationContext, reset_registry  # noqa: E402
 import wes_abbreviations
 from wes_ansible_abbreviations import (  # noqa: E402
     FISH_FUNCTIONS,
-    register_ansible_abbreviations,
+    register_ansible,
 )
 
 
@@ -29,7 +29,7 @@ def context(token):
 
 def registry():
     registry = reset_registry()
-    register_ansible_abbreviations()
+    register_ansible()
     return registry
 
 
