@@ -2,8 +2,11 @@
 
 from __future__ import annotations
 
+from pathlib import Path
 import re
 from dataclasses import dataclass
+
+from fish_to_xonsh import generate
 
 @dataclass(frozen=True)
 class AbbreviationSelector:
@@ -121,3 +124,21 @@ def declaration(line_number, name, replacement, options):
     if options.get("cursor") and replacement.count("%") == 1:
         arguments.append('cursor_marker="%"')
     return f"    abbr({', '.join(arguments)})"
+
+
+@dataclass(frozen=True)
+class FishMapping:
+    fish_file: Path
+    xonsh_module: Path
+
+def generate_wrapped(mapping: FishMapping) -> str:
+    function_name = "register_" + mapping.xonsh_module.with_suffix("").name
+    return generate(
+        mapping.fish_file,
+        title=f""
+        f"generated from Fish",
+        function_name=function_name,
+        declaration_factory=declaration,
+        should_skip=should_skip,
+        deduplicated_names=frozenset(DEDUPLICATED_ABBREVIATIONS),
+    )

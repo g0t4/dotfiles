@@ -6,13 +6,13 @@ aliases = XSH.aliases
 
 from wes_kubernetes_abbreviations import (
     FISH_FUNCTIONS,
-    register_kubernetes_abbreviations,
+    register_wes_kubernetes_abbreviations,
 )
 from wes_fish_migration import wrap_fish_functions
 
 
 $KUBECTL_EXTERNAL_DIFF = "icdiff -r"
-register_kubernetes_abbreviations()
+register_wes_kubernetes_abbreviations()
 wrap_fish_functions(aliases, FISH_FUNCTIONS)
 
 

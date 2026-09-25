@@ -1,4 +1,4 @@
-"""Kubernetes abbreviations generated from Fish kubernetes-specific.fish."""
+"""generated from Fish"""
 
 from __future__ import annotations
 
@@ -19,7 +19,7 @@ FISH_FUNCTIONS = (
 )
 
 
-def register_kubernetes_abbreviations():
+def register_wes_kubernetes_abbreviations():
     abbr('k3s', 'sudo k3s')
     abbr('k3dls', 'k3d cluster list')
     abbr('k3dcreate', 'k3d cluster create')

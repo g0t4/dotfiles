@@ -1,4 +1,4 @@
-"""Cloud Ai abbreviations generated from Fish cloud-ai-specific.fish."""
+"""generated from Fish"""
 
 from __future__ import annotations
 
@@ -29,7 +29,7 @@ FISH_FUNCTIONS = (
 )
 
 
-def register_cloud_ai_abbreviations():
+def register_wes_cloud_ai_abbreviations():
     abbr('actw', abbr_from_fish_function('actw_expanded'))
     abbr('azal', 'az account list --output table')
     abbr('azall', 'az account list-locations --output table')

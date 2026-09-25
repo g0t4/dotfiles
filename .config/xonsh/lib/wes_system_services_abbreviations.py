@@ -1,4 +1,4 @@
-"""System Services abbreviations generated from Fish system-services-specific.fish."""
+"""generated from Fish"""
 
 from __future__ import annotations
 
@@ -11,7 +11,7 @@ FISH_FUNCTIONS = (
 )
 
 
-def register_system_services_abbreviations():
+def register_wes_system_services_abbreviations():
     abbr('help', 'help_online')
     abbr('lcl', 'launchctl list')
     abbr('lcp', 'launchctl print system')

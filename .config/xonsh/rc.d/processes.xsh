@@ -12,11 +12,11 @@ from wes_filetype_abbreviations import (
     register_filetype_abbreviations,
 )
 from wes_fish_migration import wrap_fish_functions
-from wes_processes_abbreviations import FISH_FUNCTIONS, register_processes_abbreviations
+from wes_processes_abbreviations import FISH_FUNCTIONS, register_wes_processes_abbreviations
 
 
 $XONSH_SED_COMMAND = "gsed" if platform.system() == "Darwin" else "sed"
-register_processes_abbreviations()
+register_wes_processes_abbreviations()
 register_filetype_abbreviations(
     sed_command=$XONSH_SED_COMMAND
 )

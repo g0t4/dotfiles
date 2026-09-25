@@ -1,4 +1,4 @@
-"""Packages Hardware abbreviations generated from Fish packages-hardware-specific.fish."""
+"""generated from Fish"""
 
 from __future__ import annotations
 
@@ -38,7 +38,7 @@ FISH_FUNCTIONS = (
 )
 
 
-def register_packages_hardware_abbreviations():
+def register_wes_packages_hardware_abbreviations():
     abbr('apts', 'apt search')
     abbr('apti', 'sudo apt install')
     abbr('aptu', 'sudo apt update')

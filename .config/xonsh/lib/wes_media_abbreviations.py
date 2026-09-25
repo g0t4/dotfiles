@@ -1,4 +1,4 @@
-"""Media abbreviations generated from Fish media-specific.fish."""
+"""generated from Fish"""
 
 from __future__ import annotations
 
@@ -60,7 +60,7 @@ FISH_FUNCTIONS = (
 )
 
 
-def register_media_abbreviations():
+def register_wes_media_abbreviations():
     abbr('_150', abbr_from_fish_function('abbr_thumbnail_check'))
     abbr('_1', abbr_from_fish_function('abbr_check'))
     abbr('_2', abbr_from_fish_function('abbr_30fps'))

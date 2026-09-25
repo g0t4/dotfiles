@@ -1,4 +1,4 @@
-"""Processes abbreviations generated from Fish processes-specific.fish."""
+"""generated from Fish"""
 
 from __future__ import annotations
 
@@ -30,7 +30,7 @@ FISH_FUNCTIONS = (
 )
 
 
-def register_processes_abbreviations():
+def register_wes_processes_abbreviations():
     abbr('els', 'env | bat --language dotenv -p')
     abbr('egr', 'env | rg_grep -i ')
     abbr('envb', 'env | bat -l env')
