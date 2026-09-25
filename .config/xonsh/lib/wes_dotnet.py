@@ -1,22 +1,32 @@
-"""Generated .NET abbreviations."""
+"""generated from Fish"""
 
 from __future__ import annotations
 
+import re
+import os
+import platform
+
+from xonsh.built_ins import XSH
 from wes_abbreviations import abbr
-
-
-FISH_FUNCTIONS = (
-    'dotnet_get_version_tag',
-    'dotnet_version',
-    'get_image_url',
-    'dotnet_shell',
-    'diff_dotnet',
-    'dnd_all',
-    'dnd_tools',
+from wes_fish_migration import (
+    wrap_fish_functions,
+    abbr_from_fish_function,
+    platform_abbreviation,
+    unsupported_abbreviation,
 )
 
 
-def register_dotnet_abbreviations():
+def register_wes_dotnet():
+    fish_funcs = (
+        'dotnet_get_version_tag',
+        'dotnet_version',
+        'get_image_url',
+        'dotnet_shell',
+        'diff_dotnet',
+        'dnd_all',
+        'dnd_tools',
+    )
+    wrap_fish_functions(XSH.aliases, fish_funcs)
     abbr('dotnet_versions', 'skopeo --override-os linux inspect docker://mcr.microsoft.com/dotnet/sdk | jq ".RepoTags | .[]" -r')
     abbr('dotnet_versions_major_only', 'skopeo --override-os linux inspect docker://mcr.microsoft.com/dotnet/sdk | jq ".RepoTags | .[]" -r | grep -o "\\d\\.\\d" | sort | uniq')
     abbr('dotnet_versions_major_only_nightly', 'skopeo --override-os linux inspect docker://mcr.microsoft.com/dotnet/nightly/sdk | jq ".RepoTags | .[]" -r | grep -o "\\d\\.\\d" | sort | uniq')
@@ -98,3 +108,5 @@ def register_dotnet_abbreviations():
     abbr('dntup', 'dotnet tool update')
     abbr('dntr', 'dotnet tool run')
     abbr('dntres', 'dotnet tool restore')
+
+

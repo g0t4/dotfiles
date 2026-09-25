@@ -1,8 +1,3 @@
-""".NET abbreviations and Fish-backed version helpers."""
+from wes_dotnet import register_wes_dotnet
 
-from xonsh.built_ins import XSH
-from wes_dotnet_abbreviations import FISH_FUNCTIONS, register_dotnet_abbreviations
-from wes_fish_migration import wrap_fish_functions
-
-register_dotnet_abbreviations()
-wrap_fish_functions(XSH.aliases, FISH_FUNCTIONS)
+register_wes_dotnet()

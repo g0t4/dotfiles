@@ -24,6 +24,7 @@ MAPPINGS = (
     FishMapping(FISH_DIR / "cloud-ai-specific.fish", XONSH_DIR / "wes_cloud_ai_abbreviations.py"),
     FishMapping(FISH_DIR / "media-specific.fish", XONSH_DIR / "wes_media_abbreviations.py"),
     FishMapping(FISH_DIR / "packages-hardware-specific.fish", XONSH_DIR / "wes_packages_hardware_abbreviations.py"),
+    FishMapping(FISH_DIR / "dotnet.fish", XONSH_DIR / "wes_dotnet.py"),
 )
 
 
