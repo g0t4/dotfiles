@@ -1,11 +1,25 @@
-"""Generated from zsh/compat_fish/hashicorp.zsh."""
+"""generated from Fish"""
 
 from __future__ import annotations
 
+import re
+import os
+import platform
+
+from xonsh.built_ins import XSH
 from wes_abbreviations import abbr
+from wes_fish_migration import (
+    wrap_fish_functions,
+    abbr_from_fish_function,
+    platform_abbreviation,
+    unsupported_abbreviation,
+)
 
 
-def register_hashicorp_abbreviations():
+def register_wes_hashicorp():
+    fish_funcs = (
+    )
+    wrap_fish_functions(XSH.aliases, fish_funcs)
     abbr('pa', 'packer')
     abbr('pai', 'packer init .')
     abbr('pav', 'packer validate .')
@@ -60,3 +74,5 @@ def register_hashicorp_abbreviations():
     abbr('vsnrm', 'vagrant snapshot delete')
     abbr('vsnpu', 'vagrant snapshot push')
     abbr('vsnpo', 'vagrant snapshot pop')
+
+

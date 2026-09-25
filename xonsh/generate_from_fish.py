@@ -15,6 +15,7 @@ from fish_to_xonsh_policy import (
 
 ROOT = Path(__file__).resolve().parents[1]
 FISH_DIR = ROOT / "fish/load_last_interactive_only"
+ZSH_DIR = ROOT / "zsh/compat_fish"
 XONSH_DIR = ROOT / ".config/xonsh/lib"
 
 MAPPINGS = (
@@ -28,6 +29,7 @@ MAPPINGS = (
     FishMapping(FISH_DIR / "python-specific.fish", XONSH_DIR / "wes_python.py"),
     FishMapping(FISH_DIR / "ansibles.fish", XONSH_DIR / "wes_ansible.py"),
     FishMapping(FISH_DIR / "docker-specific.fish", XONSH_DIR / "wes_docker.py"),
+    FishMapping(ZSH_DIR / "hashicorp.zsh", XONSH_DIR / "wes_hashicorp.py"),
 )
 
 
