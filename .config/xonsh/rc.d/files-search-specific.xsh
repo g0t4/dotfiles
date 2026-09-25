@@ -5,6 +5,7 @@ from xonsh.built_ins import XSH
 aliases = XSH.aliases
 
 import sys
+import platform
 from pathlib import Path
 
 
@@ -15,6 +16,7 @@ if str(_wes_xonsh_lib) not in sys.path:
 from wes_files_search_abbreviations import register_files_search_abbreviations
 from wes_files_search_functions import register_files_search_functions
 
+$XONSH_FIND_COMMAND = "gfind" if platform.system() == "Darwin" else "find"
 
 register_files_search_abbreviations()
 register_files_search_functions(aliases)

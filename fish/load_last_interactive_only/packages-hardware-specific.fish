@@ -354,8 +354,8 @@ abbr man4 "$man_cmd 4"
 abbr man5 "$man_cmd 5"
 abbr man6 "$man_cmd 6"
 abbr man7 "$man_cmd 7"
-abbr man7 "$man_cmd 8"
-abbr man7 "$man_cmd 9"
+abbr man8 "$man_cmd 8"
+abbr man9 "$man_cmd 9"
 #
 # gman has --regex among other improvements
 abbr mana "$man_cmd --all --regex" ## -a = all, -w = list path(s) open all matching pages

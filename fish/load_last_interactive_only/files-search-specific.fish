@@ -143,29 +143,6 @@ if command -q mdfind
 
 end
 
-# *** find
-#  sometimes, AFAIK, fd doesn't support a few cases that find/gfind does...
-
-set -l find_cmd find
-if $IS_MACOS
-    # * gfind on macOS
-    set find_cmd gfind
-    abbr find gfind
-    # gfind == GNU find, has -exeuctable arg (among other differences)
-    # make sure to run fish_update_completions after installing for completions
-end
-
-abbr finde "$find_cmd . -executable"
-abbr findud --set-cursor "$find_cmd '%' -user wesdemos"
-abbr finduw --set-cursor "$find_cmd '%' -user wes"
-abbr --add g=w --command $find_cmd -- "-not -perm -g=w"
-abbr --add o=w --command $find_cmd -- "-not -perm -o=w"
-# u=w   g=r   g=x   g=rw  g=rwx etc
-# TODO expand to generic [ugo]=[rwx]+ regex and expand abbr to cover all cases of g=w
-
-# TODO! adopt fd for searching file paths
-#  i.e. fd | fzf scenarios
-
 # *** fd general options
 abbr fdnh 'fd --no-hidden' # include hidden
 abbr fdu 'fd --unrestricted' # no ignores applied (can layer on excludes to remove things again)

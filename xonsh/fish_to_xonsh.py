@@ -190,12 +190,6 @@ _REPLACEMENTS = {
     "$sse_jq": "sed -E 's/^[^{]*//' | jq",
 }
 
-_NAME_OVERRIDES = {
-    # The Fish source accidentally declares man7 three times; preserve intent.
-    AbbreviationSelector("man7", replacement="$man_cmd 8"): "man8",
-    AbbreviationSelector("man7", replacement="$man_cmd 9"): "man9",
-}
-
 _PLATFORM_REPLACEMENTS = {
     "pkill": ("pkill -9 -ilf", "pkill -9 -if"),
     "pkillu": ("pkill -9 -U $USER -ilf", "pkill -9 -U $USER -if"),
@@ -209,11 +203,21 @@ _MIGRATION_REPLACEMENTS = {
     "agrs": "_abbr_list --prefix '%'",
     "py_profile_import_time": '$PYTHONPROFILEIMPORTTIME=1 python -c "from sentence_transformers import SentenceTransformer"',
     "vea": "source .venv*/bin/activate.xsh",
+
+    # * files-search
+    "h": "history show all | bat -l xonsh --color always | less -F",
+    "hgr": 'history show all | rg_grep "%"',
+    "hm": "history pull --show-commands",
+    "hd": 'history delete "%"',
+    "list_filetype_extensions": repr(
+        "fd --type file | awk -F. 'NF > 1 {print $NF}' | sort | uniq -c | sort"
+    ),
+    "mdo": "unsupported_abbreviation('md_open', 'changes directory from an interactive fzf picker')",
+    "mdcd": "unsupported_abbreviation('mdfind_cd_dir', 'changes directory from an interactive fzf picker')",
 }
 
 
 def declaration(name, replacement, options):
-    name = matching_rule(_NAME_OVERRIDES, name, replacement, options, name)
     trigger = f"re.compile({options['regex']!r})" if "regex" in options else repr(name)
     unsupported = matching_rule(_UNSUPPORTED_ABBREVIATIONS, name, replacement, options)
     platform = matching_rule(_PLATFORM_REPLACEMENTS, name, replacement, options)
@@ -227,9 +231,16 @@ def declaration(name, replacement, options):
     elif "function" in options:
         function_name = options["function"]
         native = {
+
+            # * files
             "_expand_dots_in_command_position": "_expand_dots_command",
             "_expand_dots_only": "_expand_dots_only",
             "expand_zsh_equals": "_expand_zsh_equals",
+
+            # * files-search
+            "_abbr_expand_fdX": "_expand_fd_depth",
+            "_abbr_expand_rgu": "_expand_rgu",
+
         }
         replacement_expression = native.get(
             function_name, f"abbr_from_fish_function({function_name!r})"
@@ -245,6 +256,7 @@ def declaration(name, replacement, options):
     if options.get("command"):
         command = options["command"]
         command_expression = {
+            "$find_cmd": "os.environ['XONSH_FIND_COMMAND']",
             "$man_cmd": "os.environ['XONSH_MAN_COMMAND']",
             "$sed_cmd": "os.environ['XONSH_SED_COMMAND']",
         }.get(command, repr(command))

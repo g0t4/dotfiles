@@ -6,7 +6,7 @@ from __future__ import annotations
 import shlex
 from pathlib import Path
 
-from fish_to_xonsh import parse_abbreviation
+from fish_to_xonsh import declaration, parse_abbreviation
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -14,56 +14,13 @@ SOURCE = ROOT / "fish/load_last_interactive_only/files-search-specific.fish"
 TARGET = ROOT / ".config/xonsh/lib/wes_files_search_abbreviations.py"
 
 
-def declaration(name, replacement, options):
-    trigger = (
-        f"re.compile({options['regex']!r})"
-        if "regex" in options
-        else repr(name)
-    )
-    replacements = {
-        "find": "FIND_COMMAND",
-        "finde": "f\"{FIND_COMMAND} . -executable\"",
-        "findud": "f\"{FIND_COMMAND} '%' -user wesdemos\"",
-        "finduw": "f\"{FIND_COMMAND} '%' -user wes\"",
-        "h": repr("history show all | bat -l xonsh --color always | less -F"),
-        "hgr": repr('history show all | rg_grep "%"'),
-        "hm": repr("history pull --show-commands"),
-        "hd": repr('history delete "%"'),
-        "list_filetype_extensions": repr(
-            "fd --type file | awk -F. 'NF > 1 {print $NF}' | sort | uniq -c | sort"
-        ),
-        "mdo": "unsupported_abbreviation('md_open', 'changes directory from an interactive fzf picker')",
-        "mdcd": "unsupported_abbreviation('mdfind_cd_dir', 'changes directory from an interactive fzf picker')",
-    }
-    functions = {
-        "_abbr_expand_fdX": "_expand_fd_depth",
-        "_abbr_expand_rgu": "_expand_rgu",
-    }
-    if name in replacements:
-        replacement_expression = replacements[name]
-    elif "function" in options:
-        replacement_expression = functions.get(
-            options["function"], f"abbr_from_fish_function({options['function']!r})"
-        )
-    else:
-        replacement = replacement.replace("$find_cmd", "{FIND_COMMAND}")
-        replacement_expression = (
-            f"f{replacement!r}" if "{FIND_COMMAND}" in replacement else repr(replacement)
-        )
-
-    arguments = [trigger, replacement_expression]
-    command = options.get("command")
-    if command:
-        arguments.append('position="anywhere"')
-        command_expression = "FIND_COMMAND" if command == "$find_cmd" else repr(command)
-        arguments.append(f"commands=({command_expression},)")
-    if (
-        options.get("cursor")
-        and replacement.count("%") == 1
-        and name not in ("_fdX", "rgu")
-    ):
-        arguments.append('cursor_marker="%"')
-    return f"    abbr({', '.join(arguments)})"
+# def declaration(name, replacement, options):
+    # if (
+    #     options.get("cursor")
+    #     and replacement.count("%") == 1
+    #     and name not in ("_fdX", "rgu")
+    # # TODO do I need to move _fdX / rgu exclusions to fish_to_xonsh.py?
+    # ):
 
 
 def generate() -> str:
@@ -77,6 +34,7 @@ def generate() -> str:
 
 from __future__ import annotations
 
+import os
 import platform
 import re
 
@@ -85,19 +43,14 @@ from wes_fish_bridge import UnsupportedFishFunctionError, fish_function
 from wes_fish_migration import abbr_from_fish_function, unsupported_abbreviation
 
 
-FIND_COMMAND = "gfind" if platform.system() == "Darwin" else "find"
-
-
 def _expand_fd_depth(context, _match):
     return f"fd --max-depth={context.token.removeprefix('fd')}"
-
 
 def _expand_rgu(context, _match):
     after_cursor = context.buffer[context.cursor :].strip()
     if after_cursor and not after_cursor.startswith("-"):
         return "rg -u"
     return AbbreviationResult('rg -u ""', cursor=len('rg -u "'))
-
 
 def register_files_search_abbreviations():
 '''

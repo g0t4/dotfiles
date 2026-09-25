@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import os
 import platform
 import re
 
@@ -10,19 +11,14 @@ from wes_fish_bridge import UnsupportedFishFunctionError, fish_function
 from wes_fish_migration import abbr_from_fish_function, unsupported_abbreviation
 
 
-FIND_COMMAND = "gfind" if platform.system() == "Darwin" else "find"
-
-
 def _expand_fd_depth(context, _match):
     return f"fd --max-depth={context.token.removeprefix('fd')}"
-
 
 def _expand_rgu(context, _match):
     after_cursor = context.buffer[context.cursor :].strip()
     if after_cursor and not after_cursor.startswith("-"):
         return "rg -u"
     return AbbreviationResult('rg -u ""', cursor=len('rg -u "'))
-
 
 def register_files_search_abbreviations():
     abbr('mdfind_killall', 'killall mds mds_stores mds_worker Spotlight')
@@ -62,14 +58,8 @@ def register_files_search_abbreviations():
     abbr('mdimport_dump_schema', "mdimport -X | rg_grep -i '%'", cursor_marker="%")
     abbr('mdls_item_attrs', "mdls -plist - '%' | bat -l xml", cursor_marker="%")
     abbr('md_diagnose', 'sudo mddiagnose')
-    abbr('mdo', unsupported_abbreviation('md_open', 'changes directory from an interactive fzf picker'))
-    abbr('mdcd', unsupported_abbreviation('mdfind_cd_dir', 'changes directory from an interactive fzf picker'))
-    abbr('find', FIND_COMMAND)
-    abbr('finde', f"{FIND_COMMAND} . -executable")
-    abbr('findud', f"{FIND_COMMAND} '%' -user wesdemos", cursor_marker="%")
-    abbr('finduw', f"{FIND_COMMAND} '%' -user wes", cursor_marker="%")
-    abbr('g=w', '-not -perm -g=w', position="anywhere", commands=(FIND_COMMAND,))
-    abbr('o=w', '-not -perm -o=w', position="anywhere", commands=(FIND_COMMAND,))
+    abbr('mdo', "unsupported_abbreviation('md_open', 'changes directory from an interactive fzf picker')")
+    abbr('mdcd', "unsupported_abbreviation('mdfind_cd_dir', 'changes directory from an interactive fzf picker')")
     abbr('fdnh', 'fd --no-hidden')
     abbr('fdu', 'fd --unrestricted')
     abbr('fd_nonegregious', 'fd --unrestricted --exclude .venv --exclude __pycache__ --exclude .rag --exclude .git --exclude node_modules | sort -h')
@@ -131,7 +121,7 @@ def register_files_search_abbreviations():
     abbr('fdtp', 'fd --type pipe')
     abbr('fdts', 'fd --type socket')
     abbr('fdtx', 'fd --type executable')
-    abbr('list_filetype_extensions', "fd --type file | awk -F. 'NF > 1 {print $NF}' | sort | uniq -c | sort")
+    abbr('list_filetype_extensions', '"fd --type file | awk -F. \'NF > 1 {print $NF}\' | sort | uniq -c | sort"')
     abbr('fd_extensionless_files', 'fd "^[^\\.]+\\$" --type file')
     abbr('rgc', 'rg --case-sensitive "%"', cursor_marker="%")
     abbr('rgi', 'rg -i "%"', cursor_marker="%")
