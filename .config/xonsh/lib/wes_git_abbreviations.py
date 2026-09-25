@@ -6,19 +6,13 @@ import re
 
 from wes_abbreviations import abbr
 from wes_fish_bridge import fish_function
-
-
-def _fish_abbreviation(function_name):
-    def expand(context, _match):
-        return fish_function(function_name, context.token)
-
-    return expand
+from wes_fish_migration import abbr_from_fish_function
 
 
 def register_git_abbreviations():
     abbr("-W", "--function-context", commands=("git", "diff"))
     abbr('man_gitrevisions', 'man gitrevisions')
-    abbr(re.compile('reflog\\d+'), _fish_abbreviation('_abbr_expand_reflog_d'), position="anywhere")
+    abbr(re.compile('reflog\\d+'), abbr_from_fish_function('_abbr_expand_reflog_d'), position="anywhere")
     abbr('commit_with_message', ':/%', position="anywhere", cursor_marker="%")
     abbr('gsts', 'git status -s')
     abbr('gstb', 'git status -sb')
@@ -90,7 +84,7 @@ def register_git_abbreviations():
     abbr('gma', 'git merge --abort')
     abbr('gmc', 'git merge --continue')
     abbr('gmff', 'git merge --ff-only')
-    abbr(re.compile('grev\\d+'), _fish_abbreviation('_abbr_expand_grev_d'))
+    abbr(re.compile('grev\\d+'), abbr_from_fish_function('_abbr_expand_grev_d'))
     abbr('grm', 'git rm')
     abbr('grmc', 'git rm --cached')
     abbr('grst', 'git restore --staged')
@@ -125,8 +119,8 @@ def register_git_abbreviations():
     abbr('gd', 'git diff # FYI use `gdic` for icdiff (remove this reminder when habituated or too annoying)')
     abbr('gdic', 'git-icdiff HEAD')
     abbr('gdu', 'git -c delta.side-by-side=false diff')
-    abbr(re.compile('gd[u]*\\d+'), _fish_abbreviation('gdX'))
-    abbr(re.compile('gdic\\d+'), _fish_abbreviation('gdX'))
+    abbr(re.compile('gd[u]*\\d+'), abbr_from_fish_function('gdX'))
+    abbr(re.compile('gdic\\d+'), abbr_from_fish_function('gdX'))
     abbr('gd_summary', 'git diff --summary')
     abbr('gd_worktree', 'git diff')
     abbr('gds', 'git diff --staged')
@@ -149,7 +143,7 @@ def register_git_abbreviations():
     abbr('lfsup', 'git lfs update')
     abbr('lfsut', "git lfs untrack '*.EXT'")
     abbr('lfsv', 'git lfs version')
-    abbr('grvcp', _fish_abbreviation('_grvcp'))
+    abbr('grvcp', abbr_from_fish_function('_grvcp'))
     abbr('gcmsg', 'git commit -m "%"', cursor_marker="%")
     abbr('gcam', 'git commit -a -m "%"', cursor_marker="%")
     abbr('gptoss', '--author "gptoss120b<wes.mcclure+gptoss120b@gmail.com>"', commands=('git',))
@@ -166,14 +160,14 @@ def register_git_abbreviations():
     abbr('amend_n_muse', 'GIT_SEQUENCE_EDITOR=true git rebase -i --exec "git commit --amend --no-edit --author \\"muse-glimmer-30b-dspark<wes.mcclure+muse-glimmer-30b-dspark@gmail.com>\\"" HEAD~%', cursor_marker="%")
     abbr('amend_last_msg', 'git commit --amend -m "%"', cursor_marker="%")
     abbr('yolo', 'git commit --all -m "%" && git push', cursor_marker="%")
-    abbr(re.compile('gptf?\\d*f?'), _fish_abbreviation('_abbr_git_push_up_to'), cursor_marker="%")
+    abbr(re.compile('gptf?\\d*f?'), abbr_from_fish_function('_abbr_git_push_up_to'), cursor_marker="%")
     abbr('grl', 'git reflog --pretty=reflog')
     abbr('grla', 'git reflog --all --pretty=reflog')
     abbr('gl', 'git log --color=always | line_numbers')
     abbr('glemails', 'git log --pretty=names')
     abbr('glnames', 'git log --pretty=names')
-    abbr(re.compile('gl\\d+'), _fish_abbreviation('glX'))
-    abbr(re.compile('g\\d+'), _fish_abbreviation('glX'))
+    abbr(re.compile('gl\\d+'), abbr_from_fish_function('glX'))
+    abbr(re.compile('g\\d+'), abbr_from_fish_function('glX'))
     abbr('gst', 'git status')
     abbr('gstl', 'git status && echo && git_unpushed_commits')
     abbr('glo', 'git_unpushed_commits')
@@ -182,10 +176,10 @@ def register_git_abbreviations():
     abbr('gin', 'git_unpulled_commits')
     abbr('glp', 'git log --patch')
     abbr('glpf', 'git log --pretty=full --patch')
-    abbr(re.compile('glpf?\\d+'), _fish_abbreviation('glp_x'))
+    abbr(re.compile('glpf?\\d+'), abbr_from_fish_function('glp_x'))
     abbr('gls', "git log --stat 'HEAD@{push}..HEAD'")
     abbr('glsf', "git log --pretty=full --stat 'HEAD@{push}..HEAD'")
-    abbr(re.compile('gls[f]{0,1}\\d+'), _fish_abbreviation('glsX'))
+    abbr(re.compile('gls[f]{0,1}\\d+'), abbr_from_fish_function('glsX'))
     abbr('glg', "git log --graph 'HEAD@{push}~1..HEAD'")
     abbr('ggsup', 'git branch --set-upstream-to=origin/$(git_current_branch)')
     abbr('git_delta_copyable', 'git -c delta.side-by-side=false -c delta.line-numbers=false')
@@ -197,8 +191,8 @@ def register_git_abbreviations():
     abbr('gdlc', 'git log --patch HEAD~1..HEAD')
     abbr('gdiclc', 'git-icdiff HEAD~1..HEAD')
     abbr('gdlcu', 'git -c delta.side-by-side=false log --patch HEAD~2..HEAD')
-    abbr(re.compile('gdlc[u]?\\d+'), _fish_abbreviation('gdlcX'))
-    abbr(re.compile('gdiclc\\d+'), _fish_abbreviation('gdlcX'))
+    abbr(re.compile('gdlc[u]?\\d+'), abbr_from_fish_function('gdlcX'))
+    abbr(re.compile('gdiclc\\d+'), abbr_from_fish_function('gdlcX'))
     abbr('gd_stat', "git diff --stat 'HEAD@{push}..HEAD'")
     abbr('glgrep', 'git log --grep="%"', cursor_marker="%")
     abbr('gd_patch', 'git --no-pager diff --no-color')
@@ -215,7 +209,7 @@ def register_git_abbreviations():
     abbr('grbs', 'git rebase --skip')
     abbr('grbi', 'git rebase -i')
     abbr('grbias', 'git rebase -i --autostash')
-    abbr(re.compile('grbi\\d+'), _fish_abbreviation('_abbr_expand_grbi_d'))
+    abbr(re.compile('grbi\\d+'), abbr_from_fish_function('_abbr_expand_grbi_d'))
     abbr('gstash', 'git stash')
     abbr('git_stash_list', 'git stash list --pretty=stash-list')
     abbr('git_stash_show', 'git stash show --text 0')
@@ -224,7 +218,7 @@ def register_git_abbreviations():
     abbr('git_stash_apply', 'git stash apply')
     abbr('git_stash_branch', 'git stash branch')
     abbr('git_stash_patch', 'git stash push --patch --no-keep-index')
-    abbr(re.compile('gap\\d*'), _fish_abbreviation('gapX'))
+    abbr(re.compile('gap\\d*'), abbr_from_fish_function('gapX'))
     abbr('git_stash_push', 'git stash push --message "%"', cursor_marker="%")
     abbr('git_stash_save', 'git stash push --message "%"', cursor_marker="%")
     abbr('git_stash_clear', 'git stash clear')

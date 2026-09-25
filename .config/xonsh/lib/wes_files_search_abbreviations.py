@@ -7,16 +7,10 @@ import re
 
 from wes_abbreviations import AbbreviationResult, abbr
 from wes_fish_bridge import UnsupportedFishFunctionError, fish_function
+from wes_fish_migration import abbr_from_fish_function
 
 
 FIND_COMMAND = "gfind" if platform.system() == "Darwin" else "find"
-
-
-def _fish_abbreviation(function_name):
-    def expand(context, _match):
-        return fish_function(function_name, context.token)
-
-    return expand
 
 
 def _unsupported_abbreviation(function_name, reason):
@@ -154,7 +148,7 @@ def register_files_search_abbreviations():
     abbr('grep', 'rg_grep "%"', cursor_marker="%")
     abbr('h', 'history show all | bat -l xonsh --color always | less -F')
     abbr('hgr', 'history show all | rg_grep "%"', cursor_marker="%")
-    abbr('hm', 'history pull')
+    abbr('hm', 'history pull --show-commands')
     abbr('hd', 'history delete "%"', cursor_marker="%")
     abbr('rgu', _expand_rgu)
     abbr('jd', '--json | delta_rg', position="anywhere", commands=('rg',))

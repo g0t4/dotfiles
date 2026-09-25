@@ -8,13 +8,7 @@ import shutil
 
 from wes_abbreviations import abbr
 from wes_fish_bridge import fish_function
-
-
-def _fish_abbreviation(function_name):
-    def expand(context, _match):
-        return fish_function(function_name, context.token)
-
-    return expand
+from wes_fish_migration import abbr_from_fish_function
 
 
 def _dot_count(token):
@@ -63,7 +57,7 @@ def register_files_abbreviations():
     abbr('batll', 'bat --list-languages')
     abbr('bath', 'bat --style=header')
     abbr('batf', 'bat --style=full')
-    abbr(re.compile('(du|dust)\\d+'), _fish_abbreviation('dustX'))
+    abbr(re.compile('(du|dust)\\d+'), abbr_from_fish_function('dustX'))
     abbr('dust_HOME_2G', 'dust --number-of-lines 500 ~/ +2G')
     abbr('dust_HOMES_2G', 'dust --number-of-lines 500 /Users +2G')
     abbr('dust_ROOT_10G', 'dust --number-of-lines 500 / +10G')
@@ -75,13 +69,13 @@ def register_files_abbreviations():
     abbr('dust_past_month', 'dust --mtime -30')
     abbr('df', 'grc df -h')
     abbr('dfm', 'grc df -h /System/Volumes/Data')
-    abbr(re.compile('forr\\d*'), _fish_abbreviation('forr_abbr'))
+    abbr(re.compile('forr\\d*'), abbr_from_fish_function('forr_abbr'))
     abbr('findd', 'find . -type d -iname "*%*"', cursor_marker="%")
     abbr('finddr', 'find . -type d -iregex ".*%.*"', cursor_marker="%")
-    abbr(re.compile('tree\\d+'), _fish_abbreviation('treeX'))
-    abbr(re.compile('treed\\d+'), _fish_abbreviation('treedX'))
-    abbr(re.compile('treeh\\d+'), _fish_abbreviation('treehX'))
-    abbr(re.compile('treeu\\d+'), _fish_abbreviation('treeuX'))
+    abbr(re.compile('tree\\d+'), abbr_from_fish_function('treeX'))
+    abbr(re.compile('treed\\d+'), abbr_from_fish_function('treedX'))
+    abbr(re.compile('treeh\\d+'), abbr_from_fish_function('treehX'))
+    abbr(re.compile('treeu\\d+'), abbr_from_fish_function('treeuX'))
     abbr('nvim_start_server_attached', 'nvim --listen localhost:6666')
     abbr('nvim_start_server_not_attached', 'nvim --listen localhost:6666 --embed')
     abbr('nvim_client_attach_ui', 'nvim --server localhost:6666 --remote-ui')
@@ -91,9 +85,9 @@ def register_files_abbreviations():
     abbr('f', 'fish')
     abbr('x', 'xonsh')
     abbr('n', 'nvim')
-    abbr('nr', _fish_abbreviation('nr_expand'))
-    abbr('nd', _fish_abbreviation('nd_expand'))
-    abbr('nh', _fish_abbreviation('nh_expand'))
-    abbr('nn', _fish_abbreviation('nn_expand'))
+    abbr('nr', abbr_from_fish_function('nr_expand'))
+    abbr('nd', abbr_from_fish_function('nd_expand'))
+    abbr('nh', abbr_from_fish_function('nh_expand'))
+    abbr('nn', abbr_from_fish_function('nn_expand'))
     abbr('chmx', 'chmod +x')
     abbr('chmR', 'chmod -R')
