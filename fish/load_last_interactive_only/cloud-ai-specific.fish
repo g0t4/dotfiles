@@ -374,28 +374,11 @@ abbr tailn 'tail -n 1000'
 abbr tailr 'tail -r' # reverse order
 # *** frequently tailed files
 abbr tt trash_n_tail
-#
 # trash+tail b/c these quickly become unruly in size... I should setup truncation
 abbr tt_xonsh "trash_n_tail -F ~/.local/state/xonsh/xonsh.log"
-#
-function _define_devtools_abbrs --argument-names name log_path
-    # abbreviation to trash and tail the log (used by nvim plugin)
-    abbr tt_devtools_$name "trash_n_tail $log_path" # nvim plugin
-
-    # show the last 1000 lines, filtering out ClearScrollback entries
-    abbr tail_all_devtools_$name "tail -1000 $log_path | rg_grep -v ClearScrollback"
-
-    # continuously follow the log file
-    abbr tail_devtools_$name "tail -F $log_path"
-end
-
-# define abbrs for every *.log in the devtools directory
-set devtools_dir ~/.local/share/devtools
-for log_path in $devtools_dir/*.log
-    # strip directory and .log extension to get the abbreviation name
-    set abbr_name (basename $log_path .log)
-    _define_devtools_abbrs $abbr_name $log_path
-end
+abbr tt_devtools_universal trash_n_tail ~/.local/share/devtools/universal.log
+abbr tt_devtools_hammerspoons trash_n_tail ~/.local/share/devtools/hammerspoons.log
+abbr tt_devtools_launcher trash_n_tail ~/.local/share/devtools/launcher.log
 
 #
 # for now I want to keep the commands.log, maybe go back to trash_n_tail later on, for now leave tt as tail -F too:
