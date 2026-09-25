@@ -11,6 +11,7 @@ from wes_fish_migration import (
     unsupported_abbreviation,
 )
 
+# TODO! test this after my work to move away from FISH_FUNCTIONS => over to fish_funcs local variable...
 
 FISH_FUNCTIONS = (
     'use_nvim_from_source',

@@ -211,6 +211,7 @@ def test_every_misc_fish_abbreviation_is_assigned_to_one_focused_module():
 def test_every_misc_function_definition_is_assigned_to_a_focused_module():
     functions = []
     for mapping in MAPPINGS:
+        # TODO I probably broke this test when I migrated away from FISH_FUNCTIONS
         generated = importlib.import_module(
             f"wes_{mapping.xonsh_module}_abbreviations"
         )
