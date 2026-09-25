@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from wes_abbreviations import abbr
 from wes_fish_migration import (
-    fish_abbreviation,
+    abbr_from_fish_function,
 )
 
 
@@ -74,7 +74,7 @@ def register_kubernetes_abbreviations():
     abbr('kgsts', 'kubectl get statefulsets')
     abbr('kgrev', 'kubectl get pods,sts,controllerrevisions')
     abbr('kgsvc', 'kubectl get services')
-    abbr('kgv', fish_abbreviation('_abbr_kgv'))
+    abbr('kgv', abbr_from_fish_function('_abbr_kgv'))
     abbr('kaf', 'kubectl apply -f')
     abbr('kad', 'kubectl apply --dry-run=client -f')
     abbr('kak', 'kubectl apply -k .')

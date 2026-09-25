@@ -6,7 +6,7 @@ import re
 
 from wes_abbreviations import abbr
 from wes_fish_migration import (
-    fish_abbreviation,
+    abbr_from_fish_function,
     unsupported_abbreviation,
 )
 
@@ -61,21 +61,21 @@ FISH_FUNCTIONS = (
 
 
 def register_media_abbreviations():
-    abbr('_150', fish_abbreviation('abbr_thumbnail_check'))
-    abbr('_1', fish_abbreviation('abbr_check'))
-    abbr('_2', fish_abbreviation('abbr_30fps'))
-    abbr('_mp4', fish_abbreviation('abbr_mp4'))
+    abbr('_150', abbr_from_fish_function('abbr_thumbnail_check'))
+    abbr('_1', abbr_from_fish_function('abbr_check'))
+    abbr('_2', abbr_from_fish_function('abbr_30fps'))
+    abbr('_mp4', abbr_from_fish_function('abbr_mp4'))
     abbr('_3', 'video_editing_3_dropped_frames')
-    abbr('ffp', fish_abbreviation('_ffp'))
-    abbr('ffi_range', fish_abbreviation('_ffi_trim'))
-    abbr('ffi_trim', fish_abbreviation('_ffi_trim'))
-    abbr('ffi', fish_abbreviation('_ffi_copy'))
-    abbr('ffi_copy', fish_abbreviation('_ffi_copy'))
-    abbr('ffi_af', fish_abbreviation('_ffi_af'))
-    abbr('ffi_vf', fish_abbreviation('_ffi_vf'))
-    abbr('_aio', fish_abbreviation('abbr_aio'))
+    abbr('ffp', abbr_from_fish_function('_ffp'))
+    abbr('ffi_range', abbr_from_fish_function('_ffi_trim'))
+    abbr('ffi_trim', abbr_from_fish_function('_ffi_trim'))
+    abbr('ffi', abbr_from_fish_function('_ffi_copy'))
+    abbr('ffi_copy', abbr_from_fish_function('_ffi_copy'))
+    abbr('ffi_af', abbr_from_fish_function('_ffi_af'))
+    abbr('ffi_vf', abbr_from_fish_function('_ffi_vf'))
+    abbr('_aio', abbr_from_fish_function('abbr_aio'))
     abbr('shift_only', 'for i in *.{mkv,mov}; video_editing_just_shift_to_mp4_one_video $i; end')
-    abbr(re.compile('\\d+db'), fish_abbreviation('abbr_db'))
+    abbr(re.compile('\\d+db'), abbr_from_fish_function('abbr_db'))
     abbr('virshl', 'virsh list')
     abbr('virshla', 'virsh list --all')
     abbr('virshd', 'virsh define')

@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from wes_abbreviations import abbr
-from wes_fish_migration import fish_abbreviation, platform_abbreviation
+from wes_fish_migration import abbr_from_fish_function, platform_abbreviation
 
 
 FISH_FUNCTIONS = (
@@ -85,7 +85,7 @@ def register_python_abbreviations():
     abbr('uv_publish', 'uv publish')
     abbr('uv_clean', 'uv clean')
     abbr('ptw_prints', 'ptw --clear -- --capture=no --log-cli-level=INFO')
-    abbr('ptw_one', fish_abbreviation('__ptw_one'), cursor_marker="%")
+    abbr('ptw_one', abbr_from_fish_function('__ptw_one'), cursor_marker="%")
     abbr('pt', 'pytest')
     abbr('ptc', 'pytest --collect-only')
     abbr('ptk', 'pytest -k "%"', cursor_marker="%")

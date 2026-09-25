@@ -6,7 +6,7 @@ import re
 
 from wes_abbreviations import abbr
 from wes_fish_migration import (
-    fish_abbreviation,
+    abbr_from_fish_function,
 )
 
 
@@ -30,7 +30,7 @@ FISH_FUNCTIONS = (
 
 
 def register_cloud_ai_abbreviations():
-    abbr('actw', fish_abbreviation('actw_expanded'))
+    abbr('actw', abbr_from_fish_function('actw_expanded'))
     abbr('azal', 'az account list --output table')
     abbr('azall', 'az account list-locations --output table')
     abbr('azrl', 'az resource list --output table')
@@ -100,7 +100,7 @@ def register_cloud_ai_abbreviations():
     abbr('anp', 'asciinema play')
     abbr('anu', 'asciinema upload')
     abbr('anc', 'asciinema cat')
-    abbr('aggo', fish_abbreviation('abbr_agg'))
+    abbr('aggo', abbr_from_fish_function('abbr_agg'))
     abbr('vllms', 'vllm serve')
     abbr('vllmb', 'vllm bench')
     abbr('vllmc', 'vllm chat')
@@ -125,7 +125,7 @@ def register_cloud_ai_abbreviations():
     abbr('tt_streamdeck_wes', 'trash_n_tail ~/.hammerspoon/logs/streamdeck_keyboardmaestro_runner.log')
     abbr('tail_streamdeck_wes', 'tail -F ~/.hammerspoon/logs/streamdeck_keyboardmaestro_runner.log')
     abbr('tail_hardtime_logs', 'cat ~/.local/state/nvim/hardtime.nvim.log | cut -c34- | sort | uniq -c | sort')
-    abbr(re.compile('tail\\d+'), fish_abbreviation('_taild'))
+    abbr(re.compile('tail\\d+'), abbr_from_fish_function('_taild'))
     abbr('yapfs', 'yapf --style-help')
     abbr('sh', '--style-help', position="anywhere", commands=('yapf',))
     abbr('wscatc', 'wscat --connect -L --slash --show-ping-pong ws://localhost:8000')

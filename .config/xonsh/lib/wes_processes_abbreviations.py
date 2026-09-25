@@ -7,7 +7,7 @@ import re
 
 from wes_abbreviations import abbr
 from wes_fish_migration import (
-    fish_abbreviation,
+    abbr_from_fish_function,
     platform_abbreviation,
 )
 
@@ -52,7 +52,7 @@ def register_processes_abbreviations():
     abbr('psf', 'grc ps f')
     abbr('pstreeg', "pstree_grep '%'", cursor_marker="%")
     abbr('pstreeg_watch', 'viddy \'fish -i -c "pstree_grep \\\'%\\\'"\'', cursor_marker="%")
-    abbr(re.compile('pstree\\d+'), fish_abbreviation('pstreeX'))
+    abbr(re.compile('pstree\\d+'), abbr_from_fish_function('pstreeX'))
     abbr('pstrees', 'pstree -s "%"', cursor_marker="%")
     abbr('pstreep', 'pstree -p')
     abbr('pstreet', 'pstree  (ps -o pid=)')
@@ -67,13 +67,13 @@ def register_processes_abbreviations():
     abbr('*nd', "--glob '!datasets'", position="anywhere", commands=('rg',))
     abbr('seda', "$XONSH_SED_COMMAND -Ei 's/%//g' (rg --files-with-matches ___) ", cursor_marker="%")
     abbr('*a', '(rg --files-with-matches ___) ', position="anywhere", commands=(SED_COMMAND,))
-    abbr(re.compile('(lines|catr|catrange|sedr|sedrange)\\d+[,_-]\\d+'), fish_abbreviation('_cat_range_abbr'))
+    abbr(re.compile('(lines|catr|catrange|sedr|sedrange)\\d+[,_-]\\d+'), abbr_from_fish_function('_cat_range_abbr'))
     abbr('lua_logs', "rg -g '*.lua' '^\\s*log'")
     abbr('lua_logs_commented_out', "rg -g '*.lua' '^\\s*--\\s*log'")
     abbr('lua_prints', "rg -g '*.lua' '^\\s*print\\\\('")
     abbr('lua_prints_commented_out', "rg -g '*.lua' '^\\s*--\\s*print\\\\('")
     abbr('z_clean', 'z --clean')
-    abbr('ze', fish_abbreviation('_abbr_ze'), position="anywhere")
+    abbr('ze', abbr_from_fish_function('_abbr_ze'), position="anywhere")
     abbr('tf', 'terraform')
     abbr('tfv', 'terraform validate')
     abbr('tfi', 'terraform init')

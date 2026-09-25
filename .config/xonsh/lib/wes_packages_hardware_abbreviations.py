@@ -7,7 +7,7 @@ import re
 
 from wes_abbreviations import abbr
 from wes_fish_migration import (
-    fish_abbreviation,
+    abbr_from_fish_function,
     platform_abbreviation,
 )
 
@@ -49,7 +49,7 @@ def register_packages_hardware_abbreviations():
     abbr('dpkgL', 'dpkg -L')
     abbr('dpkgS', 'dpkg -S')
     abbr('watch', '$WATCH_COMMAND')
-    abbr('watch_last', fish_abbreviation('_expand_watch_last'))
+    abbr('watch_last', abbr_from_fish_function('_expand_watch_last'))
     abbr('wa', '$WATCH_COMMAND')
     abbr('wag', '$WATCH_COMMAND --no-title -- grc --colour=on')
     abbr('wak', '$WATCH_COMMAND --no-title -- grc --colour=on kubectl get --show-kind')
@@ -93,7 +93,7 @@ def register_packages_hardware_abbreviations():
     abbr('man_misc_7', '$XONSH_MAN_COMMAND 7')
     abbr('man_system_8', '$XONSH_MAN_COMMAND 8')
     abbr('man_kernel_dev_9', '$XONSH_MAN_COMMAND 9')
-    abbr(re.compile('manlist[0-9]'), fish_abbreviation('manlistX'))
+    abbr(re.compile('manlist[0-9]'), abbr_from_fish_function('manlistX'))
     abbr('man1', '$XONSH_MAN_COMMAND 1')
     abbr('man2', '$XONSH_MAN_COMMAND 2')
     abbr('man3', '$XONSH_MAN_COMMAND 3')
@@ -182,7 +182,7 @@ def register_packages_hardware_abbreviations():
     abbr('pmtree_list_installed_pkgs_that_use', 'pactree --reverse --color')
     abbr('pmtree_list_all_pkgs_used_by', 'pactree --sync --color')
     abbr('pmtree_list_all_pkgs_that_use', 'pactree --sync --reverse --color')
-    abbr(re.compile('^d(\\d+)$'), fish_abbreviation('__pactree_depth'), position="anywhere", commands=('pactree',))
+    abbr(re.compile('^d(\\d+)$'), abbr_from_fish_function('__pactree_depth'), position="anywhere", commands=('pactree',))
     abbr('prm', 'sudo pacman -R')
     abbr('pum', 'sudo pacman -U')
     abbr('nv', 'nvidia-%', cursor_marker="%")
@@ -206,7 +206,7 @@ def register_packages_hardware_abbreviations():
     abbr('nsgpu', 'nvidia-smi --query-gpu=gpu_name,gpu_bus_id,vbios_version --format=csv')
     abbr('nsall', 'nvidia-smi --query-gpu=timestamp,name,pci.bus_id,driver_version,pstate,pcie.link.gen.max,pcie.link.gen.current,temperature.gpu,utilization.gpu,utilization.memory,memory.total,memory.free,memory.used --format=csv')
     abbr('fuc', 'fish_update_completions')
-    abbr('fish_from_source', fish_abbreviation('_fish_from_source'))
+    abbr('fish_from_source', abbr_from_fish_function('_fish_from_source'))
     abbr('lscpue', 'lscpu -e')
     abbr('lscpuon', 'lscpu -e --online')
     abbr('lscpuoff', 'lscpu -e --offline')
