@@ -18,12 +18,12 @@ FISH_DIR = ROOT / "fish/load_last_interactive_only"
 XONSH_DIR = ROOT / ".config/xonsh/lib"
 
 MAPPINGS = (
-    FishMapping(FISH_DIR / "system-services-specific.fish", XONSH_DIR / "wes_system_services_abbreviations.py"),
-    FishMapping(FISH_DIR / "kubernetes-specific.fish", XONSH_DIR / "wes_kubernetes_abbreviations.py"),
-    FishMapping(FISH_DIR / "processes-specific.fish", XONSH_DIR / "wes_processes_abbreviations.py"),
-    FishMapping(FISH_DIR / "cloud-ai-specific.fish", XONSH_DIR / "wes_cloud_ai_abbreviations.py"),
-    FishMapping(FISH_DIR / "media-specific.fish", XONSH_DIR / "wes_media_abbreviations.py"),
-    FishMapping(FISH_DIR / "packages-hardware-specific.fish", XONSH_DIR / "wes_packages_hardware_abbreviations.py"),
+    FishMapping(FISH_DIR / "system-services-specific.fish", XONSH_DIR / "wes_system_services.py"),
+    FishMapping(FISH_DIR / "kubernetes-specific.fish", XONSH_DIR / "wes_kubernetes.py"),
+    FishMapping(FISH_DIR / "processes-specific.fish", XONSH_DIR / "wes_processes.py"),
+    FishMapping(FISH_DIR / "cloud-ai-specific.fish", XONSH_DIR / "wes_cloud_ai.py"),
+    FishMapping(FISH_DIR / "media-specific.fish", XONSH_DIR / "wes_media.py"),
+    FishMapping(FISH_DIR / "packages-hardware-specific.fish", XONSH_DIR / "wes_packages_hardware.py"),
     FishMapping(FISH_DIR / "dotnet.fish", XONSH_DIR / "wes_dotnet.py"),
 )
 
