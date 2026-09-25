@@ -12,7 +12,7 @@ SOURCE = ROOT / "fish/load_last_interactive_only/docker-specific.fish"
 TARGET = ROOT / ".config/xonsh/lib/wes_docker_abbreviations.py"
 
 
-def parse_abbreviation(line_number: int, line: str):
+def parse_abbreviation(line: str):
     tokens = shlex.split(line, comments=True, posix=True)
     options: dict[str, bool] = {}
     remaining: list[str] = []
@@ -33,10 +33,10 @@ def parse_abbreviation(line_number: int, line: str):
     if replacement.startswith("(grcify ") and replacement.endswith(")"):
         # use_grc_with_docker is explicitly "no" in the Fish source.
         replacement = replacement[len("(grcify ") : -1]
-    return line_number, name, replacement, options
+    return name, replacement, options
 
 
-def declaration(line_number, name, replacement, options):
+def declaration(name, replacement, options):
     arguments = [repr(name), repr(replacement)]
     if options.get("cursor"):
         arguments.append('cursor_marker="%"')
@@ -45,9 +45,9 @@ def declaration(line_number, name, replacement, options):
 
 def generate() -> str:
     declarations = []
-    for line_number, line in enumerate(SOURCE.read_text().splitlines(), 1):
+    for _line_number, line in enumerate(SOURCE.read_text().splitlines(), 1):
         if line.startswith("abbr "):
-            declarations.append(declaration(*parse_abbreviation(line_number, line)))
+            declarations.append(declaration(*parse_abbreviation(line)))
 
     header = '''\
 """Generated from fish/load_last_interactive_only/docker-specific.fish."""
