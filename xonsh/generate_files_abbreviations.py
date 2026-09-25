@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import shlex
 from pathlib import Path
+from fish_to_xonsh import parse_abbreviation
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -16,35 +17,35 @@ VALUE_SUBSTITUTIONS = {
 }
 
 
-def parse_abbreviation(line: str):
-    tokens = shlex.split(line, comments=True, posix=True)
-    options: dict[str, str | bool] = {}
-    remaining: list[str] = []
-    index = 1
-    while index < len(tokens):
-        token = tokens[index]
-        if token == "--":
-            remaining.extend(tokens[index + 1 :])
-            break
-        if token == "--set-cursor":
-            options["cursor"] = True
-            index += 1
-        elif token in ("--add", "--command", "--function", "--regex", "--position"):
-            options[token[2:]] = tokens[index + 1]
-            index += 2
-        elif token.startswith("--position="):
-            options["position"] = token.partition("=")[2]
-            index += 1
-        else:
-            remaining.append(token)
-            index += 1
-
-    name = str(options.get("add") or remaining.pop(0))
-    replacement = " ".join(remaining)
-    for old, new in VALUE_SUBSTITUTIONS.items():
-        replacement = replacement.replace(old, new)
-    return name, replacement, options
-
+# def parse_abbreviation(line: str):
+#     tokens = shlex.split(line, comments=True, posix=True)
+#     options: dict[str, str | bool] = {}
+#     remaining: list[str] = []
+#     index = 1
+#     while index < len(tokens):
+#         token = tokens[index]
+#         if token == "--":
+#             remaining.extend(tokens[index + 1 :])
+#             break
+#         if token == "--set-cursor":
+#             options["cursor"] = True
+#             index += 1
+#         elif token in ("--add", "--command", "--function", "--regex", "--position"):
+#             options[token[2:]] = tokens[index + 1]
+#             index += 2
+#         elif token.startswith("--position="):
+#             options["position"] = token.partition("=")[2]
+#             index += 1
+#         else:
+#             remaining.append(token)
+#             index += 1
+#
+#     name = str(options.get("add") or remaining.pop(0))
+#     replacement = " ".join(remaining)
+#     for old, new in VALUE_SUBSTITUTIONS.items():
+#         replacement = replacement.replace(old, new)
+#     return name, replacement, options
+#
 
 def declaration(name, replacement, options):
     trigger = f"re.compile({options['regex']!r})" if "regex" in options else repr(name)
