@@ -27,6 +27,7 @@ MAPPINGS = (
     FishMapping(FISH_DIR / "dotnet.fish", XONSH_DIR / "wes_dotnet.py"),
     FishMapping(FISH_DIR / "python-specific.fish", XONSH_DIR / "wes_python.py"),
     FishMapping(FISH_DIR / "ansibles.fish", XONSH_DIR / "wes_ansible.py"),
+    FishMapping(FISH_DIR / "docker-specific.fish", XONSH_DIR / "wes_docker.py"),
 )
 
 

@@ -1,11 +1,26 @@
-"""Generated from fish/load_last_interactive_only/docker-specific.fish."""
+"""generated from Fish"""
 
 from __future__ import annotations
 
+import re
+import os
+import platform
+
+from xonsh.built_ins import XSH
 from wes_abbreviations import abbr
+from wes_fish_migration import (
+    wrap_fish_functions,
+    abbr_from_fish_function,
+    platform_abbreviation,
+    unsupported_abbreviation,
+)
 
 
-def register_docker_abbreviations():
+def register_wes_docker():
+    fish_funcs = (
+        'grcify',
+    )
+    wrap_fish_functions(XSH.aliases, fish_funcs)
     abbr('din', 'docker inspect')
     abbr('dmo', 'docker model')
     abbr('dmols', 'docker model list')
@@ -61,17 +76,17 @@ def register_docker_abbreviations():
     abbr('dsy', 'docker system')
     abbr('dsydf', 'docker system df')
     abbr('dsydfv', 'docker system df -v')
-    abbr('dsyi', 'docker system info')
+    abbr('dsyi', '(grcify docker system info)')
     abbr('dsypr', 'docker system prune')
     abbr('dsye_tr_table', 'docker system events --since 10m --until 0m --format "{{json .}}" | jq "[( .id[0:10] // .Actor.ID ),.Type, .Action] | @csv " -r | column -t -s","  ')
     abbr('dv', 'docker volume')
-    abbr('dvls', 'docker volume ls')
-    abbr('dvlsd', 'docker volume ls -f=dangling=true')
+    abbr('dvls', '(grcify docker volume ls)')
+    abbr('dvlsd', '(grcify docker volume ls -f=dangling=true)')
     abbr('dvc', 'docker volume create')
     abbr('dvrm', 'docker volume rm')
     abbr('dvpr', 'docker volume prune')
     abbr('dvi', 'docker volume inspect')
-    abbr('dver', 'docker version')
+    abbr('dver', '(grcify docker version)')
     abbr('dc', 'docker container')
     abbr('dca', 'docker container attach')
     abbr('dcc', 'docker container commit')
@@ -86,8 +101,8 @@ def register_docker_abbreviations():
     abbr('dcpause', 'docker container pause')
     abbr('dcport', 'docker container port')
     abbr('dcpr', 'docker container prune')
-    abbr('dcps', 'docker container ps')
-    abbr('dcpsa', 'docker container ps -a')
+    abbr('dcps', '(grcify docker container ps)')
+    abbr('dcpsa', '(grcify docker container ps -a)')
     abbr('dcpsm', 'docker container ps --format "table {{.ID}}\\t{{.Names}}\\t{{.Image}}\\t{{.Mounts}}"')
     abbr('dcr', 'docker container run --name')
     abbr('dcrename', 'docker container rename')
@@ -105,7 +120,7 @@ def register_docker_abbreviations():
     abbr('dcwait', 'docker container wait')
     abbr('di', 'docker image')
     abbr('dbx', 'docker buildx')
-    abbr('dbxls', 'docker buildx ls')
+    abbr('dbxls', '(grcify docker buildx ls)')
     abbr('dbxb', 'docker buildx build')
     abbr('dbxba', 'docker buildx bake')
     abbr('dbxc', 'docker buildx create')
@@ -121,9 +136,9 @@ def register_docker_abbreviations():
     abbr('dih', 'docker image history --no-trunc')
     abbr('dihj', 'docker image history --no-trunc --format "{{json .}}" | jq')
     abbr('dii', 'docker image inspect')
-    abbr('dils', 'docker image ls')
-    abbr('dilsa', 'docker image ls --all')
-    abbr('dilsj', 'docker image ls --format "{{json .}}" | jq')
+    abbr('dils', '(grcify docker image ls)')
+    abbr('dilsa', '(grcify docker image ls --all)')
+    abbr('dilsj', '(grcify docker image ls --format "{{json .}}" | jq)')
     abbr('dilsaj', 'docker image ls --all --format "{{json .}}" | jq')
     abbr('dilsdf', "docker image ls --format '{{.Size}}\\t{{.Repository}}:{{.Tag}}' | sort -h")
     abbr('dipr', 'docker image prune')
@@ -137,7 +152,7 @@ def register_docker_abbreviations():
     abbr('dnec', 'docker network connect')
     abbr('dned', 'docker network disconnect')
     abbr('dnei', 'docker network inspect')
-    abbr('dnels', 'docker network ls')
+    abbr('dnels', '(grcify docker network ls)')
     abbr('dnepr', 'docker network prune')
     abbr('dnerm', 'docker network rm')
     abbr('dx', 'docker context')
@@ -164,10 +179,10 @@ def register_docker_abbreviations():
     abbr('dcol', 'docker compose logs')
     abbr('dcolf', 'docker compose logs -f')
     abbr('dcolt', 'docker compose logs -f --tail=0')
-    abbr('dcops', 'docker compose ps')
-    abbr('dcopsa', 'docker compose ps -a')
-    abbr('dcols', 'docker compose ls')
-    abbr('dcolsa', 'docker compose ls -a')
+    abbr('dcops', '(grcify docker compose ps)')
+    abbr('dcopsa', '(grcify docker compose ps -a)')
+    abbr('dcols', '(grcify docker compose ls)')
+    abbr('dcolsa', '(grcify docker compose ls -a)')
     abbr('dcopull', 'docker compose pull')
     abbr('dcopush', 'docker compose push')
     abbr('dcorm', 'docker compose rm')
@@ -199,3 +214,5 @@ def register_docker_abbreviations():
     abbr('dhtu', 'hub-tool tag ls --sort=updated=desc --platforms --all')
     abbr('dhtj', 'hub-tool tag ls --format json % | jq', cursor_marker="%")
     abbr('dhti', 'hub-tool tag inspect')
+
+
