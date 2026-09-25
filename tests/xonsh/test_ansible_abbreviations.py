@@ -7,14 +7,11 @@ ROOT = Path(__file__).parents[2]
 sys.path.insert(0, str(ROOT / ".config/xonsh/lib"))
 sys.path.insert(0, str(ROOT / "xonsh"))
 
-from generate_ansible_abbreviations import TARGET, generate  # noqa: E402
 from wes_abbreviations import AbbreviationContext, reset_registry  # noqa: E402
 import wes_abbreviations
-from wes_ansible_abbreviations import (  # noqa: E402
-    FISH_FUNCTIONS,
-    register_ansible,
-)
+from wes_ansible import register_wes_ansible
 
+# TODO uses new generator, update tests or get rid of tests we don't need
 
 def context(token):
     return AbbreviationContext(
@@ -29,7 +26,7 @@ def context(token):
 
 def registry():
     registry = reset_registry()
-    register_ansible()
+    register_wes_ansible()
     return registry
 
 

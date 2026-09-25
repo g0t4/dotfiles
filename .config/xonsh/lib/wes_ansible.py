@@ -1,21 +1,27 @@
-"""Generated from fish/load_last_interactive_only/ansibles.fish."""
+"""generated from Fish"""
 
 from __future__ import annotations
 
+import re
+import os
+import platform
+
 from xonsh.built_ins import XSH
-
 from wes_abbreviations import abbr
-from wes_fish_migration import wrap_fish_functions
-
-
-FISH_FUNCTIONS = (
-    '_ansible-config_options_name_contains',
-    '_ansible-config_option_details_contains',
+from wes_fish_migration import (
+    wrap_fish_functions,
+    abbr_from_fish_function,
+    platform_abbreviation,
+    unsupported_abbreviation,
 )
 
 
-def register_ansible():
-    wrap_fish_functions(XSH.aliases, FISH_FUNCTIONS)
+def register_wes_ansible():
+    fish_funcs = (
+        '_ansible-config_options_name_contains',
+        '_ansible-config_option_details_contains',
+    )
+    wrap_fish_functions(XSH.aliases, fish_funcs)
     abbr('aclsn', '_ansible-config_options_name_contains')
     abbr('aclsd', '_ansible-config_option_details_contains')
     abbr('ap', 'ansible-playbook')
@@ -77,3 +83,5 @@ def register_ansible():
     abbr('aig', 'ansible-inventory --graph')
     abbr('aih', 'ansible-inventory --host')
     abbr('apull', 'ansible-pull')
+
+
