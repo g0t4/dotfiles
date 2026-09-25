@@ -102,6 +102,7 @@ def test_trigger_rules_can_distinguish_scopes_and_replacements():
 
 
 def test_generated_misc_modules_are_in_sync_with_fish_source():
+    # TODO I drastically changed generate_from_fish... codex will have to update all these tests or get rid of the ones we dont need now
     for target, expected in generate_all().items():
         assert target.read_text() == expected
 
