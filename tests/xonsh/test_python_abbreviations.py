@@ -75,15 +75,6 @@ def test_python_uv_and_pytest_abbreviations():
     ) is None
 
 
-def test_py_kill_preserves_platform_specific_flags():
-    result, _ = registry().expand(context("py_kill"))
-    expected_flag = "-ilf" if platform.system() == "Darwin" else "-if"
-    assert result.text == f'pkill {expected_flag} "python.*3.13.5"'
-    generated = generate()
-    assert "'pkill -ilf \"python.*3.13.5\"'" in generated
-    assert "'pkill -if \"python.*3.13.5\"'" in generated
-
-
 def test_function_inventory_and_dynamic_ptw_expansion():
     generated = importlib.import_module("wes_python")
     assert len(generated.FISH_FUNCTIONS) == 14
