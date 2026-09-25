@@ -23,6 +23,9 @@ def parse_abbreviation(line: str, VALUE_SUBSTITUTIONS:dict[str, str] = {}):
             line.replace("\\'", quote_placeholder), comments=True, posix=True
         )
     ]
+    # import rich
+    # rich.print(tokens)
+    #
     options: dict[str, str | bool] = {}
     remaining: list[str] = []
     index = 1
