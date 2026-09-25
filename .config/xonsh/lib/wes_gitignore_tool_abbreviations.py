@@ -6,7 +6,7 @@ SOURCE_FUNCTIONS = ('gitignores_for', 'append_gitignores_for', 'gitignore_init',
 
 
 def register_gitignore_abbreviations():
-    abbr('gi', 'gitignores_for')  # Source line 8
-    abbr('gia', 'append_gitignores_for')  # Source line 13
-    abbr('gii', 'gitignore_init')  # Source line 18
-    abbr('gic', 'commit_gitignores_for')  # Source line 23
+    abbr('gi', 'gitignores_for')
+    abbr('gia', 'append_gitignores_for')
+    abbr('gii', 'gitignore_init')
+    abbr('gic', 'commit_gitignores_for')
