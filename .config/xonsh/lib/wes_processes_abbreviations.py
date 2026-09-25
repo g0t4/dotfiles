@@ -15,8 +15,6 @@ from wes_fish_migration import (
     unsupported_abbreviation,
 )
 
-SED_COMMAND = "gsed" if platform.system() == "Darwin" else "sed"
-
 FISH_FUNCTIONS = (
     'ps_dump_env_vars_when_process_started',
     'pstreeX',
@@ -67,10 +65,10 @@ def register_wes_processes_abbreviations():
     abbr('sede', "$XONSH_SED_COMMAND -Ei 's/%//g'", cursor_marker="%")
     abbr('sedd', "$XONSH_SED_COMMAND --debug -i 's/%//g'", cursor_marker="%")
     abbr('sedi', "$XONSH_SED_COMMAND -i 's/%//g'", cursor_marker="%")
-    abbr('rg', '(rg --files-with-matches %)', position="anywhere", commands=(SED_COMMAND,), cursor_marker="%")
+    abbr('rg', '(rg --files-with-matches %)', position="anywhere", commands=(os.environ['XONSH_SED_COMMAND'],), cursor_marker="%")
     abbr('*nd', "--glob '!datasets'", position="anywhere", commands=('rg',))
     abbr('seda', "$XONSH_SED_COMMAND -Ei 's/%//g' (rg --files-with-matches ___) ", cursor_marker="%")
-    abbr('*a', '(rg --files-with-matches ___) ', position="anywhere", commands=(SED_COMMAND,))
+    abbr('*a', '(rg --files-with-matches ___) ', position="anywhere", commands=(os.environ['XONSH_SED_COMMAND'],))
     abbr(re.compile('(lines|catr|catrange|sedr|sedrange)\\d+[,_-]\\d+'), abbr_from_fish_function('_cat_range_abbr'))
     abbr('lua_logs', "rg -g '*.lua' '^\\s*log'")
     abbr('lua_logs_commented_out', "rg -g '*.lua' '^\\s*--\\s*log'")

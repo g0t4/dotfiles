@@ -117,8 +117,8 @@ def declaration(line_number, name, replacement, options):
     if options.get("command"):
         command = options["command"]
         command_expression = {
-            "$man_cmd": "MAN_COMMAND",
-            "$sed_cmd": "SED_COMMAND",
+            "$man_cmd": "os.environ['XONSH_MAN_COMMAND']",
+            "$sed_cmd": "os.environ['XONSH_SED_COMMAND']",
         }.get(command, repr(command))
         arguments.append(f"commands=({command_expression},)")
     if options.get("cursor") and replacement.count("%") == 1:

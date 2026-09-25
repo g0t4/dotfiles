@@ -80,18 +80,6 @@ def generate(
             functions.append(function_match.group(1))
 
     declaration_text = "\n".join(declarations)
-    platform_constants = []
-    if "MAN_COMMAND" in declaration_text:
-        platform_constants.append(
-            'MAN_COMMAND = "gman" if platform.system() == "Darwin" else "man"'
-        )
-    if "SED_COMMAND" in declaration_text:
-        platform_constants.append(
-            'SED_COMMAND = "gsed" if platform.system() == "Darwin" else "sed"'
-        )
-    platform_constants_text = (
-        "\n".join(platform_constants) + "\n\n" if platform_constants else ""
-    )
 
     return f'''\
 """{title}"""
@@ -111,7 +99,6 @@ from wes_fish_migration import (
     unsupported_abbreviation,
 )
 
-{platform_constants_text}\
 FISH_FUNCTIONS = (
 {"".join(f"    {name!r},\n" for name in functions)}\
 )

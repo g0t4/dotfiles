@@ -15,8 +15,6 @@ from wes_fish_migration import (
     unsupported_abbreviation,
 )
 
-MAN_COMMAND = "gman" if platform.system() == "Darwin" else "man"
-
 FISH_FUNCTIONS = (
     'dpkg_L_files',
     'dpkg_L_tree',
@@ -110,10 +108,10 @@ def register_wes_packages_hardware_abbreviations():
     abbr('mana', '$XONSH_MAN_COMMAND --all --regex')
     abbr('mank', 'apropos')
     abbr('manf', 'whatis')
-    abbr('-K', '--global-apropos', position="anywhere", commands=(MAN_COMMAND,))
-    abbr('-k', '--apropos', position="anywhere", commands=(MAN_COMMAND,))
-    abbr('-w', '--where', position="anywhere", commands=(MAN_COMMAND,))
-    abbr('-a', '--all', position="anywhere", commands=(MAN_COMMAND,))
+    abbr('-K', '--global-apropos', position="anywhere", commands=(os.environ['XONSH_MAN_COMMAND'],))
+    abbr('-k', '--apropos', position="anywhere", commands=(os.environ['XONSH_MAN_COMMAND'],))
+    abbr('-w', '--where', position="anywhere", commands=(os.environ['XONSH_MAN_COMMAND'],))
+    abbr('-a', '--all', position="anywhere", commands=(os.environ['XONSH_MAN_COMMAND'],))
     abbr('manK', '$XONSH_MAN_COMMAND -K')
     abbr('manw', '$XONSH_MAN_COMMAND --where -K')
     abbr('mgr', '$XONSH_MAN_COMMAND -K')
