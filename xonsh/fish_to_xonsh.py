@@ -51,7 +51,10 @@ def parse_abbreviation(line: str, VALUE_SUBSTITUTIONS:dict[str, str] = {}):
     name = str(options.get("add") or remaining.pop(0))
     replacement = " ".join(remaining)
     for old, new in VALUE_SUBSTITUTIONS.items():
-        replacement = replacement.replace(old, new)
+        if type(old) == re.Pattern:
+            replacement = re.sub(old, new, replacement)
+        else:
+            replacement = replacement.replace(old, new)
     return name, replacement, options
 
 
