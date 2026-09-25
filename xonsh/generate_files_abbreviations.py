@@ -58,7 +58,7 @@ def declaration(line_number, name, replacement, options):
             "expand_zsh_equals": "_expand_zsh_equals",
         }
         replacement_expression = native.get(
-            function_name, f"_fish_abbreviation({function_name!r})"
+            function_name, f"abbr_from_fish_function({function_name!r})"
         )
     else:
         replacement_expression = repr(replacement)
@@ -90,13 +90,7 @@ import shutil
 
 from wes_abbreviations import abbr
 from wes_fish_bridge import fish_function
-
-
-def _fish_abbreviation(function_name):
-    def expand(context, _match):
-        return fish_function(function_name, context.token)
-
-    return expand
+from wes_fish_migration import abbr_from_fish_function
 
 
 def _dot_count(token):

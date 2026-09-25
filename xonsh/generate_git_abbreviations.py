@@ -64,7 +64,7 @@ def declaration(line_number, name, replacement, options):
 
     trigger = f"re.compile({options['regex']!r})" if "regex" in options else repr(name)
     replacement_expr = (
-        f"_fish_abbreviation({options['function']!r})"
+        f"abbr_from_fish_function({options['function']!r})"
         if "function" in options
         else repr(replacement)
     )
@@ -97,13 +97,7 @@ import re
 
 from wes_abbreviations import abbr
 from wes_fish_bridge import fish_function
-
-
-def _fish_abbreviation(function_name):
-    def expand(context, _match):
-        return fish_function(function_name, context.token)
-
-    return expand
+from wes_fish_migration import abbr_from_fish_function
 
 
 def register_git_abbreviations():

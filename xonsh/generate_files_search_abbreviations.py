@@ -64,7 +64,7 @@ def declaration(name, replacement, options):
         replacement_expression = replacements[name]
     elif "function" in options:
         replacement_expression = functions.get(
-            options["function"], f"_fish_abbreviation({options['function']!r})"
+            options["function"], f"abbr_from_fish_function({options['function']!r})"
         )
     else:
         replacement = replacement.replace("$find_cmd", "{FIND_COMMAND}")
@@ -103,16 +103,10 @@ import re
 
 from wes_abbreviations import AbbreviationResult, abbr
 from wes_fish_bridge import UnsupportedFishFunctionError, fish_function
+from wes_fish_migration import abbr_from_fish_function
 
 
 FIND_COMMAND = "gfind" if platform.system() == "Darwin" else "find"
-
-
-def _fish_abbreviation(function_name):
-    def expand(context, _match):
-        return fish_function(function_name, context.token)
-
-    return expand
 
 
 def _unsupported_abbreviation(function_name, reason):
