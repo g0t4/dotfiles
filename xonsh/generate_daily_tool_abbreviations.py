@@ -21,14 +21,14 @@ def generate(domain):
     source = SOURCES[domain]
     declarations = []
     functions = []
-    for number, line in enumerate((ROOT / source).read_text().splitlines(), 1):
+    for line in (ROOT / source).read_text().splitlines():
         if line.startswith("function "):
             functions.append(line.split()[1])
         if line.startswith("_create_abbr_ff_help_filter "):
             _, kind, name = shlex.split(line)
             trigger = f"ff_help_filter_{kind}_{name}"
             replacement = f"ffmpeg --help filter={name} && open https://ffmpeg.org/ffmpeg-filters.html#{name}"
-            declarations.append(f"    abbr({trigger!r}, {replacement!r})  # Source line {number}")
+            declarations.append(f"    abbr({trigger!r}, {replacement!r})")
         if not line.startswith("abbr "):
             continue
         name, replacement, options = parse_abbreviation(line)
@@ -43,7 +43,7 @@ def generate(domain):
             arguments += ['position="anywhere"', f"commands=({options['command']!r},)"]
         if options.get("cursor") and "function" not in options:
             arguments += ['cursor_marker="%"']
-        declarations.append(f"    abbr({', '.join(arguments)})  # Source line {number}")
+        declarations.append(f"    abbr({', '.join(arguments)})")
     imports = "from wes_abbreviations import abbr\n"
     if any("audio_abbreviation(" in line for line in declarations):
         imports += "from wes_daily_tool_bridges import audio_abbreviation\n"
