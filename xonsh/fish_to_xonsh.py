@@ -104,10 +104,10 @@ from wes_fish_migration import (
 
 
 def {function_name}():
-    FISH_FUNCTIONS = (
+    fish_funcs = (
     {"".join(f"    {name!r},\n" for name in functions)}\
     )
-    wrap_fish_functions(XSH.aliases, FISH_FUNCTIONS)
+    wrap_fish_functions(XSH.aliases, fish_funcs)
 {declaration_text}
 
 {register_text}
