@@ -18,9 +18,6 @@ VALUE_SUBSTITUTIONS = {
     "$GIT_FULLY_AUTO_REBASE": "GIT_SEQUENCE_EDITOR=true",
     "$_unpushed_commits": "'HEAD@{push}~1..HEAD'",
     "$_unpushed_commits_without_last_pushed": "'HEAD@{push}..HEAD'",
-    # This variable is misspelled and unset in the Fish source, so Fish expands
-    # it to an empty string when registering glp/glpf.
-    "$_unpunched_commits": "",
     r"\$(git rev-list --all)": "$(git rev-list --all)",
 }
 
