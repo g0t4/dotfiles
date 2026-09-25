@@ -37,9 +37,6 @@ function _brew_search_with_analytics
     argparse stars -- $argv # strips out --stars => into _flag_stars
     set query $argv[1]
 
-    # test with:
-    #    _reload_config; _brew_search_with_analytics foo
-
     # PRN keep bold white + green checkmark for installed packages?
 
     set _formulae (brew search --formula $query)

@@ -20,9 +20,7 @@ VALUE_SUBSTITUTIONS = {
 def declaration(name, replacement, options):
     # TODO! consoldate this too? like parse_abbreviation?
     trigger = f"re.compile({options['regex']!r})" if "regex" in options else repr(name)
-    if name == "ask_status":
-        replacement_expression = "_ask_status"
-    elif "function" in options:
+    if "function" in options:
         function_name = options["function"]
         # TODO! don't we have a better "native" approach?
         native = {
@@ -81,12 +79,6 @@ def _expand_dots_only(context, _match):
 
 def _expand_zsh_equals(context, _match):
     return shutil.which(context.token.removeprefix("="))
-
-
-def _ask_status(_context, _match):
-    repositories = ("dotfiles", "ask-openai.nvim", "devtools.nvim")
-    paths = [fish_function("__z", "--echo", repository) for repository in repositories]
-    return "; ".join(f"git -C {shlex.quote(path)} status" for path in paths)
 
 
 def register_files_abbreviations():

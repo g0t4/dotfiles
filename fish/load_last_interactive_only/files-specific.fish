@@ -67,15 +67,7 @@ abbr lns "ln -s"
 #
 # abbr --add cp- --regex 'cp-' --function _cp-
 
-## *** ask-openai related
-
-abbr ask_status "git -C (z --echo dotfiles) status; git -C (z --echo ask-openai.nvim) status; git -C (z --echo devtools.nvim) status"
-
 ## *** fish related
-
-function _reload_config
-    source ~/.config/fish/config.fish
-end
 
 function _update_dotfile_et_al
 

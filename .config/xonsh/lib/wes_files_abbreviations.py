@@ -28,12 +28,6 @@ def _expand_zsh_equals(context, _match):
     return shutil.which(context.token.removeprefix("="))
 
 
-def _ask_status(_context, _match):
-    repositories = ("dotfiles", "ask-openai.nvim", "devtools.nvim")
-    paths = [fish_function("__z", "--echo", repository) for repository in repositories]
-    return "; ".join(f"git -C {shlex.quote(path)} status" for path in paths)
-
-
 def register_files_abbreviations():
     abbr('lat', 'ls -alht')
     abbr('las', 'ls -alhS')
@@ -44,7 +38,6 @@ def register_files_abbreviations():
     abbr('cd-', 'cd -')
     abbr('cpr', 'cp -r')
     abbr('lns', 'ln -s')
-    abbr('ask_status', _ask_status)
     abbr('touch', 'touchp')
     abbr('mkfile', 'touchp')
     abbr('mkdir', 'mkdir -p')

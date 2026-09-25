@@ -291,9 +291,6 @@ def _files_unsupported(function_name, reason):
     return invoke
 
 
-aliases["_reload_config"] = _files_unsupported(
-    "_reload_config", "sourcing Fish cannot reload Xonsh"
-)
 aliases["supercd"] = _files_unsupported(
     "supercd", "its Fish implementation changes directory and edits an interactive fzf UI"
 )
