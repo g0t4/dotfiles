@@ -17,7 +17,6 @@ FISH_FUNCTIONS = (
     'ols_qwen',
     'cd2',
     'abbr_agg',
-    '_define_devtools_abbrs',
     'commands_log_executable_mode',
     'commands_log_shell_mode',
     'trash_n_tail',
@@ -112,6 +111,9 @@ def register_cloud_ai_abbreviations():
     abbr('tailr', 'tail -r')
     abbr('tt', 'trash_n_tail')
     abbr('tt_xonsh', 'trash_n_tail -F ~/.local/state/xonsh/xonsh.log')
+    abbr('tt_devtools_universal', 'trash_n_tail ~/.local/share/devtools/universal.log')
+    abbr('tt_devtools_hammerspoons', 'trash_n_tail ~/.local/share/devtools/hammerspoons.log')
+    abbr('tt_devtools_launcher', 'trash_n_tail ~/.local/share/devtools/launcher.log')
     abbr('tt_mcp_server_commands', 'tail -F ~/.local/state/mcp-server-commands/commands.log')
     abbr('tail_mcp_server_commands', 'tail -F ~/.local/state/mcp-server-commands/commands.log')
     abbr('commands_log_review', 'commands_log_executable_mode; commands_log_shell_mode')
