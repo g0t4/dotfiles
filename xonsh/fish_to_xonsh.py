@@ -11,7 +11,7 @@ from typing import Callable
 DeclarationFactory = Callable[[int, str, str, dict[str, str | bool]], str]
 
 
-def parse_abbreviation(line_number: int, line: str):
+def parse_abbreviation(line: str):
     """Parse one Fish ``abbr`` declaration without losing Fish quoting."""
     # Fish accepts backslash-escaped single quotes inside single-quoted text;
     # POSIX shlex does not. Protect those legacy awk expressions while
@@ -46,7 +46,7 @@ def parse_abbreviation(line_number: int, line: str):
             index += 1
 
     name = str(options.get("add") or remaining.pop(0))
-    return line_number, name, " ".join(remaining), options
+    return name, " ".join(remaining), options
 
 
 def generate(
@@ -69,8 +69,8 @@ def generate(
         if "# fish-only" in line:
             continue
         if re.match(r"^\s*abbr(?:\s|$)", line):
-            parsed = parse_abbreviation(line_number, line)
-            _, name, replacement, options = parsed
+            parsed = parse_abbreviation(line)
+            name, replacement, options = parsed
             identity = (name, replacement, tuple(sorted(options.items())))
             duplicate = name in deduplicated_names and identity in seen
             if not should_skip(name, replacement, options) and not duplicate:

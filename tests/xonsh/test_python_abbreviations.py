@@ -43,7 +43,7 @@ def test_every_fish_abbreviation_is_generated_with_duplicate_triggers_replaced()
         if re.match(r"^\s*abbr(?:\s|$)", line):
             from fish_to_xonsh import parse_abbreviation
 
-            source_names.append(parse_abbreviation(line_number, line)[1])
+            source_names.append(parse_abbreviation(line)[0]) # [0] == name only
 
     entries = registry().abbreviations
     assert len(entries) == len(set(source_names))

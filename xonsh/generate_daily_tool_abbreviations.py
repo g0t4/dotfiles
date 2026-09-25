@@ -31,7 +31,7 @@ def generate(domain):
             declarations.append(f"    abbr({trigger!r}, {replacement!r})  # Source line {number}")
         if not line.startswith("abbr "):
             continue
-        _, name, replacement, options = parse_abbreviation(number, line)
+        name, replacement, options = parse_abbreviation(line)
         # This is the declaration template inside the Fish factory above.
         if name == "$abbr_name":
             continue

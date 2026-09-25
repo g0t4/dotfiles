@@ -94,7 +94,7 @@ MIGRATION_REPLACEMENTS = {
 }
 
 
-def declaration(line_number, name, replacement, options):
+def declaration(name, replacement, options):
     name = matching_rule(NAME_OVERRIDES, name, replacement, options, name)
     trigger = f"re.compile({options['regex']!r})" if "regex" in options else repr(name)
     unsupported = matching_rule(UNSUPPORTED_ABBREVIATIONS, name, replacement, options)

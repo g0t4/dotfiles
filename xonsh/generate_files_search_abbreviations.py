@@ -6,33 +6,12 @@ from __future__ import annotations
 import shlex
 from pathlib import Path
 
+from fish_to_xonsh import parse_abbreviation
+
 
 ROOT = Path(__file__).resolve().parents[1]
 SOURCE = ROOT / "fish/load_last_interactive_only/files-search-specific.fish"
 TARGET = ROOT / ".config/xonsh/lib/wes_files_search_abbreviations.py"
-
-
-def parse_abbreviation(line: str):
-    tokens = shlex.split(line.strip(), comments=True, posix=True)
-    options: dict[str, str | bool] = {}
-    remaining: list[str] = []
-    index = 1
-    while index < len(tokens):
-        token = tokens[index]
-        if token == "--":
-            remaining.extend(tokens[index + 1 :])
-            break
-        if token == "--set-cursor":
-            options["cursor"] = True
-            index += 1
-        elif token in ("--add", "--command", "--function", "--regex"):
-            options[token[2:]] = tokens[index + 1]
-            index += 2
-        else:
-            remaining.append(token)
-            index += 1
-    name = str(options.get("add") or remaining.pop(0))
-    return name, " ".join(remaining), options
 
 
 def declaration(name, replacement, options):
