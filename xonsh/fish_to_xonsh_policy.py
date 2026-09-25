@@ -131,7 +131,7 @@ class FishMapping:
     fish_file: Path
     xonsh_module: Path
 
-def generate_wrapped(mapping: FishMapping) -> str:
+def generate_wrapped(mapping: FishMapping, call_register: bool = False) -> str:
     function_name = "register_" + mapping.xonsh_module.with_suffix("").name
     return generate(
         mapping.fish_file,
@@ -141,4 +141,5 @@ def generate_wrapped(mapping: FishMapping) -> str:
         declaration_factory=declaration,
         should_skip=should_skip,
         deduplicated_names=frozenset(DEDUPLICATED_ABBREVIATIONS),
+        call_register=call_register,
     )

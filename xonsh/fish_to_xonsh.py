@@ -59,6 +59,7 @@ def generate(
         lambda _name, _replacement, _options: False
     ),
     deduplicated_names: frozenset[str] = frozenset(),
+    call_register: bool = False
 ) -> str:
     """Render one importable Xonsh module from a Fish source file."""
     declarations = []
@@ -80,6 +81,8 @@ def generate(
             functions.append(function_match.group(1))
 
     declaration_text = "\n".join(declarations)
+
+    register_text = "" if not call_register else f"\n\n{function_name}()"
 
     return f'''\
 """{title}"""
@@ -110,4 +113,6 @@ FISH_FUNCTIONS = (
 def {function_name}():
     wrap_fish_functions(XSH.aliases, FISH_FUNCTIONS)
 {declaration_text}
+
+{register_text}
 '''

@@ -30,4 +30,4 @@ MAPPINGS = (
 
 if __name__ == "__main__":
     for m in MAPPINGS:
-        m.xonsh_module.write_text(generate_wrapped(m))
+        m.xonsh_module.write_text(generate_wrapped(m, call_register=False))
