@@ -13,6 +13,7 @@ ROOT = Path(__file__).resolve().parents[1]
 SOURCE = ROOT / "fish/load_last_interactive_only/git.fish"
 TARGET = ROOT / ".config/xonsh/lib/wes_git_abbreviations.py"
 
+# long term everything will be in xonsh so this is fine for a stopgap
 VALUE_SUBSTITUTIONS = {
     '"$(_repo_root)"': "$(_repo_root)",
     "$GIT_FULLY_AUTO_REBASE": "GIT_SEQUENCE_EDITOR=true",
