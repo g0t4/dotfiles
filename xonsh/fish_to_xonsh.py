@@ -225,7 +225,15 @@ def declaration(name, replacement, options):
     elif platform is not None:
         replacement_expression = f"platform_abbreviation{platform!r}"
     elif "function" in options:
-        replacement_expression = f"abbr_from_fish_function({options['function']!r})"
+        function_name = options["function"]
+        native = {
+            "_expand_dots_in_command_position": "_expand_dots_command",
+            "_expand_dots_only": "_expand_dots_only",
+            "expand_zsh_equals": "_expand_zsh_equals",
+        }
+        replacement_expression = native.get(
+            function_name, f"abbr_from_fish_function({function_name!r})"
+        )
     else:
         replacement = matching_rule(_MIGRATION_REPLACEMENTS, name, replacement, options, replacement)
         for old, new in _REPLACEMENTS.items():

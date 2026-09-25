@@ -5,7 +5,7 @@ from __future__ import annotations
 
 import shlex
 from pathlib import Path
-from fish_to_xonsh import parse_abbreviation
+from fish_to_xonsh import declaration, parse_abbreviation
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -15,33 +15,6 @@ TARGET = ROOT / ".config/xonsh/lib/wes_files_abbreviations.py"
 VALUE_SUBSTITUTIONS = {
     "$dust_lots_of_lines": "--number-of-lines 500",
 }
-
-
-def declaration(name, replacement, options):
-    # TODO! consoldate this too? like parse_abbreviation?
-    trigger = f"re.compile({options['regex']!r})" if "regex" in options else repr(name)
-    if "function" in options:
-        function_name = options["function"]
-        # TODO! don't we have a better "native" approach?
-        native = {
-            "_expand_dots_in_command_position": "_expand_dots_command",
-            "_expand_dots_only": "_expand_dots_only",
-            "expand_zsh_equals": "_expand_zsh_equals",
-        }
-        replacement_expression = native.get(
-            function_name, f"abbr_from_fish_function({function_name!r})"
-        )
-    else:
-        replacement_expression = repr(replacement)
-
-    arguments = [trigger, replacement_expression]
-    if options.get("position") == "anywhere" or options.get("command"):
-        arguments.append('position="anywhere"')
-    if options.get("command"):
-        arguments.append(f"commands=({options['command']!r},)")
-    if options.get("cursor"):
-        arguments.append('cursor_marker="%"')
-    return f"    abbr({', '.join(arguments)})"
 
 
 def generate() -> str:
