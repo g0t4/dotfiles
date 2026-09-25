@@ -2,9 +2,10 @@
 
 from __future__ import annotations
 
-from xonsh.built_ins import XSH
 import re
+import platform
 
+from xonsh.built_ins import XSH
 from wes_abbreviations import abbr
 from wes_fish_migration import (
     wrap_fish_functions,

@@ -80,9 +80,6 @@ def generate(
             functions.append(function_match.group(1))
 
     declaration_text = "\n".join(declarations)
-    stdlib_imports = []
-    if "re.compile" in declaration_text:
-        stdlib_imports.append("import re")
     platform_constants = []
     if "MAN_COMMAND" in declaration_text:
         platform_constants.append(
@@ -92,11 +89,6 @@ def generate(
         platform_constants.append(
             'SED_COMMAND = "gsed" if platform.system() == "Darwin" else "sed"'
         )
-    if platform_constants:
-        stdlib_imports.insert(0, "import platform")
-    stdlib_imports_text = (
-        "\n".join(stdlib_imports) + "\n\n" if stdlib_imports else ""
-    )
     platform_constants_text = (
         "\n".join(platform_constants) + "\n\n" if platform_constants else ""
     )
@@ -106,8 +98,10 @@ def generate(
 
 from __future__ import annotations
 
+import re
+import platform
+
 from xonsh.built_ins import XSH
-{stdlib_imports_text}\
 from wes_abbreviations import abbr
 from wes_fish_migration import (
     wrap_fish_functions,
