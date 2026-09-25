@@ -16,7 +16,7 @@ from wes_fish_migration import (
 )
 
 
-def register_wes_kubernetes_abbreviations():
+def register_wes_kubernetes():
     fish_funcs = (
         '_k3s_autocomplete',
         'kgdump',

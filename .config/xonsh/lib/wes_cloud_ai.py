@@ -16,7 +16,7 @@ from wes_fish_migration import (
 )
 
 
-def register_wes_cloud_ai_abbreviations():
+def register_wes_cloud_ai():
     fish_funcs = (
         'actw_expanded',
         'rg_cached_models',

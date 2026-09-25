@@ -16,7 +16,7 @@ from wes_fish_migration import (
 )
 
 
-def register_wes_media_abbreviations():
+def register_wes_media():
     fish_funcs = (
         'elgato_kill_other_account_streamdeck',
         'show_pixel_color',

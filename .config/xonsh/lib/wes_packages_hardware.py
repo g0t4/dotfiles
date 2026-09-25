@@ -16,7 +16,7 @@ from wes_fish_migration import (
 )
 
 
-def register_wes_packages_hardware_abbreviations():
+def register_wes_packages_hardware():
     fish_funcs = (
         'dpkg_L_files',
         'dpkg_L_tree',

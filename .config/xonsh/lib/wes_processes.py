@@ -16,7 +16,7 @@ from wes_fish_migration import (
 )
 
 
-def register_wes_processes_abbreviations():
+def register_wes_processes():
     fish_funcs = (
         'ps_dump_env_vars_when_process_started',
         'pstreeX',

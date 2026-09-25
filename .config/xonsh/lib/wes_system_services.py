@@ -16,7 +16,7 @@ from wes_fish_migration import (
 )
 
 
-def register_wes_system_services_abbreviations():
+def register_wes_system_services():
     fish_funcs = (
         'on_change_show_verbose_prompt',
         'toggle_show_verbose_prompt',
