@@ -19,6 +19,7 @@ VALUE_SUBSTITUTIONS = {
     # This variable is misspelled and unset in the Fish source, so Fish expands
     # it to an empty string when registering glp/glpf.
     "$_unpunched_commits": "",
+    r"\$(git rev-list --all)": "$(git rev-list --all)",
 }
 
 
@@ -50,7 +51,7 @@ def parse_abbreviation(line: str):
     for old, new in sorted(VALUE_SUBSTITUTIONS.items(), key=lambda item: -len(item[0])):
         replacement = replacement.replace(old, new)
     replacement = " ".join(replacement.split())
-    replacement = replacement.replace(r"\$(git rev-list --all)", "$(git rev-list --all)")
+    # TODO make VALUE_SUBSTITUTIONS take a regex too (or always)
     return name, replacement, options
 
 
