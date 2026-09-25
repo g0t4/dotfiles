@@ -22,7 +22,7 @@ VALUE_SUBSTITUTIONS = {
 }
 
 
-def parse_abbreviation(line_number: int, line: str):
+def parse_abbreviation(line: str):
     tokens = shlex.split(line, comments=True, posix=True)
     options: dict[str, str | bool] = {}
     remaining: list[str] = []
@@ -51,10 +51,10 @@ def parse_abbreviation(line_number: int, line: str):
         replacement = replacement.replace(old, new)
     replacement = " ".join(replacement.split())
     replacement = replacement.replace(r"\$(git rev-list --all)", "$(git rev-list --all)")
-    return line_number, name, replacement, options
+    return name, replacement, options
 
 
-def declaration(line_number, name, replacement, options):
+def declaration(name, replacement, options):
     command = options.get("command")
     if command == "nl" or name == "pln":
         return None
@@ -80,10 +80,10 @@ def declaration(line_number, name, replacement, options):
 
 def generate() -> str:
     declarations = []
-    for line_number, line in enumerate(SOURCE.read_text().splitlines(), 1):
+    for _line_number, line in enumerate(SOURCE.read_text().splitlines(), 1):
         if not line.startswith("abbr "):
             continue
-        parsed = parse_abbreviation(line_number, line)
+        parsed = parse_abbreviation(line)
         rendered = declaration(*parsed)
         if rendered:
             declarations.append(rendered)

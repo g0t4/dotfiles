@@ -16,7 +16,7 @@ VALUE_SUBSTITUTIONS = {
 }
 
 
-def parse_abbreviation(line_number: int, line: str):
+def parse_abbreviation(line: str):
     tokens = shlex.split(line, comments=True, posix=True)
     options: dict[str, str | bool] = {}
     remaining: list[str] = []
@@ -43,10 +43,10 @@ def parse_abbreviation(line_number: int, line: str):
     replacement = " ".join(remaining)
     for old, new in VALUE_SUBSTITUTIONS.items():
         replacement = replacement.replace(old, new)
-    return line_number, name, replacement, options
+    return name, replacement, options
 
 
-def declaration(line_number, name, replacement, options):
+def declaration(name, replacement, options):
     trigger = f"re.compile({options['regex']!r})" if "regex" in options else repr(name)
     if name == "ask_status":
         replacement_expression = "_ask_status"
@@ -75,9 +75,9 @@ def declaration(line_number, name, replacement, options):
 
 def generate() -> str:
     declarations = []
-    for line_number, line in enumerate(SOURCE.read_text().splitlines(), 1):
+    for _line_number, line in enumerate(SOURCE.read_text().splitlines(), 1):
         if line.startswith("abbr "):
-            declarations.append(declaration(*parse_abbreviation(line_number, line)))
+            declarations.append(declaration(*parse_abbreviation(line)))
 
     header = '''\
 """Generated from fish/load_last_interactive_only/files-specific.fish."""
