@@ -1,16 +1,54 @@
-"""Git abbreviations generated from fish/load_last_interactive_only/git.fish."""
+"""generated from Fish"""
 
 from __future__ import annotations
 
 import re
+import os
+import platform
 
+from xonsh.built_ins import XSH
 from wes_abbreviations import abbr
-from wes_fish_bridge import fish_function
-from wes_fish_migration import abbr_from_fish_function
+from wes_fish_migration import (
+    wrap_fish_functions,
+    abbr_from_fish_function,
+    platform_abbreviation,
+    unsupported_abbreviation,
+)
 
 
-def register_git_abbreviations():
-    abbr("-W", "--function-context", commands=("git", "diff"))
+def register_wes_git():
+    fish_funcs = (
+        '_abbr_git_short_to_long',
+        '_abbr_expand_reflog_d',
+        '_abbr_expand_grev_d',
+        'gdX',
+        '_grvcp',
+        'mark',
+        '_abbr_git_push_up_to',
+        'glX',
+        'line_numbers',
+        'git_unpushed_commits',
+        'git_unpulled_commits',
+        'glp_x',
+        'glsX',
+        'git_current_branch',
+        'git_current_branch_upstream',
+        'gdlcX',
+        'hunkdiff',
+        'pwd',
+        '_pwd',
+        'prd',
+        '_repo_root',
+        '_abbr_expand_grbi_d',
+        '_repo_is_index_clean',
+        '_repo_is_worktree_clean',
+        'gapX',
+        '_get_license',
+        'get_license_DWTFYW',
+        'get_license_MIT0',
+    )
+    wrap_fish_functions(XSH.aliases, fish_funcs)
+    abbr('-W', abbr_from_fish_function('_abbr_git_short_to_long'), position="anywhere", commands=('git',))
     abbr('man_gitrevisions', 'man gitrevisions')
     abbr(re.compile('reflog\\d+'), abbr_from_fish_function('_abbr_expand_reflog_d'), position="anywhere")
     abbr('commit_with_message', ':/%', position="anywhere", cursor_marker="%")
@@ -146,12 +184,12 @@ def register_git_abbreviations():
     abbr('grvcp', abbr_from_fish_function('_grvcp'))
     abbr('gcmsg', 'git commit -m "%"', cursor_marker="%")
     abbr('gcam', 'git commit -a -m "%"', cursor_marker="%")
-    abbr('gptoss', '--author "gptoss120b<wes.mcclure+gptoss120b@gmail.com>"', commands=('git',))
-    abbr('qwen3', '--author "qwen3.6-35b-a3b<wes.mcclure+qwen3.6-35b-a3b@gmail.com>"', commands=('git',))
-    abbr('agentworld', '--author "qwen-agentworld-35b-a3b<wes.mcclure+qwen-agentworld-35b-a3b@gmail.com>"', commands=('git',))
-    abbr('codex', '--author "codex-gpt6<wes.mcclure+codex-gpt6@gmail.com>"', commands=('git',))
-    abbr('deepseek', '--author "deepseek-v4-flash<wes.mcclure+deepseek-v4-flash@gmail.com>"', commands=('git',))
-    abbr('muse', '--author "muse-glimmer-30b-dspark<wes.mcclure+muse-glimmer-30b-dspark@gmail.com>"', commands=('git',))
+    abbr('gptoss', '--author "gptoss120b<wes.mcclure+gptoss120b@gmail.com>"', position="anywhere", commands=('git',))
+    abbr('qwen3', '--author "qwen3.6-35b-a3b<wes.mcclure+qwen3.6-35b-a3b@gmail.com>"', position="anywhere", commands=('git',))
+    abbr('agentworld', '--author "qwen-agentworld-35b-a3b<wes.mcclure+qwen-agentworld-35b-a3b@gmail.com>"', position="anywhere", commands=('git',))
+    abbr('codex', '--author "codex-gpt6<wes.mcclure+codex-gpt6@gmail.com>"', position="anywhere", commands=('git',))
+    abbr('deepseek', '--author "deepseek-v4-flash<wes.mcclure+deepseek-v4-flash@gmail.com>"', position="anywhere", commands=('git',))
+    abbr('muse', '--author "muse-glimmer-30b-dspark<wes.mcclure+muse-glimmer-30b-dspark@gmail.com>"', position="anywhere", commands=('git',))
     abbr('amend_n_gptoss', 'GIT_SEQUENCE_EDITOR=true git rebase -i --exec "git commit --amend --no-edit --author \\"gptoss120b<wes.mcclure+gptoss120b@gmail.com>\\"" HEAD~%', cursor_marker="%")
     abbr('amend_n_qwen3', 'GIT_SEQUENCE_EDITOR=true git rebase -i --exec "git commit --amend --no-edit --author \\"qwen3.6-35b-a3b<wes.mcclure+qwen3.6-35b-a3b@gmail.com>\\"" HEAD~%', cursor_marker="%")
     abbr('amend_n_agentworld', 'GIT_SEQUENCE_EDITOR=true git rebase -i --exec "git commit --amend --no-edit --author \\"qwen-agentworld-35b-a3b<wes.mcclure+qwen-agentworld-35b-a3b@gmail.com>\\"" HEAD~%', cursor_marker="%")
@@ -160,7 +198,7 @@ def register_git_abbreviations():
     abbr('amend_n_muse', 'GIT_SEQUENCE_EDITOR=true git rebase -i --exec "git commit --amend --no-edit --author \\"muse-glimmer-30b-dspark<wes.mcclure+muse-glimmer-30b-dspark@gmail.com>\\"" HEAD~%', cursor_marker="%")
     abbr('amend_last_msg', 'git commit --amend -m "%"', cursor_marker="%")
     abbr('yolo', 'git commit --all -m "%" && git push', cursor_marker="%")
-    abbr(re.compile('gptf?\\d*f?'), abbr_from_fish_function('_abbr_git_push_up_to'), cursor_marker="%")
+    abbr(re.compile('gptf?\\d*f?'), abbr_from_fish_function('_abbr_git_push_up_to'))
     abbr('grl', 'git reflog --pretty=reflog')
     abbr('grla', 'git reflog --all --pretty=reflog')
     abbr('gl', 'git log --color=always | line_numbers')
@@ -170,6 +208,18 @@ def register_git_abbreviations():
     abbr(re.compile('g\\d+'), abbr_from_fish_function('glX'))
     abbr('gst', 'git status')
     abbr('gstl', 'git status && echo && git_unpushed_commits')
+    abbr('-b', '--body-numbering', position="anywhere", commands=('nl',))
+    abbr('-d', '--section-delimiter', position="anywhere", commands=('nl',))
+    abbr('-f', '--footer-numbering', position="anywhere", commands=('nl',))
+    abbr('-h', '--header-numbering', position="anywhere", commands=('nl',))
+    abbr('-i', '--line-increment', position="anywhere", commands=('nl',))
+    abbr('-l', '--join-blank-lines', position="anywhere", commands=('nl',))
+    abbr('-n', '--number-format', position="anywhere", commands=('nl',))
+    abbr('-p', '--no-renumber', position="anywhere", commands=('nl',))
+    abbr('-s', '--number-separator', position="anywhere", commands=('nl',))
+    abbr('-v', '--starting-line-number', position="anywhere", commands=('nl',))
+    abbr('-w', '--number-width', position="anywhere", commands=('nl',))
+    abbr('pln', '| line_numbers', position="anywhere")
     abbr('glo', 'git_unpushed_commits')
     abbr('gup', 'git_unpushed_commits')
     abbr('gout', 'git_unpushed_commits')
@@ -228,3 +278,5 @@ def register_git_abbreviations():
     abbr('gg', "git grep -Ee '%' $(git rev-list --all)", cursor_marker="%")
     abbr('ggc', "git grep -C10 -Ee '%' $(git rev-list --all)", cursor_marker="%")
     abbr('ggf', "git grep --function-context -Ee '%' $(git rev-list --all)", cursor_marker="%")
+
+

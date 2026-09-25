@@ -132,11 +132,13 @@ def declaration(name, replacement, options):
 class FishMapping:
     fish_file: Path
     xonsh_module: Path
+    VALUE_SUBSTITUTIONS: dict[str | re.Pattern, str]|None = None
 
 def generate_wrapped(mapping: FishMapping, call_register: bool = False) -> str:
     function_name = "register_" + mapping.xonsh_module.with_suffix("").name
     return generate(
         mapping.fish_file,
+        mapping = mapping,
         title=f""
         f"generated from Fish",
         function_name=function_name,

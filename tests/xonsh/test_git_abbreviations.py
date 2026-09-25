@@ -6,9 +6,8 @@ ROOT = Path(__file__).parents[2]
 sys.path.insert(0, str(ROOT / ".config/xonsh/lib"))
 sys.path.insert(0, str(ROOT / "xonsh"))
 
-from generate_git_abbreviations import TARGET, generate  # noqa: E402
 from wes_abbreviations import AbbreviationContext, reset_registry  # noqa: E402
-import wes_git_abbreviations  # noqa: E402
+import wes_git  # noqa: E402
 from wes_git_functions import format_line_numbers  # noqa: E402
 
 
@@ -29,12 +28,12 @@ def context(text, *, command_path=(), command_position=None):
 
 def registry():
     result = reset_registry()
-    wes_git_abbreviations.register_git_abbreviations()
+    wes_git.register_wes_git() # TODO this now maps functions too, might interfere with other defined functions if not loaded in right order? I will fix that but then the tests here need to be updated for using generate_from_fish.py now
     return result
 
 
 def test_generated_git_module_is_in_sync_with_fish_source():
-    assert TARGET.read_text() == generate()
+    assert TARGET.read_text() == generate() # TODO  update/remove due to generate_from_fish.py migration
 
 
 def test_git_only_inventory_count_and_cursor_markers():
@@ -89,7 +88,7 @@ def test_regex_abbreviation_delegates_to_named_fish_function(monkeypatch):
         calls.append((function_name, token))
         return "@{12}"
 
-    monkeypatch.setattr(wes_git_abbreviations, "fish_function", fake_fish)
+    monkeypatch.setattr(wes_git, "fish_function", fake_fish)
     result, _ = registry().expand(
         context("git show reflog12", command_path=("git", "show"))
     )

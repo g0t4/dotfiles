@@ -7,11 +7,13 @@ import shlex
 from pathlib import Path
 from typing import Callable
 
+# from fish_to_xonsh_policy import FishMapping
+
 
 DeclarationFactory = Callable[[str, str, dict[str, str | bool]], str]
 
 
-def parse_abbreviation(line: str, VALUE_SUBSTITUTIONS:dict[str, str] = {}):
+def parse_abbreviation(line: str, VALUE_SUBSTITUTIONS:dict[str, str]|None = None):
     """Parse one Fish ``abbr`` declaration without losing Fish quoting."""
     # Fish accepts backslash-escaped single quotes inside single-quoted text;
     # POSIX shlex does not. Protect those legacy awk expressions while
@@ -50,16 +52,18 @@ def parse_abbreviation(line: str, VALUE_SUBSTITUTIONS:dict[str, str] = {}):
 
     name = str(options.get("add") or remaining.pop(0))
     replacement = " ".join(remaining)
-    for old, new in VALUE_SUBSTITUTIONS.items():
-        if type(old) == re.Pattern:
-            replacement = re.sub(old, new, replacement)
-        else:
-            replacement = replacement.replace(old, new)
+    if VALUE_SUBSTITUTIONS is not None:
+        for old, new in VALUE_SUBSTITUTIONS.items():
+            if type(old) == re.Pattern:
+                replacement = re.sub(old, new, replacement)
+            else:
+                replacement = replacement.replace(old, new)
     return name, replacement, options
 
 
 def generate(
     source: Path,
+    mapping: "FishMapping",
     *,
     title: str,
     function_name: str,
@@ -68,9 +72,10 @@ def generate(
         lambda _name, _replacement, _options: False
     ),
     deduplicated_names: frozenset[str] = frozenset(),
-    call_register: bool = False
+    call_register: bool = False,
 ) -> str:
     """Render one importable Xonsh module from a Fish source file."""
+    # print("gen mapping", mapping)
     declarations = []
     functions = []
     seen = set()
@@ -78,7 +83,7 @@ def generate(
         if "# fish-only" in line:
             continue
         if re.match(r"^\s*abbr(?:\s|$)", line):
-            parsed = parse_abbreviation(line)
+            parsed = parse_abbreviation(line, VALUE_SUBSTITUTIONS=mapping.VALUE_SUBSTITUTIONS)
             name, replacement, options = parsed
             identity = (name, replacement, tuple(sorted(options.items())))
             duplicate = name in deduplicated_names and identity in seen
