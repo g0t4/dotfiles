@@ -17,8 +17,8 @@ TARGET = ROOT / ".config/xonsh/lib/wes_git_abbreviations.py"
 VALUE_SUBSTITUTIONS = {
     '"$(_repo_root)"': "$(_repo_root)",
     "$GIT_FULLY_AUTO_REBASE": "GIT_SEQUENCE_EDITOR=true",
-    "$_unpushed_commits_without_last_pushed": "'HEAD@{push}..HEAD'",
     "$_unpushed_commits": "'HEAD@{push}~1..HEAD'",
+    "$_unpushed_commits_without_last_pushed": "'HEAD@{push}..HEAD'",
     r"\$(git rev-list --all)": "$(git rev-list --all)",
 }
 
