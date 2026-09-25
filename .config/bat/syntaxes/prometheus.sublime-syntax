@@ -1,0 +1,23 @@
+%YAML 1.2
+---
+name: Prometheus
+file_extensions:
+  - prom
+scope: source.prometheus
+
+contexts:
+  main:
+    - match: '^#\s+(HELP|TYPE)\b'
+      scope: comment.line.number-sign.prometheus
+
+    - match: '^[a-zA-Z_:][a-zA-Z0-9_:]*'
+      scope: entity.name.function.prometheus
+
+    - match: '[a-zA-Z_][a-zA-Z0-9_]*(?==)'
+      scope: variable.parameter.prometheus
+
+    - match: '"[^"]*"'
+      scope: string.quoted.double.prometheus
+
+    - match: '\b[-+]?(?:\d+(?:\.\d*)?|\.\d+)(?:[eE][-+]?\d+)?\b'
+      scope: constant.numeric.prometheus
