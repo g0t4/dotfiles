@@ -42,8 +42,6 @@ VALUE_SUBSTITUTIONS = {
 #
 #     name = str(options.get("add") or remaining.pop(0))
 #     replacement = " ".join(remaining)
-#     for old, new in VALUE_SUBSTITUTIONS.items():
-#         replacement = replacement.replace(old, new)
 #     return name, replacement, options
 #
 
@@ -78,7 +76,7 @@ def generate() -> str:
     declarations = []
     for _line_number, line in enumerate(SOURCE.read_text().splitlines(), 1):
         if line.startswith("abbr "):
-            declarations.append(declaration(*parse_abbreviation(line)))
+            declarations.append(declaration(*parse_abbreviation(line, VALUE_SUBSTITUTIONS)))
 
     header = '''\
 """Generated from fish/load_last_interactive_only/files-specific.fish."""
