@@ -61,9 +61,7 @@ def generate(
     deduplicated_names: frozenset[str] = frozenset(),
 ) -> str:
     """Render one importable Xonsh module from a Fish source file."""
-    declarations = [
-        "    wrap_fish_functions(XSH.aliases, FISH_FUNCTIONS)",
-    ]
+    declarations = []
     functions = []
     seen = set()
     for line_number, line in enumerate(source.read_text().splitlines(), 1):
@@ -82,9 +80,7 @@ def generate(
             functions.append(function_match.group(1))
 
     declaration_text = "\n".join(declarations)
-    stdlib_imports = [
-        "from xonsh.built_ins import XSH",
-    ]
+    stdlib_imports = []
     if "re.compile" in declaration_text:
         stdlib_imports.append("import re")
     platform_constants = []
@@ -110,7 +106,6 @@ def generate(
             "abbr_from_fish_function",
             "platform_abbreviation",
             "unsupported_abbreviation",
-            "wrap_fish_functions",
         )
         if name in declaration_text
     ]
@@ -126,7 +121,9 @@ def generate(
 
 from __future__ import annotations
 
+from xonsh.built_ins import XSH
 {stdlib_imports_text}\
+from wes_fish_migration import wrap_fish_functions
 from wes_abbreviations import abbr
 {bridge_import}
 
@@ -137,5 +134,6 @@ FISH_FUNCTIONS = (
 
 
 def {function_name}():
+    wrap_fish_functions(XSH.aliases, FISH_FUNCTIONS)
 {declaration_text}
 '''

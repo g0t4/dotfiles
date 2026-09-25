@@ -5,11 +5,11 @@ from __future__ import annotations
 from xonsh.built_ins import XSH
 import re
 
+from wes_fish_migration import wrap_fish_functions
 from wes_abbreviations import abbr
 from wes_fish_migration import (
     abbr_from_fish_function,
     unsupported_abbreviation,
-    wrap_fish_functions,
 )
 
 

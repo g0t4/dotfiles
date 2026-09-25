@@ -2,15 +2,15 @@
 
 from __future__ import annotations
 
-import platform
 from xonsh.built_ins import XSH
+import platform
 import re
 
+from wes_fish_migration import wrap_fish_functions
 from wes_abbreviations import abbr
 from wes_fish_migration import (
     abbr_from_fish_function,
     platform_abbreviation,
-    wrap_fish_functions,
 )
 
 
