@@ -47,7 +47,7 @@ SKIPPED_FISH_FUNCTIONS = {
     "wcl",
 }
 
-def fish_abbreviation(function_name):
+def abbr_from_fish_function(function_name):
     def expand(context, _match):
         reason = UNSUPPORTED_FISH_FUNCTIONS.get(function_name)
         if reason:

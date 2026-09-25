@@ -102,7 +102,7 @@ def declaration(line_number, name, replacement, options):
     elif platform is not None:
         replacement_expression = f"platform_abbreviation{platform!r}"
     elif "function" in options:
-        replacement_expression = f"fish_abbreviation({options['function']!r})"
+        replacement_expression = f"abbr_from_fish_function({options['function']!r})"
     else:
         replacement = matching_rule(MIGRATION_REPLACEMENTS, name, replacement, options, replacement)
         for old, new in REPLACEMENTS.items():

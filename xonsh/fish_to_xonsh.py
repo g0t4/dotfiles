@@ -103,7 +103,7 @@ def generate(
     bridge_names = [
         name
         for name in (
-            "fish_abbreviation",
+            "abbr_from_fish_function",
             "platform_abbreviation",
             "unsupported_abbreviation",
         )

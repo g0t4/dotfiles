@@ -33,7 +33,7 @@ def _declaration(line_number: int, name: str, replacement: str, options: dict) -
             "'pkill -if \"python.*3.13.5\"')"
         )
     elif "function" in options:
-        replacement_expression = f"fish_abbreviation({options['function']!r})"
+        replacement_expression = f"abbr_from_fish_function({options['function']!r})"
     else:
         replacement_expression = repr(replacement)
 
@@ -87,7 +87,7 @@ def generate() -> str:
 from __future__ import annotations
 
 from wes_abbreviations import abbr
-from wes_fish_migration import fish_abbreviation, platform_abbreviation
+from wes_fish_migration import abbr_from_fish_function, platform_abbreviation
 
 
 FISH_FUNCTIONS = (
