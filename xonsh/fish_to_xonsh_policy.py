@@ -89,6 +89,8 @@ PLATFORM_REPLACEMENTS = {
 MIGRATION_REPLACEMENTS = {
     "agr": "_abbr_list --any '%'",
     "agrs": "_abbr_list --prefix '%'",
+    "py_profile_import_time": '$PYTHONPROFILEIMPORTTIME=1 python -c "from sentence_transformers import SentenceTransformer"',
+    "vea": "source .venv*/bin/activate.xsh",
 }
 
 

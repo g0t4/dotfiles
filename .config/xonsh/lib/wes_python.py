@@ -34,7 +34,7 @@ def register_wes_python():
         '__ptw_one',
     )
     wrap_fish_functions(XSH.aliases, fish_funcs)
-    abbr('py_profile_import_time', 'PYTHONPROFILEIMPORTTIME=1 python -c from sentence_transformers import SentenceTransformer')
+    abbr('py_profile_import_time', '$PYTHONPROFILEIMPORTTIME=1 python -c "from sentence_transformers import SentenceTransformer"')
     abbr('ipy', 'ipython3')
     abbr('py', 'ipython3')
     abbr('pyt', 'python3')
@@ -48,7 +48,7 @@ def register_wes_python():
     abbr('veinit', 'uv venv')
     abbr('veinit12', 'uv venv --python 3.12')
     abbr('ved', 'deactivate')
-    abbr('vea', 'source .venv*/bin/activate.fish')
+    abbr('vea', 'source .venv*/bin/activate.xsh')
     abbr('pipir', 'uv add -r requirements.txt && rm requirements.txt # REMINDER TO MIGRATE to pyproject.toml + uv')
     abbr('uva', 'uv_add')
     abbr('uvau', 'uv add --upgrade')
