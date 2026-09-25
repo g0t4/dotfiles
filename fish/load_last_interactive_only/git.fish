@@ -454,8 +454,8 @@ end
 
 #
 # w/ patch (diff)
-abbr glp "git log --patch $_unpunched_commits"
-abbr glpf "git log --pretty=full --patch $_unpunched_commits"
+abbr glp "git log --patch $_unpushed_commits"
+abbr glpf "git log --pretty=full --patch $_unpushed_commits"
 abbr --regex 'glpf?\d+' --function glp_x _glp_x
 function glp_x
     set command_line $argv[1]
