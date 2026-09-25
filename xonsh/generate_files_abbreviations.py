@@ -48,7 +48,7 @@ def declaration(name, replacement, options):
 
 def generate() -> str:
     declarations = []
-    for _line_number, line in enumerate(SOURCE.read_text().splitlines(), 1):
+    for line in SOURCE.read_text().splitlines():
         if line.startswith("abbr "):
             declarations.append(declaration(*parse_abbreviation(line, VALUE_SUBSTITUTIONS)))
 
