@@ -74,7 +74,7 @@ def generate(
     declarations = []
     functions = []
     seen = set()
-    for line_number, line in enumerate(source.read_text().splitlines(), 1):
+    for line in source.read_text().splitlines():
         if "# fish-only" in line:
             continue
         if re.match(r"^\s*abbr(?:\s|$)", line):

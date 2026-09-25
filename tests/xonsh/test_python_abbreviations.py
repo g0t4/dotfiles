@@ -39,7 +39,7 @@ def test_generated_module_is_in_sync_with_fish_source():
 
 def test_every_fish_abbreviation_is_generated_with_duplicate_triggers_replaced():
     source_names = []
-    for line_number, line in enumerate(SOURCE.read_text().splitlines(), 1):
+    for line in SOURCE.read_text().splitlines():
         if re.match(r"^\s*abbr(?:\s|$)", line):
             from fish_to_xonsh import parse_abbreviation
 
