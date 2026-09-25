@@ -13,7 +13,6 @@ from fish_to_xonsh_policy import (
     should_skip,
 )
 
-
 ROOT = Path(__file__).resolve().parents[1]
 FISH_DIR = ROOT / "fish/load_last_interactive_only"
 XONSH_DIR = ROOT / ".config/xonsh/lib"
@@ -28,6 +27,10 @@ MAPPINGS = (
 )
 
 
-if __name__ == "__main__":
+def generate_all():
     for m in MAPPINGS:
         m.xonsh_module.write_text(generate_wrapped(m, call_register=False))
+
+
+if __name__ == "__main__":
+    generate_all()
