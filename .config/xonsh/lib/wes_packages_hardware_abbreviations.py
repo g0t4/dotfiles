@@ -15,6 +15,9 @@ from wes_fish_migration import (
     unsupported_abbreviation,
 )
 
+# FYI defining this globally clobbers the value for all other modules that came before... b/c there's only one namespace...
+# SO, keep in mind, if you try to check this later it will have FISH_FUNCTIONS values from the last module loaded that defined it...
+# IOTW only call register immediately and use it right away... IDEALLY lets just inline the list into register function
 FISH_FUNCTIONS = (
     'dpkg_L_files',
     'dpkg_L_tree',
@@ -249,3 +252,5 @@ def register_wes_packages_hardware_abbreviations():
     abbr('fdisk_details', 'sudo fdisk -lx')
     abbr('findmnt_fstab', 'findmnt --fstab')
     abbr('findmnt_verify', 'findmnt --verify --verbose')
+
+

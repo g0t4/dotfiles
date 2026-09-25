@@ -15,6 +15,9 @@ from wes_fish_migration import (
     unsupported_abbreviation,
 )
 
+# FYI defining this globally clobbers the value for all other modules that came before... b/c there's only one namespace...
+# SO, keep in mind, if you try to check this later it will have FISH_FUNCTIONS values from the last module loaded that defined it...
+# IOTW only call register immediately and use it right away... IDEALLY lets just inline the list into register function
 FISH_FUNCTIONS = (
     'ps_dump_env_vars_when_process_started',
     'pstreeX',
@@ -103,3 +106,5 @@ def register_wes_processes_abbreviations():
     abbr('ss_listening_ports', 'sudo ss -tunl')
     abbr('ss_notlistening_ports', 'sudo ss -tun')
     abbr('ss_all_ports', 'sudo ss -tuna')
+
+
