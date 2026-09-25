@@ -61,7 +61,9 @@ def generate(
     deduplicated_names: frozenset[str] = frozenset(),
 ) -> str:
     """Render one importable Xonsh module from a Fish source file."""
-    declarations = []
+    declarations = [
+        "    wrap_fish_functions(XSH.aliases, FISH_FUNCTIONS)",
+    ]
     functions = []
     seen = set()
     for line_number, line in enumerate(source.read_text().splitlines(), 1):
@@ -79,7 +81,6 @@ def generate(
         if function_match:
             functions.append(function_match.group(1))
 
-    declarations.append("    wrap_fish_functions(XSH.aliases, FISH_FUNCTIONS)")
     declaration_text = "\n".join(declarations)
     stdlib_imports = [
         "from xonsh.built_ins import XSH",

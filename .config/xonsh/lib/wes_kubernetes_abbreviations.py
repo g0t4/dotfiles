@@ -23,6 +23,7 @@ FISH_FUNCTIONS = (
 
 
 def register_wes_kubernetes_abbreviations():
+    wrap_fish_functions(XSH.aliases, FISH_FUNCTIONS)
     abbr('k3s', 'sudo k3s')
     abbr('k3dls', 'k3d cluster list')
     abbr('k3dcreate', 'k3d cluster create')
@@ -207,4 +208,3 @@ def register_wes_kubernetes_abbreviations():
     abbr('hun', 'helm uninstall')
     abbr('hup', 'helm upgrade')
     abbr('hver', 'helm version')
-    wrap_fish_functions(XSH.aliases, FISH_FUNCTIONS)

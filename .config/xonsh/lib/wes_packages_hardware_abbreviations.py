@@ -41,6 +41,7 @@ FISH_FUNCTIONS = (
 
 
 def register_wes_packages_hardware_abbreviations():
+    wrap_fish_functions(XSH.aliases, FISH_FUNCTIONS)
     abbr('apts', 'apt search')
     abbr('apti', 'sudo apt install')
     abbr('aptu', 'sudo apt update')
@@ -249,4 +250,3 @@ def register_wes_packages_hardware_abbreviations():
     abbr('fdisk_details', 'sudo fdisk -lx')
     abbr('findmnt_fstab', 'findmnt --fstab')
     abbr('findmnt_verify', 'findmnt --verify --verbose')
-    wrap_fish_functions(XSH.aliases, FISH_FUNCTIONS)

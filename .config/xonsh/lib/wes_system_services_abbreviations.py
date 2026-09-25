@@ -17,6 +17,7 @@ FISH_FUNCTIONS = (
 
 
 def register_wes_system_services_abbreviations():
+    wrap_fish_functions(XSH.aliases, FISH_FUNCTIONS)
     abbr('help', 'help_online')
     abbr('lcl', 'launchctl list')
     abbr('lcp', 'launchctl print system')
@@ -108,4 +109,3 @@ def register_wes_system_services_abbreviations():
     abbr('ctrrn', 'sudo ctr run -t --rm --net-host docker.io/library/nginx:latest web')
     abbr('containerdc', 'containerd config dump | bat -l toml')
     abbr('containerdcdefault', 'containerd config default | bat -l toml')
-    wrap_fish_functions(XSH.aliases, FISH_FUNCTIONS)

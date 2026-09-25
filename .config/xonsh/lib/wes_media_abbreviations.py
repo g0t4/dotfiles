@@ -63,6 +63,7 @@ FISH_FUNCTIONS = (
 
 
 def register_wes_media_abbreviations():
+    wrap_fish_functions(XSH.aliases, FISH_FUNCTIONS)
     abbr('_150', abbr_from_fish_function('abbr_thumbnail_check'))
     abbr('_1', abbr_from_fish_function('abbr_check'))
     abbr('_2', abbr_from_fish_function('abbr_30fps'))
@@ -113,4 +114,3 @@ def register_wes_media_abbreviations():
     abbr('spkilltray', 'echo disable tray app in partner properties file')
     abbr('splog', 'cat ~/Library/ScreenPal-v3/app-0.log')
     abbr('splogrm', 'rm ~/Library/ScreenPal-v3/app-0.log')
-    wrap_fish_functions(XSH.aliases, FISH_FUNCTIONS)

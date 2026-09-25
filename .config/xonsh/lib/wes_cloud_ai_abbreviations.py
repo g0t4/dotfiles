@@ -32,6 +32,7 @@ FISH_FUNCTIONS = (
 
 
 def register_wes_cloud_ai_abbreviations():
+    wrap_fish_functions(XSH.aliases, FISH_FUNCTIONS)
     abbr('actw', abbr_from_fish_function('actw_expanded'))
     abbr('azal', 'az account list --output table')
     abbr('azall', 'az account list-locations --output table')
@@ -187,4 +188,3 @@ def register_wes_cloud_ai_abbreviations():
     abbr('-h', '--help', position="anywhere", commands=('nix',))
     abbr('nixh', 'nix --help')
     abbr('nixpls', 'nix profile list')
-    wrap_fish_functions(XSH.aliases, FISH_FUNCTIONS)

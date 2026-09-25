@@ -33,6 +33,7 @@ FISH_FUNCTIONS = (
 
 
 def register_wes_processes_abbreviations():
+    wrap_fish_functions(XSH.aliases, FISH_FUNCTIONS)
     abbr('els', 'env | bat --language dotenv -p')
     abbr('egr', 'env | rg_grep -i ')
     abbr('envb', 'env | bat -l env')
@@ -103,4 +104,3 @@ def register_wes_processes_abbreviations():
     abbr('ss_listening_ports', 'sudo ss -tunl')
     abbr('ss_notlistening_ports', 'sudo ss -tun')
     abbr('ss_all_ports', 'sudo ss -tuna')
-    wrap_fish_functions(XSH.aliases, FISH_FUNCTIONS)
