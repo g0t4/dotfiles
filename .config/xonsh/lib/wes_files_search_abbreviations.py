@@ -7,19 +7,10 @@ import re
 
 from wes_abbreviations import AbbreviationResult, abbr
 from wes_fish_bridge import UnsupportedFishFunctionError, fish_function
-from wes_fish_migration import abbr_from_fish_function
+from wes_fish_migration import abbr_from_fish_function, unsupported_abbreviation
 
 
 FIND_COMMAND = "gfind" if platform.system() == "Darwin" else "find"
-
-
-def _unsupported_abbreviation(function_name, reason):
-    def expand(_context, _match):
-        raise UnsupportedFishFunctionError(
-            f"{function_name}: TODO SKIPPED_MIGRATION: {reason}"
-        )
-
-    return expand
 
 
 def _expand_fd_depth(context, _match):
@@ -71,8 +62,8 @@ def register_files_search_abbreviations():
     abbr('mdimport_dump_schema', "mdimport -X | rg_grep -i '%'", cursor_marker="%")
     abbr('mdls_item_attrs', "mdls -plist - '%' | bat -l xml", cursor_marker="%")
     abbr('md_diagnose', 'sudo mddiagnose')
-    abbr('mdo', _unsupported_abbreviation('md_open', 'changes directory from an interactive fzf picker'))
-    abbr('mdcd', _unsupported_abbreviation('mdfind_cd_dir', 'changes directory from an interactive fzf picker'))
+    abbr('mdo', unsupported_abbreviation('md_open', 'changes directory from an interactive fzf picker'))
+    abbr('mdcd', unsupported_abbreviation('mdfind_cd_dir', 'changes directory from an interactive fzf picker'))
     abbr('find', FIND_COMMAND)
     abbr('finde', f"{FIND_COMMAND} . -executable")
     abbr('findud', f"{FIND_COMMAND} '%' -user wesdemos", cursor_marker="%")

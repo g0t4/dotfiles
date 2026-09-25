@@ -53,8 +53,8 @@ def declaration(name, replacement, options):
         "list_filetype_extensions": repr(
             "fd --type file | awk -F. 'NF > 1 {print $NF}' | sort | uniq -c | sort"
         ),
-        "mdo": "_unsupported_abbreviation('md_open', 'changes directory from an interactive fzf picker')",
-        "mdcd": "_unsupported_abbreviation('mdfind_cd_dir', 'changes directory from an interactive fzf picker')",
+        "mdo": "unsupported_abbreviation('md_open', 'changes directory from an interactive fzf picker')",
+        "mdcd": "unsupported_abbreviation('mdfind_cd_dir', 'changes directory from an interactive fzf picker')",
     }
     functions = {
         "_abbr_expand_fdX": "_expand_fd_depth",
@@ -103,19 +103,10 @@ import re
 
 from wes_abbreviations import AbbreviationResult, abbr
 from wes_fish_bridge import UnsupportedFishFunctionError, fish_function
-from wes_fish_migration import abbr_from_fish_function
+from wes_fish_migration import abbr_from_fish_function, unsupported_abbreviation
 
 
 FIND_COMMAND = "gfind" if platform.system() == "Darwin" else "find"
-
-
-def _unsupported_abbreviation(function_name, reason):
-    def expand(_context, _match):
-        raise UnsupportedFishFunctionError(
-            f"{function_name}: TODO SKIPPED_MIGRATION: {reason}"
-        )
-
-    return expand
 
 
 def _expand_fd_depth(context, _match):
