@@ -32,7 +32,7 @@ def matching_rule(rules, name, replacement, options, default=None):
     return rules.get(name, default)
 
 
-SKIPPED_ABBREVIATIONS = {
+_SKIPPED_ABBREVIATIONS = {
     # Linux alternatives folded into platform-aware declarations.
     AbbreviationSelector("pkill", replacement="pkill -9 -if"),
     AbbreviationSelector("pkillu", replacement="pkill -9 -U $USER -if"),
@@ -44,23 +44,23 @@ SKIPPED_ABBREVIATIONS = {
 
 # Keep one copy of these identical declarations across Fish platform branches
 # (or accidental duplicates). No occurrence numbers or source positions needed.
-DEDUPLICATED_ABBREVIATIONS = {"pgrep", "pgrepu", "hfmls_ggml_org"}
+_DEDUPLICATED_ABBREVIATIONS = {"pgrep", "pgrepu", "hfmls_ggml_org"}
 
 
 def should_skip(name, replacement, options):
     return any(
         selector.matches(name, replacement, options)
         if isinstance(selector, AbbreviationSelector) else selector == name
-        for selector in SKIPPED_ABBREVIATIONS
+        for selector in _SKIPPED_ABBREVIATIONS
     )
 
 
-UNSUPPORTED_ABBREVIATIONS = {
+_UNSUPPORTED_ABBREVIATIONS = {
     "pPATH": "uses Fish loop syntax to print the current shell PATH",
     "java19": "changes the current shell PATH",
 }
 
-REPLACEMENTS = {
+_REPLACEMENTS = {
     "$fish_pid": "@(os.getpid())",
     '"$(_repo_root)"': "$(_repo_root)",
     "$sed_cmd": "$XONSH_SED_COMMAND",
@@ -72,13 +72,13 @@ REPLACEMENTS = {
     "$sse_jq": "sed -E 's/^[^{]*//' | jq",
 }
 
-NAME_OVERRIDES = {
+_NAME_OVERRIDES = {
     # The Fish source accidentally declares man7 three times; preserve intent.
     AbbreviationSelector("man7", replacement="$man_cmd 8"): "man8",
     AbbreviationSelector("man7", replacement="$man_cmd 9"): "man9",
 }
 
-PLATFORM_REPLACEMENTS = {
+_PLATFORM_REPLACEMENTS = {
     "pkill": ("pkill -9 -ilf", "pkill -9 -if"),
     "pkillu": ("pkill -9 -U $USER -ilf", "pkill -9 -U $USER -if"),
     "lsusb": ("system_profiler SPUSBDataType", "lsusb -tv"),
@@ -86,7 +86,7 @@ PLATFORM_REPLACEMENTS = {
 
 # Fish-native implementations whose Xonsh ports intentionally use structured
 # helpers instead of reproducing the source command literally.
-MIGRATION_REPLACEMENTS = {
+_MIGRATION_REPLACEMENTS = {
     "agr": "_abbr_list --any '%'",
     "agrs": "_abbr_list --prefix '%'",
     "py_profile_import_time": '$PYTHONPROFILEIMPORTTIME=1 python -c "from sentence_transformers import SentenceTransformer"',
@@ -95,10 +95,10 @@ MIGRATION_REPLACEMENTS = {
 
 
 def declaration(name, replacement, options):
-    name = matching_rule(NAME_OVERRIDES, name, replacement, options, name)
+    name = matching_rule(_NAME_OVERRIDES, name, replacement, options, name)
     trigger = f"re.compile({options['regex']!r})" if "regex" in options else repr(name)
-    unsupported = matching_rule(UNSUPPORTED_ABBREVIATIONS, name, replacement, options)
-    platform = matching_rule(PLATFORM_REPLACEMENTS, name, replacement, options)
+    unsupported = matching_rule(_UNSUPPORTED_ABBREVIATIONS, name, replacement, options)
+    platform = matching_rule(_PLATFORM_REPLACEMENTS, name, replacement, options)
     if unsupported is not None:
         replacement_expression = (
             f"unsupported_abbreviation({name!r}, "
@@ -109,8 +109,8 @@ def declaration(name, replacement, options):
     elif "function" in options:
         replacement_expression = f"abbr_from_fish_function({options['function']!r})"
     else:
-        replacement = matching_rule(MIGRATION_REPLACEMENTS, name, replacement, options, replacement)
-        for old, new in REPLACEMENTS.items():
+        replacement = matching_rule(_MIGRATION_REPLACEMENTS, name, replacement, options, replacement)
+        for old, new in _REPLACEMENTS.items():
             replacement = replacement.replace(old, new)
         replacement_expression = repr(replacement)
     arguments = [trigger, replacement_expression]
@@ -144,6 +144,6 @@ def generate_wrapped(mapping: FishMapping, call_register: bool = False) -> str:
         function_name=function_name,
         declaration_factory=declaration,
         should_skip=should_skip,
-        deduplicated_names=frozenset(DEDUPLICATED_ABBREVIATIONS),
+        deduplicated_names=frozenset(_DEDUPLICATED_ABBREVIATIONS),
         call_register=call_register,
     )

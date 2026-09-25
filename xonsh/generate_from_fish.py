@@ -7,7 +7,6 @@ from pathlib import Path
 import re
 
 from fish_to_xonsh_policy import (
-    DEDUPLICATED_ABBREVIATIONS,
     FishMapping,
     declaration,
     generate_wrapped,
