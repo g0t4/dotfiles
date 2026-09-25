@@ -1,3 +1,3 @@
-from wes_system_services_abbreviations import register_wes_system_services_abbreviations
+from wes_system_services import register_wes_system_services
 
-register_wes_system_services_abbreviations()
+register_wes_system_services()

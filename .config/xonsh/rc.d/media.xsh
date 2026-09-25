@@ -1,3 +1,3 @@
-from wes_media_abbreviations import register_wes_media_abbreviations
+from wes_media import register_wes_media
 
-register_wes_media_abbreviations()
+register_wes_media()

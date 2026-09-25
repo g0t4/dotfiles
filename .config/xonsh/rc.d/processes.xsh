@@ -4,11 +4,11 @@ from wes_filetype_abbreviations import (
     build_abbrs_for_filetype,
     register_filetype_abbreviations,
 )
-from wes_processes_abbreviations import register_wes_processes_abbreviations
+from wes_processes import register_wes_processes
 
 
 $XONSH_SED_COMMAND = "gsed" if platform.system() == "Darwin" else "sed"
-register_wes_processes_abbreviations()
+register_wes_processes()
 register_filetype_abbreviations(
     sed_command=$XONSH_SED_COMMAND
 )
