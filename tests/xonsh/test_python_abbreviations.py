@@ -27,7 +27,7 @@ def context(token, *, command_path=(), command_position=True):
 
 
 def registry():
-    generated = importlib.import_module("wes_python_abbreviations")
+    generated = importlib.import_module("wes_python")
     result = reset_registry()
     generated.register_python()
     return result
@@ -85,7 +85,7 @@ def test_py_kill_preserves_platform_specific_flags():
 
 
 def test_function_inventory_and_dynamic_ptw_expansion():
-    generated = importlib.import_module("wes_python_abbreviations")
+    generated = importlib.import_module("wes_python")
     assert len(generated.FISH_FUNCTIONS) == 14
     assert "uv_add" in generated.FISH_FUNCTIONS
     assert "apply_patch_multi" in generated.FISH_FUNCTIONS

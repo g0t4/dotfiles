@@ -13,7 +13,7 @@ from xonsh.completers.tools import RichCompletion, contextual_command_completer
 from xonsh.dirstack import cd as _xonsh_cd
 
 from wes_fish_migration import wrap_fish_functions
-from wes_python_abbreviations import FISH_FUNCTIONS, register_python
+from wes_python import FISH_FUNCTIONS, register_python
 from wes_python_functions import run_wcl, wcl_completion_candidates
 
 

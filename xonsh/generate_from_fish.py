@@ -25,6 +25,7 @@ MAPPINGS = (
     FishMapping(FISH_DIR / "media-specific.fish", XONSH_DIR / "wes_media.py"),
     FishMapping(FISH_DIR / "packages-hardware-specific.fish", XONSH_DIR / "wes_packages_hardware.py"),
     FishMapping(FISH_DIR / "dotnet.fish", XONSH_DIR / "wes_dotnet.py"),
+    FishMapping(FISH_DIR / "python-specific.fish", XONSH_DIR / "wes_python.py"),
 )
 
 
