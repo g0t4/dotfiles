@@ -15,11 +15,10 @@ from wes_fish_migration import (
     unsupported_abbreviation,
 )
 
-# FYI defining this globally clobbers the value for all other modules that came before... b/c there's only one namespace...
-# SO, keep in mind, if you try to check this later it will have FISH_FUNCTIONS values from the last module loaded that defined it...
-# IOTW only call register immediately and use it right away... IDEALLY lets just inline the list into register function
-FISH_FUNCTIONS = (
-    'ps_dump_env_vars_when_process_started',
+
+def register_wes_processes_abbreviations():
+    FISH_FUNCTIONS = (
+        'ps_dump_env_vars_when_process_started',
     'pstreeX',
     'pstree',
     'build_abbrs_for_filetype',
@@ -31,10 +30,7 @@ FISH_FUNCTIONS = (
     'custom-kill-command-word',
     'toggle-grc',
     'toggle-git_commit_command',
-)
-
-
-def register_wes_processes_abbreviations():
+    )
     wrap_fish_functions(XSH.aliases, FISH_FUNCTIONS)
     abbr('els', 'env | bat --language dotenv -p')
     abbr('egr', 'env | rg_grep -i ')

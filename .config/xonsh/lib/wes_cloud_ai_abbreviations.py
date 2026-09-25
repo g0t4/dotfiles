@@ -15,11 +15,10 @@ from wes_fish_migration import (
     unsupported_abbreviation,
 )
 
-# FYI defining this globally clobbers the value for all other modules that came before... b/c there's only one namespace...
-# SO, keep in mind, if you try to check this later it will have FISH_FUNCTIONS values from the last module loaded that defined it...
-# IOTW only call register immediately and use it right away... IDEALLY lets just inline the list into register function
-FISH_FUNCTIONS = (
-    'actw_expanded',
+
+def register_wes_cloud_ai_abbreviations():
+    FISH_FUNCTIONS = (
+        'actw_expanded',
     'rg_cached_models',
     'ols_qwen_debug',
     'ols_qwen',
@@ -34,10 +33,7 @@ FISH_FUNCTIONS = (
     'test_vllm_v1_completions_streaming',
     'test_vllm_v1_completions',
     'test_vllm_v1_completions_raw_text',
-)
-
-
-def register_wes_cloud_ai_abbreviations():
+    )
     wrap_fish_functions(XSH.aliases, FISH_FUNCTIONS)
     abbr('actw', abbr_from_fish_function('actw_expanded'))
     abbr('azal', 'az account list --output table')
