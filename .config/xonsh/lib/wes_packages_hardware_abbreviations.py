@@ -3,12 +3,14 @@
 from __future__ import annotations
 
 import platform
+from xonsh.built_ins import XSH
 import re
 
 from wes_abbreviations import abbr
 from wes_fish_migration import (
     abbr_from_fish_function,
     platform_abbreviation,
+    wrap_fish_functions,
 )
 
 
@@ -247,3 +249,4 @@ def register_wes_packages_hardware_abbreviations():
     abbr('fdisk_details', 'sudo fdisk -lx')
     abbr('findmnt_fstab', 'findmnt --fstab')
     abbr('findmnt_verify', 'findmnt --verify --verbose')
+    wrap_fish_functions(XSH.aliases, FISH_FUNCTIONS)

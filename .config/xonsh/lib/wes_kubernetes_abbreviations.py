@@ -2,9 +2,12 @@
 
 from __future__ import annotations
 
+from xonsh.built_ins import XSH
+
 from wes_abbreviations import abbr
 from wes_fish_migration import (
     abbr_from_fish_function,
+    wrap_fish_functions,
 )
 
 
@@ -204,3 +207,4 @@ def register_wes_kubernetes_abbreviations():
     abbr('hun', 'helm uninstall')
     abbr('hup', 'helm upgrade')
     abbr('hver', 'helm version')
+    wrap_fish_functions(XSH.aliases, FISH_FUNCTIONS)

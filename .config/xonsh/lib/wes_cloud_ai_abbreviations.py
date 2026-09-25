@@ -2,11 +2,13 @@
 
 from __future__ import annotations
 
+from xonsh.built_ins import XSH
 import re
 
 from wes_abbreviations import abbr
 from wes_fish_migration import (
     abbr_from_fish_function,
+    wrap_fish_functions,
 )
 
 
@@ -185,3 +187,4 @@ def register_wes_cloud_ai_abbreviations():
     abbr('-h', '--help', position="anywhere", commands=('nix',))
     abbr('nixh', 'nix --help')
     abbr('nixpls', 'nix profile list')
+    wrap_fish_functions(XSH.aliases, FISH_FUNCTIONS)

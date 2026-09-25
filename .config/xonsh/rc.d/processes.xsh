@@ -1,18 +1,10 @@
-"""Process inspection, search, and tracing abbreviations."""
-
-from xonsh.built_ins import XSH
-
-aliases = XSH.aliases
-
-import os
 import platform
 
 from wes_filetype_abbreviations import (
     build_abbrs_for_filetype,
     register_filetype_abbreviations,
 )
-from wes_fish_migration import wrap_fish_functions
-from wes_processes_abbreviations import FISH_FUNCTIONS, register_wes_processes_abbreviations
+from wes_processes_abbreviations import register_wes_processes_abbreviations
 
 
 $XONSH_SED_COMMAND = "gsed" if platform.system() == "Darwin" else "sed"
@@ -20,7 +12,6 @@ register_wes_processes_abbreviations()
 register_filetype_abbreviations(
     sed_command=$XONSH_SED_COMMAND
 )
-wrap_fish_functions(aliases, FISH_FUNCTIONS)
 
 
 def _build_abbrs_for_filetype_alias(args, **_):

@@ -2,12 +2,14 @@
 
 from __future__ import annotations
 
+from xonsh.built_ins import XSH
 import re
 
 from wes_abbreviations import abbr
 from wes_fish_migration import (
     abbr_from_fish_function,
     unsupported_abbreviation,
+    wrap_fish_functions,
 )
 
 
@@ -111,3 +113,4 @@ def register_wes_media_abbreviations():
     abbr('spkilltray', 'echo disable tray app in partner properties file')
     abbr('splog', 'cat ~/Library/ScreenPal-v3/app-0.log')
     abbr('splogrm', 'rm ~/Library/ScreenPal-v3/app-0.log')
+    wrap_fish_functions(XSH.aliases, FISH_FUNCTIONS)

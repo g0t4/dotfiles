@@ -2,7 +2,12 @@
 
 from __future__ import annotations
 
+from xonsh.built_ins import XSH
+
 from wes_abbreviations import abbr
+from wes_fish_migration import (
+    wrap_fish_functions,
+)
 
 
 FISH_FUNCTIONS = (
@@ -103,3 +108,4 @@ def register_wes_system_services_abbreviations():
     abbr('ctrrn', 'sudo ctr run -t --rm --net-host docker.io/library/nginx:latest web')
     abbr('containerdc', 'containerd config dump | bat -l toml')
     abbr('containerdcdefault', 'containerd config default | bat -l toml')
+    wrap_fish_functions(XSH.aliases, FISH_FUNCTIONS)

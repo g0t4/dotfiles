@@ -79,8 +79,11 @@ def generate(
         if function_match:
             functions.append(function_match.group(1))
 
+    declarations.append("    wrap_fish_functions(XSH.aliases, FISH_FUNCTIONS)")
     declaration_text = "\n".join(declarations)
-    stdlib_imports = []
+    stdlib_imports = [
+        "from xonsh.built_ins import XSH",
+    ]
     if "re.compile" in declaration_text:
         stdlib_imports.append("import re")
     platform_constants = []
@@ -106,6 +109,7 @@ def generate(
             "abbr_from_fish_function",
             "platform_abbreviation",
             "unsupported_abbreviation",
+            "wrap_fish_functions",
         )
         if name in declaration_text
     ]

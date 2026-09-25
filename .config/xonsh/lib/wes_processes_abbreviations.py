@@ -3,12 +3,14 @@
 from __future__ import annotations
 
 import platform
+from xonsh.built_ins import XSH
 import re
 
 from wes_abbreviations import abbr
 from wes_fish_migration import (
     abbr_from_fish_function,
     platform_abbreviation,
+    wrap_fish_functions,
 )
 
 
@@ -101,3 +103,4 @@ def register_wes_processes_abbreviations():
     abbr('ss_listening_ports', 'sudo ss -tunl')
     abbr('ss_notlistening_ports', 'sudo ss -tun')
     abbr('ss_all_ports', 'sudo ss -tuna')
+    wrap_fish_functions(XSH.aliases, FISH_FUNCTIONS)

@@ -1,16 +1,6 @@
-"""Cloud, local-model, logging, and structured-data abbreviations."""
-
-from xonsh.built_ins import XSH
-
-aliases = XSH.aliases
-
-from wes_cloud_ai_abbreviations import FISH_FUNCTIONS, register_wes_cloud_ai_abbreviations
-from wes_fish_migration import wrap_fish_functions
-
+from wes_cloud_ai_abbreviations import register_wes_cloud_ai_abbreviations
 
 register_wes_cloud_ai_abbreviations()
-wrap_fish_functions(aliases, FISH_FUNCTIONS)
-
 
 # TODO SKIPPED_MIGRATION: per-file devtools log abbreviations generated from
 # ~/.local/share/devtools/*.log at Fish startup.
