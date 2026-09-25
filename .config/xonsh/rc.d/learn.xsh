@@ -49,6 +49,7 @@ def wes_command_not_found(cmd, **kwargs):
 @events.on_transform_command
 def wes_colorful_output(cmd: str, **kwargs):
     cmd = cmd.strip()  # strip trailing \n on submit
+    # PRN add commands from docker that I had setup with `grcify` that I removed in the fish configs too
     if cmd.startswith("kubectl"):
         if "-o yaml" in cmd:
             if not "| bat -l yaml" in cmd:

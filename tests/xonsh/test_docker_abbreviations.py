@@ -43,16 +43,6 @@ def test_inventory_and_all_static_cursor_markers():
             assert entry.replacement.count(entry.cursor_marker) == 1, entry.trigger
 
 
-def test_plain_and_grcify_disabled_abbreviations():
-    docker_abbreviations = registry()
-
-    result, _ = docker_abbreviations.expand(context("dco"))
-    assert result.text == "docker compose"
-
-    result, _ = docker_abbreviations.expand(context("dcps"))
-    assert result.text == "docker container ps"
-
-
 def test_cursor_abbreviation_positions_inside_quotes():
     result, _ = registry().expand(context("ddc"))
 

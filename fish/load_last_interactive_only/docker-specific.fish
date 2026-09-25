@@ -1,15 +1,5 @@
 export DOCKER_HIDE_LEGACY_COMMANDS=1 # less clutter in help output
 
-#set use_grc_with_docker yes
-set use_grc_with_docker no
-function grcify
-    if test $use_grc_with_docker = yes
-        echo -n "grc $argv"
-    else
-        echo -n "$argv"
-    end
-end
-
 abbr din 'docker inspect'
 
 # model runner
@@ -75,7 +65,7 @@ abbr dsrtrm 'docker secret rm'
 abbr dsy 'docker system'
 abbr dsydf 'docker system df'
 abbr dsydfv 'docker system df -v'
-abbr dsyi (grcify 'docker system info')
+abbr dsyi 'docker system info'
 abbr dsypr 'docker system prune'
 
 # events from a time range - formatted as table
@@ -87,14 +77,14 @@ abbr dsye_tr_table 'docker system events --since 10m --until 0m --format "{{json
 # column -t for table, -s is separator and if I use -s'","' then it strips quote delimited CSVs\! or at least works for me as jq pipes out @csv as double quote delimited
 
 abbr dv 'docker volume' # useful for expanding this alias to then use sub commands, i.e. "dv[space]"
-abbr dvls (grcify 'docker volume ls')
-abbr dvlsd (grcify 'docker volume ls -f=dangling=true')
+abbr dvls 'docker volume ls'
+abbr dvlsd 'docker volume ls -f=dangling=true'
 abbr dvc 'docker volume create'
 abbr dvrm 'docker volume rm'
 abbr dvpr 'docker volume prune'
 abbr dvi 'docker volume inspect'
 
-abbr dver (grcify 'docker version')
+abbr dver 'docker version'
 
 abbr dc 'docker container'
 abbr dca 'docker container attach'
@@ -110,8 +100,8 @@ abbr dcl 'docker container logs'
 abbr dcpause 'docker container pause'
 abbr dcport 'docker container port'
 abbr dcpr 'docker container prune'
-abbr dcps (grcify 'docker container ps')
-abbr dcpsa (grcify 'docker container ps -a')
+abbr dcps 'docker container ps'
+abbr dcpsa 'docker container ps -a'
 abbr dcpsm 'docker container ps --format "table {{.ID}}\t{{.Names}}\t{{.Image}}\t{{.Mounts}}"' # add mounts
 abbr dcr 'docker container run --name'
 abbr dcrename 'docker container rename'
@@ -131,7 +121,7 @@ abbr dcwait 'docker container wait'
 abbr di 'docker image'
 #
 abbr dbx 'docker buildx'
-abbr dbxls (grcify 'docker buildx ls')
+abbr dbxls 'docker buildx ls'
 abbr dbxb 'docker buildx build'
 abbr dbxba 'docker buildx bake'
 abbr dbxc 'docker buildx create'
@@ -152,9 +142,9 @@ abbr dihj 'docker image history --no-trunc --format "{{json .}}" | jq'
 #
 abbr dii 'docker image inspect'
 #
-abbr dils (grcify 'docker image ls')
-abbr dilsa (grcify 'docker image ls --all')
-abbr dilsj (grcify 'docker image ls --format "{{json .}}" | jq')
+abbr dils 'docker image ls'
+abbr dilsa 'docker image ls --all'
+abbr dilsj 'docker image ls --format "{{json .}}" | jq'
 abbr dilsaj 'docker image ls --all --format "{{json .}}" | jq'
 abbr dilsdf "docker image ls --format '{{.Size}}\t{{.Repository}}:{{.Tag}}' | sort -h" # for cleanup, sort by size and show `size repo:tag`
 #
@@ -172,7 +162,7 @@ abbr dne 'docker network'
 abbr dnec 'docker network connect'
 abbr dned 'docker network disconnect'
 abbr dnei 'docker network inspect'
-abbr dnels (grcify 'docker network ls')
+abbr dnels 'docker network ls'
 abbr dnepr 'docker network prune'
 abbr dnerm 'docker network rm'
 
@@ -208,10 +198,10 @@ abbr dcok 'docker compose kill'
 abbr dcol 'docker compose logs'
 abbr dcolf 'docker compose logs -f'
 abbr dcolt 'docker compose logs -f --tail=0'
-abbr dcops (grcify 'docker compose ps')
-abbr dcopsa (grcify 'docker compose ps -a')
-abbr dcols (grcify 'docker compose ls') # * list ALL COMPOSE projets! (not just current dir's project)
-abbr dcolsa (grcify 'docker compose ls -a') # stopped too
+abbr dcops 'docker compose ps'
+abbr dcopsa 'docker compose ps -a'
+abbr dcols 'docker compose ls' # * list ALL COMPOSE projets! (not just current dir's project)
+abbr dcolsa 'docker compose ls -a' # stopped too
 
 # # alpha commands
 # abbr dcoa 'docker compose alpha'
