@@ -3,9 +3,13 @@
 from __future__ import annotations
 
 from xonsh.built_ins import XSH
-from wes_fish_migration import wrap_fish_functions
 from wes_abbreviations import abbr
-
+from wes_fish_migration import (
+    wrap_fish_functions,
+    abbr_from_fish_function,
+    platform_abbreviation,
+    unsupported_abbreviation,
+)
 
 FISH_FUNCTIONS = (
     'on_change_show_verbose_prompt',

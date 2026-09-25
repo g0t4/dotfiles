@@ -6,13 +6,13 @@ from xonsh.built_ins import XSH
 import platform
 import re
 
-from wes_fish_migration import wrap_fish_functions
 from wes_abbreviations import abbr
 from wes_fish_migration import (
+    wrap_fish_functions,
     abbr_from_fish_function,
     platform_abbreviation,
+    unsupported_abbreviation,
 )
-
 
 MAN_COMMAND = "gman" if platform.system() == "Darwin" else "man"
 

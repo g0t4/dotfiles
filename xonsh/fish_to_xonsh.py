@@ -100,21 +100,6 @@ def generate(
     platform_constants_text = (
         "\n".join(platform_constants) + "\n\n" if platform_constants else ""
     )
-    bridge_names = [
-        name
-        for name in (
-            "abbr_from_fish_function",
-            "platform_abbreviation",
-            "unsupported_abbreviation",
-        )
-        if name in declaration_text
-    ]
-    bridge_import = ""
-    if bridge_names:
-        names = "\n".join(f"    {name}," for name in bridge_names)
-        bridge_import = (
-            "from wes_fish_migration import (\n" + names + "\n)\n"
-        )
 
     return f'''\
 """{title}"""
@@ -123,9 +108,13 @@ from __future__ import annotations
 
 from xonsh.built_ins import XSH
 {stdlib_imports_text}\
-from wes_fish_migration import wrap_fish_functions
 from wes_abbreviations import abbr
-{bridge_import}
+from wes_fish_migration import (
+    wrap_fish_functions,
+    abbr_from_fish_function,
+    platform_abbreviation,
+    unsupported_abbreviation,
+)
 
 {platform_constants_text}\
 FISH_FUNCTIONS = (

@@ -5,13 +5,13 @@ from __future__ import annotations
 from xonsh.built_ins import XSH
 import re
 
-from wes_fish_migration import wrap_fish_functions
 from wes_abbreviations import abbr
 from wes_fish_migration import (
+    wrap_fish_functions,
     abbr_from_fish_function,
+    platform_abbreviation,
     unsupported_abbreviation,
 )
-
 
 FISH_FUNCTIONS = (
     'elgato_kill_other_account_streamdeck',
