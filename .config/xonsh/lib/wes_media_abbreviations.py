@@ -17,7 +17,7 @@ from wes_fish_migration import (
 
 
 def register_wes_media_abbreviations():
-    FISH_FUNCTIONS = (
+    fish_funcs = (
         'elgato_kill_other_account_streamdeck',
     'show_pixel_color',
     'show_pixel_column',
@@ -64,7 +64,7 @@ def register_wes_media_abbreviations():
     'streamdeck_svg2png_padded_square_only',
     'string_indent',
     )
-    wrap_fish_functions(XSH.aliases, FISH_FUNCTIONS)
+    wrap_fish_functions(XSH.aliases, fish_funcs)
     abbr('_150', abbr_from_fish_function('abbr_thumbnail_check'))
     abbr('_1', abbr_from_fish_function('abbr_check'))
     abbr('_2', abbr_from_fish_function('abbr_30fps'))

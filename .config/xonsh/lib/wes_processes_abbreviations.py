@@ -17,7 +17,7 @@ from wes_fish_migration import (
 
 
 def register_wes_processes_abbreviations():
-    FISH_FUNCTIONS = (
+    fish_funcs = (
         'ps_dump_env_vars_when_process_started',
     'pstreeX',
     'pstree',
@@ -31,7 +31,7 @@ def register_wes_processes_abbreviations():
     'toggle-grc',
     'toggle-git_commit_command',
     )
-    wrap_fish_functions(XSH.aliases, FISH_FUNCTIONS)
+    wrap_fish_functions(XSH.aliases, fish_funcs)
     abbr('els', 'env | bat --language dotenv -p')
     abbr('egr', 'env | rg_grep -i ')
     abbr('envb', 'env | bat -l env')

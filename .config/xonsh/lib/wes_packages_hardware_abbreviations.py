@@ -17,7 +17,7 @@ from wes_fish_migration import (
 
 
 def register_wes_packages_hardware_abbreviations():
-    FISH_FUNCTIONS = (
+    fish_funcs = (
         'dpkg_L_files',
     'dpkg_L_tree',
     'treeify',
@@ -39,7 +39,7 @@ def register_wes_packages_hardware_abbreviations():
     'trash',
     '_fish_from_source',
     )
-    wrap_fish_functions(XSH.aliases, FISH_FUNCTIONS)
+    wrap_fish_functions(XSH.aliases, fish_funcs)
     abbr('apts', 'apt search')
     abbr('apti', 'sudo apt install')
     abbr('aptu', 'sudo apt update')

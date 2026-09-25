@@ -17,7 +17,7 @@ from wes_fish_migration import (
 
 
 def register_wes_cloud_ai_abbreviations():
-    FISH_FUNCTIONS = (
+    fish_funcs = (
         'actw_expanded',
     'rg_cached_models',
     'ols_qwen_debug',
@@ -34,7 +34,7 @@ def register_wes_cloud_ai_abbreviations():
     'test_vllm_v1_completions',
     'test_vllm_v1_completions_raw_text',
     )
-    wrap_fish_functions(XSH.aliases, FISH_FUNCTIONS)
+    wrap_fish_functions(XSH.aliases, fish_funcs)
     abbr('actw', abbr_from_fish_function('actw_expanded'))
     abbr('azal', 'az account list --output table')
     abbr('azall', 'az account list-locations --output table')

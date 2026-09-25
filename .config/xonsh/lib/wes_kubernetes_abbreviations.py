@@ -17,7 +17,7 @@ from wes_fish_migration import (
 
 
 def register_wes_kubernetes_abbreviations():
-    FISH_FUNCTIONS = (
+    fish_funcs = (
         '_k3s_autocomplete',
     'kgdump',
     '_abbr_kgv',
@@ -26,7 +26,7 @@ def register_wes_kubernetes_abbreviations():
     'dig',
     'helm_template_diff',
     )
-    wrap_fish_functions(XSH.aliases, FISH_FUNCTIONS)
+    wrap_fish_functions(XSH.aliases, fish_funcs)
     abbr('k3s', 'sudo k3s')
     abbr('k3dls', 'k3d cluster list')
     abbr('k3dcreate', 'k3d cluster create')
