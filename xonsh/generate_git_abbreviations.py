@@ -6,6 +6,8 @@ from __future__ import annotations
 import shlex
 from pathlib import Path
 
+from fish_to_xonsh import parse_abbreviation
+
 
 ROOT = Path(__file__).resolve().parents[1]
 SOURCE = ROOT / "fish/load_last_interactive_only/git.fish"
@@ -21,38 +23,6 @@ VALUE_SUBSTITUTIONS = {
     "$_unpunched_commits": "",
     r"\$(git rev-list --all)": "$(git rev-list --all)",
 }
-
-
-def parse_abbreviation(line: str):
-    tokens = shlex.split(line, comments=True, posix=True)
-    options: dict[str, str | bool] = {}
-    remaining: list[str] = []
-    index = 1
-    while index < len(tokens):
-        token = tokens[index]
-        if token == "--":
-            remaining.extend(tokens[index + 1 :])
-            break
-        if token == "--set-cursor":
-            options["cursor"] = True
-            index += 1
-        elif token in ("--command", "--function", "--regex", "--position", "--add"):
-            options[token[2:]] = tokens[index + 1]
-            index += 2
-        elif token.startswith("--position="):
-            options["position"] = token.partition("=")[2]
-            index += 1
-        else:
-            remaining.append(token)
-            index += 1
-
-    name = str(options.get("add") or remaining.pop(0))
-    replacement = " ".join(remaining)
-    for old, new in sorted(VALUE_SUBSTITUTIONS.items(), key=lambda item: -len(item[0])):
-        replacement = replacement.replace(old, new)
-    replacement = " ".join(replacement.split())
-    # TODO make VALUE_SUBSTITUTIONS take a regex too (or always)
-    return name, replacement, options
 
 
 def declaration(name, replacement, options):
@@ -84,7 +54,7 @@ def generate() -> str:
     for _line_number, line in enumerate(SOURCE.read_text().splitlines(), 1):
         if not line.startswith("abbr "):
             continue
-        parsed = parse_abbreviation(line)
+        parsed = parse_abbreviation(line, VALUE_SUBSTITUTIONS)
         rendered = declaration(*parsed)
         if rendered:
             declarations.append(rendered)
