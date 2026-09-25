@@ -19,12 +19,12 @@ from wes_fish_migration import (
 def register_wes_kubernetes_abbreviations():
     fish_funcs = (
         '_k3s_autocomplete',
-    'kgdump',
-    '_abbr_kgv',
-    'kdd',
-    'kns',
-    'dig',
-    'helm_template_diff',
+        'kgdump',
+        '_abbr_kgv',
+        'kdd',
+        'kns',
+        'dig',
+        'helm_template_diff',
     )
     wrap_fish_functions(XSH.aliases, fish_funcs)
     abbr('k3s', 'sudo k3s')

@@ -19,7 +19,7 @@ from wes_fish_migration import (
 def register_wes_system_services_abbreviations():
     fish_funcs = (
         'on_change_show_verbose_prompt',
-    'toggle_show_verbose_prompt',
+        'toggle_show_verbose_prompt',
     )
     wrap_fish_functions(XSH.aliases, fish_funcs)
     abbr('help', 'help_online')

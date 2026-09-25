@@ -19,17 +19,17 @@ from wes_fish_migration import (
 def register_wes_processes_abbreviations():
     fish_funcs = (
         'ps_dump_env_vars_when_process_started',
-    'pstreeX',
-    'pstree',
-    'build_abbrs_for_filetype',
-    '_cat_range_abbr',
-    '_flush_dns',
-    'kill_hung_grc',
-    'z',
-    '_abbr_ze',
-    'custom-kill-command-word',
-    'toggle-grc',
-    'toggle-git_commit_command',
+        'pstreeX',
+        'pstree',
+        'build_abbrs_for_filetype',
+        '_cat_range_abbr',
+        '_flush_dns',
+        'kill_hung_grc',
+        'z',
+        '_abbr_ze',
+        'custom-kill-command-word',
+        'toggle-grc',
+        'toggle-git_commit_command',
     )
     wrap_fish_functions(XSH.aliases, fish_funcs)
     abbr('els', 'env | bat --language dotenv -p')
