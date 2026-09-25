@@ -42,8 +42,6 @@ def register_wes_python():
     abbr('pytho', 'python3')
     abbr('python', 'python3')
     abbr('pip', 'pip3')
-    abbr('py_pgrep', 'pgrep -lf "python.*3.13.5"')
-    abbr('py_kill', 'pkill -ilf "python.*3.13.5"')
     abbr('ve', 'python3 -m venv --clear --upgrade-deps')
     abbr('vedir', 'echo $VIRTUAL_ENV')
     abbr('ves', 'venv_status')
