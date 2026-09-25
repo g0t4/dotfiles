@@ -49,10 +49,10 @@ def parse_abbreviation(line: str, VALUE_SUBSTITUTIONS:dict[str, str] = {}):
             index += 1
 
     name = str(options.get("add") or remaining.pop(0))
-    final = " ".join(remaining)
+    replacement = " ".join(remaining)
     for old, new in VALUE_SUBSTITUTIONS.items():
-        final = final.replace(old, new)
-    return name, final, options
+        replacement = replacement.replace(old, new)
+    return name, replacement, options
 
 
 def generate(
