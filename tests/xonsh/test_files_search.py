@@ -108,6 +108,11 @@ def test_history_abbreviations_use_xonsh_commands():
     assert result.cursor == len('history delete "')
 
 
+def test_filetype_extension_abbreviation_is_a_command_not_a_quoted_string():
+    result, _ = registry().expand(context("list_filetype_extensions"))
+    assert result.text == "fd --type file | awk -F. 'NF > 1 {print $NF}' | sort | uniq -c | sort"
+
+
 def test_stateful_function_abbreviation_matches_current_conversion():
     abbreviations = registry()
     result, _ = abbreviations.expand(context("mdo"))

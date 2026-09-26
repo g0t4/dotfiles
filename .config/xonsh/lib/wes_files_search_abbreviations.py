@@ -121,7 +121,7 @@ def register_files_search_abbreviations():
     abbr('fdtp', 'fd --type pipe')
     abbr('fdts', 'fd --type socket')
     abbr('fdtx', 'fd --type executable')
-    abbr('list_filetype_extensions', '"fd --type file | awk -F. \'NF > 1 {print $NF}\' | sort | uniq -c | sort"')
+    abbr('list_filetype_extensions', "fd --type file | awk -F. 'NF > 1 {print $NF}' | sort | uniq -c | sort")
     abbr('fd_extensionless_files', 'fd "^[^\\.]+\\$" --type file')
     abbr('rgc', 'rg --case-sensitive "%"', cursor_marker="%")
     abbr('rgi', 'rg -i "%"', cursor_marker="%")

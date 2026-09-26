@@ -209,7 +209,7 @@ _MIGRATION_REPLACEMENTS = {
     "hgr": 'history show all | rg_grep "%"',
     "hm": "history pull --show-commands",
     "hd": 'history delete "%"',
-    "list_filetype_extensions": repr(
+    "list_filetype_extensions": (
         "fd --type file | awk -F. 'NF > 1 {print $NF}' | sort | uniq -c | sort"
     ),
     "mdo": "unsupported_abbreviation('md_open', 'changes directory from an interactive fzf picker')",
@@ -285,4 +285,3 @@ def generate_wrapped(mapping: FishMapping, call_register: bool = False) -> str:
         deduplicated_names=frozenset(_DEDUPLICATED_ABBREVIATIONS),
         call_register=call_register,
     )
-
