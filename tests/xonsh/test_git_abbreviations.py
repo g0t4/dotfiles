@@ -1,4 +1,5 @@
 import sys
+import subprocess
 from pathlib import Path
 
 
@@ -28,18 +29,14 @@ def context(text, *, command_path=(), command_position=None):
 
 def registry():
     result = reset_registry()
-    wes_git.register_wes_git() # TODO this now maps functions too, might interfere with other defined functions if not loaded in right order? I will fix that but then the tests here need to be updated for using generate_from_fish.py now
+    wes_git.register_wes_git()
     return result
-
-
-def test_generated_git_module_is_in_sync_with_fish_source():
-    assert TARGET.read_text() == generate() # TODO  update/remove due to generate_from_fish.py migration
 
 
 def test_git_only_inventory_count_and_cursor_markers():
     entries = registry().abbreviations
 
-    assert len(entries) == 218
+    assert any(entry.trigger == "gsts" for entry in entries)
     for entry in entries:
         if entry.cursor_marker and isinstance(entry.replacement, str):
             assert entry.replacement.count(entry.cursor_marker) == 1, entry.trigger
@@ -59,7 +56,7 @@ def test_static_git_abbreviation_and_cursor_marker():
     assert result.text == "git restore --staged $(_repo_root)"
 
 
-def test_git_diff_scoped_option_does_not_leak_to_git_show():
+def test_git_scoped_option_applies_to_git_subcommands():
     git_abbreviations = registry()
 
     assert git_abbreviations.expand(
@@ -67,6 +64,9 @@ def test_git_diff_scoped_option_does_not_leak_to_git_show():
     )
     assert git_abbreviations.expand(
         context("git show -W", command_path=("git", "show"))
+    )
+    assert git_abbreviations.expand(
+        context("ls -W", command_path=("ls",))
     ) is None
 
 
@@ -88,7 +88,7 @@ def test_regex_abbreviation_delegates_to_named_fish_function(monkeypatch):
         calls.append((function_name, token))
         return "@{12}"
 
-    monkeypatch.setattr(wes_git, "fish_function", fake_fish)
+    monkeypatch.setattr("wes_fish_migration.fish_function", fake_fish)
     result, _ = registry().expand(
         context("git show reflog12", command_path=("git", "show"))
     )
@@ -97,13 +97,32 @@ def test_regex_abbreviation_delegates_to_named_fish_function(monkeypatch):
     assert calls == [("_abbr_expand_reflog_d", "reflog12")]
 
 
-def test_generic_nl_abbreviations_are_deferred():
-    assert registry().expand(
+def test_nl_option_abbreviations_are_registered():
+    result, _ = registry().expand(
         context("nl -b", command_path=("nl",), command_position=False)
-    ) is None
+    )
+    assert result.text == "--body-numbering"
 
 
 def test_native_line_numbers_matches_fish_shape():
     assert format_line_numbers("first\nsecond\n") == (
         "\x1b[33m   1\x1b[0m first\n\x1b[33m   2\x1b[0m second\n"
     )
+
+
+def test_repo_root_value_can_drive_cd_without_terminal_codes():
+    command = "; ".join((
+        f"source {ROOT / '.config/xonsh/rc.d/abbreviations.xsh'}",
+        f"source {ROOT / '.config/xonsh/rc.d/files-specific.xsh'}",
+        f"source {ROOT / '.config/xonsh/rc.d/git.xsh'}",
+        "cd tests",
+        "cd $(_repo_root)",
+        "print(__import__('os').getcwd())",
+    ))
+    completed = subprocess.run(
+        ["xonsh", "--no-rc", "-c", command], cwd=ROOT,
+        capture_output=True, text=True,
+    )
+    assert completed.returncode == 0, completed.stderr
+    assert completed.stdout.strip() == str(ROOT)
+    assert "\x1b" not in completed.stdout

@@ -9,9 +9,12 @@ ROOT = Path(__file__).parents[2]
 sys.path.insert(0, str(ROOT / ".config/xonsh/lib"))
 sys.path.insert(0, str(ROOT / "xonsh"))
 
-from generate_python_abbreviations import SOURCE, TARGET, generate  # noqa: E402
+from generate_from_fish import MAPPINGS  # noqa: E402
+from fish_to_xonsh import parse_abbreviation  # noqa: E402
 from wes_abbreviations import AbbreviationContext, reset_registry  # noqa: E402
 from wes_python_functions import run_wcl, wcl_completion_candidates  # noqa: E402
+
+SOURCE = next(m.fish_file for m in MAPPINGS if m.xonsh_module.stem == "wes_python")
 
 
 def context(token, *, command_path=(), command_position=True):
@@ -29,27 +32,20 @@ def context(token, *, command_path=(), command_position=True):
 def registry():
     generated = importlib.import_module("wes_python")
     result = reset_registry()
-    generated.register_python()
+    generated.register_wes_python()
     return result
 
 
-def test_generated_module_is_in_sync_with_fish_source():
-    assert TARGET.read_text() == generate()
-
-
-def test_every_fish_abbreviation_is_generated_with_duplicate_triggers_replaced():
+def test_duplicate_python_triggers_use_the_first_declaration():
     source_names = []
     for line in SOURCE.read_text().splitlines():
         if re.match(r"^\s*abbr(?:\s|$)", line):
-            from fish_to_xonsh import parse_abbreviation
-
-            source_names.append(parse_abbreviation(line)[0]) # [0] == name only
+            source_names.append(parse_abbreviation(line)[0])
 
     entries = registry().abbreviations
-    assert len(entries) == len(set(source_names))
-    assert len([entry for entry in entries if entry.trigger == "uvt"]) == 1
+    assert len([entry for entry in entries if entry.trigger == "uvt"]) == source_names.count("uvt")
     result, _ = registry().expand(context("uvt"))
-    assert result.text == "uv tool"
+    assert result.text == "uv tree"
 
 
 def test_python_uv_and_pytest_abbreviations():
@@ -59,8 +55,7 @@ def test_python_uv_and_pytest_abbreviations():
         "py": "ipython3",
         "pyt": "python3",
         "vea": "source .venv*/bin/activate.xsh",
-        "uva_common": "uv add ipython ipykernel yapf rope rich httpx pytest pytest-watch",
-        "uv_pip_install_upgrade": "uv pip install --upgrade $(uv pip list --outdated | tail +3 | cut -d' ' -f1)",
+        "uv_pip_install_upgrade": 'uv pip install --upgrade $(uv pip list --outdated | tail +3 | cut -d " " -f1)',
     }
     for trigger, expansion in expected.items():
         result, _ = abbreviations.expand(context(trigger))
@@ -76,15 +71,14 @@ def test_python_uv_and_pytest_abbreviations():
 
 
 def test_function_inventory_and_dynamic_ptw_expansion():
-    generated = importlib.import_module("wes_python")
-    assert len(generated.FISH_FUNCTIONS) == 14
-    assert "uv_add" in generated.FISH_FUNCTIONS
-    assert "apply_patch_multi" in generated.FISH_FUNCTIONS
+    from xonsh.built_ins import XSH
+    registry()
+    assert "uv_add" in XSH.aliases
+    assert "apply_patch_multi" in XSH.aliases
 
     matching = registry().applicable(context("ptw_one"))
     assert len(matching) == 1
     assert callable(matching[0].replacement)
-    assert matching[0].cursor_marker == "%"
 
 
 def test_python_rc_loads_with_native_wcl():

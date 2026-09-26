@@ -47,6 +47,10 @@ SKIPPED_FISH_FUNCTIONS = {
     "wcl",
 }
 
+# These functions feed command substitutions. Interactive Fish startup can emit
+# terminal control sequences, so their output needs the capturing bridge.
+VALUE_FISH_FUNCTIONS = {"_repo_root", "git_current_branch"}
+
 def abbr_from_fish_function(function_name):
     def expand(context, _match):
         reason = UNSUPPORTED_FISH_FUNCTIONS.get(function_name)
@@ -137,6 +141,9 @@ def wrap_fish_functions(aliases, function_names):
         )
         # register enhanced "superhelp" that includes the fish function body
         abbr(function_name + "??", f"_fish_help {shlex.quote(function_name)}")
+    register_value_fish_functions(
+        aliases, (name for name in function_names if name in VALUE_FISH_FUNCTIONS)
+    )
 
 
 def register_value_fish_functions(aliases, function_names):

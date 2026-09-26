@@ -44,11 +44,11 @@ def test_common_variables_do_not_require_an_inherited_shell_environment():
     home = Path.home()
     is_macos = platform.system() == "Darwin"
     assert completed.stdout.splitlines() == [
-        "true" if is_macos else "false",
-        "false" if is_macos else "true",
-        "true"
+        "True" if is_macos else "False",
+        "False" if is_macos else "True",
+        "True"
         if not is_macos and Path("/etc/arch-release").is_file()
-        else "false",
+        else "False",
         str(home / "repos"),
         str(home / "repos/wes-config/wes-bootstrap"),
         str(home / "repos/github/g0t4/dotfiles"),

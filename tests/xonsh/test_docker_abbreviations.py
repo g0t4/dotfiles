@@ -6,8 +6,6 @@ ROOT = Path(__file__).parents[2]
 sys.path.insert(0, str(ROOT / ".config/xonsh/lib"))
 sys.path.insert(0, str(ROOT / "xonsh"))
 
-# TODO fix tests for using shared generate_from_fish.py now
-
 from wes_abbreviations import AbbreviationContext, reset_registry # noqa: E402
 from wes_docker import register_wes_docker
 
@@ -27,10 +25,6 @@ def registry():
     result = reset_registry()
     register_wes_docker()
     return result
-
-
-def test_generated_module_is_in_sync_with_docker_fish_source():
-    assert TARGET.read_text() == generate()
 
 
 def test_inventory_and_all_static_cursor_markers():

@@ -514,7 +514,10 @@ def test_fish_command_bridge_preserves_streams_and_exit_status(monkeypatch):
             "interactive_helper",
             "argument with spaces",
         ]
-        assert kwargs == dict(zip(("stdin", "stdout", "stderr"), streams))
+        assert all(kwargs[name] is stream for name, stream in zip(
+            ("stdin", "stdout", "stderr"), streams
+        ))
+        assert kwargs["env"]["ONLY_CALL_FISH_WRAP_FUNC"] == "true"
         return subprocess.CompletedProcess(argv, 7)
 
     monkeypatch.setattr(subprocess, "run", fake_run)

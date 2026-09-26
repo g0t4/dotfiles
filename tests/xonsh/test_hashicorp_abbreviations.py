@@ -7,7 +7,6 @@ ROOT = Path(__file__).parents[2]
 sys.path.insert(0, str(ROOT / ".config/xonsh/lib"))
 sys.path.insert(0, str(ROOT / "xonsh"))
 
-# TODO  update or remove tests after I migrated to shared generate_from_fish.py
 from wes_abbreviations import AbbreviationContext, reset_registry  # noqa: E402
 from wes_hashicorp import register_wes_hashicorp
 
@@ -28,10 +27,6 @@ def registry():
     result = reset_registry()
     register_wes_hashicorp()
     return result
-
-
-def test_generated_hashicorp_abbreviations_are_in_sync():
-    assert TARGET.read_text() == generate()
 
 
 def test_vagrant_and_packer_abbreviations_are_available():

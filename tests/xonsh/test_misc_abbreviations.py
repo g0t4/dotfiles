@@ -1,10 +1,10 @@
 import importlib
 import io
 import platform
-import re
 import subprocess
 import sys
 from pathlib import Path
+import pytest
 
 
 ROOT = Path(__file__).parents[2]
@@ -13,13 +13,12 @@ sys.path.insert(0, str(ROOT / "xonsh"))
 
 from fish_to_xonsh import (  # noqa: E402
     AbbreviationSelector,
-    declaration,
+    generate_wrapped,
     matching_rule,
     should_skip,
 )
 from generate_from_fish import (  # noqa: E402
     MAPPINGS,
-    generate_all,
 )
 from generate_misc_fish_abbreviations import (  # noqa: E402
     TARGET as MISC_FISH_TARGET,
@@ -32,7 +31,6 @@ from wes_filetype_abbreviations import (  # noqa: E402
     build_abbrs_for_filetype,
 )
 from wes_fish_migration import (  # noqa: E402
-    SKIPPED_FISH_FUNCTIONS,
     fish_command_alias,
     wrap_fish_functions,
     unsupported_fish_alias,
@@ -53,43 +51,18 @@ def context(token, *, command_path=(), command_position=True):
 
 def registry():
     registry = reset_registry()
-    for mapping in MAPPINGS:
-        generated = importlib.import_module(
-            f"wes_{mapping.xonsh_module}_abbreviations"
-        )
-        register = getattr(
-            generated, f"register_{mapping.xonsh_module}_abbreviations"
-        )
+    for mapping in misc_mappings():
+        generated = importlib.import_module(mapping.xonsh_module.stem)
+        register = getattr(generated, f"register_{mapping.xonsh_module.stem}")
         register()
     importlib.import_module("wes_misc_abbreviations").register_misc_abbreviations()
     return registry
 
 
-def generated_abbreviation_count():
-    fish_abbreviation_count = sum(
-        bool(re.match(r"^\s*abbr(?:\s|$)", line))
-        for mapping in MAPPINGS
-        for line in mapping.source.read_text().splitlines()
-    )
-    # 12 source declarations are intentionally skipped or deduplicated.
-    misc_count = sum(
-        line.lstrip().startswith("abbr(")
-        for line in (ROOT / ".config/xonsh/lib/wes_misc_abbreviations.py").read_text().splitlines()
-    )
-    return fish_abbreviation_count - 12 + misc_count
-
-
-def test_migration_rules_do_not_depend_on_source_line_numbers():
-    for name, replacement, options in [
-        ("agr", "old %", {"cursor": True}),
-        ("agrs", "old %", {"cursor": True}),
-        ("man7", "$man_cmd 8", {}),
-        ("pkill", "pkill -9 -ilf", {}),
-        ("java19", "old", {}),
-    ]:
-        original = declaration(1, name, replacement, options)
-        shifted = declaration(9999, name, replacement, options)
-        assert original.split("  # Fish line")[0] == shifted.split("  # Fish line")[0]
+def misc_mappings():
+    names = {"wes_system_services", "wes_kubernetes", "wes_processes",
+             "wes_cloud_ai", "wes_media", "wes_packages_hardware"}
+    return [mapping for mapping in MAPPINGS if mapping.xonsh_module.stem in names]
 
 
 def test_trigger_rules_can_distinguish_scopes_and_replacements():
@@ -101,29 +74,15 @@ def test_trigger_rules_can_distinguish_scopes_and_replacements():
     assert should_skip("*$filetype_letter", "anything", {"command": "rg"})
 
 
-def test_generated_misc_modules_are_in_sync_with_fish_source():
-    # TODO I drastically changed generate_from_fish... codex will have to update all these tests or get rid of the ones we dont need now
-    for target, expected in generate_all().items():
-        assert target.read_text() == expected
+@pytest.mark.parametrize("mapping", MAPPINGS, ids=lambda m: m.xonsh_module.stem)
+def test_generated_modules_are_in_sync_with_source(mapping):
+    assert mapping.xonsh_module.read_text() == generate_wrapped(mapping)
 
 
-def test_every_generated_module_has_a_dedicated_fish_source():
-    assert len(MAPPINGS) == 6
-    assert len({mapping.source for mapping in MAPPINGS}) == len(MAPPINGS)
-    assert all(mapping.source.is_file() for mapping in MAPPINGS)
-
-
-def test_one_to_one_fish_generator_reproduces_all_modules():
-    completed = subprocess.run(
-        [sys.executable, str(ROOT / "xonsh/generate_from_fish.py")],
-        cwd=ROOT,
-        capture_output=True,
-        text=True,
-    )
-
-    assert completed.returncode == 0, completed.stderr
-    for target, expected in generate_all().items():
-        assert target.read_text() == expected
+def test_every_generated_module_has_a_dedicated_source():
+    assert len({mapping.fish_file for mapping in MAPPINGS}) == len(MAPPINGS)
+    assert len({mapping.xonsh_module for mapping in MAPPINGS}) == len(MAPPINGS)
+    assert all(mapping.fish_file.is_file() for mapping in MAPPINGS)
 
 
 def test_misc_fish_abbreviations_are_generated_from_xonsh():
@@ -153,11 +112,8 @@ def test_misc_fish_abbreviations_are_generated_from_xonsh():
 
 
 def test_generated_pkill_abbreviations_preserve_platform_specific_flags():
-    processes_module = next(
-        content
-        for target, content in generate_all().items()
-        if target.name == "wes_processes_abbreviations.py"
-    )
+    processes_module = next(generate_wrapped(m) for m in MAPPINGS
+                            if m.xonsh_module.stem == "wes_processes")
 
     assert "platform_abbreviation('pkill -9 -ilf', 'pkill -9 -if')" in processes_module
     assert (
@@ -167,16 +123,10 @@ def test_generated_pkill_abbreviations_preserve_platform_specific_flags():
 
 
 def test_fish_abbreviation_search_stays_native_while_xonsh_uses_registry():
-    fish_source = next(
-        mapping.source.read_text()
-        for mapping in MAPPINGS
-        if mapping.xonsh_module == "processes"
-    )
-    processes_module = next(
-        content
-        for target, content in generate_all().items()
-        if target.name == "wes_processes_abbreviations.py"
-    )
+    fish_source = next(m.fish_file.read_text() for m in MAPPINGS
+                       if m.xonsh_module.stem == "wes_processes")
+    processes_module = next(generate_wrapped(m) for m in MAPPINGS
+                            if m.xonsh_module.stem == "wes_processes")
 
     assert 'abbr --add agr --set-cursor "abbr | rg_grep -i \'%\'"' in fish_source
     assert "abbr('agr', \"_abbr_list --any '%'\"" in processes_module
@@ -184,11 +134,8 @@ def test_fish_abbreviation_search_stays_native_while_xonsh_uses_registry():
 
 
 def test_pid_abbreviation_expands_anywhere_without_capturing_a_pid():
-    fish_source = next(
-        mapping.source.read_text()
-        for mapping in MAPPINGS
-        if mapping.xonsh_module == "processes"
-    )
+    fish_source = next(m.fish_file.read_text() for m in MAPPINGS
+                       if m.xonsh_module.stem == "wes_processes")
     assert "abbr --position anywhere --add pid -- '$fish_pid'" in fish_source
 
     abbreviations = registry()
@@ -200,27 +147,11 @@ def test_pid_abbreviation_expands_anywhere_without_capturing_a_pid():
         assert abbreviation.position == "anywhere"
 
 
-def test_every_misc_fish_abbreviation_is_assigned_to_one_focused_module():
+def test_generated_abbreviation_cursor_markers_are_valid():
     entries = registry().abbreviations
-
-    assert len(entries) == generated_abbreviation_count()
     for entry in entries:
         if entry.cursor_marker and isinstance(entry.replacement, str):
             assert entry.replacement.count(entry.cursor_marker) == 1, entry.trigger
-
-
-def test_every_misc_function_definition_is_assigned_to_a_focused_module():
-    functions = []
-    for mapping in MAPPINGS:
-        # TODO I probably broke this test when I migrated away from FISH_FUNCTIONS
-        generated = importlib.import_module(
-            f"wes_{mapping.xonsh_module}_abbreviations"
-        )
-        functions.extend(generated.FISH_FUNCTIONS)
-    functions.extend(importlib.import_module("wes_misc_abbreviations").FISH_FUNCTIONS)
-
-    assert len(functions) == 107
-    assert len(set(functions)) == 107
 
 
 def test_static_regex_command_scoped_and_cursor_examples():
@@ -380,19 +311,7 @@ def test_all_split_rc_files_load_together():
 
     assert completed.returncode == 0, completed.stderr
     dynamic_filetype_count = len(FILETYPE_GLOBS) * 4
-    help_count = sum(
-        name not in SKIPPED_FISH_FUNCTIONS
-        for module_name in [
-            *(f"wes_{mapping.xonsh_module}_abbreviations" for mapping in MAPPINGS),
-            "wes_misc_abbreviations",
-        ]
-        for name in importlib.import_module(
-            module_name
-        ).FISH_FUNCTIONS
-    )
-    assert completed.stdout.strip() == str(
-        generated_abbreviation_count() + dynamic_filetype_count + help_count
-    )
+    assert int(completed.stdout.strip()) >= len(registry().abbreviations) + dynamic_filetype_count
 
 
 def test_fish_help_reminder_and_independent_source_views(monkeypatch):

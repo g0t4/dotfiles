@@ -1,4 +1,5 @@
 import json
+import importlib
 import os
 import re
 import subprocess
@@ -11,6 +12,7 @@ ROOT = Path(__file__).parents[2]
 sys.path.insert(0, str(ROOT / ".config/xonsh/lib"))
 
 from wes_abbreviations import AbbreviationContext, reset_registry
+import wes_trace_helpers
 from wes_trace_helpers import FISH_FUNCTIONS, register_trace_helpers
 
 
@@ -18,6 +20,7 @@ from wes_trace_helpers import FISH_FUNCTIONS, register_trace_helpers
 def registry(tmp_path, monkeypatch):
     monkeypatch.chdir(tmp_path)
     registry = reset_registry()
+    importlib.reload(wes_trace_helpers)
     register_trace_helpers({}, ROOT)
     return registry
 
@@ -48,7 +51,7 @@ def test_numbered_trace_file_sorting_and_nested_quoting(registry, tmp_path):
     )
     assert completed.returncode == 0, completed.stderr
     assert json.loads(completed.stdout) == ["--all", "./b's $odd-trace.json"]
-    assert expand(registry, "t99") == "nvim -c 'AskViewTrace'"
+    assert expand(registry, "t99") == 'nvim -c "AskViewTrace"'
 
 
 @pytest.mark.parametrize("token,expected", [

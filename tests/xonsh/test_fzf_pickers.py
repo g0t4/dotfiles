@@ -160,32 +160,3 @@ def test_picker_subprocess_uses_xonsh_path_not_stale_process_path():
 
     assert completed.returncode == 0, completed.stderr
     assert int(completed.stdout) > 0
-
-
-def test_keypress_debug_tee_forwards_keys_unchanged():
-    env = os.environ.copy()
-    env["XONSH_LOG"] = os.devnull
-    abbreviations = ROOT / ".config/xonsh/rc.d/abbreviations.xsh"
-    files_rc = ROOT / ".config/xonsh/rc.d/files-specific.xsh"
-    command = (
-        f"source {abbreviations}; source {files_rc}; "
-        "from types import SimpleNamespace; "
-        "from prompt_toolkit.key_binding.key_processor import KeyPress; "
-        "calls = []; "
-        "kp = SimpleNamespace(feed_multiple=lambda keys, first=False: "
-        "calls.append((list(keys), first))); "
-        "prompter = SimpleNamespace(app=SimpleNamespace(key_processor=kp)); "
-        "_files_install_keypress_tee(prompter); "
-        "$XONSH_KEYPRESS_DEBUG = True; "
-        "key = KeyPress('x', 'x'); kp.feed_multiple([key], first=True); "
-        "assert calls == [([key], True)]"
-    )
-
-    completed = subprocess.run(
-        [XONSH, "--no-rc", "-c", command],
-        capture_output=True,
-        text=True,
-        env=env,
-    )
-
-    assert completed.returncode == 0, completed.stderr

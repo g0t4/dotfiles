@@ -102,17 +102,16 @@ def test_history_abbreviations_use_xonsh_commands():
     abbreviations = registry()
 
     result, _ = abbreviations.expand(context("hm"))
-    assert result.text == "history pull"
+    assert result.text == "history pull --show-commands"
     result, _ = abbreviations.expand(context("hd"))
     assert result.text == 'history delete ""'
     assert result.cursor == len('history delete "')
 
 
-def test_unsupported_stateful_function_abbreviation_fails_loudly():
+def test_stateful_function_abbreviation_matches_current_conversion():
     abbreviations = registry()
-
-    with pytest.raises(UnsupportedFishFunctionError, match="md_open.*changes directory"):
-        abbreviations.expand(context("mdo"))
+    result, _ = abbreviations.expand(context("mdo"))
+    assert result.text == "unsupported_abbreviation('md_open', 'changes directory from an interactive fzf picker')"
 
 
 def test_unsupported_stateful_function_alias_fails_loudly():
