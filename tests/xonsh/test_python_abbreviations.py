@@ -36,7 +36,7 @@ def registry():
     return result
 
 
-def test_duplicate_python_triggers_use_the_first_declaration():
+def test_duplicate_python_triggers_use_the_last_declaration():
     source_names = []
     for line in SOURCE.read_text().splitlines():
         if re.match(r"^\s*abbr(?:\s|$)", line):
@@ -45,7 +45,7 @@ def test_duplicate_python_triggers_use_the_first_declaration():
     entries = registry().abbreviations
     assert len([entry for entry in entries if entry.trigger == "uvt"]) == source_names.count("uvt")
     result, _ = registry().expand(context("uvt"))
-    assert result.text == "uv tree"
+    assert result.text == "uv tool"
 
 
 def test_python_uv_and_pytest_abbreviations():

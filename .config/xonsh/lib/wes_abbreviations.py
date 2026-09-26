@@ -124,7 +124,8 @@ class AbbreviationRegistry:
         This is intentionally the one applicability entry point for both the
         keybinding and any future abbreviation suggestions/completions.
         """
-        matches = [a for a in self.abbreviations if a.match(context)]
+        # Stable sorting keeps later registrations first at equal specificity.
+        matches = [a for a in reversed(self.abbreviations) if a.match(context)]
         return sorted(matches, key=self._priority, reverse=True)
 
     def expand(

@@ -286,6 +286,25 @@ def test_exact_beats_regex_and_scoped_beats_global():
     assert abbreviation is scoped_exact
 
 
+def test_later_equally_specific_abbreviation_wins():
+    first = Abbreviation("gst", "git status --short")
+    second = Abbreviation("gst", "git status")
+    registry = AbbreviationRegistry([first, second])
+
+    assert registry.applicable(context("gst")) == [second, first]
+    assert registry.expand(context("gst")) == (AbbreviationResult("git status"), second)
+
+
+def test_later_global_abbreviation_does_not_override_a_scoped_one():
+    scoped = Abbreviation("gst", "scoped", commands=("git",))
+    global_later = Abbreviation("gst", "global")
+    registry = AbbreviationRegistry([scoped, global_later])
+
+    assert registry.expand(context("git gst", command_path=("git",))) == (
+        AbbreviationResult("scoped"), scoped
+    )
+
+
 def test_command_position_definition_beats_same_anywhere_regex():
     command_only = Abbreviation(re.compile(r"\.\.+"), "cd ../")
     anywhere = Abbreviation(
