@@ -31,7 +31,7 @@ def fish_function_command(
 ) -> int:
     """Run an interactive Fish function while preserving command I/O."""
     env = os.environ.copy()
-    env["ONLY_CALL_FISH_WRAP_FUNC"] = "true"
+    env["ONLY_CALL_FISH_WRAPPED_FUNC"] = "true"
     completed = subprocess.run(
         [find_fish(), "-ic", "$argv[1] $argv[2..]", "--", name, *map(str, args)],
         stdin=stdin,

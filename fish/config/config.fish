@@ -69,7 +69,7 @@ if test -f $HOME/.config/fish/config-private.fish
     source $HOME/.config/fish/config-private.fish
 end
 
-if status is-interactive; and not set -q ONLY_CALL_FISH_WRAP_FUNC
+if status is-interactive; and not set -q ONLY_CALL_FISH_WRAPPED_FUNC
     # echo ITERM
     #and isatty stdout # TODO what checks do I want to limit when iterm shell integration runs? I need to block it for subshells that just need wrapped fish functions
 

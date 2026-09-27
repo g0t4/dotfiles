@@ -1,4 +1,4 @@
-if set -q ONLY_CALL_FISH_WRAP_FUNC
+if set -q ONLY_CALL_FISH_WRAPPED_FUNC
     # do not modify prompt... i.e. no OSC codes
     return
 end
