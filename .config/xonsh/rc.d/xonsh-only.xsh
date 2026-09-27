@@ -11,4 +11,4 @@ def register_xonsh_only_abbrs():
     abbr('hp', 'history pull --show-commands')
 
 
-# register_xonsh_only_abbrs()
+register_xonsh_only_abbrs()
