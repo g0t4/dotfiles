@@ -12,4 +12,4 @@ abbr('hp', 'history pull --show-commands')
 # load Lexer by default so it is available, I suspect I'll use this alot
 from xonsh.parsers.lexer import Lexer
 # Lexer().split('echo "hello world" file.txt')
-abbr('lexer_split', 'Lexer().split("%")', cursor_marker="%")
+abbr('lexer_split', 'Lexer().split("%")', cursor_marker="%", reminder=True)
