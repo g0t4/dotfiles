@@ -1,7 +1,30 @@
 # * ok lets do it! I want vi bindings!
 # PRN move this elsewhere?
 # https://fishshell.com/docs/current/interactive.html#vi-mode
-fish_vi_key_bindings
+if set --query ONLY_CALL_FISH_WRAPPED_FUNC
+    # intended for `FISH_WRAPPER=1 fish -ic '_repo_root'` so I don't get OSC codes and ANSI escape sequences that I'd normally want/use in an interactive shell REPL
+    function bind_both_modes_default_and_insert
+        # my IMPL below will fail w/o calling fish_vi_key_bindings
+        # so, NOOP these bind calls
+    end
+    return
+end
+
+fish_vi_key_bindings # FYI this results in emitting ANSI escape sequences before/after `-c` arg to `fish`
+# these OSC codes are for cursor shape control
+#
+### thus, with `fish_vi_key_bindings` I see:
+# $TERM="dumb" fish -ic "echo foo" | hexyl -C
+# ┌────────┬─────────────────────────┬─────────────────────────┬────────┬────────┐
+# │00000000│ 1b 5b 36 20 71 66 6f 6f ┊ 0a 1b 5b 32 20 71       │•[6 qfoo┊_•[2 q  │
+# └────────┴─────────────────────────┴─────────────────────────┴────────┴────────┘
+#
+### if I bypass calling fish_vi_key_bindings I see only this:
+# $TERM="dumb" fish -ic "echo foo" | hexyl -C
+# ┌────────┬─────────────────────────┬─────────────────────────┬────────┬────────┐
+# │00000000│ 66 6f 6f 0a             ┊                         │foo_    ┊        │
+# └────────┴─────────────────────────┴─────────────────────────┴────────┴────────┘
+
 function bind_both_modes_default_and_insert
     # FYI this is for using vi-mode, to bind in both normal and default modes
     #  default also works in non-vi-mode (emacs like)
