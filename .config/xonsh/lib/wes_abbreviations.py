@@ -161,14 +161,24 @@ def reset_registry():
     XONSH_ABBREVIATIONS = AbbreviationRegistry()
     return XONSH_ABBREVIATIONS
 
+from wes_timing import Timer
+
+total_us = 0
+total_abbrs = 0
 def abbr(trigger, replacement, **options):
     """Register an abbreviation with declaration syntax close to Fish's."""
-    caller = inspect.currentframe()
-    try:
-        caller = caller.f_back if caller is not None else None
-        options.setdefault("source_file", caller.f_code.co_filename if caller else None)
-        options.setdefault("source_line", caller.f_lineno if caller else None)
-    finally:
-        del caller
+    with Timer("abbr source lookup") as timer:
+        caller = inspect.currentframe()
+        try:
+            caller = caller.f_back if caller is not None else None
+            options.setdefault("source_file", caller.f_code.co_filename if caller else None)
+            options.setdefault("source_line", caller.f_lineno if caller else None)
+        finally:
+            del caller
+    global total_us, total_abbrs
+    total_us += timer.elapsed_us()
+    total_abbrs += 1
+    print("total_us", total_us)
+    print("total_abbrs", total_abbrs)
 
     return XONSH_ABBREVIATIONS.add(Abbreviation(trigger, replacement, **options))

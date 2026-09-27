@@ -20,6 +20,12 @@ class Timer:
             duration = f'{elapsed_ms=}'
         print(f"{self.description}: {duration}")
 
+    def elapsed_us(self):
+        if self.end_ns is None:
+            return (time.time_ns() - self.start_ns) / 1000
+        return (self.end_ns - self.start_ns) / 1000
+
+
 # EXAMPLE USE:
 # with Timer("foo'ing"):
 #     # Code block whose execution time you want to measure
