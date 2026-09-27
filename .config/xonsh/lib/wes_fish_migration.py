@@ -49,7 +49,7 @@ SKIPPED_FISH_FUNCTIONS = {
 
 # These functions feed command substitutions. Interactive Fish startup can emit
 # terminal control sequences, so their output needs the capturing bridge.
-VALUE_FISH_FUNCTIONS = {"_repo_root", "git_current_branch"}
+# VALUE_FISH_FUNCTIONS = {"_repo_root", "git_current_branch"}
 
 def abbr_from_fish_function(function_name):
     def expand(context, _match):
