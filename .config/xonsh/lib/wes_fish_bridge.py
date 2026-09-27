@@ -31,6 +31,7 @@ def fish_function_command(
 ) -> int:
     """Run an interactive Fish function while preserving command I/O."""
     env = os.environ.copy()
+    # FYI ONLY_CALL_FISH_WRAPPED_FUNC should be used in the fish config to stop any extra ANSI escape codes from being displayed
     env["ONLY_CALL_FISH_WRAPPED_FUNC"] = "true"
     completed = subprocess.run(
         [find_fish(), "-ic", "$argv[1] $argv[2..]", "--", name, *map(str, args)],
