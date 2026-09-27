@@ -53,6 +53,7 @@ class Abbreviation:
     internal: bool = False
     source_file: str | None = None
     source_line: int | None = None
+    reminder: bool = False # marker for reminder abbrs (things I want to learn or use and thus the name is often more verbose)
 
     @property
     def is_regex(self) -> bool:
