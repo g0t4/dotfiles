@@ -47,10 +47,6 @@ SKIPPED_FISH_FUNCTIONS = {
     "wcl",
 }
 
-# These functions feed command substitutions. Interactive Fish startup can emit
-# terminal control sequences, so their output needs the capturing bridge.
-# VALUE_FISH_FUNCTIONS = {"_repo_root", "git_current_branch"}
-
 def abbr_from_fish_function(function_name):
     def expand(context, _match):
         reason = UNSUPPORTED_FISH_FUNCTIONS.get(function_name)
@@ -101,6 +97,11 @@ def unsupported_fish_alias(function_name, reason):
 
 
 def wrap_fish_functions(aliases, function_names):
+
+    # !!! FYI if there are any ANSI escape codes coming out of fish...
+    # ! ... do not fix them here, instead fix them in the fish config
+    # ! INSTEAD, BLOCK them in the fish config with `set --query ONLY_CALL_FISH_WRAPPED_FUNC`
+
     def fish_help(args, stdin=None, stdout=None, stderr=None, spec=None, **_):
         if len(args) != 1:
             print("usage: _fish_help FUNCTION", file=stderr)
@@ -141,33 +142,3 @@ def wrap_fish_functions(aliases, function_names):
         )
         # register enhanced "superhelp" that includes the fish function body
         abbr(function_name + "??", f"_fish_help {shlex.quote(function_name)}")
-    register_value_fish_functions(
-        aliases, (name for name in function_names if name in VALUE_FISH_FUNCTIONS)
-    )
-
-
-def register_value_fish_functions(aliases, function_names):
-    """Register Fish functions that *return a value* (a string for capture).
-
-    These are functions whose stdout is captured into a variable or command
-    substitution (``$()``), e.g. ``_get_ask_traces_dir``. They must use the
-    capturing bridge (``fish_function``) which sets ``TERM=dumb`` and strips
-    terminal escape sequences (vi-mode cursor codes, OSC, etc.). The raw
-    ``fish_function_command`` bridge passes those escapes through, which pollutes
-    captured output.
-    """
-    def value_fish_alias(function_name):
-        def invoke(args, stdin=None, stdout=None, stderr=None, **_):
-            input_text = stdin.read() if stdin is not None else None
-            try:
-                output = fish_function(function_name, *args, input_text=input_text)
-            except FishFunctionError as error:
-                print(error, file=stderr or sys.stderr)
-                return 1
-            if output:
-                print(output, file=stdout or sys.stdout)
-            return 0
-        return invoke
-
-    for function_name in function_names:
-        aliases[function_name] = value_fish_alias(function_name)
