@@ -16,5 +16,5 @@ ealias pyml='| bat -l yml' -g # shortened
 #    cat site.yml py => expands to 'cat site.yml | bat -l yml'
 #   hmmmm if I have a command like \cat (to bypass aliases)... global aliases don't complete in this case?! ... the alias works on execution but it seems like _expand_alias is never called or it doesn't expand in this case
 
-ealias hC='| hexdump -C' -g
-# i.e.    echo -n $IFS | hexdump -C
+ealias hC='| hexyl -C' -g
+# i.e.    echo -n $IFS | hexyl -C

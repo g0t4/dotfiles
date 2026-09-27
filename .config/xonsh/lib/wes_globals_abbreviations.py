@@ -62,7 +62,7 @@ def register_globals_abbreviations():
         "psort": "| sort -h",
         "errout": "2>&1",
         "pwc": "| wordcount",
-        "hC": "| hexdump -C",
+        "hC": "| hexyl -C",
         "pcp": "| pbcopy",
     }.items():
         abbr(trigger, replacement, position="anywhere")

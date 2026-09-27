@@ -72,9 +72,9 @@ end
 # TODO make pwc insert pbpaste if line is empty? else just `| wc`?
 abbr --position=anywhere -- pwc '| wordcount'
 
-abbr --position=anywhere -- hC '| hexdump -C'
+abbr --position=anywhere -- hC '| hexyl -C'
 abbr --position=anywhere -- pcp '| pbcopy' # copy to clipboard
-# i.e.    echo -n $IFS | hexdump -C
+# i.e.    echo -n $IFS | hexyl -C
 
 # use `pxargs` if `px` is a problem
 # TODO I would like to wrap xargs with some more features... i.e. show command colorfully / bold so it is clear vs regular output

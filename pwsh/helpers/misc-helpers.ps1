@@ -48,7 +48,7 @@ ealias prb '| bat -pl rb' -Anywhere
 ealias psh '| bat -pl sh' -Anywhere
 ealias pxml '| bat -l xml' -Anywhere # shortened
 ealias pyml '| bat -l yml' -Anywhere # shortened
-ealias hC '| hexdump -C' -Anywhere
+ealias hC '| hexyl -C' -Anywhere
 ealias pcp '| Set-Clipboard' -Anywhere # copy to clipboard
 # todo more in fish's misc for kubectl command
 
