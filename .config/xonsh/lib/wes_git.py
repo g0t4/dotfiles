@@ -198,7 +198,7 @@ def register_wes_git():
     abbr('amend_n_muse', 'GIT_SEQUENCE_EDITOR=true git rebase -i --exec "git commit --amend --no-edit --author \\"muse-glimmer-30b-dspark<wes.mcclure+muse-glimmer-30b-dspark@gmail.com>\\"" HEAD~%', cursor_marker="%")
     abbr('amend_last_msg', 'git commit --amend -m "%"', cursor_marker="%")
     abbr('yolo', 'git commit --all -m "%" && git push', cursor_marker="%")
-    abbr(re.compile('gptf?\\d*f?'), abbr_from_fish_function('_abbr_git_push_up_to'))
+    abbr(re.compile('gptf?\\d*f?'), abbr_from_fish_function('_abbr_git_push_up_to'), cursor_marker="%")
     abbr('grl', 'git reflog --pretty=reflog')
     abbr('grla', 'git reflog --all --pretty=reflog')
     abbr('gl', 'git log --color=always | line_numbers')
