@@ -7,7 +7,7 @@ import shutil
 from collections.abc import Iterable
 
 
-def _live_xonsh_path() -> Iterable[str]:
+def _xonsh_path() -> Iterable[str]:
     try:
         from xonsh.built_ins import XSH
 
@@ -16,30 +16,19 @@ def _live_xonsh_path() -> Iterable[str]:
         return ()
 
 
-def find_fish(
-    xonsh_path: Iterable[str] | None = None,
-    *,
-    process_path: str | None = None,
-    standard_paths: Iterable[str] = (
-        "/opt/homebrew/bin/fish",
-        "/usr/local/bin/fish",
-    ),
-) -> str:
-    """Return Fish's absolute executable path using shell-aware precedence."""
-    live_entries = _live_xonsh_path() if xonsh_path is None else xonsh_path
-    live_path = os.pathsep.join(map(str, live_entries))
+def find_fish() -> str:
+    xonsh_path = _xonsh_path()
+    live_path = os.pathsep.join(map(str, xonsh_path))
     executable = shutil.which("fish", path=live_path) if live_path else None
     if executable:
         return executable
 
-    inherited_path = os.environ.get("PATH", "") if process_path is None else process_path
-    executable = shutil.which("fish", path=inherited_path) if inherited_path else None
-    if executable:
-        return executable
-
-    for path in standard_paths:
+    known_paths = (
+        "/opt/homebrew/bin/fish",
+        "/usr/bin/fish",
+    ),
+    for path in known_paths:
         if os.path.isfile(path) and os.access(path, os.X_OK):
             return path
-    raise FileNotFoundError(
-        "fish executable not found in Xonsh PATH, process PATH, or standard locations"
-    )
+    # now that I set syncing of env vars this helper is mostly unnecessary but I do like that it gives me the chance to expressly format a message when we fail to find fish
+    raise FileNotFoundError("fish executable not found in Xonsh PATH, process PATH, or standard locations")
