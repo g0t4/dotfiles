@@ -135,6 +135,7 @@ class PaletteScore:
     """A palette's distinguishability metrics, compared lexicographically."""
 
     worst_pair: float  # min ΔE across every unordered pair (no lookalikes)
+    worst_background: float  # min ΔE from the background (every color must pop)
     worst_offset: float  # min ΔE at the exposed offsets 1..4
     mean_offset: float  # average ΔE across offsets 1..4
 
@@ -142,10 +143,12 @@ class PaletteScore:
         """True if this palette is strictly better (higher is better)."""
         return (
             self.worst_pair,
+            self.worst_background,
             self.worst_offset,
             self.mean_offset,
         ) > (
             other.worst_pair,
+            other.worst_background,
             other.worst_offset,
             other.mean_offset,
         )
@@ -155,18 +158,24 @@ def palette_score(colors: list[tuple[int, int, int]]) -> PaletteScore:
     """Score a cyclic palette by OKLab ΔE.
 
     All 16 colors appear on the same line at once, so no two may look alike:
-    the global minimum pair distance is the primary metric. The offsets 1..4
-    are the neighbors that spaces / line boundaries can force together, so they
-    get extra margin as the tie-breaker (the ``worst_offset`` / ``mean_offset``
-    metrics). Maximizing the tuple in ``better_than`` does all of this.
+    the global minimum pair distance is the primary metric. The background is
+    factored in next, so the search also maximizes how much each color pops off
+    the dark background (not just how far apart colors are from each other).
+    The offsets 1..4 are the neighbors that spaces / line boundaries can force
+    together, so they get extra margin as a tie-breaker. Maximizing the tuple
+    in ``better_than`` does all of this.
     """
     oklab_colors = [rgb_to_oklab(color) for color in colors]
     n = len(oklab_colors)
+    background_oklab = rgb_to_oklab(BACKGROUND)
 
     all_pairs = [
         delta_e(oklab_colors[i], oklab_colors[j])
         for i in range(n)
         for j in range(i + 1, n)
+    ]
+    background_distances = [
+        delta_e(color_oklab, background_oklab) for color_oklab in oklab_colors
     ]
     offsets = [
         delta_e(oklab_colors[i], oklab_colors[(i + offset) % n])
@@ -176,6 +185,7 @@ def palette_score(colors: list[tuple[int, int, int]]) -> PaletteScore:
 
     return PaletteScore(
         worst_pair=min(all_pairs),
+        worst_background=min(background_distances),
         worst_offset=min(offsets),
         mean_offset=sum(offsets) / len(offsets),
     )
@@ -282,6 +292,7 @@ def main() -> None:
 
     print()
     print(f"Best score: worst_pair={best_score.worst_pair:.4f}, "
+          f"worst_background={best_score.worst_background:.4f}, "
           f"worst_offset={best_score.worst_offset:.4f}, "
           f"mean_offset={best_score.mean_offset:.4f}")
     print()

@@ -24,25 +24,26 @@ from rich.text import Text
 # One color per byte position within a 16-byte line, so no color repeats on a
 # line. Picked mechanically by ``find_colors.py``: each color has WCAG contrast
 # >= 4.5 against the dark background (#1f2229) and the palette maximizes the
-# minimum OKLab perceptual distance (ΔE) between all pairs, with extra margin
-# for neighbors at offsets 1..4 (which spaces / line boundaries can expose).
+# minimum OKLab perceptual distance (ΔE) between all pairs, then the minimum
+# distance from the background (so every color pops), with extra margin for
+# neighbors at offsets 1..4 (which spaces / line boundaries can expose).
 BYTE_COLORS: tuple[str, ...] = (
-    "#F888F0",  # 0  pink
-    "#10A008",  # 1  green
-    "#F8B020",  # 2  orange
-    "#00F8D0",  # 3  teal
-    "#18B8E8",  # 4  sky blue
-    "#B8C8B8",  # 5  pale gray-green
-    "#A878B0",  # 6  mauve
-    "#F05070",  # 7  red-pink
-    "#F8F828",  # 8  yellow
-    "#18F818",  # 9  bright green
-    "#2979FF",  # 10 blue
-    "#F818D8",  # 11 magenta
+    "#709838",  # 0  olive green
+    "#90F800",  # 1  bright lime
+    "#D858B0",  # 2  pink
+    "#F8B098",  # 3  peach
+    "#E8E0F8",  # 4  off-white lavender
+    "#40F8F0",  # 5  aqua
+    "#F85048",  # 6  red
+    "#38C0B8",  # 7  teal
+    "#C0C008",  # 8  yellow
+    "#3888F8",  # 9  blue
+    "#F0F078",  # 10 pale yellow
+    "#F820F8",  # 11 magenta
     "#B026FF",  # 12 purple
-    "#F8F8E0",  # 13 off-white
-    "#809878",  # 14 gray-green
-    "#70C860",  # 15 green
+    "#E898F8",  # 13 lavender
+    "#20C810",  # 14 green
+    "#9088A8",  # 15 gray-lavender
 )
 
 GROUP_SIZE = 8
