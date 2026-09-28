@@ -41,6 +41,44 @@ ESC = 0x1B
 CSI_8BIT = 0x9B  # 8-bit CSI introducer
 OSC_8BIT = 0x9D  # 8-bit OSC introducer
 
+# Readable names for ASCII control characters, so they don't all collapse into
+# a single placeholder and the char column actually tells you what each byte is.
+CONTROL_NAMES: dict[int, str] = {
+    0x00: "NUL",
+    0x01: "SOH",
+    0x02: "STX",
+    0x03: "ETX",
+    0x04: "EOT",
+    0x05: "ENQ",
+    0x06: "ACK",
+    0x07: "BEL",
+    0x08: "BS",
+    0x09: "TAB",
+    0x0A: "LF",
+    0x0B: "VT",
+    0x0C: "FF",
+    0x0D: "CR",
+    0x0E: "SO",
+    0x0F: "SI",
+    0x10: "DLE",
+    0x11: "DC1",
+    0x12: "DC2",
+    0x13: "DC3",
+    0x14: "DC4",
+    0x15: "NAK",
+    0x16: "SYN",
+    0x17: "ETB",
+    0x18: "CAN",
+    0x19: "EM",
+    0x1A: "SUB",
+    0x1B: "ESC",
+    0x1C: "FS",
+    0x1D: "GS",
+    0x1E: "RS",
+    0x1F: "US",
+    0x7F: "DEL",
+}
+
 
 @dataclass(frozen=True)
 class Segment:
@@ -522,10 +560,10 @@ def explain_escape(esc: bytes) -> str:
 
 
 def printable_char(byte: int) -> str:
-    """Return a printable representation of a byte, or a placeholder."""
+    """Return a readable representation of a byte for the char column."""
     if 32 <= byte < 127:
         return chr(byte)
-    return "·"
+    return CONTROL_NAMES.get(byte, "·")
 
 
 def utf8_seq_len(byte: int) -> int | None:

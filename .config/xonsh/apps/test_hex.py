@@ -101,3 +101,8 @@ def test_cursor_move_count():
 def test_utf8_char_tokens():
     tokens = char_tokens("héllo".encode("utf-8"))
     assert [text for text, _ in tokens] == ["h", "é", "l", "l", "o"]
+
+
+def test_control_names_in_char_tokens():
+    tokens = char_tokens(b"\x0a\x09\x0d\x1b")
+    assert [text for text, _ in tokens] == ["LF", "TAB", "CR", "ESC"]
