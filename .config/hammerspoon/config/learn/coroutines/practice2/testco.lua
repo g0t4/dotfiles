@@ -1,5 +1,5 @@
 require("config.tests.setup")
-local only = require("devtools.tests.define.only")
+local only = require("devtools.tests.only")
 
 describe("test", function()
     -- it("test coroutine", function()

@@ -3,9 +3,9 @@ if not vim.fn.getcwd():match("%.config/hammerspoon$") then
 end
 require("config.tests.setup")
 local should = require('devtools.tests.should')
-local describe = require('devtools.tests.define.describe')
-local only = require('devtools.tests.define.only')
-local skip = require('devtools.tests.define.skip')
+local describe = require('devtools.tests.describe')
+local only = require('devtools.tests.only')
+local skip = require('devtools.tests.skip')
 local log = require("config.logs").launcher()
 
 local casing = require("config.launcher.casing")
