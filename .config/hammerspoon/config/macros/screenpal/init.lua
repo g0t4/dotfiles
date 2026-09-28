@@ -1,5 +1,8 @@
 local vim = require("config.libs.vim") -- reuse nvim lua modules in hammerspoon
-require("config.macros.screenpal.co")
+require("devtools.co")
+local syncify = require("devtools.co.syncify")
+local ensure_in_coroutine = require("devtools.co.ensure_in_coroutine")
+local sleep_ms = require("devtools.co.sleep_ms")
 local opencv = require("config.macros.screenpal.py.opencv")
 local SilencesController = require('config.macros.screenpal.silences')
 local ScreenPalEditorWindow = require('config.macros.screenpal.editor_window')

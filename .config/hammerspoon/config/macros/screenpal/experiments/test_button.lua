@@ -1,5 +1,7 @@
 local VolumeMenu = require('config.macros.screenpal.windows.volume_menu')
 local ToolBarWindow = require('config.macros.screenpal.windows.tools_window')
+local ensure_in_coroutine = require("devtools.co.ensure_in_coroutine")
+local sleep_ms = require("devtools.co.sleep_ms")
 
 local M = {}
 
