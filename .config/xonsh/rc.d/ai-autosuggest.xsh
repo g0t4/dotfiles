@@ -7,9 +7,7 @@ import itertools
 import json
 import os
 import platform
-import sys
 import time
-from pathlib import Path
 
 from prompt_toolkit.application import get_app
 from prompt_toolkit.auto_suggest import AutoSuggest, AutoSuggestFromHistory, Suggestion
@@ -26,10 +24,6 @@ from prompt_toolkit.layout.containers import (
 from prompt_toolkit.layout.controls import FormattedTextControl
 from xonsh.events import events
 
-
-_ai_xonsh_lib = Path($XONSH_CONFIG_DIR) / "lib"
-if str(_ai_xonsh_lib) not in sys.path:
-    sys.path.insert(0, str(_ai_xonsh_lib))
 
 from wes_ai_traces import build_chat_trace, save_chat_trace
 from wes_ai_autosuggest_state import (

@@ -8,14 +8,9 @@ aliases = XSH.aliases
 import asyncio
 import os
 import sys
-from pathlib import Path
 
 from xonsh.dirstack import cd as _xonsh_cd
 
-
-_wes_xonsh_lib = Path($XONSH_CONFIG_DIR) / "lib"
-if str(_wes_xonsh_lib) not in sys.path:
-    sys.path.insert(0, str(_wes_xonsh_lib))
 
 from wes_fish_z import FishZ, FishZError
 from wes_semantic_history import InferenceClient

@@ -6,14 +6,8 @@ from xonsh.events import events
 aliases = XSH.aliases
 
 import subprocess
-import sys
-from pathlib import Path
 
 from rich.console import Console
-
-_wes_xonsh_lib = Path($XONSH_CONFIG_DIR) / "lib"
-if str(_wes_xonsh_lib) not in sys.path:
-    sys.path.insert(0, str(_wes_xonsh_lib))
 
 from prompt_toolkit.application import run_in_terminal
 from prompt_toolkit.filters import Condition, EmacsInsertMode, IsSearching, ViInsertMode
