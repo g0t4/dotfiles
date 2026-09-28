@@ -12,6 +12,8 @@ plain-English explanation of what they do.
 
 from __future__ import annotations
 
+import argparse
+import base64
 import sys
 from dataclasses import dataclass
 
@@ -398,15 +400,56 @@ def osc_detail(code: str, rest: str) -> str:
     if code == "8":
         parts = rest.split(";", 1)
         if len(parts) == 2:
-            return f"link to {parts[1] or '(empty)'}"
+            params, uri = parts
+            if params:
+                return f"link to {uri or '(empty)'!r} (params: {params})"
+            return f"link to {uri or '(empty)'!r}"
         return ""
     if code == "133":
         return OSC_133.get(rest.split(";")[0], "")
     if code == "1337":
         return OSC_1337.get(rest.split("=")[0], "")
     if code == "52":
-        return "copied selection to clipboard"
+        parts = rest.split(";", 1)
+        selection = parts[0]
+        b64data = parts[1] if len(parts) > 1 else ""
+        selection_name = {
+            "c": "clipboard",
+            "p": "primary",
+            "s": "secondary",
+        }.get(selection, f"selection {selection!r}")
+        try:
+            decoded = base64.b64decode(b64data)
+        except Exception:
+            decoded = b""
+        if decoded:
+            preview = decoded[:40].decode("utf-8", errors="replace")
+            if len(decoded) > 40:
+                preview += "…"
+            return f"copy {selection_name} ({len(decoded)} bytes): {preview!r}"
+        return f"copy {selection_name} ({len(b64data)} b64 chars)"
     return ""
+
+
+def describe_cursor_move(final: str, params_text: str) -> str:
+    """Describe a cursor movement or position CSI sequence."""
+    params = parse_params(params_text)
+    if final in ("H", "f"):
+        row = params[0] if params and params[0] is not None else 1
+        col = params[1] if len(params) > 1 and params[1] is not None else 1
+        return f"move to row {row}, column {col}"
+    n = params[0] if params and params[0] is not None else 1
+    moves = {
+        "A": f"up {n} line(s)",
+        "B": f"down {n} line(s)",
+        "C": f"forward {n} column(s)",
+        "D": f"back {n} column(s)",
+        "E": f"next {n} line(s)",
+        "F": f"previous {n} line(s)",
+        "G": f"column {n}",
+        "d": f"line {n}",
+    }
+    return moves[final]
 
 
 def explain_csi(esc: bytes) -> str:
@@ -428,6 +471,8 @@ def explain_csi(esc: bytes) -> str:
         detail = CURSOR_SHAPES.get(style, f"cursor style {style}")
     elif final == "n" and params_text == "6":
         detail = "report cursor position"
+    elif final in ("A", "B", "C", "D", "E", "F", "G", "H", "f", "d"):
+        detail = describe_cursor_move(final, params_text)
     else:
         detail = describe_params(params_text)
     if detail:
@@ -483,25 +528,66 @@ def printable_char(byte: int) -> str:
     return "·"
 
 
+def utf8_seq_len(byte: int) -> int | None:
+    """Return the length of a UTF-8 sequence starting with this byte, or None."""
+    if byte < 0x80:
+        return 1
+    if 0xC2 <= byte <= 0xDF:
+        return 2
+    if 0xE0 <= byte <= 0xEF:
+        return 3
+    if 0xF0 <= byte <= 0xF4:
+        return 4
+    return None
+
+
+def char_tokens(data: bytes) -> list[tuple[str, int]]:
+    """Decode a line's bytes into (display_text, first_byte_index) tokens.
+
+    Valid UTF-8 sequences are shown as their actual character; control bytes
+    and invalid sequences fall back to the single-byte placeholder.
+    """
+    tokens: list[tuple[str, int]] = []
+    n = len(data)
+    i = 0
+    while i < n:
+        b = data[i]
+        seq_len = utf8_seq_len(b)
+        if seq_len and seq_len > 1 and i + seq_len <= n:
+            try:
+                char = data[i : i + seq_len].decode("utf-8")
+                tokens.append((char, i))
+                i += seq_len
+                continue
+            except UnicodeDecodeError:
+                pass
+        tokens.append((printable_char(b), i))
+        i += 1
+    return tokens
+
+
 def color_for_index(index: int) -> str:
     """Return the color for a byte at a 0-based index within its group."""
     return BYTE_COLORS[index % GROUP_SIZE]
 
 
-def format_line(offset: int, data: bytes, annotation: str = "") -> Text:
+def format_line(
+    offset: int, data: bytes, annotation: str = "", use_color: bool = True
+) -> Text:
     """Render a single line of the hex dump with per-byte color coding."""
+    dim = "dim" if use_color else ""
     line = Text()
-    line.append(f"{offset:08X}  ", style="dim")
+    line.append(f"{offset:08X}  ", style=dim)
 
     # Left side: hex bytes grouped in 8s with a divider.
     for group_start in range(0, BYTES_PER_LINE, GROUP_SIZE):
         for i, byte in enumerate(data[group_start : group_start + GROUP_SIZE]):
             color = color_for_index(group_start + i)
-            line.append(f"{byte:02X}", style=color)
+            line.append(f"{byte:02X}", style=color if use_color else "")
             if i != GROUP_SIZE - 1:
                 line.append(" ")
         if group_start + GROUP_SIZE < BYTES_PER_LINE:
-            line.append(" │ ", style="dim")
+            line.append(" │ ", style=dim)
 
     # Pad the hex column so the character column lines up on short lines.
     hex_columns = (BYTES_PER_LINE * 3 - 1) + 2  # two extra for the divider
@@ -509,65 +595,75 @@ def format_line(offset: int, data: bytes, annotation: str = "") -> Text:
     if hex_width < hex_columns:
         line.append(" " * (hex_columns - hex_width))
 
-    line.append("  ", style="dim")
+    line.append("  ", style=dim)
 
-    # Right side: printable characters, same per-byte color, with a gap where
-    # the groups split so the separation is visible even without color.
-    for i, byte in enumerate(data):
-        color = color_for_index(i)
-        line.append(printable_char(byte), style=color)
-        if i == GROUP_SIZE - 1:
+    # Right side: decoded characters, same per-byte color, with a gap where the
+    # groups split so the separation is visible even without color.
+    for text, idx in char_tokens(data):
+        color = color_for_index(idx)
+        line.append(text, style=color if use_color else "")
+        if idx == GROUP_SIZE - 1:
             line.append(" ")
     if annotation:
         line.append("   ")
-        line.append(annotation, style="italic")
+        line.append(annotation, style="italic" if use_color else "")
 
     return line
 
 
-def hexdump(data: bytes, annotation: str = "") -> Text:
+def hexdump(data: bytes, annotation: str = "", use_color: bool = True) -> Text:
     """Build the full hex dump for the given bytes."""
     output = Text()
     for offset in range(0, len(data), BYTES_PER_LINE):
         chunk = data[offset : offset + BYTES_PER_LINE]
         ann = annotation if offset == 0 else ""
-        output.append(format_line(offset, chunk, ann))
+        output.append(format_line(offset, chunk, ann, use_color))
         output.append("\n")
     return output
 
 
-def render_escape(segment: Segment) -> Text:
+def render_escape(segment: Segment, use_color: bool = True) -> Text:
     """Render a single escape segment with a label and explanation."""
     text = Text()
-    text.append("── ", style="dim")
-    text.append("ANSI ESCAPE", style="bold yellow")
-    text.append(" ──", style="dim")
+    text.append("── ", style="dim" if use_color else "")
+    text.append("ANSI ESCAPE", style="bold yellow" if use_color else "")
+    text.append(" ──", style="dim" if use_color else "")
     text.append("\n")
-    text.append(hexdump(segment.data, annotation=segment.explanation))
+    text.append(
+        hexdump(segment.data, annotation=segment.explanation, use_color=use_color)
+    )
     return text
 
 
-def render_segments(segments: list[Segment]) -> Text:
+def render_segments(segments: list[Segment], use_color: bool = True) -> Text:
     """Render all segments, separating each with a blank line."""
     output = Text()
     for i, segment in enumerate(segments):
         if i:
             output.append("\n")
         if segment.kind == "escape":
-            output.append(render_escape(segment))
+            output.append(render_escape(segment, use_color))
         elif segment.data:
-            output.append(hexdump(segment.data))
+            output.append(hexdump(segment.data, use_color=use_color))
     return output
 
 
 def main() -> None:
     """Read STDIN and print a colored hex dump."""
-    console = Console()
+    parser = argparse.ArgumentParser(description="Colorized hex dump with ANSI explanations")
+    parser.add_argument(
+        "--no-color",
+        action="store_true",
+        help="disable colors and styling (plain, agent-friendly output)",
+    )
+    args = parser.parse_args()
+    use_color = not args.no_color
+    console = Console(color_system="standard" if use_color else None)
     data = sys.stdin.buffer.read()
     if not data:
-        console.print("No input received on STDIN.", style="yellow")
+        console.print("No input received on STDIN.", style="yellow" if use_color else None)
         return
-    console.print(render_segments(parse_ansi(data)))
+    console.print(render_segments(parse_ansi(data), use_color))
 
 
 if __name__ == "__main__":
