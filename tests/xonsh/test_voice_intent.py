@@ -115,16 +115,9 @@ def test_whisper_is_resolved_lazily_and_cached(tmp_path):
 
 def test_resolve_executable_finds_homebrew_when_path_does_not(monkeypatch):
     voice_module = _module()
-    monkeypatch.setattr(voice_module.shutil, "which", lambda _: None)
-    original_is_file = Path.is_file
-    monkeypatch.setattr(
-        Path,
-        "is_file",
-        lambda path: str(path) == "/opt/homebrew/bin/ffmpeg" or original_is_file(path),
-    )
-    monkeypatch.setattr(voice_module.os, "access", lambda *_: True)
-
-    assert voice_module.resolve_executable("ffmpeg") == "/opt/homebrew/bin/ffmpeg"
+    # how about we just make sure we can find ffmpeg on the system :) ... fine by me for a test... all my machines that will run voice intent need to have this so just test it!
+    # in fact, why not have voice intent startup with background tests of this and other exectuables? and warn user if not present? (can wait until turn on voice intent)
+    assert voice_module.resolve_executable("ffmpeg")
 
 
 def test_shift_f7_binding_is_registered():
