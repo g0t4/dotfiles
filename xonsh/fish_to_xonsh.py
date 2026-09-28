@@ -261,7 +261,9 @@ def declaration(name, replacement, options):
             "$sed_cmd": "os.environ['XONSH_SED_COMMAND']",
         }.get(command, repr(command))
         arguments.append(f"commands=({command_expression},)")
-    if options.get("cursor") and replacement.count("%") == 1:
+    # A function-backed abbreviation puts its marker in the function output,
+    # not in the declaration's literal replacement.
+    if options.get("cursor") and (options.get("function") or replacement.count("%") == 1):
         arguments.append('cursor_marker="%"')
     return f"    abbr({', '.join(arguments)})"
 

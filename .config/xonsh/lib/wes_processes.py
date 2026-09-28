@@ -74,7 +74,7 @@ def register_wes_processes():
     abbr('lua_prints', "rg -g '*.lua' '^\\s*print\\\\('")
     abbr('lua_prints_commented_out', "rg -g '*.lua' '^\\s*--\\s*print\\\\('")
     abbr('z_clean', 'z --clean')
-    abbr('ze', abbr_from_fish_function('_abbr_ze'), position="anywhere")
+    abbr('ze', abbr_from_fish_function('_abbr_ze'), position="anywhere", cursor_marker="%")
     abbr('tf', 'terraform')
     abbr('tfv', 'terraform validate')
     abbr('tfi', 'terraform init')

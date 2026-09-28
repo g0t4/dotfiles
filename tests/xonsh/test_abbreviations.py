@@ -233,6 +233,14 @@ def test_cursor_marker_is_removed_and_sets_cursor():
     assert result == AbbreviationResult('git commit -m ""', cursor=15)
 
 
+def test_function_cursor_marker_without_marker_places_cursor_at_end():
+    registry = AbbreviationRegistry(
+        [Abbreviation("example", lambda _ctx, _match: "echo done", cursor_marker="%")]
+    )
+    result, _ = registry.expand(context("example", command_path=("example",)))
+    assert result == AbbreviationResult("echo done", cursor=len("echo done"))
+
+
 @pytest.mark.parametrize(
     ("replacement", "cursor", "expected_text", "expected_cursor"),
     (

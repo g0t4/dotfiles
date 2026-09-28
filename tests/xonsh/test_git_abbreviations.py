@@ -3,6 +3,7 @@ from test_setup import ROOT
 import subprocess
 
 from wes_abbreviations import AbbreviationContext, reset_registry  # noqa: E402
+from fish_to_xonsh import declaration, parse_abbreviation  # noqa: E402
 import wes_git  # noqa: E402
 from wes_git_functions import format_line_numbers  # noqa: E402
 
@@ -90,6 +91,23 @@ def test_regex_abbreviation_delegates_to_named_fish_function(monkeypatch):
 
     assert result.text == "@{12}"
     assert calls == [("_abbr_expand_reflog_d", "reflog12")]
+
+
+def test_regex_fish_function_preserves_cursor_marker(monkeypatch):
+    source = (ROOT / "fish/load_last_interactive_only/git.fish").read_text()
+    definition = next(
+        line for line in source.splitlines()
+        if line.startswith("abbr --set-cursor --regex 'gpt")
+    )
+    assert 'cursor_marker="%"' in declaration(*parse_abbreviation(definition))
+
+    monkeypatch.setattr(
+        "wes_fish_migration.fish_function",
+        lambda name, token: "git push origin HEAD~1%:main --force",
+    )
+    result, _ = registry().expand(context("gpt1f", command_path=("gpt1f",)))
+    assert result.text == "git push origin HEAD~1:main --force"
+    assert result.cursor == len("git push origin HEAD~1")
 
 
 def test_nl_option_abbreviations_are_registered():

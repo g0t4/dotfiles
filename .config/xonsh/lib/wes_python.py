@@ -90,7 +90,7 @@ def register_wes_python():
     abbr('uv_publish', 'uv publish')
     abbr('uv_clean', 'uv clean')
     abbr('ptw_prints', 'ptw --clear -- --capture=no --log-cli-level=INFO')
-    abbr('ptw_one', abbr_from_fish_function('__ptw_one'))
+    abbr('ptw_one', abbr_from_fish_function('__ptw_one'), cursor_marker="%")
     abbr('pt', 'pytest')
     abbr('ptc', 'pytest --collect-only')
     abbr('ptk', 'pytest -k "%"', cursor_marker="%")

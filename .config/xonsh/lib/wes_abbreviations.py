@@ -90,7 +90,15 @@ class Abbreviation:
         result = value if isinstance(value, AbbreviationResult) else AbbreviationResult(value)
         if self.cursor_marker is None:
             return result
-        if result.text.count(self.cursor_marker) != 1:
+        marker_count = result.text.count(self.cursor_marker)
+        # Fish puts the cursor at the end when a function returns no marker.
+        if marker_count == 0 and callable(self.replacement):
+            return AbbreviationResult(
+                result.text,
+                cursor=result.cursor if result.cursor is not None else len(result.text),
+                replace_buffer=result.replace_buffer,
+            )
+        if marker_count != 1:
             raise ValueError(
                 f"abbreviation {self.trigger!r} must contain exactly one "
                 f"cursor marker {self.cursor_marker!r}"
