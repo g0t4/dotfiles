@@ -67,10 +67,13 @@ def format_line(offset: int, data: bytes) -> Text:
 
     line.append("  ", style="dim")
 
-    # Right side: printable characters, same per-byte color.
+    # Right side: printable characters, same per-byte color, with a gap where
+    # the groups split so the separation is visible even without color.
     for i, byte in enumerate(data):
         color = color_for_index(i)
         line.append(printable_char(byte), style=color)
+        if i == GROUP_SIZE - 1:
+            line.append(" ")
 
     return line
 
