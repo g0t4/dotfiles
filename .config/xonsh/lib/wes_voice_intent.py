@@ -12,25 +12,12 @@ from functools import cached_property
 from pathlib import Path
 from typing import Callable
 
+from find_executables import resolve_executable
 
 DEFAULT_MODEL = (
     Path.home()
     / "Library/Application Support/pywhispercpp/models/ggml-large-v3-turbo.bin"
 )
-
-
-def resolve_executable(name: str) -> str:
-    """Resolve tools even when Xonsh's live PATH has not reached os.environ."""
-    if os.path.isabs(name):
-        return name
-    resolved = shutil.which(name)
-    if resolved:
-        return resolved
-    for directory in (Path("/opt/homebrew/bin"), Path("/usr/local/bin")):
-        candidate = directory / name
-        if candidate.is_file() and os.access(candidate, os.X_OK):
-            return str(candidate)
-    raise FileNotFoundError(f"required executable not found: {name}")
 
 
 class VoiceIntent:

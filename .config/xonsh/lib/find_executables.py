@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import os
+from pathlib import Path
 import shutil
 from collections.abc import Iterable
 
@@ -39,4 +40,16 @@ def find_gh(name):
         raise FileNotFoundError(f"{name}: executable not found in Xonsh PATH")
     return executable
 
+def resolve_executable(name: str) -> str:
+    """Resolve tools even when Xonsh's live PATH has not reached os.environ."""
+    if os.path.isabs(name):
+        return name
+    resolved = shutil.which(name)
+    if resolved:
+        return resolved
+    for directory in (Path("/opt/homebrew/bin"), Path("/usr/local/bin")):
+        candidate = directory / name
+        if candidate.is_file() and os.access(candidate, os.X_OK):
+            return str(candidate)
+    raise FileNotFoundError(f"required executable not found: {name}")
 
