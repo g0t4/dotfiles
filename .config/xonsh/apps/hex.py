@@ -21,17 +21,27 @@ from rich.console import Console
 from rich.text import Text
 
 
-# One color per byte position within a group of 8; the cycle repeats each group
-# so a given column always has the same color.
+# One color per byte position within a 16-byte line, so no color repeats on a
+# line. A mix of pastels and neons chosen to be as perceptually distinct as
+# possible: a single red, distinct oranges/yellows/greens/teals/cyans/blues/
+# purples, plus a couple of neutral anchors. Tweak any hex value to taste.
 BYTE_COLORS: tuple[str, ...] = (
-    "red",
-    "green",
-    "yellow",
-    "blue",
-    "magenta",
-    "cyan",
-    "bright_red",
-    "bright_green",
+    "#FF3B30",  # 0  neon red
+    "#FFA726",  # 1  pastel orange
+    "#FFEA00",  # 2  neon yellow
+    "#D4E157",  # 3  pastel lime
+    "#00E676",  # 4  neon green
+    "#A5D6A7",  # 5  pastel green
+    "#1DE9B6",  # 6  neon teal
+    "#4DB6AC",  # 7  pastel teal
+    "#00E5FF",  # 8  neon cyan
+    "#4DD0E1",  # 9  pastel cyan
+    "#2979FF",  # 10 neon blue
+    "#64B5F6",  # 11 pastel blue
+    "#B026FF",  # 12 neon purple
+    "#9575CD",  # 13 pastel purple
+    "#8D6E63",  # 14 pastel brown
+    "#9E9E9E",  # 15 pastel gray
 )
 
 GROUP_SIZE = 8
@@ -612,8 +622,8 @@ def char_tokens(data: bytes) -> list[tuple[str, int]]:
 
 
 def color_for_index(index: int) -> str:
-    """Return the color for a byte at a 0-based index within its group."""
-    return BYTE_COLORS[index % GROUP_SIZE]
+    """Return the color for a byte at a 0-based index within its line."""
+    return BYTE_COLORS[index % BYTES_PER_LINE]
 
 
 def format_line(
@@ -703,7 +713,8 @@ def main() -> None:
     )
     args = parser.parse_args()
     use_color = not args.no_color
-    console = Console(color_system="standard" if use_color else None)
+    # Force truecolor so the full RGB palette is used whenever color is on.
+    console = Console(color_system="truecolor" if use_color else None)
     data = sys.stdin.buffer.read()
     if not data:
         console.print("No input received on STDIN.", style="yellow" if use_color else None)
