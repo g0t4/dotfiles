@@ -2,10 +2,15 @@
 
 Rather than one long list, the values are laid out in a rich table so the
 character, hex, and decimal representations are easy to compare at a glance.
+By default only DEC/CHAR/HEX are shown; pass --descriptions to add a column
+explaining each control character.
 """
 
 from __future__ import annotations
 
+import argparse
+
+import argcomplete
 from rich.console import Console
 from rich.table import Table
 
@@ -57,28 +62,46 @@ def ascii_char(code: int) -> str:
     return chr(code)
 
 
-def build_table() -> Table:
-    """Build the ASCII table with DEC, HEX, CHAR, and NAME columns."""
+def build_table(show_descriptions: bool) -> Table:
+    """Build the ASCII table, optionally including a DESCRIPTION column."""
     table = Table(title="ASCII Table")
     table.add_column("DEC", justify="right", style="cyan")
     table.add_column("CHAR", justify="center", style="green")
     table.add_column("HEX", justify="right", style="magenta")
-    table.add_column("DESCRIPTION", style="yellow")
+    if show_descriptions:
+        table.add_column("DESCRIPTION", style="yellow")
 
     for code in range(128):
-        table.add_row(
-            str(code),
-            ascii_char(code),
-            f"{code:02X}",
-            CONTROL_DESCRIPTIONS.get(code, ""),
-        )
+        row = [str(code), ascii_char(code), f"{code:02X}"]
+        if show_descriptions:
+            row.append(CONTROL_DESCRIPTIONS.get(code, ""))
+        table.add_row(*row)
     return table
+
+
+def build_parser() -> argparse.ArgumentParser:
+    """Build the argument parser (exposed for argcomplete)."""
+    parser = argparse.ArgumentParser(
+        prog="ascii_table",
+        description="Print a legible ASCII table of character, hex, and decimal values.",
+    )
+    parser.add_argument(
+        "-d",
+        "--descriptions",
+        action="store_true",
+        help="show a DESCRIPTION column explaining each control character",
+    )
+    return parser
 
 
 def main() -> None:
     """Render the ASCII table to the console."""
+    parser = build_parser()
+    argcomplete.autocomplete(parser)
+    args = parser.parse_args()
+
     console = Console()
-    console.print(build_table())
+    console.print(build_table(args.descriptions))
 
 
 if __name__ == "__main__":
