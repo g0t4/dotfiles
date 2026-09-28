@@ -7,7 +7,7 @@ import subprocess
 from pathlib import Path
 
 from wes_abbreviations import abbr
-from wes_fish_executable import find_fish
+from find_executables import find_fish
 from wes_fish_migration import fish_command_alias
 
 

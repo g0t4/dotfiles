@@ -8,7 +8,7 @@ from collections.abc import Callable, Sequence
 from dataclasses import dataclass
 from pathlib import Path
 
-from wes_fish_executable import find_fish
+from find_executables import find_fish
 
 
 class FishZError(RuntimeError):

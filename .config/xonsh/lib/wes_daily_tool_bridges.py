@@ -4,7 +4,7 @@ import subprocess
 from functools import lru_cache
 from pathlib import Path
 
-from wes_fish_executable import find_fish
+from find_executables import find_fish
 from wes_fish_bridge import fish_function
 from wes_abbreviations import AbbreviationResult
 

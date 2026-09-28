@@ -6,7 +6,7 @@ import os
 import re
 import subprocess
 
-from wes_fish_executable import find_fish
+from find_executables import find_fish
 
 
 _TERMINAL_ESCAPE = re.compile(
