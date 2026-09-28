@@ -22,6 +22,7 @@ Run it and paste the resulting ``BYTE_COLORS`` tuple back into ``hex.py``.
 
 from __future__ import annotations
 
+import argparse
 import math
 import random
 from dataclasses import dataclass
@@ -183,14 +184,20 @@ def palette_score(colors: list[tuple[int, int, int]]) -> PaletteScore:
 # ---- Candidate generation -----------------------------------------------------
 
 
-def build_candidate_pool(step: int = 8) -> list[tuple[int, int, int]]:
-    """Build every RGB color on a grid that clears the background contrast."""
+def build_candidate_pool(
+    step: int = 8, min_contrast: float = MIN_CONTRAST
+) -> list[tuple[int, int, int]]:
+    """Build every RGB color on a grid that clears the background contrast.
+
+    Set ``min_contrast`` to 0 to allow any color (including dark ones that would
+    be invisible on the dark background) and let pure ΔE drive the search.
+    """
     candidates: list[tuple[int, int, int]] = []
     for r in range(0, 256, step):
         for g in range(0, 256, step):
             for b in range(0, 256, step):
                 color = (r, g, b)
-                if contrast_ratio(color, BACKGROUND) >= MIN_CONTRAST:
+                if contrast_ratio(color, BACKGROUND) >= min_contrast:
                     candidates.append(color)
     return candidates
 
@@ -251,12 +258,24 @@ def optimize(
 
 def main() -> None:
     """Search for a 16-color palette and print it as ``#HEX █`` rows."""
+    parser = argparse.ArgumentParser(
+        description="Pick a 16-color palette maximizing perceptual distance."
+    )
+    parser.add_argument(
+        "--min-contrast",
+        type=float,
+        default=MIN_CONTRAST,
+        help=f"minimum WCAG contrast against the background (default {MIN_CONTRAST}; "
+        "0 = allow any color, even ones invisible on a dark background)",
+    )
+    args = parser.parse_args()
+
     random.seed(0)
-    pool = build_candidate_pool()
+    pool = build_candidate_pool(min_contrast=args.min_contrast)
     seed = [hex_to_rgb(color) for color in SEED_PALETTE]
 
     print(f"Background: {rgb_to_hex(BACKGROUND)}")
-    print(f"Candidate pool (contrast >= {MIN_CONTRAST}): {len(pool)} colors")
+    print(f"Candidate pool (contrast >= {args.min_contrast}): {len(pool)} colors")
     print("Searching...")
 
     best, best_score = optimize(pool, restarts=40, iterations_per_restart=4000, seed=seed)
