@@ -123,7 +123,7 @@ async def prepare_new_profile(session: iterm2.Session, force_local_shell: bool) 
             # FYI I don't think my check above for xonsh is reliably working (might be install approach alters it or not... also keep in mind you can install xonsh into a venv, i.e. diff version, so really just use the below code to clone the profile as-is even for xonsh case, right?)
             HOME = os.getenv("HOME")
             xonsh_cmd = f"{HOME}/.local/bin/xonsh"
-            new_profile.set_command(xonsh_cmd) # iterm is only macOS, so its safe to do this :)
+            new_profile.set_command(xonsh_cmd)  # iterm is only macOS, so its safe to do this :)
             new_profile.set_use_custom_command("Yes")
             print("was local => was_xonsh")
         else:
@@ -223,7 +223,7 @@ async def wes_new_tab(connection, force_local=False):
 # *** split panes:
 async def wes_split_pane(connection: iterm2.Connection, split_vert: bool = False, force_local=False):
     # *** FYI force_local not passed to this func yet by any wes.py handlers
-    log(f"Splitting pane, vertical={split_vert}" )
+    log(f"Splitting pane, vertical={split_vert}")
 
     current_session = await get_current_session_throw_if_none(connection)
     new_profile, use_ssh = await prepare_new_profile(current_session, force_local)
