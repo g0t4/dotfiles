@@ -9,11 +9,6 @@ import subprocess
 from find_executables import find_fish
 
 
-_TERMINAL_ESCAPE = re.compile(
-    r"(?:\x1b\][^\x07]*(?:\x07|\x1b\\)|\x1b\[[0-?]*[ -/]*[@-~])"
-)
-
-
 class FishFunctionError(RuntimeError):
     pass
 
@@ -56,7 +51,7 @@ def fish_function(
     those sequences are removed from captured output.
     """
     env = os.environ.copy()
-    env["TERM"] = "dumb"
+    env["ONLY_CALL_FISH_WRAPPED_FUNC"] = "true"
     env.pop("TERM_PROGRAM", None)
     completed = subprocess.run(
         [find_fish(), "-ic", "$argv[1] $argv[2..]", "--", name, *map(str, args)],
@@ -66,8 +61,8 @@ def fish_function(
         timeout=timeout,
         env=env,
     )
-    stdout = _TERMINAL_ESCAPE.sub("", completed.stdout).rstrip("\n")
-    stderr = _TERMINAL_ESCAPE.sub("", completed.stderr).strip()
+    stdout = completed.stdout.rstrip("\n")
+    stderr = completed.stderr.strip()
     if completed.returncode:
         detail = f": {stderr}" if stderr else ""
         raise FishFunctionError(
