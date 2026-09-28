@@ -1,8 +1,4 @@
-from pathlib import Path
-import sys
-
-XONSH_LIB = Path(__file__).parents[2] / ".config" / "xonsh" / "lib"
-sys.path.insert(0, str(XONSH_LIB))
+import test_setup # load first
 from wes_fish_bridge import fish_function
 
 class Tests_Integration_FishBridge:

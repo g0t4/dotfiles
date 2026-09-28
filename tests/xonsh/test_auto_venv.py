@@ -1,12 +1,7 @@
-import sys
 from pathlib import Path
 
-
-XONSH_LIB = Path(__file__).parents[2] / ".config" / "xonsh" / "lib"
-sys.path.insert(0, str(XONSH_LIB))
-
+import test_setup # load first
 from wes_auto_venv import AutoVenv, find_venv  # noqa: E402
-
 
 RC_DIR = Path(__file__).parents[2] / ".config/xonsh/rc.d"
 
