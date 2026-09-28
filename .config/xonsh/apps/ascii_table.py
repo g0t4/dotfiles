@@ -10,49 +10,50 @@ from rich.console import Console
 from rich.table import Table
 
 
-# Human-readable names for non-printable ASCII control characters.
-CONTROL_NAMES: dict[int, str] = {
-    0: "NUL",
-    1: "SOH",
-    2: "STX",
-    3: "ETX",
-    4: "EOT",
-    5: "ENQ",
-    6: "ACK",
-    7: "BEL",
-    8: "BS",
-    9: "TAB",
-    10: "LF",
-    11: "VT",
-    12: "FF",
-    13: "CR",
-    14: "SO",
-    15: "SI",
-    16: "DLE",
-    17: "DC1",
-    18: "DC2",
-    19: "DC3",
-    20: "DC4",
-    21: "NAK",
-    22: "SYN",
-    23: "ETB",
-    24: "CAN",
-    25: "EM",
-    26: "SUB",
-    27: "ESC",
-    28: "FS",
-    29: "GS",
-    30: "RS",
-    31: "US",
-    32: "SPACE",
-    127: "DEL",
+# Full descriptions for non-printable ASCII control characters, used in the
+# DESCRIPTION column so it does not merely repeat the CHAR column.
+CONTROL_DESCRIPTIONS: dict[int, str] = {
+    0: "Null",
+    1: "Start of Heading",
+    2: "Start of Text",
+    3: "End of Text",
+    4: "End of Transmission",
+    5: "Enquiry",
+    6: "Acknowledge",
+    7: "Bell",
+    8: "Backspace",
+    9: "Horizontal Tab",
+    10: "Line Feed",
+    11: "Vertical Tab",
+    12: "Form Feed",
+    13: "Carriage Return",
+    14: "Shift Out",
+    15: "Shift In",
+    16: "Data Link Escape",
+    17: "Device Control 1",
+    18: "Device Control 2",
+    19: "Device Control 3",
+    20: "Device Control 4",
+    21: "Negative Acknowledge",
+    22: "Synchronous Idle",
+    23: "End of Transmission Block",
+    24: "Cancel",
+    25: "End of Medium",
+    26: "Substitute",
+    27: "Escape",
+    28: "File Separator",
+    29: "Group Separator",
+    30: "Record Separator",
+    31: "Unit Separator",
+    32: "Space",
+    127: "Delete",
 }
 
 
-def ascii_name(code: int) -> str:
-    """Return the printable character or a descriptive name for `code`."""
-    if code in CONTROL_NAMES:
-        return CONTROL_NAMES[code]
+def ascii_char(code: int) -> str:
+    """Return the printable character, or a placeholder for control codes."""
+    if code in CONTROL_DESCRIPTIONS:
+        return ""
     return chr(code)
 
 
@@ -60,16 +61,16 @@ def build_table() -> Table:
     """Build the ASCII table with DEC, HEX, CHAR, and NAME columns."""
     table = Table(title="ASCII Table")
     table.add_column("DEC", justify="right", style="cyan")
-    table.add_column("HEX", justify="right", style="magenta")
     table.add_column("CHAR", justify="center", style="green")
-    table.add_column("NAME", style="yellow")
+    table.add_column("HEX", justify="right", style="magenta")
+    table.add_column("DESCRIPTION", style="yellow")
 
     for code in range(128):
         table.add_row(
             str(code),
+            ascii_char(code),
             f"{code:02X}",
-            ascii_name(code),
-            CONTROL_NAMES.get(code, ""),
+            CONTROL_DESCRIPTIONS.get(code, ""),
         )
     return table
 
