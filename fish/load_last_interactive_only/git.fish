@@ -103,12 +103,12 @@ abbr notes "git commit -a -m 'notes'"
 #   gcm = Get-Command, gc = Get-Content
 # commit
 # FYI go back to -v on all of these git commit abbrs if I get rid of my git-commit-with-function-context
-abbr gc 'GIT_EDITOR=git-commit-with-function-context git commit' # FYI gc=Get-Content in powershell (I am very tempted to overwrite it!) ... I always want a gc command and struggle to find it
-abbr gca 'GIT_EDITOR=git-commit-with-function-context git commit -a'
+abbr gc 'git -c core.editor=git-commit-with-function-context commit' # FYI gc=Get-Content in powershell (I am very tempted to overwrite it!) ... I always want a gc command and struggle to find it
+abbr gca 'git -c core.editor=git-commit-with-function-context commit -a'
 # - amend
-abbr gc! 'GIT_EDITOR=git-commit-with-function-context git commit --amend'
+abbr gc! 'git -c core.editor=git-commit-with-function-context commit --amend'
 abbr gcn! 'git commit --no-edit --amend'
-abbr gca! 'GIT_EDITOR=git-commit-with-function-context git commit -a --amend'
+abbr gca! 'git -c core.editor=git-commit-with-function-context commit -a --amend'
 abbr gcan! 'git commit -a --no-edit --amend'
 
 # checkout
