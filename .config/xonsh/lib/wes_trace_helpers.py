@@ -120,25 +120,8 @@ def expand_message_field(context, match):
 
 
 def register_trace_helpers(aliases, dotfiles):
-    def trace_fish_alias(name):
-        def invoke(args, stdin=None, stdout=None, stderr=None, **_):
-            # No interactive startup: viewers still inherit the terminal, but
-            # pipes and MCP protocol output receive no cursor-control escapes.
-            source_root = Path(dotfiles) / "fish/load_last_interactive_only"
-            return subprocess.run(
-                [find_fish(), "-c",
-                 'source $argv[1]; source $argv[2]; $argv[3] $argv[4..]',
-                 "--", str(source_root / "always/my_ai.fish"),
-                 str(source_root / "rag_captures.fish"), name, *args],
-                stdin=stdin, stdout=stdout, stderr=stderr,
-            ).returncode
-        return invoke
-
     for name in (*FISH_FUNCTIONS, "mcp_server_semantic_grep"):
-        # These require diff_two_commands / _repo_root from interactive Fish.
-        aliases[name] = (fish_command_alias(name)
-                         if name in {"ask_rewrite_diff_reviewer", "rag_validate_index"}
-                         else trace_fish_alias(name))
+        aliases[name] = fish_command_alias(name)
     for trigger in ("nat", "notes_about_trace"):
         abbr(trigger, "notes_about_trace '%'", cursor_marker="%")
     abbr(re.compile(r"(t|vt|vtt)(\d*)(a?)"), expand_trace_file)
