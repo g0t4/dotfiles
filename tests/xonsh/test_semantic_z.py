@@ -1,10 +1,5 @@
 import asyncio
-import sys
-from pathlib import Path
-
-
-XONSH_LIB = Path(__file__).parents[2] / ".config" / "xonsh" / "lib"
-sys.path.insert(0, str(XONSH_LIB))
+import test_setup
 
 from wes_fish_z import FishZEntry  # noqa: E402
 from wes_semantic_z import SemanticZ, describe_path  # noqa: E402

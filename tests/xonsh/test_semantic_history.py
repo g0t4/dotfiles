@@ -1,13 +1,7 @@
 import asyncio
 import math
-import sys
-from pathlib import Path
-
 import msgpack
-
-
-XONSH_LIB = Path(__file__).parents[2] / ".config" / "xonsh" / "lib"
-sys.path.insert(0, str(XONSH_LIB))
+import test_setup
 
 from wes_semantic_history import (  # noqa: E402
     InferenceClient,
