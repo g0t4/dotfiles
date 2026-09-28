@@ -25,25 +25,25 @@ from rich.text import Text
 # line. Picked mechanically by ``find_colors.py``: each color has WCAG contrast
 # >= 4.5 against the dark background (#1f2229) and the palette maximizes the
 # minimum OKLab perceptual distance (ΔE) between all pairs, then the minimum
-# distance from the background (so every color pops), with extra margin for
-# neighbors at offsets 1..4 (which spaces / line boundaries can expose).
+# distance from the background (so every color pops). The search optimizes only
+# the offset-2 neighbor, the tightest pair that spaces / line boundaries expose.
 BYTE_COLORS: tuple[str, ...] = (
-    "#709838",  # 0  olive green
-    "#90F800",  # 1  bright lime
-    "#D858B0",  # 2  pink
-    "#F8B098",  # 3  peach
-    "#E8E0F8",  # 4  off-white lavender
-    "#40F8F0",  # 5  aqua
-    "#F85048",  # 6  red
-    "#38C0B8",  # 7  teal
-    "#C0C008",  # 8  yellow
-    "#3888F8",  # 9  blue
-    "#F0F078",  # 10 pale yellow
-    "#F820F8",  # 11 magenta
-    "#B026FF",  # 12 purple
-    "#E898F8",  # 13 lavender
-    "#20C810",  # 14 green
-    "#9088A8",  # 15 gray-lavender
+    "#A89030",  # 0  olive
+    "#10A898",  # 1  teal-green
+    "#D0B0B8",  # 2  pale pink
+    "#F818F8",  # 3  magenta
+    "#F0E808",  # 4  yellow
+    "#F86008",  # 5  orange
+    "#A078F0",  # 6  violet
+    "#A08090",  # 7  dusty rose
+    "#10F8B8",  # 8  aqua green
+    "#F0A818",  # 9  amber
+    "#F078D8",  # 10 orchid
+    "#38A008",  # 11 green
+    "#30F808",  # 12 bright green
+    "#30D0E0",  # 13 cyan
+    "#38A0F0",  # 14 blue
+    "#F8E8D0",  # 15 cream
 )
 
 GROUP_SIZE = 8

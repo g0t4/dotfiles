@@ -36,9 +36,11 @@ MIN_CONTRAST: float = 4.5
 
 PALETTE_SIZE: int = 16
 
-# Which cyclic offsets to maximize perceptual distance for. Offsets 1..4 cover
-# the neighbor combinations that spaces / line boundaries can actually expose.
-OFFSETS: tuple[int, ...] = (1, 2, 3, 4)
+# Which cyclic offset to maximize perceptual distance for. A single space (or
+# line boundary) is what makes two colors land adjacent, so the tightest
+# exposure is 2 positions away. Offsets farther out are less of a problem, so
+# optimizing only for the closest exposed pair leaves the search freer.
+OFFSETS: tuple[int, ...] = (2,)
 
 # The existing hand-picked palette: a good starting point for the search.
 SEED_PALETTE: tuple[str, ...] = (
