@@ -55,8 +55,8 @@ async def prepare_new_profile(session: iterm2.Session, force_local_shell: bool) 
         {session.window.window_id=}
     ''')
 
-    is_ssh = was_sshed and not force_local_shell
-    print(f"{force_local_shell=}, {was_sshed=}, {is_ssh=}, {was_xonsh=}")
+    use_ssh = was_sshed and not force_local_shell
+    print(f"{force_local_shell=}, {was_sshed=}, {use_ssh=}, {was_xonsh=}")
     if was_sshed:
         if force_local_shell:
             # force local means don't reconnect over SSH, open a local terminal
@@ -120,6 +120,7 @@ async def prepare_new_profile(session: iterm2.Session, force_local_shell: bool) 
             print("was local => was_bash")
         elif was_xonsh:
             # need full path to xonsh
+            # FYI I don't think my check above for xonsh is reliably working (might be install approach alters it or not... also keep in mind you can install xonsh into a venv, i.e. diff version, so really just use the below code to clone the profile as-is even for xonsh case, right?)
             HOME = os.getenv("HOME")
             xonsh_cmd = f"{HOME}/.local/bin/xonsh"
             new_profile.set_command(xonsh_cmd) # iterm is only macOS, so its safe to do this :)
@@ -138,7 +139,7 @@ async def prepare_new_profile(session: iterm2.Session, force_local_shell: bool) 
          {new_profile.values["Custom Command"]=}
     ''')
 
-    return new_profile, is_ssh
+    return new_profile, use_ssh
 
 
 async def get_path(session: iterm2.Session) -> str:
@@ -164,7 +165,7 @@ async def wes_new_window(connection: iterm2.Connection, force_local=False):
         await iterm2.Window.async_create(connection)
         return
     session = await get_current_session_throw_if_none(connection)
-    new_profile, is_ssh = await prepare_new_profile(session, force_local)
+    new_profile, use_ssh = await prepare_new_profile(session, force_local)
 
     path = await get_path(session)
 
@@ -172,7 +173,7 @@ async def wes_new_window(connection: iterm2.Connection, force_local=False):
     if new_window is None:
         raise Exception("UNEXPECTED NO WINDOW CREATED")
 
-    if force_local or not is_ssh:
+    if force_local or not use_ssh:
         return
 
     new_session = get_current_session_for_window_throw_if_none(new_window)
@@ -190,7 +191,7 @@ async def wes_new_tab(connection, force_local=False):
     print(f"{current_window=}")
     assert current_window is not None
 
-    new_profile, is_ssh = await prepare_new_profile(session, force_local)
+    new_profile, use_ssh = await prepare_new_profile(session, force_local)
     print()
 
     path = await get_path(session)
@@ -199,7 +200,7 @@ async def wes_new_tab(connection, force_local=False):
     if new_tab is None:
         raise Exception("UNEXPECTED NO TAB CREATED")
 
-    if force_local or not is_ssh:
+    if force_local or not use_ssh:
         return new_tab
 
     new_session = get_current_session_for_current_tab_throw_if_none(new_tab)
@@ -225,7 +226,7 @@ async def wes_split_pane(connection: iterm2.Connection, split_vert: bool = False
     log(f"Splitting pane, vertical={split_vert}" )
 
     current_session = await get_current_session_throw_if_none(connection)
-    new_profile, is_ssh = await prepare_new_profile(current_session, force_local)
+    new_profile, use_ssh = await prepare_new_profile(current_session, force_local)
 
     path = await get_path(current_session)
 
@@ -233,7 +234,7 @@ async def wes_split_pane(connection: iterm2.Connection, split_vert: bool = False
     if new_session is None:
         raise Exception("UNEXPECTED NO SESSION CREATED")
 
-    if force_local or not is_ssh:
+    if force_local or not use_ssh:
         return
 
     await new_session.async_send_text(f"cd {path}; clear\n")
@@ -245,7 +246,7 @@ async def wes_replace_pane(connection: iterm2.Connection, force_local=False):
     # effectively "replacing" the current pane with a fresh one
 
     current_session = await get_current_session_throw_if_none(connection)
-    new_profile, is_ssh = await prepare_new_profile(current_session, force_local)
+    new_profile, use_ssh = await prepare_new_profile(current_session, force_local)
 
     path = await get_path(current_session)
 
@@ -268,7 +269,7 @@ async def wes_replace_pane(connection: iterm2.Connection, force_local=False):
     # Close the original session (focus is now on new_session after split)
     await current_session.async_close()
 
-    if force_local or not is_ssh:
+    if force_local or not use_ssh:
         return
 
     await new_session.async_send_text(f"cd {path}; clear\n")
