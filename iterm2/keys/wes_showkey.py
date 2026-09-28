@@ -52,10 +52,9 @@ def visualize_char(codepoint: int) -> str:
         return f"\\U{codepoint:08x}"
     return chr(codepoint)
 
+
 def visualize_pua(codepoint: int) -> str | None:
-    if codepoint < PUA_BASE:
-        return None
-    if codepoint > PUA_END:
+    if codepoint < PUA_BASE or PUA_END < codepoint:
         return None
     return decode_key(chr(codepoint))
 
