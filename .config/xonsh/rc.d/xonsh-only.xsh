@@ -13,3 +13,12 @@ abbr('hp', 'history pull --show-commands')
 from xonsh.parsers.lexer import Lexer
 # Lexer().split('echo "hello world" file.txt')
 abbr('lexer_split', 'Lexer().split("%")', cursor_marker="%", reminder=True)
+
+
+
+# abbr('at', 'ascii_table')
+def ascii_table():
+    $_python3 = f"{$WES_DOTFILES}/.venv/bin/python3"
+    $_script_py = f"{$WES_DOTFILES}/.config/xonsh/apps/ascii_table.py"
+    $_python3 $_script_py $argv
+
