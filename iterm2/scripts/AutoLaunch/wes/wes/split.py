@@ -255,23 +255,34 @@ async def wes_replace_pane(connection: iterm2.Connection, force_local=False):
         raise Exception("UNEXPECTED NO SESSION CREATED")
 
     jobName = await current_session.async_get_variable("jobName")  # see inspector for vars
-    if jobName is not None and (
-           jobName.startswith("python") # xonsh shows python3.14
-           or jobName in ["fish", "bash", "zsh", "lldb", "gdb"]
-       ):
+
+    async def ctrl_c_clear():
+        await current_session.async_send_text("\x03")  # ctrl+c (clear)
+
+    if jobName is not None and (jobName.startswith("python")  # xonsh shows python3.14
+                                or jobName in ["fish", "bash", "zsh", "lldb", "gdb"]):
         # * quit shell so history saves in xonsh
         # shell command line must be empty to quit
-        # TODO why is ctrl+c not recognized by my xonsh shell? (is it vi mode bindings?)
-        await current_session.async_send_text("\x03")  # ctrl+c (clear)
-        await current_session.async_send_text("\x04")  # ctrl+d (exit)
+        # FYI xonsh needs slight delay after ctrl+c (clear) and before ctrl+d (quit) to close it... I'm sure other shells need this too and I just missed it b/c I was closing the pane regardless!
+        #  thus I moved the logic (next) to `cd+clear` in the new pane ahead of Ctrl+D (see below, when applicable) which gives a natural delay
+        await ctrl_c_clear()
     else:
         raise Exception(f"do not have a mechanism to quit {jobName}, skipping to just close pane")
         # log(f"do not have a mechanism to quit {jobName=}, skipping to just close pane")
 
-    # Close the original session (focus is now on new_session after split)
-    await current_session.async_close()
+    async def ctrl_d_quit():
+        await current_session.async_send_text("\x04")  # ctrl+d (exit)
 
     if force_local or not use_ssh:
+        await ctrl_d_quit()
         return
 
     await new_session.async_send_text(f"cd {path}; clear\n")
+
+    await ctrl_d_quit()
+    # FYI if it was a nested shell, the window will remain open which is fine! let me close it for now
+    # - no reason to warn unless I get confused about this later on...
+    # - alternative is to keep closing shells (loop) until all nested shells are gone (maybe go this route if I want later)
+    #
+    # await current_session.async_close() # no need to close explicitly b/c Ctrl+D will do this for me now!
+    # - I only needed to close when I wasn't quitting the shell
