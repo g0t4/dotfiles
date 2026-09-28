@@ -12,7 +12,7 @@ local log = require("config.logs").hammerspoons()
 
 require("config.macros.screenpal.co")
 local TestTimer = require("config.macros.screenpal.co.tests.timer")
-local Counter = require("config.macros.screenpal.co.tests.counter")
+local Counter = require("devtools.async.counter")
 
 -- FYI alternative is to use async module, but I am happy with my ensure_in_coroutine
 -- local async = require('plenary.async.tests')
