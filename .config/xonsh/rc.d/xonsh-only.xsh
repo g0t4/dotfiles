@@ -19,14 +19,11 @@ abbr('lexer_split', 'Lexer().split("%")', cursor_marker="%", reminder=True)
 
 
 
-# # abbr('at', 'ascii_table')
-# def ascii_table():
-#     $_python3 = f"{$WES_DOTFILES}/.venv/bin/python3"
-#     $_script_py = f"{$WES_DOTFILES}/.config/xonsh/apps/ascii_table.py"
-#     $_python3 $_script_py
-
+# * dotfiles python "cmdlets"
 $_python3 = f"{$WES_DOTFILES}/.venv/bin/python3"
-$_script_py = f"{$WES_DOTFILES}/.config/xonsh/apps/ascii_table.py"
-XSH.aliases["ascii_table"] = [$_python3, $_script_py]
+#
+XSH.aliases["hexdump"] = [$_python3, f"{$WES_DOTFILES}/.config/xonsh/apps/hex.py"]
+XSH.aliases["ascii_table"] = [$_python3, f"{$WES_DOTFILES}/.config/xonsh/apps/ascii_table.py"]
+#
+# * cleanup
 del $_python3
-del $_script_py
