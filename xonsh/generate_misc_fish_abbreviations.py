@@ -3,11 +3,7 @@
 
 from __future__ import annotations
 
-import sys
-from pathlib import Path
-
-ROOT = Path(__file__).resolve().parents[1]
-sys.path.insert(0, str(ROOT / ".config/xonsh/lib"))
+from setup_paths import ROOT
 
 from wes_abbreviations import reset_registry  # noqa: E402
 from wes_misc_abbreviations import register_misc_abbreviations  # noqa: E402

@@ -1,10 +1,4 @@
-import sys
-from pathlib import Path
-
-
-ROOT = Path(__file__).parents[2]
-sys.path.insert(0, str(ROOT / ".config/xonsh/lib"))
-sys.path.insert(0, str(ROOT / "xonsh"))
+import test_setup
 
 from wes_abbreviations import AbbreviationContext, reset_registry # noqa: E402
 from wes_docker import register_wes_docker
