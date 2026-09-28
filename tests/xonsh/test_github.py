@@ -30,7 +30,7 @@ def test_github_cli_resolves_from_live_xonsh_path(tmp_path):
     command = (
         f"source {abbreviations}; source {github}; "
         f"$PATH = ['{tmp_path}']; "
-        f"assert _github_executable('gh') == '{executable}'"
+        f"assert find_gh('gh') == '{executable}'"
     )
     completed = subprocess.run(
         ["xonsh", "--no-rc", "-c", command],

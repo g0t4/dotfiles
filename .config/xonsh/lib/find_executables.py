@@ -10,15 +10,13 @@ from collections.abc import Iterable
 def _xonsh_path() -> Iterable[str]:
     try:
         from xonsh.built_ins import XSH
-
         return XSH.env.get("PATH", ())
     except (AttributeError, ImportError, TypeError):
         return ()
 
 
 def find_fish() -> str:
-    xonsh_path = _xonsh_path()
-    live_path = os.pathsep.join(map(str, xonsh_path))
+    live_path = os.pathsep.join(map(str, _xonsh_path()))
     executable = shutil.which("fish", path=live_path) if live_path else None
     if executable:
         return executable
@@ -32,3 +30,13 @@ def find_fish() -> str:
             return path
     # now that I set syncing of env vars this helper is mostly unnecessary but I do like that it gives me the chance to expressly format a message when we fail to find fish
     raise FileNotFoundError("fish executable not found in Xonsh PATH, process PATH, or standard locations")
+
+def find_gh(name):
+    """Resolve against Xonsh's live PATH, which may differ from os.environ."""
+    live_path = os.pathsep.join(map(str, _xonsh_path()))
+    executable = shutil.which(name, path=live_path)
+    if executable is None:
+        raise FileNotFoundError(f"{name}: executable not found in Xonsh PATH")
+    return executable
+
+
