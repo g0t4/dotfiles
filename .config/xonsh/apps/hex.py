@@ -29,21 +29,21 @@ from rich.text import Text
 # the offset-2 neighbor, the tightest pair that spaces / line boundaries expose.
 BYTE_COLORS: tuple[str, ...] = (
     "#F86008",  # 0  orange
-    "#F8E8D0",  # 1  cream
-    "#F0A818",  # 2  amber
-    "#A89030",  # 3  olive
-    "#F0E808",  # 4  yellow
-    "#38A008",  # 5  green
-    "#30F808",  # 6  bright green
-    "#10F8B8",  # 7  aqua green
-    "#10A898",  # 8  teal-green
-    "#30D0E0",  # 9  cyan
-    "#38A0F0",  # 10 blue
-    "#A078F0",  # 11 violet
-    "#F818F8",  # 12 magenta
-    "#F078D8",  # 13 orchid
-    "#A08090",  # 14 dusty rose
-    "#D0B0B8",  # 15 pale pink
+    "#F0A818",  # 1  amber
+    "#F0E808",  # 2  yellow
+    "#38A008",  # 3  green
+    "#30F808",  # 4  bright green
+    "#10F8B8",  # 5  aqua green
+    "#10A898",  # 6  teal-green
+    "#30D0E0",  # 7  cyan
+    "#38A0F0",  # 8  blue
+    "#A078F0",  # 9  violet
+    "#F818F8",  # 10 magenta
+    "#F078D8",  # 11 orchid
+    "#A08090",  # 12 dusty rose
+    "#D0B0B8",  # 13 pale pink
+    "#A89030",  # 14 olive (brownish yellow)
+    "#F8E8D0",  # 15 cream (reddish white, wraps toward orange)
 )
 
 GROUP_SIZE = 8
