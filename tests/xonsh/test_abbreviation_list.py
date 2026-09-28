@@ -1,15 +1,11 @@
+import test_setup
+
 import io
 import os
 import re
 import subprocess
-import sys
-from pathlib import Path
 
 from rich.console import Console
-
-
-ROOT = Path(__file__).parents[2]
-sys.path.insert(0, str(ROOT / ".config/xonsh/lib"))
 
 from wes_abbreviation_list import (  # noqa: E402
     abbreviation_list_alias,

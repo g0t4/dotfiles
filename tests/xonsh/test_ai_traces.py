@@ -1,10 +1,6 @@
+import test_setup
+
 import json
-import sys
-from pathlib import Path
-
-
-XONSH_LIB = Path(__file__).parents[2] / ".config/xonsh/lib"
-sys.path.insert(0, str(XONSH_LIB))
 
 from wes_ai_traces import build_chat_trace, save_chat_trace  # noqa: E402
 

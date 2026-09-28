@@ -1,15 +1,11 @@
+from test_setup import ROOT
+
 import importlib
 import io
 import platform
 import subprocess
-import sys
-from pathlib import Path
 import pytest
 
-
-ROOT = Path(__file__).parents[2]
-sys.path.insert(0, str(ROOT / ".config/xonsh/lib"))
-sys.path.insert(0, str(ROOT / "xonsh"))
 
 from fish_to_xonsh import (  # noqa: E402
     AbbreviationSelector,

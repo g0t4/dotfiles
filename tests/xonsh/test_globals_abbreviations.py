@@ -1,10 +1,6 @@
+from test_setup import ROOT
+
 import re
-import sys
-from pathlib import Path
-
-
-ROOT = Path(__file__).parents[2]
-sys.path.insert(0, str(ROOT / ".config/xonsh/lib"))
 
 from wes_abbreviations import AbbreviationContext, reset_registry  # noqa: E402
 from wes_globals_abbreviations import (  # noqa: E402

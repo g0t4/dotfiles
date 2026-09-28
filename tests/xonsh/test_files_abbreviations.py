@@ -1,13 +1,9 @@
+from test_setup import ROOT
+
 import re
 import os
 import subprocess
-import sys
-from pathlib import Path
 
-
-ROOT = Path(__file__).parents[2]
-sys.path.insert(0, str(ROOT / ".config/xonsh/lib"))
-sys.path.insert(0, str(ROOT / "xonsh"))
 
 from generate_files_abbreviations import TARGET, generate  # noqa: E402
 from wes_abbreviations import AbbreviationContext, reset_registry  # noqa: E402

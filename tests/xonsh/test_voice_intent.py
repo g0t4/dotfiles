@@ -1,17 +1,12 @@
+from test_setup import ROOT
+
 import asyncio
 import subprocess
 from pathlib import Path
 from types import SimpleNamespace
 
 
-ROOT = Path(__file__).parents[2]
-LIB = ROOT / ".config/xonsh/lib"
-
-
 def _module():
-    import sys
-
-    sys.path.insert(0, str(LIB))
     import wes_voice_intent
 
     return wes_voice_intent

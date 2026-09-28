@@ -1,9 +1,4 @@
-from pathlib import Path
-import sys
-
-
-ROOT = Path(__file__).parents[2]
-sys.path.insert(0, str(ROOT / ".config/xonsh/lib"))
+import test_setup
 
 from wes_ai_autosuggest_state import (  # noqa: E402
     autosuggest_state_path,

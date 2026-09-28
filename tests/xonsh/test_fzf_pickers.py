@@ -1,14 +1,13 @@
+from test_setup import ROOT
+
 import hashlib
 import os
 import shutil
 import subprocess
-import sys
 from pathlib import Path
 
 
-ROOT = Path(__file__).parents[2]
 XONSH = shutil.which("xonsh")
-sys.path.insert(0, str(ROOT / ".config/xonsh/lib"))
 
 from wes_fzf_pickers import (  # noqa: E402
     FzfMru,

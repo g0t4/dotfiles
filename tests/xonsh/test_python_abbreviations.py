@@ -1,13 +1,11 @@
+from test_setup import ROOT
+
 import importlib
 import platform
 import re
 import subprocess
-import sys
 from pathlib import Path
 
-ROOT = Path(__file__).parents[2]
-sys.path.insert(0, str(ROOT / ".config/xonsh/lib"))
-sys.path.insert(0, str(ROOT / "xonsh"))
 
 from generate_from_fish import MAPPINGS  # noqa: E402
 from fish_to_xonsh import parse_abbreviation  # noqa: E402

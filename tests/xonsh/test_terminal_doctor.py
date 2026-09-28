@@ -1,10 +1,6 @@
+import test_setup
+
 import plistlib
-import sys
-from pathlib import Path
-
-
-ROOT = Path(__file__).parents[2]
-sys.path.insert(0, str(ROOT / ".config/xonsh/lib"))
 
 from wes_terminal_doctor import (  # noqa: E402
     option_status,

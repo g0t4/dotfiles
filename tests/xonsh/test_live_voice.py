@@ -1,14 +1,11 @@
+from test_setup import ROOT
+
 import asyncio
 import os
 import subprocess
 import sys
-from pathlib import Path
 
 import pytest
-
-ROOT = Path(__file__).parents[2]
-LIB = ROOT / ".config/xonsh/lib"
-sys.path.insert(0, str(LIB))
 
 from wes_voice_stream_worker import transcript_text  # noqa: E402
 from wes_live_voice import bounded_command_result  # noqa: E402

@@ -1,15 +1,12 @@
+from test_setup import ROOT
+
 import importlib
 import os
 import subprocess
-import sys
-from pathlib import Path
 from types import SimpleNamespace
 
 import pytest
 
-ROOT = Path(__file__).parents[2]
-sys.path.insert(0, str(ROOT / '.config/xonsh/lib'))
-sys.path.insert(0, str(ROOT / 'xonsh'))
 
 from generate_daily_tool_abbreviations import SOURCES, generate
 from wes_abbreviations import AbbreviationContext, reset_registry

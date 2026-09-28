@@ -1,11 +1,7 @@
+import test_setup
+
 import logging
 import re
-import sys
-from pathlib import Path
-
-
-XONSH_LIB = Path(__file__).parents[2] / ".config/xonsh/lib"
-sys.path.insert(0, str(XONSH_LIB))
 
 from wes_logging import _configure_logging, get_wes_logger  # noqa: E402
 from wes_auto_venv import AutoVenv  # noqa: E402

@@ -1,9 +1,6 @@
-import subprocess
-import sys
-from pathlib import Path
+from test_setup import ROOT
 
-ROOT = Path(__file__).parents[2]
-sys.path.insert(0, str(ROOT / ".config/xonsh/lib"))
+import subprocess
 
 
 def test_github_rc_loads_aliases_and_abbreviations():

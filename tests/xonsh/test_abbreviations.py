@@ -1,17 +1,14 @@
+import test_setup
 from dataclasses import replace
 import os
 import re
 import subprocess
-import sys
 from pathlib import Path
 
 import pytest
 from prompt_toolkit.buffer import Buffer
 from rich.console import Console
 
-
-XONSH_LIB = Path(__file__).parents[2] / ".config" / "xonsh" / "lib"
-sys.path.insert(0, str(XONSH_LIB))
 
 import wes_fish_bridge  # noqa: E402
 import wes_abbreviation_help  # noqa: E402

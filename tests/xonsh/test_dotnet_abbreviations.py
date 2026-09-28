@@ -1,12 +1,8 @@
 """Public .NET inventory and its Fish-backed Xonsh registration."""
 
-import subprocess
-import sys
-from pathlib import Path
+import test_setup
 
-ROOT = Path(__file__).parents[2]
-sys.path.insert(0, str(ROOT / "xonsh"))
-sys.path.insert(0, str(ROOT / ".config/xonsh/lib"))
+import subprocess
 
 from wes_abbreviations import reset_registry
 from wes_dotnet import register_wes_dotnet

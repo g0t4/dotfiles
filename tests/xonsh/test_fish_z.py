@@ -1,12 +1,8 @@
+import test_setup
+
 import subprocess
-import sys
-from pathlib import Path
 
 import pytest
-
-
-XONSH_LIB = Path(__file__).parents[2] / ".config" / "xonsh" / "lib"
-sys.path.insert(0, str(XONSH_LIB))
 
 from wes_fish_z import FishZ, FishZError  # noqa: E402
 

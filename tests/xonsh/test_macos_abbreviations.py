@@ -1,9 +1,4 @@
-import sys
-from pathlib import Path
-
-
-ROOT = Path(__file__).parents[2]
-sys.path.insert(0, str(ROOT / ".config/xonsh/lib"))
+import test_setup
 
 from wes_abbreviations import AbbreviationContext, reset_registry  # noqa: E402
 from wes_macos_abbreviations import register_macos_abbreviations  # noqa: E402

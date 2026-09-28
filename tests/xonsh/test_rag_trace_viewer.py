@@ -1,12 +1,8 @@
+import test_setup
+
 import json
-import sys
-from pathlib import Path
 
 from rich.console import Console
-
-
-ROOT = Path(__file__).parents[2]
-sys.path.insert(0, str(ROOT / ".config/xonsh/lib"))
 
 from wes_rag_trace_viewer import main, newest_trace, project_trace  # noqa: E402
 

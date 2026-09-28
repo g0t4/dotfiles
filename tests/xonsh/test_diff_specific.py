@@ -1,10 +1,6 @@
-import sys
+from test_setup import ROOT
+
 import subprocess
-from pathlib import Path
-
-
-ROOT = Path(__file__).parents[2]
-sys.path.insert(0, str(ROOT / ".config/xonsh/lib"))
 
 from wes_diff import (  # noqa: E402
     ProcessSubstitutionFiles,

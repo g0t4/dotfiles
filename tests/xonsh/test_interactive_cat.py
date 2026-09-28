@@ -1,12 +1,9 @@
+from test_setup import ROOT
+
 import io
 import os
 import subprocess
-import sys
 from pathlib import Path
-
-
-ROOT = Path(__file__).parents[2]
-sys.path.insert(0, str(ROOT / ".config/xonsh/lib"))
 
 from wes_interactive_cat import InteractiveCat  # noqa: E402
 
