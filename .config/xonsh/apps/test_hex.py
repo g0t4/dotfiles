@@ -75,6 +75,18 @@ def test_explain_osc_iterm_uservar():
     assert "user variable" in segment.explanation
 
 
+def test_explain_osc_iterm_currentdir():
+    segment = parse_ansi(b"\x1b]1337;CurrentDir=/Users/wes\x07")[0]
+    assert "current directory" in segment.explanation
+    assert "/Users/wes" in segment.explanation
+
+
+def test_explain_osc_iterm_remotehost():
+    segment = parse_ansi(b"\x1b]1337;RemoteHost=wes@mbp\x07")[0]
+    assert "remote host" in segment.explanation
+    assert "wes@mbp" in segment.explanation
+
+
 def test_explain_osc_hyperlink_params():
     segment = parse_ansi(b"\x1b]8;id=42;https://example.com\x07")[0]
     assert "link to 'https://example.com'" in segment.explanation

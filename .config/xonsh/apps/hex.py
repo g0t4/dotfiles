@@ -326,6 +326,8 @@ OSC_1337: dict[str, str] = {
     "RequestAttention": "request iTerm2 attention",
     "Copy": "copy to iTerm2 clipboard",
     "ShellIntegrationVersion": "iTerm2 shell integration version",
+    "RemoteHost": "set remote host",
+    "CurrentDir": "set current directory",
 }
 
 SIMPLE_ESCAPES: dict[str, str] = {
@@ -446,7 +448,12 @@ def osc_detail(code: str, rest: str) -> str:
     if code == "133":
         return OSC_133.get(rest.split(";")[0], "")
     if code == "1337":
-        return OSC_1337.get(rest.split("=")[0], "")
+        parts = rest.split("=", 1)
+        desc = OSC_1337.get(parts[0], "")
+        value = parts[1] if len(parts) > 1 else ""
+        if desc and value:
+            return f"{desc}: {value}"
+        return desc
     if code == "52":
         parts = rest.split(";", 1)
         selection = parts[0]
