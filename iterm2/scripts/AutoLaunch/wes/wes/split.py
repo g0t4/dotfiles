@@ -254,7 +254,10 @@ async def wes_replace_pane(connection: iterm2.Connection, force_local=False):
         raise Exception("UNEXPECTED NO SESSION CREATED")
 
     jobName = await current_session.async_get_variable("jobName")  # see inspector for vars
-    if jobName in ["fish", "bash", "zsh", "xonsh", "Python", "lldb", "gdb"]:
+    if jobName is not None and (
+           jobName.startswith("python") # xonsh shows python3.14
+           or jobName in ["fish", "bash", "zsh", "xonsh", "lldb", "gdb"]
+       ):
         # * quit shell so history saves in xonsh
         # shell command line must be empty to quit
         await current_session.async_send_text("\x03")  # ctrl+c (clear)
