@@ -28,22 +28,22 @@ from rich.text import Text
 # distance from the background (so every color pops). The search optimizes only
 # the offset-2 neighbor, the tightest pair that spaces / line boundaries expose.
 BYTE_COLORS: tuple[str, ...] = (
-    "#A89030",  # 0  olive
-    "#10A898",  # 1  teal-green
-    "#D0B0B8",  # 2  pale pink
-    "#F818F8",  # 3  magenta
+    "#F86008",  # 0  orange
+    "#F8E8D0",  # 1  cream
+    "#F0A818",  # 2  amber
+    "#A89030",  # 3  olive
     "#F0E808",  # 4  yellow
-    "#F86008",  # 5  orange
-    "#A078F0",  # 6  violet
-    "#A08090",  # 7  dusty rose
-    "#10F8B8",  # 8  aqua green
-    "#F0A818",  # 9  amber
-    "#F078D8",  # 10 orchid
-    "#38A008",  # 11 green
-    "#30F808",  # 12 bright green
-    "#30D0E0",  # 13 cyan
-    "#38A0F0",  # 14 blue
-    "#F8E8D0",  # 15 cream
+    "#38A008",  # 5  green
+    "#30F808",  # 6  bright green
+    "#10F8B8",  # 7  aqua green
+    "#10A898",  # 8  teal-green
+    "#30D0E0",  # 9  cyan
+    "#38A0F0",  # 10 blue
+    "#A078F0",  # 11 violet
+    "#F818F8",  # 12 magenta
+    "#F078D8",  # 13 orchid
+    "#A08090",  # 14 dusty rose
+    "#D0B0B8",  # 15 pale pink
 )
 
 GROUP_SIZE = 8
