@@ -22,26 +22,27 @@ from rich.text import Text
 
 
 # One color per byte position within a 16-byte line, so no color repeats on a
-# line. A mix of pastels and neons chosen to be as perceptually distinct as
-# possible: a single red, distinct oranges/yellows/greens/teals/cyans/blues/
-# purples, plus a couple of neutral anchors. Tweak any hex value to taste.
+# line. Picked mechanically by ``find_colors.py``: each color has WCAG contrast
+# >= 4.5 against the dark background (#1f2229) and the palette maximizes the
+# minimum OKLab perceptual distance (ΔE) between all pairs, with extra margin
+# for neighbors at offsets 1..4 (which spaces / line boundaries can expose).
 BYTE_COLORS: tuple[str, ...] = (
-    "#FF3B30",  # 0  neon red
-    "#FFA726",  # 1  pastel orange
-    "#FFEA00",  # 2  neon yellow
-    "#D4E157",  # 3  pastel lime
-    "#00E676",  # 4  neon green
-    "#A5D6A7",  # 5  pastel green
-    "#1DE9B6",  # 6  neon teal
-    "#4DB6AC",  # 7  pastel teal
-    "#00E5FF",  # 8  neon cyan
-    "#4DD0E1",  # 9  pastel cyan
-    "#2979FF",  # 10 neon blue
-    "#64B5F6",  # 11 pastel blue
-    "#B026FF",  # 12 neon purple
-    "#9575CD",  # 13 pastel purple
-    "#8D6E63",  # 14 pastel brown
-    "#9E9E9E",  # 15 pastel gray
+    "#F888F0",  # 0  pink
+    "#10A008",  # 1  green
+    "#F8B020",  # 2  orange
+    "#00F8D0",  # 3  teal
+    "#18B8E8",  # 4  sky blue
+    "#B8C8B8",  # 5  pale gray-green
+    "#A878B0",  # 6  mauve
+    "#F05070",  # 7  red-pink
+    "#F8F828",  # 8  yellow
+    "#18F818",  # 9  bright green
+    "#2979FF",  # 10 blue
+    "#F818D8",  # 11 magenta
+    "#B026FF",  # 12 purple
+    "#F8F8E0",  # 13 off-white
+    "#809878",  # 14 gray-green
+    "#70C860",  # 15 green
 )
 
 GROUP_SIZE = 8
