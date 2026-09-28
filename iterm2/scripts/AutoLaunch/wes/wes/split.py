@@ -261,6 +261,7 @@ async def wes_replace_pane(connection: iterm2.Connection, force_local=False):
        ):
         # * quit shell so history saves in xonsh
         # shell command line must be empty to quit
+        # TODO why is ctrl+c not recognized by my xonsh shell? (is it vi mode bindings?)
         await current_session.async_send_text("\x03")  # ctrl+c (clear)
         await current_session.async_send_text("\x04")  # ctrl+d (exit)
     else:
