@@ -2,6 +2,7 @@ import rich
 
 from xonsh.built_ins import XSH
 from xonsh.events import events
+from xonsh.parsers.lexer import Lexer
 
 from prompt_toolkit.keys import Keys
 
@@ -45,12 +46,32 @@ def wes_command_not_found(cmd, **kwargs):
         rich.print(f"    {kwargs=}")
     # return {"cmd": ["echo","do", "something", "else" ...] + cmd, "env": {"FOO": "BAR"}}
 
+def colorful_cat(tokens: list[str], cmd: str):
+    if len(tokens) > 2:
+        return # nothing for now if multi file
+    # if it is a markdown file, pipe to glow to display it
+    is_markdown = tokens[1].endswith('.md')
+    if is_markdown:
+        return f"{cmd} | glow"
+
 
 @events.on_transform_command
 def wes_colorful_output(cmd: str, **kwargs):
+    if cmd is None:
+        return
     cmd = cmd.strip()  # strip trailing \n on submit
+    tokens = Lexer().split(cmd)
+    if not any(tokens):
+        return
+
+    first_token = tokens[0]
+
+    if first_token == "command":
+        # when I use `command` I am expressly requesting to not make changes to what I am running (i.e. my overrides for cat, or even these coloring of output)
+        return
+
     # PRN add commands from docker that I had setup with `grcify` that I removed in the fish configs too
-    if cmd.startswith("kubectl"):
+    if first_token == "kubectl":
         if "-o yaml" in cmd:
             if not "| bat -l yaml" in cmd:
                 return f"{cmd} | bat -l yaml"
@@ -58,9 +79,14 @@ def wes_colorful_output(cmd: str, **kwargs):
             if not "| bat -l json" in cmd:
                 return f"{cmd} | bat -l json"
         return # nothing == no changes
+
     if cmd.startswith("hf datasets info"):
         if not "| bat -l json" in cmd:
             return f"{cmd} | bat -l json"
+
+    if first_token == "cat":
+        return colorful_cat(tokens, cmd)
+
 
 # @events.on_pre_cmdloop
 # def _event_show_tip(**kw):
