@@ -30,6 +30,7 @@ def test_scoped_functions_abbreviations_and_env_follow_nearest_config(tmp_path):
     child.mkdir(parents=True)
     other.mkdir()
     (outer / ".config.xsh").write_text(
+        "from wes_local_config import local_abbr, local_function, local_env\n"
         "def private_name():\n"
         "    return 'outer'\n"
         "@local_function\n"
@@ -105,6 +106,7 @@ def test_failed_config_rolls_back_registered_items(tmp_path):
 
 def test_config_loads_in_initial_directory(tmp_path):
     (tmp_path / ".config.xsh").write_text(
+        "from wes_local_config import local_function\n"
         "@local_function\n"
         "def initial_project():\n"
         "    return 'loaded'\n"
