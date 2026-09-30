@@ -33,7 +33,6 @@ def test_scoped_functions_abbreviations_and_env_follow_nearest_config(tmp_path):
         "from wes_local_config import local_abbr, local_function, local_env\n"
         "def private_name():\n"
         "    return 'outer'\n"
-        "@local_function\n"
         "def project_name():\n"
         "    return private_name()\n"
         "local_abbr('project', 'echo outer')\n"
@@ -55,24 +54,25 @@ def test_scoped_functions_abbreviations_and_env_follow_nearest_config(tmp_path):
         "from wes_abbreviations import AbbreviationContext; "
         "registry = wes_abbreviations.XONSH_ABBREVIATIONS; "
         "context = AbbreviationContext('project', 7, 0, 7, 'project', command_position=True); "
+        "XSH.ctx['project_name'] = lambda: 'global'; "
         f"cd {outer}; "
-        "print(project_name(), 'private_name' in XSH.ctx, XSH.env['PROJECT_TEST_VALUE'], registry.expand(context)[0].text); "
+        "print(project_name(), 'private_name' in XSH.ctx, 'local_abbr' in XSH.ctx, XSH.env['PROJECT_TEST_VALUE'], registry.expand(context)[0].text); "
         f"cd {child}; "
         "print(project_name(), len(registry.abbreviations)); "
         f"cd {other}; "
         "print(project_name(), XSH.env['PROJECT_TEST_VALUE'], registry.expand(context)[0].text); "
         f"cd {tmp_path}; "
-        "print('project_name' in XSH.ctx, 'PROJECT_TEST_VALUE' in XSH.env, registry.expand(context))"
+        "print(project_name(), 'private_name' in XSH.ctx, 'PROJECT_TEST_VALUE' in XSH.env, registry.expand(context))"
     )
 
     completed = run_xonsh(command)
 
     assert completed.returncode == 0, completed.stderr
     assert completed.stdout.splitlines() == [
-        "outer False outer echo outer",
+        "outer True False outer echo outer",
         "outer 1",
         "other other echo other",
-        "False False None",
+        "global False False None",
     ]
 
 
@@ -107,7 +107,6 @@ def test_failed_config_rolls_back_registered_items(tmp_path):
 def test_config_loads_in_initial_directory(tmp_path):
     (tmp_path / ".config.xsh").write_text(
         "from wes_local_config import local_function\n"
-        "@local_function\n"
         "def initial_project():\n"
         "    return 'loaded'\n"
     )

@@ -2,13 +2,15 @@
 
 In a project's .config.xsh::
 
-    from wes_local_config import local_abbr, local_function
+    from wes_local_config import local_abbr
 
-    @local_function
     def project_name():
         return "my-project"
 
     local_abbr("serve", "uv run server")
+
+Functions defined in the file are exposed automatically. The optional
+``@local_function`` decorator remains available for existing configs.
 """
 
 from __future__ import annotations
@@ -113,6 +115,13 @@ class LocalConfigManager:
             token = _active_manager.set(self)
             try:
                 self.execx(path.read_text(), "exec", local_ctx, filename=str(path))
+                for name, value in local_ctx.items():
+                    if (
+                        inspect.isfunction(value)
+                        and value.__code__.co_filename == str(path)
+                        and self.ctx.get(name, _MISSING) is not value
+                    ):
+                        self._set_scoped(self.ctx, name, value)
             except BaseException:
                 self.deactivate()
                 raise
