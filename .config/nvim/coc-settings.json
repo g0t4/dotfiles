@@ -435,6 +435,9 @@
 
     // *** POWERSHELL ***
     "powershell.integratedConsole.showOnStartup": false,
+    "json.schemaDownload.trustedDomains": {
+      "https://raw.githubusercontent.com": true
+    },
     // WTH it still flashes momentarily, WT WT WTF
 
     // *** clangd (c,cpp,etc) ***
