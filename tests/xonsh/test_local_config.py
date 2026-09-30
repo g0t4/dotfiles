@@ -29,7 +29,7 @@ def test_scoped_functions_abbreviations_and_env_follow_nearest_config(tmp_path):
     other = tmp_path / "other"
     child.mkdir(parents=True)
     other.mkdir()
-    (outer / ".config.xsh").write_text(
+    (outer / ".local.xsh").write_text(
         "from wes_local_config import local_abbr, local_function, local_env\n"
         "def private_name():\n"
         "    return 'outer'\n"
@@ -38,7 +38,7 @@ def test_scoped_functions_abbreviations_and_env_follow_nearest_config(tmp_path):
         "local_abbr('project', 'echo outer')\n"
         "local_env('PROJECT_TEST_VALUE', 'outer')\n"
     )
-    (other / ".config.xsh").write_text(
+    (other / ".local.xsh").write_text(
         "@local_function\n"
         "def project_name():\n"
         "    return 'other'\n"
@@ -79,7 +79,7 @@ def test_scoped_functions_abbreviations_and_env_follow_nearest_config(tmp_path):
 def test_failed_config_rolls_back_registered_items(tmp_path):
     project = tmp_path / "project"
     project.mkdir()
-    (project / ".config.xsh").write_text(
+    (project / ".local.xsh").write_text(
         "local_abbr('temporary', 'echo temporary')\n"
         "local_env('PROJECT_TEST_VALUE', 'temporary')\n"
         "raise RuntimeError('broken config')\n"
@@ -105,7 +105,7 @@ def test_failed_config_rolls_back_registered_items(tmp_path):
 
 
 def test_config_loads_in_initial_directory(tmp_path):
-    (tmp_path / ".config.xsh").write_text(
+    (tmp_path / ".local.xsh").write_text(
         "from wes_local_config import local_function\n"
         "def initial_project():\n"
         "    return 'loaded'\n"

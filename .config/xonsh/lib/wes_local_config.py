@@ -1,6 +1,6 @@
-"""Scoped, nearest-parent .config.xsh files for interactive Xonsh sessions.
+"""Scoped, nearest-parent .local.xsh files for interactive Xonsh sessions.
 
-In a project's .config.xsh::
+In a project's .local.xsh::
 
     from wes_local_config import local_abbr
 
@@ -43,7 +43,7 @@ class LocalConfigManager:
     def find(start):
         directory = Path(start).resolve()
         for parent in (directory, *directory.parents):
-            candidate = parent / ".config.xsh"
+            candidate = parent / ".local.xsh"
             if candidate.is_file():
                 return candidate
         return None
@@ -141,7 +141,7 @@ _active_manager: ContextVar[LocalConfigManager | None] = ContextVar(
 def _manager() -> LocalConfigManager:
     manager = _active_manager.get()
     if manager is None:
-        raise RuntimeError("local config helpers can only be called while loading .config.xsh")
+        raise RuntimeError("local config helpers can only be called while loading .local.xsh")
     return manager
 
 

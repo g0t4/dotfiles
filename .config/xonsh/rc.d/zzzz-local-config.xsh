@@ -1,4 +1,4 @@
-"""Load the nearest .config.xsh on startup and after changing directories."""
+"""Load the nearest .local.xsh on startup and after changing directories."""
 
 import os
 
