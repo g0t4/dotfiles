@@ -563,7 +563,10 @@ if status is-interactive
         if command -q eza
             eza --tree --group-directories-first \
                 --ignore-glob $package_dirs --ignore-glob "*.lproj" \
-                --color-scale=all --icons \
+                --color-scale=all \
+                # FYI adding always for cases where I wrap calls to fish functions with subprocess.run as a simple stop gap to assume those are always connected to a TTY... we'll see how this works out
+                --color always \
+                --icons always \
                 --git-repos --git-ignore $argv
         else
             command tree --dirsfirst --noreport --filelimit 100 \

@@ -84,6 +84,7 @@ for _files_fish_function in (
     "dir_of_man_page",
     "batman",
     "gpristine_nested_repos",
+    "tree",
     "treed",
     "treeh",
     "treeu",
