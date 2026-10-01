@@ -114,28 +114,28 @@ async def main(connection: iterm2.Connection):
         await yank_last_command_output_and_paste_to_commandline(connection)
 
     # * registers
-    await wes_keymap_split_vertical_pane.async_register(connection)
-    await wes_keymap_split_horizontal_pane.async_register(connection)
+    await wes_keymap_split_vertical_pane.async_register(connection, timeout=300)
+    await wes_keymap_split_horizontal_pane.async_register(connection, timeout=300)
     #
-    await wes_keymap_new_tab.async_register(connection)
-    await wes_keymap_new_tab_force_local.async_register(connection)
-    await wes_keymap_new_tab_then_close_others.async_register(connection)
+    await wes_keymap_new_tab.async_register(connection, timeout=300)
+    await wes_keymap_new_tab_force_local.async_register(connection, timeout=300)
+    await wes_keymap_new_tab_then_close_others.async_register(connection, timeout=300)
     #
-    await wes_keymap_new_window.async_register(connection)
-    await wes_keymap_new_window_force_local.async_register(connection)
+    await wes_keymap_new_window.async_register(connection, timeout=300)
+    await wes_keymap_new_window_force_local.async_register(connection, timeout=300)
     #
-    await wes_keymap_replace_pane.async_register(connection)
-    await wes_keymap_smaller_font.async_register(connection)
-    await wes_keymap_bigger_font.async_register(connection)
+    await wes_keymap_replace_pane.async_register(connection, timeout=300)
+    await wes_keymap_smaller_font.async_register(connection, timeout=300)
+    await wes_keymap_bigger_font.async_register(connection, timeout=300)
     #
-    await wes_keymap_ask_openai.async_register(connection)
+    await wes_keymap_ask_openai.async_register(connection, timeout=300)
 
     # Register additional RPCs formerly bound to keystrokes
-    await wes_keymap_close_other_tabs.async_register(connection)
-    await wes_keymap_copy_screen_to_clipboard.async_register(connection)
-    await wes_keymap_copy_screen_to_clipboard_history.async_register(connection)
-    await wes_keymap_f9.async_register(connection)
-    await wes_keymap_yank_last_command_output.async_register(connection)
+    await wes_keymap_close_other_tabs.async_register(connection, timeout=300)
+    await wes_keymap_copy_screen_to_clipboard.async_register(connection, timeout=300)
+    await wes_keymap_copy_screen_to_clipboard_history.async_register(connection, timeout=300)
+    await wes_keymap_f9.async_register(connection, timeout=300)
+    await wes_keymap_yank_last_command_output.async_register(connection, timeout=300)
 
 
 iterm2.run_forever(main)
