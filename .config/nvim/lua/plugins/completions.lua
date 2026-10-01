@@ -92,6 +92,9 @@ local plugin_luasnip = {
         })
         snippets.filetype_extend("typescriptreact", { "typescript" })
         snippets.filetype_extend("javascriptreact", { "javascript" })
+        if use_nvim_native_lsp_completions then
+            require("plugins.completions.native_snippets").setup()
+        end
         vim.api.nvim_create_user_command("Snippets", function()
             local choices = {}
             for _, filetype in ipairs(snippets.get_snippet_filetypes()) do

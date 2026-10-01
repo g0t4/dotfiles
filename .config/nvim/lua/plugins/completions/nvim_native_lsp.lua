@@ -185,17 +185,9 @@ vim.api.nvim_create_autocmd("LspAttach", {
         local client = vim.lsp.get_client_by_id(args.data.client_id)
         if not client then return end
         if client:supports_method("textDocument/completion") then
-            -- Native autotrigger uses only the server's trigger characters by default.
-            -- Also request completion while typing identifiers, as CoC did.
-            local provider = client.server_capabilities.completionProvider
-            local triggers = provider.triggerCharacters or {}
-            for char in ("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_"):gmatch(".") do
-                if not vim.tbl_contains(triggers, char) then
-                    table.insert(triggers, char)
-                end
-            end
-            provider.triggerCharacters = triggers
-            vim.lsp.completion.enable(true, client.id, args.buf, { autotrigger = true })
+            -- 'autocomplete' collects the LSP omnifunc and LuaSnip source in
+            -- the same popup. Keep native LSP acceptance and manual requests.
+            vim.lsp.completion.enable(true, client.id, args.buf)
         end
 
         local function map(mode, lhs, rhs, desc)
