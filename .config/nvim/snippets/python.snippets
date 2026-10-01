@@ -1,28 +1,28 @@
 snippet writefile
-with open('${1:filename}.txt', 'w') as f:
-    f.write('${2:content}')
+	with open('${1:filename}.txt', 'w') as f:
+	    f.write('${2:content}')
 
 snippet richprint
-from rich import print
+	from rich import print
 
 # TODO do I like using i as prefix on all import snippets? or maybe f in the case of from * import *
 snippet inp
-import numpy as np
+	import numpy as np
 
 snippet f=
-f'{${1:string}=}'
+	f'{${1:string}=}'
 
 snippet p=
-print(f'{${1:string}=}')
+	print(f'{${1:string}=}')
 
 snippet rp=
-rich.print(f'{${1:string}=}')
+	rich.print(f'{${1:string}=}')
 
 snippet ri
-rich.inspect(${1:string})
+	rich.inspect(${1:string})
 
 snippet l=
-logger.info(f'{${1:string}=}')
+	logger.info(f'{${1:string}=}')
 
 snippet ld=
-logger.debug(f'{${1:string}=}')
+	logger.debug(f'{${1:string}=}')

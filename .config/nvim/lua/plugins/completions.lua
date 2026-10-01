@@ -81,6 +81,52 @@ local plugin_nvim_cmp = {
     }, use_cmp_completions and { 'hrsh7th/cmp-nvim-lsp', 'hrsh7th/cmp-nvim-lua' } or {}),
 }
 
+local plugin_luasnip = {
+    "L3MON4D3/LuaSnip",
+    event = "InsertEnter",
+    cmd = "Snippets",
+    config = function()
+        local snippets = require("luasnip")
+        require("luasnip.loaders.from_snipmate").load({
+            paths = vim.fn.stdpath("config") .. "/snippets",
+        })
+        snippets.filetype_extend("typescriptreact", { "typescript" })
+        snippets.filetype_extend("javascriptreact", { "javascript" })
+        vim.api.nvim_create_user_command("Snippets", function()
+            local choices = {}
+            for _, filetype in ipairs(snippets.get_snippet_filetypes()) do
+                vim.list_extend(choices, snippets.get_snippets(filetype))
+            end
+            table.sort(choices, function(a, b) return a.trigger < b.trigger end)
+            vim.ui.select(choices, {
+                prompt = "Snippets",
+                format_item = function(item) return item.trigger .. " — " .. (item.name or "") end,
+            }, function(item)
+                if item then
+                    vim.cmd.startinsert()
+                    vim.schedule(function() snippets.snip_expand(item) end)
+                end
+            end)
+        end, {})
+        vim.keymap.set({ "i", "s" }, "<C-j>", function()
+            if snippets.expand_or_jumpable() then
+                return "<Cmd>lua require('luasnip').expand_or_jump()<CR>"
+            elseif vim.snippet.active({ direction = 1 }) then
+                return "<Cmd>lua vim.snippet.jump(1)<CR>"
+            end
+            return "<C-j>"
+        end, { expr = true, silent = true, desc = "Expand snippet or jump forward" })
+        vim.keymap.set({ "i", "s" }, "<C-k>", function()
+            if snippets.jumpable(-1) then
+                return "<Cmd>lua require('luasnip').jump(-1)<CR>"
+            elseif vim.snippet.active({ direction = -1 }) then
+                return "<Cmd>lua vim.snippet.jump(-1)<CR>"
+            end
+            return "<C-k>"
+        end, { expr = true, silent = true, desc = "Jump backward in snippet" })
+    end,
+}
+
 if use_nvim_native_lsp_completions then
     require("plugins.completions.nvim_native_lsp")
 end
@@ -93,4 +139,5 @@ end
 return {
     plugin_coc,
     plugin_nvim_cmp,
+    plugin_luasnip,
 }

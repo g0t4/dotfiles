@@ -5,60 +5,60 @@
 # https://docs.github.com/en/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax#alerts
 #
 snippet note "GitHub Markdown Note"
-> [!NOTE]
-> ${1:content}
+	> [!NOTE]
+	> ${1:content}
 
 snippet tip "GitHub Markdown Tip"
-> [!TIP]
-> ${1:content}
+	> [!TIP]
+	> ${1:content}
 
 snippet important "GitHub Markdown Important"
-> [!IMPORTANT]
-> ${1:content}
+	> [!IMPORTANT]
+	> ${1:content}
 
 snippet caution "GitHub Markdown Caution"
-> [!CAUTION]
-> ${1:content}
+	> [!CAUTION]
+	> ${1:content}
 
 snippet warning "GitHub Markdown Warning"
-> [!WARNING]
-> ${1:content}
+	> [!WARNING]
+	> ${1:content}
 
 snippet link "[text](link)"
-[${1:text}](${2:link})$0
+	[${1:text}](${2:link})$0
 
 snippet link_same "[text](text)"
-[${1:link}](${1:link})$0
+	[${1:link}](${1:link})$0
 
 # FYI ` alone is some sort of interpolation that appears to use a lua expression to produce the snippet contents
 snippet fenced_code_block "triple ``` code block" b
-	\`\`\`${1:language}
-	${0}
-	\`\`\`
+		\`\`\`${1:language}
+		${0}
+		\`\`\`
 
 snippet fenced_js "javascript" b
-	\`\`\`javascript
-	${0}
-	\`\`\`
+		\`\`\`javascript
+		${0}
+		\`\`\`
 
 snippet fenced_sh "shell" b
-	\`\`\`sh
-	${0}
-	\`\`\`
+		\`\`\`sh
+		${0}
+		\`\`\`
 
 snippet fenced_fish "fish" b
-	\`\`\`fish
-	${0}
-	\`\`\`
+		\`\`\`fish
+		${0}
+		\`\`\`
 
 snippet fenced_python "python" b
-	\`\`\`python
-	${0}
-	\`\`\`
+		\`\`\`python
+		${0}
+		\`\`\`
 
 snippet link_image "Markdown image link https://daringfireball.net/projects/markdown/syntax#img" b
-![${1:alt text}](${2:image_url})$0
+	![${1:alt text}](${2:image_url})$0
 
 snippet link_only "AKA `auto link`: https://daringfireball.net/projects/markdown/syntax#autolink" b
-<${1:absolute url}>$0
+	<${1:absolute url}>$0
 

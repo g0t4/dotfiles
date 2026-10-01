@@ -4,137 +4,137 @@
 # * d == $   (mostly applies to scalars by the way, but focus on the $ which is MEMORABLE and the first char)
 # [d]ollar $ - e[x]pand
 snippet dx "dollar expand quoted (no word splitting) - no curly braces by default"
-"$${1:variable}"
+	"$${1:variable}"
 
 snippet dxb "dx w/ {} to delineate"
-"${${1:variable}}"
+	"${${1:variable}}"
 
 snippet dxu "dollar expand unquoted (split words)"
-${${1:variable}}
+	${${1:variable}}
 
 # * dollar sub operators
 snippet d_default_value_if_unset "default value - substitute if unset"
-"\${${1:variable}:-${2:default_value}}"
+	"\${${1:variable}:-${2:default_value}}"
 # useful way to decide if smth is unset vs set empty
 snippet d_swap_if_set "change value IF variable is SET... unset remains unset"
-"\${${1:variable}:+${2:use_this_if_set}}"
+	"\${${1:variable}:+${2:use_this_if_set}}"
 snippet d_assign_if_unset "assign if unset (only assignment operator that changes variable's value)"
-"\${${1:variable}:=${2:assign_this_if_unset}}"
+	"\${${1:variable}:=${2:assign_this_if_unset}}"
 snippet d_error_if_unset "error if unset"
-"\${${1:variable}:?${2:error_message_if_unset}}"
+	"\${${1:variable}:?${2:error_message_if_unset}}"
 
 snippet d# "dollar expand length"
-\${#${1:variable}}
+	\${#${1:variable}}
 
 snippet check_string_length
-if ((\${#${1:variable}} >= 1)); then
-    ${0:echo ___}
-fi
+	if ((\${#${1:variable}} >= 1)); then
+	    ${0:echo ___}
+	fi
 
 snippet check_array_length
-if ((\${#${1:array}[@]} >= 1)); then
-    ${0:declare -p ${1}} | bat -l bash
-fi
+	if ((\${#${1:array}[@]} >= 1)); then
+	    ${0:declare -p ${1}} | bat -l bash
+	fi
 
 snippet d_strip_prefix "Prefix strip: \${var#pattern}"
-\${${1:VAR}#${2:pattern}}
+	\${${1:VAR}#${2:pattern}}
 #\${${1:VAR#${2:pattern}}}
 
 snippet d_strip_suffix "Suffix strip: \${var%pattern}"
-\${${1:VAR}%${2:pattern}}
+	\${${1:VAR}%${2:pattern}}
 #\${${1:VAR%${2:pattern}}}
 
 # * arrays
 # [a]rray e[x]pand
 snippet d@ "expand array, element-preserving expansion (quoted)"
-"\${${1:ARRAY}[@]}"
+	"\${${1:ARRAY}[@]}"
 
 snippet d* "expand array, join elements with IFS, but preserve elements (quoted)"
-"\${${1:ARRAY}[*]}"
+	"\${${1:ARRAY}[*]}"
 
 snippet d_array_element
-"\${${1:SCALAR}[${2:INDEX}]}"
+	"\${${1:SCALAR}[${2:INDEX}]}"
 
 snippet d_array_length
-\${#${1:ARRAY}[@]}
+	\${#${1:ARRAY}[@]}
 
 snippet d_string_length
-\${#${1:STRING}}
+	\${#${1:STRING}}
 
 snippet echo_variable "BOTH arrays and scalars"
-declare -p ${1:VAR} | bat -l bash
+	declare -p ${1:VAR} | bat -l bash
 
 snippet echo_array_element
-echo "${1}[${2}]: _\${${1:ARRAY}[${2:INDEX_OR_KEY}]}_"
+	echo "${1}[${2}]: _\${${1:ARRAY}[${2:INDEX_OR_KEY}]}_"
 
 
 # * FOR LOOPS
 # [a]rray [f]or-loop
 snippet for_in_array "loop over array elements - preserve elements (quoted)"
-for ${2:item} in "\${${1:ARRAY}[@]}"; do
-    ${0:codes}
-done
+	for ${2:item} in "\${${1:ARRAY}[@]}"; do
+	    ${0:codes}
+	done
 
 snippet for_in_range "for in loop, over range of numbers"
-for i in {${2:1}..${1:10}}; do
-    echo "\$${0:i}"
-done
+	for i in {${2:1}..${1:10}}; do
+	    echo "\$${0:i}"
+	done
 
 snippet for_in_array_indicies "for int loop over range of element indexes in an array"
-for i in "\${!${1:ARRAY}[@]}"; do
-    echo "Index \$i: \${${1}[\$i]}"
-done
+	for i in "\${!${1:ARRAY}[@]}"; do
+	    echo "Index \$i: \${${1}[\$i]}"
+	done
 
 snippet if_not_empty
-if [[ -n "${${1:VAR}}" ]]; then
-	$0
-fi
+	if [[ -n "${${1:VAR}}" ]]; then
+		$0
+	fi
 
 snippet if_empty
-if [[ -z "${${1:VAR}}" ]]; then
-	$0
-fi
+	if [[ -z "${${1:VAR}}" ]]; then
+		$0
+	fi
 
 snippet declarep "print attributes and value of VAR"
-declare -p ${1:VAR} | bat -l bash
+	declare -p ${1:VAR} | bat -l bash
 # alias declarep b/c I use this all the time
 snippet dp
-declare -p ${1:VAR} | bat -l bash
+	declare -p ${1:VAR} | bat -l bash
 
 snippet declareA "associative array"
-declare -A ${1:ARRAY}
+	declare -A ${1:ARRAY}
 
 snippet dA "associative array"
-declare -A ${1:ARRAY}
+	declare -A ${1:ARRAY}
 
 snippet declarea "indexed array"
-declare -a ${1:ARRAY}
+	declare -a ${1:ARRAY}
 
 snippet da "indexed array"
-declare -a ${1:ARRAY}
+	declare -a ${1:ARRAY}
 
 snippet delcarei "arithmetic exp (to integer) on assign"
-declare -i ${1:INTEGER}
+	declare -i ${1:INTEGER}
 
 snippet declare_lowercase "lowercase on assign"
-declare -l ${1:always_lowercase_string}
+	declare -l ${1:always_lowercase_string}
 
 snippet declare_uppercase "uppercase on assign"
-declare -l ${1:ALWAYS_UPPERCASE_STRING}
+	declare -l ${1:ALWAYS_UPPERCASE_STRING}
 
 snippet declare_function_definition_lookup
-declare -f ${1:FUNCTION_NAME}
+	declare -f ${1:FUNCTION_NAME}
 
 # keep once space before # so its not treated as comment:
 snippet shellcheck_disable_code
- # shellcheck disable=SC${1:2127}
+	 # shellcheck disable=SC${1:2127}
 
 snippet shellcheck_disable_all
- # shellcheck disable=all
+	 # shellcheck disable=all
 
 # * common shell check one-off disables
 #Elements in associative arrays need index, e.g. array=( [index]=value ) . (shellcheck SC2190)
 snippet shellcheck_disable_array_no_index
- # shellcheck disable=SC2190 # allow for declare -A foo=(key2 value1 ... keyN valueN) syntax in 5.1+
+	 # shellcheck disable=SC2190 # allow for declare -A foo=(key2 value1 ... keyN valueN) syntax in 5.1+
 
 

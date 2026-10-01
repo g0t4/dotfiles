@@ -39,8 +39,112 @@ vim.lsp.config("xonsh", {
     init_options = { pythonBackend = "pyright" },
 })
 
+-- The live config links individual files into this repo, not the whole nvim directory.
+local source_file = vim.fn.resolve(debug.getinfo(1, "S").source:sub(2))
+local server_bin = vim.fn.fnamemodify(source_file, ":h:h:h:h") .. "/node_modules/.bin/"
+
+vim.lsp.config("ts_ls", {
+    cmd = { server_bin .. "typescript-language-server", "--stdio" },
+    filetypes = { "javascript", "javascriptreact", "typescript", "typescriptreact" },
+    root_markers = { "tsconfig.json", "jsconfig.json", "package.json", ".git" },
+    workspace_required = false,
+    settings = {
+        typescript = { format = { insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces = true } },
+    },
+})
+
+vim.lsp.config("dockerfile", {
+    cmd = { server_bin .. "docker-langserver", "--stdio" },
+    filetypes = { "dockerfile" },
+    root_markers = { "Dockerfile", "compose.yaml", "docker-compose.yml", ".git" },
+    workspace_required = false,
+})
+
+vim.lsp.config("yamlls", {
+    cmd = { server_bin .. "yaml-language-server", "--stdio" },
+    filetypes = { "yaml" }, -- Ansible buffers have their own filetype/server.
+    root_markers = { ".yamllint", "package.json", ".git" },
+    workspace_required = false,
+    settings = {
+        yaml = {
+            format = { enable = false },
+            schemaStore = { enable = true },
+            schemas = { kubernetes = {
+                "k8s/*.yaml", "k8s/*.yml", "k8s/**/*.yaml", "k8s/**/*.yml",
+                "kubernetes/*.yaml", "kubernetes/*.yml",
+                "kubernetes/**/*.yaml", "kubernetes/**/*.yml",
+            } },
+        },
+    },
+})
+
+vim.lsp.config("jsonls", {
+    cmd = { server_bin .. "vscode-json-language-server", "--stdio" },
+    filetypes = { "json", "jsonc" },
+    root_markers = { "package.json", ".git" },
+    workspace_required = false,
+    settings = {
+        json = {
+            validate = { enable = false },
+            format = { keepLines = true },
+            schemas = { {
+                fileMatch = { ".luarc.json", ".luarc.jsonc" },
+                url = "https://raw.githubusercontent.com/LuaLS/vscode-lua/master/setting/schema.json",
+            } },
+        },
+    },
+})
+
+vim.lsp.config("bashls", {
+    cmd = { server_bin .. "bash-language-server", "start" },
+    filetypes = { "sh" },
+    root_markers = { ".shellcheckrc", ".git" },
+    workspace_required = false,
+})
+
+vim.lsp.config("ansiblels", {
+    cmd = { "ansible-language-server", "--stdio" },
+    filetypes = { "ansible" },
+    root_markers = { "ansible.cfg", ".git" },
+    workspace_required = false,
+    settings = {
+        ansible = {
+            validation = { enabled = true, lint = { enabled = true } },
+            python = { interpreterPath = "python3" },
+        },
+    },
+})
+
+vim.lsp.config("nixd", {
+    cmd = { "nixd" },
+    filetypes = { "nix" },
+    root_markers = { "flake.nix", ".git" },
+    workspace_required = false,
+    settings = { nixd = { formatting = { command = { "nixfmt" } } } },
+})
+
+vim.lsp.config("ts_query_ls", {
+    cmd = { "ts_query_ls" },
+    filetypes = { "query" },
+    root_markers = { ".tsqueryrc.json", ".git" },
+    workspace_required = false,
+})
+
+vim.lsp.config("fish_lsp", {
+    cmd = { "fish-lsp", "start" },
+    filetypes = { "fish" },
+    root_markers = { "config.fish", ".git" },
+    workspace_required = false,
+    cmd_env = { fish_lsp_diagnostic_disable_error_codes = "2003 2001" },
+    init_options = { workspaces = { paths = { defaults = {
+        vim.fn.expand("~/.config/fish"), "/opt/homebrew/share/fish",
+    } } } },
+})
+
 local function format_buffer(range)
-    if vim.bo.filetype == "xonsh" or vim.bo.filetype == "python" then
+    if vim.bo.filetype == "yaml" or vim.bo.filetype == "ansible" then
+        vim.cmd("normal! gg=G")
+    elseif vim.bo.filetype == "xonsh" or vim.bo.filetype == "python" then
         -- Neither xonsh-lsp nor Pyright formats; keep the existing CLI formatters.
         local lines = vim.api.nvim_buf_get_lines(0, 0, -1, false)
         local yapf = vim.fn.exepath("yapf")
@@ -169,4 +273,7 @@ vim.api.nvim_create_autocmd("LspAttach", {
     end,
 })
 
-vim.lsp.enable({ "lua_ls", "pyright", "xonsh" })
+vim.lsp.enable({
+    "lua_ls", "pyright", "xonsh", "ts_ls", "dockerfile", "yamlls", "jsonls", "bashls",
+    "ansiblels", "nixd", "ts_query_ls", "fish_lsp",
+})

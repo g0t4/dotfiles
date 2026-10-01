@@ -9,151 +9,151 @@
 # TODO setup keymap to tab through args so I can support more than $1
 # TODO revisit wtf is what in how setmetatable and __index works... then can add back setmetatable(self) or otherwise...
 snippet class "Lua class pattern - explicit instance/instance_mt/class_mt"
----@class ${1}
-local ${1:ClassName} = {}
--- optional class level metatable (i.e. to override a metamethod like __tostring(), __call(), __add(), __pairs(), __ipairs(), etc):
--- local class_mt = {}
--- setmetatable(${1}, class_mt)
+	---@class ${1}
+	local ${1:ClassName} = {}
+	-- optional class level metatable (i.e. to override a metamethod like __tostring(), __call(), __add(), __pairs(), __ipairs(), etc):
+	-- local class_mt = {}
+	-- setmetatable(${1}, class_mt)
 
-function ${1}:new()
-	local instance_mt = { __index = self } -- provides prototypical inheritance w/ subclassing support b/c self:new()
-    local instance = setmetatable({}, instance_mt)
-    ${0}
-    return instance
-end
+	function ${1}:new()
+		local instance_mt = { __index = self } -- provides prototypical inheritance w/ subclassing support b/c self:new()
+	    local instance = setmetatable({}, instance_mt)
+	    ${0}
+	    return instance
+	end
 
-return ${1}
+	return ${1}
 
 # lua, bail early from a function (can't just return)
 snippet drend "do return end"
-do return end
+	do return end
 
 
 snippet schedule "schedule(func)"
-vim.schedule(function()
-    ${0}
-end)
+	vim.schedule(function()
+	    ${0}
+	end)
 
 snippet defer_fn "vim.defer(func, ms)"
-vim.defer_fn(function()
-    ${0}
-end, ${1:1000})
+	vim.defer_fn(function()
+	    ${0}
+	end, ${1:1000})
 
 snippet vp "vim.print(_)"
-vim.print(${0})
+	vim.print(${0})
 
 snippet locall "local log ..."
-local log = require('devtools.logs.logger').universal()
+	local log = require('devtools.logs.logger').universal()
 
 snippet vpq "vim.print('_')"
-vim.print('${0}')
+	vim.print('${0}')
 
 snippet vi "vim.inspect(_)"
-vim.inspect(${0})
+	vim.inspect(${0})
 
 snippet hsi "hs.inspect(_)"
-hs.inspect(${0})
+	hs.inspect(${0})
 
 # FYI log* snippets, the duplicated values for $1 ... I think due to CoC completions, they don't always update as you type, but on enter/Ctrl-J they will mirror
 
 snippet logt "log:trace()"
-log:trace("${1}", ${1:what})
+	log:trace("${1}", ${1:what})
 
 snippet logd "log:debug()"
-log:debug("${1}", ${1:what})
+	log:debug("${1}", ${1:what})
 
 snippet logi "log:info()"
-log:info("${1}", ${1:what})
+	log:info("${1}", ${1:what})
 
 snippet logw "log:warn()"
-log:warn("${1}", ${1:what})
+	log:warn("${1}", ${1:what})
 
 snippet loge "log:error()"
-log:error("${1}", ${1:what})
+	log:error("${1}", ${1:what})
 
 # TODO not sure a1/a2 are easy enough to justify reaching for the #... find a new name?
 snippet a1 "array of array"
-{ ${0} }
+	{ ${0} }
 
 snippet a2 "array of array"
-{{ ${0} }}
+	{{ ${0} }}
 
 
 # *** busted style testing (i.e. plenary)
 
 snippet busted_file
-local assert = require("luassert")
-describe("$1", function()
-    it("$2", function()
-        $0
-    end)
-end)
+	local assert = require("luassert")
+	describe("$1", function()
+	    it("$2", function()
+	        $0
+	    end)
+	end)
 
 # describe for busted tests
 snippet busted_describe_it
-describe("$1", function()
-    it("$2", function()
-        $0
-    end)
-end)
+	describe("$1", function()
+	    it("$2", function()
+	        $0
+	    end)
+	end)
 
 # describe + it
 snippet busted_it
-it("$1", function()
-    $0
-end)
+	it("$1", function()
+	    $0
+	end)
 
 
 snippet annotate_table_array
-${1:ValueType}[]
+	${1:ValueType}[]
 
 # just cancel filling placeholders when you have enough
 snippet annotate_table_literal
-{ ${1:key1}: ${2:ValueType}, ${3:key2}: ${4:ValueType} }
+	{ ${1:key1}: ${2:ValueType}, ${3:key2}: ${4:ValueType} }
 
 snippet annotate_table_key_value
-table<${1:KeyType}, ${2:ValueType}>
+	table<${1:KeyType}, ${2:ValueType}>
 
 # I prefer the table<string syntax...
 # instead of this recommendation on luals annotations page:
 #{ [string]: ${1:ValueType} }
 snippet annotate_table_dictionary
-table<string, ${1:ValueType}>
+	table<string, ${1:ValueType}>
 
 # https://luals.github.io/wiki/annotations/#cast
 snippet annotate_cast
----@cast ${1:variable} ${2:type}
+	---@cast ${1:variable} ${2:type}
 snippet annotate_cast_add_type
----@cast ${1:variable} +${2:type}
+	---@cast ${1:variable} +${2:type}
 snippet annotate_cast_remove_type
----@cast ${1:variable} -${2:type}
+	---@cast ${1:variable} -${2:type}
 # skipped:
 #   cast multiple types
 #   cast possibly nil
 
 
 snippet annotate_class
----@class ${1:ClassName}
+	---@class ${1:ClassName}
 snippet annotate_class_extends
----@class ${1:ClassName}: ${2:ParentClassName}
+	---@class ${1:ClassName}: ${2:ParentClassName}
 
 # skipped: @enum, @generic, @meta,
 # skipped@field  (FIM does a good job w/ these)
 
 snippet annotate_module_simulated_require
----@module "${1:module_name}"
+	---@module "${1:module_name}"
 
 # skipped: @nodiscard (force consumers to use result of function)
 
 snippet annotate_vararg
----@vararg ${1:type}
+	---@vararg ${1:type}
 
 snippet diagnostics_disable_unused_functions
----@diagnostic disable-next-line: unused-function
+	---@diagnostic disable-next-line: unused-function
 
 snippet diagnostics_disable_unused_locals
----@diagnostic disable-next-line: unused-local
+	---@diagnostic disable-next-line: unused-local
 
 snippet diagnostics_disable_all_unused
----@diagnostic disable-next-line: unused-function, unused-local
+	---@diagnostic disable-next-line: unused-function, unused-local
 

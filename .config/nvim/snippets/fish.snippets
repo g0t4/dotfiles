@@ -8,13 +8,13 @@
 # - AFAICT, the line w/ least tabs is used as strip amount, not based on first line alone
 # - obviously, must use indent w/ shebang expansion, else # is interpreted as a comment
 snippet shefish "#!/usr/bin/env fish"
-	#!/usr/bin/env fish
+		#!/usr/bin/env fish
 
 
 snippet fun "function call"
-	function ${1:name}
-		${0}
-	end
+		function ${1:name}
+			${0}
+		end
 
 
 
@@ -26,6 +26,6 @@ snippet fun "function call"
 #  'prefix': 'for'
 #  'body': 'for ${1:element} in #{2:array}\n\t$0\nend'
 snippet for "for ... in ... end"
-	for ${1:element} in ${2:array}
-		${0}
-	end
+		for ${1:element} in ${2:array}
+			${0}
+		end
