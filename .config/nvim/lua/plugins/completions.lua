@@ -1,6 +1,8 @@
 --
 -- * insert mode completions:
-local use_coc_completions = true
+local use_coc_completions = true -- GET OFF OF THIS... it is killing shutdown performance, murdering it at random
+-- BTW git checkout d1689a48 (3 months back, before their stupid MCP server crap which probably caused this... works fine, no hanging on quit)
+
 local use_cmp_completions = false
 local use_nvim_0_11_completions = true
 --
