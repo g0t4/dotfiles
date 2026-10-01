@@ -37,7 +37,7 @@ MAPPINGS = (
     FishMapping(FISH_DIR / "ansibles.fish", XONSH_DIR / "wes_ansible.py"),
     FishMapping(FISH_DIR / "docker-specific.fish", XONSH_DIR / "wes_docker.py"),
     FishMapping(FISH_DIR / "git.fish", XONSH_DIR / "wes_git.py", VALUE_SUBSTITUTIONS=GIT_VALUE_SUBSTITUTIONS),
-
+    FishMapping(FISH_DIR / "ask-openai.fish", XONSH_DIR / "ask_openai.py"),
     FishMapping(ZSH_DIR / "hashicorp.zsh", XONSH_DIR / "wes_hashicorp.py"),
 )
 
