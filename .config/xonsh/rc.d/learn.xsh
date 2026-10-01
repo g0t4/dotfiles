@@ -93,3 +93,13 @@ def wes_colorful_output(cmd: str, **kwargs):
 #     import random
 #     tips = ["Use Tab for completion", "Try 'xonfig' to configure xonsh"]
 #     print("Tip:", random.choice(tips))
+
+
+# TODO later today you'll have time for this
+# def test_subprocess_run():
+#     import subprocess
+#     subprocess.run(["fish", "-ic", "isatty stdin"]) # true
+#     subprocess.run(["fish", "-ic", "isatty stdout"]) # true
+#     echo foo | fish -ic "isatty stdin" # fails
+#     fish -ic "isatty stdout" | cat # fails
+# aliases['test_run'] = ... setup aliased function and see how stdin/stdout works in that model
