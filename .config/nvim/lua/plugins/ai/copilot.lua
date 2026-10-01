@@ -10,16 +10,6 @@ local use_ai = {
 }
 
 
-local lsp_ask_openai = {
-    enabled = true,
-    "neovim/nvim-lspconfig",
-    config = function()
-        -- TODO make sure I don't double define nvim-lspconfig plugin? have one spot register it and then just config server here?
-        -- FYI! this is needed for ask-openai test LSP to work (for RAG)
-    end
-}
-
-
 -- ! consider https://github.com/zbirenbaum/copilot.lua
 --    purportedly faster and less glitchy than copilot.vim
 --    has panel too with completion preview, is that useful?
@@ -636,7 +626,6 @@ if version.major == 0 and version.minor < 10 then
 end
 
 return {
-    lsp_ask_openai,
     llm_nvim_plugin,
     llama_cpp_llama_vim_plugin,
     ask_openai_plugin,
