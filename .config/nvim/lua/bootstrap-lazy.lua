@@ -60,7 +60,7 @@ require("lazy").setup({
         require("plugins.code"),
         require("plugins.colors"),
         require("plugins.comments"),
-        require("plugins.completions"),
+        require("plugins.completions"), -- TODO what in here is causing slow quit randomly? if you comment this out quit is not randmoly slow anymore
         require("plugins.ai.copilot"),
         require("plugins.debugging.dap"),
         require("plugins.debugging.vimspector"),
