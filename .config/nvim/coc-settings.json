@@ -383,26 +383,26 @@
             }
         },
 
-        "fennel": {
-            // "enable": false,
-
-            "command": "fennel-ls", --
-            // see flsproject.fnl for config and notes to install, including docsets for neovim
-
-
-            // this one AFAICT has no ability to help w/ vim APIs (yuck):
-            // "command": "fennel-language-server", --
-            // // cargo install --git https://github.com/rydesun/fennel-language-server
-
-            "filetypes": [ "fennel" ],
-            //  add rootPatterns b/c fennel doesn't have the equiv of say packages.json
-            // "rootPatterns": [
-            //     ".vim/",
-            //     ".git/",
-            //     ".hg/"
-            // ],
-            "trace.server": "verbose", // woa I didn't know this existed?!
-        },
+        // "fennel": {
+        //     // "enable": false,
+        //
+        //     "command": "fennel-ls", --
+        //     // see flsproject.fnl for config and notes to install, including docsets for neovim
+        //
+        //
+        //     // this one AFAICT has no ability to help w/ vim APIs (yuck):
+        //     // "command": "fennel-language-server", --
+        //     // // cargo install --git https://github.com/rydesun/fennel-language-server
+        //
+        //     "filetypes": [ "fennel" ],
+        //     //  add rootPatterns b/c fennel doesn't have the equiv of say packages.json
+        //     // "rootPatterns": [
+        //     //     ".vim/",
+        //     //     ".git/",
+        //     //     ".hg/"
+        //     // ],
+        //     "trace.server": "verbose", // woa I didn't know this existed?!
+        // },
         //  TODO try again (uninstall pyright first)
         // starting to work but not finding local "first-party" modules in my packages
         //    has to be a bug b/c I setup a new codebase and finally got it to find 3rd party venv packages... but not local modules (yet)?
