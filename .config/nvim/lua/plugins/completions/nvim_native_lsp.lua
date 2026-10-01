@@ -67,6 +67,14 @@ end
 
 vim.api.nvim_create_user_command("FormatBuffer", function() format_buffer() end, {})
 
+-- FYI wes checklist when reviewing new config
+-- 1. goto jumping works (gd/F12, <leader>gr/F24 for references opens loclist)
+-- 2. hover help (shift+K)
+-- 3. rename local variable (F2/<leader>rn)
+-- 4. diagnostics jumping ]g and [g
+-- 5. completions (as I type + on-demand)
+-- 6. formatting file/selection (when applicable for language/server)
+
 vim.api.nvim_create_autocmd("LspAttach", {
     group = vim.api.nvim_create_augroup("native_lsp_mappings", { clear = true }),
     callback = function(args)
