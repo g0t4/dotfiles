@@ -1,5 +1,4 @@
 local vim = require("config.libs.vim") -- reuse nvim lua modules in hammerspoon
-require("devtools.co")
 local syncify = require("devtools.co.syncify")
 local ensure_in_coroutine = require("devtools.co.ensure_in_coroutine")
 local sleep_ms = require("devtools.co.sleep_ms")

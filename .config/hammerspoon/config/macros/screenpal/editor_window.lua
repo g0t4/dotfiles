@@ -1,5 +1,4 @@
 local AppWindows = require("config.macros.screenpal.app_windows")
-require("devtools.co")
 local TimelineController = require('config.macros.screenpal.timeline')
 require("config.macros.streamdeck.commands")
 local log = require("config.logs").hammerspoons()
