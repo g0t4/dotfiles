@@ -1,11 +1,11 @@
 --
 -- * insert mode completions:
-local use_coc_completions = true -- GET OFF OF THIS... it is killing shutdown performance, murdering it at random
+local use_coc_completions = false -- TODO ASAP GET OFF OF THIS... it is killing shutdown performance, murdering it at random
 -- BTW git checkout d1689a48 (3 months back, before their stupid MCP server crap which probably caused this... works fine, no hanging on quit)
 
 local use_cmp_completions = false
-local use_nvim_0_11_completions = true
---
+local use_nvim_native_lsp_completions = true
+
 -- * cmdline completions:
 local use_cmp_cmdline_search = true -- make sure to enable wilder via its enabled property
 local use_nvim_0_11_cmdline_search = false -- IIAC this was added in 0.11 too?
@@ -235,8 +235,9 @@ local plugin_nvim_cmp = {
     },
 }
 
-if use_nvim_0_11_completions then
+if use_nvim_native_lsp_completions then
     -- TODO! try standalone LSP in nvim 0.11! (completions, config, multi-client?, plus prev features, also LSP API looks good)
+    require("plugins.completions.nvim_native_lsp")
 end
 
 if use_nvim_0_11_cmdline_search then
