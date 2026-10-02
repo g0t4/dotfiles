@@ -205,9 +205,7 @@ def _wes_keybindings(bindings: KeyBindings, prompter: PromptSession, **_):
 
     @bindings.add(
         "c-a",
-        # filter=
-        # eager=True,
-        # save_before=lambda event: False,
+        # TODO can I get 5,c-a to add 5?
     )
     def _vim_increment(event: KeyPressEvent):
         buffer = event.current_buffer
