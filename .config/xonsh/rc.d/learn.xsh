@@ -15,6 +15,10 @@ log.setLevel(logging.INFO)  # only failures (effectively shuts up the logger)
 def dump_keymaps():
     return XSH.shell.shell.prompter.app.key_bindings.bindings
 
+def dump_keymaps2():
+    # TODO which one shows everything?
+    return XSH.shell.shell.prompter.app.key_processor._bindings._key_bindings.bindings
+
 def dump_events():
     rich.print(events)
 
