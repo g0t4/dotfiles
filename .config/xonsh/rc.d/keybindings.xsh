@@ -6,7 +6,7 @@ import os
 import subprocess
 import sys
 
-from prompt_toolkit.filters import vi_insert_mode, vi_navigation_mode
+from prompt_toolkit.filters import vi_insert_mode, vi_navigation_mode, vi_selection_mode
 from prompt_toolkit.key_binding.bindings.named_commands import get_by_name
 from xonsh.dirstack import cd as _xonsh_cd
 from xonsh.tools import print_above_prompt
@@ -16,6 +16,7 @@ from prompt_toolkit.keys import Keys
 from prompt_toolkit.application import run_in_terminal
 from prompt_toolkit.shortcuts import PromptSession
 from prompt_toolkit.filters import Never
+from prompt_toolkit.enums import EditingMode
 from xonsh.formatter import format_source
 
 
@@ -231,6 +232,29 @@ def _wes_keybindings(bindings: KeyBindings, prompter: PromptSession, **_):
         buffer.text = text[:start] + new_num + text[end:]
         buffer.cursor_position = start + len(new_num)
         event.app.invalidate()
+
+    def wrap_selection(buffer, left, right=None):
+        selection_state = buffer.selection_state
+
+        for start, end in buffer.document.selection_ranges():
+            buffer.transform_region(start, end, lambda s: f"{left}{s}{right}")
+
+        # keep the selection of the inner expression
+        # e.g. `echo |Hello World|` -> `echo "|Hello World|"`
+        buffer.cursor_position += 1
+        selection_state.original_cursor_position += 1
+        buffer.selection_state = selection_state
+
+    @bindings.add(
+        "S", Keys.Any,
+        filter = vi_selection_mode,
+    )
+    def _vi_surround(event: KeyPressEvent):
+        log.info(f"surround {event}")
+        # get current selection
+        buffer = event.current_buffer
+        key = event.key_sequence[1].key
+        wrap_selection(buffer, key, key)
 
     # * set propmt_toolkit's timeout keychord intervals
     # FYI same settings as in vim!
