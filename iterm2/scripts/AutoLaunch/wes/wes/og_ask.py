@@ -72,10 +72,10 @@ async def ask_openai(connection):
         ctrl_c = "\x03"
         ctrl_u = "\x15"
         clear_command = {
-            "fish": ctrl_c,  # ctrl+c (my own binding)
+            "fish": ctrl_c,  # custom
             "lldb": ctrl_u,  # builtin
             "Python": ctrl_u,  # builtin
-            "xonsh": ctrl_c, # added
+            "xonsh": ctrl_c,  # custom
         }
         if which_shell is None or which_shell not in clear_command:
             log(f"{which_shell=} not recognized, defaulting to ctrl+c")
