@@ -203,6 +203,14 @@ def _wes_keybindings(bindings: KeyBindings, prompter: PromptSession, **_):
     def _vim_redo(event):
         event.current_buffer.redo()
 
+    @bindings.add(
+        "c-a",
+        # filter=
+        # eager=True,
+        # save_before=lambda event: False,
+    )
+    def _vim_increment(event: KeyPressEvent):
+
     # * set propmt_toolkit's timeout keychord intervals
     # FYI same settings as in vim!
     # *** https://python-prompt-toolkit.readthedocs.io/en/master/pages/advanced_topics/key_bindings.html#timeouts
