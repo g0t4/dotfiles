@@ -56,6 +56,18 @@ local function workspace_name_for_statusline()
     return workspace_name()
 end
 
+local function vim_lsp_status()
+    local clients = vim.lsp.get_clients({ bufnr = 0 })
+    if #clients == 0 then
+        return ""
+    end
+    local names = {}
+    for _, client in ipairs(clients) do
+        table.insert(names, client.name)
+    end
+    return table.concat(names, ", ")
+end
+
 
 return {
     {
@@ -95,6 +107,7 @@ return {
                         { "progress", padding = { right = 1 } },
                     },
                     lualine_z = {
+                        { vim_lsp_status },
                         -- { workspace_name_for_statusline },
                     },
                     -- search shows #/total in commandline so don't need that here
