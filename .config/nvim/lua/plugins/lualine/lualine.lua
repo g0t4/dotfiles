@@ -57,15 +57,52 @@ local function workspace_name_for_statusline()
 end
 
 local function vim_lsp_status()
-    local clients = vim.lsp.get_clients({ bufnr = 0 })
-    if #clients == 0 then
-        return ""
-    end
-    local names = {}
+    local log = require("devtools.logs.logger"):universal()
+
+    local percentage = nil
+    local summary = {} --- @type string[]
+    local clients = vim.lsp.get_clients()
     for _, client in ipairs(clients) do
-        table.insert(names, client.name)
+        local progress = client.progress
+
+        -- * work done progress kinds:
+        --   begin: https://microsoft.github.io/language-server-protocol/specifications/lsp/3.18/specification/#workDoneProgressBegin
+        --   report: https://microsoft.github.io/language-server-protocol/specifications/lsp/3.18/specification/#workDoneProgressReport
+        --   end: https://microsoft.github.io/language-server-protocol/specifications/lsp/3.18/specification/#workDoneProgressEnd
+
+        local last_progress = nil
+        --- @diagnostic disable-next-line:no-unknown
+        for progress in client.progress do
+            --- @cast progress {token: lsp.ProgressToken, value: lsp.LSPAny}
+            if type(progress.value) == 'table' and progress.value.kind then
+                -- only if looks like a progress object
+                last_progress = progress.value
+                -- TODO do I wanna litearlly only look at the last entry? and not report any progress if it is not a table w/ kind?
+            end
+        end
+        local summ
+        if last_progress == nil then
+            summ = client.name + ": no_progress"
+        elseif last_progress.kind == "report" then
+            log:info("REPORT")
+            summ = client.name .. ": " .. tostring(last_progress.message) .. " - " .. (last_progress.percentage or 0) .. "%"
+        elseif last_progress.kind == "end" then
+            summ = client.name + ": end"
+        elseif last_progress.kind == "begin" then
+            summ = client.name + ": begin"
+        else
+            summ = client.name .. ": unknown kind"
+        end
+        log:info("summary", summ)
+        summary[#summary + 1] = summ
+        -- TODO look at kind and title? and take the ones I want and skip the rest? log them so I can look into and dismiss what I don't care about?
     end
-    return table.concat(names, ", ")
+    -- if #summary == 0 then
+    --     return ""
+    -- end
+    local overview = table.concat(summary, " | ")
+    log:info("overview", overview)
+    return overview
 end
 
 
