@@ -227,7 +227,8 @@ def _wes_keybindings(bindings: KeyBindings, prompter: PromptSession, **_):
             num = int(num_str)
         except ValueError:
             return
-        new_num = str(num + 1)
+        count = int(event.arg or 1)
+        new_num = str(num + count)
         buffer.text = text[:start] + new_num + text[end:]
         buffer.cursor_position = start + len(new_num)
         event.app.invalidate()
