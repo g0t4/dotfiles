@@ -212,9 +212,9 @@ def _wes_keybindings(bindings: KeyBindings, prompter: PromptSession, **_):
         text = buffer.text
         pos = buffer.cursor_position
         import re
-        m = re.search(r"\d+", text[pos:])
+        m = re.search(r"-?\d+", text[pos:])
         if not m:
-            m = re.search(r"\d+", text[:pos][::-1])
+            m = re.search(r"-?\d+", text[:pos][::-1])
             if not m:
                 return
             start = pos - m.end()
