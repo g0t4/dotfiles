@@ -210,6 +210,29 @@ def _wes_keybindings(bindings: KeyBindings, prompter: PromptSession, **_):
         # save_before=lambda event: False,
     )
     def _vim_increment(event: KeyPressEvent):
+        buffer = event.current_buffer
+        text = buffer.text
+        pos = buffer.cursor_position
+        import re
+        m = re.search(r"\d+", text[pos:])
+        if not m:
+            m = re.search(r"\d+", text[:pos][::-1])
+            if not m:
+                return
+            start = pos - m.end()
+            end = pos - m.start()
+        else:
+            start = pos + m.start()
+            end = pos + m.end()
+        num_str = text[start:end]
+        try:
+            num = int(num_str)
+        except ValueError:
+            return
+        new_num = str(num + 1)
+        buffer.text = text[:start] + new_num + text[end:]
+        buffer.cursor_position = start + len(new_num)
+        event.app.invalidate()
 
     # * set propmt_toolkit's timeout keychord intervals
     # FYI same settings as in vim!
