@@ -182,13 +182,11 @@ def _wes_keybindings(bindings: KeyBindings, prompter: PromptSession, **_):
     def _backward_kill_small_word(event):
         get_by_name("backward-kill-word").handler(event)
 
-    @bindings.add("c-c", save_before=lambda event: False)
-    def _clear_buffer_without_new_prompt(event):
-        # Xonsh's default raises KeyboardInterrupt, which finishes this prompt
-        # and draws another. Reset only the editor buffer so the existing
-        # prompt stays in place. Foreground processes still receive SIGINT
-        # directly from the terminal because Prompt Toolkit is not reading then.
-        event.current_buffer.reset()
+    @bindings.add("c-c")
+    def _clear_buffer_without_new_prompt(event: KeyPressEvent):
+        # Xonsh's default Ctrl-C raises KeyboardInterrupt, which finishes the prompt and draws another.
+        # set text to nothing so this is undo-able
+        event.current_buffer.text = ""
         event.app.invalidate()
 
     # Vim-mode additions -------------------------------------------------
