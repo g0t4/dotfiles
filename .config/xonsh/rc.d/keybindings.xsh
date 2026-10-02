@@ -85,7 +85,6 @@ def start_debugger():
     # TODO setup ipdb (or w/e I choose) to work with vim like bindings (IIAC it's mostly all prompt_toolkit across backends?)
     # TODO how can I fix how the debugger mangles output of it and the current prompt?
 
-
 @events.on_ptk_create
 def _wes_keybindings(bindings: KeyBindings, prompter: PromptSession, **_):
 
@@ -155,7 +154,7 @@ def _wes_keybindings(bindings: KeyBindings, prompter: PromptSession, **_):
     @bindings.add("\uE495", save_before=lambda event: False)
     def _inspect_live(event: KeyPressEvent):
         code = _inspectify(event.current_buffer.text)
-        print("\n", code) # show what is evaluated (for scrollback purposes + to make sure I understand what's evaluated)
+        print("\n", code)  # show what is evaluated (for scrollback purposes + to make sure I understand what's evaluated)
         func = lambda: XSH.execer.eval(code, globals(), locals())
         run_in_terminal(func)
 
