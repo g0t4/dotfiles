@@ -6,9 +6,10 @@ vim.diagnostic.config({
     underline = { severity = { min = vim.diagnostic.severity.INFO } },
     severity_sort = true
 })
--- vim.lsp.document_color.enable(false)
-vim.lsp.inlay_hint.enable(false)
-vim.lsp.codelens.enable(false)
+-- TODO disable the following?
+-- vim.lsp.inlay_hint.enable(false)
+-- vim.lsp.codelens.enable(false)
+-- vim.lsp.document_color.enable(false) -- FYI this apparently is not related to semantic_tokens? but smth for identifying literal color values?
 
 -- FYI `:checkhealth vim.lsp` shows language servers and active features per buffer!
 
@@ -20,7 +21,7 @@ vim.lsp.codelens.enable(false)
 --    which suggests there are other uses for `:h lsp-semantic-tokens` beyond coloring code?
 --    and yet there's no vim.lsp.semantic_highlights.enable(false)
 --    so they seem intertwined?
-vim.lsp.semantic_tokens.enable(false)
+vim.lsp.semantic_tokens.enable(false) -- FYI can also set this per LS IIRC
 
 vim.lsp.config("lua", {
     cmd = { "lua-language-server" },
@@ -246,60 +247,21 @@ vim.api.nvim_create_autocmd("LspAttach", {
         map("n", "<leader>cp", ":cprevious<CR>", "Previous result")
 
         map("n", "<leader>cd", function()
-            local function client_positional_params(params)
-                local win = vim.api.nvim_get_current_win()
-                return function(client)
-                    local ret = vim.lsp.util.make_position_params(win, client.offset_encoding)
-                    if params then
-                        ret = vim.tbl_extend('force', ret, params)
-                    end
-                    return ret
-                end
-            end
-
-            -- vim.lsp.buf_request_all(0, 'experimental/serverStatus', client_positional_params(), function(results, ctx)
-            --     local bufnr = assert(ctx.bufnr)
-            --     if vim.api.nvim_get_current_buf() ~= bufnr then
-            --         -- Ignore result since buffer changed. This happens for slow language servers.
-            --         return
-            --     end
-            --     -- Filter errors from results
-            --     local results1 = {} --- @type table<integer,lsp.Hover>
-            --     local log = require("devtools.logs.logger"):universal()
-            --     log:info("results", results)
-            -- end)
-
             local diagnostics = vim.diagnostic.get(0)
             if #diagnostics > 0 then
                 vim.diagnostic.setloclist({ open = true })
                 return
             end
 
+            -- * if no diagnostics, attempt to show if it is b/c one or more language-servers are still busy loading
+            --  FYI this is not intended to be definitive... just a hint to help
             local log = require("devtools.logs.logger"):universal()
-            -- * crude attempt at getting progress
-
-            -- for _, client in ipairs(vim.lsp.get_clients()) do
-            --     --- @diagnostic disable-next-line:no-unknown
-            --     for progress in client.progress do
-            --         --- @cast progress {token: lsp.ProgressToken, value: lsp.LSPAny}
-            --         local value = progress.value
-            --         if type(value) == 'table' and value.kind then
-            --             local message = value.message and (value.title .. ': ' .. value.message) or value.title
-            --             messages[#messages + 1] = message
-            --             if value.percentage then
-            --                 percentage = math.max(percentage or 0, value.percentage)
-            --             end
-            --         end
-            --         -- else: Doesn't look like work done progress and can be in any format
-            --         -- Just ignore it as there is no sensible way to display it
-            --     end
-            -- end
-
-            local message = "No diagnostics\n\nLSP clients doing_something: "
+            local message = "No diagnostics"
+            local message_doing_something = ""
             for _, c in ipairs(vim.lsp.get_clients({ bufnr = 0 })) do
-                local last_progress
+                -- local last_progress
                 -- log:info("client.progress (ring buffer)", c.progress)
-                local pending = c.progress.pending -- empty might mean not loading :) ...
+                local pending = c.progress.pending -- empty might mean not loading :) ... seems like yes... but, doing something does not mean still loading workspace, but if not pending then should mean loaded workspace
                 -- FYI lua ls =>  pending = { [1333] = "Diagnosing workspace" },
                 --   TODO I could look at "diagnosing workspace" or w/e statuses might be here?
                 local doing_something = next(pending) ~= nil
@@ -319,11 +281,14 @@ vim.api.nvim_create_autocmd("LspAttach", {
                 }
                 -- log:info("stat", status)
                 if doing_something then
-                message = message .. "\n" .. c.name
+                    message_doing_something = message_doing_something .. "\n" .. c.name
                 end
             end
             vim.lsp.status() --  is terrible (dumps progress message ring buffer per LSP client, useless)
-            vim.notify(messag, vim.log.levels.INFO)
+            if message_doing_something ~= "" then
+                message = message .. "\n\nLSP servers doing_something:" .. message_doing_something
+            end
+            vim.notify(message, vim.log.levels.INFO)
         end, "Buffer diagnostics")
 
         map("n", "[g", function() vim.diagnostic.jump({ count = -1 }) end, "Previous diagnostic")
