@@ -71,7 +71,7 @@ local plugin_nvim_cmp = {
         end
 
         if use_cmp_cmdline_search then
-            require("plugins.completions.cmdline_cmp").setup()
+            require("plugins.completions.nvim_cmp.cmdline").setup()
         end
     end,
     dependencies = vim.list_extend({
