@@ -87,7 +87,7 @@ vim.lsp.config("yaml", {
     },
 })
 
-vim.lsp.config("jsonls", {
+vim.lsp.config("json", {
     cmd = { server_bin .. "vscode-json-language-server", "--stdio" },
     filetypes = { "json", "jsonc" },
     root_markers = { "package.json", ".git" },
@@ -104,14 +104,14 @@ vim.lsp.config("jsonls", {
     },
 })
 
-vim.lsp.config("bashls", {
+vim.lsp.config("bash", {
     cmd = { server_bin .. "bash-language-server", "start" },
     filetypes = { "sh" },
     root_markers = { ".shellcheckrc", ".git" },
     workspace_required = false,
 })
 
-vim.lsp.config("ansiblels", {
+vim.lsp.config("ansible", {
     cmd = { "ansible-language-server", "--stdio" },
     filetypes = { "ansible" },
     root_markers = { "ansible.cfg", ".git" },
@@ -289,9 +289,9 @@ vim.lsp.enable({
     "typescript",
     "docker",
     "yaml",
-    "jsonls",
-    "bashls",
-    "ansiblels",
+    "json",
+    "bash",
+    "ansible",
     "nix",
     "treesitter_query",
     "fish",
