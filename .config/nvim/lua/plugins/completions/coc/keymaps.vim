@@ -34,58 +34,14 @@ let g:coc_global_extensions = [
             "\ 'coc-rust-analyzer',
             "\ 'coc-lightbulb', " seemed to show up on every line regardless if any code actions available => TODO investigate?
             " \ 'coc-powershell', " WTF the it opens an integrated terminal EVERY TIME AND EVEN IF IT IS DISABLED, it still does it and just closes it .. WTF
-
-    " FYI coc-calc shows the range of what can be done... "1 + 2 = " and it suggests the result "3"
-    " PRN https://github.com/iamcco/coc-diagnostic => generic integration of diagnostics tools (make LSP adapter for them, IIUC)
-    " brew install zig zls " also consider https://github.com/ziglang/zig.vim
-    " BTW prettier formats (graphql, ...)
-    " coc-sh (bash)
-
-" FYI
-"  :CocList extensions  " and others
-"  :CocInstall coc-lua   " wow gutter icons showed right up!
-"     https://github.com/josa42/coc-lua
-"     https://github.com/LuaLS/lua-language-server  # LSP backend, use this for options (ie diagnostics config)
-"  :CocInstall coc-vimlsp
-"     https://github.com/iamcco/vim-language-server
-"  :CocInstall coc-fish " shows man pages on Shift+K!! cool
-"  :CocInstall coc-pyright
-"  :CocInstall coc-toml coc-yaml coc-json
-"  :CocInstall coc-svg
-"  :CocInstall coc-docker
-"
-" TRY:
-"   list here: https://github.com/neoclide/coc.nvim/wiki/Using-coc-extensions#implemented-coc-extensions
-"   ??? https://github.com/yuki-yano/coc-copilot
-"   ??? https://github.com/neoclide/coc-tabnine
-"   coc-sh (bash)   coc-powershell
-"   coc-omnisharp (c#,vb)
-"   coc-nginx
-"   coc-rust-analyzer?
-"   coc-tsserver (typescript, javascript)
-"   lua alternative: https://github.com/xiyaowong/coc-sumneko-lua
-"   mardownlint / markdown-preview-enhanced / markmap (mindmap + markdown)
-"   spelling: coc-ltex / coc-spell-checker
+            " coc-svg
 
 " Some servers have issues with backup files, see #649
 set nobackup
 set nowritebackup
 
-" * Having longer updatetime (default is 4000 ms = 4s) leads to noticeable
-" delays and poor user experience
+" * Having longer updatetime (default is 4000 ms = 4s) leads to noticeable delays and poor user experience
 set updatetime=300
-
-" FYI not using tab to trigger completion:
-"" Use tab for trigger completion with characters ahead and navigate
-"" NOTE: There's always complete item selected by default, you may want to enable
-"" no select by `"suggest.noselect": true` in your configuration file
-"" NOTE: Use command ':verbose imap <tab>' to make sure tab is not mapped by
-"" other plugin before putting this into your config
-"inoremap <silent><expr> <TAB>
-"      \ coc#pum#visible() ? coc#pum#next(1) :
-"      \ CheckBackspace() ? "\<Tab>" :
-"      \ coc#refresh()
-"inoremap <expr><S-TAB> coc#pum#visible() ? coc#pum#prev(1) : "\<C-h>"
 
 " Make <CR> to accept selected completion item or notify coc.nvim to format
 " <C-g>u breaks current undo, please make your own choice
@@ -102,21 +58,7 @@ inoremap <silent><expr> <CR> coc#pum#visible() ? coc#pum#confirm()
 "    actually I haven't verified if it breaks S-Enter, pass through might just be doing enter ;)
 inoremap <silent><nowait><expr> <S-CR> coc#pum#visible() ? coc#pum#cancel() : "<S-CR>"
 
-
-
-function! CheckBackspace() abort
-    let col = col('.') - 1
-    return !col || getline('.')[col - 1]  =~# '\s'
-endfunction
-
-
-" FYI some keymaps in coc.vim: ~/.local/share/nvim/lazy/coc.nvim/plugin/coc.vim line 723
-" TODO do I have a race condition on loading plugins that might be causing the defaults to not map?
-"    BECAUSE: coc.vim won't set  these if a keymap already exists so that might be it, if so add those back here from coc.vim (above, line 723 etc)
-"    OK I have a few not working for LUA maybe only? investigate later, I am leaving the broken ones for now
 " *** page up/down for coc hover windows/menus
-" coc#pum is for completions [p]op[u]p [m]enu
-"   #visible()
 " FYI for testing, in insert mode, in lua, type `vim.o` and you have multiple pages of completions to scroll up/down
 " FYI, scroll(1) is down a page, scroll(0) is up a page
 " PRN could I wire up neoscroll on this too?! use next/prev if I can get page size? then I could as it has custom funcs IIRC to do other scrolls
@@ -142,10 +84,8 @@ inoremap <silent><expr> <C-f> coc#pum#visible() ? coc#pum#scroll(0) : "\<C-f>"
 "nnoremap <silent><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-f>"
 
 
-
 " Use <c-space> to trigger/refresh completion
 inoremap <silent><expr> <c-space> coc#refresh()
-
 
 
 nnoremap <silent> <S-k> :call ShowDocumentation()<CR>
@@ -167,7 +107,6 @@ endfunction
 " TODO! change highlight group and bring this back is fine... though I have underline based on text matches already and thats not terrible
 " Highlight the symbol and its references when holding the cursor
 "autocmd CursorHold * silent call CocActionAsync('highlight')
-
 
 
 " Symbol renaming (I love F2 for this, maybe get rid of rn if I use F2 alone)
