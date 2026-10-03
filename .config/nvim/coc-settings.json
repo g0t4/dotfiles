@@ -256,7 +256,7 @@
             }
         },
 
-        "nixd": {
+        "nix": {
             "command": "nixd",
             "args": [ "--log=verbose" ],
             "filetypes": [ "nix" ],
@@ -270,7 +270,7 @@
             }
         },
 
-        "ts_query_ls": {
+        "treesitter_query": {
             // *** tree-sitter query files (*.scm)
             "command": "ts_query_ls",
             "filetypes": [ "query", "scm" ],
@@ -354,7 +354,7 @@
         // FORMATTER:
         //    uses `fish-indent foo.fish` # no options AFAIK to configure
         // config discussions: https://github.com/ndonfris/fish-lsp/discussions
-        "fish-lsp": {
+        "fish": {
             "command": "fish-lsp",
             "filetypes": [
                 "fish"

@@ -7,7 +7,7 @@ vim.diagnostic.config({
     severity_sort = true
 })
 
-vim.lsp.config("lua_ls", {
+vim.lsp.config("lua", {
     cmd = { "lua-language-server" },
     filetypes = { "lua" },
     root_markers = { ".luarc.json", ".luarc.jsonc", ".git" },
@@ -50,7 +50,7 @@ vim.lsp.config("xonsh", {
 local source_file = vim.fn.resolve(debug.getinfo(1, "S").source:sub(2))
 local server_bin = vim.fn.fnamemodify(source_file, ":h:h:h:h") .. "/node_modules/.bin/"
 
-vim.lsp.config("ts_ls", {
+vim.lsp.config("typescript", {
     cmd = { server_bin .. "typescript-language-server", "--stdio" },
     filetypes = { "javascript", "javascriptreact", "typescript", "typescriptreact" },
     root_markers = { "tsconfig.json", "jsconfig.json", "package.json", ".git" },
@@ -60,14 +60,14 @@ vim.lsp.config("ts_ls", {
     },
 })
 
-vim.lsp.config("dockerfile", {
+vim.lsp.config("docker", {
     cmd = { server_bin .. "docker-langserver", "--stdio" },
     filetypes = { "dockerfile" },
     root_markers = { "Dockerfile", "compose.yaml", "docker-compose.yml", ".git" },
     workspace_required = false,
 })
 
-vim.lsp.config("yamlls", {
+vim.lsp.config("yaml", {
     cmd = { server_bin .. "yaml-language-server", "--stdio" },
     filetypes = { "yaml" }, -- Ansible buffers have their own filetype/server.
     root_markers = { ".yamllint", "package.json", ".git" },
@@ -124,7 +124,7 @@ vim.lsp.config("ansiblels", {
     },
 })
 
-vim.lsp.config("nixd", {
+vim.lsp.config("nix", {
     cmd = { "nixd" },
     filetypes = { "nix" },
     root_markers = { "flake.nix", ".git" },
@@ -132,14 +132,14 @@ vim.lsp.config("nixd", {
     settings = { nixd = { formatting = { command = { "nixfmt" } } } },
 })
 
-vim.lsp.config("ts_query_ls", {
+vim.lsp.config("treesitter_query", {
     cmd = { "ts_query_ls" },
     filetypes = { "query" },
     root_markers = { ".tsqueryrc.json", ".git" },
     workspace_required = false,
 })
 
-vim.lsp.config("fish_lsp", {
+vim.lsp.config("fish", {
     cmd = { "fish-lsp", "start" },
     filetypes = { "fish" },
     root_markers = { "config.fish", ".git" },
@@ -283,6 +283,6 @@ vim.api.nvim_create_autocmd("LspAttach", {
 })
 
 vim.lsp.enable({
-    "lua_ls", "pyright", "xonsh", "ts_ls", "dockerfile", "yamlls", "jsonls", "bashls",
-    "ansiblels", "nixd", "ts_query_ls", "fish_lsp",
+    "lua", "pyright", "xonsh", "typescript", "docker", "yaml", "jsonls", "bashls",
+    "ansiblels", "nix", "treesitter_query", "fish",
 })
