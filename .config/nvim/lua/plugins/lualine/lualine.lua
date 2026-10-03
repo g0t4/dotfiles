@@ -104,7 +104,20 @@ return {
                         { "filename", path = 1 },
                     }, -- default ""
                     lualine_c = { "" }, -- default "filename"
-                    lualine_x = { "location" }, -- default "location"
+                    lualine_x = {
+                        {
+                            function()
+                                return vim.fn.line(".") .. ""
+                            end,
+                        },
+                        {
+                            function()
+                                return vim.fn.col(".") .. ""
+                            end,
+                            padding = { left = 0, right = 1 }
+                        }, -- FYI when set padding it overrides both sides, so only specify left means right = 0
+                        { "progress", padding = { right = 1 } },
+                    },
                     lualine_y = {}, -- default ""
                     lualine_z = {}, -- default ""
                 },
