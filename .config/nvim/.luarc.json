@@ -17,6 +17,7 @@
         ],
         // I prefer to leave the original variable name too so I can see what it is and not forget its there
         "unusedLocalExclude": [ "_*" ],
+        "libraryFiles": "Disable", // default: "Opened"
     },
 
     // FYI I had to quit/restart zed to get new workspace.library paths to start working with Find Ref (F12)

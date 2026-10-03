@@ -17,12 +17,9 @@
         ],
         // I prefer to leave the original variable name too so I can see what it is and not forget its there
         "unusedLocalExclude": [ "_*" ],
-
+        "libraryFiles": "Disable", // default: "Opened"
+        // PRN? "diagnostics.ignoredFiles" for any of my files?
     },
-
-    // TODO ignore dirs? I dont want diagnostics for libraries for example...
-    // https://luals.github.io/wiki/settings/#workspaceignoredir
-    // or smth under diagnostics above
 
     // FYI I had to quit/restart zed to get new workspace.library paths to start working with Find Ref (F12)
     // nvim diagnostics refresh without restart, in a few seconds max:

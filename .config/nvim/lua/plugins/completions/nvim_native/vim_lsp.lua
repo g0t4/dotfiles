@@ -28,6 +28,9 @@ vim.lsp.config("lua", {
     filetypes = { "lua" },
     root_markers = { ".luarc.json", ".luarc.jsonc", ".git" },
     workspace_required = false,
+    diagnostics={
+        libraryFiles = "Disable", -- default "Opened" https://luals.github.io/wiki/settings/#diagnosticslibraryfiles
+    },
     settings = {
         Lua = {
             runtime = { version = "LuaJIT", path = { "?.lua", "?/init.lua" } },
