@@ -93,9 +93,9 @@ return {
                         }, -- FYI when set padding it overrides both sides, so only specify left means right = 0
                         { "progress", padding = { right = 1 } },
                     },
-                    -- lualine_z = {
-                    --     -- { workspace_name_for_statusline },
-                    -- },
+                    lualine_z = {
+                        -- { workspace_name_for_statusline },
+                    },
                     -- search shows #/total in commandline so don't need that here
                 },
                 inactive_sections = {
