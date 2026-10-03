@@ -246,7 +246,6 @@ vim.api.nvim_create_autocmd("LspAttach", {
         map("n", "<leader>cp", ":cprevious<CR>", "Previous result")
 
         map("n", "<leader>cd", function()
-
             local function client_positional_params(params)
                 local win = vim.api.nvim_get_current_win()
                 return function(client)
@@ -258,47 +257,73 @@ vim.api.nvim_create_autocmd("LspAttach", {
                 end
             end
 
-            vim.lsp.buf_request_all(0, 'textDocument/hover', client_positional_params(), function(results, ctx)
-                local bufnr = assert(ctx.bufnr)
-                if vim.api.nvim_get_current_buf() ~= bufnr then
-                    -- Ignore result since buffer changed. This happens for slow language servers.
-                    return
-                end
-
-                -- Filter errors from results
-                local results1 = {} --- @type table<integer,lsp.Hover>
-                local log = require("devtools.logs.logger"):universal()
-                log:info("results", results)
-
-                -- for client_id, resp in pairs(results) do
-                --     local err, result = resp.err, resp.result
-                --     if err then
-                --         lsp.log.error(err.code, err.message)
-                --     elseif result then
-                --         results1[client_id] = result
-                --     end
-                -- end
-            end)
-
-            do return end
+            -- vim.lsp.buf_request_all(0, 'experimental/serverStatus', client_positional_params(), function(results, ctx)
+            --     local bufnr = assert(ctx.bufnr)
+            --     if vim.api.nvim_get_current_buf() ~= bufnr then
+            --         -- Ignore result since buffer changed. This happens for slow language servers.
+            --         return
+            --     end
+            --     -- Filter errors from results
+            --     local results1 = {} --- @type table<integer,lsp.Hover>
+            --     local log = require("devtools.logs.logger"):universal()
+            --     log:info("results", results)
+            -- end)
 
             local diagnostics = vim.diagnostic.get(0)
-            if #diagnostics == 0 then
-                -- TODO check progress of language servers too?
-                -- vim.notify("No diagnostics\n" .. vim.lsp.status(), vim.log.levels.INFO)
-                for _, c in ipairs(vim.lsp.get_clients({ bufnr = 0 })) do
-                    vim.print({
-                        name = c.name,
-                        id = c.id,
-                        initialized = c.initialized,
-                        stopped = c:is_stopped(),
-                        requests = c.requests,
-                        progress = c.progress,
-                    })
-                end
-            else
+            if #diagnostics > 0 then
                 vim.diagnostic.setloclist({ open = true })
+                return
             end
+
+            local log = require("devtools.logs.logger"):universal()
+            -- * crude attempt at getting progress
+
+            -- for _, client in ipairs(vim.lsp.get_clients()) do
+            --     --- @diagnostic disable-next-line:no-unknown
+            --     for progress in client.progress do
+            --         --- @cast progress {token: lsp.ProgressToken, value: lsp.LSPAny}
+            --         local value = progress.value
+            --         if type(value) == 'table' and value.kind then
+            --             local message = value.message and (value.title .. ': ' .. value.message) or value.title
+            --             messages[#messages + 1] = message
+            --             if value.percentage then
+            --                 percentage = math.max(percentage or 0, value.percentage)
+            --             end
+            --         end
+            --         -- else: Doesn't look like work done progress and can be in any format
+            --         -- Just ignore it as there is no sensible way to display it
+            --     end
+            -- end
+
+            local message = "No diagnostics\n\nLSP clients doing_something: "
+            for _, c in ipairs(vim.lsp.get_clients({ bufnr = 0 })) do
+                local last_progress
+                -- log:info("client.progress (ring buffer)", c.progress)
+                local pending = c.progress.pending -- empty might mean not loading :) ...
+                -- FYI lua ls =>  pending = { [1333] = "Diagnosing workspace" },
+                --   TODO I could look at "diagnosing workspace" or w/e statuses might be here?
+                local doing_something = next(pending) ~= nil
+                -- for progress in c.progress do
+                --     --     -- log:warn("prog", progress)
+                --     last_progress = progress.value
+                -- end
+
+                local status = {
+                    name = c.name,
+                    id = c.id,
+                    doing_something = doing_something,
+                    initialized = c.initialized,
+                    stopped = c:is_stopped(),
+                    -- requests = c.requests,
+                    -- last_progress = last_progress,
+                }
+                -- log:info("stat", status)
+                if doing_something then
+                message = message .. "\n" .. c.name
+                end
+            end
+            vim.lsp.status() --  is terrible (dumps progress message ring buffer per LSP client, useless)
+            vim.notify(messag, vim.log.levels.INFO)
         end, "Buffer diagnostics")
 
         map("n", "[g", function() vim.diagnostic.jump({ count = -1 }) end, "Previous diagnostic")
