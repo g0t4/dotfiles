@@ -62,6 +62,21 @@ return {
         dependencies = { 'nvim-tree/nvim-web-devicons' },
         -- TODO consider "kyazdani42/nvim-web-devicons" (lua rewrite) if some reaosn to do so, i.e. perf? or other forks?
         config = function()
+            local loc = {
+                {
+                    function()
+                        return vim.fn.line(".") .. ""
+                    end,
+                },
+                {
+                    function()
+                        return vim.fn.col(".") .. ""
+                    end,
+                    padding = { left = 0, right = 1 }
+                }, -- FYI when set padding it overrides both sides, so only specify left means right = 0
+                { "progress", padding = { right = 1 } },
+            }
+
             require("lualine").setup {
                 options = {
                     -- separators waste space!
@@ -79,20 +94,7 @@ return {
                     },
                     lualine_c = { statusline_filetype, unpack(CopilotsStatus()), },
                     lualine_x = {},
-                    lualine_y = {
-                        {
-                            function()
-                                return vim.fn.line(".") .. ""
-                            end,
-                        },
-                        {
-                            function()
-                                return vim.fn.col(".") .. ""
-                            end,
-                            padding = { left = 0, right = 1 }
-                        }, -- FYI when set padding it overrides both sides, so only specify left means right = 0
-                        { "progress", padding = { right = 1 } },
-                    },
+                    lualine_y = loc,
                     lualine_z = {
                         -- { workspace_name_for_statusline },
                     },
@@ -104,20 +106,7 @@ return {
                         { "filename", path = 1 },
                     }, -- default ""
                     lualine_c = { "" }, -- default "filename"
-                    lualine_x = {
-                        {
-                            function()
-                                return vim.fn.line(".") .. ""
-                            end,
-                        },
-                        {
-                            function()
-                                return vim.fn.col(".") .. ""
-                            end,
-                            padding = { left = 0, right = 1 }
-                        }, -- FYI when set padding it overrides both sides, so only specify left means right = 0
-                        { "progress", padding = { right = 1 } },
-                    },
+                    lualine_x = loc,
                     lualine_y = {}, -- default ""
                     lualine_z = {}, -- default ""
                 },
