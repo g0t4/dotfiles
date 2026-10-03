@@ -93,7 +93,7 @@ local plugin_luasnip = {
         snippets.filetype_extend("typescriptreact", { "typescript" })
         snippets.filetype_extend("javascriptreact", { "javascript" })
         if use_nvim_native_lsp_completions then
-            require("plugins.completions.native_snippets").setup()
+            require("plugins.completions.nvim_native.snippets").setup()
         end
         vim.api.nvim_create_user_command("Snippets", function()
             local choices = {}
@@ -131,7 +131,7 @@ local plugin_luasnip = {
 }
 
 if use_nvim_native_lsp_completions then
-    require("plugins.completions.nvim_native_lsp")
+    require("plugins.completions.nvim_native.vim_lsp")
 end
 
 if use_nvim_0_11_cmdline_search then

@@ -26,7 +26,7 @@ end
 
 function M.setup()
     -- 'F' uses completefunc and 'o' uses the LSP omnifunc.
-    vim.o.completefunc = "v:lua.require'plugins.completions.native_snippets'.complete"
+    vim.o.completefunc = "v:lua.require'plugins.completions.nvim_native.snippets'.complete"
     vim.o.complete = "F,o"
     vim.o.autocomplete = true
 
