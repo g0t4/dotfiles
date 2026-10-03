@@ -22,6 +22,8 @@
     // FYI I had to quit/restart zed to get new workspace.library paths to start working with Find Ref (F12)
     // nvim diagnostics refresh without restart, in a few seconds max:
     "workspace.library": [
+        // TODO! PRUNE FOR HAMMERSPOON!
+        // TODO! this is why lua start is so damn slow too!
         "$VIMRUNTIME",
         "${3rd}/luv/library", // for vim.uv usages => from lua-language-server's bundled type hints: https://github.com/LuaLS/lua-language-server/tree/master/meta/3rd
         "${3rd}/luassert/library",
@@ -29,18 +31,13 @@
         "/Applications/Hammerspoon.app/Contents/Resources/extensions",
         // "/Applications/Hammerspoon.app/Contents/Frameworks", // do I need this for any LSP features, these are dylib modules
 
-        "~/.luarocks/share/lua/5.4", // luarocks --local
-        "/opt/homebrew/share/lua/5.4/", // luarocks --global (IIAC luarocks links here too?)
+        // "~/.luarocks/share/lua/5.4", // luarocks --local  // TODO do I need this?
+        // "/opt/homebrew/share/lua/5.4/", // luarocks --global (IIAC luarocks links here too?) // TODO do I need this?
         // "/Applications/Hammerspoon.app/Contents/Resources/extensions", // doesn't work, don't try again unless you find good reason to
 
         // hammerspoon stubs (based on my custom checkout dir):
-        "~/repos/github/Hammerspoon/Spoons/Source/EmmyLua.spoon/annotations/",
+        // "~/repos/github/Hammerspoon/Spoons/Source/EmmyLua.spoon/annotations/", // TODO do I need this?
         "~/repos/github/g0t4/devtools.nvim",
-        "~/repos/github/g0t4/ask-openai.nvim",
-
-        "~/.local/share/nvim/lazy/lazy.nvim", // plugin manager type defs
-        "~/.local/share/nvim/lazy/plenary.nvim", // adds globals for describe, it, before_each, etc
-        "~/.local/share/nvim/lazy/nvim-notify", // to F12 into stuff
     ],
 
     // darn warning in nvim about luv... picking 3 (dont show again) sets this!
@@ -48,3 +45,4 @@
     // see coc-settings.json for more notes about why I set this:
     "workspace.checkThirdParty": "Disable"
 }
+

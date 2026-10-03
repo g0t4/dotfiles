@@ -1,0 +1,48 @@
+{
+    // FYI see more notes in coc-settings.json about lua LS/LSP and formatter
+
+    // FYI I confirmed this works with both zed's lua extension and coc in nvim
+    //    just split a pane and comment out one of these globals
+    //    (both zed and nvim will almost instantly flip to a diagnostic error)
+    "diagnostics": {
+        // diagnositcs docs: https://github.com/LuaLS/lua-language-server/blob/master/doc/en-us/config.md
+        "globals": [
+            "hs",
+            // nvim:
+            "vim",
+        ],
+        "disable": [
+            "lowercase-global",
+            "need-check-nil",
+        ],
+        // I prefer to leave the original variable name too so I can see what it is and not forget its there
+        "unusedLocalExclude": [ "_*" ],
+    },
+
+    // FYI I had to quit/restart zed to get new workspace.library paths to start working with Find Ref (F12)
+    // nvim diagnostics refresh without restart, in a few seconds max:
+    "workspace.library": [
+        // TODO! ADD BACK FOR NEOVIM ONLY
+        // TODO! this is why lua start is so damn slow too!
+        "$VIMRUNTIME",
+        "${3rd}/luv/library", // for vim.uv usages => from lua-language-server's bundled type hints: https://github.com/LuaLS/lua-language-server/tree/master/meta/3rd
+        "${3rd}/luassert/library",
+
+        // "~/.luarocks/share/lua/5.1", // luarocks --local
+        // "/opt/homebrew/share/lua/5.1/", // luarocks --global (IIAC luarocks links here too?)
+
+        "~/repos/github/g0t4/devtools.nvim",
+
+        // TODO is this recursively including the same files in this repo and then back to it b/c ask-openai.nvim references
+        // FYI you can link just the file you need if you actually need this linked... I don't think you need to link it
+        // "~/repos/github/g0t4/ask-openai.nvim", // FYI adding this causes 100K scanned files???
+
+        "~/.local/share/nvim/lazy/lazy.nvim", // plugin manager type defs
+        "~/.local/share/nvim/lazy/plenary.nvim", // adds globals for describe, it, before_each, etc
+    ],
+
+    // darn warning in nvim about luv... picking 3 (dont show again) sets this!
+    //   and before I had this .luarc.json file picking 3 did nothing! message appeared on every restart of nvim
+    // see coc-settings.json for more notes about why I set this:
+    "workspace.checkThirdParty": "Disable"
+}
