@@ -22,7 +22,7 @@ vim.diagnostic.config({
 --    and yet there's no vim.lsp.semantic_highlights.enable(false)
 --    so they seem intertwined?
 vim.lsp.semantic_tokens.enable(false) -- FYI can also set this per LS IIRC
-
+-- vim.lsp.log.set_level("trace")
 vim.lsp.config("lua", {
     cmd = { "lua-language-server" },
     filetypes = { "lua" },
@@ -34,6 +34,9 @@ vim.lsp.config("lua", {
             workspace = { checkThirdParty = false },
             completion = { callSnippet = "Both", keywordSnippet = "Replace" },
             -- Project globals belong in that project's .luarc.json.
+            -- telemetry = { enable = true }, -- does this give me more logging? if so, where? (vim.lsp.log.get_filename())
+            -- TODO try this per workspace
+            --    lua-language-server --check E:\programming\myLuaProject --checklevel=Warning
         },
     },
 })
