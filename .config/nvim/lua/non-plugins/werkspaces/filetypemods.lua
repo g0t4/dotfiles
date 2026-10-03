@@ -105,22 +105,6 @@ vim.api.nvim_create_autocmd("FileType", {
     end,
 })
 
--- vim.lsp.config("xonsh_lsp", {
---     cmd = { "uvx", "-n", "xonsh-lsp" },
---     filetypes = { "xonsh" },
---     root_markers = { ".xonshrc", "xonshrc", ".git" },
---     init_options = {
---         pythonBackend = "pyright", -- or "ty"
---     },
---     settings = {
---         environment = {
---             python = vim.fn.exepath("python3"),
---         },
---     },
--- })
---
--- vim.lsp.enable("xonsh_lsp")
-
 -- * xonsh treesitter recommends:
 --   https://github.com/FoamScience/xonsh-language-server#4-optional-tree-sitter-highlighting
 --   FYI I have a generic FileType event handle that calls vim.treesitter.start (don't need special version just for xonsh)

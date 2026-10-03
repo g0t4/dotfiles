@@ -39,6 +39,7 @@ vim.lsp.config("pyright", {
 })
 
 vim.lsp.config("xonsh", {
+    -- cmd = { "uv", "tool", "run", "-n", "xonsh-lsp" }, -- also works to explicitly use uv
     cmd = { "xonsh-lsp", "--stdio" },
     filetypes = { "xonsh" },
     root_markers = { ".xonshrc", "xonshrc", ".git" },
