@@ -6,6 +6,19 @@ vim.diagnostic.config({
     underline = { severity = { min = vim.diagnostic.severity.INFO } },
     severity_sort = true
 })
+-- vim.lsp.document_color.enable(false)
+
+-- FYI `:checkhealth vim.lsp` shows language servers and active features per buffer!
+
+-- disable semantic_tokens to avoid adding highlights on top of treesitter highlighting...
+--  maybe I can bring this back if it is useful for language server to provide this too...
+--  but, the default comment style clashed with my colorful comment styles (i.e. find comment with "FYI") :hi @lsp.type.comment
+--  I could just clear the highlight group... but, let's just nuke this for now...
+--  TODO any utility in semantic_tokens beyond highlighting? kinda confusing that lsp-semantic-highlights is a separate help section
+--    which suggests there are other uses for `:h lsp-semantic-tokens` beyond coloring code?
+--    and yet there's no vim.lsp.semantic_highlights.enable(false)
+--    so they seem intertwined?
+vim.lsp.semantic_tokens.enable(false)
 
 vim.lsp.config("lua", {
     cmd = { "lua-language-server" },
