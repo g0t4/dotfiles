@@ -1,8 +1,11 @@
 -- Native LSP for source buffers. Command-line completion stays in cmdline_cmp.lua.
 vim.opt.completeopt = { "menuone", "noselect", "popup" }
-vim.diagnostic.config({ signs = false, virtual_text = false,
+vim.diagnostic.config({
+    signs = false,
+    virtual_text = false,
     underline = { severity = { min = vim.diagnostic.severity.INFO } },
-    severity_sort = true })
+    severity_sort = true
+})
 
 vim.lsp.config("lua_ls", {
     cmd = { "lua-language-server" },
@@ -25,9 +28,13 @@ vim.lsp.config("pyright", {
     root_markers = { "pyrightconfig.json", "pyproject.toml", "setup.py", ".git" },
     workspace_required = false,
     settings = {
-        python = { analysis = { inlayHints = {
-            variableTypes = false, parameterTypes = false, functionReturnTypes = false,
-        } } },
+        python = {
+            analysis = {
+                inlayHints = {
+                    variableTypes = false, parameterTypes = false, functionReturnTypes = false,
+                }
+            }
+        },
     },
 })
 
@@ -69,11 +76,13 @@ vim.lsp.config("yamlls", {
         yaml = {
             format = { enable = false },
             schemaStore = { enable = true },
-            schemas = { kubernetes = {
-                "k8s/*.yaml", "k8s/*.yml", "k8s/**/*.yaml", "k8s/**/*.yml",
-                "kubernetes/*.yaml", "kubernetes/*.yml",
-                "kubernetes/**/*.yaml", "kubernetes/**/*.yml",
-            } },
+            schemas = {
+                kubernetes = {
+                    "k8s/*.yaml", "k8s/*.yml", "k8s/**/*.yaml", "k8s/**/*.yml",
+                    "kubernetes/*.yaml", "kubernetes/*.yml",
+                    "kubernetes/**/*.yaml", "kubernetes/**/*.yml",
+                }
+            },
         },
     },
 })
@@ -136,9 +145,15 @@ vim.lsp.config("fish_lsp", {
     root_markers = { "config.fish", ".git" },
     workspace_required = false,
     cmd_env = { fish_lsp_diagnostic_disable_error_codes = "2003 2001" },
-    init_options = { workspaces = { paths = { defaults = {
-        vim.fn.expand("~/.config/fish"), "/opt/homebrew/share/fish",
-    } } } },
+    init_options = {
+        workspaces = {
+            paths = {
+                defaults = {
+                    vim.fn.expand("~/.config/fish"), "/opt/homebrew/share/fish",
+                }
+            }
+        }
+    },
 })
 
 local function format_buffer(range)
@@ -228,9 +243,11 @@ vim.api.nvim_create_autocmd("LspAttach", {
         map("x", "<leader>ca", vim.lsp.buf.code_action, "LSP code actions for selection")
         map("n", "<leader>cal", function()
             local row = vim.api.nvim_win_get_cursor(0)[1]
-            vim.lsp.buf.code_action({ range = {
-                start = { row, 0 }, ["end"] = { row, #vim.api.nvim_get_current_line() },
-            } })
+            vim.lsp.buf.code_action({
+                range = {
+                    start = { row, 0 }, ["end"] = { row, #vim.api.nvim_get_current_line() },
+                }
+            })
         end, "LSP line actions")
         map("n", "<leader>cqf", function()
             vim.lsp.buf.code_action({ context = { only = { "quickfix" } }, apply = true })
