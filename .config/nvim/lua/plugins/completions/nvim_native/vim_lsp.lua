@@ -7,6 +7,8 @@ vim.diagnostic.config({
     severity_sort = true
 })
 -- vim.lsp.document_color.enable(false)
+vim.lsp.inlay_hint.enable(false)
+vim.lsp.codelens.enable(false)
 
 -- FYI `:checkhealth vim.lsp` shows language servers and active features per buffer!
 
