@@ -242,9 +242,63 @@ vim.api.nvim_create_autocmd("LspAttach", {
         map("n", "<leader>cl", ":clast<CR>", "Last result")
         map("n", "<leader>cn", ":cnext<CR>", "Next result")
         map("n", "<leader>cp", ":cprevious<CR>", "Previous result")
+
         map("n", "<leader>cd", function()
-            vim.diagnostic.setloclist({ open = true })
+
+            local function client_positional_params(params)
+                local win = vim.api.nvim_get_current_win()
+                return function(client)
+                    local ret = vim.lsp.util.make_position_params(win, client.offset_encoding)
+                    if params then
+                        ret = vim.tbl_extend('force', ret, params)
+                    end
+                    return ret
+                end
+            end
+
+            vim.lsp.buf_request_all(0, 'textDocument/hover', client_positional_params(), function(results, ctx)
+                local bufnr = assert(ctx.bufnr)
+                if vim.api.nvim_get_current_buf() ~= bufnr then
+                    -- Ignore result since buffer changed. This happens for slow language servers.
+                    return
+                end
+
+                -- Filter errors from results
+                local results1 = {} --- @type table<integer,lsp.Hover>
+                local log = require("devtools.logs.logger"):universal()
+                log:info("results", results)
+
+                -- for client_id, resp in pairs(results) do
+                --     local err, result = resp.err, resp.result
+                --     if err then
+                --         lsp.log.error(err.code, err.message)
+                --     elseif result then
+                --         results1[client_id] = result
+                --     end
+                -- end
+            end)
+
+            do return end
+
+            local diagnostics = vim.diagnostic.get(0)
+            if #diagnostics == 0 then
+                -- TODO check progress of language servers too?
+                -- vim.notify("No diagnostics\n" .. vim.lsp.status(), vim.log.levels.INFO)
+                for _, c in ipairs(vim.lsp.get_clients({ bufnr = 0 })) do
+                    vim.print({
+                        name = c.name,
+                        id = c.id,
+                        initialized = c.initialized,
+                        stopped = c:is_stopped(),
+                        requests = c.requests,
+                        progress = c.progress,
+                    })
+                end
+            else
+                vim.diagnostic.setloclist({ open = true })
+            end
         end, "Buffer diagnostics")
+
         map("n", "[g", function() vim.diagnostic.jump({ count = -1 }) end, "Previous diagnostic")
         map("n", "]g", function() vim.diagnostic.jump({ count = 1 }) end, "Next diagnostic")
         map("n", "[e", function()
