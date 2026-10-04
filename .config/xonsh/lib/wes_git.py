@@ -51,6 +51,7 @@ def register_wes_git():
     abbr('-W', abbr_from_fish_function('_abbr_git_short_to_long'), position="anywhere", commands=('git',))
     abbr('man_gitrevisions', 'man gitrevisions')
     abbr(re.compile('reflog\\d+'), abbr_from_fish_function('_abbr_expand_reflog_d'), position="anywhere")
+    abbr('gd_last_amend', "git diff '@{1}..@{0}'")
     abbr('commit_with_message', ':/%', position="anywhere", cursor_marker="%")
     abbr('gsts', 'git status -s')
     abbr('gstb', 'git status -sb')

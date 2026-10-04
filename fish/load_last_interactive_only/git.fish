@@ -31,6 +31,10 @@ abbr --position anywhere --regex 'reflog\d+' --function _abbr_expand_reflog_d --
 function _abbr_expand_reflog_d
     echo -s (string replace --regex '^reflog' '@{' $argv) "}"
 end
+#
+abbr gd_last_amend "git diff '@{1}..@{0}'" # show diff of last amend commit (if that was the last change)
+# ?? add gd_last_amend\d+ to do \d back
+#
 # FYI if static expand text then tab complete works in newer fish build w/ my fix for tab completing anywhere abbrs
 abbr --set-cursor --position anywhere commit_with_message ":/%" # set cursor is merely to avoid the trailing space
 # TODO add more specifiers helpers when they come up
