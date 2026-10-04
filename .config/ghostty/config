@@ -4,6 +4,8 @@
 #    ghostty +show-config --default --docs
 #    https://github.com/ghostty-org/ghostty/blob/main/src/config/Config.zig
 
+keybind = shift+page_up=scroll_page_up
+keybind = shift+page_down=scroll_page_down
 
 # TODO setup a share config tool that writes these colors to both iTerm prefs and to ghostty prefs?
 #   FYI iterm does not store colors in RGB/hex format...  so you'd need to convert them
