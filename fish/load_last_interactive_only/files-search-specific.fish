@@ -493,7 +493,10 @@ function rg_grep --wraps rg --description "rg as a grep replacement"
         --no-config \
         --no-heading \
         --hidden \
-        --color always \
+        #
+        # --color always \ # this trips me up when using in a subcommand where I don't always want color (b/c ansi escape sequences can be literaly fed into another command not expecting them)
+        #      i.e.      git log -- $(git log --all --name-only --pretty=format: | sort -u | rg_grep --color never '\\.vim$')
+        #
         # allow smart case matching which is a key feature of rg and is reasonable to apply in this "grep" mode even though "grep" doesn't include this
         --smart-case \
         # grep like output (no filename:line:column)
