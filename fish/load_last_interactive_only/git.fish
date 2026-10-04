@@ -567,6 +567,8 @@ function hunkdiff
 end
 
 abbr --set-cursor glgrep 'git log --grep="%"'
+abbr --set-cursor git_grep_all_files_ever 'git log --all --name-only --pretty=format: | sort -u | rg \'\\.vim%$\'' # leave .vim as example of finding by file extension
+# abbr --set-cursor git_grep_
 
 # WIP => disable pager and color for generating a unified diff
 abbr gd_patch "git --no-pager diff --no-color"

@@ -246,6 +246,7 @@ def register_wes_git():
     abbr(re.compile('gdiclc\\d+'), abbr_from_fish_function('gdlcX'))
     abbr('gd_stat', "git diff --stat 'HEAD@{push}..HEAD'")
     abbr('glgrep', 'git log --grep="%"', cursor_marker="%")
+    abbr('git_grep_all_files_ever', "git log --all --name-only --pretty=format: | sort -u | rg '\\\\.vim%$'", cursor_marker="%")
     abbr('gd_patch', 'git --no-pager diff --no-color')
     abbr('rr', '_repo_root')
     abbr('gwt', 'git worktree')
