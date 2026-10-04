@@ -1,8 +1,51 @@
 # https://ghostty.org/docs/config/reference
 # cmd+shift+, to reload
-# dump default config: 
+# dump default config:
 #    ghostty +show-config --default --docs
 #    https://github.com/ghostty-org/ghostty/blob/main/src/config/Config.zig
+
+
+# TODO setup a share config tool that writes these colors to both iTerm prefs and to ghostty prefs?
+#   FYI iterm does not store colors in RGB/hex format...  so you'd need to convert them
+background = #1f2229
+foreground = #cecece
+palette =   0 = #000000
+palette =   1 = #d3706a
+palette =   2 = #b0d091
+palette =   3 = #cbc288
+palette =   4 = #6f9cc8
+palette =   5 = #9f79de
+palette =   6 = #8aceb9
+palette =   7 = #d3d3d1
+palette =   8 = #8990ab
+palette =   9 = #ed7e77
+palette =   10 = #a6ed81
+palette =   11 = #f7e99a
+palette =   12 = #75a8e5
+palette =   13 = #8b47e5
+palette =   14 = #a8fbe2
+palette =   15 = #fefffc
+#
+#
+# * standard 3/4-bit color:
+#
+#   0	Black (SYSTEM)	#000000	rgb(0,0,0)	hsl(0,0%,0%)
+#   1	Maroon (SYSTEM)	#800000	rgb(128,0,0)	hsl(0,100%,25%)
+#   2	Green (SYSTEM)	#008000	rgb(0,128,0)	hsl(120,100%,25%)
+#   3	Olive (SYSTEM)	#808000	rgb(128,128,0)	hsl(60,100%,25%)
+#   4	Navy (SYSTEM)	#000080	rgb(0,0,128)	hsl(240,100%,25%)
+#   5	Purple (SYSTEM)	#800080	rgb(128,0,128)	hsl(300,100%,25%)
+#   6	Teal (SYSTEM)	#008080	rgb(0,128,128)	hsl(180,100%,25%)
+#   7	Silver (SYSTEM)	#c0c0c0	rgb(192,192,192)	hsl(0,0%,75%)
+#   8	Grey (SYSTEM)	#808080	rgb(128,128,128)	hsl(0,0%,50%)
+#   9	Red (SYSTEM)	#ff0000	rgb(255,0,0)	hsl(0,100%,50%)
+#   10	Lime (SYSTEM)	#00ff00	rgb(0,255,0)	hsl(120,100%,50%)
+#   11	Yellow (SYSTEM)	#ffff00	rgb(255,255,0)	hsl(60,100%,50%)
+#   12	Blue (SYSTEM)	#0000ff	rgb(0,0,255)	hsl(240,100%,50%)
+#   13	Fuchsia (SYSTEM)	#ff00ff	rgb(255,0,255)	hsl(300,100%,50%)
+#   14	Aqua (SYSTEM)	#00ffff	rgb(0,255,255)	hsl(180,100%,50%)
+#   15	White (SYSTEM)	#ffffff	rgb(255,255,255)	hsl(0,0%,100%)
+
 
 shell-integration-features = no-cursor
 cursor-style = block
@@ -23,10 +66,10 @@ mouse-hide-while-typing = true
 macos-titlebar-style = tabs
 # TODO when using tabs in titlebar, can we not have such a thick titlebar? the tab bar + titlebar is taller than just the titlebar alone
 # hides the proxy icon in the titlebar (seems to only matter if using native titlebar-style):
-macos-titlebar-proxy-icon = hidden 
+macos-titlebar-proxy-icon = hidden
 
 # macos specific
-# macos-option-as-alt 
+# macos-option-as-alt
 #
 
 # https://ghostty.org/docs/config/keybind
@@ -41,7 +84,7 @@ macos-titlebar-proxy-icon = hidden
 
 # font-family # jetbrains mono default is fine, wanna try it vs saucecodepro
 # ghostty +list-fonts
-font-size = 20
+font-size = 10
 
 # clippy (defaults: read=ask, write=allow)
 # clipboard-read = allow
