@@ -189,6 +189,20 @@ def _wes_keybindings(bindings: KeyBindings, prompter: PromptSession, **_):
         event.current_buffer.text = ""
         event.app.invalidate()
 
+    @bindings.add("escape", "a")
+    def accept_and_hold(event):
+        # mirror zsh's ctrl+a
+        # accept and hold IIRC ...
+        # run current command
+        # + set next prompt cmdline to the same command and cursor position...
+        # i.e. lets you easily re-run a command and tweak an argument
+        buf = event.current_buffer
+        pos = buf.cursor_position
+        $XONSH_PROMPT_NEXT_CMD = (
+            buf.text[:pos] + "<cursor>" + buf.text[pos:]
+        )
+        buf.validate_and_handle()
+
     # Vim-mode additions -------------------------------------------------
     # Match Vim/Neovim: Ctrl-R redoes the most recently undone change in
     # normal mode. This intentionally replaces reverse history search there.
