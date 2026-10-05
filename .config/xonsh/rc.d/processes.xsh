@@ -7,11 +7,8 @@ from wes_filetype_abbreviations import (
 from wes_processes import register_wes_processes
 
 
-$XONSH_SED_COMMAND = "gsed" if platform.system() == "Darwin" else "sed"
 register_wes_processes()
-register_filetype_abbreviations(
-    sed_command=$XONSH_SED_COMMAND
-)
+register_filetype_abbreviations()
 
 
 def _build_abbrs_for_filetype_alias(args, **_):
@@ -20,7 +17,6 @@ def _build_abbrs_for_filetype_alias(args, **_):
     build_abbrs_for_filetype(
         args[0],
         args[1],
-        sed_command=$XONSH_SED_COMMAND,
     )
 
 

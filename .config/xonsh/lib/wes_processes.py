@@ -21,8 +21,6 @@ def register_wes_processes():
         'ps_dump_env_vars_when_process_started',
         'pstreeX',
         'pstree',
-        'build_abbrs_for_filetype',
-        '_cat_range_abbr',
         '_flush_dns',
         'kill_hung_grc',
         'z',
@@ -60,15 +58,6 @@ def register_wes_processes():
     abbr('pstreeU', 'pstree -U')
     abbr('pstreeu', 'pstree -u $(whoami)')
     abbr('pstreew', 'pstree -w')
-    abbr('sed', 'gsed')
-    abbr('sede', "$XONSH_SED_COMMAND -Ei 's/%//g'", cursor_marker="%")
-    abbr('sedd', "$XONSH_SED_COMMAND --debug -i 's/%//g'", cursor_marker="%")
-    abbr('sedi', "$XONSH_SED_COMMAND -i 's/%//g'", cursor_marker="%")
-    abbr('rg', '(rg --files-with-matches %)', position="anywhere", commands=(os.environ['XONSH_SED_COMMAND'],), cursor_marker="%")
-    abbr('*nd', "--glob '!datasets'", position="anywhere", commands=('rg',))
-    abbr('seda', "$XONSH_SED_COMMAND -Ei 's/%//g' (rg --files-with-matches ___) ", cursor_marker="%")
-    abbr('*a', '(rg --files-with-matches ___) ', position="anywhere", commands=(os.environ['XONSH_SED_COMMAND'],))
-    abbr(re.compile('(lines|catr|catrange|sedr|sedrange)\\d+[,_-]\\d+'), abbr_from_fish_function('_cat_range_abbr'))
     abbr('lua_logs', "rg -g '*.lua' '^\\s*log'")
     abbr('lua_logs_commented_out', "rg -g '*.lua' '^\\s*--\\s*log'")
     abbr('lua_prints', "rg -g '*.lua' '^\\s*print\\\\('")

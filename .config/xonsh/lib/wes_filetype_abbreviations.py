@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+import os
+
 from wes_abbreviations import abbr
 
 
@@ -17,12 +19,12 @@ FILETYPE_GLOBS = (
     ("x", "xsh"),
 )
 
+if os.getenv("IS_MACOS"):
+    sed_command = "gsed"
 
 def build_abbrs_for_filetype(
     filetype_letter: str,
     glob_end: str,
-    *,
-    sed_command: str,
 ) -> None:
     """Register the four Fish-style abbreviations for one file type."""
     rg_filter = f"(@lines rg -g '*.{glob_end}' --files-with-matches '___')"
@@ -47,12 +49,9 @@ def build_abbrs_for_filetype(
     abbr(f"rg{filetype_letter}", f"rg -g '*.{glob_end}'")
 
 
-def register_filetype_abbreviations(
-    sed_command: str
-) -> None:
+def register_filetype_abbreviations() -> None:
     for filetype_letter, glob_end in FILETYPE_GLOBS:
         build_abbrs_for_filetype(
             filetype_letter,
             glob_end,
-            sed_command=sed_command,
         )

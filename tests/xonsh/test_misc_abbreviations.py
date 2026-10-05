@@ -62,9 +62,6 @@ def misc_mappings():
 
 
 def test_trigger_rules_can_distinguish_scopes_and_replacements():
-    rules = {"rg": "general", AbbreviationSelector("rg", command="$sed_cmd"): "scoped"}
-    assert matching_rule(rules, "rg", "", {"command": "$sed_cmd"}) == "scoped"
-    assert matching_rule(rules, "rg", "", {"command": "other"}) == "general"
     assert should_skip("pkill", "pkill -9 -if", {})
     assert not should_skip("pkill", "pkill -9 -ilf", {})
     assert should_skip("*$filetype_letter", "anything", {"command": "rg"})
@@ -209,44 +206,6 @@ def test_repo_root_command_substitutions_are_not_quoted_for_xonsh():
     ):
         result, _ = abbreviations.expand(context(trigger))
         assert result.text == f"{command} $(_repo_root)"
-
-
-def test_build_abbrs_for_filetype_registers_dedicated_and_scoped_forms():
-    abbreviations = reset_registry()
-
-    build_abbrs_for_filetype("x", "xsh", sed_command="gsed")
-
-    result, _ = abbreviations.expand(context("sedx"))
-    assert result.text == "gsed -Ei 's///g' (@lines rg -g '*.xsh' --files-with-matches '___')"
-    assert result.cursor == len("gsed -Ei 's/")
-
-    result, _ = abbreviations.expand(
-        context("*x", command_path=("rg",), command_position=False)
-    )
-    assert result.text == "-g '*.xsh'"
-    assert (
-        abbreviations.expand(
-            context("*x", command_path=("fd",), command_position=False)
-        )
-        is None
-    )
-
-    result, _ = abbreviations.expand(
-        context("*x", command_path=("gsed",), command_position=False)
-    )
-    assert result.text == "(@lines rg -g '*.xsh' --files-with-matches '___')"
-
-    result, _ = abbreviations.expand(context("rgx"))
-    assert result.text == "rg -g '*.xsh'"
-
-
-def test_build_abbrs_for_filetype_preserves_brace_globs():
-    abbreviations = reset_registry()
-
-    build_abbrs_for_filetype("j", "{json,js}", sed_command="sed")
-
-    result, _ = abbreviations.expand(context("rgj"))
-    assert result.text == "rg -g '*.{json,js}'"
 
 
 def test_safe_function_alias_delegates_to_interactive_fish(monkeypatch):

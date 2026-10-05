@@ -64,3 +64,19 @@ if $IS_MACOS:
     #    that you cannot DELETE EITHER in /usr/share/man/man1/bash.1
     # * : to prepend (test with manpath command)
     $MANPATH = "/opt/homebrew/share/man:"
+
+# * SED
+
+$sed_cmd = "sed"
+if $IS_MACOS:
+    $sed_cmd = "gsed"
+
+abbr('sed', 'gsed')
+abbr('sede', f"{$sed_cmd} -Ei 's/%//g'", cursor_marker="%")
+abbr('sedd', f"{$sed_cmd} --debug -i 's/%//g'", cursor_marker="%")
+abbr('sedi', f"{$sed_cmd} -i 's/%//g'", cursor_marker="%")
+abbr('rg', '(rg --files-with-matches %)', position="anywhere", commands=($sed_cmd,), cursor_marker="%")
+abbr('*nd', "--glob '!datasets'", position="anywhere", commands=('rg',))
+abbr('seda', f"{$sed_cmd} -Ei 's/%//g' (rg --files-with-matches ___) ", cursor_marker="%")
+abbr('*a', '(rg --files-with-matches ___) ', position="anywhere", commands=($sed_cmd,))
+abbr(re.compile('(lines|catr|catrange|sedr|sedrange)\\d+[,_-]\\d+'), abbr_from_fish_function('_cat_range_abbr'))

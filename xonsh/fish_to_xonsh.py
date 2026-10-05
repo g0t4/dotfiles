@@ -181,7 +181,6 @@ _UNSUPPORTED_ABBREVIATIONS = {
 _REPLACEMENTS = {
     "$fish_pid": "@(os.getpid())",
     '"$(_repo_root)"': "$(_repo_root)",
-    "$sed_cmd": "$XONSH_SED_COMMAND",
     "$_ls_http": "http paxy.lan:8016",
     "$_ls_prompt": "prompt='what is 11*2'",
     "$_ls_messages": 'messages:=[ {"role": "user", "content": "what is 11*2"} ]',
@@ -254,10 +253,7 @@ def declaration(name, replacement, options):
         arguments.append('position="anywhere"')
     if options.get("command"):
         command = options["command"]
-        command_expression = {
-            "$sed_cmd": "os.environ['XONSH_SED_COMMAND']",
-        }.get(command, repr(command))
-        arguments.append(f"commands=({command_expression},)")
+        arguments.append(f"commands=({repr(command)},)")
     # A function-backed abbreviation puts its marker in the function output,
     # not in the declaration's literal replacement.
     if options.get("cursor") and (options.get("function") or replacement.count("%") == 1):
