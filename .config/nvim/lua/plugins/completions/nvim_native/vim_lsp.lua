@@ -60,6 +60,11 @@ vim.lsp.config("pyright", {
     },
 })
 
+vim.filetype.add({
+    extension = { xsh = 'xonsh', xonshrc = 'xonsh' },
+    filename  = { ['.xonshrc'] = 'xonsh', ['xonshrc'] = 'xonsh' },
+})
+
 vim.lsp.config("xonsh", {
     -- cmd = { "uv", "tool", "run", "-n", "xonsh-lsp" }, -- also works to explicitly use uv
     cmd = { "xonsh-lsp", "--stdio" },

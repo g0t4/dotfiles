@@ -86,11 +86,6 @@ vim.filetype.add({
 --     },
 -- })
 
-vim.filetype.add({
-    extension = { xsh = 'xonsh', xonshrc = 'xonsh' },
-    filename  = { ['.xonshrc'] = 'xonsh', ['xonshrc'] = 'xonsh' },
-})
-
 vim.api.nvim_create_autocmd("FileType", {
     group = "filetypemods",
     pattern = "xonsh",
