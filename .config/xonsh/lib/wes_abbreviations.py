@@ -183,3 +183,7 @@ def abbr(trigger, replacement, **options):
         del caller
 
     return XONSH_ABBREVIATIONS.add(Abbreviation(trigger, replacement, **options))
+
+def reminder_abbr(trigger, replacement, **options):
+    options.setdefault("reminder", True)
+    return abbr(trigger, replacement, **options)

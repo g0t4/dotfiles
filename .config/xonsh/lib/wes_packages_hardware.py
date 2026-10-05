@@ -32,7 +32,6 @@ def register_wes_packages_hardware():
         'npx',
         'bitmaths',
         'pretty_size',
-        'manlistX',
         'show_hex_rgb_color',
         'treeify_with_icons',
         '__pactree_depth',
@@ -85,38 +84,6 @@ def register_wes_packages_hardware():
     abbr('tsh', 'tree-sitter highlight')
     abbr('tsplayground', 'tree-sitter playground')
     abbr('bm', 'bitmaths')
-    abbr('man', 'gman')
-    abbr('man_commands_1', '$XONSH_MAN_COMMAND 1')
-    abbr('man_syscalls_2', '$XONSH_MAN_COMMAND 2')
-    abbr('man_c_stdlib_3', '$XONSH_MAN_COMMAND 3')
-    abbr('man_kernel_interfaces_4', '$XONSH_MAN_COMMAND 4')
-    abbr('man_file_formats_5', '$XONSH_MAN_COMMAND 5')
-    abbr('man_misc_7', '$XONSH_MAN_COMMAND 7')
-    abbr('man_system_8', '$XONSH_MAN_COMMAND 8')
-    abbr('man_kernel_dev_9', '$XONSH_MAN_COMMAND 9')
-    abbr(re.compile('manlist[0-9]'), abbr_from_fish_function('manlistX'))
-    abbr('man1', '$XONSH_MAN_COMMAND 1')
-    abbr('man2', '$XONSH_MAN_COMMAND 2')
-    abbr('man3', '$XONSH_MAN_COMMAND 3')
-    abbr('man4', '$XONSH_MAN_COMMAND 4')
-    abbr('man5', '$XONSH_MAN_COMMAND 5')
-    abbr('man6', '$XONSH_MAN_COMMAND 6')
-    abbr('man7', '$XONSH_MAN_COMMAND 7')
-    abbr('man8', '$XONSH_MAN_COMMAND 8')
-    abbr('man9', '$XONSH_MAN_COMMAND 9')
-    abbr('mana', '$XONSH_MAN_COMMAND --all --regex')
-    abbr('mank', 'apropos')
-    abbr('manf', 'whatis')
-    abbr('-K', '--global-apropos', position="anywhere", commands=(os.environ['XONSH_MAN_COMMAND'],))
-    abbr('-k', '--apropos', position="anywhere", commands=(os.environ['XONSH_MAN_COMMAND'],))
-    abbr('-w', '--where', position="anywhere", commands=(os.environ['XONSH_MAN_COMMAND'],))
-    abbr('-a', '--all', position="anywhere", commands=(os.environ['XONSH_MAN_COMMAND'],))
-    abbr('manK', '$XONSH_MAN_COMMAND -K')
-    abbr('manw', '$XONSH_MAN_COMMAND --where -K')
-    abbr('mgr', '$XONSH_MAN_COMMAND -K')
-    abbr('mgrw', '$XONSH_MAN_COMMAND --where -K')
-    abbr('manbash', '$XONSH_MAN_COMMAND $HOME/repos/github/g0t4/bash/doc/bash.1')
-    abbr('mbash', '$XONSH_MAN_COMMAND $HOME/repos/github/g0t4/bash/doc/bash.1')
     abbr('mitm', 'mitmproxy')
     abbr('mitml', 'mitmproxy --mode=local')
     abbr('mitmw', 'mitmweb')

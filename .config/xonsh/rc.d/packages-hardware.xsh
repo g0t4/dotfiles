@@ -10,5 +10,4 @@ from wes_packages_hardware import (
 
 $WATCH_INTERVAL = 0.5
 $WATCH_COMMAND = "viddy" if shutil.which("viddy") else "watch"
-$XONSH_MAN_COMMAND = "gman" if platform.system() == "Darwin" else "man"
 register_wes_packages_hardware()

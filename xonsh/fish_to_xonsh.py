@@ -182,7 +182,6 @@ _REPLACEMENTS = {
     "$fish_pid": "@(os.getpid())",
     '"$(_repo_root)"': "$(_repo_root)",
     "$sed_cmd": "$XONSH_SED_COMMAND",
-    "$man_cmd": "$XONSH_MAN_COMMAND",
     "$_ls_http": "http paxy.lan:8016",
     "$_ls_prompt": "prompt='what is 11*2'",
     "$_ls_messages": 'messages:=[ {"role": "user", "content": "what is 11*2"} ]',
@@ -257,7 +256,6 @@ def declaration(name, replacement, options):
         command = options["command"]
         command_expression = {
             "$find_cmd": "os.environ['XONSH_FIND_COMMAND']",
-            "$man_cmd": "os.environ['XONSH_MAN_COMMAND']",
             "$sed_cmd": "os.environ['XONSH_SED_COMMAND']",
         }.get(command, repr(command))
         arguments.append(f"commands=({command_expression},)")
