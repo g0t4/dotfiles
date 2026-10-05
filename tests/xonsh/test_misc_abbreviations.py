@@ -24,7 +24,6 @@ from wes_abbreviations import AbbreviationContext, reset_registry  # noqa: E402
 from wes_fish_bridge import UnsupportedFishFunctionError  # noqa: E402
 from wes_filetype_abbreviations import (  # noqa: E402
     FILETYPE_GLOBS,
-    build_abbrs_for_filetype,
 )
 from wes_fish_migration import (  # noqa: E402
     fish_command_alias,
