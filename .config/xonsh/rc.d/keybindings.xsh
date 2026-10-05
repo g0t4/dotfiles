@@ -24,6 +24,13 @@ from wes_directory_history import DirectoryHistory
 from wes_history_tokens import history_token_search
 from wes_logging import get_wes_logger
 from wes_abbreviations import abbr
+from wes_surround import (
+    change_surround,
+    delete_surround,
+    normalize_pair,
+    wrap_to_end,
+    wrap_word,
+)
 
 log = get_wes_logger(__name__)
 
@@ -245,74 +252,94 @@ def _wes_keybindings(bindings: KeyBindings, prompter: PromptSession, **_):
         buffer.cursor_position = start + len(new_num)
         event.app.invalidate()
 
-    def wrap_selection(buffer, left, right=None):
+    def _invalidate(event):
+        app = getattr(event, "app", None)
+        if app is not None:
+            app.invalidate()
+
+    def _apply_buffer_text(event, new_text, new_pos):
+        buffer = event.current_buffer
+        buffer.text = new_text
+        buffer.cursor_position = new_pos
+        _invalidate(event)
+
+    def _apply_wrap_word(event, *, key_index, big):
+        buffer = event.current_buffer
+        delim = event.key_sequence[key_index].key
+        new_text, new_pos, changed = wrap_word(
+            buffer.text, buffer.cursor_position, delim, big=big
+        )
+        if changed:
+            _apply_buffer_text(event, new_text, new_pos)
+
+    def wrap_selection(buffer, delim):
+        # Wrap the active visual selection. Keeps the selection selected around
+        # the inner expression: `echo |Hello World|` -> `echo "|Hello World|"`.
         selection_state = buffer.selection_state
+        left, right = normalize_pair(delim)
 
         for start, end in buffer.document.selection_ranges():
             buffer.transform_region(start, end, lambda s: f"{left}{s}{right}")
 
-        # keep the selection of the inner expression
-        # e.g. `echo |Hello World|` -> `echo "|Hello World|"`
-        buffer.cursor_position += 1
-        selection_state.original_cursor_position += 1
+        buffer.cursor_position += len(left)
+        selection_state.original_cursor_position += len(left)
         buffer.selection_state = selection_state
 
-    @bindings.add(
-        "d","s", Keys.Any,
-        filter = vi_navigation_mode,
-    )
+    # ds<delim>: delete the surrounding pair nearest the cursor.
+    @bindings.add("d", "s", Keys.Any, filter=vi_navigation_mode)
     def _vi_delete_surround(event: KeyPressEvent):
         buffer = event.current_buffer
-        pos = buffer.cursor_position
-        key = event.key_sequence[2].key
-        log.info(f"delete surround {event} {key=}")
-        left_key_offset = buffer.text[:pos].rfind(key)
-        right_key_offset = buffer.text[pos:].find(key) if key else -1
-        if left_key_offset == -1 or right_key_offset == -1:
-            return
-        abs_right_key_offset = pos + right_key_offset
-        # TODO test this, it's brittle AF
-        buffer.text = buffer.text[:left_key_offset] \
-            + buffer.text[left_key_offset+1:abs_right_key_offset ] \
-            + buffer.text[abs_right_key_offset+1:]
-        # PRN quotes inside of quotes might be an issue, deal with it using tests and let AI handle it
-        # FYI do not move cursor, leave it for now?
-        # event.app.invalidate()
+        delim = event.key_sequence[2].key
+        new_text, new_pos, changed = delete_surround(
+            buffer.text, buffer.cursor_position, delim
+        )
+        if changed:
+            _apply_buffer_text(event, new_text, new_pos)
 
-    @bindings.add(
-        "c","s", Keys.Any, Keys.Any,
-        filter = vi_navigation_mode,
-    )
+    # cs<old><new>: swap the surrounding pair nearest the cursor.
+    @bindings.add("c", "s", Keys.Any, Keys.Any, filter=vi_navigation_mode)
     def _vi_change_surround(event: KeyPressEvent):
         buffer = event.current_buffer
-        pos = buffer.cursor_position
-        key = event.key_sequence[2].key
-        log.info(f"change surround {event} {key=}")
-        left_key_offset = buffer.text[:pos].rfind(key)
-        right_key_offset = buffer.text[pos:].find(key) if key else -1
-        if left_key_offset == -1 or right_key_offset == -1:
-            return
-        abs_right_key_offset = pos + right_key_offset
-        # TODO test this, it's brittle AF
-        change_to = event.key_sequence[3].keyj
-        buffer.text = buffer.text[:left_key_offset] \
-            + change_to \
-            + buffer.text[left_key_offset+1:abs_right_key_offset] \
-            + change_to \
-            + buffer.text[abs_right_key_offset+1:]
-        # FYI same concerns as `ds_` above
+        old_delim = event.key_sequence[2].key
+        new_delim = event.key_sequence[3].key
+        new_text, new_pos, changed = change_surround(
+            buffer.text, buffer.cursor_position, old_delim, new_delim
+        )
+        if changed:
+            _apply_buffer_text(event, new_text, new_pos)
 
-
-    @bindings.add(
-        "S", Keys.Any,
-        filter = vi_selection_mode,
-    )
+    # S<delim>: wrap the current visual selection.
+    @bindings.add("S", Keys.Any, filter=vi_selection_mode)
     def _vi_surround(event: KeyPressEvent):
-        log.info(f"surround {event}")
-        # get current selection
         buffer = event.current_buffer
-        key = event.key_sequence[1].key
-        wrap_selection(buffer, key, key)
+        delim = event.key_sequence[1].key
+        wrap_selection(buffer, delim)
+
+    # yst<delim>: "you surround this" - wrap the word under/after the cursor.
+    @bindings.add("y", "s", "t", Keys.Any, filter=vi_navigation_mode)
+    def _vi_ys_surround_this(event: KeyPressEvent):
+        _apply_wrap_word(event, key_index=3, big=False)
+
+    # ysiw<delim>: wrap the inner small word (alnum + underscore).
+    @bindings.add("y", "s", "i", "w", Keys.Any, filter=vi_navigation_mode)
+    def _vi_ys_surround_inner_word(event: KeyPressEvent):
+        _apply_wrap_word(event, key_index=4, big=False)
+
+    # ysiW<delim>: wrap the inner big word (non-whitespace run).
+    @bindings.add("y", "s", "i", "W", Keys.Any, filter=vi_navigation_mode)
+    def _vi_ys_surround_inner_big_word(event: KeyPressEvent):
+        _apply_wrap_word(event, key_index=4, big=True)
+
+    # ys$<delim>: wrap from the cursor to the end of the buffer.
+    @bindings.add("y", "s", "$", Keys.Any, filter=vi_navigation_mode)
+    def _vi_ys_surround_to_end(event: KeyPressEvent):
+        buffer = event.current_buffer
+        delim = event.key_sequence[3].key
+        new_text, new_pos, changed = wrap_to_end(
+            buffer.text, buffer.cursor_position, delim
+        )
+        if changed:
+            _apply_buffer_text(event, new_text, new_pos)
 
     # * set propmt_toolkit's timeout keychord intervals
     # FYI same settings as in vim!
@@ -344,9 +371,13 @@ def _wes_keybindings(bindings: KeyBindings, prompter: PromptSession, **_):
     #
     #  TODO make sure testing of key bind changes!
     # - Ctrl+A/X to _increment/decrement the nearest (on or after cursor) number just like in neovim
-    # - surround keymaps (i.e. `ysiw` and `ysiW` and then what to wrap with...), test case:
-    #   => `ysiw"` puts quotes around inner little word
-    #   => `ysiW"` puts quotes around inner little word
+    # - surround keymaps are done (see above):
+    #   => `ds(` deletes the parens around the cursor
+    #   => `cs("` swaps parens for quotes around the cursor
+    #   => `S(` wraps the visual selection in parens
+    #   => `yst"` / `ysiw"` wrap the word under the cursor in quotes
+    #   => `ysiW"` wraps the inner big word
+    #   => `ys$"` wraps from the cursor to the end of the buffer
     # - ?PRN? add test for timeoutlen change?
 
     def low_level_observe_keyboard_events():
