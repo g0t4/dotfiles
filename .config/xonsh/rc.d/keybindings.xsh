@@ -279,6 +279,28 @@ def _wes_keybindings(bindings: KeyBindings, prompter: PromptSession, **_):
         # FYI do not move cursor, leave it for now?
         # event.app.invalidate()
 
+    @bindings.add(
+        "c","s", Keys.Any, Keys.Any,
+        filter = vi_navigation_mode,
+    )
+    def _vi_change_surround(event: KeyPressEvent):
+        buffer = event.current_buffer
+        pos = buffer.cursor_position
+        key = event.key_sequence[2].key
+        log.info(f"change surround {event} {key=}")
+        left_key_offset = buffer.text[:pos].rfind(key)
+        right_key_offset = buffer.text[pos:].find(key) if key else -1
+        if left_key_offset == -1 or right_key_offset == -1:
+            return
+        abs_right_key_offset = pos + right_key_offset
+        # TODO test this, it's brittle AF
+        change_to = event.key_sequence[3].keyj
+        buffer.text = buffer.text[:left_key_offset] \
+            + change_to \
+            + buffer.text[left_key_offset+1:abs_right_key_offset] \
+            + change_to \
+            + buffer.text[abs_right_key_offset+1:]
+        # FYI same concerns as `ds_` above
 
 
     @bindings.add(
