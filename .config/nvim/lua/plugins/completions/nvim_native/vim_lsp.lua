@@ -1,7 +1,7 @@
 -- Native LSP for source buffers. Command-line completion stays in cmdline_cmp.lua.
 vim.opt.completeopt = { "menuone", "noselect", "popup", "fuzzy", }
 vim.diagnostic.config({
-    signs = false,
+    signs = true, -- gutter signs
     virtual_text = false,
     underline = { severity = { min = vim.diagnostic.severity.INFO } },
     severity_sort = true
