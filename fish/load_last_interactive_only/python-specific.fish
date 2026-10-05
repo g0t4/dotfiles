@@ -13,7 +13,9 @@ abbr py_profile_import_time PYTHONPROFILEIMPORTTIME=1 python -c "from sentence_t
 #
 # ipython repl is FAR superior in terms of colors and other features
 abbr ipy ipython3
-abbr py ipython3
+abbr py python3 # FYI if you go back to ipython3 here too, then add smth like `py3` for python3
+# thanks to xonsh, I feel like most of my need for python REPL are satisified and thus I don't need python3/ipython3 for a REPL... and so I can default to python3 when it comes to scripts which is what I usually prefer
+#   FYI alternative => if venv has ipython3 then use it, else python3 (put that into the auto venv script => check and abbr it)
 # make python ONE more char longer than ipython py abbr, but don't make it so I have to type full thing or tab complete it
 abbr pyt python3
 abbr pyth python3
