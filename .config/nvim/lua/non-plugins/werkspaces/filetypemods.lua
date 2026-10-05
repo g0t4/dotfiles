@@ -97,21 +97,6 @@ vim.api.nvim_create_autocmd("FileType", {
     end,
 })
 
--- * xonsh treesitter recommends:
---   https://github.com/FoamScience/xonsh-language-server#4-optional-tree-sitter-highlighting
---   FYI I have a generic FileType event handle that calls vim.treesitter.start (don't need special version just for xonsh)
-vim.api.nvim_create_autocmd('User', {
-    pattern = 'TSUpdate',
-    callback = function()
-        require('nvim-treesitter.parsers').xonsh = {
-            install_info = {
-                url = 'https://github.com/FoamScience/tree-sitter-xonsh',
-                queries = 'queries/',
-            },
-        }
-    end,
-})
-
 local function describeFormatOptionForLetter(letter)
     local descriptions = {
 
