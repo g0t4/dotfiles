@@ -89,10 +89,26 @@ vim.lsp.config("typescript", {
 })
 
 vim.lsp.config("docker", {
-    cmd = { server_bin .. "docker-langserver", "--stdio" },
+    -- ?? any issues after switching to new go based LS?
+    --   https://github.com/docker/docker-language-server
+    --   go install github.com/docker/docker-language-server/cmd/docker-language-server@latest
+    --   supports Dockerfile, compose, bake files ... IIRC old one is Dockerfile only?
+    --
+    cmd = { "docker-language-server", "start", "--stdio" },
     filetypes = { "dockerfile" },
+    -- TODO what root markers? Dockerfile might be fine for a root dir? diff Dockerfiles then have diff workspaces?
     root_markers = { "Dockerfile", "compose.yaml", "docker-compose.yml", ".git" },
     workspace_required = false,
+
+    -- * prior docker LS:
+    --   https://www.npmjs.com/package/dockerfile-language-server-nodejs
+    --
+    --   FYI new server has support to run alongside dockerfile LS
+    --   - use this to remove duplicate diagnostics: removeOverlappingIssues
+    --
+    -- prior LS (I used this via coc-docker)
+    -- cmd = { server_bin .. "docker-langserver", "--stdio" }, --
+
 })
 
 vim.lsp.config("yaml", {
