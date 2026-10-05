@@ -87,11 +87,8 @@ vim.filetype.add({
 -- })
 
 vim.filetype.add({
-    extension = { xsh = "xonsh" },
-    filename = {
-        [".xonshrc"] = "xonsh",
-        ["xonshrc"] = "xonsh",
-    },
+    extension = { xsh = 'xonsh', xonshrc = 'xonsh' },
+    filename  = { ['.xonshrc'] = 'xonsh', ['xonshrc'] = 'xonsh' },
 })
 
 vim.api.nvim_create_autocmd("FileType", {
