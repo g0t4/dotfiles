@@ -1,3 +1,24 @@
+-- TODO! outstanding issues:
+--     see :checkhealth vim.lsp
+--     address warnings (many LS binaries missing in some repos)
+--        open for my most common repos and make sure no warnings
+--        if using node => npx so it doesn't use local node_modules?
+--
+--   TODO why does xonsh ahve root dir ~
+--     is this b/c of symlinked ~/.config/nvim?
+--     this has to be a problem for loading way too many files
+--     otherwise it should see `.git` dir
+--     see :checkhealth vim.lsp
+--          - xonsh (id: 3)
+--          - Version: 0.2.1
+--          - Root directory: ~
+--          - Command: { "xonsh-lsp", "--stdio" }
+--          - Settings: {}
+--          - Attached buffers: 11, 8, 6
+
+
+--
+--
 -- Native LSP for source buffers. Command-line completion stays in cmdline_cmp.lua.
 vim.opt.completeopt = { "menuone", "noselect", "popup", "fuzzy", }
 vim.diagnostic.config({
