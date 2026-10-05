@@ -1,20 +1,13 @@
-"""File-search environment shared with Fish."""
-
 from xonsh.built_ins import XSH
-
-aliases = XSH.aliases
 
 import platform
 from pathlib import Path
 
-
 from wes_files_search_abbreviations import register_files_search_abbreviations
 from wes_files_search_functions import register_files_search_functions
 
-$XONSH_FIND_COMMAND = "gfind" if platform.system() == "Darwin" else "find"
-
 register_files_search_abbreviations()
-register_files_search_functions(aliases)
+register_files_search_functions(XSH.aliases)
 
 _wes_ripgrep_config = Path($WES_DOTFILES) / ".config/ripgrep/ripgreprc"
 if _wes_ripgrep_config.is_file():

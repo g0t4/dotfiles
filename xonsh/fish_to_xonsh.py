@@ -255,7 +255,6 @@ def declaration(name, replacement, options):
     if options.get("command"):
         command = options["command"]
         command_expression = {
-            "$find_cmd": "os.environ['XONSH_FIND_COMMAND']",
             "$sed_cmd": "os.environ['XONSH_SED_COMMAND']",
         }.get(command, repr(command))
         arguments.append(f"commands=({command_expression},)")
