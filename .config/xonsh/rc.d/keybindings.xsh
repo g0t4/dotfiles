@@ -258,6 +258,30 @@ def _wes_keybindings(bindings: KeyBindings, prompter: PromptSession, **_):
         buffer.selection_state = selection_state
 
     @bindings.add(
+        "d","s", Keys.Any,
+        filter = vi_navigation_mode,
+    )
+    def _vi_delete_surround(event: KeyPressEvent):
+        buffer = event.current_buffer
+        pos = buffer.cursor_position
+        key = event.key_sequence[2].key
+        log.info(f"delete surround {event} {key=}")
+        left_key_offset = buffer.text[:pos].rfind(key)
+        right_key_offset = buffer.text[pos:].find(key) if key else -1
+        if left_key_offset == -1 or right_key_offset == -1:
+            return
+        abs_right_key_offset = pos + right_key_offset
+        # TODO test this, it's brittle AF
+        buffer.text = buffer.text[:left_key_offset] \
+            + buffer.text[left_key_offset+1:abs_right_key_offset ] \
+            + buffer.text[abs_right_key_offset+1:]
+        # PRN quotes inside of quotes might be an issue, deal with it using tests and let AI handle it
+        # FYI do not move cursor, leave it for now?
+        # event.app.invalidate()
+
+
+
+    @bindings.add(
         "S", Keys.Any,
         filter = vi_selection_mode,
     )
