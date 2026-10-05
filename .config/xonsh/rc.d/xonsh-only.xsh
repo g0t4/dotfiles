@@ -1,7 +1,7 @@
 from pathlib import Path
 from xonsh.built_ins import XSH
 
-from wes_abbreviations import abbr
+from wes_abbreviations import abbr, reminder_abbr
 
 if Path(__file__).name < "xonsh-only.xsh":
     raise RuntimeError("xonsh-only.xsh must be named so it loads later on to override with xonsh specific abbrs")
@@ -27,3 +27,10 @@ XSH.aliases["ascii_table"] = [$_python3, f"{$WES_DOTFILES}/.config/xonsh/apps/as
 #
 # * cleanup
 del $_python3
+
+# PRN use a function and wrap in @() if not in command position?
+#  btw show the method to get to it as I want to learn/habituate using shutil (not just calculate and show the values)
+reminder_abbr('$LINES', 'shutil.get_terminal_size().lines', position="anywhere")
+reminder_abbr('$ROWS', 'shutil.get_terminal_size().lines', position="anywhere")
+reminder_abbr('$COLUMNS', 'shutil.get_terminal_size().columns', position="anywhere")
+
