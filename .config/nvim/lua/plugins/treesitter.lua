@@ -96,8 +96,64 @@ return {
                 "zsh",
                 "toml",
                 "xonsh",
+                "java",
+                "powershell",
+                "rust",
+                "nix", -- btw syntax-highlighting is fine for nix OOB too
+                "go",
+                "c_sharp",
+                "cuda",
+                "c", "cpp",
+                "swift",
+                "hcl",
+                "xml",
+                "jinja",
+                -- ? "jinja_inline", ? add?
+                "make",
+                "cmake",
+                -- "csv", -- is this one useful?
+                -- "dockerfile", -- add?
+                -- "dtd", -- add?
+                -- "diff", -- add?
+                "editorconfig",
+                "gitcommit", -- i.e. .git/COMMIT_EDITMSG (syntax highlighting works fine too)
+                "git_config", -- (syntax highlighting works fine too)
+                "git_rebase",
+                "gitattributes",
+                "gitignore",
+                "helm",
+                -- "http", -- add?
+                -- "ini" -- is this useful? "systemd" / "conf" style? not sure any use here }
+                -- "jq" -- add?
+                -- "json5" -- add?
+                -- "nginx" -- add?
+                -- "php"
+                -- "perl"
+                -- "ruby"
+                -- "regex" -- interesting?!
+                -- "requirements" -- is this requirements.txt?
+                "sql",
+                -- "scala",
+                -- "strace",
+                "svelte", -- vite ask server uses this
+                "ssh_config",
+                -- "tsv",
+                "tsx",
+                "terraform",
+                -- "vimdoc", -- add?
+                "vue",
+                -- "vhdl",
+
+                -- FYI these are OOB so don't need to install with TSInstall:
+                --     "c", "lua", "markdown", "vim", "vimdoc", tree-sitter query files (scm IIRC)
+                -- TODO useful to add this too (not just builtin markdown one?) "markdown_inline" ?
+
                 -- "cst", "test", -- TODO where did I install these from? (both are part of treesitter test file testing
+                --
+                -- -- do these exist and are they useful?
+                --   "applescript" parser?
             }
+
             -- * list installed parsers/queries
             --   :TSListInstalled      -> nvim-treesitter's own bookkeeping (get_installed)
             --   :TSListInstalledAll   -> runtimepath scan (parsers from ANY source)
