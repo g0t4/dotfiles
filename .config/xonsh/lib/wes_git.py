@@ -147,6 +147,7 @@ def register_wes_git():
     abbr('gsmu', 'git submodule update --remote --recursive')
     abbr('gsmst', 'git submodule status --recursive')
     abbr('gsw', 'git switch')
+    abbr('gswd', 'git switch --detach')
     abbr('gswc', 'git switch -c')
     abbr('gswm', 'git switch master')
     abbr('gts', 'git tag -s')

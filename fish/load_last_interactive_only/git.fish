@@ -229,6 +229,7 @@ abbr gsmst 'git submodule status --recursive'
 
 # switching branches
 abbr gsw 'git switch'
+abbr gswd 'git switch --detach'
 abbr gswc 'git switch -c'
 abbr gswm 'git switch master'
 
