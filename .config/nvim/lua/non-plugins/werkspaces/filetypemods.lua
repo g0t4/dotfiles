@@ -267,13 +267,23 @@ vim.api.nvim_create_autocmd("FileType", {
     end,
 })
 
--- ansible
+-- * ansible
+vim.filetype.add({
+    -- add at least one static mapping (i.e. site.yml) so the filetype "ansible" exists, else vim.lsp chokes on invalid filetype
+    extension = {
+        ansible_bullshit_vim_lsp_STFU = "ansible",
+    },
+})
 vim.api.nvim_create_autocmd("BufRead", {
     -- SET ON BUFREAD => not on FILETYPE!
+    -- *** DO NOT SET static with vim.filetype.add b/c then yaml TS highlighting won't be applied
+    --   * by changing filetype I get a bit of both worlds: yaml + ALS
+    --   BTW I might be able to re-use yaml TS parser for highlighting somehow w/o this hack? but who cares if this works
+    --      oh and btw it is not just about schema, I want ALS for ansible to provide real values on completion
+    --      so setting schema alone like kubernetes is not gonna work for ansible, actually I bet I want smth similar in k8s land too... is there a k8s LS?
     pattern = {
         "**/playbooks/*.{yml,yaml}",
         "site.{yml,yaml}",
-        -- TODO other patterns for ansible?
     },
     callback = function()
         vim.bo.filetype = "ansible"
