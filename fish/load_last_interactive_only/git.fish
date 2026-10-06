@@ -121,7 +121,6 @@ abbr gcan! 'git commit -a --no-edit --amend'
 abbr gco 'git restore' # historically I've used gco for restoring a single file (pass as next param)
 # another good thing about `git restore` => run it alone and it will remind you that you need to pass a path!
 #
-# TODO add warning in xonsh command transformer like handler to recommend not using `git checkout` anymore?
 abbr gcob 'git switch -c'
 
 # I'm always flumoxed to find the scope of config options to edit with confidence

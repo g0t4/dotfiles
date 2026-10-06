@@ -58,6 +58,21 @@ def colorful_cat(tokens: list[str], cmd: str):
     if is_markdown:
         return f"{cmd} | glow"
 
+# @events.on_precommand # cannot raise or otherwise stop execution, so likely use on_postcommand if you want to warn so it shows right after output (on_precommand puts it before and might be missed if lots of output)
+@events.on_postcommand
+def wes_habituate_new_commands_warnings(cmd: str, **kwargs):
+    """
+    sometimes I want to use a new command/subcommand to do some task... and I have a habit of using the old command/subcommand
+    so, how about pester me with a warning when I do so! so I remember to do things different until I stop using the "old" way
+    """
+    if cmd is None:
+        return
+
+    # * avoid using `git checkout` entirely
+    if "git checkout" in cmd:
+        rich.print("\n\n[bold yellow]⚠️  Habit warning:[/] `git checkout` is deprecated in favor of `git switch`/`git restore`")
+    # TODO add more warnings!
+
 
 @events.on_transform_command
 def wes_colorful_output(cmd: str, **kwargs):
