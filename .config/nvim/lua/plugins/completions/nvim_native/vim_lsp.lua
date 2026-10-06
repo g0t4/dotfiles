@@ -1,8 +1,6 @@
 -- TODO! outstanding issues:
 --     see :checkhealth vim.lsp
---     address warnings (many LS binaries missing in some repos)
---        open for my most common repos and make sure no warnings
---        if using node => npx so it doesn't use local node_modules?
+--     TODO are warnings all gone now?
 --
 --   TODO why does xonsh ahve root dir ~
 --     is this b/c of symlinked ~/.config/nvim?
@@ -59,7 +57,7 @@ vim.lsp.config("lua", {
             completion = { callSnippet = "Both", keywordSnippet = "Replace" },
             -- Project globals belong in that project's .luarc.json.
             -- telemetry = { enable = true }, -- does this give me more logging? if so, where? (vim.lsp.log.get_filename())
-            -- TODO try this per workspace
+            -- FYI try this per workspace
             --    lua-language-server --check E:\programming\myLuaProject --checklevel=Warning
         },
     },
@@ -95,12 +93,10 @@ vim.lsp.config("xonsh", {
     init_options = { pythonBackend = "pyright" },
 })
 
--- The live config links individual files into this repo, not the whole nvim directory.
-local source_file = vim.fn.resolve(debug.getinfo(1, "S").source:sub(2))
-local server_bin = vim.fn.fnamemodify(source_file, ":h:h:h:h") .. "/node_modules/.bin/"
-
 vim.lsp.config("typescript", {
-    cmd = { server_bin .. "typescript-language-server", "--stdio" },
+    -- npm install -g typescript-language-server
+    -- TODO do I also need to install typescript (and @X version?)
+    cmd = { "typescript-language-server", "--stdio" },
     filetypes = { "javascript", "javascriptreact", "typescript", "typescriptreact" },
     root_markers = { "tsconfig.json", "jsconfig.json", "package.json", ".git" },
     workspace_required = false,
@@ -128,7 +124,7 @@ vim.lsp.config("docker", {
     --   - use this to remove duplicate diagnostics: removeOverlappingIssues
     --
     -- prior LS (I used this via coc-docker)
-    -- cmd = { server_bin .. "docker-langserver", "--stdio" }, --
+    -- cmd = { "docker-langserver", "--stdio" }, --
 
 })
 
@@ -155,7 +151,8 @@ vim.lsp.config("yaml", {
 })
 
 vim.lsp.config("json", {
-    cmd = { server_bin .. "vscode-json-language-server", "--stdio" },
+    -- npm install -g vscode-langservers-extracted
+    cmd = { "vscode-json-language-server", "--stdio" },
     filetypes = { "json", "jsonc" },
     root_markers = { "package.json", ".git" },
     workspace_required = false,
@@ -172,7 +169,8 @@ vim.lsp.config("json", {
 })
 
 vim.lsp.config("bash", {
-    cmd = { server_bin .. "bash-language-server", "start" },
+    -- npm install -g bash-language-server
+    cmd = { "bash-language-server", "start" },
     filetypes = { "sh" },
     root_markers = { ".shellcheckrc", ".git" },
     workspace_required = false,
