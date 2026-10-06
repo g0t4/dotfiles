@@ -340,8 +340,20 @@ vim.api.nvim_create_autocmd("LspAttach", {
             vim.notify(message, vim.log.levels.INFO)
         end, "Buffer diagnostics")
 
-        map("n", "[g", function() vim.diagnostic.jump({ count = -1 }) end, "Previous diagnostic")
-        map("n", "]g", function() vim.diagnostic.jump({ count = 1 }) end, "Next diagnostic")
+        local function on_jump(diagnostic, bufnr)
+            if not diagnostic then return end
+
+            vim.diagnostic.show(
+                diagnostic.namespace,
+                bufnr,
+                { diagnostic },
+                -- show as virtual text instead of hover window:
+                { virtual_lines = { current_line = true }, virtual_text = false }
+            )
+        end
+        map("n", "gl", vim.diagnostic.open_float)
+        map("n", "[g", function() vim.diagnostic.jump({ count = -1, on_jump = on_jump}) end, "Previous diagnostic")
+        map("n", "]g", function() vim.diagnostic.jump({ count = 1, on_jump = on_jump}) end, "Next diagnostic")
         map("n", "[e", function()
             vim.diagnostic.jump({ count = -1, severity = vim.diagnostic.severity.ERROR })
         end, "Previous error")
