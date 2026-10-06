@@ -407,16 +407,16 @@ vim.api.nvim_create_autocmd("LspAttach", {
 })
 
 vim.lsp.enable({
-    -- "lua",
-    -- "pyright",
+    "lua",
+    "pyright",
     "xonsh",
-    -- "typescript",
-    -- "docker",
-    -- "yaml",
-    -- "json",
-    -- "bash",
-    -- "ansible",
-    -- "nix",
-    -- "treesitter_query",
-    -- "fish",
+    "typescript",
+    "docker",
+    "yaml",
+    "json",
+    "bash",
+    "ansible",
+    "nix",
+    "treesitter_query",
+    "fish",
 })
