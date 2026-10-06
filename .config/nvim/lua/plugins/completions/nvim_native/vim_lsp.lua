@@ -133,7 +133,9 @@ vim.lsp.config("docker", {
 })
 
 vim.lsp.config("yaml", {
-    cmd = { server_bin .. "yaml-language-server", "--stdio" },
+    -- https://github.com/redhat-developer/yaml-language-server
+    -- npm install -g yaml-language-server
+    cmd = { "yaml-language-server", "--stdio" },
     filetypes = { "yaml" }, -- Ansible buffers have their own filetype/server.
     root_markers = { ".yamllint", "package.json", ".git" },
     workspace_required = false,
