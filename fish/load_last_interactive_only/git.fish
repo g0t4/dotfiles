@@ -115,11 +115,14 @@ abbr gcn! 'git commit --no-edit --amend'
 abbr gca! 'git -c core.editor=git-commit-with-function-context commit -a --amend'
 abbr gcan! 'git commit -a --no-edit --amend'
 
-# checkout
-abbr gco 'git checkout'
-abbr gcom 'git checkout master'
-abbr gcop 'git restore --patch' # interactive restore (like git add --patch) - FYI prefer git restore over git checkout
-abbr gcob 'git checkout -b'
+# * STOP USING `git checkout` entirely => move to `restore` and `switch`
+# FYI once I stop using `gco` and `gcob` then get rid of them (you'll know when you're ready... or these will just be forgotten)
+#
+abbr gco 'git restore' # historically I've used gco for restoring a single file (pass as next param)
+# another good thing about `git restore` => run it alone and it will remind you that you need to pass a path!
+#
+# TODO add warning in xonsh command transformer like handler to recommend not using `git checkout` anymore?
+abbr gcob 'git switch -c'
 
 # I'm always flumoxed to find the scope of config options to edit with confidence
 abbr gconf 'grc git config --list --show-origin --show-scope' # show files where set (ie scope's file)
@@ -227,6 +230,7 @@ abbr gsmst 'git submodule status --recursive'
 # switching branches
 abbr gsw 'git switch'
 abbr gswc 'git switch -c'
+abbr gswm 'git switch master'
 
 # tagging
 abbr gts 'git tag -s'
