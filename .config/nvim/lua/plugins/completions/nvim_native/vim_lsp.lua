@@ -23,7 +23,8 @@ vim.diagnostic.config({
     signs = true, -- gutter signs
     virtual_text = false,
     underline = { severity = { min = vim.diagnostic.severity.INFO } },
-    severity_sort = true
+    severity_sort = true,
+    -- float = true -- TODO how to get hover help
 })
 -- TODO disable the following?
 -- vim.lsp.inlay_hint.enable(false)
