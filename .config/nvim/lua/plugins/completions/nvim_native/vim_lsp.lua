@@ -92,6 +92,9 @@ vim.lsp.config("xonsh", {
     root_markers = { { ".xonshrc", "xonshrc", ".git" } }, -- DOUBLE {{ }} is intentional ... do NOT remove that else each option is scanned one at a time and that means ~/.xonshrc will win every time unless you have a .xonshrc in the workspace root... IOTW ~/.xonshrc prevents ever using `.git` to mark workspace root if you havea  {} and not {{}}  b/c extra {} means equal precedence... first level down means in order exhaust the search (walk parents for each top level one by one)
     workspace_required = false,
     init_options = { pythonBackend = "pyright" },
+    -- Neovim 0.12.5 sends didSave to unrelated clients in the same sync group.
+    -- Recheck tests/nvim/lsp_save_isolation/repro.lua after upgrading Neovim.
+    flags = { allow_incremental_sync = false },
 })
 
 vim.lsp.config("typescript", {
