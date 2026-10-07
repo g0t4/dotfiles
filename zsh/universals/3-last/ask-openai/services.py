@@ -84,7 +84,7 @@ def use_openai(model: Optional[str] = None):
         name='openai',
         api_key=get_api_key('openai', 'ask'),
         base_url="https://api.openai.com/v1",
-        model=model if model else 'gpt-5',
+        model=model if model else 'gpt-6.1-sol',
     )
 
 def use_anthropic(model: Optional[str] = None):
@@ -127,7 +127,7 @@ def use_deepseek(model: Optional[str] = None):
         # FYI `security add-generic-password -a ask -s deepseek -w`
         api_key=get_api_key('deepseek', 'ask'),
         base_url="https://api.deepseek.com",
-        model=model if model else 'deepseek-chat',
+        model=model if model else 'deepseek-flash',
     )
 
 def use_xai(model: Optional[str] = None):
