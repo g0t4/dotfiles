@@ -106,9 +106,22 @@ async def ask_openai(connection):
     task_clear = clear_line()
 
     # FYI last_comand is not essential, sometimes it is useful to provide recent a recent command as context (and then I can just ask a question and it sees prior command to apply question to)
-    env_last_command = await session.async_get_variable("lastCommand")  # FYI works on remotes w/ iterm2 shell integration
+    last_command = await session.async_get_variable("lastCommand")  # FYI works on remotes w/ iterm2 shell integration
 
-    user_content = f"env: shell={ask_shell} on uname={ask_os} and FYI lastCommand={env_last_command}\nquestion: {current_command}"
+# TODO get more command history?
+    user_content = f"""My shell is {ask_shell} on {ask_os}.
+
+## Recent command history
+
+These may be relevant, or not. You decide.
+```xonsh
+{last_command}
+```
+
+I need help with my current commandline buffer, which contains this text:
+{current_command}"""
+
+
     messages = [{
         "role": "system",
         "content": "You are a command line expert. Respond with a single, valid commandline. I intend to execute it. No explanation. No markdown. DO NOT respond with leading ``` nor trailing ```"
