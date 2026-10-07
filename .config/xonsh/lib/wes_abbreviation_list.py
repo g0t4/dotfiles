@@ -49,7 +49,8 @@ def abbreviation_listings() -> list[AbbreviationListing]:
         if abbreviation.internal:
             continue
         trigger = _trigger_text(abbreviation)
-        if trigger.endswith("??"):
+        is_xonsh_like_abbr_help = trigger.endswith("??")
+        if is_xonsh_like_abbr_help:
             # skip ?? abbrs which are merely a hack to add xonsh like ?? to abbrs
             continue
         expansion = abbreviation_replacement_text(abbreviation)
