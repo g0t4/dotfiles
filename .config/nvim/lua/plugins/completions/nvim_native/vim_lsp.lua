@@ -108,6 +108,19 @@ vim.lsp.config("xonsh", {
     -- Neovim 0.12.5 sends didSave to unrelated clients in the same sync group.
     -- Recheck tests/nvim/lsp_save_isolation/repro.lua after upgrading Neovim.
     flags = { allow_incremental_sync = false },
+    -- xonsh-lsp is pygls-based; by default pygls picks the first encoding Neovim
+    -- advertises (utf-8). Given my other vim.lsp clients all use utf-16 then
+    -- xonsh ends up in its own change-tracking group.
+    -- Advertising only utf-16 makes pygls negotiate utf-16 so xonsh shares a
+    -- sync group with lua/pyright etc. (no fork of xonsh-lsp needed).
+    --
+    -- use `:checkhealth vim.lsp` => search for position encoding (near end usually)
+    -- where neovim will warn if a client isn't utf-16
+    capabilities = {
+        general = {
+            positionEncodings = { "utf-16" },
+        },
+    },
 })
 
 vim.lsp.config("typescript", {
