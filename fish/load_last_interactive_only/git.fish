@@ -174,9 +174,12 @@ abbr gmc 'git merge --continue'
 abbr gmff 'git merge --ff-only'
 
 # reverting
-abbr --add _grev_d --regex 'grev\d+' --function _abbr_expand_grev_d
+abbr --add _grev_d --regex 'grev\d*' --function _abbr_expand_grev_d
 function _abbr_expand_grev_d
-    string replace --regex '^grev' 'git revert HEAD~' $argv
+    set num (string replace 'grev' '' $argv) # strip everything but number
+    set tilde_num (string replace --regex '(\d+)' '~\1' $num)
+    # only add ~NUM if NUM was provided, else just HEAD below:
+    echo -n "git revert HEAD$tilde_num --no-commit"
 end
 
 # removing

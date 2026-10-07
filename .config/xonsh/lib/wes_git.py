@@ -121,7 +121,7 @@ def register_wes_git():
     abbr('gma', 'git merge --abort')
     abbr('gmc', 'git merge --continue')
     abbr('gmff', 'git merge --ff-only')
-    abbr(re.compile('grev\\d+'), abbr_from_fish_function('_abbr_expand_grev_d'))
+    abbr(re.compile('grev\\d*'), abbr_from_fish_function('_abbr_expand_grev_d'))
     abbr('grm', 'git rm')
     abbr('grmc', 'git rm --cached')
     abbr('grst', 'git restore --staged')
