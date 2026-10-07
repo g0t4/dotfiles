@@ -222,10 +222,7 @@ def _wes_keybindings(bindings: KeyBindings, prompter: PromptSession, **_):
     def _vim_redo(event):
         event.current_buffer.redo()
 
-    @bindings.add(
-        "c-a",
-        # TODO can I get 5,c-a to add 5?
-    )
+    @bindings.add("c-a")
     def _vim_increment(event: KeyPressEvent):
         buffer = event.current_buffer
         text = buffer.text
