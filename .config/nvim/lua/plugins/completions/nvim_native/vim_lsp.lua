@@ -479,3 +479,6 @@ vim.lsp.enable({
     "treesitter_query",
     "fish",
 })
+
+vim.keymap.set({ "n" }, "<leader>chl", function() vim.cmd('checkhealth vim.lsp') end, { desc = "Check LSP health" })
+-- TODO? :lua vim.cmd('tabnew ' .. vim.lsp.log.get_filename())
