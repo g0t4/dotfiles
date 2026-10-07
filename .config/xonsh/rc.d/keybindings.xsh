@@ -31,6 +31,7 @@ from wes_surround import (
     wrap_to_end,
     wrap_word,
 )
+from wes_number import increment_number, decrement_number
 
 log = get_wes_logger(__name__)
 
@@ -225,55 +226,21 @@ def _wes_keybindings(bindings: KeyBindings, prompter: PromptSession, **_):
     @bindings.add("c-a")
     def _vim_increment(event: KeyPressEvent):
         buffer = event.current_buffer
-        text = buffer.text
-        pos = buffer.cursor_position
-        import re
-        m = re.search(r"-?\d+", text[pos:])
-        if not m:
-            m = re.search(r"-?\d+", text[:pos][::-1])
-            if not m:
-                return
-            start = pos - m.end()
-            end = pos - m.start()
-        else:
-            start = pos + m.start()
-            end = pos + m.end()
-        num_str = text[start:end]
-        try:
-            num = int(num_str)
-        except ValueError:
+        count = event.arg or 1
+        result = increment_number(buffer.text, buffer.cursor_position, count)
+        if result is None:
             return
-        count = int(event.arg or 1)
-        new_num = str(num + count)
-        buffer.text = text[:start] + new_num + text[end:]
-        buffer.cursor_position = start + len(new_num)
+        buffer.text, buffer.cursor_position = result
         event.app.invalidate()
 
     @bindings.add("c-x")
     def _vim_decrement(event: KeyPressEvent):
         buffer = event.current_buffer
-        text = buffer.text
-        pos = buffer.cursor_position
-        import re
-        m = re.search(r"-?\d+", text[pos:])
-        if not m:
-            m = re.search(r"-?\d+", text[:pos][::-1])
-            if not m:
-                return
-            start = pos - m.end()
-            end = pos - m.start()
-        else:
-            start = pos + m.start()
-            end = pos + m.end()
-        num_str = text[start:end]
-        try:
-            num = int(num_str)
-        except ValueError:
+        count = event.arg or 1
+        result = decrement_number(buffer.text, buffer.cursor_position, count)
+        if result is None:
             return
-        count = int(event.arg or 1)
-        new_num = str(num - count)
-        buffer.text = text[:start] + new_num + text[end:]
-        buffer.cursor_position = start + len(new_num)
+        buffer.text, buffer.cursor_position = result
         event.app.invalidate()
 
     def _invalidate(event):
