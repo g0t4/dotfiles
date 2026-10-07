@@ -197,7 +197,7 @@ _PLATFORM_REPLACEMENTS = {
 # Fish-native implementations whose Xonsh ports intentionally use structured
 # helpers instead of reproducing the source command literally.
 _MIGRATION_REPLACEMENTS = {
-    "agr": "_abbr_list --any '%'",
+    "agr": "_abbr_list --any '%' --fish-functions",
     "agrs": "_abbr_list --prefix '%'",
     "py_profile_import_time": '$PYTHONPROFILEIMPORTTIME=1 python -c "from sentence_transformers import SentenceTransformer"',
     "vea": "source .venv*/bin/activate.xsh",

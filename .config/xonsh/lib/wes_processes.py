@@ -35,7 +35,7 @@ def register_wes_processes():
     abbr('envb', 'env | bat -l env')
     abbr('vls', 'set | bat --language ini -p')
     abbr('vgr', 'set | rg_grep -i ')
-    abbr('agr', "_abbr_list --any '%'", cursor_marker="%")
+    abbr('agr', "_abbr_list --any '%' --fish-functions", cursor_marker="%")
     abbr('agrs', "_abbr_list --prefix '%'", cursor_marker="%")
     abbr('completeC', "complete -C '%'", cursor_marker="%")
     abbr('pid', '@(os.getpid())', position="anywhere")

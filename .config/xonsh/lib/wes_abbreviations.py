@@ -149,12 +149,22 @@ class AbbreviationRegistry:
         return None
 
 
-def abbreviation_replacement_text(abbreviation: Abbreviation) -> str:
+def abbreviation_replacement_text(abbreviation: Abbreviation, show_fish_functions = False) -> str:
     """Describe a replacement without executing a dynamic callback."""
     replacement = abbreviation.replacement
     if isinstance(replacement, str):
         return replacement
-    return getattr(replacement, "__qualname__", type(replacement).__name__)
+    qualname = getattr(replacement, "__qualname__", type(replacement).__name__)
+    if show_fish_functions and qualname.startswith("abbr_from_fish_function"):
+        try:
+            func_name = replacement.__closure__[0].cell_contents
+            from wes_fish_bridge import fish_function
+            func_source_code = fish_function("type", "--color=never", func_name)
+            return func_source_code
+        except Exception:
+            return "failed to find fish function source"
+
+    return qualname
 
 # TODO move away from consumers using global XONSH_ABBREVIATIONS and instead just pass None for the registry
 #  OR have them import it at least so it is clean where it comes from

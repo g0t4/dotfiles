@@ -40,7 +40,7 @@ def _callback_source(abbreviation: Abbreviation) -> str:
         return ""
 
 
-def abbreviation_listings() -> list[AbbreviationListing]:
+def abbreviation_listings(show_fish_functions = False) -> list[AbbreviationListing]:
     listings = []
     registry = wes_abbreviations.XONSH_ABBREVIATIONS
     # TODO can we show source code for abbr_from_fish_function so I can search it too
@@ -53,7 +53,7 @@ def abbreviation_listings() -> list[AbbreviationListing]:
         if is_xonsh_like_abbr_help:
             # skip ?? abbrs which are merely a hack to add xonsh like ?? to abbrs
             continue
-        expansion = abbreviation_replacement_text(abbreviation)
+        expansion = abbreviation_replacement_text(abbreviation, show_fish_functions=show_fish_functions)
         scope = " ".join(abbreviation.commands) or abbreviation.position
         search_text = "\n".join(
             (trigger, expansion, scope, _callback_source(abbreviation))
@@ -63,10 +63,10 @@ def abbreviation_listings() -> list[AbbreviationListing]:
 
 
 def search_abbreviations(
-    query="", *, prefix=False
+    query="", *, prefix=False, show_fish_functions=False,
 ) -> list[AbbreviationListing]:
     query = query.casefold()
-    listings = abbreviation_listings()
+    listings = abbreviation_listings(show_fish_functions=show_fish_functions)
     if not query:
         return listings
     if prefix:
@@ -80,10 +80,13 @@ def abbreviation_list_alias(
     values = list(args)
     plain = False
     mode = "any"
+    show_fish_functions = False
     query_parts = []
     for value in values:
         if value == "--plain":
             plain = True
+        elif value == "--fish-functions":
+            show_fish_functions = True
         elif value == "--any":
             mode = "any"
         elif value == "--prefix":
@@ -99,7 +102,7 @@ def abbreviation_list_alias(
             query_parts.append(value)
 
     query = " ".join(query_parts)
-    listings = search_abbreviations(query, prefix=mode == "prefix")
+    listings = search_abbreviations(query, prefix=mode == "prefix", show_fish_functions=show_fish_functions)
 
     def render_abbreviation_list():
         table = Table(
