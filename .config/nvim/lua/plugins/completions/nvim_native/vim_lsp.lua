@@ -172,6 +172,61 @@ vim.lsp.config("json", {
     },
 })
 
+vim.lsp.config("css", {
+    -- npm install -g vscode-langservers-extracted
+    cmd = { "vscode-css-language-server", "--stdio" },
+    filetypes = { "css", "scss", "less" },
+    root_markers = { ".git" },
+    workspace_required = false,
+    settings = {
+        css = {
+            validate = { enable = true },
+        },
+        scss = {
+            validate = { enable = true },
+        },
+        less = {
+            validate = { enable = true },
+        },
+    },
+})
+
+vim.lsp.config("html", {
+    -- npm install -g vscode-langservers-extracted
+    cmd = { "vscode-html-language-server", "--stdio" },
+    filetypes = { "html" },
+    root_markers = { ".git" },
+    workspace_required = false,
+    settings = {
+        html = {
+            validate = { enable = true },
+        },
+    },
+})
+
+vim.lsp.config("markdown", {
+    -- npm install -g vscode-langservers-extracted
+    cmd = { "vscode-markdown-language-server", "--stdio" },
+    filetypes = { "markdown" },
+    root_markers = { ".git" },
+    workspace_required = false,
+})
+
+vim.lsp.config("eslint", {
+    -- npm install -g vscode-langservers-extracted
+    cmd = { "vscode-eslint-language-server", "--stdio" },
+    filetypes = { "javascript", "javascriptreact", "typescript", "typescriptreact" },
+    root_markers = { ".eslintrc", ".eslintrc.js", ".eslintrc.cjs", ".eslintrc.json", "eslint.config.js", "package.json", ".git" },
+    workspace_required = false,
+    settings = {
+        eslint = {
+            validate = true,
+            packageManager = "npm",
+            format = { enable = true },
+        },
+    },
+})
+
 vim.lsp.config("bash", {
     -- npm install -g bash-language-server
     cmd = { "bash-language-server", "start" },
@@ -414,6 +469,10 @@ vim.lsp.enable({
     "docker",
     "yaml",
     "json",
+    "css",
+    "html",
+    "markdown",
+    "eslint",
     "bash",
     "ansible",
     "nix",
