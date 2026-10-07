@@ -43,6 +43,8 @@ def _callback_source(abbreviation: Abbreviation) -> str:
 def abbreviation_listings() -> list[AbbreviationListing]:
     listings = []
     registry = wes_abbreviations.XONSH_ABBREVIATIONS
+    # TODO can we show source code for abbr_from_fish_function so I can search it too
+    #   which means, when I search for `git revert` then the fish IMPL for grev\\d* would match b/c it now includes the text for grev which maps to `git revert`
     for abbreviation in registry.abbreviations:
         if abbreviation.internal:
             continue
