@@ -1,3 +1,16 @@
+-- -- clear the LSP log?
+-- local lsp_log_path = vim.lsp.log.get_filename()
+-- if lsp_log_path and vim.fn.filereadable(lsp_log_path) == 1 then
+--     local log_size = vim.fn.getfsize(lsp_log_path)
+--     local max_size = 10 * 1024 ^ 2
+--     if log_size > max_size then
+--         -- vim.fn.delete(lsp_log_path)
+--         vim.notify("LSP log rotated, was: " .. log_size, vim.log.levels.INFO)
+--     end
+-- end
+-- -- vim.lsp.log.set_level(vim.log.levels.WARN)
+
+
 -- TODO! outstanding issues:
 --     see :checkhealth vim.lsp
 --     TODO are warnings all gone now?
