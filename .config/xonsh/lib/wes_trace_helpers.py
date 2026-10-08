@@ -132,6 +132,8 @@ def register_trace_helpers(aliases, dotfiles):
     abbr("tc", "jq --raw-output '.request_body.messages[] | select(.tool_calls) | .tool_calls[] | .function | {(.name): (.arguments | fromjson)}' ./*-trace.json") # key is tool name and value is now the arguments object!
     #
     # * full args object per tool type
+    abbr("tc_tools_used", "jq --raw-output '.request_body.messages[] | select(.tool_calls) | .tool_calls[] | .function | {(.name): (.arguments | fromjson)}' ./*-trace.json | jq 'keys | .[]' --raw-output | sort | uniq -c ")
+    #
     abbr("tc_run_process", "jq --raw-output '.request_body.messages[] | select(.tool_calls) | .tool_calls[] | .function | {(.name): (.arguments | fromjson)}' ./*-trace.json | jq 'select(.run_process) | .run_process'")
     abbr("tc_run_xonsh", "jq --raw-output '.request_body.messages[] | select(.tool_calls) | .tool_calls[] | .function | {(.name): (.arguments | fromjson)}' ./*-trace.json | jq 'select(.run_xonsh) | .run_xonsh'")
     abbr("tc_run_in_neovim", "jq --raw-output '.request_body.messages[] | select(.tool_calls) | .tool_calls[] | .function | {(.name): (.arguments | fromjson)}' ./*-trace.json | jq 'select(.run_in_neovim) | .run_in_neovim'")
@@ -139,9 +141,10 @@ def register_trace_helpers(aliases, dotfiles):
     abbr("tc_fetch", "jq --raw-output '.request_body.messages[] | select(.tool_calls) | .tool_calls[] | .function | {(.name): (.arguments | fromjson)}' ./*-trace.json | jq 'select(.fetch) | .fetch'")
     #
     # * key tool argument
-    abbr("tc_tools_used", "jq --raw-output '.request_body.messages[] | select(.tool_calls) | .tool_calls[] | .function | {(.name): (.arguments | fromjson)}' ./*-trace.json | jq 'keys | .[]' --raw-output | sort | uniq -c ")
-    abbr("tc_commandline", "jq --raw-output '.request_body.messages[] | select(.tool_calls) | .tool_calls[].function.arguments | fromjson | select(.command_line) | .command_line' ./*-trace.json")
-    abbr("tc_xonsh", "jq --raw-output '.request_body.messages[] | select(.tool_calls) | .tool_calls[].function | select(.name == \"run_xonsh\") | .arguments | fromjson | select(.code) | .code' ./*-trace.json")
+    abbr("tc_commandline", "jq --join-output '.request_body.messages[] | select(.tool_calls) | .tool_calls[].function | select(.name == \"run_process\") | .arguments | fromjson | select(.command_line) | (.command_line | tostring) + \"\\n\\n\\n\"' ./*-trace.json") # add net of two blank lines to split things apart (3 \n => 2 blank lines)
+    abbr("tc_xonsh", "jq --join-output '.request_body.messages[] | select(.tool_calls) | .tool_calls[].function | select(.name == \"run_xonsh\") | .arguments | fromjson | select(.code) | (.code | tostring) + \"\\n\\n\\n\"' ./*-trace.json") # add net of two blank lines to split things apart (3 \n => 2 blank lines)
+    #
+    #
     abbr(re.compile(r"msg(r|f|c|args|patch)?(\d+)"), expand_message_field, position="anywhere")
     timing_query = ".request_body.messages[].timings | select(.) | [.cache_n, .prompt_n, .predicted_n] | @tsv"
     totals = '{a+=$1; b+=$2; c+=$3} END {print a "\\t" b "\\t" c}'
