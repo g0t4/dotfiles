@@ -151,7 +151,7 @@ def _wes_keybindings(bindings: KeyBindings, prompter: PromptSession, **_):
     #
     # ctrl+cmd+k using my new PUA+send_hex_code scheme so iTerm2 can receive rich key event info and project it to preserve it into my client apps
     # => see iterm2/keys/*.py
-    @bindings.add("\uE694", save_before=lambda event: False)
+    @bindings.add("\uE694")
     def _inspect_in_commandline(event: KeyPressEvent):
         event.current_buffer.text = _inspectify(event.current_buffer.text)
         event.current_buffer.cursor_position = len(event.current_buffer.text)  # cursor to end of buffer
@@ -159,7 +159,7 @@ def _wes_keybindings(bindings: KeyBindings, prompter: PromptSession, **_):
         # run_in_terminal(event.current_buffer.text)
     #
     # shift+alt+"i"
-    @bindings.add("\uE495", save_before=lambda event: False)
+    @bindings.add("\uE495")
     def _inspect_live(event: KeyPressEvent):
         code = _inspectify(event.current_buffer.text)
         print("\n", code)  # show what is evaluated (for scrollback purposes + to make sure I understand what's evaluated)
@@ -185,7 +185,6 @@ def _wes_keybindings(bindings: KeyBindings, prompter: PromptSession, **_):
         "c-w",
         filter=vi_insert_mode,
         eager=True,
-        save_before=lambda event: False,
     )
     def _backward_kill_small_word(event):
         get_by_name("backward-kill-word").handler(event)

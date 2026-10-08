@@ -22,7 +22,7 @@ def _wes_keybindings(bindings: KeyBindings, prompter: PromptSession, **_):
     # TODO probably will settle on one of these in time and get rid of the other:
     # FYI ptk differentiates alt+i vs shift+alt+i
     # alt+"i"
-    @bindings.add("escape", "i", save_before=lambda event: False)
+    @bindings.add("escape", "i")
     def _inspect_in_commandline(event: KeyPressEvent):
         event.current_buffer.text = f"rich.inspect({event.current_buffer.text})"
         event.current_buffer.cursor_position = len(event.current_buffer.text)  # cursor to end of buffer
@@ -30,7 +30,7 @@ def _wes_keybindings(bindings: KeyBindings, prompter: PromptSession, **_):
         # run_in_terminal(event.current_buffer.text)
     #
     # shift+alt+"i"
-    @bindings.add("escape", "I", save_before=lambda event: False)
+    @bindings.add("escape", "I")
     def _inspect_live(event: KeyPressEvent):
         cmd_line = event.current_buffer.text
         # how do I compile it into python and wrap with inspect?
