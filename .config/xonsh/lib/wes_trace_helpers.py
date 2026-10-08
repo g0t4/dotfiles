@@ -130,6 +130,7 @@ def register_trace_helpers(aliases, dotfiles):
     # abbr("tc", "jq --raw-output '.request_body.messages[] | select(.tool_calls) | .tool_calls[].function' ./*-trace.json") # arguments are json stringified so they're harder to reason about here... hence next that expands an arguments object next to name
     # abbr("tc", "jq --raw-output '.request_body.messages[] | select(.tool_calls) | .tool_calls[] | .function | {name, arguments: (.arguments | fromjson)}' ./*-trace.json") # puts function name and deserialized args json onto a single object!
     abbr("tc", "jq --raw-output '.request_body.messages[] | select(.tool_calls) | .tool_calls[] | .function | {(.name): (.arguments | fromjson)}' ./*-trace.json") # key is tool name and value is now the arguments object!
+    abbr("tc_tools_used", "jq --raw-output '.request_body.messages[] | select(.tool_calls) | .tool_calls[] | .function | {(.name): (.arguments | fromjson)}' ./*-trace.json | jq 'keys | .[]' --raw-output | sort | uniq -c ")
     abbr("tc_commandline", "jq --raw-output '.request_body.messages[] | select(.tool_calls) | .tool_calls[].function.arguments | fromjson | select(.command_line) | .command_line' ./*-trace.json")
     abbr("tc_xonsh", "jq --raw-output '.request_body.messages[] | select(.tool_calls) | .tool_calls[].function | select(.name == \"run_xonsh\") | .arguments | fromjson | select(.code) | .code' ./*-trace.json")
     abbr(re.compile(r"msg(r|f|c|args|patch)?(\d+)"), expand_message_field, position="anywhere")
