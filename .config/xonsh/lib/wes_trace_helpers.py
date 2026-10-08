@@ -145,6 +145,7 @@ def register_trace_helpers(aliases, dotfiles):
     abbr("tc_xonsh", "jq --join-output '.request_body.messages[] | select(.tool_calls) | .tool_calls[].function | select(.name == \"run_xonsh\") | .arguments | fromjson | select(.code) | (.code | tostring) + \"\\n\\n\\n\"' ./*-trace.json") # add net of two blank lines to split things apart (3 \n => 2 blank lines)
     #
     # abbr("tc_results_too", "jq '.request_body.messages[] | select(.role == \"tool\") | .content | fromjson' ./*-trace.json")
+    abbr("tc_results_too", "jq --join-output '.request_body.messages[] | select(.role == \"tool\") | .content + \"\\n\\n######################\\n\\n\"' ./*-trace.json")
     #
     abbr(re.compile(r"msg(r|f|c|args|patch)?(\d+)"), expand_message_field, position="anywhere")
     timing_query = ".request_body.messages[].timings | select(.) | [.cache_n, .prompt_n, .predicted_n] | @tsv"
