@@ -145,13 +145,9 @@ complete -c mcp_server_semantic_grep \
 abbr trace_timings "jq --raw-output '.request_body.messages[].timings | select(.) | [.cache_n, .prompt_n, .predicted_n] | @tsv' ./*-trace.json | awk '{a+=\$1; b+=\$2; c+=\$3} END {print a \"\\t\" b \"\\t\" c}'"
 #
 abbr --add _tm --regex "tm\d+" --function _abbr_trace_message
-function _abbr_trace_message --argument-names count
-    set count (string replace -r '^[^\d]+' '' $count)
-    set num_messages (jq '.request_body.messages | length' *-trace.json)
-    if test $count -ge $num_messages
-        set count (math "$num_messages - 1")
-    end
-    echo "cat *-trace.json | jq .request_body.messages[$count]"
+function _abbr_trace_message --argument-names message_num_base1
+    set message_num_base0 (math (string replace -r '^[^\d]+' '' $message_num_base1) - 1)
+    echo "cat *-trace.json | jq .request_body.messages[$message_num_base0]"
 end
 
 abbr --add _tc --regex "tc\d+" --function _abbr_trace_command
@@ -168,13 +164,14 @@ function _abbr_msg_num --argument-names to_expand
     #  `msgc7` => contents
     #  `msgargs7` => tool call args
 
-    set num (math (string replace --regex '\D+' '' $to_expand) )
+    set num_base1 (math (string replace --regex '\D+' '' $to_expand) )
+    set num_base0 (math num_base1 - 1)
     set prefix (string replace --regex '\d+' '' $to_expand)
 
     set first_trace (fd "\-trace.json" | head -n 1)
 
     # dump messages
-    echo -n "cat $first_trace | jq '.request_body.messages[$num]"
+    echo -n "cat $first_trace | jq '.request_body.messages[$num_base0]"
     if test "$prefix" = msg
         echo -n "'"
         return

@@ -92,10 +92,10 @@ def expand_trace_file(context, match):
 
 
 def expand_trace_message(context, match):
-    index = int(match.group(2))
+    message_num_base0 = int(match.group(2)) - 1
     # Apply the upper bound independently to each input trace, unlike asking
     # Fish to compare an integer with jq's potentially multi-file output.
-    query = f".request_body.messages | .[([{index}, length - 1] | min)]"
+    query = f".request_body.messages | .[([{message_num_base0}, length - 1] | min)]"
     if match.group(1) == "tc":
         query += ".tool_calls[].function.arguments"
         return "jq -r " + single_quote(query) + " ./*-trace.json | jq -r '.command_line // .code'"
@@ -106,7 +106,8 @@ def expand_message_field(context, match):
     files = trace_files(recursive=True)
     if not files:
         raise ValueError("No *-trace.json file found below the current directory")
-    suffix, index = match.groups()
+    suffix, message_num_base1 = match.groups()
+    message_num_base0 = int(message_num_base1) - 1
     field, tail = {
         "": ("", ""),
         "r": (".reasoning_content", " -r"),
@@ -115,7 +116,7 @@ def expand_message_field(context, match):
         "args": (".tool_calls[0].function.arguments", " -r | jq '.'"),
         "patch": (".tool_calls[0].function.arguments", " -r | jq '.patch' -r | bat -l patch"),
     }[suffix or ""]
-    query = f".request_body.messages[{int(index)}]{field}"
+    query = f".request_body.messages[{message_num_base0}]{field}"
     return "cat " + single_quote("./" + str(files[0])) + " | jq " + single_quote(query) + tail
 
 
