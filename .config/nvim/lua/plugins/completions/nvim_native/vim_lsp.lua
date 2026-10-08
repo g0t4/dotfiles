@@ -42,7 +42,7 @@ vim.diagnostic.config({
 --    and yet there's no vim.lsp.semantic_highlights.enable(false)
 --    so they seem intertwined?
 vim.lsp.semantic_tokens.enable(false) -- FYI can also set this per LS IIRC
-vim.lsp.log.set_level("trace")
+-- vim.lsp.log.set_level("trace")
 vim.lsp.config("lua", {
     cmd = { "lua-language-server" },
     filetypes = { "lua" },
