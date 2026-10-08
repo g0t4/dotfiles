@@ -155,6 +155,8 @@ _SKIPPED_ABBREVIATIONS = {
     AbbreviationSelector("pkill", replacement="pkill -9 -if"),
     AbbreviationSelector("pkillu", replacement="pkill -9 -U $USER -if"),
     AbbreviationSelector("lsusb", replacement="system_profiler SPUSBDataType"),
+    # Fish-only help_online; intentionally not ported to Xonsh.
+    "help",
     # Templates have native registration helpers, not literal triggers.
     "$_abbr", "*$filetype_letter", "rg$filetype_letter",
     "tt_devtools_$name", "tail_all_devtools_$name", "tail_devtools_$name",
