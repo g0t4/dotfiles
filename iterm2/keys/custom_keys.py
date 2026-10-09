@@ -56,12 +56,20 @@ CUSTOM_KEYS = {
 
     "alt+i",       # │ alt+i            │ U+E694  │ ee 9a 94 │
     "alt+shift+I", # │ alt+shift+I      │ U+E495  │ ee 92 95 │
+    #
+    # BTW as a consequence of my convention for mapping keys... a few heuristics apply:
+    #
+    # FYI shift U+ value can be computed: non-shift (i.e. 0xE694) minus almost 0x0200, one less (0x1FF)
+    #   bitmaths 0xE694 - 0x1FF # => 0xE495
+    #
+    # letter differences are 0x10 per letter difference (i.e a is 2 before c)
+    #  so g == i (0xE694) - 0x020 => 0xE674
 
     "alt+c",
     "alt+shift+C",
 
-    "alt+g", # │ alt+g            │ U+E674  │ ee 99 b4 │
-    "alt+shift+G", # │ alt+G            │ U+E474  │ ee 91 b4 │
+    "alt+g", # 0xE674
+    "alt+shift+G",
 
     "alt+e", # change prompt to enumerate
     "alt+shift+E", # enumerate w/o changing prompt
