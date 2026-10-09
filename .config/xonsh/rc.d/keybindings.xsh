@@ -151,15 +151,14 @@ def _wes_keybindings(bindings: KeyBindings, prompter: PromptSession, **_):
     #
     # ctrl+cmd+k using my new PUA+send_hex_code scheme so iTerm2 can receive rich key event info and project it to preserve it into my client apps
     # => see iterm2/keys/*.py
-    @bindings.add("\uE694")
+    @bindings.add("\uE694") # alt+i
     def _inspect_in_commandline(event: KeyPressEvent):
         event.current_buffer.text = _inspectify(event.current_buffer.text)
         event.current_buffer.cursor_position = len(event.current_buffer.text)  # cursor to end of buffer
         # event.current_buffer.insert_text("FOO") # moves cursor too
         # run_in_terminal(event.current_buffer.text)
     #
-    # shift+alt+"i"
-    @bindings.add("\uE495")
+    @bindings.add("\uE495") # shift+alt+"i"
     def _inspect_live(event: KeyPressEvent):
         code = _inspectify(event.current_buffer.text)
         print("\n", code)  # show what is evaluated (for scrollback purposes + to make sure I understand what's evaluated)
