@@ -48,10 +48,18 @@ CUSTOM_KEYS = {
 
     # alt is now alt! (not escape)
     # btw this means I can go back to eager escape in xonsh/fish/etc and not need to have to wait for escape to in insert to transition to normal mode
+    # FYI use doctor_list_pua_keys() to dump the table in comments and paste it in here
 
-    "alt+i",       # │ alt+i       │ U+E084  │ ee 82 84 │
-    "alt+shift+I", # │ alt+shift+i │ U+E085  │ ee 82 85 │
-    # "alt+I",
+    # FYI you can use alt+ combos with any key you want b/c traditionally that's not available (it's mapped to escape)... so nothing in xonsh would be using it OOB
+
+    "alt+i",       # │ alt+i            │ U+E694  │ ee 9a 94 │
+    "alt+shift+I", # │ alt+shift+I      │ U+E495  │ ee 92 95 │
+
+    "alt+g", # │ alt+g            │ U+E674  │ ee 99 b4 │
+    "alt+G", # │ alt+G            │ U+E474  │ ee 91 b4 │
+
+    "alt+e", # change prompt to enumerate
+    "alt+E", # enumerate w/o changing prompt
 
     # * FYI make sure to set key char (D) in this case to upper case when using `shift` modifier... doing just `shift+d` won't work, nor will just `D`... must be `shift+D`
     "cmd+ctrl+shift+D", # debugger
