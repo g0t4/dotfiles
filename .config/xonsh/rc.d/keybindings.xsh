@@ -163,6 +163,29 @@ def _wes_keybindings(bindings: KeyBindings, prompter: PromptSession, **_):
         func = lambda: XSH.execer.eval(code, globals(), locals())
         run_in_terminal(func)
 
+    def _comprehensionify(cmdline: str) -> str:
+        cmdline = format_source(cmdline).strip()
+        first_char = cmdline[0]
+        if not first_char.isalpha():
+            first_char = "v"
+        return f"[{first_char} for {first_char} in {cmdline}]"
+
+    @bindings.add("\uE634") # alt+c
+    def _wrap_commandline_with_comprehension(event: KeyPressEvent):
+        event.current_buffer.text = _comprehensionify(event.current_buffer.text)
+        event.current_buffer.cursor_position = 2 # cursor at end of expression (before `for` clause) => easily modify projection
+
+    @bindings.add("\uE435") # alt+shift+c
+    def _comprehend_commandline(event: KeyPressEvent):
+        # FYI this only is useful for a generator right now (AFAICT that's all I'd use it for)
+        # i.e. this can enumerate a generator and print each value
+        # FYI I am not married to this use case, so change it if it feels right to do smth else!
+        code = _comprehensionify(event.current_buffer.text)
+        print("\n", code)
+        func = lambda: print(XSH.execer.eval(code, globals(), locals()))
+        run_in_terminal(func)
+
+
     # Match Fish's reversible history-token-search-backward/forward. Unlike
     # Prompt Toolkit's yank_last_arg(), this visits every token, not only the
     # final argument of each command.

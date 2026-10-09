@@ -57,11 +57,14 @@ CUSTOM_KEYS = {
     "alt+i",       # │ alt+i            │ U+E694  │ ee 9a 94 │
     "alt+shift+I", # │ alt+shift+I      │ U+E495  │ ee 92 95 │
 
+    "alt+c",
+    "alt+shift+C",
+
     "alt+g", # │ alt+g            │ U+E674  │ ee 99 b4 │
-    "alt+G", # │ alt+G            │ U+E474  │ ee 91 b4 │
+    "alt+shift+G", # │ alt+G            │ U+E474  │ ee 91 b4 │
 
     "alt+e", # change prompt to enumerate
-    "alt+E", # enumerate w/o changing prompt
+    "alt+shift+E", # enumerate w/o changing prompt
 
     # * FYI make sure to set key char (D) in this case to upper case when using `shift` modifier... doing just `shift+d` won't work, nor will just `D`... must be `shift+D`
     "cmd+ctrl+shift+D", # debugger
