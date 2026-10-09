@@ -42,6 +42,8 @@ UPPER_ALPHA = {
         for i in range(26)
     ]
 }
+print(f'{LOWER_ALPHA=}')
+print(f'{UPPER_ALPHA=}')
 KEY_IDS = {**LOWER_ALPHA, **UPPER_ALPHA}
 
 CUSTOM_KEYS = {
