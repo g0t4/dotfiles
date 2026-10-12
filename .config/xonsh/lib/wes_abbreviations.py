@@ -231,6 +231,10 @@ def _fish_function_source(func_name: str) -> str:
     if cached is not None:
         return cached
     try:
+        # TODO(perf): if this shows up in profiles, consider batching all fish
+        #   function lookups into a single fish process invocation (e.g. pass
+        #   multiple names to `type` and split on a delimiter marker) to avoid
+        #   per-function subprocess spawn overhead entirely.
         from wes_fish_bridge import fish_function
         source = fish_function("type", "--color=never", func_name)
     except Exception:
