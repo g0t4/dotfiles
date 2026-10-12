@@ -82,33 +82,13 @@
 #   https://xon.sh/completers.html
 
 
-# TODO: Add Fish-style search within the visible completion menu.
-#
-# Current behavior in Xonsh 0.23.6 with Prompt Toolkit 3.0.52:
-#   - Ctrl-S starts forward incremental history search.
-#   - If a completion menu is visible, that search does not filter its entries.
-#   - Typing more of the command token recomputes/narrows completions, but there
-#     is no separate query field for searching the already-visible menu.
-#
-# Desired behavior:
-#   After opening the completion menu, a binding such as Ctrl-S should enter a
-#   completion-search mode comparable to Fish's `pager-toggle-search`. Typed
-#   search text should filter the menu without becoming part of the command
-#   line; accepting a result should apply it to the original completion token.
-#
-# Scope and questions to answer after learning stock Xonsh completion:
-#   - This requires Prompt Toolkit UI and keybinding work, not merely another
-#     completion provider.
-#   - Preserve normal Ctrl-S history search while no completion menu is active.
-#   - Decide whether matching searches completion values, display labels,
-#     descriptions, provider names, or some combination of them.
-#   - Decide whether matching is substring, subsequence, fuzzy-ranked, or uses
-#     the same matcher eventually chosen for command completion.
-#   - Define Escape, Backspace-on-empty, Enter, Tab, Shift-Tab, Ctrl-C, and
-#     completion-menu-dismissal behavior.
-#   - Verify interaction with multiline input, Vi/Emacs modes, async completion,
-#     mouse selection, completion refreshes, and the AI autosuggestion overlay.
-#
-# Tests should cover entering and leaving search mode, live filtering, accepting
-# a result, restoring the untouched command buffer on cancellation, retaining
-# Ctrl-S history search outside a completion menu, and zero/multiple results.
+# Completion menu search (implemented in completion-menu.xsh / wes_completion_menu.py):
+#   - Tab collects candidates normally; Ctrl-S opens a separate Filter field.
+#   - Scored subsequence matching searches values, labels, then descriptions.
+#   - Up/Down and Tab/Shift-Tab select; Enter inserts without executing.
+#   - Escape, Ctrl-S, or Backspace on an empty query returns to the full menu.
+#   - Ctrl-C dismisses the menu. Cancellation restores the original command.
+#   - Alt-D toggles columns versus rows with descriptions beside each value;
+#     the choice persists for the current shell session.
+#   - Without a completion menu, Ctrl-S retains normal history search and
+#     Alt-D retains its normal editor binding. agr/agrs still discover abbrs.
