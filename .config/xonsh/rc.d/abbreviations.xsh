@@ -69,11 +69,13 @@ _wes_abbreviation_expander = XonshAbbreviationExpander(wes_abbreviations.XONSH_A
 @non_exclusive_completer
 @contextual_command_completer
 def _wes_abbreviation_completer(command):
+    log.info(f"{command=}")
     context = context_from_completion(
         command.prefix + command.suffix,
         len(command.prefix),
         command,
     )
+    log.info(f'{context=}')
     return {
         RichCompletion(
             trigger,
