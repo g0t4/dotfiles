@@ -38,6 +38,7 @@ from wes_xonsh_abbreviations import (
     apply_abbreviation_selection,
     context_from_completion,
     expand_abbreviation_on_space,
+    install_abbreviation_completion_order,
 )
 
 from wes_logging import ensure_logger_is_setup, get_wes_logger, get_console
@@ -76,7 +77,7 @@ def _wes_abbreviation_completer(command):
         command,
     )
     log.info(f'{context=}')
-    return {
+    return (
         RichCompletion(
             trigger,
             prefix_len=len(command.prefix),
@@ -87,10 +88,11 @@ def _wes_abbreviation_completer(command):
         for trigger, expansion in abbreviation_completion_candidates(
             wes_abbreviations.XONSH_ABBREVIATIONS, context
         )
-    }
+    )
 
 
 add_one_completer("wes_abbreviations", _wes_abbreviation_completer, "start")
+install_abbreviation_completion_order()
 
 
 # Enhanced keyboard protocols encode Alt-Shift-A as one CSI sequence instead

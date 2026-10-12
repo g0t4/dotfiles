@@ -11,6 +11,7 @@ from wes_abbreviations import (
     AbbreviationRegistry,
     AbbreviationResult,
     abbreviation_replacement_text,
+    completion_match_key,
 )
 
 
@@ -61,7 +62,7 @@ def abbreviation_completion_candidates(
     *,
     minimum_anywhere_prefix_length=MIN_ANYWHERE_COMPLETION_PREFIX_LENGTH,
 ) -> list[tuple[str, str]]:
-    """Return literal abbreviation triggers applicable to a partial token."""
+    """Return applicable literal triggers in completion-score order."""
     candidates = []
     for abbreviation in registry.abbreviations:
         if abbreviation.internal or not isinstance(abbreviation.trigger, str):
@@ -72,17 +73,58 @@ def abbreviation_completion_candidates(
             and len(context.token) < minimum_anywhere_prefix_length
         ):
             continue
-        if not abbreviation.trigger.startswith(context.token):
-            continue
-        candidate_context = replace(context, token=abbreviation.trigger)
-        if abbreviation.match(candidate_context):
+        key = abbreviation.completion_key(context)
+        if key is not None:
             candidates.append(
                 (
+                    key,
                     abbreviation.trigger,
                     abbreviation_replacement_text(abbreviation),
                 )
             )
-    return candidates
+    return [
+        (trigger, expansion)
+        for _, trigger, expansion in sorted(candidates, key=lambda row: row[0])
+    ]
+
+
+def install_abbreviation_completion_order():
+    """Restore fuzzy abbreviation order after Xonsh sorts merged providers.
+
+    Only swap abbreviation slots within the prefix/non-prefix groups. Other
+    providers retain their order and positions, and all prefixes stay first.
+    """
+    from functools import wraps
+    from xonsh.completer import Completer
+
+    original = Completer.complete_from_context
+    if getattr(original, "_wes_abbreviation_order", False):
+        return
+
+    @wraps(original)
+    def complete_from_context(self, completion_context, old_completer_args=None):
+        completions, prefix_len = original(self, completion_context, old_completer_args)
+        if completion_context is None or completion_context.command is None:
+            return completions, prefix_len
+        query = completion_context.command.prefix
+        ordered = list(completions)
+        for prefix_group in (True, False):
+            indices = [
+                index
+                for index, item in enumerate(ordered)
+                if getattr(item, "provider", None) == "abbreviation"
+                and str(item).lower().startswith(query.lower()) == prefix_group
+            ]
+            ranked = sorted(
+                (ordered[index] for index in indices),
+                key=lambda item: completion_match_key(str(item), query),
+            )
+            for index, item in zip(indices, ranked):
+                ordered[index] = item
+        return tuple(ordered), prefix_len
+
+    complete_from_context._wes_abbreviation_order = True
+    Completer.complete_from_context = complete_from_context
 
 
 def abbreviation_picker_rows(

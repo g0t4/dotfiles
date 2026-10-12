@@ -3,6 +3,7 @@ from dataclasses import replace
 import os
 import re
 import subprocess
+import sys
 from pathlib import Path
 
 import pytest
@@ -24,6 +25,7 @@ from wes_abbreviations import (  # noqa: E402
     AbbreviationResult,
     abbr,
     reset_registry,
+    completion_match_key,
 )
 from wes_xonsh_abbreviations import (  # noqa: E402
     XonshAbbreviationExpander,
@@ -33,6 +35,7 @@ from wes_xonsh_abbreviations import (  # noqa: E402
     expand_abbreviation_on_space,
     command_path_from_args,
     context_from_completion,
+    install_abbreviation_completion_order,
 )
 from wes_fish_bridge import (  # noqa: E402
     FishFunctionError,
@@ -394,6 +397,73 @@ def test_abbreviation_completion_matches_literal_prefix_and_scope():
     ) == []
 
 
+@pytest.mark.parametrize("query", ["tt_u", "devuni", "ttdu", "TTDU"])
+def test_flexible_completion_does_not_expand_partial_tokens(query):
+    registry = AbbreviationRegistry([
+        Abbreviation("tt_devtools_universal", "trash_n_tail universal.log")
+    ])
+    candidates = abbreviation_completion_candidates(registry, context(query))
+    assert bool(candidates) == (query != "TTDU")
+    assert registry.expand(context(query)) is None
+
+
+def test_completion_scoring_prefers_prefix_boundaries_and_consecutive_matches():
+    assert completion_match_key("du_long_prefix", "du") < completion_match_key("dev_universal", "du")
+    assert completion_match_key("dev_universal", "du") < completion_match_key("xxdxxuxx", "du")
+    assert completion_match_key("x_ab", "ab") < completion_match_key("x_a_b", "ab")
+    # Select the later boundary alignment rather than greedily using the first d.
+    assert completion_match_key("xd_dev_universal", "du") < completion_match_key("xdxxxxuxxxxx", "du")
+    assert completion_match_key("dev_universal", "ud") is None
+    assert completion_match_key("DevToolsUniversal", "dtu") is not None
+    assert completion_match_key("DevToolsUniversal", "DTU") is not None
+    assert completion_match_key("devtoolsuniversal", "DTU") is None
+
+
+def test_fuzzy_completion_retains_scope_quote_and_visibility_rules():
+    registry = AbbreviationRegistry([
+        Abbreviation("dev_universal", "shown", commands=("git",)),
+        Abbreviation("debug_universal", "hidden", internal=True),
+        Abbreviation(re.compile("du.*"), "regex"),
+    ])
+    assert abbreviation_completion_candidates(registry, context("git du", command_path=("git",))) == [
+        ("dev_universal", "shown")
+    ]
+    assert abbreviation_completion_candidates(registry, context("ls du", command_path=("ls",))) == []
+    assert abbreviation_completion_candidates(registry, context("git du", command_path=("git",), quoted=True)) == []
+
+
+def test_merged_completion_order_preserves_prefixes_and_other_providers(monkeypatch):
+    from xonsh.built_ins import XSH
+    from xonsh.completer import Completer
+    from xonsh.completers.tools import RichCompletion
+    from xonsh.environ import Env
+    from xonsh.parsers.completion_context import CompletionContextParser
+
+    monkeypatch.setattr(XSH, "env", Env(COMPLETION_QUERY_LIMIT=1000))
+    original = Completer.complete_from_context
+    monkeypatch.setattr(Completer, "complete_from_context", original)
+    install_abbreviation_completion_order()
+    installed = Completer.complete_from_context
+    install_abbreviation_completion_order()
+    assert Completer.complete_from_context is installed
+
+    items = [
+        RichCompletion("xxduxx", provider="abbreviation", prefix_len=2),
+        RichCompletion("dev_universal", provider="abbreviation", prefix_len=2),
+        RichCompletion("du_command", provider="command", prefix_len=2),
+        RichCompletion("xdu_other", provider="command", prefix_len=2),
+        RichCompletion("du_abbr", provider="abbreviation", prefix_len=2),
+    ]
+    monkeypatch.setattr(Completer, "generate_completions", staticmethod(
+        lambda *_args: ((item, 2) for item in items)
+    ))
+    parsed = CompletionContextParser().parse("du", 2, ctx={})
+    merged, plen = Completer().complete_from_context(parsed)
+    assert list(merged) == ["du_abbr", "du_command", "xdu_other", "dev_universal", "xxduxx"]
+    assert plen == 2
+    assert all(item.prefix_len == 2 for item in merged)
+
+
 def test_empty_argument_completion_hides_global_anywhere_abbreviations():
     registry = AbbreviationRegistry(
         [
@@ -464,22 +534,29 @@ def test_xonsh_abbreviation_completer_is_non_exclusive(tmp_path):
     env = os.environ | {
         "XONSH_CONFIG_DIR": str(rc.parents[1]),
         "XDG_STATE_HOME": str(tmp_path),
+        "PYTHONPATH": str(rc.parents[1] / "lib") + os.pathsep + os.environ.get("PYTHONPATH", ""),
     }
     command = (
         f"source {rc}; "
         "from xonsh.completers.tools import is_exclusive_completer; "
-        "print(is_exclusive_completer(__xonsh__.completers['wes_abbreviations']))"
+        "print(is_exclusive_completer(__xonsh__.completers['wes_abbreviations'])); "
+        "from wes_abbreviations import abbr; "
+        "entry = abbr('tt_devtools_universal', 'tail universal.log'); "
+        "from xonsh.completer import Completer; "
+        "c = Completer(); "
+        "items, plen = c.complete('tt_u', 'tt_u', 0, 4, {}, multiline_text='tt_u', cursor_index=4); "
+        "print([(str(item), item.prefix_len) for item in items if getattr(item, 'provider', None) == 'abbreviation'])"
     )
 
     completed = subprocess.run(
-        ["xonsh", "--no-rc", "-c", command],
+        [sys.executable, "-m", "xonsh", "--no-rc", "-c", command],
         capture_output=True,
         text=True,
         env=env,
     )
 
     assert completed.returncode == 0, completed.stderr
-    assert completed.stdout == "False\n"
+    assert completed.stdout == "False\n[('tt_devtools_universal', 4)]\n"
 
 
 def test_command_path_skips_assignments_env_options_and_redirections():

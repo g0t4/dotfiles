@@ -7,7 +7,7 @@ matcher independent makes its edge cases cheap to exercise with pytest.
 
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 import inspect
 from re import Pattern
 from typing import Callable, Literal, Match, TypeAlias
@@ -40,6 +40,56 @@ ExpansionValue: TypeAlias = str | AbbreviationResult
 ExpansionCallback: TypeAlias = Callable[
     [AbbreviationContext, Match[str] | None], ExpansionValue | None
 ]
+
+
+def completion_match_key(trigger: str, query: str) -> tuple | None:
+    """Smart-case subsequence ranking; prefixes always win.
+
+    Find the best alignment, rewarding boundaries and consecutive characters
+    while charging for skipped characters. This is inspired by fzf scoring,
+    rather than a port of its algorithm. Smaller keys rank first.
+    """
+    sensitive = any(char.isupper() for char in query)
+    text = trigger if sensitive else trigger.lower()
+    pattern = query if sensitive else query.lower()
+    if not pattern:
+        return (0, 0, trigger.lower(), trigger)
+    if text.startswith(pattern):
+        return (0, 0, trigger.lower(), trigger)
+
+    # For each query character, keep the best score ending at each position.
+    # A running maximum makes this O(len(trigger) * len(query)).
+    previous: dict[int, int] = {}
+    for query_index, char in enumerate(pattern):
+        current = {}
+        best_gap = None
+        for index, candidate in enumerate(text):
+            prior = previous.get(index - 2)
+            if prior is not None:
+                value = prior + index - 2
+                best_gap = value if best_gap is None else max(best_gap, value)
+            if candidate != char:
+                continue
+            boundary = (
+                index == 0
+                or not trigger[index - 1].isalnum()
+                or (trigger[index - 1].islower() and trigger[index].isupper())
+            )
+            bonus = 16 + (12 if boundary else 0)
+            if query_index == 0:
+                current[index] = bonus - index
+                continue
+            scores = []
+            if index - 1 in previous:
+                scores.append(previous[index - 1] + 10)
+            if best_gap is not None:
+                scores.append(best_gap - index + 1 - 3)
+            if scores:
+                current[index] = max(scores) + bonus
+        if not current:
+            return None
+        previous = current
+    return (1, -max(previous.values()), trigger.lower(), trigger)
 
 
 @dataclass(frozen=True)
@@ -75,6 +125,14 @@ class Abbreviation:
         if self.is_regex:
             return self.trigger.fullmatch(context.token)
         return self.trigger == context.token
+
+    def completion_key(self, context: AbbreviationContext) -> tuple | None:
+        """Score a literal completion while retaining exact expansion rules."""
+        if self.internal or self.is_regex:
+            return None
+        if not self.match(replace(context, token=self.trigger)):
+            return None
+        return completion_match_key(self.trigger, context.token)
 
     def expand(
         self, context: AbbreviationContext, match: Match[str] | bool
