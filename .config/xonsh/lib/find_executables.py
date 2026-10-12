@@ -25,7 +25,7 @@ def find_fish() -> str:
     known_paths = (
         "/opt/homebrew/bin/fish",
         "/usr/bin/fish",
-    ),
+    )
     for path in known_paths:
         if os.path.isfile(path) and os.access(path, os.X_OK):
             return path
@@ -52,4 +52,3 @@ def resolve_executable(name: str) -> str:
         if candidate.is_file() and os.access(candidate, os.X_OK):
             return str(candidate)
     raise FileNotFoundError(f"required executable not found: {name}")
-

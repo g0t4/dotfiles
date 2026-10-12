@@ -12,7 +12,7 @@ from rich.table import Table
 
 from wes_abbreviations import (
     Abbreviation,
-    abbreviation_replacement_text,
+    abbreviation_replacement_texts,
 )
 import wes_abbreviations
 
@@ -41,19 +41,24 @@ def _callback_source(abbreviation: Abbreviation) -> str:
 
 
 def abbreviation_listings(show_fish_functions = False) -> list[AbbreviationListing]:
-    listings = []
     registry = wes_abbreviations.XONSH_ABBREVIATIONS
-    # TODO can we show source code for abbr_from_fish_function so I can search it too
-    #   which means, when I search for `git revert` then the fish IMPL for grev\\d* would match b/c it now includes the text for grev which maps to `git revert`
+    visible = []
     for abbreviation in registry.abbreviations:
         if abbreviation.internal:
             continue
         trigger = _trigger_text(abbreviation)
-        is_xonsh_like_abbr_help = trigger.endswith("??")
-        if is_xonsh_like_abbr_help:
-            # skip ?? abbrs which are merely a hack to add xonsh like ?? to abbrs
+        # skip ?? abbrs which are merely a hack to add xonsh like ?? to abbrs
+        if trigger.endswith("??"):
             continue
-        expansion = abbreviation_replacement_text(abbreviation, show_fish_functions=show_fish_functions)
+        visible.append(abbreviation)
+
+    expansions = abbreviation_replacement_texts(
+        visible, show_fish_functions=show_fish_functions
+    )
+
+    listings = []
+    for abbreviation, expansion in zip(visible, expansions):
+        trigger = _trigger_text(abbreviation)
         scope = " ".join(abbreviation.commands) or abbreviation.position
         search_text = "\n".join(
             (trigger, expansion, scope, _callback_source(abbreviation))

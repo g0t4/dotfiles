@@ -12,7 +12,14 @@ from wes_abbreviation_list import (  # noqa: E402
     abbreviation_listings,
     search_abbreviations,
 )
-from wes_abbreviations import abbr, reset_registry  # noqa: E402
+from wes_abbreviations import (  # noqa: E402
+    Abbreviation,
+    abbr,
+    abbreviation_replacement_text,
+    abbreviation_replacement_texts,
+    reset_registry,
+)
+import wes_abbreviations  # noqa: E402
 
 
 def registry():
@@ -90,3 +97,23 @@ def test_alias_supports_any_prefix_and_help():
     output = io.StringIO()
     abbreviation_list_alias(["--help"], Console(file=output))
     assert output.getvalue().startswith("usage: _abbr_list")
+
+
+def test_replacement_text_preserves_string_and_qualname():
+    abbr_string = Abbreviation("pb", "pbpaste")
+    abbr_callable = Abbreviation("foo", lambda *_: "bar")
+
+    assert abbreviation_replacement_text(abbr_string) == "pbpaste"
+    assert "lambda" in abbreviation_replacement_text(abbr_callable)
+
+
+def test_replacement_texts_batch_matches_single():
+    registry()
+    abbreviations = wes_abbreviations.XONSH_ABBREVIATIONS.abbreviations
+
+    singles = [
+        abbreviation_replacement_text(abbr, show_fish_functions=False)
+        for abbr in abbreviations
+    ]
+    batch = abbreviation_replacement_texts(abbreviations, show_fish_functions=False)
+    assert singles == batch

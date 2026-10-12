@@ -7,6 +7,7 @@ matcher independent makes its edge cases cheap to exercise with pytest.
 
 from __future__ import annotations
 
+from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass, replace
 import inspect
 from re import Pattern
@@ -207,22 +208,94 @@ class AbbreviationRegistry:
         return None
 
 
-def abbreviation_replacement_text(abbreviation: Abbreviation, show_fish_functions = False) -> str:
+def _fish_function_name(replacement: Callable) -> str | None:
+    """Return the fish function name wrapped by an ``abbr_from_fish_function``."""
+    qualname = getattr(replacement, "__qualname__", type(replacement).__name__)
+    if not qualname.startswith("abbr_from_fish_function"):
+        return None
+    closure = getattr(replacement, "__closure__", None)
+    if closure is None:
+        return None
+    try:
+        return closure[0].cell_contents
+    except (IndexError, ValueError):
+        return None
+
+
+_FISH_SOURCE_CACHE: dict[str, str] = {}
+
+
+def _fish_function_source(func_name: str) -> str:
+    """Fetch a fish function body, falling back to a descriptive error."""
+    cached = _FISH_SOURCE_CACHE.get(func_name)
+    if cached is not None:
+        return cached
+    try:
+        from wes_fish_bridge import fish_function
+        source = fish_function("type", "--color=never", func_name)
+    except Exception:
+        source = "failed to find fish function source"
+    _FISH_SOURCE_CACHE[func_name] = source
+    return source
+
+
+def _callback_qualname(replacement: Callable) -> str:
+    return getattr(replacement, "__qualname__", type(replacement).__name__)
+
+
+def abbreviation_replacement_text(
+    abbreviation: Abbreviation, show_fish_functions: bool = False
+) -> str:
     """Describe a replacement without executing a dynamic callback."""
     replacement = abbreviation.replacement
     if isinstance(replacement, str):
         return replacement
-    qualname = getattr(replacement, "__qualname__", type(replacement).__name__)
-    if show_fish_functions and qualname.startswith("abbr_from_fish_function"):
-        try:
-            func_name = replacement.__closure__[0].cell_contents
-            from wes_fish_bridge import fish_function
-            func_source_code = fish_function("type", "--color=never", func_name)
-            return func_source_code
-        except Exception:
-            return "failed to find fish function source"
+    if show_fish_functions:
+        func_name = _fish_function_name(replacement)
+        if func_name is not None:
+            return _fish_function_source(func_name)
+    return _callback_qualname(replacement)
 
-    return qualname
+
+def abbreviation_replacement_texts(
+    abbreviations: list[Abbreviation],
+    show_fish_functions: bool = False,
+) -> list[str]:
+    """Describe many replacements, parallelizing fish source lookups.
+
+    When ``show_fish_functions`` is set, the per-function ``fish type``
+    subprocesses run concurrently instead of one after another.
+    """
+    if not show_fish_functions:
+        return [abbreviation_replacement_text(a) for a in abbreviations]
+
+    fish_names: dict[int, str] = {}
+    results: list[str | None] = [None] * len(abbreviations)
+    for index, abbreviation in enumerate(abbreviations):
+        replacement = abbreviation.replacement
+        if isinstance(replacement, str):
+            results[index] = replacement
+            continue
+        func_name = _fish_function_name(replacement)
+        if func_name is not None:
+            fish_names[index] = func_name
+        else:
+            results[index] = _callback_qualname(replacement)
+
+    if fish_names:
+        workers = min(len(fish_names), 8)
+        with ThreadPoolExecutor(max_workers=workers) as executor:
+            futures = {
+                index: executor.submit(_fish_function_source, name)
+                for index, name in fish_names.items()
+            }
+            for index, future in futures.items():
+                results[index] = future.result()
+
+    return [
+        result if result is not None else "failed to find fish function source"
+        for result in results
+    ]
 
 # TODO move away from consumers using global XONSH_ABBREVIATIONS and instead just pass None for the registry
 #  OR have them import it at least so it is clean where it comes from
