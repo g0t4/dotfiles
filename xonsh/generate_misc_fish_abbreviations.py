@@ -3,7 +3,14 @@
 
 from __future__ import annotations
 
-from setup_paths import ROOT
+import sys
+from pathlib import Path
+
+ROOT = Path(__file__).parents[2]
+
+XONSH_LIB = Path(__file__).parents[1] / ".config" / "xonsh" / "lib"
+sys.path.insert(0, str(XONSH_LIB))
+# sys.path.insert(0, str(ROOT / "xonsh"))
 
 from wes_abbreviations import reset_registry  # noqa: E402
 from wes_misc_abbreviations import register_misc_abbreviations  # noqa: E402
