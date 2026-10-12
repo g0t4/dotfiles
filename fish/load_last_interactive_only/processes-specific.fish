@@ -231,27 +231,27 @@ end
 # *** terraform
 if command -q terraform
 
-    abbr tf terraform
+    abbr tform terraform
 
-    abbr tfv 'terraform validate' # *** favorite
-    abbr tfi 'terraform init'
-    abbr tfimport 'terraform import'
-    abbr tff 'terraform fmt'
-    abbr tfa 'terraform apply'
-    abbr tfp 'terraform plan'
-    abbr tfo 'terraform output'
+    abbr tformv 'terraform validate' # *** favorite
+    abbr tformi 'terraform init'
+    abbr tformimport 'terraform import'
+    abbr tformf 'terraform fmt'
+    abbr tforma 'terraform apply'
+    abbr tformp 'terraform plan'
+    abbr tformo 'terraform output'
 
-    abbr tfshow 'terraform show' # dump all resources in state
+    abbr tformshow 'terraform show' # dump all resources in state
     #
-    abbr tfs 'terraform state' # subcommands
-    abbr tfsl 'terraform state list' # list resources currently in state
-    abbr tfss 'terraform state show' # dump one resource in state
-    abbr tfsrm 'terraform state rm' # remove resource from state
-    abbr tfr 'terraform refresh'
+    abbr tforms 'terraform state' # subcommands
+    abbr tformsl 'terraform state list' # list resources currently in state
+    abbr tformss 'terraform state show' # dump one resource in state
+    abbr tformsrm 'terraform state rm' # remove resource from state
+    abbr tformr 'terraform refresh'
 
-    abbr tfd 'terraform destroy'
-    abbr tft 'terraform taint'
-    abbr tfu 'terraform untaint'
+    abbr tformd 'terraform destroy'
+    abbr tformt 'terraform taint'
+    abbr tformu 'terraform untaint'
 
 end
 
