@@ -8,8 +8,7 @@ from __future__ import annotations
 
 from wes_abbreviations import abbr
 from wes_fish_migration import (
-    unsupported_abbreviation,
-)
+    unsupported_abbreviation, )
 
 # TODO! test this after my work to move away from FISH_FUNCTIONS => over to fish_funcs local variable...
 
@@ -38,10 +37,10 @@ def register_misc_abbreviations():
     abbr('strs_colon', "string split ':'")
     abbr('strs_pipe', "string split '|'")
     abbr('strjoin_lines', "string join '\\n'")
-    abbr('-a', '--all', position="anywhere", commands=('string',))
-    abbr('-q', '--quiet', position="anywhere", commands=('string',))
-    abbr('-r', '--regex', position="anywhere", commands=('string',))
-    abbr('-v', '--invert', position="anywhere", commands=('string',))
+    abbr('-a', '--all', position="anywhere", commands=('string', ))
+    abbr('-q', '--quiet', position="anywhere", commands=('string', ))
+    abbr('-r', '--regex', position="anywhere", commands=('string', ))
+    abbr('-v', '--invert', position="anywhere", commands=('string', ))
     # A trailing cursor marker puts Xonsh's cursor at the end, matching Fish's
     # --set-cursor behavior when the replacement has no embedded `%`.
     abbr('strace_process', 'strace -f -e trace=process bash%', cursor_marker="%")
@@ -91,3 +90,8 @@ def register_misc_abbreviations():
     abbr('unzipl', 'unzip -l')
     abbr('trim_trailing_new_line', 'perl -pe "chomp if eof" -i')
     abbr('whicha', 'which -a')
+
+    abbr('shutdown', 'sudo shutdown -h now')  # time needed
+    # sudo shutdown -r now # also works for reboot but needs time then
+    abbr('reboot', 'sudo reboot')  # time not needed
+    abbr('restart', 'sudo reboot')

@@ -118,8 +118,3 @@ function secure_entry_who
         echo "Secure Input not enabled."
     end
 end
-
-abbr 'shutdown' 'sudo shutdown -h now' # time needed
-# sudo shutdown -r now # also works for reboot but needs time then
-abbr 'reboot' 'sudo reboot'  # time not needed
-abbr 'restart' 'sudo reboot'

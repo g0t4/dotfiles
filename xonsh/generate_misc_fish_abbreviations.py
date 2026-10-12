@@ -6,7 +6,7 @@ from __future__ import annotations
 import sys
 from pathlib import Path
 
-ROOT = Path(__file__).parents[2]
+ROOT = Path(__file__).parents[1]
 
 XONSH_LIB = Path(__file__).parents[1] / ".config" / "xonsh" / "lib"
 sys.path.insert(0, str(XONSH_LIB))
