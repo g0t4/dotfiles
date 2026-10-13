@@ -14,6 +14,7 @@ from rich.syntax import Syntax
 from rich.text import Text
 
 import wes_abbreviations
+from wes_syntax_theme import syntax_theme
 from wes_abbreviations import (
     Abbreviation,
     AbbreviationContext,
@@ -108,7 +109,7 @@ def render_abbreviation_help(
         except (OSError, TypeError):
             source = None
         if source:
-            renderables.append(Syntax(source.rstrip(), "python", theme="ansi_dark"))
+            renderables.append(Syntax(source.rstrip(), "python", theme=syntax_theme(), background_color="default"))
 
     console.print(
         Panel(

@@ -19,6 +19,7 @@ from wes_fish_bridge import (
     fish_function_command,
 )
 from wes_abbreviations import abbr
+from wes_syntax_theme import syntax_theme
 from wes_logging import get_wes_logger
 log = get_wes_logger(__name__)
 
@@ -118,7 +119,7 @@ def wrap_fish_functions(aliases, function_names):
             wrapper = getattr(wrapper, "func", wrapper)
             console.print(Syntax(
                 textwrap.dedent(inspect.getsource(wrapper)).rstrip(),
-                "python", theme="ansi_dark", background_color="default",
+                "python", theme=syntax_theme(), background_color="default",
             ))
         except (KeyError, OSError, TypeError) as error:
             console.print(Text(f"Source unavailable: {error}", style="dim"))

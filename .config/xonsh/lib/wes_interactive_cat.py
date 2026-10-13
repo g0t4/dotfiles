@@ -12,10 +12,11 @@ from pathlib import Path
 class InteractiveCat:
     """Keep cat semantics while making simple interactive operands richer."""
 
-    def __init__(self, *, env, run=subprocess.run, which=shutil.which):
+    def __init__(self, *, env, run=subprocess.run, which=shutil.which, bat=None):
         self._env = env
         self._run = run
         self._which = which
+        self._bat = bat
 
     def _environment(self):
         return self._env.detype()
@@ -68,6 +69,8 @@ class InteractiveCat:
         return (stdout or sys.stdout).isatty()
 
     def _show_file(self, path, *, stdin=None, stdout=None, stderr=None, spec=None):
+        if self._bat is not None:
+            return self._bat(["--", str(path)], stdin=stdin, stdout=stdout, stderr=stderr, spec=spec)
         executable = self._command("bat", "batcat")
         if executable is None:
             return self._stock_cat(

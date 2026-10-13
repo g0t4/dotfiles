@@ -42,3 +42,32 @@ The optional Rich renderer consumes the same custom Pygments style.
 For the first tuning pass, compare comment readability, keyword saturation,
 string brightness, and punctuation contrast. Change one role at a time against
 the same sample, then verify it on a real file.
+
+## Daily use in Xonsh
+
+Interactive Xonsh loads `rc.d/syntax-theme.xsh` to make `bat` and interactive
+`cat` use this palette for Python (`.py`, `.pyi`) and Lua (`.lua`). Enable it in
+an existing REPL from the dotfiles root:
+
+```xonsh
+source .config/xonsh/rc.d/syntax-theme.xsh
+bat tools/syntax-lab/examples/sample.py
+bat tools/syntax-lab/examples/sample.lua
+cat tools/syntax-lab/examples/sample.py
+echo 'print("hello\\n")' | bat -pl py
+bat-stock tools/syntax-lab/examples/sample.py
+```
+
+The wrapper supports filenames, multiple files, stdin with `-l py`/`-l lua`,
+`-p`/`-pp`/`--plain`, `-pl`, `-n`/`--number`, `--style=plain`/`numbers`,
+`--color=auto`/`always`/`never`, and `--paging=never`. It uses plain output with
+no pager by default, matching this repo's bat config. Other languages and options
+(including headers, themes, ranges, and paging) delegate to stock bat with the
+original arguments and stdin. `bat-stock` bypasses the wrapper explicitly.
+Piped/redirected output remains plain unless color is forced. The wrapper is
+interactive-only; noninteractive Xonsh commands retain stock bat/cat.
+
+Existing command transforms that append `| bat -l json` or `yaml` naturally reach
+the wrapper and delegate to stock bat. Python source previews in abbreviation
+help and Fish-wrapper help use this same palette through Rich. Palette edits
+apply to the next invocation, without reloading Xonsh.
