@@ -34,6 +34,12 @@ reminder_abbr('$LINES', 'shutil.get_terminal_size().lines', position="anywhere")
 reminder_abbr('$ROWS', 'shutil.get_terminal_size().lines', position="anywhere")
 reminder_abbr('$COLUMNS', 'shutil.get_terminal_size().columns', position="anywhere")
 
+def _human_size(num):
+    for unit in ['B', 'K', 'M', 'G', 'T']:
+        if num < 1024:
+            return f"{num:.1f}{unit}"
+        num /= 1024
+    return f"{num:.1f}P"
 
 # abbr("files_sorted_by_size", "gfind . -type f -printf '%s %p\\n' | grep -Ev 'dylib|.rag|.venv|node_modules|.git|.mp4|uv.lock|./tags|package-lock.json|.cpython' | sort -nr")
 def _files_sorted_by_size():
@@ -44,13 +50,5 @@ def _files_sorted_by_size():
     data.sort(key=lambda x: x[0], reverse=False)
     for size, path in data:
         print(f"{_human_size(size):>10} {path}")
-
-def _human_size(num):
-    """Convert bytes to human-readable string."""
-    for unit in ['B', 'K', 'M', 'G', 'T']:
-        if num < 1024:
-            return f"{num:.1f}{unit}"
-        num /= 1024
-    return f"{num:.1f}P"
 
 aliases['files_sorted_by_size'] = _files_sorted_by_size
