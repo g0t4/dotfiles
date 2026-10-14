@@ -1,7 +1,7 @@
 #!/usr/bin/env -S uv run --script
 # /// script
 # requires-python = ">=3.12"
-# dependencies = ["pygments>=2.19,<3", "rich>=13.9,<15"]
+# dependencies = ["pygments>=2.19,<3", "rich>=13.9,<15", "xonsh>=0.24,<0.25"]
 # ///
 """Use our theme for Python/Lua/Markdown views; delegate other requests to bat."""
 
@@ -16,7 +16,7 @@ from pygments.lexers import get_lexer_by_name
 
 from highlight import ROOT, load_style, style_for_lexer
 
-LANGUAGES = {"py": "python", "python": "python", "python3": "python", "lua": "lua", "md": "markdown", "markdown": "markdown"}
+LANGUAGES = {"py": "python", "python": "python", "python3": "python", "lua": "lua", "md": "markdown", "markdown": "markdown", "xsh": "xonsh", "xonsh": "xonsh"}
 
 
 def parse(args):
@@ -68,7 +68,7 @@ def parse(args):
                 return None
             grayscale = value == "wes-gray"
     files = files or ["-"]
-    languages = [language or {".py": "python", ".pyi": "python", ".lua": "lua", ".md": "markdown", ".markdown": "markdown"}.get(Path(file).suffix.lower()) for file in files]
+    languages = [language or ("xonsh" if Path(file).name.lower().endswith('xonshrc') else {".py": "python", ".pyi": "python", ".lua": "lua", ".md": "markdown", ".markdown": "markdown", ".xsh": "xonsh"}.get(Path(file).suffix.lower())) for file in files]
     if not all(languages):
         return None
     return files, languages, color, numbers, grayscale

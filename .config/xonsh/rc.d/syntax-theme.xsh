@@ -1,4 +1,4 @@
-"""Daily Python/Lua/Markdown viewers; safe to source again in a running REPL."""
+"""Daily Python/Lua/Markdown/Xonsh viewers; safe to source again in a REPL."""
 
 import shutil
 from xonsh.built_ins import XSH

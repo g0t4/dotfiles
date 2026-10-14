@@ -76,3 +76,29 @@ def test_reload_file_installs_aliases_and_routes_a_real_pipeline():
     result = subprocess.run([sys.executable, '-m', 'xonsh', '--no-rc', '-c', command], capture_output=True, text=True, env={**os.environ, 'PYTHONPATH': str(ROOT / '.config/xonsh/lib')})
     assert result.returncode == 0, result.stderr
     assert '\x1b[38;2;' in result.stdout
+
+
+def test_xonsh_native_lexer_and_relative_paths(tmp_path):
+    from pygments import lex
+    from pygments.lexers import get_lexer_by_name
+    from pygments.token import Name
+    from xonsh.pyghooks import XonshLexer
+
+    lexer = get_lexer_by_name('xonsh')
+    assert isinstance(lexer, XonshLexer)
+    for path in ('foo.py', './foo.py', '/tmp/foo.py'):
+        source = f'value = $(cat {path})\n'
+        tokens = list(lex(source, lexer))
+        assert any(token == Name.Builtin and text == 'cat' for token, text in tokens)
+        assert ''.join(text for _, text in tokens) == source
+    marker = tmp_path / 'must-not-exist'
+    sample = tmp_path / 'sample.xsh'
+    sample.write_text(f'import os\n$[touch {marker}]\n')
+    result = run_bat('--color=always', str(sample))
+    assert result.returncode == 0, result.stderr
+    assert '\x1b[38;2;' in result.stdout
+    assert not marker.exists()
+    for language in ('xsh', 'xonsh'):
+        result = run_bat('-pl', language, '--color=always', input='value = $(cat foo.py)\n')
+        assert result.returncode == 0, result.stderr
+        assert '38;2;142;203;187mcat' in result.stdout

@@ -1,7 +1,7 @@
 #!/usr/bin/env -S uv run --script
 # /// script
 # requires-python = ">=3.12"
-# dependencies = ["pygments>=2.19,<3", "rich>=13.9,<15", "pillow>=11,<13", "colorspacious>=1.1.2,<2"]
+# dependencies = ["pygments>=2.19,<3", "rich>=13.9,<15", "pillow>=11,<13", "colorspacious>=1.1.2,<2", "xonsh>=0.24,<0.25"]
 # ///
 """Editable Pygments theme; preview code without running it."""
 
@@ -132,7 +132,7 @@ def main():
                 if role != "background":
                     console.print(f"{role:12} {color}  {contrast(color, colors['background']):4.1f}:1  AaBb 0123 # sample", style=color)
             return
-        example = {"lua": "sample.lua", "md": "sample.md", "markdown": "sample.md"}.get(args.language, "sample.py")
+        example = {"lua": "sample.lua", "md": "sample.md", "markdown": "sample.md", "xonsh": "sample.xsh", "xsh": "sample.xsh"}.get(args.language, "sample.py")
         path = Path(args.file) if args.file and args.file != "-" else ROOT / "examples" / example
         code = sys.stdin.read() if args.file == "-" else path.read_text()
         lexer = get_lexer_by_name(args.language) if args.language else get_lexer_for_filename(str(path))

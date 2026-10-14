@@ -187,3 +187,29 @@ Sweep builders live in `explorer.py`'s `SWEEPS` registry and return labeled
 exports are shared, so new sweep techniques can use the same machinery. Exports
 contain numbered palette JSON files and a manifest with labels and blur radii.
 These explorer flags belong to `highlight.py`; the daily `bat` wrapper is unchanged.
+
+## Xonsh
+
+Xonsh source now uses Xonsh's own Pygments plugin (`xonsh.pyghooks.XonshLexer`)
+with our palette. `.xsh`, filenames ending in `xonshrc`, and `-l xsh`/`xonsh`
+route through it in the daily wrapper. It also works in the preview tool, sweeps,
+and Markdown fences labeled `xonsh` or `xsh`.
+
+```xonsh
+bat .config/xonsh/rc.d/learn.xsh
+bat -pl xonsh .config/xonsh/rc.d/learn.xsh
+```
+
+```sh
+uv run tools/syntax-lab/highlight.py -l xonsh
+uv run tools/syntax-lab/highlight.py .config/xonsh/rc.d/learn.xsh --sweep background
+```
+
+Explicit subprocess constructs such as `$(cat foo.py)` and `$[cat ./foo.py]`
+enter shell mode in the native lexer. Bare commands in whole-file highlighting
+have limitations and may be classified as Python names; recognition can also
+depend on the environment. Relative/absolute paths are included in the specimen
+to make these cases visible as we iterate. Highlighting does not execute source.
+Our normal Xonsh views no longer depend on the Sublime grammar. Stock bat remains
+available for unsupported options and through `bat-stock`; its grammar is retained
+for that fallback.
