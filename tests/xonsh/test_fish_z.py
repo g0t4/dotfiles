@@ -1,10 +1,74 @@
 import test_setup
 
 import subprocess
+from pathlib import Path
 
 import pytest
 
 from wes_fish_z import FishZ, FishZError  # noqa: E402
+
+
+@pytest.fixture
+def z_alias(monkeypatch):
+    from xonsh.built_ins import XSH
+    from xonsh.events import events
+
+    aliases = {}
+    monkeypatch.setattr(type(XSH), "aliases", property(lambda self: aliases))
+    namespace = {}
+    source = Path(test_setup.ROOT / ".config/xonsh/rc.d/z.xsh").read_text()
+    exec(compile(source, "z.xsh", "exec"), namespace)
+    events.on_chdir.discard(namespace["_wes_z_record_directory"])
+    return namespace
+
+
+@pytest.mark.parametrize("url", [
+    "https://github.com/QwenLM/Qwen3-ASR.git",
+    "git@github.com:QwenLM/Qwen3-ASR.git",
+])
+def test_z_repository_url_jumps_without_pulling_existing_clone(z_alias, tmp_path, url):
+    calls = []
+
+    def wcl(args, **kwargs):
+        calls.append(args)
+        print(tmp_path, file=kwargs["stdout"])
+        return 0
+
+    z_alias["aliases"]["wcl"] = [wcl]
+    z_alias["_xonsh_cd"] = lambda args: (calls.append(args), None, 0)
+    assert z_alias["_wes_z_alias"]([url]) == 0
+    assert calls == [["--path-only", url], [str(tmp_path)]]
+
+
+def test_z_repository_url_clones_missing_repo_and_requests_cd(z_alias, tmp_path):
+    url = "https://github.com/QwenLM/Qwen3-ASR.git"
+    calls = []
+
+    def wcl(args, **kwargs):
+        calls.append(args)
+        if "--path-only" in args:
+            print(tmp_path / "missing", file=kwargs["stdout"])
+            return 0
+        return 3
+
+    z_alias["aliases"]["wcl"] = wcl
+    assert z_alias["_wes_z_alias"]([url]) == 3
+    assert calls == [["--path-only", url], ["--cd", url]]
+
+
+def test_z_repository_path_lookup_failure_does_not_cd_or_clone(z_alias):
+    calls = []
+    z_alias["aliases"]["wcl"] = lambda args, **_: (calls.append(args) or 2)
+    assert z_alias["_wes_z_alias"](["https://github.com/org/repo.git"]) == 2
+    assert len(calls) == 1
+
+
+def test_z_plain_query_still_resolves_fish_history(z_alias, tmp_path):
+    calls = []
+    z_alias["_wes_fish_z"].resolve = lambda args: (calls.append(args) or tmp_path)
+    z_alias["_xonsh_cd"] = lambda args: (calls.append(args), None, 0)
+    assert z_alias["_wes_z_alias"](["Qwen3-ASR"]) == 0
+    assert calls == [["Qwen3-ASR"], [str(tmp_path)]]
 
 
 class RecordingRunner:

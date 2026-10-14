@@ -7,7 +7,10 @@ aliases = XSH.aliases
 
 import asyncio
 import os
+from pathlib import Path
+import re
 import sys
+import tempfile
 
 from xonsh.dirstack import cd as _xonsh_cd
 
@@ -41,6 +44,34 @@ _wes_z_non_jumping_options = {
 def _wes_z_alias(args, stdin=None, stdout=None, stderr=None, **_):
     output_stream = stdout or sys.stdout
     error_stream = stderr or sys.stderr
+
+    if any(re.search(r"(?:https://[^/]+/.+|git@[^:]+:.+)", argument) for argument in args):
+        wcl = aliases.get("wcl")
+        if isinstance(wcl, list) and len(wcl) == 1:
+            wcl = wcl[0]
+        if not callable(wcl):
+            print("z: wcl alias is unavailable", file=error_stream)
+            return 1
+        with tempfile.TemporaryFile(mode="w+") as path_output:
+            return_code = wcl(
+                ["--path-only", *args], stdin=stdin, stdout=path_output, stderr=stderr
+            )
+            path_output.seek(0)
+            raw_path = path_output.read().strip()
+        if return_code:
+            return return_code
+        if not raw_path:
+            print("z: wcl returned no repository path", file=error_stream)
+            return 1
+        destination = Path(raw_path).expanduser()
+        if not destination.is_dir():
+            return wcl(["--cd", *args], stdin=stdin, stdout=stdout, stderr=stderr)
+        cd_stdout, cd_stderr, return_code = _xonsh_cd([str(destination)])
+        if cd_stdout:
+            print(cd_stdout, end="", file=output_stream)
+        if cd_stderr:
+            print(cd_stderr, end="", file=error_stream)
+        return return_code
 
     if any(argument in _wes_z_non_jumping_options for argument in args):
         return _wes_fish_z.run(
