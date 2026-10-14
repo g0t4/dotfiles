@@ -34,3 +34,5 @@ reminder_abbr('$LINES', 'shutil.get_terminal_size().lines', position="anywhere")
 reminder_abbr('$ROWS', 'shutil.get_terminal_size().lines', position="anywhere")
 reminder_abbr('$COLUMNS', 'shutil.get_terminal_size().columns', position="anywhere")
 
+
+abbr("files_sorted_by_size", "gfind . -type f -printf '%s %p\\n' | grep -Ev 'dylib|.rag|.venv|node_modules|.git|.mp4|uv.lock|./tags|package-lock.json|.cpython' | sort -nr")
