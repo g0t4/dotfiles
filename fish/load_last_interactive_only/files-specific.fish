@@ -468,14 +468,27 @@ if status --is-interactive
     end
 
     function cd
-        set -l path $argv[1]
-        if test -f $path; and test (count $argv) -eq 1
-            # only override IF path is a file and no other args, else let _original_cd handle it (including handling failures for multiple args)
-            # PRN handle other file types as needed, not sure yet what might arise, I just wanted files for now
-            _original_cd (dirname $path)
-        else
-            # calls here if path is empty, multi args, or single arg that is not a file (i.e. a dir)
+        if test (count $argv) -ne 1
+            # if no args => cd $HOME
+            # if > 1 args => might be using -P or smth like it so do original cd
             _original_cd $argv
+            return
+        end
+
+        set -l path $argv[1]
+        if test $path = '-'
+            or test $path = '.'
+            or test $path = '..'
+            or test -d $path
+            # forward to original cd
+            _original_cd $argv
+        else
+            # all remaining cases assume we want to cd to dir of the path
+            # all file types (char devices, block devices, regular files, etc)
+            # + non-existant paths too where just the last filename part is non-existant (cd to existing dir above it)
+            # FYI if anything have this fish impl call into my python impl and use it instead of writing fish code for this too
+            # since I already have a xonsh python impl anyways
+            _original_cd (dirname $path)
         end
     end
 
