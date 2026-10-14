@@ -44,10 +44,11 @@ def _human_size(num):
 # abbr("files_sorted_by_size", "gfind . -type f -printf '%s %p\\n' | grep -Ev 'dylib|.rag|.venv|node_modules|.git|.mp4|uv.lock|./tags|package-lock.json|.cpython' | sort -nr")
 def _files_sorted_by_size():
     """List files sorted by size with human-readable sizes."""
+    # use this to find biggest files in a repo, i.e. to help me think about limits on run_xonsh/run_process STDOUT/STDERR... although this will be useful otherwise
     cmd = ['fd', '-H', '-t', 'f']
     files = subprocess.check_output(cmd, text=True).splitlines()
     data = [(os.path.getsize(f), f) for f in files]
-    data.sort(key=lambda x: x[0], reverse=False)
+    data.sort()
     for size, path in data:
         print(f"{_human_size(size):>10} {path}")
 
