@@ -12,9 +12,9 @@ import sys
 
 from pygments import highlight
 from pygments.formatters import TerminalTrueColorFormatter
-from pygments.lexers import get_lexer_by_name
 
 from highlight import ROOT, load_style, style_for_lexer
+from wes_syntax import source_lexer
 
 LANGUAGES = {"py": "python", "python": "python", "python3": "python", "lua": "lua", "md": "markdown", "markdown": "markdown", "xsh": "xonsh", "xonsh": "xonsh"}
 
@@ -99,7 +99,7 @@ def main(args=None):
         try:
             code = sys.stdin.read() if file == "-" else Path(file).read_text()
             if colored:
-                lexer = get_lexer_by_name(language)
+                lexer = source_lexer(language)
                 sys.stdout.write(highlight(code, lexer, TerminalTrueColorFormatter(style=style_for_lexer(lexer, colors, style), linenos=numbers)))
             elif numbers:
                 sys.stdout.writelines(f"{index:6}  {line}" for index, line in enumerate(code.splitlines(keepends=True), 1))

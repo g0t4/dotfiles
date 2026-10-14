@@ -1,16 +1,1 @@
-{
-  "background": "#1f2229",
-  "text": "#cecece",
-  "comment": "#929aaa",
-  "keyword": "#b394e3",
-  "function": "#82b0df",
-  "type": "#d9bd83",
-  "string": "#acd095",
-  "number": "#dfa477",
-  "builtin": "#8ecbbb",
-  "decorator": "#8ecbbb",
-  "operator": "#b4bbc5",
-  "punctuation": "#a0a8b5",
-  "escape": "#d9bd83",
-  "error": "#ee7e78"
-}
+wes_syntax/palette.json

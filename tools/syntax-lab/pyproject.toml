@@ -1,0 +1,16 @@
+[build-system]
+requires = ["setuptools>=80"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "wes-syntax"
+version = "0.1.0"
+description = "Wes's shared Pygments palette and Rich source rendering"
+requires-python = ">=3.12"
+dependencies = ["pygments>=2.19,<3", "rich>=13.9,<15", "xonsh>=0.24,<0.25"]
+
+[tool.setuptools]
+packages = ["wes_syntax"]
+
+[tool.setuptools.package-data]
+wes_syntax = ["palette.json"]

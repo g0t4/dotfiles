@@ -190,8 +190,10 @@ These explorer flags belong to `highlight.py`; the daily `bat` wrapper is unchan
 
 ## Xonsh
 
-Xonsh source now uses Xonsh's own Pygments plugin (`xonsh.pyghooks.XonshLexer`)
-with our palette. `.xsh`, filenames ending in `xonshrc`, and `-l xsh`/`xonsh`
+Xonsh source uses Xonsh's own Pygments plugin (`xonsh.pyghooks.XonshLexer`)
+with our palette and a small `SourceXonshLexer` subclass. It ends import states
+at ordinary newlines so following Python statements aren't mistaken for module
+names; explicit backslash continuations remain supported. `.xsh`, filenames ending in `xonshrc`, and `-l xsh`/`xonsh`
 route through it in the daily wrapper. It also works in the preview tool, sweeps,
 and Markdown fences labeled `xonsh` or `xsh`.
 
@@ -213,3 +215,38 @@ to make these cases visible as we iterate. Highlighting does not execute source.
 Our normal Xonsh views no longer depend on the Sublime grammar. Stock bat remains
 available for unsupported options and through `bat-stock`; its grammar is retained
 for that fallback.
+
+## Using the library in another Python tool
+
+Install the local package into that tool's environment, preferably editable:
+
+```sh
+uv pip install --python /path/to/tool/.venv/bin/python -e "$WES_DOTFILES/tools/syntax-lab"
+```
+
+Or declare it in the tool's `pyproject.toml` (as the chat viewer does):
+
+```toml
+[project]
+dependencies = ["wes-syntax"] # alongside the tool's existing dependencies
+
+[tool.uv.sources]
+wes-syntax = { path = "../dotfiles/tools/syntax-lab", editable = true }
+```
+
+```python
+from rich.console import Console
+from wes_syntax import syntax
+
+Console().print(syntax(markdown_text, "markdown", word_wrap=True))
+Console().print(syntax(python_source, "python", grayscale=True))
+```
+
+`syntax()` returns a Rich `Syntax` renderable, usable inside panels/groups/trees.
+It preserves the terminal background and forwards Rich options such as
+`word_wrap` and `line_numbers`. `load_style()`, `make_style()`,
+`style_for_lexer()`, `source_lexer()`, and `grayscale_color()` are available for lower-level uses.
+`palette=` accepts another palette JSON path. The CLI and library share the same
+implementation; the existing `palette.json` path is a symlink to the packaged
+palette in `wes_syntax/palette.json`. Editable installs read palette edits on
+each new renderable. No explorer/image dependencies are needed by the library.

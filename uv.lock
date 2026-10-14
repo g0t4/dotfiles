@@ -432,6 +432,7 @@ dependencies = [
     { name = "transformers" },
     { name = "ty" },
     { name = "typer" },
+    { name = "wes-syntax" },
     { name = "xonsh" },
     { name = "yapf" },
 ]
@@ -477,6 +478,7 @@ requires-dist = [
     { name = "transformers", specifier = ">=4.52.4" },
     { name = "ty", specifier = ">=0.0.1a13" },
     { name = "typer", specifier = ">=0.15.3" },
+    { name = "wes-syntax", editable = "tools/syntax-lab" },
     { name = "xonsh", specifier = ">=0.24.2" },
     { name = "yapf", specifier = ">=0.43.0" },
 ]
@@ -2674,6 +2676,23 @@ wheels = [
     { url = "https://files.pythonhosted.org/packages/b6/19/6ab716d02a3b068fbbeb6face8a7423156e12c446975312f1c7c0f4badab/websockets-14.1-cp313-cp313-win32.whl", hash = "sha256:0d4290d559d68288da9f444089fd82490c8d2744309113fc26e2da6e48b65da6", size = 162834, upload-time = "2024-11-13T07:10:49.149Z" },
     { url = "https://files.pythonhosted.org/packages/6c/fd/ab6b7676ba712f2fc89d1347a4b5bdc6aa130de10404071f2b2606450209/websockets-14.1-cp313-cp313-win_amd64.whl", hash = "sha256:8621a07991add373c3c5c2cf89e1d277e49dc82ed72c75e3afc74bd0acc446f0", size = 163277, upload-time = "2024-11-13T07:10:50.561Z" },
     { url = "https://files.pythonhosted.org/packages/b0/0b/c7e5d11020242984d9d37990310520ed663b942333b83a033c2f20191113/websockets-14.1-py3-none-any.whl", hash = "sha256:4d4fc827a20abe6d544a119896f6b78ee13fe81cbfef416f3f2ddf09a03f0e2e", size = 156277, upload-time = "2024-11-13T07:11:27.848Z" },
+]
+
+[[package]]
+name = "wes-syntax"
+version = "0.1.0"
+source = { editable = "tools/syntax-lab" }
+dependencies = [
+    { name = "pygments" },
+    { name = "rich" },
+    { name = "xonsh" },
+]
+
+[package.metadata]
+requires-dist = [
+    { name = "pygments", specifier = ">=2.19,<3" },
+    { name = "rich", specifier = ">=13.9,<15" },
+    { name = "xonsh", specifier = ">=0.24,<0.25" },
 ]
 
 [[package]]

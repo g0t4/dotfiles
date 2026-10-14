@@ -102,3 +102,20 @@ def test_xonsh_native_lexer_and_relative_paths(tmp_path):
         result = run_bat('-pl', language, '--color=always', input='value = $(cat foo.py)\n')
         assert result.returncode == 0, result.stderr
         assert '38;2;142;203;187mcat' in result.stdout
+
+
+def test_xonsh_python_tokens_match_python_after_imports():
+    from pygments import lex
+    from wes_syntax import source_lexer
+
+    loop = 'for i in range(5):\n    print(i)\n'
+    for prefix in ('import os\n', 'import os   \n', 'from pathlib import Path\n', 'from pathlib import Path   \n', 'import os, \\\n    sys\n', 'from pathlib import (\n    Path,\n)\n'):
+        tokens = list(lex(prefix + loop, source_lexer('xonsh')))
+        # Compare just the loop, retaining token types and whitespace exactly.
+        offset = 0
+        actual = []
+        for token, value in tokens:
+            if offset >= len(prefix):
+                actual.append((token, value))
+            offset += len(value)
+        assert actual == list(lex(loop, source_lexer('python'))), prefix
