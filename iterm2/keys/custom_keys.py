@@ -68,14 +68,17 @@ CUSTOM_KEYS = {
     "alt+c",
     "alt+shift+C",
 
-    "alt+g", # 0xE674
-    "alt+shift+G",
+    # * FYI make sure to set key char (D) in this case to upper case when using `shift` modifier... doing just `shift+d` won't work, nor will just `D`... must be `shift+D`
+    "cmd+ctrl+shift+D", # debugger
 
     "alt+e", # change prompt to enumerate
     "alt+shift+E", # enumerate w/o changing prompt
 
-    # * FYI make sure to set key char (D) in this case to upper case when using `shift` modifier... doing just `shift+d` won't work, nor will just `D`... must be `shift+D`
-    "cmd+ctrl+shift+D", # debugger
+    "alt+g", # 0xE674
+    "alt+shift+G",
+
+    "alt+p", # change prompt to enumerate
+    "alt+shift+P", # enumerate w/o changing prompt
 
     # maybes:
 
