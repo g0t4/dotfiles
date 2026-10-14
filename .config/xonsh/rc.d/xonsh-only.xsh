@@ -1,3 +1,4 @@
+import os, subprocess
 from pathlib import Path
 from xonsh.built_ins import XSH
 
@@ -37,12 +38,7 @@ reminder_abbr('$COLUMNS', 'shutil.get_terminal_size().columns', position="anywhe
 # abbr("files_sorted_by_size", "gfind . -type f -printf '%s %p\\n' | grep -Ev 'dylib|.rag|.venv|node_modules|.git|.mp4|uv.lock|./tags|package-lock.json|.cpython' | sort -nr")
 def _files_sorted_by_size():
     """List files sorted by size with human-readable sizes."""
-    import os, subprocess
-    exclusions = ['*.dylib', '*.rag', '.venv', 'node_modules', '.git', '*.mp4', 'uv.lock',
-'tags', 'package-lock.json', '*.cpython']
     cmd = ['fd', '-H', '-t', 'f']
-    for pattern in exclusions:
-        cmd += ['-E', pattern]
     files = subprocess.check_output(cmd, text=True).splitlines()
     data = [(os.path.getsize(f), f) for f in files]
     data.sort(key=lambda x: x[0], reverse=False)
