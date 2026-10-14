@@ -1,5 +1,6 @@
 # helpers (idea is always use pbcopy/paste -- see below)
 abbr pwdcp cppath # reminder, hopefully cppath stick with me but we shall see..
+abbr prdcp "prd | pbcopy"
 # I am tempted to leave pwdcp and let it take the relative path arg too :), basically alias cppath without abbr expansion
 
 function cppath

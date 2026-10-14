@@ -2,28 +2,13 @@
 -- * think of this as devtools for neovim
 -- FYI move stable ideas into devtools.nvim repo
 
+-- * cmdline abbreviations
+vim.cmd.cnoreabbrev('pwdcp', 'CopyFileSystemLink') -- I use pwdcp for workdir in command line (pwd | pbcopy)
+--   in neovim I am usually referring to the current buffer and its file path (hence using that with pwdcp)
+vim.cmd.cnoreabbrev('prdcp', 'DevCopyRelativePath') -- prd == pwd relative to repo root.. use that with prdcp to trigger copying the buffer's file path relative to repo root
+
 local ENABLE_CUSTOM_ABBRS_IN_CMDLINE = false -- *** toggle on/off
 if ENABLE_CUSTOM_ABBRS_IN_CMDLINE then
-    local abbrevs = {
-        i = {
-            -- btw = "by the way",
-            idk = "I don't know",
-        },
-        c = {
-            -- lnvim = "Dump vim.api.nvim_",
-
-            -- wls = "Dump vim.api.nvim_list_wins()",
-            -- bls = "Dump vim.api.nvim_list_bufs()",
-            -- bls = "buffers",
-            -- tls = "tabs",
-        }
-    }
-
-    for mode, defs in pairs(abbrevs) do
-        for lhs, rhs in pairs(defs) do
-            vim.cmd(string.format("%sabbrev %s %s", mode, lhs, rhs))
-        end
-    end
 
     -- * space-less expansions (abbreviations)
     -- FYI I am actually not convinced anymore that this is the best idea... i.e. when I try to type `nmap` I often get `nmapp` ...

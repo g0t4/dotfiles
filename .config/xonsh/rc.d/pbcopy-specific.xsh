@@ -145,6 +145,8 @@ def _pbcommand_alias(args, stdout=None, stderr=None, **_):
 aliases["cppath"] = _cppath_alias
 aliases["pwdcp"] = _cppath_alias
 
+abbr("prdcp", "prd | pbcopy")
+
 abbr("pb", "pbpaste")
 abbr("pbj", "pbpaste | jq")
 #
