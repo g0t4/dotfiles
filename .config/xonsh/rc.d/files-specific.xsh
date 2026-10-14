@@ -100,8 +100,9 @@ _files_original_cd = aliases["cd"]
 
 def _files_cd(args, stdin=None, **_):
     adjusted = list(args)
-    if len(adjusted) == 1 and os.path.isfile(os.path.expanduser(adjusted[0])):
-        adjusted[0] = os.path.dirname(os.path.expanduser(adjusted[0])) or "."
+    if len(adjusted) == 1:
+        if os.path.isfile(os.path.expanduser(adjusted[0])):
+            adjusted[0] = os.path.dirname(os.path.expanduser(adjusted[0])) or "."
     olddir = os.getcwd()
     path_before = [str(entry) for entry in $PATH]
     log.info(
