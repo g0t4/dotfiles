@@ -186,6 +186,31 @@ def _wes_keybindings(bindings: KeyBindings, prompter: PromptSession, **_):
         run_in_terminal(func)
 
 
+    @bindings.add("\uE704") # alt+p
+    def _absolute_pathify_current_token(event: KeyPressEvent):
+        buf = event.current_buffer
+        cursor = buf.cursor_position
+        text = buf.text
+        # Find token boundaries
+        left = cursor
+        while left > 0 and not text[left-1].isspace() and text[left-1] not in "\"'`":
+            left -= 1
+        right = cursor
+        while right < len(text) and not text[right].isspace() and text[right] not in "\"'`":
+            right += 1
+        token = text[left:right]
+        if not token:
+            token = "." # use current dir itself
+        # Expand path
+        expanded = os.path.abspath(os.path.expanduser(token))
+        # Replace token
+        new_text = text[:left] + expanded + text[right:]
+        buf.text = new_text
+        # Place cursor after the inserted path
+        buf.cursor_position = left + len(expanded)
+        log.info(f"Expanded '{token}' to '{expanded}'")
+
+
     # Match Fish's reversible history-token-search-backward/forward. Unlike
     # Prompt Toolkit's yank_last_arg(), this visits every token, not only the
     # final argument of each command.
