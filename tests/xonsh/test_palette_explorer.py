@@ -1,6 +1,8 @@
 from test_setup import ROOT
 
 import argparse
+import base64
+import io
 import json
 import subprocess
 import sys
@@ -80,3 +82,30 @@ def test_invalid_blur_is_reported_without_traceback():
     result = subprocess.run([sys.executable, str(LAB / 'highlight.py'), '--blur=-1'], capture_output=True, text=True)
     assert result.returncode == 2
     assert 'Traceback' not in result.stderr
+
+
+def test_inline_image_uses_terminal_cell_width_and_preserves_payload(tmp_path, monkeypatch):
+    output = tmp_path / 'sample.png'
+    payload = b'PNG test payload'
+    output.write_bytes(payload)
+    monkeypatch.setenv('TERM_PROGRAM', 'iTerm.app')
+    monkeypatch.setenv('TERM', 'xterm-256color')
+    stream = io.StringIO()
+    console = Console(file=stream, force_terminal=True, width=240)
+    # A native 2000px image may occupy only half a Retina pane, but this
+    # specimen should occupy 200 terminal cells at 10px/rendered character.
+    explorer.display_iterm_image(output, columns=240, char_width=10, image_width=2000, console=console)
+    sequence = stream.getvalue()
+    assert ';width=200;height=auto;preserveAspectRatio=1:' in sequence
+    assert base64.b64decode(sequence.split(':', 1)[1].rstrip('\a\n')) == payload
+    stream.seek(0)
+    stream.truncate()
+    explorer.display_iterm_image(output, columns=240, char_width=10, image_width=4000, console=console)
+    assert ';width=240;' in stream.getvalue()
+
+
+def test_redirected_output_does_not_emit_inline_images(tmp_path, monkeypatch):
+    monkeypatch.setenv('TERM_PROGRAM', 'iTerm.app')
+    stream = io.StringIO()
+    explorer.display_iterm_image(tmp_path / 'not-read.png', columns=80, char_width=10, image_width=800, console=Console(file=stream, force_terminal=False))
+    assert stream.getvalue() == ''

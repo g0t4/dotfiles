@@ -121,7 +121,7 @@ uv run tools/syntax-lab/highlight.py path/to/project.py --sweep hue-shuffle --se
 # Zoom out, then rerun to fit more cells; or force a column count.
 uv run tools/syntax-lab/highlight.py -l md --sweep background --sample-lines 18 --columns 3
 
-# Actual raster blur, optionally shown inline by imgcat in iTerm2.
+# Actual raster blur, shown inline in iTerm2.
 uv run tools/syntax-lab/highlight.py path/to/project.py --blur
 uv run tools/syntax-lab/highlight.py path/to/project.py --sweep blur --steps 5 --blur 3 --output /tmp/blur.png
 
@@ -175,8 +175,12 @@ or 3 pixels by default. Labels stay sharp. Images use a regular monospace font,
 with no bold or italics; `--font` supplies a different TTF/TTC and `--font-size`
 sets its size. This is a controlled specimen, not a screenshot of your terminal.
 PNG output defaults to `/tmp/syntax-lab-blur.png`; `--output` chooses a path and
-can export any sweep. iTerm2 gets an inline preview when `imgcat` is available;
-otherwise open the PNG in an image viewer.
+can export any sweep. iTerm2 gets an inline preview using its image protocol,
+with explicit width in terminal cells rather than native pixels. This accounts
+for zoom and Retina scaling; the raster grid's padding counts toward the width,
+and oversized grids shrink to fit the pane while preserving aspect ratio. Saved
+PNGs keep their original pixel dimensions. Other terminals can open the PNG in
+an image viewer.
 
 Sweep builders live in `explorer.py`'s `SWEEPS` registry and return labeled
 `Variant` objects. Terminal layout, image rendering, composition, and palette

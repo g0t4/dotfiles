@@ -170,6 +170,27 @@ def terminal_grid(code, lexer, variants, args, console):
     console.print(table)
 
 
+def display_iterm_image(output, *, columns, char_width, image_width, console):
+    """Size in terminal cells, independent of native PNG pixels/Retina scale."""
+    import base64
+    import os
+
+    if not console.is_terminal or os.environ.get('TERM_PROGRAM') != 'iTerm.app':
+        return
+    # Account for the raster padding as well as glyphs, but never exceed the
+    # pane width. Forced oversized grids are proportionally scaled to fit.
+    display_columns = min(columns, max(1, math.ceil(image_width / char_width)))
+    payload = output.read_bytes()
+    name = base64.b64encode(output.name.encode()).decode('ascii')
+    data = base64.b64encode(payload).decode('ascii')
+    sequence = f'\x1b]1337;File=name={name};size={len(payload)};inline=1;width={display_columns};height=auto;preserveAspectRatio=1:{data}\a'
+    # Match imgcat's passthrough handling when running under tmux/screen.
+    if os.environ.get('TERM', '').startswith(('screen', 'tmux')):
+        sequence = '\x1bPtmux;' + sequence.replace('\x1b', '\x1b\x1b') + '\x1b\\'
+    console.file.write(sequence + '\n')
+    console.file.flush()
+
+
 def image_grid(code, lexer, variants, args, console):
     from PIL import Image, ImageDraw, ImageFilter, ImageFont
     font_candidates = [args.font] if args.font else [Path('/System/Library/Fonts/Menlo.ttc'), Path('/usr/share/fonts/truetype/dejavu/DejaVuSansMono.ttf')]
@@ -202,14 +223,7 @@ def image_grid(code, lexer, variants, args, console):
     output.parent.mkdir(parents=True, exist_ok=True)
     canvas.save(output, format='PNG')
     console.print(f'Image: {output.resolve()} ({canvas.width}×{canvas.height}, {columns} columns)', soft_wrap=True, markup=False)
-    # iTerm2 displays the actual PNG without needing another viewer.
-    if console.is_terminal:
-        import os
-        import shutil
-        import subprocess
-        imgcat = shutil.which('imgcat') if os.environ.get('TERM_PROGRAM') == 'iTerm.app' else None
-        if imgcat:
-            subprocess.run([imgcat, str(output.resolve())], check=False)
+    display_iterm_image(output, columns=console.width, char_width=char_width, image_width=canvas.width, console=console)
 
 
 def explore(args, code, lexer, colors, console):
