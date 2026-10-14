@@ -11,6 +11,9 @@ DEFAULT_PALETTE = Path(__file__).with_name("palette.json")
 
 
 def source_lexer(language=None, *, filename=None):
+    if language in ("apply-patch", "apply_patch"):
+        from .patch import ApplyPatchLexer
+        return ApplyPatchLexer()
     from pygments.lexers import get_lexer_by_name, get_lexer_for_filename
     lexer = get_lexer_by_name(language) if language is not None else get_lexer_for_filename(str(filename))
     if "xonsh" in lexer.aliases:
@@ -68,6 +71,10 @@ def make_style(colors):
             Punctuation: colors["punctuation"],
             Error: colors["error"],
             Token.Generic: colors["text"],
+            Generic.Inserted: colors["string"],
+            Generic.Deleted: colors["error"],
+            Generic.Heading: colors["function"],
+            Generic.Subheading: colors["builtin"],
         }
 
     return WesDark

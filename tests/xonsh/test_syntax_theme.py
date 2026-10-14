@@ -1,5 +1,6 @@
 from test_setup import ROOT
 
+import io
 import os
 from pathlib import Path
 import re
@@ -119,3 +120,18 @@ def test_xonsh_python_tokens_match_python_after_imports():
                 actual.append((token, value))
             offset += len(value)
         assert actual == list(lex(loop, source_lexer('python'))), prefix
+
+
+def test_diff_tokens_use_palette_and_preserve_context():
+    from rich.console import Console
+    from wes_syntax import syntax
+
+    source = 'diff --git a/a.py b/a.py\n--- a/a.py\n+++ b/a.py\n@@ -1 +1 @@\n-old\n+new\n context\n'
+    stream = io.StringIO()
+    Console(file=stream, force_terminal=True, color_system='truecolor', no_color=False, width=100).print(syntax(source, 'diff'))
+    ansi = stream.getvalue()
+    assert re.search(r'38;2;172;208;149(?:;49)?m\+new', ansi)
+    assert re.search(r'38;2;238;126;120(?:;49)?m-old', ansi)
+    assert re.search(r'38;2;130;176;223(?:;49)?mdiff --git', ansi)
+    assert not re.search(r'\x1b\[(?:1m|1;|3m|3;|48;)', ansi)
+    assert ' context' in re.sub(r'\x1b\[[0-9;]*m', '', ansi)

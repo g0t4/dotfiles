@@ -250,3 +250,14 @@ It preserves the terminal background and forwards Rich options such as
 implementation; the existing `palette.json` path is a symlink to the packaged
 palette in `wes_syntax/palette.json`. Editable installs read palette edits on
 each new renderable. No explorer/image dependencies are needed by the library.
+
+Pygments' `diff` lexer uses our green for inserted lines, red for deleted lines,
+blue for file headers, teal for hunk headers, and neutral context. Use
+`syntax(patch_text, "diff")` or pass a `.diff`/`.patch` file to the preview tool.
+This colors an existing diff; it does not compute differences or syntax-highlight
+the source language within changed lines.
+
+`syntax(patch_text, "apply-patch")` extends those diff rules for tool patches:
+Add File is green, Delete File red, Update File blue, Move to teal, and
+Begin/End Patch or End of File markers slate. Hunk bodies retain ordinary diff
+colors. This lexer only highlights text; it never applies a patch.
