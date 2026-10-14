@@ -375,11 +375,19 @@ abbr tailr 'tail -r' # reverse order
 # *** frequently tailed files
 abbr tt trash_n_tail
 # trash+tail b/c these quickly become unruly in size... I should setup truncation
-abbr tt_xonsh "trash_n_tail -F ~/.local/state/xonsh/xonsh.log"
+abbr tt_xonsh "trash_n_tail ~/.local/state/xonsh/xonsh.log"
+#
+abbr tt_mcp_run_xonsh "trash_n_tail ~/.local/state/mcp-servers/xonsh.log"
+abbr tt_mcp_subagents "trash_n_tail ~/.local/state/mcp-servers/subagents.log"
+abbr tt_mcp_perception "trash_n_tail ~/.local/state/mcp-servers/perception.log"
+#
 abbr tt_devtools_universal trash_n_tail ~/.local/share/devtools/universal.log
 abbr tt_devtools_hammerspoons trash_n_tail ~/.local/share/devtools/hammerspoons.log
 abbr tt_devtools_launcher trash_n_tail ~/.local/share/devtools/launcher.log
-
+#
+abbr tt_voiced trash_n_tail ~/.local/state/ask-openai/devtools/voiced.log
+abbr tt_clankerd trash_n_tail ~/.local/state/ask-openai/clankerd.log
+abbr tt_ask_lang_server trash_n_tail ~/.local/state/ask-openai/language.server.log # python LS
 #
 # for now I want to keep the commands.log, maybe go back to trash_n_tail later on, for now leave tt as tail -F too:
 abbr tt_mcp_server_commands 'tail -F ~/.local/state/mcp-server-commands/commands.log'
@@ -395,16 +403,11 @@ end
 # delegate tool / agents MCP server
 abbr tt_agents_mcp_server 'tail -F ~/.local/state/mcp-servers/agent.log'
 # TODO other files here like traces?
-
 #
-abbr tt_ask_lang_server 'trash_n_tail ~/.local/state/ask-openai/language.server.log' # python LS
-abbr tail_ask_lang_server 'tail -F ~/.local/state/ask-openai/language.server.log' # python LS
 #
 abbr tt_nvim_lsp_log 'trash_n_tail ~/.local/state/nvim/lsp.log' # nvim lsp logs
-abbr tail_nvim_lsp_log 'tail -F ~/.local/state/nvim/lsp.log' # nvim lsp logs
 #
 abbr tt_streamdeck_wes 'trash_n_tail ~/.hammerspoon/logs/streamdeck_keyboardmaestro_runner.log'
-abbr tail_streamdeck_wes 'tail -F ~/.hammerspoon/logs/streamdeck_keyboardmaestro_runner.log'
 #
 abbr tail_hardtime_logs 'cat ~/.local/state/nvim/hardtime.nvim.log | cut -c34- | sort | uniq -c | sort'
 function trash_n_tail
