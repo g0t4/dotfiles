@@ -1,7 +1,7 @@
 #!/usr/bin/env -S uv run --script
 # /// script
 # requires-python = ">=3.12"
-# dependencies = ["pygments>=2.19,<3", "rich>=13.9,<15"]
+# dependencies = ["pygments>=2.19,<3", "rich>=13.9,<15", "pillow>=11,<13", "colorspacious>=1.1.2,<2"]
 # ///
 """Editable Pygments theme; preview code without running it."""
 
@@ -42,6 +42,11 @@ def load_style(path, *, grayscale=False):
     if grayscale:
         colors = {role: grayscale_color(color) for role, color in colors.items()}
 
+    return colors, make_style(colors)
+
+
+def make_style(colors):
+
     class WesDark(Style):
         background_color = colors["background"]
         styles = {
@@ -69,7 +74,7 @@ def load_style(path, *, grayscale=False):
             Token.Generic: colors["text"],
         }
 
-    return colors, WesDark
+    return WesDark
 
 
 def style_for_lexer(lexer, colors, base_style):
@@ -114,6 +119,8 @@ def main():
     parser.add_argument("--renderer", choices=("pygments", "rich"), default="pygments")
     parser.add_argument("--line-numbers", action="store_true")
     parser.add_argument("--force-color", action="store_true", help="preserve ANSI when piping to less -R")
+    from explorer import add_arguments, explore
+    add_arguments(parser)
     args = parser.parse_args()
     try:
         colors, style = load_style(args.palette, grayscale=args.grayscale)
@@ -129,6 +136,9 @@ def main():
         path = Path(args.file) if args.file and args.file != "-" else ROOT / "examples" / example
         code = sys.stdin.read() if args.file == "-" else path.read_text()
         lexer = get_lexer_by_name(args.language) if args.language else get_lexer_for_filename(str(path))
+        if args.sweep or args.blur is not None or args.vision or args.hue_shuffle or args.background or args.output or args.export_dir:
+            explore(args, code, lexer, colors, console)
+            return
         style = style_for_lexer(lexer, colors, style)
         if args.tokens:
             for token, value in lex(code, lexer):
