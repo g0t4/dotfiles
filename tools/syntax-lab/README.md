@@ -71,3 +71,36 @@ Existing command transforms that append `| bat -l json` or `yaml` naturally reac
 the wrapper and delegate to stock bat. Python source previews in abbreviation
 help and Fish-wrapper help use this same palette through Rich. Palette edits
 apply to the next invocation, without reloading Xonsh.
+
+## Markdown and grayscale experiments
+
+Markdown source (`.md`, `.markdown`, `-l md`, `-l markdown`) now uses the same
+palette: purple headings, teal inline code/quotes, amber emphasis, blue link
+labels, and slate URLs. Fenced code uses its language lexer with our code colors.
+Markdown punctuation stays visible; tables retain their source layout. No bold
+or italic font styles are applied. Interactive `cat file.md` no longer implicitly
+pipes through glow; use `glow file.md` explicitly for its rendered view.
+
+```sh
+uv run tools/syntax-lab/highlight.py -l md
+uv run tools/syntax-lab/highlight.py -l md --grayscale
+uv run tools/syntax-lab/highlight.py --grayscale
+uv run tools/syntax-lab/highlight.py --grayscale --swatches
+```
+
+In interactive Xonsh:
+
+```xonsh
+bat tools/syntax-lab/examples/sample.md
+bat --theme=wes-gray tools/syntax-lab/examples/sample.md
+bat --theme=wes-gray tools/syntax-lab/examples/sample.py
+```
+
+`wes-gray` is derived from the current palette on every invocation. It removes
+chroma while preserving linear sRGB relative luminance (within 8-bit rounding),
+which keeps the brightness hierarchy and approximate contrast rather than using
+a simple RGB average or HSL lightness. The color theme remains the default.
+The terminal background is always preserved, even for grayscale; the grayscale
+swatch report uses a converted background reference for its contrast calculation.
+Custom `wes-gray`/`wes-dark` theme names apply to supported wrapper requests;
+other languages and advanced bat options still use stock bat and its own themes.

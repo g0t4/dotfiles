@@ -50,14 +50,6 @@ def wes_command_not_found(cmd, **kwargs):
         rich.print(f"    {kwargs=}")
     # return {"cmd": ["echo","do", "something", "else" ...] + cmd, "env": {"FOO": "BAR"}}
 
-def colorful_cat(tokens: list[str], cmd: str):
-    if len(tokens) > 2:
-        return  # nothing for now if multi file
-    # if it is a markdown file, pipe to glow to display it
-    is_markdown = tokens[1].endswith('.md')
-    if is_markdown:
-        return f"{cmd} | glow"
-
 # @events.on_precommand # cannot raise or otherwise stop execution, so likely use on_postcommand if you want to warn so it shows right after output (on_precommand puts it before and might be missed if lots of output)
 @events.on_postcommand
 def wes_habituate_new_commands_warnings(cmd: str, **kwargs):
@@ -103,8 +95,8 @@ def wes_colorful_output(cmd: str, **kwargs):
         if not "| bat -l json" in cmd:
             return f"{cmd} | bat -l json"
 
-    if first_token == "cat":
-        return colorful_cat(tokens, cmd)
+    # Interactive cat handles Markdown through our palette. Keep rendering
+    # explicit (e.g. glow file.md), rather than appending another formatter.
 
 
 # @events.on_pre_cmdloop

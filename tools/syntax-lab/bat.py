@@ -3,7 +3,7 @@
 # requires-python = ">=3.12"
 # dependencies = ["pygments>=2.19,<3", "rich>=13.9,<15"]
 # ///
-"""Use our theme for simple Python/Lua views; delegate other requests to bat."""
+"""Use our theme for Python/Lua/Markdown views; delegate other requests to bat."""
 
 import os
 from pathlib import Path
@@ -14,26 +14,26 @@ from pygments import highlight
 from pygments.formatters import TerminalTrueColorFormatter
 from pygments.lexers import get_lexer_by_name
 
-from highlight import ROOT, load_style
+from highlight import ROOT, load_style, style_for_lexer
 
-LANGUAGES = {"py": "python", "python": "python", "python3": "python", "lua": "lua"}
+LANGUAGES = {"py": "python", "python": "python", "python3": "python", "lua": "lua", "md": "markdown", "markdown": "markdown"}
 
 
 def parse(args):
     """Return supported options, or None without reading input for fallback."""
-    language, color, numbers = None, "auto", False
+    language, color, numbers, grayscale = None, "auto", False, False
     files = []
     iterator = iter(args)
     for arg in iterator:
         if arg == "--":
             files.extend(iterator)
             break
-        if arg in ("-l", "-pl", "-ppl", "--language", "--color", "--paging", "--style"):
+        if arg in ("-l", "-pl", "-ppl", "--language", "--color", "--paging", "--style", "--theme"):
             value = next(iterator, None)
             if value is None:
                 return None
             option = "-l" if arg in ("-pl", "-ppl") else arg
-        elif any(arg.startswith(option + "=") for option in ("--language", "--color", "--paging", "--style")):
+        elif any(arg.startswith(option + "=") for option in ("--language", "--color", "--paging", "--style", "--theme")):
             option, value = arg.split("=", 1)
         elif arg.startswith("-l") and len(arg) > 2:
             option, value = "-l", arg[2:]
@@ -63,11 +63,15 @@ def parse(args):
             if value not in ("plain", "numbers"):
                 return None
             numbers = value == "numbers"
+        elif option == "--theme":
+            if value not in ("wes-gray", "wes-dark"):
+                return None
+            grayscale = value == "wes-gray"
     files = files or ["-"]
-    languages = [language or {".py": "python", ".pyi": "python", ".lua": "lua"}.get(Path(file).suffix.lower()) for file in files]
+    languages = [language or {".py": "python", ".pyi": "python", ".lua": "lua", ".md": "markdown", ".markdown": "markdown"}.get(Path(file).suffix.lower()) for file in files]
     if not all(languages):
         return None
-    return files, languages, color, numbers
+    return files, languages, color, numbers, grayscale
 
 
 def stock(args):
@@ -83,10 +87,10 @@ def main(args=None):
     options = parse(args)
     if options is None:
         return stock(args)
-    files, languages, color, numbers = options
+    files, languages, color, numbers, grayscale = options
     colored = color == "always" or (color == "auto" and sys.stdout.isatty() and "NO_COLOR" not in os.environ)
     try:
-        _, style = load_style(ROOT / "palette.json")
+        colors, style = load_style(ROOT / "palette.json", grayscale=grayscale)
     except (OSError, ValueError):
         # Fall back before consuming any stdin if the theme is unavailable.
         return stock(args)
@@ -95,7 +99,8 @@ def main(args=None):
         try:
             code = sys.stdin.read() if file == "-" else Path(file).read_text()
             if colored:
-                sys.stdout.write(highlight(code, get_lexer_by_name(language), TerminalTrueColorFormatter(style=style, linenos=numbers)))
+                lexer = get_lexer_by_name(language)
+                sys.stdout.write(highlight(code, lexer, TerminalTrueColorFormatter(style=style_for_lexer(lexer, colors, style), linenos=numbers)))
             elif numbers:
                 sys.stdout.writelines(f"{index:6}  {line}" for index, line in enumerate(code.splitlines(keepends=True), 1))
             else:

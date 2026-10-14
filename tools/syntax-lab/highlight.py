@@ -16,19 +16,31 @@ from pygments import highlight, lex
 from pygments.formatters import TerminalTrueColorFormatter
 from pygments.lexers import get_lexer_by_name, get_lexer_for_filename
 from pygments.style import Style
-from pygments.token import Comment, Error, Keyword, Name, Number, Operator, Punctuation, String, Token
+from pygments.token import Comment, Error, Generic, Keyword, Name, Number, Operator, Punctuation, String, Token
 from rich.console import Console
 from rich.syntax import PygmentsSyntaxTheme, Syntax
 
 ROOT = Path(__file__).resolve().parent
 
 
-def load_style(path):
+def grayscale_color(color):
+    """Remove chroma while preserving linear sRGB relative luminance."""
+    channels = [int(color[i:i + 2], 16) / 255 for i in (1, 3, 5)]
+    linear = [c / 12.92 if c <= 0.04045 else ((c + 0.055) / 1.055) ** 2.4 for c in channels]
+    luminance = sum(c * weight for c, weight in zip(linear, (0.2126, 0.7152, 0.0722)))
+    gray = 12.92 * luminance if luminance <= 0.0031308 else 1.055 * luminance ** (1 / 2.4) - 0.055
+    channel = round(gray * 255)
+    return f"#{channel:02x}{channel:02x}{channel:02x}"
+
+
+def load_style(path, *, grayscale=False):
     colors = json.loads(path.read_text())
     required = json.loads((ROOT / "palette.json").read_text()).keys()
     for key in required:
         if not re.fullmatch(r"#[0-9a-fA-F]{6}", colors.get(key, "")):
             raise ValueError(f"{key}: expected a #RRGGBB color in {path}")
+    if grayscale:
+        colors = {role: grayscale_color(color) for role, color in colors.items()}
 
     class WesDark(Style):
         background_color = colors["background"]
@@ -60,6 +72,28 @@ def load_style(path):
     return colors, WesDark
 
 
+def style_for_lexer(lexer, colors, base_style):
+    if lexer.name != "Markdown":
+        return base_style
+
+    class WesMarkdown(base_style):
+        styles = {
+            **base_style.styles,
+            Generic.Heading: colors["keyword"],
+            Generic.Subheading: colors["keyword"],
+            Generic.Strong: colors["type"],
+            Generic.Emph: colors["builtin"],
+            Generic.Deleted: colors["comment"],
+            String.Backtick: colors["builtin"],
+            Name.Tag: colors["function"],
+            Name.Attribute: colors["comment"],
+            Name.Label: colors["function"],
+            Name.Entity: colors["function"],
+        }
+
+    return WesMarkdown
+
+
 def contrast(foreground, background):
     def luminance(color):
         channels = [int(color[i:i + 2], 16) / 255 for i in (1, 3, 5)]
@@ -74,6 +108,7 @@ def main():
     parser.add_argument("file", nargs="?", help="source file, or - for stdin; defaults to Python demo")
     parser.add_argument("--language", "-l", help="Pygments lexer, e.g. python or lua")
     parser.add_argument("--palette", type=Path, default=ROOT / "palette.json")
+    parser.add_argument("--grayscale", action="store_true", help="remove chroma, preserving relative luminance")
     parser.add_argument("--swatches", action="store_true", help="show palette and contrast against configured background")
     parser.add_argument("--tokens", action="store_true", help="inspect lexer token assignments instead of coloring")
     parser.add_argument("--renderer", choices=("pygments", "rich"), default="pygments")
@@ -81,7 +116,7 @@ def main():
     parser.add_argument("--force-color", action="store_true", help="preserve ANSI when piping to less -R")
     args = parser.parse_args()
     try:
-        colors, style = load_style(args.palette)
+        colors, style = load_style(args.palette, grayscale=args.grayscale)
         colored = args.force_color or (sys.stdout.isatty() and "NO_COLOR" not in os.environ)
         console = Console(color_system="truecolor" if colored else None, force_terminal=colored, no_color=not colored, highlight=False)
         if args.swatches:
@@ -90,9 +125,11 @@ def main():
                 if role != "background":
                     console.print(f"{role:12} {color}  {contrast(color, colors['background']):4.1f}:1  AaBb 0123 # sample", style=color)
             return
-        path = Path(args.file) if args.file and args.file != "-" else ROOT / "examples" / ("sample.lua" if args.language == "lua" else "sample.py")
+        example = {"lua": "sample.lua", "md": "sample.md", "markdown": "sample.md"}.get(args.language, "sample.py")
+        path = Path(args.file) if args.file and args.file != "-" else ROOT / "examples" / example
         code = sys.stdin.read() if args.file == "-" else path.read_text()
         lexer = get_lexer_by_name(args.language) if args.language else get_lexer_for_filename(str(path))
+        style = style_for_lexer(lexer, colors, style)
         if args.tokens:
             for token, value in lex(code, lexer):
                 if value.strip():
