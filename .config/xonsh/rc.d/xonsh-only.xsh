@@ -18,7 +18,6 @@ from xonsh.parsers.lexer import Lexer
 abbr('lexer_split', 'Lexer().split("%")', cursor_marker="%", reminder=True)
 
 
-
 # * dotfiles python "cmdlets"
 $_python3 = f"{$WES_DOTFILES}/.venv/bin/python3"
 #
@@ -35,4 +34,27 @@ reminder_abbr('$ROWS', 'shutil.get_terminal_size().lines', position="anywhere")
 reminder_abbr('$COLUMNS', 'shutil.get_terminal_size().columns', position="anywhere")
 
 
-abbr("files_sorted_by_size", "gfind . -type f -printf '%s %p\\n' | grep -Ev 'dylib|.rag|.venv|node_modules|.git|.mp4|uv.lock|./tags|package-lock.json|.cpython' | sort -nr")
+# abbr("files_sorted_by_size", "gfind . -type f -printf '%s %p\\n' | grep -Ev 'dylib|.rag|.venv|node_modules|.git|.mp4|uv.lock|./tags|package-lock.json|.cpython' | sort -nr")
+def _files_sorted_by_size():
+    """List files sorted by size with human-readable sizes."""
+    import os, subprocess
+    exclusions = ['*.dylib', '*.rag', '.venv', 'node_modules', '.git', '*.mp4', 'uv.lock',
+'tags', 'package-lock.json', '*.cpython']
+    cmd = ['fd', '-H', '-t', 'f']
+    for pattern in exclusions:
+        cmd += ['-E', pattern]
+    files = subprocess.check_output(cmd, text=True).splitlines()
+    data = [(os.path.getsize(f), f) for f in files]
+    data.sort(key=lambda x: x[0], reverse=False)
+    for size, path in data:
+        print(f"{_human_size(size):>10} {path}")
+
+def _human_size(num):
+    """Convert bytes to human-readable string."""
+    for unit in ['B', 'K', 'M', 'G', 'T']:
+        if num < 1024:
+            return f"{num:.1f}{unit}"
+        num /= 1024
+    return f"{num:.1f}P"
+
+aliases['files_sorted_by_size'] = _files_sorted_by_size
