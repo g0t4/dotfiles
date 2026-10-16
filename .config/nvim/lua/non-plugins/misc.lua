@@ -8,6 +8,10 @@ local log = require('devtools.logs.logger').universal()
 -- cursor block in insert:
 vim.cmd(":set guicursor=i:block")
 
+-- lualine shows mode colors so we don't need showmode in the command line
+-- (showmode causes the command line to flicker when lualine refreshes the statusline)
+vim.o.showmode = false
+
 
 
 vim.cmd([[

@@ -84,6 +84,11 @@ return {
                     component_separators = "",
                     theme = require("plugins.lualine.theme").theme(),
                     -- always_show_tabline = false,
+                    -- reduce flicker: don't refresh on every CursorMovedI, and slow down refresh rate
+                    refresh = {
+                        events = { "WinEnter", "BufEnter", "BufWritePost", "ModeChanged", "VimResized", "Filetype" },
+                        refresh_time = 100,
+                    },
                 },
                 sections = {
                     -- commandline shows mode already so why put it here too? plus lualine has color changes
