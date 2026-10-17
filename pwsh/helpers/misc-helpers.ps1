@@ -173,3 +173,8 @@ abbr olsh "`$env:OLLAMA_NUM_PARALLEL=1; `$env:OLLAMA_KEEP_ALIVE='30m'; `$env:OLL
 abbr olshd "`$env:OLLAMA_NUM_PARALLEL=1; `$env:OLLAMA_KEEP_ALIVE='30m'; `$env:OLLAMA_DEBUG=2; `$env:OLLAMA_HOST='http://0.0.0.0:11434'; $ollama_serve"
 abbr olshow "grc ollama show"
 
+
+function Restart-Explorer {
+    Stop-Process -Name explorer -Force -ErrorAction SilentlyContinue
+    Start-Process explorer.exe
+}
