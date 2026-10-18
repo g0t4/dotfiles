@@ -1,0 +1,14 @@
+[project]
+name = "screen-zebras"
+version = "0.1.0"
+description = "Live exposure zebras for the primary macOS display"
+requires-python = ">=3.12"
+dependencies = [
+    "numpy>=2.0",
+    "pyobjc-framework-Cocoa>=12.0",
+    "pyobjc-framework-Quartz>=12.0",
+    "pyobjc-framework-ScreenCaptureKit>=12.0",
+]
+
+[tool.uv]
+package = false
