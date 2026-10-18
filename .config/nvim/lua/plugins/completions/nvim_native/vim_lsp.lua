@@ -485,7 +485,7 @@ vim.lsp.enable({
     "css",
     "html",
     "markdown",
-    "eslint",
+    -- "eslint", -- some damn error about path not set crap, fuck it then
     "bash",
     "ansible",
     "nix",
