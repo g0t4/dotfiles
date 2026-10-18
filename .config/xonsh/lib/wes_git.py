@@ -155,7 +155,7 @@ def register_wes_git():
     abbr('gassume', 'git update-index --assume-unchanged')
     abbr('gassumeun', 'git update-index --no-assume-unchanged')
     abbr('gassumels', 'git ls-files -v | rg_grep ^h')
-    abbr('gd', 'git diff # FYI use `gdic` for icdiff (remove this reminder when habituated or too annoying)')
+    abbr('gd', 'git diff #_FYI_gdic')
     abbr('gdic', 'git-icdiff HEAD')
     abbr('gdu', 'git -c delta.side-by-side=false diff ')
     abbr(re.compile('gd[u]*\\d+'), abbr_from_fish_function('gdX'))
