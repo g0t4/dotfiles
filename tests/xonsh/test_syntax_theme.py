@@ -105,6 +105,18 @@ def test_xonsh_native_lexer_and_relative_paths(tmp_path):
         assert '38;2;142;203;187mcat' in result.stdout
 
 
+def test_xonsh_source_with_existing_path_without_ls_colors(tmp_path):
+    target = tmp_path / 'existing.py'
+    target.write_text('pass\n')
+    source = f'value = $(cat {target})\n'
+    env = {key: value for key, value in os.environ.items() if key != 'LS_COLORS'}
+
+    result = run_bat('-pl', 'xonsh', '--color=always', input=source, env=env)
+
+    assert result.returncode == 0, result.stderr
+    assert re.sub(r'\x1b\[[0-9;]*m', '', result.stdout) == source
+
+
 def test_xonsh_python_tokens_match_python_after_imports():
     from pygments import lex
     from wes_syntax import source_lexer
