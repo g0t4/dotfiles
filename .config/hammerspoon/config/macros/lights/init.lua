@@ -65,11 +65,12 @@ local function set_hsl_16bit_channels(dmx_channels, channel_start, params)
     dmx_channels[channel_start + 7] = light_low_byte
 end
 
-function StreamDeckBuild26()
+function StreamDeckBuild26(key_intensity)
     local temp = 5600
 
     -- light values
-    local left = { intensity = 12, temp = temp }
+    local key_intensity = key_intensity or 12
+    local left = { intensity = key_intensity, temp = temp }
     local right = { intensity = 10, temp = temp }
     --
     -- don't need this for now, and this fixture is the finicky one... so I am done for today!
