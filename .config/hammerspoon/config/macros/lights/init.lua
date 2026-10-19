@@ -69,7 +69,7 @@ function StreamDeckBuild26(key_intensity)
     local temp = 5600
 
     -- light values
-    local key_intensity = key_intensity or 12
+    local key_intensity = key_intensity or 15
     local left = { intensity = key_intensity, temp = temp }
     local right = { intensity = 10, temp = temp }
     --
