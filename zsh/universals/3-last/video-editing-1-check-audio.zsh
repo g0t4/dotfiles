@@ -8,6 +8,8 @@ function video_editing_1_check_audio() {
     search_in=("${@[@]}")
   fi
 
+  local silence_remove="silenceremove=start_periods=1:start_threshold=-40dB:stop_periods=-1:stop_threshold=-40dB:detection=rms"
+
   for clip in ${search_in}; do
 
     log_blue "\n## ${clip:t} "
@@ -68,8 +70,15 @@ function video_editing_1_check_audio() {
       #  -af "volumedetect,ametadata=print:key=lavfi.r128.I, file=openvino.log:overwrite=true" -f null /dev/null
 
 
-    ####### VOLUME DETECT ON ENTIRE CLIP
+    ####### LEGACY VOLUME DETECT ON ENTIRE CLIP (includes silence periods)
+    #
+    # TODO get rid of legacy if I find that the new volumedetect w/ silence_remove is close enough
+    #  my heuristics about level are rooted in the level I check w/ silences included... and assumes that silences are relatively consistent (expected silence ratio in speaking from natural pauses)... so I suspect it is safe to remove them and keep my heurisitc of 20-23dB being a good mean level)
+    #  maybe adjust to -19 to -23 dB as acceptable? I noticed about 1dB gap legacy vs silence_remove... from samples of me speaking with natural pauses... so far that's the gap
+    #
     # FYI add -t 10 to take first 10 seconds only, add before -i option
+    echo
+    echo "LEGACY volumedetect (includes silences which largely affects mean and number of samples)"
     _parsed=$(ffmpeg -hide_banner -i "$clip" \
       -af volumedetect -f null /dev/null 2>&1 | grep Parsed)
     _max_volume=$(echo $_parsed | grep -o "max_volume:.*" | cut -d' ' -f2)
@@ -85,12 +94,31 @@ function video_editing_1_check_audio() {
     fi
     echo $_histogram # for now print for all clips (red of errors stands out)
 
+    ####### VOLUME DETECT ON ENTIRE CLIP
+    echo
+    echo "NEW volumedetect w/o silences"
+    # FYI add -t 10 to take first 10 seconds only, add before -i option
+    _parsed=$(ffmpeg -hide_banner -i "$clip" \
+      -af "${silence_remove},volumedetect" -f null /dev/null 2>&1 | grep Parsed)
+    _max_volume=$(echo $_parsed | grep -o "max_volume:.*" | cut -d' ' -f2)
+    _mean_volume=$(echo $_parsed | grep -o "mean_volume:.*" | cut -d' ' -f2)
+    _n_samples=$(echo $_parsed | grep -o "n_samples:.*" | cut -d' ' -f2)
+    echo "volume: MEAN: $_mean_volume, MAX: $_max_volume, n_samples: $_n_samples"
+    _histogram=$(echo $_parsed | grep -o "histogram.*")
+    # IIUC no reason why max_volume wouldn't be <= max of histogram too?
+    # max is expressed as a negative number so -3.0 is 3dB ... so if max is > -3.0 then it is too loud (at least)
+    # most clips should be 4/5/6 as topmost level (a few samples at 3dB is fine too), > 10@3dB is maybe an indicator that smth is too loud?
+    if (( $_max_volume > -3.0 )); then
+      log_error "max volume < 3dB"
+    fi
+    echo $_histogram # for now print for all clips (red of errors stands out)
+
+
     echo
     function show_geometric_mean_of_peak() {
         local window_ms=$1
         local audio_sample_rate=48000
         local samples_per_window=$((audio_sample_rate * window_ms / 1000))
-        local silence_remove="silenceremove=start_periods=1:start_threshold=-40dB:stop_periods=-1:stop_threshold=-40dB:detection=rms"
 
         ffmpeg -hide_banner -nostats -i "$clip" \
           -af "${silence_remove},aresample=${audio_sample_rate},asetnsamples=n=${samples_per_window}:p=0,astats=metadata=1:reset=1:measure_perchannel=none:measure_overall=Peak_level,ametadata=mode=print:key=lavfi.astats.Overall.Peak_level" \
