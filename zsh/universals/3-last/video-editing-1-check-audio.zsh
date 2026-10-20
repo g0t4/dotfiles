@@ -88,9 +88,10 @@ function video_editing_1_check_audio() {
     # echo
     # echo
 
+    silence_remove="silenceremove=start_periods=1:start_threshold=-40dB:stop_periods=-1:stop_threshold=-40dB:detection=rms"
     ####### MEAN PEAK LEVEL (2000ms windows, excluding silence)
     ffmpeg -hide_banner -nostats -i "$clip" \
-      -af "aresample=48000,asetnsamples=n=96000:p=0,astats=metadata=1:reset=1:measure_perchannel=none:measure_overall=Peak_level,ametadata=mode=print:key=lavfi.astats.Overall.Peak_level" \
+      -af "$silence_remove,aresample=48000,asetnsamples=n=96000:p=0,astats=metadata=1:reset=1:measure_perchannel=none:measure_overall=Peak_level,ametadata=mode=print:key=lavfi.astats.Overall.Peak_level" \
       -f null /dev/null 2>&1 |
       awk -F= '
         /lavfi.astats.Overall.Peak_level=/ {
@@ -108,7 +109,7 @@ function video_editing_1_check_audio() {
         }'
 
     ffmpeg -hide_banner -nostats -i "$clip" \
-      -af "aresample=48000,asetnsamples=n=4800:p=0,astats=metadata=1:reset=1:measure_perchannel=none:measure_overall=Peak_level,ametadata=mode=print:key=lavfi.astats.Overall.Peak_level" \
+      -af "$silence_remove,aresample=48000,asetnsamples=n=4800:p=0,astats=metadata=1:reset=1:measure_perchannel=none:measure_overall=Peak_level,ametadata=mode=print:key=lavfi.astats.Overall.Peak_level" \
       -f null /dev/null 2>&1 |
       awk -F= '
         /lavfi.astats.Overall.Peak_level=/ {
