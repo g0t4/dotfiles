@@ -87,7 +87,7 @@ function video_editing_1_check_audio() {
 
     echo
     echo
-    function compute_mean_of_peak() {
+    function show_geometric_mean_of_peak() {
         local window_ms=$1
         local audio_sample_rate=48000
         local samples_per_window=$((audio_sample_rate * window_ms / 1000))
@@ -112,8 +112,8 @@ function video_editing_1_check_audio() {
             }'
     }
 
-    compute_mean_of_peak 2000
-    compute_mean_of_peak 100
+    show_geometric_mean_of_peak 2000
+    show_geometric_mean_of_peak 100
 
     # ??? todo ebur128 loudness filter!
     #  learn: https://tech.ebu.ch/loudness
