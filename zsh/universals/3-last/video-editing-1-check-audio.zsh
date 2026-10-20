@@ -80,7 +80,7 @@ function video_editing_1_check_audio() {
     echo
     echo "LEGACY volumedetect (includes silences which largely affects mean and number of samples)"
     _parsed=$(ffmpeg -hide_banner -i "$clip" \
-      -af volumedetect -f null /dev/null 2>&1 | grep Parsed)
+      -af volumedetect -f null /dev/null 2>&1 | grep -v 'n_samples: 0' | grep Parsed)
     _max_volume=$(echo $_parsed | grep -o "max_volume:.*" | cut -d' ' -f2)
     _mean_volume=$(echo $_parsed | grep -o "mean_volume:.*" | cut -d' ' -f2)
     _n_samples=$(echo $_parsed | grep -o "n_samples:.*" | cut -d' ' -f2)
@@ -99,7 +99,8 @@ function video_editing_1_check_audio() {
     echo "NEW volumedetect w/o silences"
     # FYI add -t 10 to take first 10 seconds only, add before -i option
     _parsed=$(ffmpeg -hide_banner -i "$clip" \
-      -af "${silence_remove},volumedetect" -f null /dev/null 2>&1 | grep Parsed)
+      -af "${silence_remove},volumedetect" -f null /dev/null 2>&1 | grep -v 'n_samples: 0' | grep Parsed)
+    # FYI grep -v 'n_samples: 0' | is to skip first initialization report of n_samples... only want the actual value at end (non-zero)
     _max_volume=$(echo $_parsed | grep -o "max_volume:.*" | cut -d' ' -f2)
     _mean_volume=$(echo $_parsed | grep -o "mean_volume:.*" | cut -d' ' -f2)
     _n_samples=$(echo $_parsed | grep -o "n_samples:.*" | cut -d' ' -f2)
