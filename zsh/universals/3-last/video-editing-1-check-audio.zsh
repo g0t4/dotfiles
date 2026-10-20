@@ -87,45 +87,35 @@ function video_editing_1_check_audio() {
 
     echo
     echo
+    function compute_mean_of_peak() {
+        local window_ms=$1
+        local audio_sample_rate=48000
+        local samples_per_window=$((audio_sample_rate * window_ms / 1000))
+        local silence_remove="silenceremove=start_periods=1:start_threshold=-40dB:stop_periods=-1:stop_threshold=-40dB:detection=rms"
 
-    silence_remove="silenceremove=start_periods=1:start_threshold=-40dB:stop_periods=-1:stop_threshold=-40dB:detection=rms"
-    ####### MEAN PEAK LEVEL (2000ms windows, excluding silence)
-    ffmpeg -hide_banner -nostats -i "$clip" \
-      -af "$silence_remove,aresample=48000,asetnsamples=n=96000:p=0,astats=metadata=1:reset=1:measure_perchannel=none:measure_overall=Peak_level,ametadata=mode=print:key=lavfi.astats.Overall.Peak_level" \
-      -f null /dev/null 2>&1 |
-      awk -F= '
-        /lavfi.astats.Overall.Peak_level=/ {
-          peak = $NF + 0
-          if ($NF != "-inf" && peak > -50) {
-            sum += peak
-            count++
-          }
-        }
-        END {
-          if (count)
-            printf "Mean 2000ms peak: %.2f dBFS (%d windows)\n", sum/count, count
-          else
-            print "Mean 2000ms peak: no active audio detected"
-        }'
+        ffmpeg -hide_banner -nostats -i "$clip" \
+          -af "${silence_remove},aresample=${audio_sample_rate},asetnsamples=n=${samples_per_window}:p=0,astats=metadata=1:reset=1:measure_perchannel=none:measure_overall=Peak_level,ametadata=mode=print:key=lavfi.astats.Overall.Peak_level" \
+          -f null /dev/null 2>&1 |
+          awk -F= -v window_ms="$window_ms" '
+            /lavfi.astats.Overall.Peak_level=/ {
+              peak = $NF + 0
+              if ($NF != "-inf" && peak > -50) {
+                sum += peak
+                count++
+              }
+            }
+            END {
+              if (count)
+                printf "Mean %dms peak: %.2f dBFS (%d windows)\n", window_ms, sum/count, count
+              else
+                printf "Mean %dms peak: no active audio detected\n", window_ms
+            }'
+    }
 
-    ffmpeg -hide_banner -nostats -i "$clip" \
-      -af "$silence_remove,aresample=48000,asetnsamples=n=4800:p=0,astats=metadata=1:reset=1:measure_perchannel=none:measure_overall=Peak_level,ametadata=mode=print:key=lavfi.astats.Overall.Peak_level" \
-      -f null /dev/null 2>&1 |
-      awk -F= '
-        /lavfi.astats.Overall.Peak_level=/ {
-          peak = $NF + 0
-          if ($NF != "-inf" && peak > -50) {
-            sum += peak
-            count++
-          }
-        }
-        END {
-          if (count)
-            printf "Mean 100ms peak: %.2f dBFS (%d windows)\n", sum/count, count
-          else
-            print "Mean 100ms peak: no active audio detected"
-        }'
-    # todo ebur128 loudness filter!
+    compute_mean_of_peak 2000
+    compute_mean_of_peak 100
+
+    # ??? todo ebur128 loudness filter!
     #  learn: https://tech.ebu.ch/loudness
     # cool way to understand this: video output that shows levels!
     #   ffplay -f lavfi -i "amovie=m02c30.mp4,ebur128=video=1:meter=18 [out0][out1]"
