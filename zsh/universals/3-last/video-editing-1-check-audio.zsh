@@ -86,7 +86,6 @@ function video_editing_1_check_audio() {
     echo $_histogram # for now print for all clips (red of errors stands out)
 
     echo
-    echo
     function show_geometric_mean_of_peak() {
         local window_ms=$1
         local audio_sample_rate=48000
@@ -114,6 +113,8 @@ function video_editing_1_check_audio() {
 
     show_geometric_mean_of_peak 2000
     show_geometric_mean_of_peak 100
+    echo
+    echo
 
     # ??? todo ebur128 loudness filter!
     #  learn: https://tech.ebu.ch/loudness
