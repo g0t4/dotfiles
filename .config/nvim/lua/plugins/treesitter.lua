@@ -183,66 +183,72 @@ return {
             end, { desc = 'List parsers and queries tracked by nvim-treesitter' })
 
             vim.api.nvim_create_user_command('TSListAllInRuntimePath', function()
-                local parser_files = vim.api.nvim_get_runtime_file('parser/*', true)
-                local by_lang, order = {}, {}
-                for _, file in ipairs(parser_files) do
-                    local name = vim.fn.fnamemodify(file, ':t:r')
-                    if not by_lang[name] then
-                        by_lang[name] = {}
-                        table.insert(order, name)
+                local lines = {}
+                local function what_is_in_rtp(what)
+                    local rtp_files = vim.api.nvim_get_runtime_file(what, true)
+                    local by_lang, order = {}, {}
+                    for _, file in ipairs(rtp_files) do
+                        local name = vim.fn.fnamemodify(file, ':t:r')
+                        if not by_lang[name] then
+                            by_lang[name] = {}
+                            table.insert(order, name)
+                        end
+                        table.insert(by_lang[name], file)
                     end
-                    table.insert(by_lang[name], file)
+                    table.sort(order)
+
+                    local function norm(p) return p and vim.fs.normalize(p) or nil end
+
+                    local vimruntime = norm(vim.env.VIMRUNTIME)
+                    local site = norm(vim.fn.stdpath('data') .. '/site')
+
+                    -- where nvim-treesitter (main branch) installs parsers, if available
+                    local ts_dir
+                    do
+                        local ok, cfg = pcall(require, 'nvim-treesitter.config')
+                        if what:find("parsers") then
+                            if ok and cfg.get_install_dir then
+                                ts_dir = norm(cfg.get_install_dir('parser'))
+                                print(ts_dir)
+                            end
+                        end
+                    end
+
+                    local function label(path)
+                        path = norm(path)
+                        if vimruntime and vim.startswith(path, vimruntime) then
+                            return 'bundled'
+                        end
+                        if (ts_dir and vim.startswith(path, ts_dir)) or path:find('nvim%-treesitter') then
+                            return 'nvim-treesitter'
+                        end
+                        if vim.startswith(path, site) then
+                            return 'site'
+                        end
+                        if vim.startswith(path, '/nix/store/') then
+                            -- strip the hash: /nix/store/<hash>-<name>/... -> nix:<name>
+                            local pkg = path:match('^/nix/store/[^-]+%-([^/]+)')
+                            return 'nix:' .. (pkg or '?')
+                        end
+                        return vim.fn.fnamemodify(path, ':~')
+                    end
+
+                    table.insert(lines, string.format(what .. ' on runtimepath (%d):', #order))
+                    for _, lang in ipairs(order) do
+                        local files = by_lang[lang]
+                        local sources = vim.tbl_map(label, files)
+                        local line = string.format('  %-20s %s', lang, sources[1])
+                        if #files > 1 then
+                            line = line .. '  (shadows: ' .. table.concat(vim.list_slice(sources, 2), ', ') .. ')'
+                            line = line .. vim.inspect(files)
+                        end
+                        table.insert(lines, line)
+                    end
                 end
-                table.sort(order)
-
-                local function norm(p) return p and vim.fs.normalize(p) or nil end
-
-                local vimruntime = norm(vim.env.VIMRUNTIME)
-                local site = norm(vim.fn.stdpath('data') .. '/site')
-
-                -- where nvim-treesitter (main branch) installs parsers, if available
-                local ts_dir
-                do
-                    local ok, cfg = pcall(require, 'nvim-treesitter.config')
-                    if ok and cfg.get_install_dir then
-                        ts_dir = norm(cfg.get_install_dir('parser'))
-                        print(ts_dir)
-                    end
-                end
-
-                local function label(path)
-                    path = norm(path)
-                    if vimruntime and vim.startswith(path, vimruntime) then
-                        return 'bundled'
-                    end
-                    if (ts_dir and vim.startswith(path, ts_dir)) or path:find('nvim%-treesitter') then
-                        return 'nvim-treesitter'
-                    end
-                    if vim.startswith(path, site) then
-                        return 'site'
-                    end
-                    if vim.startswith(path, '/nix/store/') then
-                        -- strip the hash: /nix/store/<hash>-<name>/... -> nix:<name>
-                        local pkg = path:match('^/nix/store/[^-]+%-([^/]+)')
-                        return 'nix:' .. (pkg or '?')
-                    end
-                    return vim.fn.fnamemodify(path, ':~')
-                end
-
-                local lines = { string.format('parsers on runtimepath (%d):', #order) }
-                for _, lang in ipairs(order) do
-                    local files = by_lang[lang]
-                    local sources = vim.tbl_map(label, files)
-                    local line = string.format('  %-20s %s', lang, sources[1])
-                    if #files > 1 then
-                        line = line .. '  (shadows: ' .. table.concat(vim.list_slice(sources, 2), ', ') .. ')'
-                        line = line .. vim.inspect(files)
-                    end
-                    table.insert(lines, line)
-                end
-
-                show_ts_list('All parsers in runtime path (RTP)', lines)
-            end, { desc = 'List all parsers on the runtimepath with their source' })
+                what_is_in_rtp('parser/*')
+                what_is_in_rtp('queries/*')
+                show_ts_list('ts related files in RTP', lines)
+            end, { desc = 'List all treesitter related files on the runtimepath' })
 
             -- v0.12+ notes:
             -- - nvim owns treesitter highlighting, folding
