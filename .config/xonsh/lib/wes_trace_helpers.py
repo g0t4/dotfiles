@@ -62,9 +62,12 @@ def trace_files(*, recursive=False):
 
 
 def expand_trace_file(context, match):
-    trace_number = int(match.group(2) or 1)
+    trace_number = match.group(2)
     files = trace_files()
-    selected = files[trace_number - 1] if 1 <= trace_number <= len(files) else None
+    if trace_number == "":
+        selected = files[-1] # default to last
+    else:
+        selected = files[trace_number - 1] if 1 <= trace_number <= len(files) else None
 
     parts: list[str] = []
     if match.group(3):
