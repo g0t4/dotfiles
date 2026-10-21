@@ -144,9 +144,11 @@ return {
                 "vue",
                 -- "vhdl",
 
+                -- "markdown",
                 -- FYI these are OOB so don't need to install with TSInstall:
                 --     "c", "lua", "markdown", "vim", "vimdoc", tree-sitter query files (scm IIRC)
-                -- TODO useful to add this too (not just builtin markdown one?) "markdown_inline" ?
+                --     FYI also it appears "markdown_inline" is installed in neovim too
+                --     confirmed this by uninstalling w/ TSUninstall (nvim-treesitter) and reloaded and markdown tables still render properly with my render-markdown.nvim which IIUC uses treesitter parsers
 
                 -- "cst", "test", -- TODO where did I install these from? (both are part of treesitter test file testing
                 --
