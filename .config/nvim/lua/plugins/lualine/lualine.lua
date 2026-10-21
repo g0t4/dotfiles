@@ -97,7 +97,8 @@ return {
                         -- https://github.com/nvim-lualine/lualine.nvim#filename-component-options
                         { "filename", path = 1 } -- 1 = relative path
                     },
-                    lualine_c = { statusline_filetype, unpack(CopilotsStatus()), },
+
+                    lualine_c = { statusline_filetype, unpack(require("ask-openai.status").get_lualine_components()), },
                     lualine_x = {},
                     lualine_y = loc,
                     lualine_z = {

@@ -1,7 +1,3 @@
-function CopilotsStatus()
-    return require("ask-openai.status").get_lualine_components()
-end
-
 local ask_openai_plugin = {
     "g0t4/ask-openai.nvim",
     enabled = true,
