@@ -18,6 +18,7 @@
 --
 --
 -- Native LSP for source buffers. Command-line completion stays in cmdline_cmp.lua.
+require('plugins.completions.nvim_native.trace').setup()
 vim.opt.completeopt = { "menuone", "noselect", "popup", "fuzzy", }
 vim.diagnostic.config({
     signs = true, -- gutter signs
