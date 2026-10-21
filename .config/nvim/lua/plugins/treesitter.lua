@@ -168,6 +168,7 @@ return {
             end
 
             vim.api.nvim_create_user_command('TSListAllInRuntimePath', function()
+                -- FYI this is kinda rushed but should show some level of detail into what is available for parsers and queries (w/o breaking out queries by type highlights/injections/etc)
                 local lines = {}
                 local function what_is_in_rtp(what)
                     local rtp_files = vim.api.nvim_get_runtime_file(what, true)
