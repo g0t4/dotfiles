@@ -167,21 +167,6 @@ return {
                 vim.api.nvim_win_set_buf(0, buf)
             end
 
-            vim.api.nvim_create_user_command('TSListInstalledByNvimTreesitter', function()
-                local ts = require('nvim-treesitter')
-                local parsers = ts.get_installed('parsers') or {}
-                local queries = ts.get_installed('queries') or {}
-
-                local lines = {
-                    string.format('parsers (%d):', #parsers),
-                }
-                vim.list_extend(lines, vim.tbl_map(function(lang) return '  ' .. lang end, parsers))
-                table.insert(lines, string.format('queries (%d):', #queries))
-                vim.list_extend(lines, vim.tbl_map(function(lang) return '  ' .. lang end, queries))
-
-                show_ts_list('Parsers Installed by nvim-treesitter only', lines)
-            end, { desc = 'List parsers and queries tracked by nvim-treesitter' })
-
             vim.api.nvim_create_user_command('TSListAllInRuntimePath', function()
                 local lines = {}
                 local function what_is_in_rtp(what)
