@@ -184,23 +184,37 @@ return {
 
             vim.api.nvim_create_user_command('TSListAllInRuntimePath', function()
                 local parser_files = vim.api.nvim_get_runtime_file('parser/*', true)
-                local langs = {}
+                local by_lang, order = {}, {}
                 for _, file in ipairs(parser_files) do
                     local name = vim.fn.fnamemodify(file, ':t:r')
-                    if not vim.tbl_contains(langs, name) then
-                        table.insert(langs, name .. " " .. file)
+                    if not by_lang[name] then
+                        by_lang[name] = {}
+                        table.insert(order, name)
                     end
+                    table.insert(by_lang[name], file)
                 end
-                table.sort(langs)
+                table.sort(order)
 
-                local lines = {
-                    string.format('parsers on runtimepath (%d):', #langs),
-                }
-                vim.list_extend(lines, vim.tbl_map(function(lang) return '  ' .. lang end, langs))
+                local vimruntime = vim.env.VIMRUNTIME
+                local function label(path)
+                    if vim.startswith(path, vimruntime) then return 'bundled' end
+                    if path:find('nvim%-treesitter') then return 'nvim-treesitter' end
+                    return vim.fn.fnamemodify(path, ':~')
+                end
 
-                show_ts_list('All parsers in runtime path (RTP)... includes nvim-treesitter + neovim OOB + others', lines)
-            end, { desc = 'List all parsers found on the runtimepath (any source)' })
+                local lines = { string.format('parsers on runtimepath (%d):', #order) }
+                for _, lang in ipairs(order) do
+                    local files = by_lang[lang]
+                    local sources = vim.tbl_map(label, files)
+                    local line = string.format('  %-20s %s', lang, sources[1])
+                    if #files > 1 then
+                        line = line .. '  (shadows: ' .. table.concat(vim.list_slice(sources, 2), ', ') .. ')'
+                    end
+                    table.insert(lines, line)
+                end
 
+                show_ts_list('All parsers in runtime path (RTP)', lines)
+            end, { desc = 'List all parsers on the runtimepath with their source' })
 
             -- v0.12+ notes:
             -- - nvim owns treesitter highlighting, folding
