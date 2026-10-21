@@ -28,6 +28,51 @@ def test_python_and_lua_use_palette_without_bold_or_background():
         assert not re.search(r"\x1b\[(?:1m|1;|48;)", result.stdout)
 
 
+def test_bash_and_sh_use_palette_for_files_and_explicit_languages(tmp_path):
+    source = '#!/usr/bin/env bash\nif true; then printf "hello %s\\n" "$USER"; fi\n'
+    for name in ('script.sh', 'script.bash', '.bashrc', '.profile'):
+        path = tmp_path / name
+        path.write_text(source)
+        result = run_bat('--color=always', str(path))
+        assert result.returncode == 0, result.stderr
+        assert '38;2;179;148;227mif' in result.stdout  # keyword
+        assert '38;2;142;203;187mprintf' in result.stdout  # builtin
+        assert '38;2;172;208;149m"hello' in result.stdout  # string
+        assert re.sub(r'\x1b\[[0-9;]*m', '', result.stdout) == source
+        assert not re.search(r'\x1b\[(?:1m|1;|48;)', result.stdout)
+
+    for language in ('bash', 'sh', 'shell'):
+        result = run_bat('-pl', language, '--color=always', input=source)
+        assert result.returncode == 0, result.stderr
+        assert '38;2;179;148;227mif' in result.stdout
+        assert re.sub(r'\x1b\[[0-9;]*m', '', result.stdout) == source
+
+
+def test_bash_commands_are_distinct_from_arguments_and_quoted_text():
+    from pygments import lex
+    from pygments.token import Name, Text
+    from wes_syntax import source_lexer
+
+    source = (
+        "jq -r '.command_line // .code' trace.json | git status --short && echo done\n"
+        "FOO=bar git log; 2>/dev/null jq -r '.code' trace.json\n"
+        "echo 'git status'\n"
+        "cat <<EOF\ngit status\nEOF\n"
+    )
+    tokens = list(lex(source, source_lexer('bash')))
+    assert ''.join(value for _, value in tokens) == source
+    assert [value for token, value in tokens if token == Name.Function] == [
+        'jq', 'git', 'git', 'jq', 'cat'
+    ]
+    assert (Text, 'status') in tokens
+    assert (Text, '--short') in tokens
+
+    result = run_bat('-pl', 'sh', '--color=always', input=source)
+    assert result.returncode == 0, result.stderr
+    assert '38;2;130;176;223mgit' in result.stdout  # external command blue
+    assert '38;2;206;206;206mstatus' in result.stdout  # argument neutral
+
+
 def test_redirected_file_and_no_color_stay_plain(tmp_path):
     path = tmp_path / "sample.py"
     source = 'print("hello")\n'

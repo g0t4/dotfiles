@@ -3,7 +3,7 @@
 # requires-python = ">=3.12"
 # dependencies = ["pygments>=2.19,<3", "rich>=13.9,<15", "xonsh>=0.24,<0.25"]
 # ///
-"""Use our theme for Python/Lua/Markdown views; delegate other requests to bat."""
+"""Use our theme for supported source views; delegate other requests to bat."""
 
 import os
 from pathlib import Path
@@ -16,7 +16,28 @@ from pygments.formatters import TerminalTrueColorFormatter
 from highlight import ROOT, load_style, style_for_lexer
 from wes_syntax import source_lexer
 
-LANGUAGES = {"py": "python", "python": "python", "python3": "python", "lua": "lua", "md": "markdown", "markdown": "markdown", "xsh": "xonsh", "xonsh": "xonsh"}
+LANGUAGES = {
+    "py": "python", "python": "python", "python3": "python",
+    "lua": "lua", "md": "markdown", "markdown": "markdown",
+    "xsh": "xonsh", "xonsh": "xonsh",
+    "bash": "bash", "sh": "bash", "shell": "bash",
+}
+FILE_LANGUAGES = {
+    ".py": "python", ".pyi": "python", ".lua": "lua",
+    ".md": "markdown", ".markdown": "markdown", ".xsh": "xonsh",
+    ".sh": "bash", ".bash": "bash",
+}
+SHELL_FILENAMES = {".bashrc", ".bash_profile", ".bash_login", ".bash_logout", ".profile"}
+
+
+def file_language(file):
+    path = Path(file)
+    name = path.name.lower()
+    if name.endswith("xonshrc"):
+        return "xonsh"
+    if name in SHELL_FILENAMES:
+        return "bash"
+    return FILE_LANGUAGES.get(path.suffix.lower())
 
 
 def parse(args):
@@ -68,7 +89,7 @@ def parse(args):
                 return None
             grayscale = value == "wes-gray"
     files = files or ["-"]
-    languages = [language or ("xonsh" if Path(file).name.lower().endswith('xonshrc') else {".py": "python", ".pyi": "python", ".lua": "lua", ".md": "markdown", ".markdown": "markdown", ".xsh": "xonsh"}.get(Path(file).suffix.lower())) for file in files]
+    languages = [language or file_language(file) for file in files]
     if not all(languages):
         return None
     return files, languages, color, numbers, grayscale

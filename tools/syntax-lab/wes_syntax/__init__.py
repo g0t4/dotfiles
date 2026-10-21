@@ -19,6 +19,9 @@ def source_lexer(language=None, *, filename=None):
     if "xonsh" in lexer.aliases:
         from .lexers import SourceXonshLexer
         return SourceXonshLexer()
+    if lexer.name == "Bash":
+        from .lexers import SourceBashLexer
+        return SourceBashLexer()
     return lexer
 
 def grayscale_color(color):
