@@ -65,6 +65,8 @@ function browse_traces
 end
 complete -c browse_traces -a '(command ls $WES_ASK_CAPTURES)' --no-files
 
+abbr vtw view_trace --watch
+
 abbr vt view_trace
 function view_trace
     # Run the chat viewer tool using the module namespace.

@@ -128,6 +128,7 @@ def register_trace_helpers(aliases, dotfiles):
         aliases[name] = fish_command_alias(name)
     for trigger in ("nat", "notes_about_trace"):
         abbr(trigger, "notes_about_trace '%'", cursor_marker="%")
+    abbr('vtw', 'view_trace --watch')
     abbr(re.compile(r"(t|vt|vtt)(\d*)(a?)"), expand_trace_file)
     abbr(re.compile(r"(tm|tc)(\d+)"), expand_trace_message)
     # abbr("tc", "jq --raw-output '.request_body.messages[] | select(.tool_calls) | .tool_calls[].function' ./*-trace.json") # arguments are json stringified so they're harder to reason about here... hence next that expands an arguments object next to name
