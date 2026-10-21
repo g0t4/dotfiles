@@ -116,7 +116,7 @@ return {
                 -- "dtd", -- add?
                 -- "diff", -- add?
                 "editorconfig",
-                "gitcommit", -- i.e. .git/COMMIT_EDITMSG (syntax highlighting works fine too)
+                "gitcommit",  -- i.e. .git/COMMIT_EDITMSG (syntax highlighting works fine too)
                 "git_config", -- (syntax highlighting works fine too)
                 "git_rebase",
                 "gitattributes",
@@ -354,7 +354,7 @@ return {
                             --
                             url = "https://github.com/tree-sitter-grammars/tree-sitter-test",
                             files = { "src/parser.c", "src/scanner.c" }, -- TODO is this still needed?
-                            branch = 'master', -- will use 'main' now as default and shit a brick on :TSInstall test...
+                            branch = 'master',                           -- will use 'main' now as default and shit a brick on :TSInstall test...
                             --
                             -- TODO do I need any of these?
                             -- optional entries (from nvim-treesitter docs: https://github.com/nvim-treesitter/nvim-treesitter#adding-custom-languages)
