@@ -95,6 +95,11 @@ def wes_colorful_output(cmd: str, **kwargs):
         if not "| bat -l json" in cmd:
             return f"{cmd} | bat -l json"
 
+    if "/v1/models" in cmd:
+        # this might upset me at some point, we shall see... endswith might work better
+        if not "| jq" in cmd:
+            return f"{cmd} | jq"
+
     # Interactive cat handles Markdown through our palette. Keep rendering
     # explicit (e.g. glow file.md), rather than appending another formatter.
 
