@@ -42,11 +42,38 @@ return {
     --     -- install deno on system
     -- }
 
-    -- NOTES:
-    -- markdown rendering:
-    -- https://github.com/MeanderingProgrammer/render-markdown.nvim
-    --
     -- previewer: look promising https://github.com/jannis-baum/vivify.vim
-    --
+
+    {
+        -- this will render tables w/ extmarks, I want to give it a try again...
+        -- I scaled back what it does to just really style tables to be padded/aligned automatically...
+        -- if I like it and can accustom myself to using it then I will expand what it does
+        -- mostly gonna help when I have tables in AI generated messages in my chat viewer
+        -- + when I use tables in markdown files...
+        -- FYI wes just get over it changing the line to edit when in insert mode! and when on the line in normal mode!
+        --
+        "MeanderingProgrammer/render-markdown.nvim",
+        ft = { "markdown" },
+        dependencies = { "nvim-treesitter/nvim-treesitter" },
+        opts = {
+            heading      = { enabled = false },
+            code         = { enabled = false },
+            bullet       = { enabled = false },
+            checkbox     = { enabled = false },
+            quote        = { enabled = false },
+            dash         = { enabled = false },
+            link         = { enabled = false },
+            sign         = { enabled = false },
+
+            pipe_table   = {
+                enabled = true,
+                style = "full",
+                cell = "padded",
+            },
+
+            render_modes = { "n", "c" },
+            anti_conceal = { enabled = true },
+        },
+    }
 
 }
