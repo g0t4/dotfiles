@@ -195,10 +195,37 @@ return {
                 end
                 table.sort(order)
 
-                local vimruntime = vim.env.VIMRUNTIME
+                local function norm(p) return p and vim.fs.normalize(p) or nil end
+
+                local vimruntime = norm(vim.env.VIMRUNTIME)
+                local site = norm(vim.fn.stdpath('data') .. '/site')
+
+                -- where nvim-treesitter (main branch) installs parsers, if available
+                local ts_dir
+                do
+                    local ok, cfg = pcall(require, 'nvim-treesitter.config')
+                    if ok and cfg.get_install_dir then
+                        ts_dir = norm(cfg.get_install_dir('parser'))
+                        print(ts_dir)
+                    end
+                end
+
                 local function label(path)
-                    if vim.startswith(path, vimruntime) then return 'bundled' end
-                    if path:find('nvim%-treesitter') then return 'nvim-treesitter' end
+                    path = norm(path)
+                    if vimruntime and vim.startswith(path, vimruntime) then
+                        return 'bundled'
+                    end
+                    if (ts_dir and vim.startswith(path, ts_dir)) or path:find('nvim%-treesitter') then
+                        return 'nvim-treesitter'
+                    end
+                    if vim.startswith(path, site) then
+                        return 'site'
+                    end
+                    if vim.startswith(path, '/nix/store/') then
+                        -- strip the hash: /nix/store/<hash>-<name>/... -> nix:<name>
+                        local pkg = path:match('^/nix/store/[^-]+%-([^/]+)')
+                        return 'nix:' .. (pkg or '?')
+                    end
                     return vim.fn.fnamemodify(path, ':~')
                 end
 
@@ -209,6 +236,7 @@ return {
                     local line = string.format('  %-20s %s', lang, sources[1])
                     if #files > 1 then
                         line = line .. '  (shadows: ' .. table.concat(vim.list_slice(sources, 2), ', ') .. ')'
+                        line = line .. vim.inspect(files)
                     end
                     table.insert(lines, line)
                 end
