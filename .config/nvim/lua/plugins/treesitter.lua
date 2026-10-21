@@ -188,7 +188,7 @@ return {
                 for _, file in ipairs(parser_files) do
                     local name = vim.fn.fnamemodify(file, ':t:r')
                     if not vim.tbl_contains(langs, name) then
-                        table.insert(langs, name)
+                        table.insert(langs, name .. " " .. file)
                     end
                 end
                 table.sort(langs)
