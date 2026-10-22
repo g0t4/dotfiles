@@ -257,15 +257,16 @@ end
 
 abbr shift_only 'for i in *.{mkv,mov}; video_editing_just_shift_to_mp4_one_video $i; end'
 function video_editing_just_shift_to_mp4_one_video
-    # TODO merge with stage_1 below which does the same thing
-    # converts to mp4 + shifts by 100ms
     set video_file (realpath $argv[1])
-    set output_file (path change-extension ".shifted100ms.mp4" "$video_file")
-    if test -f "$output_file"
-        echo "Skipping...file already exists: $output_file"
-    else
-        ffmpeg -i "$video_file" -itsoffset 0.1 -i "$video_file" -map 0:v -map 1:a -c:v copy -c:a aac "$output_file"
-    end
+    xonsh -c "video_editing_just_shift_to_mp4_one_video('$video_file')"
+    # # TODO merge with stage_1 below which does the same thing
+    # # converts to mp4 + shifts by 100ms
+    # set output_file (path change-extension ".shifted100ms.mp4" "$video_file")
+    # if test -f "$output_file"
+    #     echo "Skipping...file already exists: $output_file"
+    # else
+    #     ffmpeg -i "$video_file" -itsoffset 0.1 -i "$video_file" -map 0:v -map 1:a -c:v copy -c:a aac "$output_file"
+    # end
 end
 
 function path_stem --argument-names path --description "return path w/o extension, i.e. foo.mp4 => foo"
@@ -291,8 +292,12 @@ function _video_editing_aio_stage1
     if not test -f "$stage1_shifted_file"
         _ffmpeg_concat $argv # produces $combined_file
 
-        # TODO change this to re-encode audio stream? to avoid some issues w/ start=NON-ZERO (ffprobe foo.mp4) output
-        ffmpeg -i "$combined_file" -itsoffset 0.1 -i "$combined_file" -map 0:v -map 1:a -c:v copy -c:a aac "$stage1_shifted_file"
+        log_ --red "UPDATED AND NOT YET TESTED (itsoffset shift in fish's _video_editing_aio_stage1)"
+        log_ --red "  I did test it on xonsh port of itsoffset shift)"
+        # TODO! would be nice to merge this with xonsh version of itsoffset shift to avoid dulicating brittle conversion logic that I inevitably will forget to sync
+        #  TODO how about pass two args to that version (output name too) or it defaults the output if not passed (see above for calling the xonsh version from fish)
+        ffmpeg -i "$combined_file" -itsoffset 0.1 -i "$combined_file" -map 0:v -map 1:a -c copy -avoid_negative_ts make_zero "$stage1_shifted_file"
+
         trash $combined_file # be safe with rm, if it was wrong file I wanna have it be recoverable
     end
     echo $stage1_shifted_file

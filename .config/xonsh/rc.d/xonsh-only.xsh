@@ -53,3 +53,24 @@ def _files_sorted_by_size():
         print(f"{_human_size(size):>10} {path}")
 
 aliases['files_sorted_by_size'] = _files_sorted_by_size
+
+
+import glob
+import os
+
+abbr("shift_only","""
+for i in glob.glob('*.mkv') + glob.glob('*.mov'):
+    video_editing_just_shift_to_mp4_one_video(i)
+""")
+
+def video_editing_just_shift_to_mp4_one_video(video_file):
+    # TODO ensure old definition doesn't trump this when generatig xonsh from other fish config files
+    # TODO merge with stage_1 below which does the same thing
+    # converts to mp4 + shifts by 100ms
+    video_file = os.path.realpath(video_file)
+    output_file = os.path.splitext(video_file)[0] + '.shifted100ms.mp4'
+    if os.path.isfile(output_file):
+        print(f"Skipping...file already exists: {output_file}")
+    else:
+        ffmpeg -i @(video_file) -itsoffset 0.1 -i @(video_file) -map 0:v -map 1:a -c copy -avoid_negative_ts make_zero @(output_file)
+
