@@ -65,7 +65,7 @@ def expand_trace_file(context, match):
     trace_number = match.group(2)
     files = trace_files()
     if trace_number == "":
-        selected = files[-1] # default to last
+        selected = files[-1] if len(files) > 0 else None  # default to last
     else:
         selected = files[trace_number - 1] if 1 <= trace_number <= len(files) else None
 
