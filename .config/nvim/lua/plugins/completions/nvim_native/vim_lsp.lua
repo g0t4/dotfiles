@@ -362,10 +362,18 @@ vim.api.nvim_create_autocmd("LspAttach", {
         map("n", "<F2>", vim.lsp.buf.rename, "LSP rename")
         map("n", "<leader>co", vim.lsp.buf.document_symbol, "LSP document symbols")
         map("n", "<leader>cs", vim.lsp.buf.workspace_symbol, "LSP workspace symbols")
+        --
+        -- * result movement
         map("n", "<leader>cf", ":cfirst<CR>", "First result")
-        map("n", "<leader>cl", ":clast<CR>", "Last result")
         map("n", "<leader>cn", ":cnext<CR>", "Next result")
         map("n", "<leader>cp", ":cprevious<CR>", "Previous result")
+        map("n", "<leader>cl", ":clast<CR>", "Last result")
+        --
+        -- * file movement
+        map("n", "<leader>cnf", ":cnfile<CR>", "Next file")
+        map("n", "<leader>cNf", ":cNfile<CR>", "Previous file")
+        map("n", "<leader>cpf", ":cpfile<CR>", "Previous file")
+        --
 
         map("n", "<leader>cd", function()
             local diagnostics = vim.diagnostic.get(0)

@@ -26,7 +26,6 @@ function open_hammerspoon_failure_in_quickfix()
     }):start()
 end
 
-
 function set_quickfix_from_clipboard_AUTO_DETECT()
     local clipboard = vim.fn.getreg('+')
     quickfix.set_quickfix_from(clipboard)
@@ -54,15 +53,11 @@ vim.keymap.set('n', "<leader>qhs", open_hammerspoon_failure_in_quickfix)
 
 -- FYI in treesitter you can open in quick fix with ctrl-q and then use these for navigating items:
 -- quickfix item navigation:
-vim.keymap.set('n', "<leader>qn", function() vim.cmd('cnext') end) -- next item in quickfix
-vim.keymap.set('n', "<leader>qp", function() vim.cmd('cprev') end) -- prev item in quickfix
--- move by file:
-vim.keymap.set('n', "<leader>qnf", function() vim.cmd('cnfile') end)
-vim.keymap.set('n', "<leader>qpf", function() vim.cmd('cpfile') end)
+--  TODO remove these when I am switched over the <leader>c prefixed versions:
+vim.keymap.set('n', "<leader>qn", function() vim.print("USE <leader>cn") end) -- next item in quickfix
+vim.keymap.set('n', "<leader>qp", function() vim.print("USE <leader>cp") end) -- prev item in quickfix
 
-vim.keymap.set('n', "<leader>qp", function() vim.cmd('cprev') end) -- prev item in quickfix
 vim.keymap.set('n', "<leader>qc", set_quickfix_from_clipboard_AUTO_DETECT)
 
 
 -- TODO last failure => AskAgent :)
-
