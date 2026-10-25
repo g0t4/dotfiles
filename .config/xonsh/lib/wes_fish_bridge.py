@@ -63,6 +63,8 @@ def fish_function_capture_stdout(
     )
     stdout = completed.stdout.rstrip("\n")
     stderr = completed.stderr.strip()
+    # TODO we shouldn't throw away STDERR when non-zero exit code...
+    # TODO also, nothing should be using this if it needs streaming STDOUT/STDERR!
     if completed.returncode:
         detail = f": {stderr}" if stderr else ""
         raise FishFunctionError(
