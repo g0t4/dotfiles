@@ -28,21 +28,7 @@ def fish_function_stream(
     stdout: _FILE = None,
     stderr: _FILE = None,
 ) -> int:
-    # FYI this is just an alias until I can review usages of fish_function_command and point it here
-    # also in case I need to change how fish_function_command behaves for a subset of consumers, then I cand split this off and do that here
-    # this RENAME is all about making it explicit why this exist vs other fish function wrappers (i.e. fish_function_capture_stdout)
-    # "stream" as in STDOUT/ERR is piped to xonsh shell's STDOUT/ERR so you see stuff as it happens and not if its returned (when captured) or just dropped
-    return fish_function_command(name, args, stdin=stdin, stdout=stdout, stderr=stderr)
-
-
-def fish_function_command(
-    name: str,
-    *args: str,
-    stdin: _FILE = None,
-    stdout: _FILE = None,
-    stderr: _FILE = None,
-) -> int:
-    """Run an interactive Fish function while preserving command I/O."""
+    """Run a Fish function while streaming STDIN and STDOUT/STDERR"""
     env = os.environ.copy()
     # FYI ONLY_CALL_FISH_WRAPPED_FUNC should be used in the fish config to stop any extra ANSI escape codes from being displayed
     env["ONLY_CALL_FISH_WRAPPED_FUNC"] = "true"

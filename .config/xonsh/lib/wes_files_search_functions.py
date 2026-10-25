@@ -9,7 +9,7 @@ from wes_fish_bridge import (
     FishFunctionError,
     UnsupportedFishFunctionError,
     fish_function_capture_stdout,
-    fish_function_command,
+    fish_function_stream_invoke,
 )
 
 
@@ -44,19 +44,6 @@ UNSUPPORTED_FUNCTIONS = {
     "md_open": "may change directory from an interactive fzf picker",
     "mdfind_cd_dir": "changes directory from an interactive fzf picker",
 }
-
-
-def fish_alias(function_name):
-    def invoke(args, stdin=None, stdout=None, stderr=None, **_):
-        return fish_function_command(
-            function_name,
-            *args,
-            stdin=stdin,
-            stdout=stdout,
-            stderr=stderr,
-        )
-
-    return invoke
 
 
 def captured_fish_alias(function_name):
@@ -117,7 +104,7 @@ def register_files_search_functions(aliases):
     ]
     # PRN override ripgrep to add color by default too? i.e. RIPGREP_CONFIG_PATH
     for function_name in STREAMED_FISH_FUNCTIONS:
-        aliases[function_name] = fish_alias(function_name)
+        aliases[function_name] = fish_function_stream_invoke(function_name)
     for function_name in CAPTURED_FISH_FUNCTIONS:
         aliases[function_name] = captured_fish_alias(function_name)
 

@@ -40,7 +40,7 @@ from wes_xonsh_abbreviations import (  # noqa: E402
 from wes_fish_bridge import (  # noqa: E402
     FishFunctionError,
     fish_function_capture_stdout,
-    fish_function_command,
+    fish_function_stream,
 )
 
 
@@ -623,7 +623,7 @@ def test_fish_command_bridge_preserves_streams_and_exit_status(monkeypatch):
 
     monkeypatch.setattr(subprocess, "run", fake_run)
     assert (
-        fish_function_command(
+        fish_function_stream(
             "interactive_helper",
             "argument with spaces",
             stdin=streams[0],
