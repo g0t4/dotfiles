@@ -19,7 +19,7 @@ from prompt_toolkit.keys import Keys
 from xonsh.parsers.completion_context import CompletionContextParser
 
 from wes_files_abbreviations import register_files_abbreviations
-from wes_fish_bridge import FishFunctionError, fish_function_command
+from wes_fish_bridge import FishFunctionError, fish_function_stream
 from wes_fish_z import FishZ, FishZError
 from wes_interactive_cat import InteractiveCat
 from wes_logging import ensure_logger_is_setup, get_wes_logger
@@ -45,7 +45,6 @@ log = get_wes_logger("fzf_pickers")
 log = get_wes_logger("files")
 
 
-
 def _files_picker_key_event(event):
     return [
         {"key": str(key_press.key), "data": repr(key_press.data)}
@@ -61,14 +60,11 @@ def _files_run(*args, **kwargs):
 
 def _files_fish_alias(function_name):
     def invoke(args, stdin=None, stdout=None, stderr=None, **_):
-        input_text = stdin.read() if stdin is not None else None
         try:
-            output = fish_function_capture_stdout(function_name, *args, input_text=input_text)
+            fish_function_stream(function_name, args, stdin=stdin, stdout=stdout, stderr=stderr)
         except FishFunctionError as error:
             print(error, file=stderr or sys.stderr)
             return 1
-        if output:
-            print(output, file=stdout or sys.stdout)
         return 0
 
     return invoke
