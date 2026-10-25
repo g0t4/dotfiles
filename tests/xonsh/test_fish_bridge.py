@@ -1,5 +1,5 @@
 import test_setup # load first
-from wes_fish_bridge import fish_function
+from wes_fish_bridge import fish_function_capture_stdout
 
 class Tests_Integration_FishBridge:
     """
@@ -11,10 +11,10 @@ class Tests_Integration_FishBridge:
     """
 
     def test_repo_root(self):
-        assert fish_function("_repo_root") == "/Users/wesdemos/repos/github/g0t4/dotfiles"
+        assert fish_function_capture_stdout("_repo_root") == "/Users/wesdemos/repos/github/g0t4/dotfiles"
 
     def test_git_current_branch(self):
-        assert fish_function("git_current_branch") == "master"
+        assert fish_function_capture_stdout("git_current_branch") == "master"
 
     def test_abbr_function_gdlcX_with_argument(self):
-        assert fish_function("gdlcX", "gdlc2") == "git log --patch HEAD~2..HEAD~1"
+        assert fish_function_capture_stdout("gdlcX", "gdlc2") == "git log --patch HEAD~2..HEAD~1"

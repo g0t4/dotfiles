@@ -235,8 +235,8 @@ def _fish_function_source(func_name: str) -> str:
         #   function lookups into a single fish process invocation (e.g. pass
         #   multiple names to `type` and split on a delimiter marker) to avoid
         #   per-function subprocess spawn overhead entirely.
-        from wes_fish_bridge import fish_function
-        source = fish_function("type", "--color=never", func_name)
+        from wes_fish_bridge import fish_function_capture_stdout
+        source = fish_function_capture_stdout("type", "--color=never", func_name)
     except Exception:
         source = "failed to find fish function source"
     _FISH_SOURCE_CACHE[func_name] = source

@@ -7,7 +7,7 @@ import platform
 import re
 
 from wes_abbreviations import AbbreviationResult, abbr
-from wes_fish_bridge import UnsupportedFishFunctionError, fish_function
+from wes_fish_bridge import UnsupportedFishFunctionError, fish_function_capture_stdout
 from wes_fish_migration import abbr_from_fish_function, unsupported_abbreviation
 
 

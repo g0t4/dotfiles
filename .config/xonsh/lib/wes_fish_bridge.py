@@ -38,7 +38,7 @@ def fish_function_command(
     return completed.returncode
 
 
-def fish_function(
+def fish_function_capture_stdout(
     name: str,
     *args: str,
     input_text: str | None = None,

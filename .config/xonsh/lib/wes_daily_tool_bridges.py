@@ -5,13 +5,13 @@ from functools import lru_cache
 from pathlib import Path
 
 from find_executables import find_fish
-from wes_fish_bridge import fish_function
+from wes_fish_bridge import fish_function_capture_stdout
 from wes_abbreviations import AbbreviationResult
 
 
 def audio_abbreviation(name, *, cursor=False):
     def expand(context, _match):
-        text = fish_function(name, context.token)
+        text = fish_function_capture_stdout(name, context.token)
         # Match Fish: the first marker is optional, and only it is removed.
         marker = text.find("%") if cursor else -1
         if marker < 0:

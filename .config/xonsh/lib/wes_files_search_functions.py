@@ -8,7 +8,7 @@ import sys
 from wes_fish_bridge import (
     FishFunctionError,
     UnsupportedFishFunctionError,
-    fish_function,
+    fish_function_capture_stdout,
     fish_function_command,
 )
 
@@ -63,7 +63,7 @@ def captured_fish_alias(function_name):
     def invoke(args, stdin=None, stdout=None, stderr=None, **_):
         input_text = stdin.read() if stdin is not None else None
         try:
-            output = fish_function(function_name, *args, input_text=input_text)
+            output = fish_function_capture_stdout(function_name, *args, input_text=input_text)
         except FishFunctionError as error:
             print(error, file=stderr or sys.stderr)
             return 1

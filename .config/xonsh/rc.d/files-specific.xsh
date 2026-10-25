@@ -19,7 +19,7 @@ from prompt_toolkit.keys import Keys
 from xonsh.parsers.completion_context import CompletionContextParser
 
 from wes_files_abbreviations import register_files_abbreviations
-from wes_fish_bridge import FishFunctionError, fish_function
+from wes_fish_bridge import FishFunctionError, fish_function_capture_stdout
 from wes_fish_z import FishZ, FishZError
 from wes_interactive_cat import InteractiveCat
 from wes_logging import ensure_logger_is_setup, get_wes_logger
@@ -63,7 +63,7 @@ def _files_fish_alias(function_name):
     def invoke(args, stdin=None, stdout=None, stderr=None, **_):
         input_text = stdin.read() if stdin is not None else None
         try:
-            output = fish_function(function_name, *args, input_text=input_text)
+            output = fish_function_capture_stdout(function_name, *args, input_text=input_text)
         except FishFunctionError as error:
             print(error, file=stderr or sys.stderr)
             return 1
@@ -186,7 +186,7 @@ def _cd_dir_of_man_page(args, stdout=None, stderr=None, **_):
         print("usage: cd_dir_of_man_page <page>", file=stderr or sys.stderr)
         return 2
     try:
-        man_path = fish_function("dir_of_man_page", args[0])
+        man_path = fish_function_capture_stdout("dir_of_man_page", args[0])
     except FishFunctionError as error:
         print(error, file=stderr or sys.stderr)
         return 1

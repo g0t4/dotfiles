@@ -11,7 +11,6 @@ from pathlib import Path
 from xonsh.completers.completer import add_one_completer
 from xonsh.completers.tools import RichCompletion, contextual_command_completer
 
-from wes_fish_bridge import FishFunctionError, fish_function
 from wes_git import register_wes_git
 from wes_git_functions import (
     format_line_numbers,

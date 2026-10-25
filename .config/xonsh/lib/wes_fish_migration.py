@@ -15,7 +15,7 @@ from rich.text import Text
 from wes_fish_bridge import (
     FishFunctionError,
     UnsupportedFishFunctionError,
-    fish_function,
+    fish_function_capture_stdout,
     fish_function_command,
 )
 from wes_abbreviations import abbr
@@ -56,7 +56,7 @@ def abbr_from_fish_function(function_name):
                 f"Fish abbreviation function {function_name!r} requires a native "
                 f"Xonsh migration: {reason}"
             )
-        return fish_function(function_name, context.token)
+        return fish_function_capture_stdout(function_name, context.token)
 
     return expand
 
@@ -126,8 +126,8 @@ def wrap_fish_functions(aliases, function_names):
         console.print()
         console.rule(Text(f"Fish implementation: {name}", style="bold green"), style="green")
         console.file.flush()
-        fish_function_definition = fish_function("functions", "--color", "never", name) # tell fish not to color the code
-        console.print(Syntax(fish_function_definition, "fish", theme=syntax_theme(), background_color="default"))
+        fish_func_definition = fish_function_capture_stdout("functions", "--color", "never", name) # tell fish not to color the code
+        console.print(Syntax(fish_func_definition, "fish", theme=syntax_theme(), background_color="default"))
 
     aliases["_fish_help"] = fish_help
     for function_name in function_names:

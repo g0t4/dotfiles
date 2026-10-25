@@ -39,7 +39,7 @@ from wes_xonsh_abbreviations import (  # noqa: E402
 )
 from wes_fish_bridge import (  # noqa: E402
     FishFunctionError,
-    fish_function,
+    fish_function_capture_stdout,
     fish_function_command,
 )
 
@@ -590,7 +590,7 @@ def test_fish_bridge_passes_arguments_outside_command_string(monkeypatch):
         return subprocess.CompletedProcess(argv, 0, stdout="value\n", stderr="")
 
     monkeypatch.setattr(subprocess, "run", fake_run)
-    assert fish_function("git_helper", "argument with spaces") == "value"
+    assert fish_function_capture_stdout("git_helper", "argument with spaces") == "value"
 
 
 def test_fish_bridge_can_forward_pipeline_input(monkeypatch):
@@ -599,7 +599,7 @@ def test_fish_bridge_can_forward_pipeline_input(monkeypatch):
         return subprocess.CompletedProcess([], 0, stdout="1 one\n2 two\n", stderr="")
 
     monkeypatch.setattr(subprocess, "run", fake_run)
-    assert fish_function("line_numbers", input_text="one\ntwo\n") == "1 one\n2 two"
+    assert fish_function_capture_stdout("line_numbers", input_text="one\ntwo\n") == "1 one\n2 two"
 
 
 def test_fish_command_bridge_preserves_streams_and_exit_status(monkeypatch):
@@ -640,4 +640,4 @@ def test_fish_bridge_reports_function_and_stderr(monkeypatch):
 
     monkeypatch.setattr(subprocess, "run", fake_run)
     with pytest.raises(FishFunctionError, match="git_helper.*bad state"):
-        fish_function("git_helper")
+        fish_function_capture_stdout("git_helper")
