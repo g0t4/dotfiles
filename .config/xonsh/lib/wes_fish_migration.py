@@ -127,7 +127,8 @@ def wrap_fish_functions(aliases, function_names):
         console.rule(Text(f"Fish implementation: {name}", style="bold green"), style="green")
         console.file.flush()
         return fish_function_command(
-            "type", "--color=" + ("always" if console.is_terminal else "never"),
+            "functions",
+            # "--color=" + ("always" if console.is_terminal else "never"),
             name, stdin=stdin, stdout=stdout, stderr=stderr
         )
 
