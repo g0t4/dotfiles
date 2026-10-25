@@ -147,6 +147,16 @@ local function buildActions(paths)
 
     local actions = {}
 
+    if #paths == 1 and hs.fs.attributes(paths[1], "mode") == "directory" then
+        table.insert(actions, {
+            text = "New Nested Folder",
+            subText = "Create a folder inside " .. getFilename(paths[1]),
+            action = "new_nested_folder",
+            paths = paths,
+            image = hs.image.imageFromName("NSFolder"),
+        })
+    end
+
     -- Copy path(s)
     table.insert(actions, {
         text = "Copy Path",
@@ -241,7 +251,20 @@ local function onChoice(choice)
 
     local paths = choice.paths
 
-    if choice.action == "copy_contents" then
+    if choice.action == "new_nested_folder" then
+        local script = os.getenv("HOME") .. "/repos/github/g0t4/dotfiles/misc/alfred/file-actions/finder-new-nested-folder.applescript"
+        local task = hs.task.new("/usr/bin/osascript", function(exitCode, _, stderr)
+            -- Canceling the name prompt is an expected outcome (AppleScript error -128).
+            if exitCode ~= 0 and not (stderr or ""):find("(-128)", 1, true) then
+                log:error("New Nested Folder failed:", stderr)
+                hs.alert.show("Could not create nested folder")
+            end
+        end, {script})
+        if not task or not task:start() then
+            hs.alert.show("Could not start New Nested Folder")
+        end
+
+    elseif choice.action == "copy_contents" then
         local contents = {}
         local skipped = 0
         for _, path in ipairs(paths) do
