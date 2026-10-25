@@ -18,7 +18,9 @@ async def on_f9(connection: iterm2.Connection):
         print("No current session")
         return
 
-    jobName = await session.async_get_variable("jobName")  # see inspector for vars
+    # TODO `deepestJob` ... this must be a new variable! try using this first?
+    deepest_job = await session.async_get_variable("deepestJob")
+    jobName = await session.async_get_variable("jobName")
     if jobName == "nvim":
         # send to neovim to handle it
         # await session.async_send_text(":qa\r")
