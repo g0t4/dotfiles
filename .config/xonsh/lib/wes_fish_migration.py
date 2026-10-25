@@ -126,11 +126,8 @@ def wrap_fish_functions(aliases, function_names):
         console.print()
         console.rule(Text(f"Fish implementation: {name}", style="bold green"), style="green")
         console.file.flush()
-        return fish_function_command(
-            "functions",
-            # "--color=" + ("always" if console.is_terminal else "never"),
-            name, stdin=stdin, stdout=stdout, stderr=stderr
-        )
+        fish_function_definition = fish_function("functions", "--color", "never", name) # tell fish not to color the code
+        console.print(Syntax(fish_function_definition, "fish", theme=syntax_theme(), background_color="default"))
 
     aliases["_fish_help"] = fish_help
     for function_name in function_names:
