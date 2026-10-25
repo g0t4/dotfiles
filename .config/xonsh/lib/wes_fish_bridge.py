@@ -23,7 +23,7 @@ class UnsupportedFishFunctionError(RuntimeError):
 
 def fish_function_stream(
     name: str,
-    *args: str,
+    args: str,
     stdin: _FILE = None,
     stdout: _FILE = None,
     stderr: _FILE = None,
