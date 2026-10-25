@@ -19,7 +19,7 @@ from prompt_toolkit.keys import Keys
 from xonsh.parsers.completion_context import CompletionContextParser
 
 from wes_files_abbreviations import register_files_abbreviations
-from wes_fish_bridge import FishFunctionError, fish_function_capture_stdout
+from wes_fish_bridge import FishFunctionError, fish_function_command
 from wes_fish_z import FishZ, FishZError
 from wes_interactive_cat import InteractiveCat
 from wes_logging import ensure_logger_is_setup, get_wes_logger

@@ -17,6 +17,19 @@ class UnsupportedFishFunctionError(RuntimeError):
     pass
 
 
+def fish_function_stream(
+    name: str,
+    *args: str,
+    stdin=None,
+    stdout=None,
+    stderr=None,
+) -> int:
+    # FYI this is just an alias until I can review usages of fish_function_command and point it here
+    # also in case I need to change how fish_function_command behaves for a subset of consumers, then I cand split this off and do that here
+    # this RENAME is all about making it explicit why this exist vs other fish function wrappers (i.e. fish_function_capture_stdout)
+    # "stream" as in STDOUT/ERR is piped to xonsh shell's STDOUT/ERR so you see stuff as it happens and not if its returned (when captured) or just dropped
+    return fish_function_command(name, args, stdin=stdin, stdout=stdout, stderr=stderr)
+
 def fish_function_command(
     name: str,
     *args: str,
