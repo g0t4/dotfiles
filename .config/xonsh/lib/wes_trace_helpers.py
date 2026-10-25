@@ -8,7 +8,7 @@ from pathlib import Path
 
 from wes_abbreviations import abbr
 from find_executables import find_fish
-from wes_fish_migration import fish_command_alias
+from wes_fish_bridge import fish_function_stream_invoke
 
 
 FISH_FUNCTIONS = (
@@ -125,7 +125,7 @@ def expand_message_field(context, match):
 
 def register_trace_helpers(aliases, dotfiles):
     for name in (*FISH_FUNCTIONS, "mcp_server_semantic_grep"):
-        aliases[name] = fish_command_alias(name)
+        aliases[name] = fish_function_stream_invoke(name)
     for trigger in ("nat", "notes_about_trace"):
         abbr(trigger, "notes_about_trace '%'", cursor_marker="%")
     abbr('vtw', 'view_trace --watch')

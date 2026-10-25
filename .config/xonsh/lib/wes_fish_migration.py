@@ -16,7 +16,7 @@ from wes_fish_bridge import (
     FishFunctionError,
     UnsupportedFishFunctionError,
     fish_function_capture_stdout,
-    fish_function_command,
+    fish_function_stream_invoke,
 )
 from wes_abbreviations import abbr
 from wes_syntax_theme import syntax_theme
@@ -74,19 +74,6 @@ def unsupported_abbreviation(name, reason):
 def platform_abbreviation(darwin, other):
     return darwin if platform.system() == "Darwin" else other
 
-def fish_command_alias(function_name):
-    def invoke(args, stdin=None, stdout=None, stderr=None, **_):
-        return fish_function_command(
-            function_name,
-            *args,
-            stdin=stdin,
-            stdout=stdout,
-            stderr=stderr,
-        )
-
-    return invoke
-
-
 def unsupported_fish_alias(function_name, reason):
     def invoke(_args, **_):
         raise UnsupportedFishFunctionError(
@@ -137,7 +124,7 @@ def wrap_fish_functions(aliases, function_names):
         aliases[function_name] = (
             unsupported_fish_alias(function_name, reason)
             if reason
-            else fish_command_alias(function_name)
+            else fish_function_stream_invoke(function_name)
         )
         # register enhanced "superhelp" that includes the fish function body
         abbr(function_name + "??", f"_fish_help {shlex.quote(function_name)}")

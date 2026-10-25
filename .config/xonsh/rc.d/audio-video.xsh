@@ -2,7 +2,7 @@
 
 from xonsh.built_ins import XSH
 from wes_audio_video_tool_abbreviations import SOURCE_FUNCTIONS, register_audio_video_abbreviations
-from wes_fish_migration import fish_command_alias
+from wes_fish_bridge import fish_function_stream_invoke
 from wes_abbreviations import abbr
 
 register_audio_video_abbreviations()
@@ -20,4 +20,4 @@ for _audio_function in SOURCE_FUNCTIONS:
     elif _audio_function == "_create_abbr_ff_help_filter":
         XSH.aliases[_audio_function] = _create_abbr_ff_help_filter
     else:
-        XSH.aliases[_audio_function] = fish_command_alias(_audio_function)
+        XSH.aliases[_audio_function] = fish_function_stream_invoke(_audio_function)

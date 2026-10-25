@@ -11,7 +11,7 @@ import sys
 
 from wes_github_functions import run_gitignore_commit
 from wes_abbreviations import abbr
-from wes_fish_migration import fish_command_alias
+from wes_fish_bridge import fish_function_stream_invoke
 from find_executables import find_gh
 
 def _github_run(command, *, error, stdout=None, stderr=None):
@@ -87,7 +87,7 @@ for _github_fish_function in (
     "copy_github_raw_link",
     "__gh_depoliticize",
 ):
-    aliases[_github_fish_function] = fish_command_alias(_github_fish_function)
+    aliases[_github_fish_function] = fish_function_stream_invoke(_github_fish_function)
 
 abbr("ghrc", "gh_repo_create_private")
 abbr("ghrcp", "gh_repo_create_public")
