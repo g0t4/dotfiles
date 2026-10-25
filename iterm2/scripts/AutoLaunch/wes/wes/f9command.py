@@ -6,6 +6,7 @@ from logs import log
 async def forward_f9(session):
     await session.async_send_text("\x1b[20~")
 
+
 async def on_f9(connection: iterm2.Connection):
     # this started out with how I use F9 to quit nvim
     #   might be nice to F9 nvim and F9 again to close iterm pane (not all of iterm though)
@@ -24,7 +25,7 @@ async def on_f9(connection: iterm2.Connection):
         # send F9 to neovim...
         await forward_f9(session)
         return
-    if jobName in ["fish", "bash", "zsh", "xonsh", "Python", "lldb", "gdb"]:
+    if jobName in ["fish", "bash", "zsh", "xonsh", "Python", "lldb", "gdb", "codex"]:
         # shell command line must be empty to quit
         await session.async_send_text("\x03")  # ctrl+c (clear)
         await session.async_send_text("\x04")  # ctrl+d (exit)
