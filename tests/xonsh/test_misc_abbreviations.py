@@ -213,7 +213,7 @@ def test_safe_function_alias_delegates_to_interactive_fish(monkeypatch):
         calls.append((name, args, kwargs))
         return 4
 
-    monkeypatch.setattr("wes_fish_migration.fish_function_command", fake_command)
+    monkeypatch.setattr("wes_fish_bridge.fish_function_stream", fake_command)
     alias = fish_function_stream_invoke("which_versions")
 
     assert alias(["python"], stdin="in", stdout="out", stderr="err") == 4
@@ -276,7 +276,7 @@ def test_fish_help_reminder_and_independent_source_views(monkeypatch):
     assert registry.expand(context("??which_versions")) is None
     calls = []
     monkeypatch.setattr(
-        "wes_fish_migration.fish_function_command",
+            "wes_fish_bridge.fish_function_stream",
         lambda *args, **kwargs: calls.append((args, kwargs)) or 0,
     )
     output = io.StringIO()
@@ -301,7 +301,7 @@ def test_fish_help_colors_last_pipeline_command_including_redirects(monkeypatch)
     wrap_fish_functions(aliases, ["which_versions"])
     calls = []
     monkeypatch.setattr(
-        "wes_fish_migration.fish_function_command",
+        "wes_fish_bridge.fish_function_stream",
         lambda *args, **kwargs: calls.append(args) or 0,
     )
     for last, redirect, colored in [(True, None, True), (False, None, False), (True, "file", True)]:
