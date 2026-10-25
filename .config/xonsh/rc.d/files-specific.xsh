@@ -19,7 +19,7 @@ from prompt_toolkit.keys import Keys
 from xonsh.parsers.completion_context import CompletionContextParser
 
 from wes_files_abbreviations import register_files_abbreviations
-from wes_fish_bridge import FishFunctionError, fish_function_stream
+from wes_fish_bridge import FishFunctionError, fish_function_stream_invoke
 from wes_fish_z import FishZ, FishZError
 from wes_interactive_cat import InteractiveCat
 from wes_logging import ensure_logger_is_setup, get_wes_logger
@@ -58,17 +58,6 @@ def _files_run(*args, **kwargs):
     return subprocess.run(*args, **kwargs)
 
 
-def _files_fish_alias(function_name):
-    def invoke(args, stdin=None, stdout=None, stderr=None, **_):
-        try:
-            fish_function_stream(function_name, args, stdin=stdin, stdout=stdout, stderr=stderr)
-        except FishFunctionError as error:
-            print(error, file=stderr or sys.stderr)
-            return 1
-        return 0
-
-    return invoke
-
 
 for _files_fish_function in (
     "_update_dotfile_et_al",
@@ -88,7 +77,7 @@ for _files_fish_function in (
     "prepend_to_file",
     "shebangify",
 ):
-    aliases[_files_fish_function] = _files_fish_alias(_files_fish_function)
+    aliases[_files_fish_function] = fish_function_stream_invoke(_files_fish_function)
 
 
 _files_original_cd = aliases["cd"]

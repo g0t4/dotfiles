@@ -89,3 +89,15 @@ def fish_function_capture_stdout(
             f"fish function {name!r} exited {completed.returncode}{detail}"
         )
     return stdout
+
+
+def fish_function_stream_invoke(function_name):
+    def invoke(args, stdin=None, stdout=None, stderr=None, **_):
+        try:
+            fish_function_stream(function_name, args, stdin=stdin, stdout=stdout, stderr=stderr)
+        except FishFunctionError as error:
+            print(error, file=stderr or sys.stderr)
+            return 1
+        return 0
+
+    return invoke
