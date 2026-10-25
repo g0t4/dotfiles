@@ -8,6 +8,7 @@ import re
 
 from wes_abbreviations import AbbreviationResult, abbr
 from wes_fish_bridge import UnsupportedFishFunctionError, fish_function_capture_stdout
+
 from wes_fish_migration import abbr_from_fish_function, unsupported_abbreviation
 
 
@@ -100,7 +101,7 @@ def register_files_search_abbreviations():
     abbr('fdabs', 'fd --absolute-path')
     abbr('fdl', 'fd --list-details')
     abbr('fdfp', 'fd --full-path')
-    abbr(re.compile('fd\\d+'), _expand_fd_depth)
+    abbr(re.compile('fd\\d+'), _expand_fd_depth, cursor_marker="%")
     abbr('fd_changed_within', 'fd --changed-within "%"', cursor_marker="%")
     abbr('fd_changed_within_hours', 'fd --changed-within "% h"', cursor_marker="%")
     abbr('fd_changed_within_days', 'fd --changed-within "% d"', cursor_marker="%")
@@ -131,7 +132,7 @@ def register_files_search_abbreviations():
     abbr('hgr', 'history show all | rg_grep "%"', cursor_marker="%")
     abbr('hm', 'history pull --show-commands')
     abbr('hd', 'history delete "%"', cursor_marker="%")
-    abbr('rgu', _expand_rgu)
+    abbr('rgu', _expand_rgu, cursor_marker="%")
     abbr('jd', '--json | delta_rg', position="anywhere", commands=('rg',))
     abbr('rg_json_delta', 'rg --json "%" | delta_rg', cursor_marker="%")
     abbr('rg_delta', 'rg --json "%" | delta_rg', cursor_marker="%")
