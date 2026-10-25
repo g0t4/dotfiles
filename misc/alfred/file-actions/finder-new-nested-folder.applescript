@@ -22,7 +22,11 @@ tell application "Finder"
 
 	-- Expand the selected directory in list/tree view so its new child is visible.
 	if current view of front window is list view then
-		tell application "System Events" to key code 124 -- Right arrow
+		tell application "System Events" to tell process "Finder"
+			set frontmost to true
+			key code 124 -- Right arrow
+		end tell
+		delay 0.2 -- Allow the disclosure animation to finish
 	end if
 
 	-- Match Finder's naming convention without colliding with an existing item.
@@ -34,11 +38,26 @@ tell application "Finder"
 	end repeat
 	set newFolder to make new folder at selectedDir with properties {name:newFolderName}
 
-	-- Set the selection directly; `select newFolder` can open another tab/window.
-	set selection to {newFolder}
+	-- Finder refreshes the expanded list asynchronously after creating an item.
+	-- Retry selection until it sticks, without using `select` (which can open a tab).
+	set newFolderAlias to newFolder as alias
+	set folderSelected to false
+	repeat 30 times
+		delay 0.1
+		set selection to {newFolderAlias}
+		delay 0.1
+		set currentSelection to selection as alias list
+		if (count of currentSelection) is 1 then
+			if item 1 of currentSelection is newFolderAlias then
+				set folderSelected to true
+				exit repeat
+			end if
+		end if
+	end repeat
+	if not folderSelected then error "Finder did not select the new folder for renaming."
 end tell
 
--- Let Finder display the selection before starting inline rename.
+-- Give the confirmed selection time to render before sending Return.
 delay 0.2
 tell application "System Events" to tell process "Finder"
 	set frontmost to true
