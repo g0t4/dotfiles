@@ -84,7 +84,7 @@ def test_regex_abbreviation_delegates_to_named_fish_function(monkeypatch):
         calls.append((function_name, token))
         return "@{12}"
 
-    monkeypatch.setattr("wes_fish_migration.fish_function", fake_fish)
+    monkeypatch.setattr("wes_fish_bridge.fish_function_capture_stdout", fake_fish)
     result, _ = registry().expand(
         context("git show reflog12", command_path=("git", "show"))
     )
@@ -102,7 +102,7 @@ def test_regex_fish_function_preserves_cursor_marker(monkeypatch):
     assert 'cursor_marker="%"' in declaration(*parse_abbreviation(definition))
 
     monkeypatch.setattr(
-        "wes_fish_migration.fish_function",
+        "wes_fish_bridge.fish_function_capture_stdout",
         lambda name, token: "git push origin HEAD~1%:main --force",
     )
     result, _ = registry().expand(context("gpt1f", command_path=("gpt1f",)))

@@ -117,3 +117,32 @@ def test_replacement_texts_batch_matches_single():
     ]
     batch = abbreviation_replacement_texts(abbreviations, show_fish_functions=False)
     assert singles == batch
+
+
+def test_fish_source_uses_shared_fetch_and_palette(monkeypatch):
+    from rich.syntax import Syntax
+    from wes_fish_bridge import abbr_from_fish_function
+    import wes_abbreviation_list as listing
+
+    reset_registry()
+    wes_abbreviations._FISH_SOURCE_CACHE.clear()
+    abbr('helper', abbr_from_fish_function('fish_helper'))
+    calls = []
+
+    def capture(*args):
+        calls.append(args)
+        return 'function fish_helper\n    echo hello\nend'
+
+    monkeypatch.setattr('wes_fish_bridge.fish_function_capture_stdout', capture)
+    theme = Syntax('echo', 'fish')._theme
+    monkeypatch.setattr(listing, 'syntax_theme', lambda: theme)
+    rendered = []
+    monkeypatch.setattr(listing, 'Syntax', lambda *args, **kwargs: rendered.append((args, kwargs)) or Syntax(*args, **kwargs))
+    output = io.StringIO()
+    abbreviation_list_alias(['--fish-functions', 'helper'], Console(file=output, force_terminal=True))
+    assert calls == [('functions', '--color', 'never', 'fish_helper')]
+    assert rendered[0][0] == ('function fish_helper\n    echo hello\nend', 'fish')
+    assert rendered[0][1]['theme'] is theme
+    assert '\x1b[' in output.getvalue()
+    assert search_abbreviations('hello', show_fish_functions=True)[0].trigger == 'helper'
+    wes_abbreviations._FISH_SOURCE_CACHE.clear()

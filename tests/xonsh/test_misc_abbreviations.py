@@ -25,7 +25,7 @@ from wes_fish_bridge import UnsupportedFishFunctionError, fish_function_stream_i
 from wes_filetype_abbreviations import (  # noqa: E402
     FILETYPE_GLOBS,
 )
-from wes_fish_migration import (  # noqa: E402
+from wes_fish_bridge import (  # noqa: E402
     wrap_fish_functions,
     unsupported_fish_alias,
 )
@@ -209,8 +209,8 @@ def test_repo_root_command_substitutions_are_not_quoted_for_xonsh():
 def test_safe_function_alias_delegates_to_interactive_fish(monkeypatch):
     calls = []
 
-    def fake_command(name, *args, **kwargs):
-        calls.append((name, args, kwargs))
+    def fake_command(name, args, **kwargs):
+        calls.append((name, tuple(args), kwargs))
         return 4
 
     monkeypatch.setattr("wes_fish_bridge.fish_function_stream", fake_command)
@@ -276,17 +276,17 @@ def test_fish_help_reminder_and_independent_source_views(monkeypatch):
     assert registry.expand(context("??which_versions")) is None
     calls = []
     monkeypatch.setattr(
-            "wes_fish_bridge.fish_function_stream",
-        lambda *args, **kwargs: calls.append((args, kwargs)) or 0,
+        "wes_fish_bridge.fish_function_capture_stdout",
+        lambda *args, **kwargs: calls.append((args, kwargs)) or "function which_versions; end",
     )
     output = io.StringIO()
-    assert aliases["_fish_help"](["which_versions"], stdout=output) == 0
+    assert aliases["_fish_help"](["which_versions"], stdout=output) is None
     assert "Xonsh wrapper: which_versions" in output.getvalue()
     assert "def invoke" in output.getvalue()
     assert "Fish implementation: which_versions" in output.getvalue()
-    assert calls[0][0] == ("type", "--color=never", "which_versions")
+    assert calls[0][0] == ("functions", "--color", "never", "which_versions")
     del aliases["which_versions"]
-    assert aliases["_fish_help"](["which_versions"], stdout=output) == 0
+    assert aliases["_fish_help"](["which_versions"], stdout=output) is None
     assert "Source unavailable" in output.getvalue()
     assert len(calls) == 2
 
@@ -301,8 +301,8 @@ def test_fish_help_colors_last_pipeline_command_including_redirects(monkeypatch)
     wrap_fish_functions(aliases, ["which_versions"])
     calls = []
     monkeypatch.setattr(
-        "wes_fish_bridge.fish_function_stream",
-        lambda *args, **kwargs: calls.append(args) or 0,
+        "wes_fish_bridge.fish_function_capture_stdout",
+        lambda *args, **kwargs: calls.append(args) or "function which_versions; end",
     )
     for last, redirect, colored in [(True, None, True), (False, None, False), (True, "file", True)]:
         output = io.StringIO()
@@ -311,4 +311,4 @@ def test_fish_help_colors_last_pipeline_command_including_redirects(monkeypatch)
             spec=SimpleNamespace(last_in_pipeline=last, stdout=redirect),
         )
         assert ("\x1b[" in output.getvalue()) == colored
-        assert calls[-1][1] == ("--color=always" if colored else "--color=never")
+        assert calls[-1] == ("functions", "--color", "never", "which_versions")

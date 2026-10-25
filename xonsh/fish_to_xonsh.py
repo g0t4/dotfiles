@@ -108,7 +108,7 @@ import platform
 
 from xonsh.built_ins import XSH
 from wes_abbreviations import abbr
-from wes_fish_migration import (
+from wes_fish_bridge import (
     wrap_fish_functions,
     abbr_from_fish_function,
     platform_abbreviation,

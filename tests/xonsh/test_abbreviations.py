@@ -625,7 +625,7 @@ def test_fish_command_bridge_preserves_streams_and_exit_status(monkeypatch):
     assert (
         fish_function_stream(
             "interactive_helper",
-            "argument with spaces",
+            ["argument with spaces"],
             stdin=streams[0],
             stdout=streams[1],
             stderr=streams[2],

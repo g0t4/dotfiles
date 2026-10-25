@@ -9,10 +9,14 @@ from typing import TextIO
 
 from rich.console import Console
 from rich.table import Table
+from rich.syntax import Syntax
+
+from wes_syntax_theme import syntax_theme
 
 from wes_abbreviations import (
     Abbreviation,
     abbreviation_replacement_texts,
+    _fish_function_name,
 )
 import wes_abbreviations
 
@@ -23,6 +27,7 @@ class AbbreviationListing:
     expansion: str
     scope: str
     search_text: str
+    language: str | None = None
 
 
 def _trigger_text(abbreviation: Abbreviation) -> str:
@@ -63,7 +68,8 @@ def abbreviation_listings(show_fish_functions = False) -> list[AbbreviationListi
         search_text = "\n".join(
             (trigger, expansion, scope, _callback_source(abbreviation))
         ).casefold()
-        listings.append(AbbreviationListing(trigger, expansion, scope, search_text))
+        language = "fish" if show_fish_functions and _fish_function_name(abbreviation.replacement) else None
+        listings.append(AbbreviationListing(trigger, expansion, scope, search_text, language))
     return listings
 
 
@@ -121,7 +127,11 @@ def abbreviation_list_alias(
         table.add_column("Expansion", style="white", header_style="white")
         table.add_column("Scope", style="dim", header_style="dim")
         for item in listings:
-            table.add_row(item.trigger, item.expansion, item.scope)
+            expansion = (
+                Syntax(item.expansion, item.language, theme=syntax_theme(), background_color="default")
+                if item.language else item.expansion
+            )
+            table.add_row(item.trigger, expansion, item.scope)
         console.print(table)
 
     render_abbreviation_list()

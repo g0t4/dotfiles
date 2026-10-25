@@ -17,7 +17,7 @@ from wes_files_search_functions import (  # noqa: E402
     FISH_BRIDGE_FUNCTIONS,
     NATIVE_FUNCTIONS,
     UNSUPPORTED_FUNCTIONS,
-    unsupported_alias,
+    unsupported_fish_alias,
 )
 
 
@@ -116,7 +116,7 @@ def test_stateful_function_abbreviation_matches_current_conversion():
 
 
 def test_unsupported_stateful_function_alias_fails_loudly():
-    alias = unsupported_alias("mdfind_cd_dir", "changes directory")
+    alias = unsupported_fish_alias("mdfind_cd_dir", "changes directory")
 
     with pytest.raises(UnsupportedFishFunctionError, match="mdfind_cd_dir"):
         alias(["repos"])

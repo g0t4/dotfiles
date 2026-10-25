@@ -8,7 +8,7 @@ import shutil
 
 from wes_abbreviations import abbr
 from wes_fish_bridge import fish_function_capture_stdout
-from wes_fish_migration import abbr_from_fish_function
+from wes_fish_bridge import abbr_from_fish_function
 
 
 def _dot_count(token):

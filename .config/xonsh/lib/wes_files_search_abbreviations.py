@@ -9,7 +9,7 @@ import re
 from wes_abbreviations import AbbreviationResult, abbr
 from wes_fish_bridge import UnsupportedFishFunctionError, fish_function_capture_stdout
 
-from wes_fish_migration import abbr_from_fish_function, unsupported_abbreviation
+from wes_fish_bridge import abbr_from_fish_function, unsupported_abbreviation
 
 
 def _expand_fd_depth(context, _match):

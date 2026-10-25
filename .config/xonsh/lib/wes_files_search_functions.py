@@ -2,13 +2,11 @@
 
 from __future__ import annotations
 
-import subprocess
 import sys
 
 from wes_fish_bridge import (
-    FishFunctionError,
-    UnsupportedFishFunctionError,
-    fish_function_capture_stdout,
+    captured_fish_alias,
+    unsupported_fish_alias,
     fish_function_stream_invoke,
 )
 
@@ -44,30 +42,6 @@ UNSUPPORTED_FUNCTIONS = {
     "md_open": "may change directory from an interactive fzf picker",
     "mdfind_cd_dir": "changes directory from an interactive fzf picker",
 }
-
-
-def captured_fish_alias(function_name):
-    def invoke(args, stdin=None, stdout=None, stderr=None, **_):
-        input_text = stdin.read() if stdin is not None else None
-        try:
-            output = fish_function_capture_stdout(function_name, *args, input_text=input_text)
-        except FishFunctionError as error:
-            print(error, file=stderr or sys.stderr)
-            return 1
-        if output:
-            print(output, file=stdout or sys.stdout)
-        return 0
-
-    return invoke
-
-
-def unsupported_alias(function_name, reason):
-    def invoke(_args, **_):
-        raise UnsupportedFishFunctionError(
-            f"{function_name}: TODO SKIPPED_MIGRATION: {reason}"
-        )
-
-    return invoke
 
 
 def fd_depth_alias(args, stdout=None, stderr=None, **_):
@@ -110,4 +84,4 @@ def register_files_search_functions(aliases):
 
     aliases["_abbr_expand_fdX"] = fd_depth_alias
     for function_name, reason in UNSUPPORTED_FUNCTIONS.items():
-        aliases[function_name] = unsupported_alias(function_name, reason)
+        aliases[function_name] = unsupported_fish_alias(function_name, reason)

@@ -2,7 +2,7 @@ import os
 import re
 
 from wes_abbreviations import abbr, reminder_abbr
-from wes_fish_migration import abbr_from_fish_function
+from wes_fish_bridge import abbr_from_fish_function
 
 # FYI! MANUALLY SYNC CHANGES... FAR EASIER! OR JUST DON'T BOTHER WITH FISH
 

@@ -7,7 +7,7 @@ expansions live in xonsh/generate_misc_fish_abbreviations.py.
 from __future__ import annotations
 
 from wes_abbreviations import abbr
-from wes_fish_migration import (
+from wes_fish_bridge import (
     unsupported_abbreviation, )
 
 # TODO! test this after my work to move away from FISH_FUNCTIONS => over to fish_funcs local variable...
