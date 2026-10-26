@@ -65,7 +65,7 @@ def generate(
     mapping: "FishMapping",
     *,
     title: str,
-    function_name: str,
+    register_module_func_name: str,
     declaration_factory: DeclarationFactory,
     should_skip: Callable[[str, str, dict[str, str | bool]], bool] = (
         lambda _name, _replacement, _options: False
@@ -95,7 +95,7 @@ def generate(
 
     declaration_text = "\n".join(declarations)
 
-    register_text = "" if not call_register else f"\n\n{function_name}()"
+    register_text = "" if not call_register else f"\n\n{register_module_func_name}()"
 
     return f'''\
 """{title}"""
@@ -116,7 +116,7 @@ from wes_fish_bridge import (
 )
 
 
-def {function_name}():
+def {register_module_func_name}():
     fish_funcs = (
 {"".join(f"        {name!r},\n" for name in functions)}\
     )
@@ -270,13 +270,13 @@ class FishMapping:
     VALUE_SUBSTITUTIONS: dict[str | re.Pattern, str]|None = None
 
 def generate_wrapped(mapping: FishMapping, call_register: bool = False) -> str:
-    function_name = "register_" + mapping.xonsh_module.with_suffix("").name
+    register_module_func_name = "register_" + mapping.xonsh_module.with_suffix("").name
     return generate(
         mapping.fish_file,
         mapping = mapping,
         title=f""
         f"generated from Fish",
-        function_name=function_name,
+        register_module_func_name=register_module_func_name,
         declaration_factory=declaration,
         should_skip=should_skip,
         deduplicated_names=frozenset(_DEDUPLICATED_ABBREVIATIONS),
