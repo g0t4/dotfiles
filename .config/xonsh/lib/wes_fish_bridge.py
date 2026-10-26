@@ -116,17 +116,6 @@ UNSUPPORTED_FISH_FUNCTIONS = {
     "use_nvim_from_source": "changes current-shell environment variables",
 }
 
-SKIPPED_FISH_FUNCTIONS = {
-    # This is a Fish variable event handler, not a user-facing command.
-    "on_change_show_verbose_prompt",
-    # z.xsh already provides a state-aware bridge that changes Xonsh's cwd.
-    "z",
-    # processes.xsh installs the native current-shell implementation.
-    "build_abbrs_for_filetype",
-    # python-specific.xsh installs a native wrapper that can change Xonsh's cwd.
-    "wcl",
-}
-
 def abbr_from_fish_function(function_name):
     def expand(context, _match):
         reason = UNSUPPORTED_FISH_FUNCTIONS.get(function_name)
@@ -197,8 +186,6 @@ def wrap_fish_functions(aliases, function_names):
 
     aliases["_fish_help"] = fish_help
     for function_name in function_names:
-        if function_name in SKIPPED_FISH_FUNCTIONS:
-            continue
         reason = UNSUPPORTED_FISH_FUNCTIONS.get(function_name)
         aliases[function_name] = (
             unsupported_fish_alias(function_name, reason)

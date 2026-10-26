@@ -18,7 +18,6 @@ from wes_fish_bridge import (
 
 def register_wes_system_services():
     fish_funcs = (
-        'on_change_show_verbose_prompt',
         'toggle_show_verbose_prompt',
     )
     wrap_fish_functions(XSH.aliases, fish_funcs)

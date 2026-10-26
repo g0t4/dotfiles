@@ -23,7 +23,6 @@ def register_wes_processes():
         'pstree',
         '_flush_dns',
         'kill_hung_grc',
-        'z',
         '_abbr_ze',
         'custom-kill-command-word',
         'toggle-grc',

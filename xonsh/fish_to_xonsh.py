@@ -9,6 +9,18 @@ from pathlib import Path
 from typing import Callable
 
 
+SKIPPED_FISH_FUNCTIONS = {
+    # This is a Fish variable event handler, not a user-facing command.
+    "on_change_show_verbose_prompt",
+    # z.xsh already provides a state-aware bridge that changes Xonsh's cwd.
+    "z",
+    # processes.xsh installs the native current-shell implementation.
+    "build_abbrs_for_filetype",
+    # python-specific.xsh installs a native wrapper that can change Xonsh's cwd.
+    "wcl",
+}
+
+
 DeclarationFactory = Callable[[str, str, dict[str, str | bool]], str]
 
 
@@ -118,7 +130,7 @@ from wes_fish_bridge import (
 
 def {register_module_func_name}():
     fish_funcs = (
-{"".join(f"        {name!r},\n" for name in functions)}\
+{"".join(f"        {name!r},\n" for name in functions if name not in SKIPPED_FISH_FUNCTIONS)}\
     )
     wrap_fish_functions(XSH.aliases, fish_funcs)
 {declaration_text}

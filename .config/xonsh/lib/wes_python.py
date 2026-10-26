@@ -25,7 +25,6 @@ def register_wes_python():
         'uv_reinstall_package',
         'pstree_grep',
         'detect_encoding',
-        'wcl',
         'wrc',
         'rich_colors',
         'rich_emoji',
