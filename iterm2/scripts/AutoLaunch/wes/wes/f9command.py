@@ -27,7 +27,9 @@ async def on_f9(connection: iterm2.Connection):
         # send F9 to neovim...
         await forward_f9(session)
         return
-    if jobName in ["fish", "bash", "zsh", "xonsh", "Python", "lldb", "gdb", "codex"]:
+    is_any_python_version = jobName.startswith("python")  # FYI python3.14 (or other version) is why I check for startswith("python")... which is the case with xonsh at least some of the time
+    if jobName in ["fish", "bash", "zsh", "xonsh", "Python", "lldb", "gdb", "codex"] \
+      or is_any_python_version:
         # shell command line must be empty to quit
         await session.async_send_text("\x03")  # ctrl+c (clear)
         await session.async_send_text("\x04")  # ctrl+d (exit)
