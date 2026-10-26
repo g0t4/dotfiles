@@ -8,6 +8,7 @@ import platform
 
 from xonsh.built_ins import XSH
 from wes_abbreviations import abbr
+from wes_kgdump import kgdump, complete_kgdump
 from wes_fish_bridge import (
     wrap_fish_functions,
     abbr_from_fish_function,
@@ -19,7 +20,6 @@ from wes_fish_bridge import (
 def register_wes_kubernetes():
     fish_funcs = (
         '_k3s_autocomplete',
-        'kgdump',
         '_abbr_kgv',
         'kdd',
         'kns',
@@ -27,6 +27,9 @@ def register_wes_kubernetes():
         'helm_template_diff',
     )
     wrap_fish_functions(XSH.aliases, fish_funcs)
+    XSH.aliases["kgdump"] = kgdump
+    XSH.completers["kgdump"] = complete_kgdump
+    XSH.completers.move_to_end("kgdump", last=False)
     abbr('k3s', 'sudo k3s')
     abbr('k3dls', 'k3d cluster list')
     abbr('k3dcreate', 'k3d cluster create')

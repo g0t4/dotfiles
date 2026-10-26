@@ -74,63 +74,6 @@ if command -q kubectl
     abbr kgns 'kubectl get namespaces'
     # TODO redo get aliases to use abbreviations where applicable (ie n=>ns)
     #
-    function kgdump
-        # usages:
-        #    kgdump [-t regex] [namespace]
-        #    kgdump -t ingress
-        #    kgdump -t helm
-        #    kgdump kube-system
-        #    kgdump -t ingress kube-system
-        argparse --name kgdump 't/type=' -- $argv
-        # TLDR: pattern search all resources by namespace/type/name (or all if no args) => this is the long term goal, todo impl
-        #   PRN add 'n/name=' flag to filter resources by name too (wait until I want this)
-        #   PRN modify namespace arg to be a flag too? to avoid confusion?  AND make it regex/pattern also
-        set filter -A # all namespaces (default)
-
-        if test (count $argv) -gt 0
-            # filter on namespace, keep as list to pass as args below
-            set filter -n $argv
-        else
-            # only dump non-namespaced if no namespace requested
-            log_ --red "NOT NAMESPACED:"
-            set types (kubectl api-resources --verbs=list --namespaced=false -o name)
-            if set -q _flag_type
-                set types (string match -r ".*$_flag_type.*" -- $types)
-            end
-            if test (count $types) -eq 0
-                log_ --brwhite --bold "  NO matching types found"
-            else
-                set comma_list (string join , $types)
-                set what kubectl get --show-kind --ignore-not-found $comma_list
-                log_ --black "  $what"
-                eval $what
-            end
-        end
-
-        log_blankline
-        log_ --red "NAMESPACED( $filter ):"
-        set types (kubectl api-resources --verbs=list --namespaced=true -o name)
-        if set -q _flag_type
-            set types (string match -r ".*$_flag_type.*" -- $types)
-        end
-        if test (count $types) -eq 0
-            log_ --brwhite --bold "  NO matching types found"
-        else
-            set comma_list (string join , $types)
-            set what kubectl get --show-kind --ignore-not-found $comma_list $filter
-            log_ --black "  $what"
-            eval $what
-        end
-
-        # FYI can also use smth like:
-        #   kubectl get $(kubectl api-resources --verbs=list --namespaced -o name | paste -sd, -) --all-namespaces
-    end
-    # kgdump completions
-    complete -c kgdump -s t -l type -d 'filter by type (regex/pattern)'
-    # ? -n/--name
-    complete -c kgdump -a '(kubectl get namespace -o custom-columns=:metadata.name)' --no-files
-    #
-    #
     abbr kga 'kubectl get all'
     abbr kgaa 'kubectl get all -A' # -A/--all-namespaces
     abbr kgas 'kubectl get all --show-labels'
