@@ -316,7 +316,8 @@ def reset_registry():
     return XONSH_ABBREVIATIONS
 
 
-def abbr(trigger, replacement, **options):
+def abbr(trigger, replacement, position: Literal["command", "anywhere"] = "command", **options):
+    # TODO pass all all options as named options... and replicage that into reminder_abbr() below
     """Register an abbreviation with declaration syntax close to Fish's."""
     # FYI < 1us per abbr to get source_file/source_line, so this is fine
     caller = inspect.currentframe()
@@ -327,7 +328,7 @@ def abbr(trigger, replacement, **options):
     finally:
         del caller
 
-    return XONSH_ABBREVIATIONS.add(Abbreviation(trigger, replacement, **options))
+    return XONSH_ABBREVIATIONS.add(Abbreviation(trigger, replacement, position=position, **options))
 
 def reminder_abbr(trigger, replacement, **options):
     options.setdefault("reminder", True)
