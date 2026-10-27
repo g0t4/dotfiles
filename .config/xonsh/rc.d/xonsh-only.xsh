@@ -1,4 +1,5 @@
 import os, subprocess
+import rich
 from pathlib import Path
 from xonsh.built_ins import XSH
 
@@ -74,3 +75,18 @@ def video_editing_just_shift_to_mp4_one_video(video_file):
     else:
         ffmpeg -i @(video_file) -itsoffset 0.1 -i @(video_file) -map 0:v -map 1:a -c copy -avoid_negative_ts make_zero @(output_file)
 
+
+# * Apple decided to rename SPUSBDataType => SPUSBHostDataType w/ no failure if you use the old value... instead it just behaves as if there are no USB devices (empty STDOUT!)
+# so, fail if old value passed so we get an explicit failure and reminder
+def system_profiler(args, stdin=None):
+    if "SPUSBDataType" in args:
+        rich.print("[red] SPUSBDataType is obsolete; use SPUSBHostDataType")
+        raise ValueError(
+            "SPUSBDataType is obsolete; use SPUSBHostDataType"
+        )
+
+    import subprocess
+    return subprocess.call(["/usr/sbin/system_profiler", *args])
+
+aliases["system_profiler"] = system_profiler
+abbr("SPUSBDataType", "SPUSBHostDataType", position = "anywhere")  # expand to corrected value when user types
