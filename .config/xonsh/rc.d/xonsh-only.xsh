@@ -78,15 +78,14 @@ def video_editing_just_shift_to_mp4_one_video(video_file):
 
 # * Apple decided to rename SPUSBDataType => SPUSBHostDataType w/ no failure if you use the old value... instead it just behaves as if there are no USB devices (empty STDOUT!)
 # so, fail if old value passed so we get an explicit failure and reminder
-def system_profiler(args, stdin=None):
+def system_profiler(args, stdin=None, stdout=None, stderr=None):
     if "SPUSBDataType" in args:
         rich.print("[red] SPUSBDataType is obsolete; use SPUSBHostDataType")
         raise ValueError(
             "SPUSBDataType is obsolete; use SPUSBHostDataType"
         )
 
-    import subprocess
-    return subprocess.call(["/usr/sbin/system_profiler", *args])
+    subprocess.run(["/usr/sbin/system_profiler", *args], stdin=stdin, stdout=stdout, stderr=stderr)
 
 aliases["system_profiler"] = system_profiler
 abbr("SPUSBDataType", "SPUSBHostDataType", position = "anywhere")  # expand to corrected value when user types
