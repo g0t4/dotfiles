@@ -90,43 +90,52 @@ def system_profiler(args, stdin=None, stdout=None, stderr=None):
 aliases["system_profiler"] = system_profiler
 abbr("SPUSBDataType", "SPUSBHostDataType", position = "anywhere")  # expand to corrected value when user types
 
-
 from datetime import datetime
 from pathlib import Path
-import subprocess
 
 def camlink_snapshot():
-    # TODO turn this into a general purpose device enumeration troubleshooting tool if it works well for the camlink obs issue
     timestamp = datetime.now().astimezone().strftime("%Y%m%d-%H%M%S%z")
     output = Path.home() / f"camlink-{timestamp}.txt"
 
-    commands = {
-        "AVFoundation": [
-            "swift", "-e", """
+    swift = subprocess.run(
+        ["swift", "-e", r"""
 import AVFoundation
+
 for device in AVCaptureDevice.devices(for: .video) {
-    print("Name: \\(device.localizedName)")
-    print("Unique ID: \\(device.uniqueID)")
-    print("Model ID: \\(device.modelID)")
-    print("Manufacturer: \\(device.manufacturer)")
+    print("Name: \(device.localizedName)")
+    print("Unique ID: \(device.uniqueID)")
+    print("Model ID: \(device.modelID)")
+    print("Manufacturer: \(device.manufacturer)")
     print("---")
 }
-""",
-        ],
-        "USB IORegistry": ["ioreg", "-p", "IOUSB", "-l", "-w", "0"],
-        "USB System Profiler": ["system_profiler", "SPUSBHostDataType"],
-    }
+"""],
+        capture_output=True,
+        text=True,
+        errors="replace",
+    )
+
+    ioreg = subprocess.run(
+        ["ioreg", "-p", "IOUSB", "-l", "-w", "0"],
+        capture_output=True,
+        text=True,
+        errors="replace",
+    )
+
+    profiler = subprocess.run(
+        ["system_profiler", "SPUSBHostDataType"],
+        capture_output=True,
+        text=True,
+        errors="replace",
+    )
 
     with output.open("w") as file:
         file.write(f"Cam Link snapshot: {timestamp}\n")
 
-        for section, command in commands.items():
-            result = subprocess.run(
-                command,
-                capture_output=True,
-                text=True,
-                errors="replace",
-            )
+        for section, result in [
+            ("AVFoundation", swift),
+            ("USB IORegistry", ioreg),
+            ("USB System Profiler", profiler),
+        ]:
             file.write(f"\n{'=' * 20} {section} {'=' * 20}\n")
             file.write(result.stdout)
             if result.stderr:
@@ -135,3 +144,4 @@ for device in AVCaptureDevice.devices(for: .video) {
 
     print(output)
     return output
+
