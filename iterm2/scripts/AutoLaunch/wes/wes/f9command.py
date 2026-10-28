@@ -34,11 +34,12 @@ async def on_f9(connection: iterm2.Connection):
         await session.async_send_text("\x04")  # ctrl+d (exit)
         return
 
-    if deepestJob in ["ssh"]:
-      # assume safe to ctrl+d only (won't work if nested commands on remote... TBD)
-        await session.async_send_text("\x04")  # ctrl+d (exit)
-        log(f"ssh is not a reliable jobName to decide what to use to F9 remotely {deepestJob=} {jobName=}")
-        return
+    # if deepestJob in ["ssh"]:
+    #   # this fucks over f9 to quit nvim remotely... obviously... but leave it off for now
+    #   # assume safe to ctrl+d only (won't work if nested commands on remote... TBD)
+    #     await session.async_send_text("\x04")  # ctrl+d (exit)
+    #     log(f"ssh is not a reliable jobName to decide what to use to F9 remotely {deepestJob=} {jobName=}")
+    #     return
 
 
     await forward_f9(session)
