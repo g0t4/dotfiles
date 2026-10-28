@@ -3,8 +3,13 @@ from xonsh.events import events
 
 # * load static values once (not every time handler fires)
 # b/c these are relatively speaking expensive (in terms of prompt overhead)
-if Path("/etc/os-release").exists():
-    ask_os = $(cat /etc/os-release | grep '^ID=' | cut -d= -f2)
+etc_release = Path("/etc/os-release")
+if etc_release.exists():
+    ask_os = None
+    for line in etc_release.read_text().splitlines():
+        if line.startswith('ID='):
+            ask_os = line.split('=', 1)[1].strip('"')
+            break
 else:
     import platform
     ask_os = platform.system()  # or use $(uname) like fish script does  # Darwin, Linux, etc
