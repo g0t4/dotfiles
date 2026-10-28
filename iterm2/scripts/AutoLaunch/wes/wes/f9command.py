@@ -19,7 +19,7 @@ async def on_f9(connection: iterm2.Connection):
         return
 
     deepestJob = await session.async_get_variable("deepestJob")
-    # jobName = await session.async_get_variable("jobName") # only use this again if issues with new deepestJob
+    jobName = await session.async_get_variable("jobName") # only use this again if issues with new deepestJob
     if deepestJob == "nvim":
         # send to neovim to handle it
         # await session.async_send_text(":qa\r")
