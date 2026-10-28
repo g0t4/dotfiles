@@ -95,7 +95,7 @@ from pathlib import Path
 
 def camlink_snapshot():
     timestamp = datetime.now().astimezone().strftime("%Y%m%d-%H%M%S%z")
-    output = Path.home() / f"camlink-{timestamp}.txt"
+    output = Path(f"camlink-{timestamp}.txt")
 
     swift = subprocess.run(
         ["swift", "-e", r"""
