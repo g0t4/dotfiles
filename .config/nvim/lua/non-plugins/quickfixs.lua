@@ -26,11 +26,6 @@ function open_hammerspoon_failure_in_quickfix()
     }):start()
 end
 
-function set_quickfix_from_clipboard_AUTO_DETECT()
-    local clipboard = vim.fn.getreg('+')
-    quickfix.set_quickfix_from(clipboard)
-end
-
 function set_quickfix_from_clipboard_IIRC_HAMMERSPOON(reg)
     -- TODO move to devtools.nvim... then update callers too?
     -- TODO was this error format for hammerspoon?
@@ -57,7 +52,6 @@ vim.keymap.set('n', "<leader>qhs", open_hammerspoon_failure_in_quickfix)
 vim.keymap.set('n', "<leader>qn", function() vim.print("USE <leader>cn") end) -- next item in quickfix
 vim.keymap.set('n', "<leader>qp", function() vim.print("USE <leader>cp") end) -- prev item in quickfix
 
-vim.keymap.set('n', "<leader>qc", set_quickfix_from_clipboard_AUTO_DETECT)
-
+vim.keymap.set('n', "<leader>qc", quickfix.set_quickfix_from_clipboard)
 
 -- TODO last failure => AskAgent :)
