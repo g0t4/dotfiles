@@ -9,6 +9,9 @@ from wes_abbreviations import abbr
 
 EMOJI_ABBREVIATIONS = {
     "love": "❤️",
+    "chefs_kiss": "👨‍🍳💋",
+    "cigarette": "🚬",
+    "hot!": "🚬 🚬 🚬 🚬 🚬 🚬 🚬",
     "fire": "🔥",
     "smile": "😊",
     "thumbsup": "👍",
@@ -26,8 +29,64 @@ EMOJI_ABBREVIATIONS = {
     "music": "🎵",
     "sun": "☀️",
     "moon": "🌙",
-}
+    # more for quick reactions to awesome work by my agent
+    "fireworks": "🎆",
 
+    # Exceptional work
+    "genius": "🧠💡",
+    "masterpiece": "🎨🏆",
+    "perfection": "🤌💋",
+    "legendary": "👑🏆🔥",
+    "holy_shit": "🤯🤯🤯",
+    "standing_ovation": "👏👏👏👏👏",
+    "mic_drop": "🎤💥",
+    "big_brain": "🧠🧠🧠",
+    "wizard": "🧙‍♂️✨",
+    "beautiful": "🥹❤️",
+    "nailed_it": "💅'ed it",
+    "flawless": "💎✨",
+
+    # Victory celebrations
+    "boom": "💥💥💥",
+    "ship_it": "🚢✅",
+    "victory": "🏆🥇",
+    "jackpot": "🎰💰",
+    "hell_yes": "🔥🚀❤️",
+    "dance": "💃🕺🎉",
+    "unstoppable": "🚂💨",
+
+    # Clever discoveries
+    "aha": "💡👀",
+    "detective": "🕵️🔎",
+    "interesting": "🧐🔬",
+    "mind_blown": "🤯💥",
+    "plot_twist": "👀🍿",
+    "sneaky": "🥷✨",
+    "galaxy_brain": "🧠🌌",
+
+    # Questionable decisions
+    "sus": "🤨📸",
+    "wat": "👁️👄👁️",
+    # TODO! look into why delta shows some diff than my nerdfont terminal combo in neovim
+    #  like here it shows male symbol next to this:
+    #  yes... zero width joiner (ZWJ) .. FML
+    "facepalm": "🤦‍♂️",
+    "bruh": "💀",
+    "uh_oh": "😬🚨",
+    "yikes": "🫣💥",
+    "nope": "🙅‍♂️❌",
+    "side_eye": "👀",
+    "confused": "❓🤨",
+
+    # Spectacular failures
+    "exploded": "💥🔥💀",
+    "rip": "🪦💐",
+    "dumpster_fire": "🗑️🔥",
+    "clown": "🤡",
+    "what_the_fuck": "🤬⁉️",
+    "try_again": "🔄🛠️",
+    "back_to_work": "🫵💻",
+}
 
 def _numbered_command(command, *, pipe=False):
     def expand(_context, match):
