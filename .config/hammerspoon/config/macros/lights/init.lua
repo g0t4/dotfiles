@@ -23,9 +23,11 @@ local function hue_degrees_to_dmx(degrees)
     return math.floor(val / 256), val % 256
 end
 
+---@alias LightParams { intensity: number, temp: number }
+
 ---@param dmx_channels table<number, integer>
 ---@param channel_start integer
----@param params { intensity: number, temp: number }
+---@param params LightParams
 local function set_cct_16bit_channels(dmx_channels, channel_start, params)
     local intensity_high_byte, intensity_low_byte = percent_to_dmx(params.intensity)
     local temp_high_byte, temp_low_byte = temp_to_dmx(params.temp)
@@ -39,9 +41,11 @@ local function set_cct_16bit_channels(dmx_channels, channel_start, params)
     dmx_channels[channel_start + 7] = 0 -- unused
 end
 
+---@alias HslParams { master: number, hue: number, saturation: number, lightness: number }
+
 ---@param dmx_channels table<number, integer>
 ---@param channel_start integer
----@param params { master: number, hue: number, saturation: number, lightness: number }
+---@param params HslParams
 local function set_hsl_16bit_channels(dmx_channels, channel_start, params)
     local master_high_byte, master_low_byte = percent_to_dmx(params.master)
     log:info("master", master_high_byte, master_low_byte)
@@ -65,16 +69,28 @@ local function set_hsl_16bit_channels(dmx_channels, channel_start, params)
     dmx_channels[channel_start + 7] = light_low_byte
 end
 
-function StreamDeckBuild26(key_intensity)
-    local temp = 5600
+function StreamDeckDmxWarmest()
+    local temp = 2800
+    _set_temp(temp)
+end
 
-    -- light values
-    local key_intensity = key_intensity or 15
+function StreamDeckCourseAlertFatigue()
+    local temp = 5600
+    _set_temp(temp)
+end
+
+function _set_temp(temp)
+    -- alert fatigue used: 15 key, 10 fill - both at 5600 | backlight color blue 240 - 20% intensity - 5000 kelvin (couldn't get it to save 5600 but 5k is close enough)
+    local key_intensity = 15
     local left = { intensity = key_intensity, temp = temp }
     local right = { intensity = 10, temp = temp }
-    --
-    -- don't need this for now, and this fixture is the finicky one... so I am done for today!
+
+    _set_key_and_fill(left, right)
+end
+
+function _set_key_and_fill(left, right)
     -- local back = { master = 20, hue = 220, saturation = 100, lightness = 0 } -- rear/kick/accent
+    -- btw back is stuck on 11 for now, unless I can get it to power cycle with new settings (which could happen, after a long run today it did power off with red power button! and pressing power repeatedly did lead it to turn on today and off once... so that's interesting!)
 
     local dmx_channels = {}
     set_cct_16bit_channels(dmx_channels, 1, left)
