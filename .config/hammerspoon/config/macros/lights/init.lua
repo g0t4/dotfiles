@@ -69,26 +69,9 @@ local function set_hsl_16bit_channels(dmx_channels, channel_start, params)
     dmx_channels[channel_start + 7] = light_low_byte
 end
 
-function StreamDeckDmxWarmest()
-    local temp = 2800
-    _set_temp(temp)
-end
-
-function StreamDeckCourseAlertFatigue()
-    local temp = 5600
-    _set_temp(temp)
-end
-
-function _set_temp(temp)
-    -- alert fatigue used: 15 key, 10 fill - both at 5600 | backlight color blue 240 - 20% intensity - 5000 kelvin (couldn't get it to save 5600 but 5k is close enough)
-    local key_intensity = 15
-    local left = { intensity = key_intensity, temp = temp }
-    local right = { intensity = 10, temp = temp }
-
-    _set_key_and_fill(left, right)
-end
-
-function _set_key_and_fill(left, right)
+---@param left LightParams
+---@param right LightParams
+local function set_key_and_fill(left, right)
     -- local back = { master = 20, hue = 220, saturation = 100, lightness = 0 } -- rear/kick/accent
     -- btw back is stuck on 11 for now, unless I can get it to power cycle with new settings (which could happen, after a long run today it did power off with red power button! and pressing power repeatedly did lead it to turn on today and off once... so that's interesting!)
 
@@ -103,6 +86,26 @@ function _set_key_and_fill(left, right)
     local cmd = "/opt/homebrew/bin/ola_set_dmx -u 1 --dmx " .. dmx_string
     log:info(cmd)
     hs.execute(cmd)
+end
+
+---@param temp number
+local function set_temp(temp)
+    -- alert fatigue used: 15 key, 10 fill - both at 5600 | backlight color blue 240 - 20% intensity - 5000 kelvin (couldn't get it to save 5600 but 5k is close enough)
+    local key_intensity = 15
+    local left = { intensity = key_intensity, temp = temp }
+    local right = { intensity = 10, temp = temp }
+
+    set_key_and_fill(left, right)
+end
+
+function StreamDeckDmxWarmest()
+    local temp = 2800
+    set_temp(temp)
+end
+
+function StreamDeckCourseAlertFatigue()
+    local temp = 5600
+    set_temp(temp)
 end
 
 function StreamDeckDmxOff()
