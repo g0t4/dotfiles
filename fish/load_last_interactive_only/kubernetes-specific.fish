@@ -136,7 +136,7 @@ if command -q kubectl
 
     # apply
     abbr kaf 'kubectl apply -f' # create or modify
-    abbr kad 'kubectl apply --dry-run=client -f' # dry-run
+    abbr kad 'kubectl apply --dry-run=client -f'
     abbr kak 'kubectl apply -k .' # assumes kustomization dir is current dir (i.e. kustomization.yaml)
     abbr kk 'kubectl kustomize' # (sort next to kak b/c they are companions) - preview rendered yaml (≈ dry-run)
     # api-versions/resources
@@ -155,7 +155,7 @@ if command -q kubectl
     # delete
     abbr kdel 'kubectl delete'
     abbr kdeli 'kubectl delete --interactive' # mostly a reminder to consider showing in demos
-    abbr kdeld 'kubectl delete --dry-run' # mostly a reminder to consider showing in demos
+    abbr kdeld 'kubectl delete --dry-run=client' # mostly a reminder to consider showing in demos
     abbr kdelf 'kubectl delete -f'
     abbr kdelp 'kubectl delete pod' # alias: delp
     # diff

@@ -100,7 +100,7 @@ def register_wes_kubernetes():
     abbr('kcp', 'kubectl cp')
     abbr('kdel', 'kubectl delete')
     abbr('kdeli', 'kubectl delete --interactive')
-    abbr('kdeld', 'kubectl delete --dry-run')
+    abbr('kdeld', 'kubectl delete --dry-run=client')
     abbr('kdelf', 'kubectl delete -f')
     abbr('kdelp', 'kubectl delete pod')
     abbr('kdi', 'kubectl diff')
