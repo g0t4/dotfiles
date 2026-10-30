@@ -145,3 +145,10 @@ for device in AVCaptureDevice.devices(for: .video) {
     print(output)
     return output
 
+# zj for jellij "namespace"
+abbr("zj", "zellij")
+abbr("zjd", "zellij delete-all-sessions --yes")
+abbr("zjdf", "zellij delete-all-sessions --yes --force") # kill sessions before deleting them
+abbr("zjl", "zellij list-sessions")
+
+
