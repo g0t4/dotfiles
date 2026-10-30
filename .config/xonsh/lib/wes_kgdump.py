@@ -3,15 +3,20 @@
 from __future__ import annotations
 
 import argparse
+import os
 import re
 import shlex
 import subprocess
 import sys
 
 from rich.console import Console
+from rich.syntax import Syntax
+
+from wes_interactive_cat import InteractiveCat
+from wes_syntax_theme import syntax_theme
 
 
-def kgdump(args, stdin=None, stdout=None, stderr=None):
+def kgdump(args, stdin=None, stdout=None, stderr=None, spec=None, **_):
     parser = argparse.ArgumentParser(prog="kgdump")
     parser.add_argument("-t", "--type", help="filter resource types by regex")
     parser.add_argument("namespace", nargs="?")
@@ -24,7 +29,21 @@ def kgdump(args, stdin=None, stdout=None, stderr=None):
         print(f"kgdump: invalid type regex: {error}", file=stderr or sys.stderr)
         return 2
 
-    console = Console(file=stdout or sys.stdout, markup=False, highlight=False)
+    # Xonsh's terminal dispatcher may not report isatty() on the captured
+    # stdout it passes to aliases. Use the spec to detect a real terminal and
+    # force the color system so Rich styles actually render.
+    terminal_output = (
+        InteractiveCat._is_terminal_output(stdout, spec)
+        and "NO_COLOR" not in os.environ
+    )
+    console = Console(
+        file=stdout or sys.stdout,
+        markup=False,
+        highlight=False,
+        color_system="truecolor" if terminal_output else None,
+        force_terminal=terminal_output,
+        no_color=not terminal_output,
+    )
     namespace_args = ["-n", options.namespace] if options.namespace else ["-A"]
     scopes = [True] if options.namespace else [False, True]
     status = 0
@@ -52,7 +71,20 @@ def kgdump(args, stdin=None, stdout=None, stderr=None):
             command = ["grc", "--colour=on", "kubectl", "get", "--show-kind", "--ignore-not-found", ",".join(types)]
             if namespaced:
                 command.extend(namespace_args)
-            console.print("  " + shlex.join(command), style="bright_black")
+            command_line = "  " + shlex.join(command)
+            if terminal_output:
+                console.print(
+                    Syntax(
+                        command_line,
+                        "bash",
+                        theme=syntax_theme(),
+                        background_color="default",
+                        padding=0,
+                        word_wrap=False,
+                    )
+                )
+            else:
+                console.print(command_line)
             console.file.flush()
             result = subprocess.run(command, stdin=stdin, stdout=stdout, stderr=stderr)
             if result.returncode:
