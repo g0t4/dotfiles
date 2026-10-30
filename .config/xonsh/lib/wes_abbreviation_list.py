@@ -5,6 +5,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 import inspect
 import sys
+import re
 from typing import TextIO
 
 from rich.console import Console
@@ -82,7 +83,7 @@ def search_abbreviations(
         return listings
     if prefix:
         return [item for item in listings if item.trigger.casefold().startswith(query)]
-    return [item for item in listings if query in item.search_text]
+    return [item for item in listings if re.search(query, item.search_text, re.IGNORECASE)]
 
 
 def abbreviation_list_alias(
