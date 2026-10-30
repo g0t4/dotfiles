@@ -68,6 +68,8 @@ def kgdump(args, stdin=None, stdout=None, stderr=None, spec=None, **_):
             if not types:
                 console.print("  NO matching types found", style="bold bright_white")
                 continue
+            # FYI my current bash theme does not color the command position?! ... only builtins it seems (so "echo foo" has `echo` colored but not `grc` below)
+            # TODO fix bash syntax-lab handling to not suck a dick on coloring it
             command = ["grc", "--colour=on", "kubectl", "get", "--show-kind", "--ignore-not-found", ",".join(types)]
             if namespaced:
                 command.extend(namespace_args)
