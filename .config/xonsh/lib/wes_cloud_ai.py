@@ -24,8 +24,6 @@ def register_wes_cloud_ai():
         'ols_qwen',
         'cd2',
         'abbr_agg',
-        'commands_log_executable_mode',
-        'commands_log_shell_mode',
         'trash_n_tail',
         '_taild',
         'rebuild_llama_cpp',
@@ -125,9 +123,8 @@ def register_wes_cloud_ai():
     abbr('tt_voiced', 'trash_n_tail ~/.local/state/ask-openai/devtools/voiced.log')
     abbr('tt_clankerd', 'trash_n_tail ~/.local/state/ask-openai/clankerd.log')
     abbr('tt_ask_lang_server', 'trash_n_tail ~/.local/state/ask-openai/language.server.log')
-    abbr('tt_mcp_server_commands', 'tail -F ~/.local/state/mcp-server-commands/commands.log')
-    abbr('tail_mcp_server_commands', 'tail -F ~/.local/state/mcp-server-commands/commands.log')
-    abbr('commands_log_review', 'commands_log_executable_mode; commands_log_shell_mode')
+    abbr('tt_mcp_server_commands', 'tail -F ~/.local/share/mcp-server-commands/commands.log')
+    abbr('tail_mcp_server_commands', 'tail -F ~/.local/share/mcp-server-commands/commands.log')
     abbr('tt_agents_mcp_server', 'tail -F ~/.local/state/mcp-servers/agent.log')
     abbr('tt_nvim_lsp_log', 'trash_n_tail ~/.local/state/nvim/lsp.log')
     abbr('tt_streamdeck_wes', 'trash_n_tail ~/.hammerspoon/logs/streamdeck_keyboardmaestro_runner.log')
