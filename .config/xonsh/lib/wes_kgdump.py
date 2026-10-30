@@ -49,7 +49,7 @@ def kgdump(args, stdin=None, stdout=None, stderr=None):
             if not types:
                 console.print("  NO matching types found", style="bold bright_white")
                 continue
-            command = ["kubectl", "get", "--show-kind", "--ignore-not-found", ",".join(types)]
+            command = ["grc", "--colour=on", "kubectl", "get", "--show-kind", "--ignore-not-found", ",".join(types)]
             if namespaced:
                 command.extend(namespace_args)
             console.print("  " + shlex.join(command), style="bright_black")
@@ -76,7 +76,7 @@ def complete_kgdump(prefix, line, begidx, endidx, ctx):
         return {flag for flag in ("-t", "--type", "-h", "--help") if flag.startswith(prefix)}
     try:
         result = subprocess.run(
-            ["kubectl", "get", "namespace", "-o", "custom-columns=:metadata.name", "--no-headers"],
+            ["grc", "--colour=on", "kubectl", "get", "namespace", "-o", "custom-columns=:metadata.name", "--no-headers"],
             capture_output=True, text=True,
         )
     except OSError:
