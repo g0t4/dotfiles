@@ -80,7 +80,7 @@ def kgdump(args, stdin=None, stdout=None, stderr=None, spec=None, **_):
                         theme=syntax_theme(),
                         background_color="default",
                         padding=0,
-                        word_wrap=False,
+                        word_wrap=True,
                     )
                 )
             else:
