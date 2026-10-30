@@ -72,13 +72,12 @@ end
 ---@param left LightParams
 ---@param right LightParams
 local function set_key_and_fill(left, right)
-    -- local back = { master = 20, hue = 220, saturation = 100, lightness = 0 } -- rear/kick/accent
-    -- btw back is stuck on 11 for now, unless I can get it to power cycle with new settings (which could happen, after a long run today it did power off with red power button! and pressing power repeatedly did lead it to turn on today and off once... so that's interesting!)
+    local back = { master = 20, hue = 240, saturation = 100, lightness = 0 } -- rear/kick/accent
 
     local dmx_channels = {}
     set_cct_16bit_channels(dmx_channels, 1, left)
     set_cct_16bit_channels(dmx_channels, 9, right)
-    -- set_hsl_16bit_channels(dmx_channels, 17, back)
+    set_hsl_16bit_channels(dmx_channels, 17, back)
 
     -- TODO how can I target a subset of channels without a massive comma delimited string?
     --    i.e. can't I send just 21 to 28? and not need the empty commas in between?
