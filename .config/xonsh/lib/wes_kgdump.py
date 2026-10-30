@@ -68,25 +68,26 @@ def kgdump(args, stdin=None, stdout=None, stderr=None, spec=None, **_):
             if not types:
                 console.print("  NO matching types found", style="bold bright_white")
                 continue
-            # FYI my current bash theme does not color the command position?! ... only builtins it seems (so "echo foo" has `echo` colored but not `grc` below)
-            # TODO fix bash syntax-lab handling to not suck a dick on coloring it
             command = ["grc", "--colour=on", "kubectl", "get", "--show-kind", "--ignore-not-found", ",".join(types)]
             if namespaced:
                 command.extend(namespace_args)
             command_line = "  " + shlex.join(command)
-            if terminal_output:
-                console.print(
-                    Syntax(
-                        command_line,
-                        "bash",
-                        theme=syntax_theme(),
-                        background_color="default",
-                        padding=0,
-                        word_wrap=True,
-                    )
-                )
-            else:
-                console.print(command_line)
+            #
+            # FYI my current bash theme does not color the command position?! ... only builtins it seems (so "echo foo" has `echo` colored but not `grc` below)
+            # TODO fix bash syntax-lab handling to not suck a dick on coloring it
+            # if terminal_output:
+            #     console.print(
+            #         Syntax(
+            #             command_line,
+            #             "bash",
+            #             theme=syntax_theme(),
+            #             background_color="default",
+            #             padding=0,
+            #             word_wrap=True,
+            #         )
+            #     )
+            # else:
+            console.print(command_line, style="dim")
             console.file.flush()
             result = subprocess.run(command, stdin=stdin, stdout=stdout, stderr=stderr)
             if result.returncode:
