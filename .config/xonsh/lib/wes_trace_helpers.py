@@ -67,7 +67,11 @@ def expand_trace_file(context, match):
     if trace_number == "":
         selected = files[-1] if len(files) > 0 else None  # default to last
     else:
-        selected = files[trace_number - 1] if 1 <= trace_number <= len(files) else None
+        trace_number = int(trace_number)
+        if trace_number < 0:
+            selected = files[trace_number]
+        else:
+            selected = files[trace_number - 1]
 
     parts: list[str] = []
     if match.group(3):
@@ -129,7 +133,7 @@ def register_trace_helpers(aliases, dotfiles):
     for trigger in ("nat", "notes_about_trace"):
         abbr(trigger, "notes_about_trace '%'", cursor_marker="%")
     abbr('vtw', 'view_trace --watch')
-    abbr(re.compile(r"(t|vt|vtt)(\d*)(a?)"), expand_trace_file)
+    abbr(re.compile(r"(t|vt|vtt)(-?\d*)(a?)"), expand_trace_file)
     abbr(re.compile(r"(tm|tc)(\d+)"), expand_trace_message)
     # abbr("tc", "jq --raw-output '.request_body.messages[] | select(.tool_calls) | .tool_calls[].function' ./*-trace.json") # arguments are json stringified so they're harder to reason about here... hence next that expands an arguments object next to name
     # abbr("tc", "jq --raw-output '.request_body.messages[] | select(.tool_calls) | .tool_calls[] | .function | {name, arguments: (.arguments | fromjson)}' ./*-trace.json") # puts function name and deserialized args json onto a single object!
