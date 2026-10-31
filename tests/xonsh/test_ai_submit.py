@@ -2,8 +2,35 @@ import os
 import subprocess
 from pathlib import Path
 
+import pytest
+
 
 ROOT = Path(__file__).parents[2]
+
+
+@pytest.mark.parametrize("value, expected", [("False", False), ("0", False), ("off", False), ("True", True), ("1", True)])
+def test_inherited_ai_setting_is_boolean(tmp_path, value, expected):
+    ai = ROOT / ".config/xonsh/rc.d/ai-autosuggest.xsh"
+    env = os.environ.copy()
+    env["XONSH_AI_AUTOSUGGEST"] = value
+    env["XONSH_AI_AUTOSUGGEST_STATE"] = str(tmp_path / "state")
+    env["XONSH_LOG"] = os.devnull
+    command = (
+        f"source {ai}; "
+        f"assert $XONSH_AI_AUTOSUGGEST is {expected}; "
+        "$XONSH_AI_AUTOSUGGEST = 'False'; "
+        "assert $XONSH_AI_AUTOSUGGEST is False; "
+        "import subprocess; "
+        f"child = subprocess.run(['xonsh', '--no-rc', '-c', "
+        f"'source {ai}; assert $XONSH_AI_AUTOSUGGEST is False'], "
+        "env=@.env.detype(), capture_output=True, text=True); "
+        "assert child.returncode == 0, child.stderr"
+    )
+    completed = subprocess.run(
+        ["xonsh", "--no-rc", "-c", command],
+        capture_output=True, text=True, env=env,
+    )
+    assert completed.returncode == 0, completed.stderr
 
 
 def test_submit_cancels_active_prediction_and_blocks_replacement_request():

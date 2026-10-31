@@ -33,10 +33,13 @@ from wes_ai_autosuggest_state import (
 from wes_logging import ensure_logger_is_setup, get_wes_logger
 from wes_semantic_history import InferenceClient, SemanticHistoryRetriever
 
-
-@.env.setdefault(
+# Register conversion for future assignments, and explicitly convert any value
+# already inherited from the parent process (e.g. the string "False").
+_ai_autosuggest_initial = @.env.get(
     "XONSH_AI_AUTOSUGGEST", read_autosuggest_enabled(@.env)
 )
+@.env.register("XONSH_AI_AUTOSUGGEST", type="bool", default=True)
+$XONSH_AI_AUTOSUGGEST = _ai_autosuggest_initial
 _AI_AUTOSUGGEST_URL = "http://paxy:8014/v1/chat/completions"
 _AI_AUTOSUGGEST_MODEL = "ggml-org/DeepSeek-V4-Flash-Vision-Exp-GGUF"
 
