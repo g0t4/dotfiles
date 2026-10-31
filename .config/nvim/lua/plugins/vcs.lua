@@ -32,7 +32,8 @@ local plugins = {
                 -- allow auto load when not in course repo
                 return {'BufRead'}
             end
-            return {''}
+            -- block all events from triggering
+            return {}
         end,
 
 
