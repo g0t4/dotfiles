@@ -16,17 +16,27 @@ local plugins = {
         -- cons: adjusting the gutter can be annoying/jarring when you make a first change
 
         'lewis6991/gitsigns.nvim',
-        enabled = function()
+        enabled = true,
+        lazy = true, -- always true so it can be conditionally loaded (if not auto on event)
+        -- can I lazy load depending on buffer read's file's path?
+
+        event = function()
             local cwd = vim.fn.getcwd()
             -- if dir has "course-" in the path anywhere then assume it is a course recording
-            local in_course_dir = cwd:find("/course-")
+            local in_course_dir = cwd:find("/course-") ~= nil
 
             -- local log = require("devtools.logs.logger").universal()
             -- log:info("cwd", cwd, "in_course_dir", in_course_dir)
 
-            local enable_gitsigns = not in_course_dir
-            return enable_gitsigns
+            if not in_course_dir then
+                -- allow auto load when not in course repo
+                return {'BufRead'}
+            end
+            -- block all events from triggering
+            -- BUT you can still run `:Lazy load gitsigns.nvim` in a course repo, hence why I use event to decide auto load and not enabled
+            return {}
         end,
+
 
         config = function()
             -- TODO! review config options and other features (just added it for gutter signs for now)
