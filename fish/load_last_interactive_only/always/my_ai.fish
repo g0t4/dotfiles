@@ -19,13 +19,13 @@ function ask_rewrite_diff_reviewer
     diff_two_commands "jq .request_body.messages[-1].content -r $trace_file" "jq .response_message.content -r $trace_file"
 end
 
-abbr --add abbr_trace_nth_file_nvim --regex 't\d*a?' --function abbr_expand_trace_nth_file_nvim
+abbr --add abbr_trace_nth_file_nvim --regex 't-?\d*a?' --function abbr_expand_trace_nth_file_nvim
 function _abbr_expand_trace_nth_file_args --argument-names abbreviation
     # extract the numeric part after the leading 't'
-    set index_part (string replace --regex '^t' '' $abbreviation)
+    set index_part (string replace --regex '^t' '' -- $abbreviation)
     set opts ""
-    if string match --quiet --regex a $index_part
-        set index_part (string replace --regex 'a' '' $index_part)
+    if string match --quiet 'a' -- $index_part
+        set index_part (string replace 'a' '' -- $index_part)
         set opts --all
     end
     # default to the first file if no number was provided
@@ -43,9 +43,9 @@ end
 function abbr_expand_trace_nth_file_nvim --argument-names abbreviation
     echo "nvim -c 'AskViewTrace $(_abbr_expand_trace_nth_file_args $abbreviation)'"
 end
-abbr --add abbr_trace_nth_file_vt --regex 'vt\d*a?' --function abbr_expand_trace_nth_file_vt
+abbr --add abbr_trace_nth_file_vt --regex 'vt-?\d*a?' --function abbr_expand_trace_nth_file_vt
 function abbr_expand_trace_nth_file_vt --argument-names abbreviation
-    set abbreviation (string replace --regex '^v' '' $abbreviation) # strip `v` prefix
+    set abbreviation (string replace --regex '^v' '' -- $abbreviation) # strip `v` prefix b/c helper already handles `t1` style
     echo "view_trace $(_abbr_expand_trace_nth_file_args $abbreviation)"
 end
 
