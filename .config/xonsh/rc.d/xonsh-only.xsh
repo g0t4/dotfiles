@@ -149,7 +149,7 @@ for device in AVCaptureDevice.devices(for: .video) {
 abbr("zj", "zellij")
 abbr("zjd", "zellij delete-all-sessions --yes")
 abbr("zjdf", "zellij delete-all-sessions --yes --force") # kill sessions before deleting them
-abbr("zjl", "zellij list-sessions")
+abbr("zjls", "zellij list-sessions")
 
 # certificates
 
