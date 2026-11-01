@@ -1,0 +1,169 @@
+"""Human-facing TLS certificate inspection; ANSI colors are always enabled.
+
+CLI: python wes_certificates.py HOST[:PORT] [--connect ADDRESS] [--ca-file FILE]
+Watch: watch -c -n 2 'python /path/to/wes_certificates.py example.com'
+Uses native system trust by default; --ca-file selects only the supplied PEM bundle.
+Requires openssl on PATH. Exit codes: 0 healthy, 1 certificate/network problem,
+2 invalid arguments. An expiry warning alone still returns 0.
+"""
+from __future__ import annotations
+
+import argparse
+from datetime import datetime, timezone
+import ipaddress
+import math
+import socket
+import ssl
+import subprocess
+import sys
+
+import truststore
+from urllib.parse import urlsplit
+
+
+def _paint(text, color):
+    return f"\033[{color}m{text}\033[0m"
+
+
+def _duration(seconds):
+    seconds = abs(seconds)
+    if seconds >= 86400:
+        return f'{seconds / 86400:.1f} days'
+    if seconds < 60:
+        return 'less than 1 minute'
+    hours, minutes = divmod(int(seconds // 60), 60)
+    parts = []
+    if hours:
+        parts.append(f'{hours} hour' + ('s' if hours != 1 else ''))
+    if minutes:
+        parts.append(f'{minutes} minute' + ('s' if minutes != 1 else ''))
+    return ' '.join(parts)
+
+
+def _endpoint(value):
+    try:
+        parsed = urlsplit('//' + value)
+    except ValueError as exc:
+        raise argparse.ArgumentTypeError(str(exc)) from exc
+    if not parsed.hostname or parsed.path or parsed.query or parsed.fragment or parsed.username:
+        raise argparse.ArgumentTypeError('expected HOST[:PORT] (use brackets for IPv6)')
+    try:
+        port = parsed.port or 443
+    except ValueError as exc:
+        raise argparse.ArgumentTypeError(str(exc)) from exc
+    if not 1 <= port <= 65535:
+        raise argparse.ArgumentTypeError('port must be between 1 and 65535')
+    return parsed.hostname, port
+
+
+def _openssl(pem, *args):
+    return subprocess.run(['openssl', 'x509', '-noout', *args], input=pem,
+                          capture_output=True, text=True, timeout=5)
+
+
+def _verification_context(ca_file):
+    if ca_file is not None:
+        # An explicit bundle is the sole trust source for reproducible demos.
+        return ssl.create_default_context(cafile=ca_file), f'PEM file: {ca_file}'
+    source = {'darwin': 'macOS Keychain', 'win32': 'Windows certificate store'}.get(
+        sys.platform, 'System trust (OpenSSL)')
+    return truststore.SSLContext(ssl.PROTOCOL_TLS_CLIENT), source
+
+
+def inspect(host, port=443, *, connect=None, ca_file=None, timeout=5,
+            warn_days=30, stdout=None):
+    """Inspect the leaf, then separately validate TLS using system/custom trust."""
+    out = stdout if stdout is not None else sys.stdout
+
+    def line(label, text, color='37'):
+        print(f'{label:>12}  {_paint(text, color)}', file=out)
+
+    address = connect or host
+    line('Server', f'{host}:{port}' + (f' via {address}' if connect else ''), '1;36')
+    try:
+        context = ssl.SSLContext(ssl.PROTOCOL_TLS_CLIENT)
+        context.check_hostname = False
+        context.verify_mode = ssl.CERT_NONE
+        with socket.create_connection((address, port), timeout=timeout) as raw:
+            with context.wrap_socket(raw, server_hostname=host) as tls:
+                pem = ssl.DER_cert_to_PEM_cert(tls.getpeercert(binary_form=True))
+                line('TLS', f'{tls.version()} / {tls.cipher()[0]}')
+        details = _openssl(pem, '-subject', '-issuer', '-serial', '-dates',
+                           '-fingerprint', '-sha256', '-ext', 'subjectAltName')
+        if details.returncode:
+            raise ValueError(details.stderr.strip())
+        fields = {}
+        sans = []
+        for text in details.stdout.splitlines():
+            if '=' in text and not text.startswith(' '):
+                key, value = text.split('=', 1)
+                fields[key.strip()] = value.strip()
+            elif text.startswith(' '):
+                sans.append(text.strip())
+        line('Subject', fields['subject'])
+        line('Issuer', fields['issuer'])
+        line('Names', ' '.join(sans) or '(no subjectAltName)')
+        now = datetime.now(timezone.utc)
+        problem = False
+        for field, label in [('notBefore', 'Valid from'), ('notAfter', 'Expires')]:
+            date = datetime.fromtimestamp(ssl.cert_time_to_seconds(fields[field]), timezone.utc)
+            delta = (date - now).total_seconds()
+            color = '32'
+            status = ''
+            if field == 'notBefore' and delta > 0:
+                color, status, problem = '1;31', 'NOT YET VALID', True
+            elif field == 'notAfter':
+                if delta <= 0:
+                    color, status, problem = '1;31', f'EXPIRED {_duration(delta)} ago', True
+                else:
+                    color = '1;33' if delta <= warn_days * 86400 else '32'
+                    status = f'{_duration(delta)} remaining'
+            line(label, f'{date:%Y-%m-%d %H:%M:%S UTC}' + (f' — {status}' if status else ''), color)
+        try:
+            ipaddress.ip_address(host)
+            check = '-checkip'
+        except ValueError:
+            check = '-checkhost'
+        match = _openssl(pem, check, host)
+        if match.returncode not in (0, 1):
+            raise ValueError(match.stderr.strip())
+        hostname_ok = match.returncode == 0
+        problem |= not hostname_ok
+        line('Hostname', 'MATCH' if hostname_ok else 'MISMATCH', '32' if hostname_ok else '1;31')
+        # A second handshake reports trust/chain errors without hiding the leaf.
+        try:
+            verified, trust_source = _verification_context(ca_file)
+            line('Trust', trust_source)
+            with socket.create_connection((address, port), timeout=timeout) as raw:
+                with verified.wrap_socket(raw, server_hostname=host):
+                    pass
+            line('Validation', 'OK', '32')
+        except ssl.SSLCertVerificationError as exc:
+            line('Validation', exc.verify_message or str(exc), '1;31')
+            problem = True
+        line('Serial', fields['serial'])
+        line('SHA-256', fields['sha256 Fingerprint'])
+        return int(problem)
+    except (OSError, ValueError, subprocess.SubprocessError, KeyError) as exc:
+        line('Error', str(exc), '1;31')
+        return 1
+
+
+def main(args=None, stdout=None, stderr=None):
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('server', type=_endpoint, help='HOST[:PORT], default port 443')
+    parser.add_argument('--connect', help='connect to this address, keeping HOST for SNI and validation')
+    parser.add_argument('--ca-file', help='PEM CA bundle (default: system trust)')
+    parser.add_argument('--timeout', type=float, default=5, help='socket timeout in seconds (default: 5)')
+    parser.add_argument('--warn-days', type=float, default=30, help='yellow expiry threshold (default: 30)')
+    options = parser.parse_args(args)
+    if (not math.isfinite(options.timeout) or options.timeout <= 0
+            or not math.isfinite(options.warn_days) or options.warn_days < 0):
+        parser.error('--timeout must be positive and --warn-days must be nonnegative')
+    host, port = options.server
+    return inspect(host, port, connect=options.connect, ca_file=options.ca_file,
+                   timeout=options.timeout, warn_days=options.warn_days, stdout=stdout)
+
+
+if __name__ == '__main__':
+    sys.exit(main())

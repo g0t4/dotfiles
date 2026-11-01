@@ -151,4 +151,14 @@ abbr("zjd", "zellij delete-all-sessions --yes")
 abbr("zjdf", "zellij delete-all-sessions --yes --force") # kill sessions before deleting them
 abbr("zjl", "zellij list-sessions")
 
+# certificates
 
+from wes_certificates import main as _cert_connect
+
+def cert_connect(args, stdin=None, stdout=None, stderr=None):
+    """cert_connect HOST[:PORT] [--connect ADDRESS] [--ca-file FILE]. Always color."""
+    return _cert_connect(args, stdout=stdout, stderr=stderr)
+
+aliases['cert_connect'] = cert_connect
+# watch uses an external command, so invoke the same helper directly with Python.
+abbr('watch_cert', f'watch -c -n 2 {$WES_DOTFILES}/.venv/bin/python {$WES_DOTFILES}/.config/xonsh/lib/wes_certificates.py')
