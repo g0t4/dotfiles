@@ -62,6 +62,12 @@ if command -q zed
     ln -f -s $dotfiles_dir/.config/zed/settings.json $HOME/.config/zed/settings.json
 end
 
+# *** zellij
+if command -q zellij
+    mkdir -p $HOME/.config/zellij
+    ln -f -s $dotfiles_dir/.config/zellij/config.kdl $HOME/.config/zellij/config.kdl
+end
+
 # *** bat (entire config dir now for config+syntaxes, can go back to one-off if this is problematic)
 # FYI if not match then `trash $HOME/.config/bat`
 ln -f -s $dotfiles_dir/.config/bat $HOME/.config/. # DIR SYMLINK
