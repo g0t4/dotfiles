@@ -87,8 +87,8 @@ def register_wes_processes():
     abbr('lsofpi', 'sudo lsof -p $(pgrep -if "%" | head -1) -a -i', cursor_marker="%")
     abbr('lsof_ports_for_pid', 'sudo lsof -p % -a -i', cursor_marker="%")
     abbr('lsofp_watch', '$WATCH_COMMAND "sudo lsof -p \\$(pgrep -if \\"%\\" | head -1)"', cursor_marker="%")
-    abbr('ss_listening_ports', 'sudo ss -tunl')
-    abbr('ss_notlistening_ports', 'sudo ss -tun')
-    abbr('ss_all_ports', 'sudo ss -tuna')
+    abbr('ss_listening_ports', 'sudo ss -tunlp')
+    abbr('ss_notlistening_ports', 'sudo ss -tunp')
+    abbr('ss_all_ports', 'sudo ss -tunap')
 
 
