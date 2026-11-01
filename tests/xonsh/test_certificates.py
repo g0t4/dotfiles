@@ -54,7 +54,7 @@ commonName = supplied
 
 
 @contextmanager
-def server(root, name):
+def server(root, name, shutdowns=None):
     ctx = ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER)
     ctx.load_cert_chain(root / f'{name}.crt', root / f'{name}.key')
     listener = socket.socket()
@@ -72,10 +72,16 @@ def server(root, name):
             with conn:
                 conn.settimeout(2)
                 try:
-                    with ctx.wrap_socket(conn, server_side=True):
-                        pass
-                except ssl.SSLError:
-                    pass  # Expected when the client rejects the certificate.
+                    with ctx.wrap_socket(conn, server_side=True,
+                                         suppress_ragged_eofs=False) as tls:
+                        if shutdowns is not None:
+                            assert tls.recv(1) == b''  # Must receive close_notify.
+                            tls.unwrap().close()
+                            shutdowns.append('clean')
+                except ssl.SSLError as exc:
+                    if shutdowns is not None:
+                        shutdowns.append(str(exc))
+                    # Expected when the client rejects during the handshake.
 
     worker = threading.Thread(target=serve)
     worker.start()
@@ -198,3 +204,37 @@ def test_explicit_bundle_bypasses_native_trust(certificates, monkeypatch):
 def test_duration(seconds, expected):
     from wes_certificates import _duration
     assert _duration(seconds) == expected
+
+
+def test_inspection_connections_close_cleanly(certificates):
+    shutdowns = []
+    with server(certificates, 'valid', shutdowns) as port:
+        assert inspect('localhost', port, connect='127.0.0.1',
+                       ca_file=str(certificates / 'ca.crt'), stdout=io.StringIO()) == 0
+    assert shutdowns == ['clean', 'clean']
+
+
+def test_native_rejection_closes_cleanly(certificates):
+    import truststore
+    from wes_certificates import _validate_tls
+
+    context = truststore.SSLContext(ssl.PROTOCOL_TLS_CLIENT)
+    context.load_verify_locations(cafile=str(certificates / 'ca.crt'))
+    shutdowns = []
+    with server(certificates, 'expired', shutdowns) as port:
+        with pytest.raises(ssl.SSLCertVerificationError):
+            _validate_tls(context, '127.0.0.1', port, 'localhost', 2)
+    assert shutdowns == ['clean']
+
+
+def test_shutdown_timeout_does_not_mask_results():
+    from wes_certificates import _disconnect
+
+    class UnresponsivePeer:
+        def settimeout(self, timeout):
+            assert timeout == 0.5
+
+        def unwrap(self):
+            raise TimeoutError('no close_notify reply')
+
+    _disconnect(UnresponsivePeer())
