@@ -22,9 +22,9 @@ Each invocation opens a separate window. Tabs and layouts are currently in memor
 | --- | --- |
 | ↑ / ↓, type a name | Select a file or directory |
 | → / ← | Expand / collapse a directory |
-| ⌘↓ / ⌘Return | Open selected directory in a new tab |
+| ⌘Return | Open selected directory in a new tab |
 | ⌘T | Duplicate current tab's root |
-| ⌘O | Open file with its default app, or directory in a new tab |
+| ⌘↓ / ⌘O | Enter directory in current tab, or open file with its default app |
 | ⌘W | Close tab (last tab closes the window) |
 | ⌘L | Enter a directory path (Return to navigate in current tab) |
 | ⌘↑ / Option↑ | Parent directory |

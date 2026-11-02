@@ -159,10 +159,10 @@ class Browser(QMainWindow):
         toolbar.addWidget(self.location)
         file_menu = self.menuBar().addMenu("File")
         view_menu = self.menuBar().addMenu("View")
-        open_directory = self.action(file_menu, "Open Directory in New Tab", "Ctrl+Down", self.tab_selected)
-        open_directory.setShortcuts([QKeySequence("Ctrl+Down"), QKeySequence("Ctrl+Return")])
+        self.action(file_menu, "Open Directory in New Tab", "Ctrl+Return", self.tab_selected)
         self.action(file_menu, "Duplicate Tab", "Ctrl+T", lambda: self.add_tab(self.current().root))
-        self.action(file_menu, "Open Selected File", "Ctrl+O", self.open_selected)
+        open_item = self.action(file_menu, "Open Selected Item", "Ctrl+Down", self.open_selected)
+        open_item.setShortcuts([QKeySequence("Ctrl+Down"), QKeySequence("Ctrl+O")])
         self.action(file_menu, "Close Tab", "Ctrl+W", lambda: self.close_tab(self.tabs.currentIndex()))
         self.action(file_menu, "Quit Pip Rot", "Ctrl+Q", self.close)
         self.action(view_menu, "Go to Directory…", "Ctrl+L", self.focus_location)
@@ -177,7 +177,7 @@ class Browser(QMainWindow):
         next_tab.setShortcuts([QKeySequence(f"{control}+Tab"), QKeySequence(f"{control}+PgDown")])
         previous_tab = self.action(view_menu, "Previous Tab", f"{control}+Shift+Tab", lambda: self.cycle_tab(-1))
         previous_tab.setShortcuts([QKeySequence(f"{control}+Shift+Tab"), QKeySequence(f"{control}+PgUp")])
-        self.statusBar().showMessage("← → collapse / expand · ⌘↓ directory in new tab · ⌘L go to directory")
+        self.statusBar().showMessage("← → collapse / expand · ⌘↓ open · ⌘↵ new tab · ⌘L go to directory")
         for path in paths:
             self.add_path(path, reveal)
 
@@ -227,7 +227,8 @@ class Browser(QMainWindow):
     def open_selected(self):
         path = self.current().selected()
         if path.is_dir():
-            self.add_tab(path)
+            self.current().navigate(path)
+            self.update_location()
         else:
             QDesktopServices.openUrl(QUrl.fromLocalFile(str(path)))
 

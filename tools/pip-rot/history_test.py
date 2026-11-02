@@ -35,6 +35,14 @@ with tempfile.TemporaryDirectory() as directory:
     tab = window.current()
     tab.tree.setCurrentIndex(tab.model.index(str(b)))
     assert not window.back_action.isEnabled()
+    tab.tree.setCurrentIndex(tab.model.index(str(a)))
+    window.open_selected()
+    pump()
+    assert tab.root == a and window.tabs.count() == 1
+    window.move_history(-1)
+    pump()
+    assert tab.root == root and tab.selected() == a
+    tab.tree.setCurrentIndex(tab.model.index(str(b)))
     visit(window, a)
     visit(window, b)
     assert window.current() is tab and window.tabs.count() == 1
@@ -76,5 +84,13 @@ with tempfile.TemporaryDirectory() as directory:
         window.move_history(1)
         warning.assert_called_once()
     assert tab.root == a and tab.history_index == 1
+    movie = b / 'file-000.txt'
+    window.add_path(movie, True)
+    pump()
+    count = window.tabs.count()
+    with patch('pip_rot.QDesktopServices.openUrl', return_value=True) as open_url:
+        window.open_selected()
+        assert open_url.call_args.args[0].toLocalFile() == str(movie)
+    assert window.tabs.count() == count
     window.close()
 print('PASS: back/forward, selection restore, branching, duplicate suppression, tab isolation, parent history, missing directory')
