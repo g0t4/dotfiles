@@ -238,6 +238,8 @@ class Browser(QMainWindow):
         tab.deleteLater()
         if not self.tabs.count():
             self.close()
+        else:
+            self.current().tree.setFocus(Qt.FocusReason.OtherFocusReason)
 
     def update_location(self, *_):
         if self.current():
