@@ -48,8 +48,8 @@ Hammerspoon integration:
 The filesystem model loads listings in the background and watches for changes.
 The tree disables inline rename, move, and drag-and-drop; explicit
 actions can create directories or move selected items to Trash.
-The columns are Name, Size, Type, and Date Modified, plus Duration when videos
-appear in the current directory or an expanded subdirectory. Collapsing the
+The columns are Name, Size, Duration, and Date Modified (Type is hidden).
+Duration appears when videos appear in the current directory or an expanded subdirectory. Collapsing the
 last video-containing branch hides Duration again. Common video extensions are
 recognized case-insensitively. Only visible video rows are probed, with two
 background jobs maximum and an eight-second timeout per probe. Results are
