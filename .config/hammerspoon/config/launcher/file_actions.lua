@@ -211,6 +211,14 @@ local function buildActions(paths)
         image = hs.image.imageFromName("NSRevealFreestandingTemplate"),
     })
 
+    table.insert(actions, {
+        text = "Reveal in Pip Rot",
+        subText = summary,
+        action = "reveal_pip_rot",
+        paths = paths,
+        image = hs.image.imageFromName("NSRevealFreestandingTemplate"),
+    })
+
     -- Open with...
     table.insert(actions, {
         text = "Open With...",
@@ -351,6 +359,9 @@ local function onChoice(choice)
             -- Open iTerm at the resolved directory
             hs.execute(string.format('open -a "iTerm" "%s"', dir))
         end
+
+    elseif choice.action == "reveal_pip_rot" then
+        require("config.launcher.pip_rot").reveal(paths)
 
     elseif choice.action == "reveal" then
         for _, path in ipairs(paths) do

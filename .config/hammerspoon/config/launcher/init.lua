@@ -2336,7 +2336,9 @@ local function onChoice(choice)
     if choice.browsePath then
         -- For path browsing, open the file/folder
         if choice.path then
-            if modifiers.cmd or modifiers.shift then
+            if modifiers.cmd and modifiers.shift then
+                require("config.launcher.pip_rot").reveal({choice.path})
+            elseif modifiers.cmd or modifiers.shift then
                 -- Reveal in Finder
                 revealInFinder(choice.path)
             else
@@ -2357,6 +2359,8 @@ local function onChoice(choice)
         -- Copy path to clipboard
         hs.pasteboard.setContents(choice.path)
         hs.alert.show("Path copied: " .. choice.text)
+    elseif modifiers.cmd and modifiers.shift then
+        require("config.launcher.pip_rot").reveal({choice.path})
     elseif modifiers.cmd or modifiers.shift then
         -- Reveal in Finder
         revealInFinder(choice.path)

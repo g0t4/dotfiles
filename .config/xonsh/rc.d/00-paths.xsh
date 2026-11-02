@@ -189,3 +189,6 @@ def _path_list():
                 ["fd", "--unrestricted", "--exact-depth", "1", ".", directory],
                 check=False,
             )
+
+# Pip Rot file browser (external command retains native path completion).
+_path_move_prepend(str(XONSH_LIB.parents[2] / "tools" / "pip-rot"))

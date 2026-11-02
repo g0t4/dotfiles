@@ -1,0 +1,6 @@
+[project]
+name = "pip-rot"
+version = "0.1.0"
+description = "A small, keyboard-friendly file tree. Rotten to the core."
+requires-python = ">=3.12"
+dependencies = ["PySide6-Essentials>=6.8,<7"]

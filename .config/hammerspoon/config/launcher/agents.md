@@ -156,7 +156,7 @@ When a chooser entry is chosen (`onChoice`):
 * **Fish / Python** – executes the command, copies any output, and shows an alert.
 * **Emoji** – copies the emoji and simulates `Cmd+V` to paste it immediately.
 * **File / Path** – default action opens the item; with `Cmd`/`Shift` it reveals in Finder;
-  with `Alt` it copies the absolute path.
+  with `Alt` it copies the absolute path. `Cmd+Shift+Return` reveals in Pip Rot.
 
 ## Implementation Notes (for future modifications)
 * All async searches return a **cancel function**; `currentCancelFunc` is invoked on
