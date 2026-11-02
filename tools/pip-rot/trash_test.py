@@ -9,7 +9,7 @@ from PySide6.QtCore import QEventLoop, QTimer, Qt
 from PySide6.QtTest import QTest
 from PySide6.QtWidgets import QApplication
 
-from pip_rot import Browser
+from pip_rot import Browser, finder_trash_executable
 
 
 def pump():
@@ -17,6 +17,9 @@ def pump():
     QTimer.singleShot(150, loop.quit)
     loop.exec()
 
+
+with patch.dict(os.environ, {"PATH": "/usr/bin:/bin"}):
+    assert finder_trash_executable() == '/opt/homebrew/bin/trash'
 
 app = QApplication([])
 with tempfile.TemporaryDirectory() as directory:
@@ -34,7 +37,7 @@ with tempfile.TemporaryDirectory() as directory:
         pump()
         tab = window.current()
         tab.tree.clearSelection()
-        with patch('pip_rot.shutil.which', return_value=str(fake)):
+        with patch('pip_rot.finder_trash_executable', return_value=str(fake)):
             window.trash_selected()
             assert not window.trash_processes and not log.exists()
             tab.tree.setCurrentIndex(tab.model.index(str(file)))

@@ -138,7 +138,7 @@ QT_QPA_PLATFORM=offscreen uv run --project tools/pip-rot python tools/pip-rot/ac
 lua tools/pip-rot/action_context_test.lua
 ```
 
-Move to Trash uses `trash -F` (`brew install trash`), asking Finder to preserve
+Move to Trash uses Homebrew’s `trash -F` (`brew install trash`), asking Finder to preserve
 its **Put Back** metadata. It runs asynchronously and reports failures. The
 Hammerspoon picker uses the same command instead of moving files with `mv`.
 There is no permanent-delete, empty-trash, or Pip Rot ⌘Z action. Restore through
@@ -150,3 +150,7 @@ means no trash operation; the picker hides Trash for a directory fallback
 ```sh
 QT_QPA_PLATFORM=offscreen uv run --project tools/pip-rot python tools/pip-rot/trash_test.py
 ```
+
+The native app resolves Homebrew’s `/opt/homebrew/bin/trash` (or Intel
+`/usr/local/bin/trash`) explicitly, regardless of PATH. macOS also ships a
+different `/usr/bin/trash` that does not accept `-F`; it is not used here.

@@ -1,7 +1,7 @@
 """Pip Rot: small independent filesystem trees in tabs."""
 import argparse
 import subprocess
-import shutil
+import os
 from dataclasses import dataclass
 from pathlib import Path
 import sys
@@ -16,6 +16,15 @@ from PySide6.QtWidgets import (
 
 from media import DurationCache, MediaModel
 from action_context import publish_context, remove_context
+
+
+def finder_trash_executable():
+    # macOS /usr/bin/trash is a different implementation with no -F option.
+    # Pin the Homebrew command whose Finder mode preserves Put Back metadata.
+    for path in ("/opt/homebrew/bin/trash", "/usr/local/bin/trash"):
+        if Path(path).is_file() and os.access(path, os.X_OK):
+            return path
+    return None
 
 
 @dataclass
@@ -252,9 +261,7 @@ class Browser(QMainWindow):
         if not paths:
             self.statusBar().showMessage("Select files or directories to move to Trash", 4000)
             return
-        executable = shutil.which("trash") or (
-            "/opt/homebrew/bin/trash" if Path("/opt/homebrew/bin/trash").exists() else None
-        )
+        executable = finder_trash_executable()
         if not executable:
             QMessageBox.warning(self, "Pip Rot", "Install the trash command: brew install trash")
             return
