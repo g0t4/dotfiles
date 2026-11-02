@@ -2456,8 +2456,36 @@ function M.hide()
     deleteActiveHotkeys()
 end
 
+-- Release native windows before Lua teardown; garbage collection can leave
+-- a visible chooser behind across reloads.
+function M.shutdown()
+    log:info("Shutting down launcher")
+    if currentCancelFunc then
+        local cancel = currentCancelFunc
+        currentCancelFunc = nil
+        local ok, err = pcall(cancel)
+        if not ok then log:error("Launcher search cleanup failed:", err) end
+    end
+    closeLLMWebView()
+    deleteActiveHotkeys()
+    selectionModifiers = nil
+    if chooser then
+        chooser:hide()
+        chooser:delete()
+        chooser = nil
+    end
+end
+
 -- Setup keybinding
 function M.init()
+    -- Preserve any shutdown work registered by earlier modules.
+    local previousShutdown = hs.shutdownCallback
+    hs.shutdownCallback = function()
+        local ok, err = pcall(M.shutdown)
+        if not ok then log:error("Launcher shutdown failed:", err) end
+        if previousShutdown then previousShutdown() end
+    end
+
     -- Load history from disk
     loadHistory()
 
