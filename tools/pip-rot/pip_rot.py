@@ -1,5 +1,6 @@
 """Pip Rot: small independent filesystem trees in tabs."""
 import argparse
+from dataclasses import dataclass
 from pathlib import Path
 import sys
 
@@ -14,10 +15,20 @@ from PySide6.QtWidgets import (
 from media import DurationCache, MediaModel
 
 
+@dataclass
+class Location:
+    root: Path
+    selected: Path | None = None
+    scroll: int = 0
+
+
 class FileTab(QWidget):
     def __init__(self, root: Path, cache: DurationCache, reveal: Path | None = None):
         super().__init__()
         self.root = root
+        self.history = [Location(root, reveal)]
+        self.history_index = 0
+        self.restore_scroll = None
         self.initial_selection_done = False
         self.pending_reveal = reveal
         self.model = MediaModel(cache, self)
@@ -82,6 +93,37 @@ class FileTab(QWidget):
             self.tree.scrollTo(index)
             self.pending_reveal = None
             self.initial_selection_done = True
+            if self.restore_scroll is not None:
+                self.tree.verticalScrollBar().setValue(self.restore_scroll)
+                self.restore_scroll = None
+
+    def save_location(self):
+        entry = self.history[self.history_index]
+        entry.selected = self.selected()
+        entry.scroll = self.tree.verticalScrollBar().value()
+
+    def navigate(self, root):
+        if root == self.root:
+            return
+        self.save_location()
+        del self.history[self.history_index + 1:]
+        # Going up highlights the directory we just left.
+        reveal = self.root if self.root.parent == root else None
+        self.history.append(Location(root, reveal))
+        self.history_index += 1
+        self.show_location()
+
+    def show_location(self):
+        entry = self.history[self.history_index]
+        self.root = entry.root
+        self.pending_reveal = entry.selected
+        self.restore_scroll = entry.scroll
+        self.initial_selection_done = False
+        self.tree.setRootIndex(self.model.setRootPath(str(self.root)))
+        self.tree.clearSelection()
+        self.tree.setCurrentIndex(self.model.index(-1, -1))
+        self.loaded(str(self.root))
+        self.tree.setFocus()
 
     def selected(self):
         index = self.tree.currentIndex()
@@ -109,6 +151,11 @@ class Browser(QMainWindow):
         self.location = QLineEdit()
         self.location.setPlaceholderText("Go to a directory…")
         self.location.returnPressed.connect(self.go_location)
+        go_menu = self.menuBar().addMenu("Go")
+        self.back_action = self.action(go_menu, "Back", "Ctrl+[", lambda: self.move_history(-1))
+        self.forward_action = self.action(go_menu, "Forward", "Ctrl+]", lambda: self.move_history(1))
+        toolbar.addAction(self.back_action)
+        toolbar.addAction(self.forward_action)
         toolbar.addWidget(self.location)
         file_menu = self.menuBar().addMenu("File")
         view_menu = self.menuBar().addMenu("View")
@@ -195,6 +242,13 @@ class Browser(QMainWindow):
         if self.current():
             self.location.setText(str(self.current().root))
             self.setWindowTitle(f"{self.current().root} — Pip Rot")
+            index = self.tabs.currentIndex()
+            self.tabs.setTabText(index, self.current().root.name or str(self.current().root))
+            self.tabs.setTabToolTip(index, str(self.current().root))
+        if hasattr(self, "back_action"):
+            tab = self.current()
+            self.back_action.setEnabled(bool(tab and tab.history_index > 0))
+            self.forward_action.setEnabled(bool(tab and tab.history_index + 1 < len(tab.history)))
 
     def focus_location(self):
         self.location.setFocus()
@@ -207,11 +261,22 @@ class Browser(QMainWindow):
         if not path.is_dir():
             QMessageBox.warning(self, "Pip Rot", f"Not a directory: {path}")
             return
-        old = self.current()
-        index = self.tabs.currentIndex()
-        self.add_tab(path.absolute())
-        self.tabs.removeTab(index)
-        old.deleteLater()
+        self.current().navigate(Path(QDir.cleanPath(str(path.absolute()))))
+        self.update_location()
+
+    def move_history(self, delta):
+        tab = self.current()
+        target = tab.history_index + delta
+        if not 0 <= target < len(tab.history):
+            return
+        entry = tab.history[target]
+        if not entry.root.is_dir():
+            QMessageBox.warning(self, "Pip Rot", f"Directory is no longer available: {entry.root}")
+            return
+        tab.save_location()
+        tab.history_index = target
+        tab.show_location()
+        self.update_location()
 
     def go_parent(self):
         self.location.setText(str(self.current().root.parent))

@@ -28,6 +28,7 @@ Each invocation opens a separate window. Tabs and layouts are currently in memor
 | ⌘W | Close tab (last tab closes the window) |
 | ⌘L | Enter a directory path (Return to navigate in current tab) |
 | ⌘↑ / Option↑ | Parent directory |
+| ⌘[ / ⌘] | Back / forward in this tab’s directory history |
 | ControlTab / ControlShiftTab | Next / previous tab |
 | ControlPageDown / ControlPageUp | Next / previous tab |
 | ⌘Shift. | Toggle hidden files across tabs |
@@ -70,3 +71,9 @@ With ffmpeg installed, verify real video metadata too:
 ```sh
 QT_QPA_PLATFORM=offscreen uv run --project tools/pip-rot python tools/pip-rot/media_test.py
 ```
+
+Each tab keeps its own directory history, including selection and scroll position.
+Going to a directory with ⌘L or going up records a visit; expanding a folder does
+not. Navigating somewhere new after going back discards the forward history.
+Back/Forward also appear in the Go menu and location toolbar. History lasts for
+the current window session.
