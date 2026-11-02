@@ -66,6 +66,7 @@ def register_misc_abbreviations():
     abbr('cdr', 'cd $(_repo_root)')
     abbr('orr', 'open $(_repo_root)')
     abbr('oh', 'open .')
+    abbr('prh', 'pip-rot .')
     abbr('ch', 'code .')
     abbr('cih', 'code-insiders .')
     abbr('cr', 'code $(_repo_root)')
