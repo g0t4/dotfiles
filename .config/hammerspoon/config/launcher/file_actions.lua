@@ -202,19 +202,19 @@ local function buildActions(paths)
         image = hs.image.imageFromName("NSActionTemplate"),
     })
 
+    table.insert(actions, {
+        text = "Reveal in  Pip Rot",
+        subText = summary,
+        action = "reveal_pip_rot",
+        paths = paths,
+        image = hs.image.imageFromName("NSRevealFreestandingTemplate"),
+    })
+
     -- Reveal in Finder (useful if triggered from non-Finder app later)
     table.insert(actions, {
         text = "Reveal in Finder",
         subText = summary,
         action = "reveal",
-        paths = paths,
-        image = hs.image.imageFromName("NSRevealFreestandingTemplate"),
-    })
-
-    table.insert(actions, {
-        text = "Reveal in Pip Rot",
-        subText = summary,
-        action = "reveal_pip_rot",
         paths = paths,
         image = hs.image.imageFromName("NSRevealFreestandingTemplate"),
     })
