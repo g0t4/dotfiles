@@ -44,11 +44,27 @@ Hammerspoon integration:
 
 The filesystem model loads listings in the background and watches for changes.
 It is read-only: no rename, move, delete, or drag-and-drop operations yet.
-The initial columns are Name, Size, Type, and Date Modified. Media duration is a
-future addition; this app does not read or modify Finder's `.DS_Store` files.
+The columns are Name, Size, Type, and Date Modified, plus Duration when videos
+appear in the current directory or an expanded subdirectory. Collapsing the
+last video-containing branch hides Duration again. Common video extensions are
+recognized case-insensitively. Only visible video rows are probed, with two
+background jobs maximum and an eight-second timeout per probe. Results are
+cached across tabs for this window and invalidated when a file's size or
+modification time changes. Duration is display-only; sort by the other columns.
+
+Duration uses `ffprobe` (`brew install ffmpeg` if missing). `…` means loading;
+`—` means unavailable, unsupported, or corrupt media. Files and folders that
+are not videos have blank duration cells. Long durations use `h:mm:ss`.
+This app does not read or modify Finder's `.DS_Store` files.
 
 Verification:
 
 ```sh
 QT_QPA_PLATFORM=offscreen uv run --project tools/pip-rot python tools/pip-rot/smoke_test.py
+```
+
+With ffmpeg installed, verify real video metadata too:
+
+```sh
+QT_QPA_PLATFORM=offscreen uv run --project tools/pip-rot python tools/pip-rot/media_test.py
 ```

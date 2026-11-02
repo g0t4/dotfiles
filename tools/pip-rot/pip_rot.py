@@ -11,13 +11,16 @@ from PySide6.QtWidgets import (
 )
 
 
+from media import DurationCache, MediaModel
+
+
 class FileTab(QWidget):
-    def __init__(self, root: Path, reveal: Path | None = None):
+    def __init__(self, root: Path, cache: DurationCache, reveal: Path | None = None):
         super().__init__()
         self.root = root
         self.initial_selection_done = False
         self.pending_reveal = reveal
-        self.model = QFileSystemModel(self)
+        self.model = MediaModel(cache, self)
         self.model.setReadOnly(True)
         self.model.setOption(QFileSystemModel.Option.DontUseCustomDirectoryIcons)
         self.model.setFilter(QDir.Filter.AllEntries | QDir.Filter.NoDotAndDotDot)
@@ -29,19 +32,48 @@ class FileTab(QWidget):
         self.tree.setEditTriggers(QAbstractItemView.EditTrigger.NoEditTriggers)
         self.tree.setSortingEnabled(True)
         self.tree.sortByColumn(0, Qt.SortOrder.AscendingOrder)
+        self.last_sort = (0, Qt.SortOrder.AscendingOrder)
+        self.tree.header().sortIndicatorChanged.connect(self.sort_changed)
         self.tree.header().setSectionResizeMode(0, QHeaderView.ResizeMode.Interactive)
         self.tree.setColumnWidth(0, 440)
         self.tree.setColumnWidth(1, 110)
         self.tree.setColumnWidth(2, 150)
         self.tree.setColumnWidth(3, 180)
+        self.tree.setColumnWidth(4, 100)
+        self.tree.setColumnHidden(4, True)
+        self.model.rowsInserted.connect(self.update_duration_column)
+        self.model.rowsRemoved.connect(self.update_duration_column)
+        self.model.dataChanged.connect(self.update_duration_column)
         layout = QVBoxLayout(self)
         layout.setContentsMargins(0, 0, 0, 0)
         layout.addWidget(self.tree)
         self.model.directoryLoaded.connect(self.loaded)
+        self.tree.expanded.connect(self.update_duration_column)
+        self.tree.collapsed.connect(self.update_duration_column)
         self.tree.doubleClicked.connect(self.open_file)
         QTimer.singleShot(0, lambda: self.loaded(str(root)))
 
+    def sort_changed(self, column, order):
+        # QFileSystemModel sorts its four built-in columns only.
+        if column == 4:
+            self.tree.sortByColumn(*self.last_sort)
+        else:
+            self.last_sort = (column, order)
+
+    def update_duration_column(self, *_):
+        # Inspect loaded rows only; expanding a nested directory may reveal videos.
+        def contains_video(parent):
+            for row in range(self.model.rowCount(parent)):
+                index = self.model.index(row, 0, parent)
+                if self.model.is_video(index):
+                    return True
+                if self.tree.isExpanded(index) and contains_video(index):
+                    return True
+            return False
+        self.tree.setColumnHidden(4, not contains_video(self.tree.rootIndex()))
+
     def loaded(self, directory):
+        self.update_duration_column()
         if self.initial_selection_done or Path(directory) != self.root:
             return
         index = self.model.index(str(self.pending_reveal)) if self.pending_reveal else self.model.index(0, 0, self.tree.rootIndex())
@@ -63,7 +95,8 @@ class FileTab(QWidget):
 class Browser(QMainWindow):
     def __init__(self, paths, reveal=False):
         super().__init__()
-        self.resize(1100, 740)
+        self.resize(1200, 740)
+        self.duration_cache = DurationCache(self)
         self.tabs = QTabWidget()
         self.tabs.setDocumentMode(True)
         self.tabs.setTabsClosable(True)
@@ -113,7 +146,7 @@ class Browser(QMainWindow):
                      path if reveal or not path.is_dir() else None)
 
     def add_tab(self, root, reveal=None):
-        tab = FileTab(root, reveal)
+        tab = FileTab(root, self.duration_cache, reveal)
         self.tabs.setCurrentIndex(self.tabs.addTab(tab, root.name or str(root)))
         self.tabs.setTabToolTip(self.tabs.currentIndex(), str(root))
         tab.tree.setContextMenuPolicy(Qt.ContextMenuPolicy.CustomContextMenu)
