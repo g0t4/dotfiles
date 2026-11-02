@@ -1,11 +1,12 @@
 """Pip Rot: small independent filesystem trees in tabs."""
 import argparse
 import subprocess
+import shutil
 from dataclasses import dataclass
 from pathlib import Path
 import sys
 
-from PySide6.QtCore import QDir, Qt, QUrl, QTimer
+from PySide6.QtCore import QDir, QProcess, Qt, QUrl, QTimer
 from PySide6.QtGui import QAction, QDesktopServices, QKeySequence
 from PySide6.QtWidgets import (
     QApplication, QAbstractItemView, QFileSystemModel, QHeaderView, QInputDialog, QLineEdit, QMainWindow,
@@ -150,6 +151,7 @@ class Browser(QMainWindow):
         super().__init__()
         self.resize(1200, 740)
         self.duration_cache = DurationCache(self)
+        self.trash_processes = set()
         self.tabs = QTabWidget()
         self.tabs.setDocumentMode(True)
         self.tabs.setTabsClosable(True)
@@ -174,6 +176,8 @@ class Browser(QMainWindow):
         self.action(file_menu, "Copy Path", "Ctrl+Shift+C", self.copy_paths)
         self.action(file_menu, "Copy File Contents", "Ctrl+Alt+Shift+C", self.copy_contents)
         self.action(file_menu, "New Nested Directory…", "Ctrl+Shift+N", self.new_directory)
+        self.trash_action = self.action(file_menu, "Move to Trash", "Ctrl+Backspace", self.trash_selected)
+        self.trash_action.setShortcutContext(Qt.ShortcutContext.WidgetWithChildrenShortcut)
         self.action(file_menu, "Open Directory in New Tab", "Ctrl+Return", self.tab_selected)
         self.action(file_menu, "Duplicate Tab", "Ctrl+T", lambda: self.add_tab(self.current().root))
         open_item = self.action(file_menu, "Open Selected Item", "Ctrl+Down", self.open_selected)
@@ -217,6 +221,7 @@ class Browser(QMainWindow):
         tab = FileTab(root, self.duration_cache, reveal)
         self.tabs.setCurrentIndex(self.tabs.addTab(tab, root.name or str(root)))
         self.tabs.setTabToolTip(self.tabs.currentIndex(), str(root))
+        tab.tree.addAction(self.trash_action)
         tab.tree.setContextMenuPolicy(Qt.ContextMenuPolicy.CustomContextMenu)
         tab.tree.customContextMenuRequested.connect(lambda point: self.context_menu(tab, point))
         self.apply_hidden(tab)
@@ -237,7 +242,48 @@ class Browser(QMainWindow):
         menu.addAction("Copy Path", self.copy_paths)
         menu.addAction("Copy File Contents", self.copy_contents)
         menu.addAction("New Nested Directory…", self.new_directory)
+        menu.addAction(self.trash_action)
         menu.exec(tab.tree.viewport().mapToGlobal(point))
+
+    def trash_selected(self):
+        tab = self.current()
+        rows = tab.tree.selectionModel().selectedRows(0)
+        paths = [tab.model.filePath(row) for row in rows]
+        if not paths:
+            self.statusBar().showMessage("Select files or directories to move to Trash", 4000)
+            return
+        executable = shutil.which("trash") or (
+            "/opt/homebrew/bin/trash" if Path("/opt/homebrew/bin/trash").exists() else None
+        )
+        if not executable:
+            QMessageBox.warning(self, "Pip Rot", "Install the trash command: brew install trash")
+            return
+        process = QProcess(self)
+        self.trash_processes.add(process)
+        self.trash_action.setEnabled(False)
+
+        def cleanup():
+            self.trash_processes.discard(process)
+            self.trash_action.setEnabled(not self.trash_processes)
+            process.deleteLater()
+
+        def finished(code, _status):
+            stderr = bytes(process.readAllStandardError()).decode(errors="replace").strip()
+            if code:
+                QMessageBox.warning(self, "Pip Rot", stderr or "Some items could not be moved to Trash.")
+            else:
+                self.statusBar().showMessage(f"Moved {len(paths)} item(s) to Trash — restore with Finder’s Put Back", 5000)
+            cleanup()
+            self.publish_selection()
+
+        def failed(error):
+            if error == QProcess.ProcessError.FailedToStart:
+                QMessageBox.warning(self, "Pip Rot", process.errorString())
+                cleanup()
+
+        process.finished.connect(finished)
+        process.errorOccurred.connect(failed)
+        process.start(executable, ["-F", *paths])
 
     def selected_paths(self):
         tab = self.current()
@@ -249,7 +295,10 @@ class Browser(QMainWindow):
     def publish_selection(self, *_):
         if self.current():
             try:
-                publish_context(self.current().root, self.selected_paths(), self.windowTitle())
+                publish_context(
+                    self.current().root, self.selected_paths(), self.windowTitle(),
+                    selection_explicit=bool(self.current().tree.selectionModel().selectedRows(0)),
+                )
             except OSError as error:
                 self.statusBar().showMessage(f"Could not update action picker context: {error}")
 

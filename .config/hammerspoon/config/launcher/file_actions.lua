@@ -3,6 +3,7 @@ local M = {}
 
 -- File actions menu for selected files (like Alfred's file actions)
 local chooser = nil
+local trashTasks = {}
 
 local function shellQuote(value)
     return "'" .. value:gsub("'", "'\\''") .. "'"
@@ -354,13 +355,26 @@ local function onChoice(choice)
         end
 
     elseif choice.action == "trash" then
-        for _, path in ipairs(paths) do
-            hs.execute('mv ' .. shellQuote(path) .. ' ~/.Trash/')
-        end
-        if #paths == 1 then
-            hs.alert.show("Trashed: " .. getFilename(paths[1]))
+        local args = {"-F"}
+        for _, path in ipairs(paths) do table.insert(args, path) end
+        local task
+        task = hs.task.new("/opt/homebrew/bin/trash", function(code, _, stderr)
+            trashTasks[task] = nil
+            if code ~= 0 then
+                log:error("Move to Trash failed:", stderr)
+                hs.alert.show("Some items could not be moved to Trash")
+            else
+                hs.alert.show("Moved " .. #paths .. " item(s) to Trash")
+            end
+        end, args)
+        if task then
+            trashTasks[task] = true
+            if not task:start() then
+                trashTasks[task] = nil
+                hs.alert.show("Could not start trash")
+            end
         else
-            hs.alert.show("Trashed " .. #paths .. " items")
+            hs.alert.show("Could not start trash")
         end
     end
 end
@@ -455,6 +469,12 @@ function M.show()
     local context = require("config.launcher.action_context").capture()
     local paths = context and context.paths or {}
     local actions = buildActions(paths)
+    -- A current-directory fallback is useful for navigation, never for Trash.
+    if context and context.source == "pip-rot" and context.selection_explicit ~= true then
+        for index = #actions, 1, -1 do
+            if actions[index].action == "trash" then table.remove(actions, index) end
+        end
+    end
     for _, action in ipairs(actions) do
         action.context_source = context and context.source
     end

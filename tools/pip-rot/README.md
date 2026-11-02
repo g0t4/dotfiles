@@ -46,8 +46,8 @@ Hammerspoon integration:
   Command or Shift alone still reveals it in Finder.
 
 The filesystem model loads listings in the background and watches for changes.
-The tree disables inline rename, move, delete, and drag-and-drop; explicit
-actions can create directories.
+The tree disables inline rename, move, and drag-and-drop; explicit
+actions can create directories or move selected items to Trash.
 The columns are Name, Size, Type, and Date Modified, plus Duration when videos
 appear in the current directory or an expanded subdirectory. Collapsing the
 last video-containing branch hides Duration again. Common video extensions are
@@ -97,11 +97,12 @@ Native Pip Rot actions are also available in File and the tree's context menu:
 | ⌘ShiftC | Copy Path (raw paths, one per line) |
 | ⌘OptionShiftC | Copy File Contents (text files) |
 | ⌘ShiftN | New Nested Directory inside the selected directory, or file's parent |
+| ⌘Backspace | Move explicitly selected files/directories to Trash |
 
 New Nested Directory accepts paths such as `drafts/notes`, selects the created
 directory, and refuses existing targets or `..` traversal. The filesystem view
-still disables inline rename, drag-and-drop, and delete; creation is an explicit
-action. The Hammerspoon Copy Path action retains its existing shell-escaped output.
+still disables inline rename and drag-and-drop; creation and moving items to
+Trash are explicit actions. The Hammerspoon Copy Path action retains its existing shell-escaped output.
 
 Pip Rot publishes selection changes atomically to a private per-process file:
 
@@ -117,6 +118,7 @@ Example contract:
   "kind": "files",
   "source": "pip-rot",
   "pid": 12345,
+  "selection_explicit": true,
   "directory": "/Users/you/Movies",
   "paths": ["/Users/you/Movies/example.mp4"],
   "window_title": "/Users/you/Movies — Pip Rot"
@@ -134,4 +136,17 @@ Additional checks (from the repository root):
 ```sh
 QT_QPA_PLATFORM=offscreen uv run --project tools/pip-rot python tools/pip-rot/actions_test.py
 lua tools/pip-rot/action_context_test.lua
+```
+
+Move to Trash uses `trash -F` (`brew install trash`), asking Finder to preserve
+its **Put Back** metadata. It runs asynchronously and reports failures. The
+Hammerspoon picker uses the same command instead of moving files with `mv`.
+There is no permanent-delete, empty-trash, or Pip Rot ⌘Z action. Restore through
+Finder's Trash → Put Back. The native shortcut applies to the tree, so editing
+text in the location field keeps normal text-editing behavior. No selected rows
+means no trash operation; the picker hides Trash for a directory fallback
+(`selection_explicit: false`).
+
+```sh
+QT_QPA_PLATFORM=offscreen uv run --project tools/pip-rot python tools/pip-rot/trash_test.py
 ```

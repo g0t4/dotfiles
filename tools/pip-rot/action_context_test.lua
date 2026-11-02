@@ -33,6 +33,14 @@ local real_title=title; title='not Pip Rot'; assert(provider.capture()==nil); ti
 package.loaded['config.launcher.action_context']=provider
 local file_actions=assert(loadfile('.config/hammerspoon/config/launcher/file_actions.lua'))()
 file_actions.show()
+for _, action in ipairs(actions) do assert(action.action~='trash', 'root fallback must not offer Trash') end
+payload.selection_explicit=true
+file_actions.show()
+local trash
+for _, action in ipairs(actions) do if action.action=='trash' then trash=action end end
+assert(trash, 'explicit selection must offer Trash')
+callback(trash)
+assert(task_args[1]=='-F' and task_args[2]==payload.paths[1])
 local terminal
 for _, action in ipairs(actions) do if action.action=='open_terminal' then terminal=action end end
 assert(terminal.context_source=='pip-rot')
