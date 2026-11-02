@@ -59,8 +59,9 @@ aliases['files_sorted_by_size'] = _files_sorted_by_size
 import glob
 import os
 
+# FYI use \\\\ => looks like \\ before expansion => \ when expanded b/c we want \. in the literal expanded text
 abbr("shift_only","""
-for i in glob.glob('*.mkv') + glob.glob('*.mov'):
+for i in $(@lines fd '\\\\.(mkv|mov)$'):
     video_editing_just_shift_to_mp4_one_video(i)
 """)
 
