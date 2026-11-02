@@ -2134,7 +2134,7 @@ local refreshHotkeyCtrlR = nil
 local historyHotkeyUp = nil
 local historyHotkeyDown = nil
 local tabEventTap = nil
-local pipRotHotkey = nil
+local revealHotkeys = {}
 local selectionModifiers = nil
 
 -- Delete active hotkeys
@@ -2160,10 +2160,8 @@ local function deleteActiveHotkeys()
         historyHotkeyDown = nil
         log:info("Deleted Cmd+Down hotkey")
     end
-    if pipRotHotkey then
-        pipRotHotkey:delete()
-        pipRotHotkey = nil
-    end
+    for _, hotkey in ipairs(revealHotkeys) do hotkey:delete() end
+    revealHotkeys = {}
     if tabEventTap then
         tabEventTap:stop()
         tabEventTap = nil
@@ -2353,7 +2351,7 @@ local function onChoice(choice)
     if choice.browsePath then
         -- For path browsing, open the file/folder
         if choice.path then
-            if modifiers.cmd and modifiers.shift then
+            if modifiers.shift and not modifiers.cmd then
                 require("config.launcher.pip_rot").reveal({choice.path})
             elseif modifiers.cmd or modifiers.shift then
                 -- Reveal in Finder
@@ -2376,7 +2374,7 @@ local function onChoice(choice)
         -- Copy path to clipboard
         hs.pasteboard.setContents(choice.path)
         hs.alert.show("Path copied: " .. choice.text)
-    elseif modifiers.cmd and modifiers.shift then
+    elseif modifiers.shift and not modifiers.cmd then
         require("config.launcher.pip_rot").reveal({choice.path})
     elseif modifiers.cmd or modifiers.shift then
         -- Reveal in Finder
@@ -2417,19 +2415,23 @@ function M.show()
     historyHotkeyUp:enable()
     historyHotkeyDown:enable()
 
-    -- Cocoa's chooser does not accept Cmd+Shift+Return as a normal selection.
     -- Select explicitly and preserve intent instead of sampling flags later.
-    pipRotHotkey = hs.hotkey.new({"cmd", "shift"}, "return", function()
-        local choice = chooser:selectedRowContents()
-        require("config.logs").hammerspoons():info("Pip Rot launcher shortcut:", choice)
-        if choice and choice.path then
-            selectionModifiers = { cmd = true, shift = true }
-            chooser:select()
-        else
-            log:info("Pip Rot shortcut ignored: selected result has no path")
-        end
-    end)
-    pipRotHotkey:enable()
+    local function bindReveal(mods, intent, target)
+        local hotkey = hs.hotkey.new(mods, "return", function()
+            local choice = chooser:selectedRowContents()
+            require("config.logs").hammerspoons():info("Launcher reveal shortcut:", target, choice)
+            if choice and choice.path then
+                selectionModifiers = intent
+                chooser:select()
+            else
+                log:info("Reveal shortcut ignored: selected result has no path")
+            end
+        end)
+        table.insert(revealHotkeys, hotkey)
+        hotkey:enable()
+    end
+    bindReveal({"shift"}, {shift = true}, "Pip Rot")
+    bindReveal({"cmd", "shift"}, {cmd = true, shift = true}, "Finder")
 
     -- Tab completion eventtap
     if not tabEventTap then

@@ -42,8 +42,8 @@ Hammerspoon integration:
 
 - Type `pip` or `pip-rot` in the launcher (or `b pip`) to open Pip Rot at Home.
 - `Option+Command+/` file actions: **Reveal in Pip Rot**, alongside **Reveal in Finder**.
-- `Alt+Space` launcher: **Command+Shift+Return** reveals a search result in Pip Rot;
-  Command or Shift alone still reveals it in Finder.
+- `Alt+Space` launcher: **Shift+Return** reveals a search result in Pip Rot;
+  **Command+Shift+Return** reveals it in Finder (Command+Return also retains Finder reveal).
 
 The filesystem model loads listings in the background and watches for changes.
 The tree disables inline rename, move, and drag-and-drop; explicit

@@ -155,8 +155,8 @@ When a chooser entry is chosen (`onChoice`):
 * **System Settings** – opens the pane using the `x-apple.systempreferences:` URL scheme.
 * **Fish / Python** – executes the command, copies any output, and shows an alert.
 * **Emoji** – copies the emoji and simulates `Cmd+V` to paste it immediately.
-* **File / Path** – default action opens the item; with `Cmd`/`Shift` it reveals in Finder;
-  with `Alt` it copies the absolute path. `Cmd+Shift+Return` reveals in Pip Rot.
+* **File / Path** – default action opens the item; with `Shift` it reveals in Pip Rot; with `Cmd` (including `Cmd+Shift`) it reveals in Finder;
+  with `Alt` it copies the absolute path. `Shift+Return` reveals in Pip Rot; `Cmd+Shift+Return` reveals in Finder.
 
 ## Implementation Notes (for future modifications)
 * All async searches return a **cancel function**; `currentCancelFunc` is invoked on

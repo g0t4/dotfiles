@@ -18,13 +18,14 @@ setmetatable(chooser, {__index=function(_, key)
     if key=='select' then return function() callback(selected) end end
     return function() return chooser end
 end})
-local shortcut
+local shortcuts = {}
 hs = {
     shutdownCallback=function() previousShutdownCalled=previousShutdownCalled+1 end,
     image={imageFromName=noop},
+    osascript={applescript=function(script) launched="finder"; return true, nil end},
     chooser={new=function(fn) callback=fn; return chooser end},
     hotkey={bind=noop,new=function(mods,key,fn)
-        if key=='return' then shortcut=fn end
+        if key=='return' then shortcuts[table.concat(mods, '+')]=fn end
         return {enable=noop,delete=noop}
     end},
     eventtap={checkKeyboardModifiers=function() return {} end,
@@ -33,9 +34,20 @@ hs = {
 local launcher = assert(loadfile('.config/hammerspoon/config/launcher/init.lua'))()
 launcher.init()
 launcher.show()
-assert(shortcut, 'missing shortcut')
-shortcut()
-assert(launched==selected.path, 'shortcut did not reveal selected path')
+assert(shortcuts.shift and shortcuts['cmd+shift'], 'missing reveal shortcuts')
+shortcuts.shift()
+assert(launched==selected.path, 'Shift+Return did not reveal in Pip Rot')
+launcher.show()
+shortcuts['cmd+shift']()
+assert(launched=='finder', 'Cmd+Shift+Return did not reveal in Finder')
+launcher.show()
+selected.browsePath='/tmp'
+shortcuts.shift()
+assert(launched==selected.path, 'path browsing must reveal in Pip Rot')
+launcher.show()
+shortcuts['cmd+shift']()
+assert(launched=='finder', 'path browsing must reveal in Finder')
+selected.browsePath=nil
 launcher.show()
 selected={bookmark='pip-rot',text='Open Pip Rot'}
 callback(selected)
