@@ -151,6 +151,6 @@ means no trash operation; the picker hides Trash for a directory fallback
 QT_QPA_PLATFORM=offscreen uv run --project tools/pip-rot python tools/pip-rot/trash_test.py
 ```
 
-The native app resolves Homebrew’s `/opt/homebrew/bin/trash` (or Intel
-`/usr/local/bin/trash`) explicitly, regardless of PATH. macOS also ships a
+Both interfaces use exactly `/opt/homebrew/bin/trash`, regardless of PATH,
+with no fallback to another executable. macOS also ships a
 different `/usr/bin/trash` that does not accept `-F`; it is not used here.

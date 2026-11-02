@@ -21,10 +21,8 @@ from action_context import publish_context, remove_context
 def finder_trash_executable():
     # macOS /usr/bin/trash is a different implementation with no -F option.
     # Pin the Homebrew command whose Finder mode preserves Put Back metadata.
-    for path in ("/opt/homebrew/bin/trash", "/usr/local/bin/trash"):
-        if Path(path).is_file() and os.access(path, os.X_OK):
-            return path
-    return None
+    path = "/opt/homebrew/bin/trash"
+    return path if Path(path).is_file() and os.access(path, os.X_OK) else None
 
 
 @dataclass
