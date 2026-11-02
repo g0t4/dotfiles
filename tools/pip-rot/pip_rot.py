@@ -1,5 +1,6 @@
 """Pip Rot: small independent filesystem trees in tabs."""
 import argparse
+import subprocess
 from dataclasses import dataclass
 from pathlib import Path
 import sys
@@ -7,12 +8,13 @@ import sys
 from PySide6.QtCore import QDir, Qt, QUrl, QTimer
 from PySide6.QtGui import QAction, QDesktopServices, QKeySequence
 from PySide6.QtWidgets import (
-    QApplication, QAbstractItemView, QFileSystemModel, QHeaderView, QLineEdit, QMainWindow,
+    QApplication, QAbstractItemView, QFileSystemModel, QHeaderView, QInputDialog, QLineEdit, QMainWindow,
     QMenu, QMessageBox, QTabWidget, QTreeView, QVBoxLayout, QWidget,
 )
 
 
 from media import DurationCache, MediaModel
+from action_context import publish_context, remove_context
 
 
 @dataclass
@@ -39,6 +41,7 @@ class FileTab(QWidget):
         self.tree.setModel(self.model)
         self.tree.setRootIndex(self.model.setRootPath(str(root)))
         self.tree.setUniformRowHeights(True)
+        self.tree.setSelectionMode(QAbstractItemView.SelectionMode.ExtendedSelection)
         self.tree.setSelectionBehavior(QAbstractItemView.SelectionBehavior.SelectRows)
         self.tree.setEditTriggers(QAbstractItemView.EditTrigger.NoEditTriggers)
         self.tree.setSortingEnabled(True)
@@ -85,10 +88,18 @@ class FileTab(QWidget):
 
     def loaded(self, directory):
         self.update_duration_column()
-        if self.initial_selection_done or Path(directory) != self.root:
+        if self.initial_selection_done:
+            return
+        if Path(directory) != self.root and not (
+            self.pending_reveal and Path(directory) in self.pending_reveal.parents
+        ):
             return
         index = self.model.index(str(self.pending_reveal)) if self.pending_reveal else self.model.index(0, 0, self.tree.rootIndex())
         if index.isValid():
+            ancestor = index.parent()
+            while ancestor.isValid() and ancestor != self.tree.rootIndex():
+                self.tree.expand(ancestor)
+                ancestor = ancestor.parent()
             self.tree.setCurrentIndex(index)
             self.tree.scrollTo(index)
             self.pending_reveal = None
@@ -159,6 +170,10 @@ class Browser(QMainWindow):
         toolbar.addWidget(self.location)
         file_menu = self.menuBar().addMenu("File")
         view_menu = self.menuBar().addMenu("View")
+        self.action(file_menu, "Open Terminal Here", "Ctrl+Alt+T", self.open_terminal)
+        self.action(file_menu, "Copy Path", "Ctrl+Shift+C", self.copy_paths)
+        self.action(file_menu, "Copy File Contents", "Ctrl+Alt+Shift+C", self.copy_contents)
+        self.action(file_menu, "New Nested Directory…", "Ctrl+Shift+N", self.new_directory)
         self.action(file_menu, "Open Directory in New Tab", "Ctrl+Return", self.tab_selected)
         self.action(file_menu, "Duplicate Tab", "Ctrl+T", lambda: self.add_tab(self.current().root))
         open_item = self.action(file_menu, "Open Selected Item", "Ctrl+Down", self.open_selected)
@@ -205,7 +220,9 @@ class Browser(QMainWindow):
         tab.tree.setContextMenuPolicy(Qt.ContextMenuPolicy.CustomContextMenu)
         tab.tree.customContextMenuRequested.connect(lambda point: self.context_menu(tab, point))
         self.apply_hidden(tab)
+        tab.tree.selectionModel().selectionChanged.connect(self.publish_selection)
         tab.tree.setFocus()
+        self.publish_selection()
 
     def context_menu(self, tab, point):
         index = tab.tree.indexAt(point)
@@ -216,8 +233,79 @@ class Browser(QMainWindow):
             menu.addAction("Open Directory in New Tab", self.tab_selected)
         else:
             menu.addAction("Open File", self.open_selected)
-        menu.addAction("Copy Path", lambda: QApplication.clipboard().setText(str(tab.selected())))
+        menu.addAction("Open Terminal Here", self.open_terminal)
+        menu.addAction("Copy Path", self.copy_paths)
+        menu.addAction("Copy File Contents", self.copy_contents)
+        menu.addAction("New Nested Directory…", self.new_directory)
         menu.exec(tab.tree.viewport().mapToGlobal(point))
+
+    def selected_paths(self):
+        tab = self.current()
+        if not tab:
+            return []
+        rows = tab.tree.selectionModel().selectedRows(0)
+        return [Path(tab.model.filePath(row)) for row in rows] or [tab.root]
+
+    def publish_selection(self, *_):
+        if self.current():
+            try:
+                publish_context(self.current().root, self.selected_paths(), self.windowTitle())
+            except OSError as error:
+                self.statusBar().showMessage(f"Could not update action picker context: {error}")
+
+    def closeEvent(self, event):
+        remove_context()
+        super().closeEvent(event)
+
+    def copy_paths(self):
+        QApplication.clipboard().setText("\n".join(map(str, self.selected_paths())))
+
+    def copy_contents(self):
+        contents = []
+        try:
+            paths = self.selected_paths()
+            for path in paths:
+                if path.is_file():
+                    text = path.read_text()
+                    contents.append(f"--- {path.name} ---\n{text}" if len(paths) > 1 else text)
+        except (OSError, UnicodeError) as error:
+            QMessageBox.warning(self, "Pip Rot", f"Could not read file contents: {error}")
+            return
+        if contents:
+            QApplication.clipboard().setText("\n\n".join(contents))
+        else:
+            self.statusBar().showMessage("Select a text file to copy its contents", 4000)
+
+    def action_directory(self):
+        path = self.current().selected()
+        return path if path.is_dir() else path.parent
+
+    def open_terminal(self):
+        try:
+            subprocess.Popen(["/usr/bin/open", "-a", "iTerm", str(self.action_directory())])
+        except OSError as error:
+            QMessageBox.warning(self, "Pip Rot", str(error))
+
+    def new_directory(self):
+        parent = self.action_directory()
+        name, accepted = QInputDialog.getText(self, "New Nested Directory", f"Create inside {parent}:")
+        if not accepted or not name.strip():
+            return
+        relative = Path(name.strip())
+        if relative.is_absolute() or '..' in relative.parts or relative == Path('.'):
+            QMessageBox.warning(self, "Pip Rot", "Use a relative directory name without '..'.")
+            return
+        target = parent / relative
+        try:
+            target.mkdir(parents=True)
+        except OSError as error:
+            QMessageBox.warning(self, "Pip Rot", str(error))
+            return
+        tab = self.current()
+        tab.tree.expand(tab.model.index(str(parent)))
+        tab.pending_reveal = target
+        tab.initial_selection_done = False
+        tab.loaded(str(tab.root))
 
     def tab_selected(self):
         path = self.current().selected()
@@ -252,6 +340,7 @@ class Browser(QMainWindow):
             tab = self.current()
             self.back_action.setEnabled(bool(tab and tab.history_index > 0))
             self.forward_action.setEnabled(bool(tab and tab.history_index + 1 < len(tab.history)))
+        self.publish_selection()
 
     def focus_location(self):
         self.location.setFocus()

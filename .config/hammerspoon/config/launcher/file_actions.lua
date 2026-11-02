@@ -4,47 +4,8 @@ local M = {}
 -- File actions menu for selected files (like Alfred's file actions)
 local chooser = nil
 
--- Get selected files from the frontmost app
-local function getSelectedFiles()
-    local app = hs.application.frontmostApplication()
-    local appName = app and app:name() or ""
-
-    log:info("=== File Actions ===")
-    log:info("Frontmost app:", appName)
-
-    if appName == "Finder" then
-        -- Get Finder selection via AppleScript
-        local ok, result = hs.osascript.applescript([[
-            tell application "Finder"
-                set selectedItems to selection
-                set pathList to ""
-                repeat with anItem in selectedItems
-                    set posixPath to POSIX path of (anItem as alias)
-                    if pathList is "" then
-                        set pathList to posixPath
-                    else
-                        set pathList to pathList & linefeed & posixPath
-                    end if
-                end repeat
-                return pathList
-            end tell
-        ]])
-
-        if ok and result and result ~= "" then
-            local paths = {}
-            for line in result:gmatch("[^\n]+") do
-                -- Remove trailing slash from directories for consistency
-                local path = line:gsub("/$", "")
-                table.insert(paths, path)
-            end
-            log:info("Finder selection:", #paths, "items")
-            return paths
-        end
-    end
-
-    -- TODO: support other apps (e.g. Path Finder, Terminal, etc.)
-    log:warn("No files selected or unsupported app:", appName)
-    return {}
+local function shellQuote(value)
+    return "'" .. value:gsub("'", "'\\''") .. "'"
 end
 
 -- Helper to get just filename from path
@@ -138,7 +99,7 @@ local function buildActions(paths)
     if #paths == 0 then
         return {{
             text = "No files selected",
-            subText = "Select files in Finder first",
+            subText = "Select files in Finder or Pip Rot first",
             image = hs.image.imageFromName("NSCaution"),
         }}
     end
@@ -259,6 +220,11 @@ local function onChoice(choice)
 
     local paths = choice.paths
 
+    if choice.action == "new_nested_folder" and choice.context_source == "pip-rot" then
+        M.newNestedFolder(paths[1])
+        return
+    end
+
     if choice.action == "new_nested_folder" then
         local script = os.getenv("HOME") .. "/repos/github/g0t4/dotfiles/misc/alfred/file-actions/finder-new-nested-folder.applescript"
         local task = hs.task.new("/usr/bin/osascript", function(exitCode, _, stderr)
@@ -357,7 +323,7 @@ local function onChoice(choice)
                 dir = path:match("^(.+)/[^/]+$") or path
             end
             -- Open iTerm at the resolved directory
-            hs.execute(string.format('open -a "iTerm" "%s"', dir))
+            M.openPath({"-a", "iTerm", dir})
         end
 
     elseif choice.action == "reveal_pip_rot" then
@@ -365,7 +331,7 @@ local function onChoice(choice)
 
     elseif choice.action == "reveal" then
         for _, path in ipairs(paths) do
-            hs.execute(string.format('open -R "%s"', path))
+            M.openPath({"-R", path})
         end
 
     elseif choice.action == "open_with" then
@@ -373,7 +339,7 @@ local function onChoice(choice)
         M.showOpenWith(paths)
 
     elseif choice.action == "diff" then
-        local output, status = hs.execute(string.format('diff "%s" "%s"', paths[1], paths[2]))
+        local output, status = hs.execute('diff ' .. shellQuote(paths[1]) .. ' ' .. shellQuote(paths[2]))
         if status then
             hs.alert.show("Files are identical")
         else
@@ -389,12 +355,45 @@ local function onChoice(choice)
 
     elseif choice.action == "trash" then
         for _, path in ipairs(paths) do
-            hs.execute(string.format('mv "%s" ~/.Trash/', path))
+            hs.execute('mv ' .. shellQuote(path) .. ' ~/.Trash/')
         end
         if #paths == 1 then
             hs.alert.show("Trashed: " .. getFilename(paths[1]))
         else
             hs.alert.show("Trashed " .. #paths .. " items")
+        end
+    end
+end
+
+-- Pass paths as arguments, preserving spaces, quotes, dollars, and newlines.
+function M.openPath(args)
+    local task = hs.task.new("/usr/bin/open", function(code, _, stderr)
+        if code ~= 0 then
+            log:error("Open failed:", stderr)
+            hs.alert.show("Could not open path")
+        end
+    end, args)
+    if not task or not task:start() then hs.alert.show("Could not start open") end
+end
+
+function M.newNestedFolder(parent)
+    local button, name = hs.dialog.textPrompt("New Nested Directory", "Create inside " .. parent, "", "Create", "Cancel")
+    if button ~= "Create" or name == "" then return end
+    if name:sub(1, 1) == "/" then hs.alert.show("Use a relative directory name"); return end
+    local components = {}
+    for component in name:gmatch("[^/]+") do
+        if component == ".." then hs.alert.show("Parent traversal is not allowed"); return end
+        if component ~= "." then table.insert(components, component) end
+    end
+    if #components == 0 then return end
+    local target = parent .. "/" .. table.concat(components, "/")
+    if hs.fs.attributes(target) then hs.alert.show("Directory already exists"); return end
+    local current = parent
+    for _, component in ipairs(components) do
+        current = current .. "/" .. component
+        if not hs.fs.attributes(current) then
+            local ok, err = hs.fs.mkdir(current)
+            if not ok then log:error("Create directory failed:", err); hs.alert.show("Could not create directory"); return end
         end
     end
 end
@@ -406,7 +405,7 @@ function M.showOpenWith(paths)
             return
         end
         for _, path in ipairs(paths) do
-            hs.execute(string.format('open -a "%s" "%s"', choice.appPath, path))
+            M.openPath({"-a", choice.appPath, path})
         end
     end)
 
@@ -453,8 +452,13 @@ end
 
 -- Show file actions menu
 function M.show()
-    local paths = getSelectedFiles()
+    local context = require("config.launcher.action_context").capture()
+    local paths = context and context.paths or {}
     local actions = buildActions(paths)
+    for _, action in ipairs(actions) do
+        action.context_source = context and context.source
+    end
+    if chooser then chooser:delete() end
 
     chooser = hs.chooser.new(onChoice)
 
@@ -470,6 +474,11 @@ end
 
 -- Setup keybinding
 function M.init()
+    local previousShutdown = hs.shutdownCallback
+    hs.shutdownCallback = function()
+        if chooser then chooser:hide(); chooser:delete(); chooser = nil end
+        if previousShutdown then previousShutdown() end
+    end
     hs.hotkey.bind({"alt", "cmd"}, "/", function()
         M.show()
     end)

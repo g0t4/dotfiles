@@ -185,3 +185,11 @@ When a chooser entry is chosen (`onChoice`):
 ---
 *File maintained by the AI assistant as a quick reference for the
 Hammerspoon launcher module.*
+
+## File action context
+
+`action_context.lua` captures file contexts from Finder or the front Pip Rot
+window before the picker takes focus. Pip Rot writes a versioned JSON record at
+`~/.local/state/pip-rot/context-<pid>.json`; validate PID and window title before
+using it. The picker freezes those paths for action dispatch. Finder selection
+is returned as an AppleScript list so newlines in filenames remain intact.
