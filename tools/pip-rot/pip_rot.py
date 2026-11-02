@@ -119,12 +119,17 @@ class Browser(QMainWindow):
         self.action(file_menu, "Close Tab", "Ctrl+W", lambda: self.close_tab(self.tabs.currentIndex()))
         self.action(file_menu, "Quit Pip Rot", "Ctrl+Q", self.close)
         self.action(view_menu, "Go to Directory…", "Ctrl+L", self.focus_location)
-        self.action(view_menu, "Parent Directory", "Alt+Up", self.go_parent)
+        parent_directory = self.action(view_menu, "Parent Directory", "Ctrl+Up", self.go_parent)
+        parent_directory.setShortcuts([QKeySequence("Ctrl+Up"), QKeySequence("Alt+Up")])
         hidden = self.action(view_menu, "Show Hidden Files", "Ctrl+Shift+.", self.toggle_hidden)
         hidden.setCheckable(True)
         self.hidden_action = hidden
-        self.action(view_menu, "Next Tab", "Ctrl+Tab", lambda: self.cycle_tab(1))
-        self.action(view_menu, "Previous Tab", "Ctrl+Shift+Tab", lambda: self.cycle_tab(-1))
+        # Qt swaps Ctrl/Meta on macOS: Meta means the physical Control key.
+        control = "Meta" if sys.platform == "darwin" else "Ctrl"
+        next_tab = self.action(view_menu, "Next Tab", f"{control}+Tab", lambda: self.cycle_tab(1))
+        next_tab.setShortcuts([QKeySequence(f"{control}+Tab"), QKeySequence(f"{control}+PgDown")])
+        previous_tab = self.action(view_menu, "Previous Tab", f"{control}+Shift+Tab", lambda: self.cycle_tab(-1))
+        previous_tab.setShortcuts([QKeySequence(f"{control}+Shift+Tab"), QKeySequence(f"{control}+PgUp")])
         self.statusBar().showMessage("← → collapse / expand · ⌘↓ directory in new tab · ⌘L go to directory")
         for path in paths:
             self.add_path(path, reveal)

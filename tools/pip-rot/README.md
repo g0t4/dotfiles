@@ -27,8 +27,9 @@ Each invocation opens a separate window. Tabs and layouts are currently in memor
 | ⌘O | Open file with its default app, or directory in a new tab |
 | ⌘W | Close tab (last tab closes the window) |
 | ⌘L | Enter a directory path (Return to navigate in current tab) |
-| Option↑ | Parent directory |
+| ⌘↑ / Option↑ | Parent directory |
 | ControlTab / ControlShiftTab | Next / previous tab |
+| ControlPageDown / ControlPageUp | Next / previous tab |
 | ⌘Shift. | Toggle hidden files across tabs |
 
 Double-click a file to open it; double-click a directory to expand it.
@@ -38,6 +39,7 @@ Command shortcuts to Control.
 
 Hammerspoon integration:
 
+- Type `pip` or `pip-rot` in the launcher (or `b pip`) to open Pip Rot at Home.
 - `Option+Command+/` file actions: **Reveal in Pip Rot**, alongside **Reveal in Finder**.
 - `Alt+Space` launcher: **Command+Shift+Return** reveals a search result in Pip Rot;
   Command or Shift alone still reveals it in Finder.

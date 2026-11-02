@@ -114,7 +114,7 @@ llmIsThinking       -- true while model is in reasoning/thinking phase
 identified by a `generationId`, shown side-by-side or stacked with headers.
 
 ## Bookmarks & Actions
-The `bookmarks` table defines static entries (trash, lock, sleep, logout, …) each
+The `bookmarks` table defines static entries (pip-rot, trash, lock, sleep, logout, …) each
 with a `name`, `keywords`, display `text`, `subText`, and an icon.  When a bookmark
 is selected the corresponding function in `bookmarkActions` is executed – e.g.
 `trash` runs `open "trash://"`, `mute` toggles the default output device, and

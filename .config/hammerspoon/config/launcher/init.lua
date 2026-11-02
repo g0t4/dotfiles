@@ -1341,6 +1341,13 @@ end
 -- NOTE: actions are stored by name and dispatched in onChoice (hs.chooser can't serialize functions)
 local bookmarks = {
     {
+        name = "pip-rot",
+        keywords = {"pip", "pip-rot", "pip rot"},
+        text = "Open Pip Rot",
+        subText = "Browse files starting at Home",
+        image = hs.image.imageFromName("NSFolder"),
+    },
+    {
         name = "trash",
         keywords = {"trash", "bin", "rubbish", "deleted"},
         text = "Open Trash",
@@ -1520,6 +1527,9 @@ end
 
 -- Bookmark action dispatch (keyed by name)
 local bookmarkActions = {
+    ["pip-rot"] = function()
+        require("config.launcher.pip_rot").open()
+    end,
     trash = function()
         osascriptOrLog('tell application "Finder" to open trash')
         osascriptOrLog('tell application "Finder" to activate')
@@ -2124,6 +2134,8 @@ local refreshHotkeyCtrlR = nil
 local historyHotkeyUp = nil
 local historyHotkeyDown = nil
 local tabEventTap = nil
+local pipRotHotkey = nil
+local selectionModifiers = nil
 
 -- Delete active hotkeys
 local function deleteActiveHotkeys()
@@ -2147,6 +2159,10 @@ local function deleteActiveHotkeys()
         historyHotkeyDown:delete()
         historyHotkeyDown = nil
         log:info("Deleted Cmd+Down hotkey")
+    end
+    if pipRotHotkey then
+        pipRotHotkey:delete()
+        pipRotHotkey = nil
     end
     if tabEventTap then
         tabEventTap:stop()
@@ -2231,7 +2247,8 @@ local function onChoice(choice)
     -- Log for debugging
     log:info("=== onChoice callback ===")
     log:info("choice:", choice)
-    local modifiers = hs.eventtap.checkKeyboardModifiers()
+    local modifiers = selectionModifiers or hs.eventtap.checkKeyboardModifiers()
+    selectionModifiers = nil
     log:info("modifiers:", modifiers)
     log:info("========================")
 
@@ -2399,6 +2416,20 @@ function M.show()
     refreshHotkeyCtrlR:enable()
     historyHotkeyUp:enable()
     historyHotkeyDown:enable()
+
+    -- Cocoa's chooser does not accept Cmd+Shift+Return as a normal selection.
+    -- Select explicitly and preserve intent instead of sampling flags later.
+    pipRotHotkey = hs.hotkey.new({"cmd", "shift"}, "return", function()
+        local choice = chooser:selectedRowContents()
+        require("config.logs").hammerspoons():info("Pip Rot launcher shortcut:", choice)
+        if choice and choice.path then
+            selectionModifiers = { cmd = true, shift = true }
+            chooser:select()
+        else
+            log:info("Pip Rot shortcut ignored: selected result has no path")
+        end
+    end)
+    pipRotHotkey:enable()
 
     -- Tab completion eventtap
     if not tabEventTap then

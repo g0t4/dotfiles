@@ -191,4 +191,4 @@ def _path_list():
             )
 
 # Pip Rot file browser (external command retains native path completion).
-_path_move_prepend(str(XONSH_LIB.parents[2] / "tools" / "pip-rot"))
+_path_move_prepend(str(XONSH_LIB.resolve().parents[2] / "tools" / "pip-rot"))
