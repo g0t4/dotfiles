@@ -329,3 +329,12 @@ there is no merge or overwrite. Symlinks are duplicated as links.
 ```sh
 QT_QPA_PLATFORM=offscreen uv run --project tools/pip-rot python tools/pip-rot/duplicate_test.py
 ```
+
+## Status-line warnings
+
+Rejected actions (for example, duplicating or renaming multiple selected items)
+show an amber status-line band with high-contrast text and a warning glyph.
+They keep keyboard focus in the tree and do not open a prompt. Routine updates
+use normal styling; message expiry or clearing also resets the warning treatment.
+The same warning style covers rename failures, missing selection, history/context
+errors, and attempts to close/restart during a transfer.

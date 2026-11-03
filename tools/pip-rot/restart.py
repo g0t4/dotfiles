@@ -70,7 +70,7 @@ class RestartController(QObject):
                 self.child = None
                 if self.session_path:
                     self.session_path.unlink(missing_ok=True)
-                self.window.statusBar().showMessage(f'Restart failed; original window kept open. See {self.log_path}', 15000)
+                self.window.statusBar().showMessage(f'Restart failed; original window kept open. See {self.log_path}', 15000, warning=True)
             return
         filename = request_path()
         if not filename.exists():
@@ -85,7 +85,7 @@ class RestartController(QObject):
 
     def restart(self):
         if self.window.transfers.busy:
-            self.window.statusBar().showMessage('Let the file transfer finish before restarting.', 5000)
+            self.window.statusBar().showMessage('Let the file transfer finish before restarting.', 5000, warning=True)
             return
         if self.child:
             return
@@ -106,7 +106,7 @@ class RestartController(QObject):
             self.window.statusBar().showMessage('Restarting Pip Rot…')
         except OSError as error:
             self.session_path.unlink(missing_ok=True)
-            self.window.statusBar().showMessage(f'Could not restart: {error}', 10000)
+            self.window.statusBar().showMessage(f'Could not restart: {error}', 10000, warning=True)
 
     def close(self):
         self.timer.stop()

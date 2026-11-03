@@ -22,6 +22,7 @@ from directory_picker import DirectoryHistory, DirectoryPicker
 from restart import RestartController, restore
 from file_tree import FileTree
 from transfers import CrossVolumeMove, Transfers, name_parts
+from status_line import StatusLine
 
 
 def finder_trash_executable():
@@ -172,11 +173,12 @@ class Browser(QMainWindow):
     def __init__(self, paths, reveal=False, *, record_history=False):
         super().__init__()
         self.resize(1200, 740)
+        self.setStatusBar(StatusLine(self))
         self.restart_controller = None
         self.directory_history = DirectoryHistory(self)
         self.record_history = record_history
         self.last_recorded_directory = None
-        self.directory_history.error.connect(lambda message: self.statusBar().showMessage(message, 6000))
+        self.directory_history.error.connect(lambda message: self.statusBar().showMessage(message, 6000, warning=True))
         self.duration_cache = DurationCache(self)
         self.trash_processes = set()
         self.transfers = Transfers(self)
@@ -278,7 +280,7 @@ class Browser(QMainWindow):
         tab.model.fileRenamed.connect(
             lambda directory, _old, new: QTimer.singleShot(0, lambda: self.renamed_item(tab, Path(directory) / new))
         )
-        tab.model.rename_failed.connect(lambda message: self.statusBar().showMessage(message, 7000))
+        tab.model.rename_failed.connect(lambda message: self.statusBar().showMessage(message, 7000, warning=True))
         tab.tree.setFocus()
         self.publish_selection()
 
@@ -305,7 +307,7 @@ class Browser(QMainWindow):
         tab = self.current()
         rows = tab.tree.selectionModel().selectedRows(0)
         if len(rows) != 1:
-            self.statusBar().showMessage("Select exactly one file or directory to duplicate", 4000)
+            self.statusBar().showMessage("Select exactly one file or directory to duplicate", 4000, warning=True)
             return
         source = Path(tab.model.filePath(rows[0]))
         self.transfers.duplicate(source)
@@ -396,7 +398,7 @@ class Browser(QMainWindow):
         tab = self.current()
         rows = tab.tree.selectionModel().selectedRows(0)
         if len(rows) != 1:
-            self.statusBar().showMessage("Select exactly one file or directory to rename", 4000)
+            self.statusBar().showMessage("Select exactly one file or directory to rename", 4000, warning=True)
             return
         tab.tree.setCurrentIndex(rows[0])
         tab.tree.edit(rows[0])
@@ -413,7 +415,7 @@ class Browser(QMainWindow):
         rows = tab.tree.selectionModel().selectedRows(0)
         paths = [tab.model.filePath(row) for row in rows]
         if not paths:
-            self.statusBar().showMessage("Select files or directories to move to Trash", 4000)
+            self.statusBar().showMessage("Select files or directories to move to Trash", 4000, warning=True)
             return
         executable = finder_trash_executable()
         if not executable:
@@ -462,7 +464,7 @@ class Browser(QMainWindow):
                     capabilities=["restart"] if self.restart_controller else [],
                 )
             except OSError as error:
-                self.statusBar().showMessage(f"Could not update action picker context: {error}")
+                self.statusBar().showMessage(f"Could not update action picker context: {error}", 7000, warning=True)
 
     def restart_app(self):
         if self.restart_controller is None:
@@ -471,7 +473,7 @@ class Browser(QMainWindow):
 
     def closeEvent(self, event):
         if self.transfers.busy:
-            self.statusBar().showMessage("File transfer in progress; let it finish before closing.", 5000)
+            self.statusBar().showMessage("File transfer in progress; let it finish before closing.", 5000, warning=True)
             event.ignore()
             return
         if self.restart_controller:
@@ -497,7 +499,7 @@ class Browser(QMainWindow):
         if contents:
             QApplication.clipboard().setText("\n\n".join(contents))
         else:
-            self.statusBar().showMessage("Select a text file to copy its contents", 4000)
+            self.statusBar().showMessage("Select a text file to copy its contents", 4000, warning=True)
 
     def action_directory(self):
         path = self.current().selected()
@@ -545,7 +547,7 @@ class Browser(QMainWindow):
 
     def close_tab(self, index):
         if self.tabs.count() == 1 and self.transfers.busy:
-            self.statusBar().showMessage("File transfer in progress; let it finish before closing.", 5000)
+            self.statusBar().showMessage("File transfer in progress; let it finish before closing.", 5000, warning=True)
             return
         tab = self.tabs.widget(index)
         self.tabs.removeTab(index)
