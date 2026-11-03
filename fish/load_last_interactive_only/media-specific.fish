@@ -265,6 +265,7 @@ function video_editing_just_shift_to_mp4_one_video
     # if test -f "$output_file"
     #     echo "Skipping...file already exists: $output_file"
     # else
+    # # FYI for my workflows in screenpal this copy did not work well! black frames at start randomly... see my xonsh version of this with avoid_negative_ts that helped fix that
     #     ffmpeg -i "$video_file" -itsoffset 0.1 -i "$video_file" -map 0:v -map 1:a -c:v copy -c:a aac "$output_file"
     # end
 end
