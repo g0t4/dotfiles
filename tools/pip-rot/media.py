@@ -94,6 +94,10 @@ class MediaModel(QFileSystemModel):
         self.cache = cache
         cache.updated.connect(self.duration_ready)
 
+    def supportedDragActions(self):
+        # Export file URLs for opening/importing elsewhere, never negotiate moves.
+        return Qt.DropAction.CopyAction
+
     def columnCount(self, parent=QModelIndex()):
         return 5
 

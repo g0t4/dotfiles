@@ -46,7 +46,8 @@ Hammerspoon integration:
   **Command+Shift+Return** reveals it in Finder (Command+Return also retains Finder reveal).
 
 The filesystem model loads listings in the background and watches for changes.
-The tree disables inline rename, move, and drag-and-drop; explicit
+The tree supports dragging files out; inline rename, moves, and incoming drops
+remain disabled. Explicit
 actions can create directories or move selected items to Trash.
 The columns are Name, Size, Duration, and Date Modified (Type is hidden).
 Duration appears when videos appear in the current directory or an expanded subdirectory. Collapsing the
@@ -101,7 +102,7 @@ Native Pip Rot actions are also available in File and the tree's context menu:
 
 New Nested Directory accepts paths such as `drafts/notes`, selects the created
 directory, and refuses existing targets or `..` traversal. The filesystem view
-still disables inline rename and drag-and-drop; creation and moving items to
+still disables inline rename and incoming drops; creation and moving items to
 Trash are explicit actions. The Hammerspoon Copy Path action retains its existing shell-escaped output.
 
 Pip Rot publishes selection changes atomically to a private per-process file:
@@ -172,4 +173,17 @@ renderer is implemented yet.
 
 ```sh
 QT_QPA_PLATFORM=offscreen uv run --project tools/pip-rot python tools/pip-rot/preview_test.py
+```
+
+## Drag files into other apps
+
+Drag a selected file (or multiple selected rows) out of Pip Rot into another
+application to open/import it—for example, drop a MOV/MKV onto Audacity.
+Pip Rot exports native local-file URLs and offers **copy only**, so it does not
+move or remove the source files. The receiving application decides whether it
+supports that file format and drop destination. Pip Rot does not yet accept
+incoming drops or move/copy files between its folders/tabs.
+
+```sh
+QT_QPA_PLATFORM=offscreen uv run --project tools/pip-rot python tools/pip-rot/drag_test.py
 ```
