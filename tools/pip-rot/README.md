@@ -215,3 +215,10 @@ Pip Rot rereads it whenever the picker opens or its ordering changes.
 ```sh
 QT_QPA_PLATFORM=offscreen uv run --project tools/pip-rot python tools/pip-rot/directory_picker_test.py
 ```
+
+## Dock icon
+
+The running process uses the artwork in `assets/pip-rot.png` through Qt's
+application icon setting. Relaunch Pip Rot to pick it up; a full `.app` bundle
+is not required for this runtime icon. It does not install a persistent Dock
+launcher. Artwork provenance and the generation prompt are in `assets/README.md`.

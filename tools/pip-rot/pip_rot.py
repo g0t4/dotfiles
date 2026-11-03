@@ -7,7 +7,7 @@ from pathlib import Path
 import sys
 
 from PySide6.QtCore import QDir, QProcess, Qt, QUrl, QTimer
-from PySide6.QtGui import QAction, QDesktopServices, QKeySequence
+from PySide6.QtGui import QAction, QDesktopServices, QIcon, QKeySequence
 from PySide6.QtWidgets import (
     QApplication, QAbstractItemView, QFileSystemModel, QHeaderView, QInputDialog, QLineEdit, QMainWindow,
     QMenu, QMessageBox, QTabWidget, QTreeView, QVBoxLayout, QWidget,
@@ -496,6 +496,7 @@ def main():
     app = QApplication(sys.argv[:1])
     app.setApplicationName("Pip Rot")
     app.setOrganizationName("Pip Rot")
+    app.setWindowIcon(QIcon(str(Path(__file__).resolve().parent / "assets/pip-rot.png")))
     window = Browser(args.paths, args.reveal, record_history=True)
     window.show()
     window.raise_()
