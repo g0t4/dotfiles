@@ -187,3 +187,31 @@ incoming drops or move/copy files between its folders/tabs.
 ```sh
 QT_QPA_PLATFORM=offscreen uv run --project tools/pip-rot python tools/pip-rot/drag_test.py
 ```
+
+## Shared z directory jumper
+
+**Control+P** opens a fuzzy directory picker using the exact same `z` backend and
+database as Xonsh. On macOS this is the physical Control key, matching Neovim.
+
+- Start typing to fuzzy-match directory paths; multiple words narrow the match.
+- Up/Down choose a result while the query keeps focus.
+- Return navigates in the current tab and records normal Back/Forward history.
+- Command+Return opens the result in a new tab.
+- Escape cancels and returns focus to the file tree.
+- The ordering selector switches between **Most recent** (default) and
+  **Frequent + recent (z)**. Search uses only the shared z history; it does not
+  crawl the filesystem. Use Command+L for directories outside that history.
+
+Opening a directory, navigating, or changing to a different directory tab records
+a visit through the existing shell backend. Expanding folders and changing file
+selection do not add visits. Queries and visit recording run in a serialized
+background queue, keeping shell startup/database work off the UI thread.
+
+The backend is `.config/xonsh/lib/wes_fish_z.py`, which currently delegates to
+Fish's `__z`/`__z_add` and honors its configured `Z_DATA` (currently
+`~/.local/share/z/data`). There is no separate Pip Rot directory database.
+Pip Rot rereads it whenever the picker opens or its ordering changes.
+
+```sh
+QT_QPA_PLATFORM=offscreen uv run --project tools/pip-rot python tools/pip-rot/directory_picker_test.py
+```

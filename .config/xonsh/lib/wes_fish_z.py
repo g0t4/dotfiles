@@ -57,11 +57,11 @@ class FishZ:
             raise FishZError(f"z result is not a directory: {destination}\n run `z --clean` to remove non-existant dirs from z cache")
         return destination
 
-    def entries(self) -> list[FishZEntry]:
-        """Return existing directories and their current Fish-z frecency scores."""
+    def entries(self, *, recent: bool = False) -> list[FishZEntry]:
+        """Return existing directories with frecency or recency scores."""
         try:
             completed = self.runner(
-                [self._fish(), "-c", "__z --list"],
+                [self._fish(), "-c", "__z --list --recent" if recent else "__z --list"],
                 capture_output=True,
                 text=True,
                 timeout=self.timeout,

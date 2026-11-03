@@ -17,6 +17,7 @@ from PySide6.QtWidgets import (
 from media import DurationCache, MediaModel
 from action_context import publish_context, remove_context
 from preview import PreviewController
+from directory_picker import DirectoryHistory, DirectoryPicker
 
 
 def finder_trash_executable():
@@ -159,9 +160,13 @@ class FileTab(QWidget):
 
 
 class Browser(QMainWindow):
-    def __init__(self, paths, reveal=False):
+    def __init__(self, paths, reveal=False, *, record_history=False):
         super().__init__()
         self.resize(1200, 740)
+        self.directory_history = DirectoryHistory(self)
+        self.record_history = record_history
+        self.last_recorded_directory = None
+        self.directory_history.error.connect(lambda message: self.statusBar().showMessage(message, 6000))
         self.duration_cache = DurationCache(self)
         self.trash_processes = set()
         self.preview = PreviewController(self)
@@ -208,11 +213,12 @@ class Browser(QMainWindow):
         self.hidden_action = hidden
         # Qt swaps Ctrl/Meta on macOS: Meta means the physical Control key.
         control = "Meta" if sys.platform == "darwin" else "Ctrl"
+        self.action(go_menu, "Jump to Directory…", f"{control}+P", self.jump_directory)
         next_tab = self.action(view_menu, "Next Tab", f"{control}+Tab", lambda: self.cycle_tab(1))
         next_tab.setShortcuts([QKeySequence(f"{control}+Tab"), QKeySequence(f"{control}+PgDown")])
         previous_tab = self.action(view_menu, "Previous Tab", f"{control}+Shift+Tab", lambda: self.cycle_tab(-1))
         previous_tab.setShortcuts([QKeySequence(f"{control}+Shift+Tab"), QKeySequence(f"{control}+PgUp")])
-        self.statusBar().showMessage("← → collapse / expand · ⌘↓ open · ⌘↵ new tab · ⌘L go to directory")
+        self.statusBar().showMessage("← → collapse / expand · ⌘↓ open · ⌘↵ new tab · ⌃P jump · ⌘L path")
         for path in paths:
             self.add_path(path, reveal)
 
@@ -404,6 +410,9 @@ class Browser(QMainWindow):
 
     def update_location(self, *_):
         if self.current():
+            if self.record_history and self.current().root != self.last_recorded_directory:
+                self.last_recorded_directory = self.current().root
+                self.directory_history.record(self.current().root)
             self.location.setText(str(self.current().root))
             self.setWindowTitle(f"{self.current().root} — Pip Rot")
             index = self.tabs.currentIndex()
@@ -414,6 +423,21 @@ class Browser(QMainWindow):
             self.back_action.setEnabled(bool(tab and tab.history_index > 0))
             self.forward_action.setEnabled(bool(tab and tab.history_index + 1 < len(tab.history)))
         self.publish_selection()
+
+    def jump_directory(self):
+        picker = DirectoryPicker(self.directory_history, self)
+        if picker.exec() and picker.destination:
+            path = picker.destination
+            if not path.is_dir():
+                QMessageBox.warning(self, "Pip Rot", f"Directory is no longer available: {path}")
+            elif picker.new_tab:
+                self.add_tab(path)
+            else:
+                self.current().navigate(path)
+                self.update_location()
+        picker.deleteLater()
+        if self.current():
+            self.current().tree.setFocus()
 
     def focus_location(self):
         self.location.setFocus()
@@ -472,7 +496,7 @@ def main():
     app = QApplication(sys.argv[:1])
     app.setApplicationName("Pip Rot")
     app.setOrganizationName("Pip Rot")
-    window = Browser(args.paths, args.reveal)
+    window = Browser(args.paths, args.reveal, record_history=True)
     window.show()
     window.raise_()
     window.activateWindow()

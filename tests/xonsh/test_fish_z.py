@@ -179,3 +179,11 @@ def test_record_cannot_break_cd_when_fish_cannot_start(tmp_path, capsys):
 
     assert FishZ(runner=unavailable).record(tmp_path) is False
     assert "failed to record" in capsys.readouterr().err
+
+
+def test_entries_can_request_recency_ordering(tmp_path):
+    runner = RecordingRunner(completed(stdout=f"-42 {tmp_path}\n"))
+    entries = FishZ(runner=runner, fish_executable="/test/fish").entries(recent=True)
+    assert entries[0].path == tmp_path
+    assert entries[0].frecency == -42
+    assert runner.calls[0][0] == ["/test/fish", "-c", "__z --list --recent"]
