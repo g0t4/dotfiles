@@ -6,7 +6,7 @@ from dataclasses import dataclass
 from pathlib import Path
 import sys
 
-from PySide6.QtCore import QDir, QProcess, Qt, QUrl, QTimer
+from PySide6.QtCore import QDir, QItemSelectionModel, QProcess, Qt, QUrl, QTimer
 from PySide6.QtGui import QAction, QDesktopServices, QIcon, QKeySequence
 from PySide6.QtWidgets import (
     QApplication, QAbstractItemView, QFileSystemModel, QHeaderView, QInputDialog, QLineEdit, QMainWindow,
@@ -44,7 +44,7 @@ class FileTab(QWidget):
         self.initial_selection_done = False
         self.pending_reveal = reveal
         self.model = MediaModel(cache, self)
-        self.model.setReadOnly(True)
+        self.model.setReadOnly(False)
         self.model.setOption(QFileSystemModel.Option.DontUseCustomDirectoryIcons)
         self.model.setFilter(QDir.Filter.AllEntries | QDir.Filter.NoDotAndDotDot)
         self.tree = QTreeView()
@@ -192,18 +192,22 @@ class Browser(QMainWindow):
         file_menu = self.menuBar().addMenu("File")
         view_menu = self.menuBar().addMenu("View")
         self.preview_action = self.action(view_menu, "Quick Look", "Space", self.preview_selected)
-        self.preview_action.setShortcutContext(Qt.ShortcutContext.WidgetWithChildrenShortcut)
+        self.preview_action.setShortcutContext(Qt.ShortcutContext.WidgetShortcut)
         self.action(file_menu, "Open Terminal Here", "Ctrl+Alt+T", self.open_terminal)
         self.action(file_menu, "Copy Path", "Ctrl+Shift+C", self.copy_paths)
         self.action(file_menu, "Copy File Contents", "Ctrl+Alt+Shift+C", self.copy_contents)
         self.action(file_menu, "New Nested Directory…", "Ctrl+Shift+N", self.new_directory)
+        self.rename_action = self.action(file_menu, "Rename…", "Ctrl+R", self.rename_selected)
+        self.rename_action.setShortcutContext(Qt.ShortcutContext.WidgetShortcut)
         self.trash_action = self.action(file_menu, "Move to Trash", "Ctrl+Backspace", self.trash_selected)
-        self.trash_action.setShortcutContext(Qt.ShortcutContext.WidgetWithChildrenShortcut)
+        self.trash_action.setShortcutContext(Qt.ShortcutContext.WidgetShortcut)
         self.action(file_menu, "Open Directory in New Tab", "Ctrl+Return", self.tab_selected)
         self.action(file_menu, "Duplicate Tab", "Ctrl+T", lambda: self.add_tab(self.current().root))
         open_item = self.action(file_menu, "Open Selected Item", "Ctrl+Down", self.open_selected)
         open_item.setShortcuts([QKeySequence("Ctrl+Down"), QKeySequence("Ctrl+O")])
-        self.action(file_menu, "Close Tab", "Ctrl+W", lambda: self.close_tab(self.tabs.currentIndex()))
+        close_tab = self.action(file_menu, "Close Tab", "Ctrl+W", lambda: self.close_tab(self.tabs.currentIndex()))
+        close_tab.setShortcuts([QKeySequence("Ctrl+W"), QKeySequence("F8")])
+        self.action(file_menu, "Close Window", "F9", self.close)
         self.action(file_menu, "Quit Pip Rot", "Ctrl+Q", self.close)
         self.action(view_menu, "Go to Directory…", "Ctrl+L", self.focus_location)
         parent_directory = self.action(view_menu, "Parent Directory", "Ctrl+Up", self.go_parent)
@@ -243,12 +247,17 @@ class Browser(QMainWindow):
         tab = FileTab(root, self.duration_cache, reveal)
         self.tabs.setCurrentIndex(self.tabs.addTab(tab, root.name or str(root)))
         self.tabs.setTabToolTip(self.tabs.currentIndex(), str(root))
+        tab.tree.addAction(self.rename_action)
         tab.tree.addAction(self.trash_action)
         tab.tree.addAction(self.preview_action)
         tab.tree.setContextMenuPolicy(Qt.ContextMenuPolicy.CustomContextMenu)
         tab.tree.customContextMenuRequested.connect(lambda point: self.context_menu(tab, point))
         self.apply_hidden(tab)
         tab.tree.selectionModel().selectionChanged.connect(self.publish_selection)
+        tab.model.fileRenamed.connect(
+            lambda directory, _old, new: QTimer.singleShot(0, lambda: self.renamed_item(tab, Path(directory) / new))
+        )
+        tab.model.rename_failed.connect(lambda message: self.statusBar().showMessage(message, 7000))
         tab.tree.setFocus()
         self.publish_selection()
 
@@ -265,9 +274,28 @@ class Browser(QMainWindow):
         menu.addAction("Copy Path", self.copy_paths)
         menu.addAction("Copy File Contents", self.copy_contents)
         menu.addAction("New Nested Directory…", self.new_directory)
+        menu.addAction(self.rename_action)
         menu.addAction(self.trash_action)
         menu.addAction(self.preview_action)
         menu.exec(tab.tree.viewport().mapToGlobal(point))
+
+    def renamed_item(self, tab, path):
+        index = tab.model.index(str(path))
+        if index.isValid():
+            tab.tree.setCurrentIndex(index)
+            tab.tree.selectionModel().select(
+                index, QItemSelectionModel.SelectionFlag.ClearAndSelect | QItemSelectionModel.SelectionFlag.Rows,
+            )
+        self.publish_selection()
+
+    def rename_selected(self):
+        tab = self.current()
+        rows = tab.tree.selectionModel().selectedRows(0)
+        if len(rows) != 1:
+            self.statusBar().showMessage("Select exactly one file or directory to rename", 4000)
+            return
+        tab.tree.setCurrentIndex(rows[0])
+        tab.tree.edit(rows[0])
 
     def preview_selected(self):
         tab = self.current()

@@ -25,7 +25,8 @@ Each invocation opens a separate window. Tabs and layouts are currently in memor
 | ⌘Return | Open selected directory in a new tab |
 | ⌘T | Duplicate current tab's root |
 | ⌘↓ / ⌘O | Enter directory in current tab, or open file with its default app |
-| ⌘W | Close tab (last tab closes the window) |
+| ⌘W / F8 | Close tab (last tab closes the window) |
+| F9 | Close current window |
 | ⌘L | Enter a directory path (Return to navigate in current tab) |
 | ⌘↑ / Option↑ | Parent directory |
 | ⌘[ / ⌘] | Back / forward in this tab’s directory history |
@@ -46,8 +47,8 @@ Hammerspoon integration:
   **Command+Shift+Return** reveals it in Finder (Command+Return also retains Finder reveal).
 
 The filesystem model loads listings in the background and watches for changes.
-The tree supports dragging files out; inline rename, moves, and incoming drops
-remain disabled. Explicit
+The tree supports dragging files out and explicit inline rename; moves and
+incoming drops remain disabled. Explicit
 actions can create directories or move selected items to Trash.
 The columns are Name, Size, Duration, and Date Modified (Type is hidden).
 Duration appears when videos appear in the current directory or an expanded subdirectory. Collapsing the
@@ -102,7 +103,7 @@ Native Pip Rot actions are also available in File and the tree's context menu:
 
 New Nested Directory accepts paths such as `drafts/notes`, selects the created
 directory, and refuses existing targets or `..` traversal. The filesystem view
-still disables inline rename and incoming drops; creation and moving items to
+still disables incoming drops; renaming, creation, and moving items to
 Trash are explicit actions. The Hammerspoon Copy Path action retains its existing shell-escaped output.
 
 Pip Rot publishes selection changes atomically to a private per-process file:
@@ -222,3 +223,17 @@ The running process uses the artwork in `assets/pip-rot.png` through Qt's
 application icon setting. Relaunch Pip Rot to pick it up; a full `.app` bundle
 is not required for this runtime icon. It does not install a persistent Dock
 launcher. Artwork provenance and the generation prompt are in `assets/README.md`.
+
+## Rename
+
+Select one file or directory and press **Command+R** (File → Rename, or the
+context menu). Qt opens an inline editor in the Name column. Return commits;
+Escape cancels. Typing to jump and double-click behavior remain unchanged;
+editing begins only through the Rename action. Existing destination names are
+not overwritten, and errors appear in the status bar. The renamed item stays
+selected and its action-picker context updates. Space and Command+Backspace in
+the editor perform normal text editing, rather than previewing/trashing files.
+
+```sh
+QT_QPA_PLATFORM=offscreen uv run --project tools/pip-rot python tools/pip-rot/rename_test.py
+```

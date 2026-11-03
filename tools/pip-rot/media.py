@@ -89,10 +89,26 @@ class DurationCache(QObject):
 
 
 class MediaModel(QFileSystemModel):
+    rename_failed = Signal(str)
+
     def __init__(self, cache, parent=None):
         super().__init__(parent)
         self.cache = cache
         cache.updated.connect(self.duration_ready)
+
+    def setData(self, index, value, role=Qt.ItemDataRole.EditRole):
+        if role == Qt.ItemDataRole.EditRole and index.column() == 0:
+            name = str(value)
+            if not name or name in ('.', '..') or '/' in name or '\0' in name:
+                self.rename_failed.emit('Rename requires a filename, without path separators.')
+                return False
+            if name == self.fileName(index):
+                return True
+            renamed = super().setData(index, name, role)
+            if not renamed:
+                self.rename_failed.emit(f'Could not rename to {name!r}: target exists or directory is not writable.')
+            return renamed
+        return super().setData(index, value, role)
 
     def supportedDragActions(self):
         # Export file URLs for opening/importing elsewhere, never negotiate moves.

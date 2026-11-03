@@ -24,7 +24,7 @@ with tempfile.TemporaryDirectory() as directory:
         assert tab.tree.dragDropMode() == QAbstractItemView.DragDropMode.DragOnly
         assert tab.tree.defaultDropAction() == Qt.DropAction.CopyAction
         assert not tab.tree.acceptDrops() and not tab.tree.viewport().acceptDrops()
-        assert tab.model.isReadOnly()
+        assert not tab.model.isReadOnly()
         assert tab.model.supportedDragActions() == Qt.DropAction.CopyAction
         tab.tree.clearSelection()
         for path in paths:

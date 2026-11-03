@@ -33,7 +33,7 @@ with tempfile.TemporaryDirectory() as directory:
     window.add_path(movie, True)
     wait_for_files()
     assert window.current().selected() == movie
-    assert window.current().model.isReadOnly()
+    assert not window.current().model.isReadOnly()
     window.hidden_action.setChecked(True)
     window.toggle_hidden()
     window.close_tab(2)
