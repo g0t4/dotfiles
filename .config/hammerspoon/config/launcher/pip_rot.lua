@@ -34,8 +34,8 @@ function M.reveal(paths)
     launch(paths, true)
 end
 
-function M.open()
-    launch({os.getenv("HOME")}, false)
+function M.open(path)
+    launch({path or os.getenv("HOME")}, false)
 end
 
 return M

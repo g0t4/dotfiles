@@ -5,6 +5,11 @@ local ensure_in_coroutine = require("devtools.co.ensure_in_coroutine")
 
 local M = {}
 
+---@param path? string Directory to open, or file to select; defaults to Home.
+function StreamDeckPipRot(path)
+    require("config.launcher.pip_rot").open(path)
+end
+
 function nudge_human_to_check_log()
     -- leave as black alert
     hs.alert.show("check " .. log.basename, nil, nil, 5)

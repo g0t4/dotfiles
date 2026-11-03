@@ -338,3 +338,16 @@ They keep keyboard focus in the tree and do not open a prompt. Routine updates
 use normal styling; message expiry or clearing also resets the warning treatment.
 The same warning style covers rename failures, missing selection, history/context
 errors, and attempts to close/restart during a transfer.
+
+## Stream Deck
+
+The startup-loaded global Hammerspoon helper launches asynchronously:
+
+```lua
+StreamDeckPipRot()             -- Home
+StreamDeckPipRot("~/Movies")   -- directory
+StreamDeckPipRot("/absolute/path/to/file.mov") -- select file in its parent
+```
+
+From a shell action, use `/opt/homebrew/bin/hs -c 'StreamDeckPipRot()'`.
+It returns immediately; each invocation currently opens a new Pip Rot process.
