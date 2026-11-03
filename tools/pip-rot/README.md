@@ -154,3 +154,22 @@ QT_QPA_PLATFORM=offscreen uv run --project tools/pip-rot python tools/pip-rot/tr
 Both interfaces use exactly `/opt/homebrew/bin/trash`, regardless of PATH,
 with no fallback to another executable. macOS also ships a
 different `/usr/bin/trash` that does not accept `-F`; it is not used here.
+
+## Preview
+
+Focus the tree and press **Space** (or choose View → Quick Look) to preview the
+selected file(s) or directory using macOS `/usr/bin/qlmanage -p`. Press Space
+again from the tree to close that preview. If the selection changed, Space
+replaces the old preview with the new selection. Quick Look owns its floating
+window and its native close/Escape behavior. Space inside the location field
+remains ordinary typing.
+
+Pip Rot owns only the helper it launches and closes it when its browser window
+closes. Selection changes alone do not update a running preview in this first
+version. `preview.py:preview_command` is the dispatch point for future
+format-specific overrides; all formats currently use Quick Look. No bat/jq
+renderer is implemented yet.
+
+```sh
+QT_QPA_PLATFORM=offscreen uv run --project tools/pip-rot python tools/pip-rot/preview_test.py
+```

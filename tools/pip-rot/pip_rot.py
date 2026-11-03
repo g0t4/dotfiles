@@ -16,6 +16,7 @@ from PySide6.QtWidgets import (
 
 from media import DurationCache, MediaModel
 from action_context import publish_context, remove_context
+from preview import PreviewController
 
 
 def finder_trash_executable():
@@ -160,6 +161,8 @@ class Browser(QMainWindow):
         self.resize(1200, 740)
         self.duration_cache = DurationCache(self)
         self.trash_processes = set()
+        self.preview = PreviewController(self)
+        self.preview.error.connect(lambda message: QMessageBox.warning(self, "Pip Rot Preview", message))
         self.tabs = QTabWidget()
         self.tabs.setDocumentMode(True)
         self.tabs.setTabsClosable(True)
@@ -180,6 +183,8 @@ class Browser(QMainWindow):
         toolbar.addWidget(self.location)
         file_menu = self.menuBar().addMenu("File")
         view_menu = self.menuBar().addMenu("View")
+        self.preview_action = self.action(view_menu, "Quick Look", "Space", self.preview_selected)
+        self.preview_action.setShortcutContext(Qt.ShortcutContext.WidgetWithChildrenShortcut)
         self.action(file_menu, "Open Terminal Here", "Ctrl+Alt+T", self.open_terminal)
         self.action(file_menu, "Copy Path", "Ctrl+Shift+C", self.copy_paths)
         self.action(file_menu, "Copy File Contents", "Ctrl+Alt+Shift+C", self.copy_contents)
@@ -230,6 +235,7 @@ class Browser(QMainWindow):
         self.tabs.setCurrentIndex(self.tabs.addTab(tab, root.name or str(root)))
         self.tabs.setTabToolTip(self.tabs.currentIndex(), str(root))
         tab.tree.addAction(self.trash_action)
+        tab.tree.addAction(self.preview_action)
         tab.tree.setContextMenuPolicy(Qt.ContextMenuPolicy.CustomContextMenu)
         tab.tree.customContextMenuRequested.connect(lambda point: self.context_menu(tab, point))
         self.apply_hidden(tab)
@@ -251,7 +257,15 @@ class Browser(QMainWindow):
         menu.addAction("Copy File Contents", self.copy_contents)
         menu.addAction("New Nested Directory…", self.new_directory)
         menu.addAction(self.trash_action)
+        menu.addAction(self.preview_action)
         menu.exec(tab.tree.viewport().mapToGlobal(point))
+
+    def preview_selected(self):
+        tab = self.current()
+        rows = tab.tree.selectionModel().selectedRows(0)
+        paths = [Path(tab.model.filePath(row)) for row in rows]
+        if paths:
+            self.preview.toggle(paths)
 
     def trash_selected(self):
         tab = self.current()
@@ -309,6 +323,7 @@ class Browser(QMainWindow):
                 self.statusBar().showMessage(f"Could not update action picker context: {error}")
 
     def closeEvent(self, event):
+        self.preview.close()
         remove_context()
         super().closeEvent(event)
 
