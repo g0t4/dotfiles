@@ -2,6 +2,7 @@
 import ctypes
 import errno
 import os
+import re
 from pathlib import Path
 import shutil
 import stat
@@ -64,7 +65,7 @@ def rename_exclusive(source, target):
         raise OSError(error, os.strerror(error), str(target))
 
 
-def copy_then_publish(source, target):
+def copy_then_publish(source, target, next_target=None):
     # Stage on the destination volume; ditto preserves macOS metadata and packages.
     staging = Path(tempfile.mkdtemp(prefix='.pip-rot-transfer-', dir=target.parent))
     temporary = staging / source.name
@@ -75,7 +76,14 @@ def copy_then_publish(source, target):
             result = subprocess.run(['/usr/bin/ditto', str(source), str(temporary)], capture_output=True, text=True)
             if result.returncode:
                 raise OSError(result.stderr.strip() or f'Could not copy {source}')
-        rename_exclusive(temporary, target)
+        while True:
+            try:
+                rename_exclusive(temporary, target)
+                return target
+            except FileExistsError:
+                if next_target is None:
+                    raise
+                target = next_target()
     finally:
         shutil.rmtree(staging)
 
@@ -90,6 +98,48 @@ def transfer_one(source, target, copy):
                 raise CrossVolumeMove(source, target.parent) from error
             raise
     copy_then_publish(source, target)
+
+
+def name_parts(path):
+    name = path.name
+    if path.is_dir():
+        return name, ''
+    for extension in ('.tar.gz', '.tar.bz2', '.tar.xz', '.tar.zst', '.tar.lz4', '.tar.lzma'):
+        if name.lower().endswith(extension):
+            return name[:-len(extension)], name[-len(extension):]
+    extension = path.suffix
+    return (name[:-len(extension)], extension) if extension else (name, '')
+
+
+def duplicate_target(source):
+    basename, extension = name_parts(source)
+    numbered = re.fullmatch(r'(.*)~([0-9]+)', basename)
+    if numbered and int(numbered[2]) >= 2:
+        basename = numbered[1]
+    number = 2
+    while True:
+        target = source.with_name(f'{basename}~{number}{extension}')
+        if not exists(target):
+            return target
+        number += 1
+
+
+class DuplicateJob(QRunnable):
+    def __init__(self, owner, source):
+        super().__init__()
+        self.owner, self.source = owner, source
+
+    def run(self):
+        completed, errors = [], []
+        try:
+            mode = self.source.lstat().st_mode
+            if not (stat.S_ISREG(mode) or stat.S_ISDIR(mode) or stat.S_ISLNK(mode)):
+                raise ValueError('Only regular files, directories, and symlinks can be duplicated.')
+            target = copy_then_publish(self.source, duplicate_target(self.source), lambda: duplicate_target(self.source))
+            completed.append((self.source, target, True))
+        except Exception as error:
+            errors.append(str(error))
+        self.owner.duplicated.emit(completed, errors)
 
 
 class TransferJob(QRunnable):
@@ -121,6 +171,7 @@ class TransferJob(QRunnable):
 
 class Transfers(QObject):
     finished = Signal(object, object)
+    duplicated = Signal(object, object)
 
     def __init__(self, parent=None):
         super().__init__(parent)
@@ -128,6 +179,7 @@ class Transfers(QObject):
         self.pool.setMaxThreadCount(1)
         self.pending = 0
         self.finished.connect(self.done)
+        self.duplicated.connect(self.done)
 
     @property
     def busy(self):
@@ -136,6 +188,10 @@ class Transfers(QObject):
     def submit(self, paths, destination, copy):
         self.pending += 1
         self.pool.start(TransferJob(self, paths, destination, copy))
+
+    def duplicate(self, source):
+        self.pending += 1
+        self.pool.start(DuplicateJob(self, Path(source)))
 
     def done(self, *_):
         self.pending -= 1

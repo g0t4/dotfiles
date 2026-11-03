@@ -21,7 +21,7 @@ from preview import PreviewController
 from directory_picker import DirectoryHistory, DirectoryPicker
 from restart import RestartController, restore
 from file_tree import FileTree
-from transfers import CrossVolumeMove, Transfers
+from transfers import CrossVolumeMove, Transfers, name_parts
 
 
 def finder_trash_executable():
@@ -181,6 +181,7 @@ class Browser(QMainWindow):
         self.trash_processes = set()
         self.transfers = Transfers(self)
         self.transfers.finished.connect(self.transfer_finished)
+        self.transfers.duplicated.connect(self.duplicate_finished)
         self.preview = PreviewController(self)
         self.preview.error.connect(lambda message: QMessageBox.warning(self, "Pip Rot Preview", message))
         self.tabs = QTabWidget()
@@ -211,6 +212,8 @@ class Browser(QMainWindow):
         self.action(file_menu, "Copy Path", "Ctrl+Shift+C", self.copy_paths)
         self.action(file_menu, "Copy File Contents", "Ctrl+Alt+Shift+C", self.copy_contents)
         self.action(file_menu, "New Nested Directory…", "Ctrl+Shift+N", self.new_directory)
+        self.duplicate_action = self.action(file_menu, "Duplicate", "Ctrl+D", self.duplicate_selected)
+        self.duplicate_action.setShortcutContext(Qt.ShortcutContext.WidgetShortcut)
         self.rename_action = self.action(file_menu, "Rename…", "Ctrl+R", self.rename_selected)
         self.rename_action.setShortcutContext(Qt.ShortcutContext.WidgetShortcut)
         self.trash_action = self.action(file_menu, "Move to Trash", "Ctrl+Backspace", self.trash_selected)
@@ -264,6 +267,7 @@ class Browser(QMainWindow):
         self.tabs.setTabToolTip(self.tabs.currentIndex(), str(root))
         tab.tree.files_dropped.connect(self.transfer_files)
         tab.tree.drop_hint.connect(lambda text: self.statusBar().showMessage(text, 4000))
+        tab.tree.addAction(self.duplicate_action)
         tab.tree.addAction(self.rename_action)
         tab.tree.addAction(self.trash_action)
         tab.tree.addAction(self.preview_action)
@@ -291,10 +295,45 @@ class Browser(QMainWindow):
         menu.addAction("Copy Path", self.copy_paths)
         menu.addAction("Copy File Contents", self.copy_contents)
         menu.addAction("New Nested Directory…", self.new_directory)
+        menu.addAction(self.duplicate_action)
         menu.addAction(self.rename_action)
         menu.addAction(self.trash_action)
         menu.addAction(self.preview_action)
         menu.exec(tab.tree.viewport().mapToGlobal(point))
+
+    def duplicate_selected(self):
+        tab = self.current()
+        rows = tab.tree.selectionModel().selectedRows(0)
+        if len(rows) != 1:
+            self.statusBar().showMessage("Select exactly one file or directory to duplicate", 4000)
+            return
+        source = Path(tab.model.filePath(rows[0]))
+        self.transfers.duplicate(source)
+        self.statusBar().showMessage(f"Duplicating {source.name}…")
+
+    def duplicate_finished(self, completed, errors):
+        if errors:
+            QMessageBox.warning(self, "Pip Rot Duplicate", "\n".join(errors))
+            return
+        source, target, _ = completed[0]
+        self.statusBar().showMessage(f"Created {target.name}", 5000)
+        tab = self.current()
+        # Do not steal focus if the user navigated away while a large copy ran.
+        if tab and tab.selected() == source and tab.tree.hasFocus():
+            QTimer.singleShot(0, lambda: self.edit_duplicate(tab, source, target))
+
+    def edit_duplicate(self, tab, source, target):
+        if self.current() is not tab or tab.selected() != source:
+            return
+        index = tab.model.index(str(target))
+        if not index.isValid():
+            return
+        self.renamed_item(tab, target)
+        tab.tree.scrollTo(index)
+        tab.tree.edit(index)
+        editor = QApplication.focusWidget()
+        if isinstance(editor, QLineEdit):
+            editor.setSelection(0, len(name_parts(target)[0].encode("utf-16-le")) // 2)
 
     def transfer_files(self, paths, destination, copy):
         self.transfers.submit(paths, destination, copy)

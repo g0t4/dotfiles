@@ -299,3 +299,33 @@ directories moved by its transfer queue. Transfer undo is not implemented yet.
 ```sh
 QT_QPA_PLATFORM=offscreen uv run --project tools/pip-rot python tools/pip-rot/transfers_test.py
 ```
+
+## Duplicate
+
+Select one file or directory and press **Command+D** (File → Duplicate, or the
+context menu). Pip Rot makes a separate sibling copy in the background and then
+opens its name for inline editing, selecting the basename without its extension.
+Return accepts your edit; Escape keeps the automatically named duplicate.
+If you navigate or move focus elsewhere during a large copy, completion does not
+steal focus to start renaming.
+
+Names use the lowest available `~N` starting at 2:
+
+```
+clip.mov       → clip~2.mov
+clip~2.mov     → clip~3.mov
+lesson 12.mov  → lesson 12~2.mov
+archive.tar.gz → archive~2.tar.gz
+folder.v2/     → folder.v2~2/
+```
+
+Existing `~N` suffixes (N ≥ 2) are recognized; meaningful ordinary trailing
+numbers are left alone. Hidden files and known compound tar extensions are
+preserved. Names are allocated when the background job runs, and publication is
+exclusive. If another process takes a candidate name during the copy, the staged
+data is reused under the next free name. Directories are copied as new siblings;
+there is no merge or overwrite. Symlinks are duplicated as links.
+
+```sh
+QT_QPA_PLATFORM=offscreen uv run --project tools/pip-rot python tools/pip-rot/duplicate_test.py
+```
