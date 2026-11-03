@@ -21,7 +21,7 @@ from preview import PreviewController
 from directory_picker import DirectoryHistory, DirectoryPicker
 from restart import RestartController, restore
 from file_tree import FileTree
-from transfers import Transfers
+from transfers import CrossVolumeMove, Transfers
 
 
 def finder_trash_executable():
@@ -320,9 +320,29 @@ class Browser(QMainWindow):
                     tab.show_location()
         self.update_location()
         if errors:
-            QMessageBox.warning(self, "Pip Rot Transfer", f"{len(completed)} item(s) completed; {len(errors)} failed.\n\n" + "\n".join(errors))
+            cross_volume = next((error for error in errors if isinstance(error, CrossVolumeMove)), None)
+            if cross_volume:
+                self.cross_volume_warning(cross_volume, len(completed))
+            else:
+                QMessageBox.warning(self, "Pip Rot Transfer", f"{len(completed)} item(s) completed; {len(errors)} failed.\n\n" + "\n".join(map(str, errors)))
         else:
             self.statusBar().showMessage(f"Transferred {len(completed)} item(s)", 5000)
+
+    def cross_volume_warning(self, error, completed=0):
+        message = QMessageBox(self)
+        message.setIcon(QMessageBox.Icon.Warning)
+        message.setWindowTitle("Cross-volume move")
+        message.setText("Pip Rot does not move files between volumes yet.")
+        message.setInformativeText(f"{completed} item(s) moved. The blocked source is unchanged.\n\nSource: {error.source}\nDestination: {error.destination}")
+        finder = message.addButton("Open in Finder", QMessageBox.ButtonRole.ActionRole)
+        message.addButton(QMessageBox.StandardButton.Close)
+        message.exec()
+        if message.clickedButton() is finder:
+            try:
+                subprocess.Popen(["/usr/bin/open", "-R", str(error.source)])
+                subprocess.Popen(["/usr/bin/open", "-a", "Finder", str(error.destination)])
+            except OSError as failure:
+                QMessageBox.warning(self, "Pip Rot", f"Could not open Finder: {failure}")
 
     def renamed_item(self, tab, path):
         index = tab.model.index(str(path))

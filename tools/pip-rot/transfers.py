@@ -11,6 +11,13 @@ import tempfile
 from PySide6.QtCore import QObject, QRunnable, QThreadPool, Signal
 
 
+class CrossVolumeMove(ValueError):
+    def __init__(self, source, destination):
+        self.source = Path(source)
+        self.destination = Path(destination)
+        super().__init__(f'Cross-volume moves are not supported yet. Source: {source}\nDestination: {destination}')
+
+
 def exists(path):
     return os.path.lexists(path)
 
@@ -27,7 +34,10 @@ def plan_transfer(paths, destination, copy):
     )]
     plan, names = [], set()
     for source in paths:
-        mode = source.lstat().st_mode
+        info = source.lstat()
+        mode = info.st_mode
+        if not copy and info.st_dev != destination.stat().st_dev:
+            raise CrossVolumeMove(source, destination)
         if source.parent == source:
             raise ValueError('Cannot transfer a filesystem root.')
         if not (stat.S_ISREG(mode) or stat.S_ISDIR(mode) or stat.S_ISLNK(mode)):
@@ -76,20 +86,10 @@ def transfer_one(source, target, copy):
             rename_exclusive(source, target)
             return
         except OSError as error:
-            if error.errno != errno.EXDEV:
-                raise
-    before = source.lstat()
+            if error.errno == errno.EXDEV:
+                raise CrossVolumeMove(source, target.parent) from error
+            raise
     copy_then_publish(source, target)
-    if not copy:
-        after = source.lstat()
-        if (before.st_dev, before.st_ino, before.st_size, before.st_mtime_ns) != (
-            after.st_dev, after.st_ino, after.st_size, after.st_mtime_ns
-        ):
-            raise OSError(f'Copied to {target}, but the source changed; it was left in place.')
-        if source.is_dir() and not source.is_symlink():
-            shutil.rmtree(source)
-        else:
-            source.unlink()
 
 
 class TransferJob(QRunnable):
@@ -101,6 +101,9 @@ class TransferJob(QRunnable):
         completed, errors = [], []
         try:
             plan = plan_transfer(self.paths, self.destination, self.copy)
+        except CrossVolumeMove as error:
+            errors.append(error)
+            plan = []
         except Exception as error:
             errors.append(str(error))
             plan = []
@@ -108,6 +111,9 @@ class TransferJob(QRunnable):
             try:
                 transfer_one(source, target, copy)
                 completed.append((source, target, copy))
+            except CrossVolumeMove as error:
+                errors.append(error)
+                break
             except Exception as error:
                 errors.append(f'{source.name}: {error}')
         self.owner.finished.emit(completed, errors)

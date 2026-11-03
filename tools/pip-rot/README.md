@@ -287,7 +287,10 @@ are not merged and targets are never overwritten: macOS `renamex_np` with
 
 Copies use `ditto` to preserve macOS metadata and stage their output on the
 destination volume before publishing it. Moves use an atomic rename on the same
-volume; cross-volume moves copy/publish first and only then remove the source.
+volume. Cross-volume moves are blocked during preflight (with an EXDEV guard at
+execution too); there is no copy-and-delete fallback. The warning offers **Open
+in Finder**, revealing the source and opening the destination so you can finish
+there. Cross-volume copies remain supported and leave their sources untouched.
 Failures are reported, including completed counts if part of a batch succeeded.
 While a transfer is running, Pip Rot refuses to close the last tab, close the
 window, or restart; retry after it finishes. Open tab/history paths within this window follow

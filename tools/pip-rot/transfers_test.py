@@ -3,6 +3,7 @@ import errno
 import subprocess
 from pathlib import Path
 import tempfile
+from types import SimpleNamespace
 from unittest.mock import patch
 
 from PySide6.QtCore import QEventLoop, QMimeData, QPoint, QPointF, QTimer, Qt, QUrl
@@ -11,7 +12,7 @@ from PySide6.QtWidgets import QApplication
 
 from file_tree import PIP_ROT_FILES, drop_action
 from pip_rot import Browser
-from transfers import plan_transfer, transfer_one, rename_exclusive
+from transfers import CrossVolumeMove, plan_transfer, transfer_one
 
 
 def pump():
@@ -61,17 +62,35 @@ with tempfile.TemporaryDirectory() as directory:
     link.symlink_to('missing')
     (destination/'broken').symlink_to('also-missing')
     expect_error(lambda: plan_transfer([link], destination, True))
-    # Exercise cross-volume move fallback without requiring another mounted disk.
+    # Cross-volume moves stop without copying/removing the source; explicit copies remain available.
     cross = source/'cross.txt'
     cross.write_text('cross-volume data')
     subprocess.run(['/usr/bin/xattr', '-w', 'com.piprot.test', 'preserve metadata', str(cross)], check=True)
-    def cross_device_once(src, dst):
-        if src == cross:
-            raise OSError(errno.EXDEV, 'different volume')
-        return rename_exclusive(src, dst)
-    with patch('transfers.rename_exclusive', side_effect=cross_device_once):
-        transfer_one(cross, destination/cross.name, False)
-    assert not cross.exists() and (destination/cross.name).read_text() == 'cross-volume data'
+    with patch('transfers.rename_exclusive', side_effect=OSError(errno.EXDEV, 'different volume')), patch('transfers.copy_then_publish') as copier:
+        try:
+            transfer_one(cross, destination/cross.name, False)
+        except CrossVolumeMove as error:
+            assert error.source == cross and error.destination == destination
+        else:
+            raise AssertionError('Cross-volume move was accepted')
+        copier.assert_not_called()
+    assert cross.exists() and not (destination/cross.name).exists()
+    original_lstat = Path.lstat
+    def different_volume(path, *args, **kwargs):
+        info = original_lstat(path, *args, **kwargs)
+        if path == cross:
+            return SimpleNamespace(st_mode=info.st_mode, st_dev=destination.stat().st_dev + 1)
+        return info
+    with patch.object(Path, 'lstat', different_volume):
+        try:
+            plan_transfer([cross], destination, False)
+        except CrossVolumeMove:
+            pass
+        else:
+            raise AssertionError('Preflight failed to detect cross-volume move')
+
+    transfer_one(cross, destination/cross.name, True)
+    assert cross.exists() and (destination/cross.name).read_text() == 'cross-volume data'
     assert subprocess.check_output(['/usr/bin/xattr', '-p', 'com.piprot.test', str(destination/cross.name)]).strip() == b'preserve metadata'
     actions = Qt.DropAction.CopyAction | Qt.DropAction.MoveAction
     mime = QMimeData()
@@ -148,6 +167,18 @@ with tempfile.TemporaryDirectory() as directory:
                 break
         assert window.current().root.resolve() == (destination/'relocating/inner').resolve(), window.current().root
         window.close_tab(1)
+        # The warning's Finder button hands off both source and destination.
+        def click_finder():
+            dialog = app.activeModalWidget()
+            assert dialog is not None
+            next(button for button in dialog.buttons() if button.text() == 'Open in Finder').click()
+        with patch('pip_rot.subprocess.Popen') as popen:
+            QTimer.singleShot(0, click_finder)
+            window.cross_volume_warning(CrossVolumeMove(cross, destination))
+            assert [call.args[0] for call in popen.call_args_list] == [
+                ['/usr/bin/open', '-R', str(cross)],
+                ['/usr/bin/open', '-a', 'Finder', str(destination)],
+            ]
         # Close/restart cannot interrupt an active filesystem operation.
         window.transfers.pending = 1
         window.close()
@@ -156,4 +187,4 @@ with tempfile.TemporaryDirectory() as directory:
         assert window.tabs.count() == 1
         window.transfers.pending = 0
         window.close()
-print('PASS: file/folder transfers, symlinks, collision races, self-move rejection, cross-volume metadata, move/copy policy, real Qt drop and async completion, close guard')
+print('PASS: file/folder transfers, symlinks, collision races, self-move rejection, cross-volume move blocking, copy metadata, Finder handoff, move/copy policy, real Qt drop and async completion, close guard')
