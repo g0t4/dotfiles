@@ -84,6 +84,9 @@ class RestartController(QObject):
             self.restart()
 
     def restart(self):
+        if self.window.transfers.busy:
+            self.window.statusBar().showMessage('Let the file transfer finish before restarting.', 5000)
+            return
         if self.child:
             return
         directory = context_path().parent

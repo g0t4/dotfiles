@@ -11,7 +11,7 @@ from PySide6.QtCore import QDir, QItemSelectionModel, QProcess, Qt, QUrl, QTimer
 from PySide6.QtGui import QAction, QDesktopServices, QIcon, QKeySequence
 from PySide6.QtWidgets import (
     QApplication, QAbstractItemView, QFileSystemModel, QHeaderView, QInputDialog, QLineEdit, QMainWindow,
-    QMenu, QMessageBox, QTabWidget, QTreeView, QVBoxLayout, QWidget,
+    QMenu, QMessageBox, QTabWidget, QVBoxLayout, QWidget,
 )
 
 
@@ -20,6 +20,8 @@ from action_context import publish_context, remove_context
 from preview import PreviewController
 from directory_picker import DirectoryHistory, DirectoryPicker
 from restart import RestartController, restore
+from file_tree import FileTree
+from transfers import Transfers
 
 
 def finder_trash_executable():
@@ -49,12 +51,9 @@ class FileTab(QWidget):
         self.model.setReadOnly(False)
         self.model.setOption(QFileSystemModel.Option.DontUseCustomDirectoryIcons)
         self.model.setFilter(QDir.Filter.AllEntries | QDir.Filter.NoDotAndDotDot)
-        self.tree = QTreeView()
+        self.tree = FileTree()
         self.tree.setModel(self.model)
         self.tree.setRootIndex(self.model.setRootPath(str(root)))
-        self.tree.setDragDropMode(QAbstractItemView.DragDropMode.DragOnly)
-        self.tree.setDefaultDropAction(Qt.DropAction.CopyAction)
-        self.tree.setAcceptDrops(False)
         self.tree.setUniformRowHeights(True)
         self.tree.setSelectionMode(QAbstractItemView.SelectionMode.ExtendedSelection)
         self.tree.setSelectionBehavior(QAbstractItemView.SelectionBehavior.SelectRows)
@@ -180,12 +179,16 @@ class Browser(QMainWindow):
         self.directory_history.error.connect(lambda message: self.statusBar().showMessage(message, 6000))
         self.duration_cache = DurationCache(self)
         self.trash_processes = set()
+        self.transfers = Transfers(self)
+        self.transfers.finished.connect(self.transfer_finished)
         self.preview = PreviewController(self)
         self.preview.error.connect(lambda message: QMessageBox.warning(self, "Pip Rot Preview", message))
         self.tabs = QTabWidget()
         self.tabs.setDocumentMode(True)
         self.tabs.setTabsClosable(True)
         self.tabs.setMovable(True)
+        self.tabs.tabBar().setAcceptDrops(True)
+        self.tabs.tabBar().setChangeCurrentOnDrag(True)
         self.tabs.tabCloseRequested.connect(self.close_tab)
         self.tabs.currentChanged.connect(self.update_location)
         self.setCentralWidget(self.tabs)
@@ -259,6 +262,8 @@ class Browser(QMainWindow):
         tab = FileTab(root, self.duration_cache, reveal)
         self.tabs.setCurrentIndex(self.tabs.addTab(tab, root.name or str(root)))
         self.tabs.setTabToolTip(self.tabs.currentIndex(), str(root))
+        tab.tree.files_dropped.connect(self.transfer_files)
+        tab.tree.drop_hint.connect(lambda text: self.statusBar().showMessage(text, 4000))
         tab.tree.addAction(self.rename_action)
         tab.tree.addAction(self.trash_action)
         tab.tree.addAction(self.preview_action)
@@ -290,6 +295,34 @@ class Browser(QMainWindow):
         menu.addAction(self.trash_action)
         menu.addAction(self.preview_action)
         menu.exec(tab.tree.viewport().mapToGlobal(point))
+
+    def transfer_files(self, paths, destination, copy):
+        self.transfers.submit(paths, destination, copy)
+        verb = "Copying" if copy else "Moving"
+        self.statusBar().showMessage(f"{verb} {len(paths)} item(s) to {destination}…")
+
+    def transfer_finished(self, completed, errors):
+        # Keep tabs/history pointing at directories moved elsewhere in this window.
+        for source, target, copy in completed:
+            if copy:
+                continue
+            def remap(path):
+                if path is not None and path.is_relative_to(source):
+                    return target / path.relative_to(source)
+                return path
+            for index in range(self.tabs.count()):
+                tab = self.tabs.widget(index)
+                tab.save_location()
+                for entry in tab.history:
+                    entry.root = remap(entry.root)
+                    entry.selected = remap(entry.selected)
+                if tab.root != tab.history[tab.history_index].root:
+                    tab.show_location()
+        self.update_location()
+        if errors:
+            QMessageBox.warning(self, "Pip Rot Transfer", f"{len(completed)} item(s) completed; {len(errors)} failed.\n\n" + "\n".join(errors))
+        else:
+            self.statusBar().showMessage(f"Transferred {len(completed)} item(s)", 5000)
 
     def renamed_item(self, tab, path):
         index = tab.model.index(str(path))
@@ -378,6 +411,10 @@ class Browser(QMainWindow):
         self.restart_controller.restart()
 
     def closeEvent(self, event):
+        if self.transfers.busy:
+            self.statusBar().showMessage("File transfer in progress; let it finish before closing.", 5000)
+            event.ignore()
+            return
         if self.restart_controller:
             self.restart_controller.close()
         self.preview.close()
@@ -448,6 +485,9 @@ class Browser(QMainWindow):
             QDesktopServices.openUrl(QUrl.fromLocalFile(str(path)))
 
     def close_tab(self, index):
+        if self.tabs.count() == 1 and self.transfers.busy:
+            self.statusBar().showMessage("File transfer in progress; let it finish before closing.", 5000)
+            return
         tab = self.tabs.widget(index)
         self.tabs.removeTab(index)
         tab.deleteLater()

@@ -111,8 +111,7 @@ class MediaModel(QFileSystemModel):
         return super().setData(index, value, role)
 
     def supportedDragActions(self):
-        # Export file URLs for opening/importing elsewhere, never negotiate moves.
-        return Qt.DropAction.CopyAction
+        return Qt.DropAction.CopyAction | Qt.DropAction.MoveAction
 
     def columnCount(self, parent=QModelIndex()):
         return 5

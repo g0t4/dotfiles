@@ -47,9 +47,8 @@ Hammerspoon integration:
   **Command+Shift+Return** reveals it in Finder (Command+Return also retains Finder reveal).
 
 The filesystem model loads listings in the background and watches for changes.
-The tree supports dragging files out and explicit inline rename; moves and
-incoming drops remain disabled. Explicit
-actions can create directories or move selected items to Trash.
+The tree supports file dragging, directory drop targets, and explicit inline
+rename. Explicit actions can also create directories or move selected items to Trash.
 The columns are Name, Size, Duration, and Date Modified (Type is hidden).
 Duration appears when videos appear in the current directory or an expanded subdirectory. Collapsing the
 last video-containing branch hides Duration again. Common video extensions are
@@ -103,8 +102,8 @@ Native Pip Rot actions are also available in File and the tree's context menu:
 
 New Nested Directory accepts paths such as `drafts/notes`, selects the created
 directory, and refuses existing targets or `..` traversal. The filesystem view
-still disables incoming drops; renaming, creation, and moving items to
-Trash are explicit actions. The Hammerspoon Copy Path action retains its existing shell-escaped output.
+supports directory drops; renaming, creation, and moving items to Trash are
+explicit actions. The Hammerspoon Copy Path action retains its existing shell-escaped output.
 
 Pip Rot publishes selection changes atomically to a private per-process file:
 
@@ -180,10 +179,10 @@ QT_QPA_PLATFORM=offscreen uv run --project tools/pip-rot python tools/pip-rot/pr
 
 Drag a selected file (or multiple selected rows) out of Pip Rot into another
 application to open/import it—for example, drop a MOV/MKV onto Audacity.
-Pip Rot exports native local-file URLs and offers **copy only**, so it does not
-move or remove the source files. The receiving application decides whether it
-supports that file format and drop destination. Pip Rot does not yet accept
-incoming drops or move/copy files between its folders/tabs.
+Pip Rot exports native local-file URLs with copy as the outbound default.
+The receiving application decides whether it supports that format and drop
+destination. Pip Rot never performs generic source-row deletion after an
+external drop; filesystem destinations handle their own transfers.
 
 ```sh
 QT_QPA_PLATFORM=offscreen uv run --project tools/pip-rot python tools/pip-rot/drag_test.py
@@ -266,4 +265,34 @@ There is no generic process-kill/relaunch fallback for other apps.
 ```sh
 QT_QPA_PLATFORM=offscreen uv run --project tools/pip-rot python tools/pip-rot/restart_test.py
 lua tools/pip-rot/app_actions_test.lua
+```
+
+## Rearrange files with drag and drop
+
+- Drag from Pip Rot onto a **directory row** to move files/folders into it.
+- Hold **Option** while dropping to copy instead.
+- Drop onto **blank tree space** to use that tab's root directory.
+- Hover over another tab to switch to it, then drop into its tree. Hover over
+  a collapsed directory to expand it. Edge scrolling is provided by Qt.
+- Files dragged in from Finder or other apps **copy** into the chosen directory,
+  preserving those external sources. Only local-file URLs are accepted.
+- A target outline and the status bar identify the destination and Move/Copy
+  action. Dropping onto an ordinary file is rejected.
+
+Operations run in a background queue. Preflight rejects existing destination
+names (including dangling symlinks), duplicate basenames, and moving a directory
+inside itself. Dropping onto the same parent is a no-op for moves. Directories
+are not merged and targets are never overwritten: macOS `renamex_np` with
+`RENAME_EXCL` also protects against a name appearing after preflight.
+
+Copies use `ditto` to preserve macOS metadata and stage their output on the
+destination volume before publishing it. Moves use an atomic rename on the same
+volume; cross-volume moves copy/publish first and only then remove the source.
+Failures are reported, including completed counts if part of a batch succeeded.
+While a transfer is running, Pip Rot refuses to close the last tab, close the
+window, or restart; retry after it finishes. Open tab/history paths within this window follow
+directories moved by its transfer queue. Transfer undo is not implemented yet.
+
+```sh
+QT_QPA_PLATFORM=offscreen uv run --project tools/pip-rot python tools/pip-rot/transfers_test.py
 ```
