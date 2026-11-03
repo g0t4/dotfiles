@@ -219,6 +219,11 @@ local function onChoice(choice)
         return
     end
 
+    if choice.action == "restart_app" then
+        require("config.launcher.app_actions").restart(choice.app_context)
+        return
+    end
+
     local paths = choice.paths
 
     if choice.action == "new_nested_folder" and choice.context_source == "pip-rot" then
@@ -477,6 +482,9 @@ function M.show()
     end
     for _, action in ipairs(actions) do
         action.context_source = context and context.source
+    end
+    for _, action in ipairs(require("config.launcher.app_actions").choices(context)) do
+        table.insert(actions, 1, action)
     end
     if chooser then chooser:delete() end
 

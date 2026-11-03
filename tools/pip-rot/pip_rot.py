@@ -1,5 +1,6 @@
 """Pip Rot: small independent filesystem trees in tabs."""
 import argparse
+import json
 import subprocess
 import os
 from dataclasses import dataclass
@@ -18,6 +19,7 @@ from media import DurationCache, MediaModel
 from action_context import publish_context, remove_context
 from preview import PreviewController
 from directory_picker import DirectoryHistory, DirectoryPicker
+from restart import RestartController, restore
 
 
 def finder_trash_executable():
@@ -75,7 +77,7 @@ class FileTab(QWidget):
         layout = QVBoxLayout(self)
         layout.setContentsMargins(0, 0, 0, 0)
         layout.addWidget(self.tree)
-        self.model.directoryLoaded.connect(self.loaded)
+        self.model.directoryLoaded.connect(lambda directory: self.loaded(directory, complete=True))
         self.tree.expanded.connect(self.update_duration_column)
         self.tree.collapsed.connect(self.update_duration_column)
         self.tree.doubleClicked.connect(self.open_file)
@@ -100,15 +102,25 @@ class FileTab(QWidget):
             return False
         self.tree.setColumnHidden(4, not contains_video(self.tree.rootIndex()))
 
-    def loaded(self, directory):
+    def restore_view_scroll(self, complete=False):
+        if self.restore_scroll is not None:
+            self.tree.doItemsLayout()
+            scrollbar = self.tree.verticalScrollBar()
+            scrollbar.setValue(self.restore_scroll)
+            if complete or scrollbar.maximum() >= self.restore_scroll:
+                self.restore_scroll = None
+
+    def loaded(self, directory, complete=False):
         self.update_duration_column()
+        if self.restore_scroll is not None and Path(directory) == self.root:
+            QTimer.singleShot(0, lambda: self.restore_view_scroll(complete))
         if self.initial_selection_done:
             return
         if Path(directory) != self.root and not (
             self.pending_reveal and Path(directory) in self.pending_reveal.parents
         ):
             return
-        index = self.model.index(str(self.pending_reveal)) if self.pending_reveal else self.model.index(0, 0, self.tree.rootIndex())
+        index = self.model.index(str(self.pending_reveal)) if self.pending_reveal and self.pending_reveal != self.root else self.model.index(0, 0, self.tree.rootIndex())
         if index.isValid():
             ancestor = index.parent()
             while ancestor.isValid() and ancestor != self.tree.rootIndex():
@@ -118,9 +130,7 @@ class FileTab(QWidget):
             self.tree.scrollTo(index)
             self.pending_reveal = None
             self.initial_selection_done = True
-            if self.restore_scroll is not None:
-                self.tree.verticalScrollBar().setValue(self.restore_scroll)
-                self.restore_scroll = None
+            self.restore_view_scroll()
 
     def save_location(self):
         entry = self.history[self.history_index]
@@ -163,6 +173,7 @@ class Browser(QMainWindow):
     def __init__(self, paths, reveal=False, *, record_history=False):
         super().__init__()
         self.resize(1200, 740)
+        self.restart_controller = None
         self.directory_history = DirectoryHistory(self)
         self.record_history = record_history
         self.last_recorded_directory = None
@@ -208,6 +219,7 @@ class Browser(QMainWindow):
         close_tab = self.action(file_menu, "Close Tab", "Ctrl+W", lambda: self.close_tab(self.tabs.currentIndex()))
         close_tab.setShortcuts([QKeySequence("Ctrl+W"), QKeySequence("F8")])
         self.action(file_menu, "Close Window", "F9", self.close)
+        self.action(file_menu, "Restart App", "", self.restart_app)
         self.action(file_menu, "Quit Pip Rot", "Ctrl+Q", self.close)
         self.action(view_menu, "Go to Directory…", "Ctrl+L", self.focus_location)
         parent_directory = self.action(view_menu, "Parent Directory", "Ctrl+Up", self.go_parent)
@@ -355,11 +367,19 @@ class Browser(QMainWindow):
                 publish_context(
                     self.current().root, self.selected_paths(), self.windowTitle(),
                     selection_explicit=bool(self.current().tree.selectionModel().selectedRows(0)),
+                    capabilities=["restart"] if self.restart_controller else [],
                 )
             except OSError as error:
                 self.statusBar().showMessage(f"Could not update action picker context: {error}")
 
+    def restart_app(self):
+        if self.restart_controller is None:
+            self.restart_controller = RestartController(self)
+        self.restart_controller.restart()
+
     def closeEvent(self, event):
+        if self.restart_controller:
+            self.restart_controller.close()
         self.preview.close()
         remove_context()
         super().closeEvent(event)
@@ -517,7 +537,17 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("paths", nargs="*", default=[str(Path.cwd())])
     parser.add_argument("--reveal", action="store_true", help="Show each item selected in its parent directory")
+    parser.add_argument("--restore-session", type=Path, help=argparse.SUPPRESS)
     args = parser.parse_args()
+    session = None
+    if args.restore_session:
+        try:
+            session = json.loads(args.restore_session.read_text())
+            if session['version'] != 1 or not session['tabs']:
+                raise ValueError('Invalid session')
+            args.paths = [entry['directory'] for entry in session['tabs']]
+        except (OSError, ValueError, KeyError, TypeError) as error:
+            parser.error(f"Could not restore session: {error}")
     for path in args.paths:
         if not Path(path).expanduser().exists():
             parser.error(f"Path does not exist: {path}")
@@ -526,7 +556,13 @@ def main():
     app.setOrganizationName("Pip Rot")
     app.setWindowIcon(QIcon(str(Path(__file__).resolve().parent / "assets/pip-rot.png")))
     window = Browser(args.paths, args.reveal, record_history=True)
+    if session:
+        restore(window, session)
+    window.restart_controller = RestartController(window)
     window.show()
+    window.publish_selection()
+    if args.restore_session:
+        args.restore_session.unlink(missing_ok=True)
     window.raise_()
     window.activateWindow()
     return app.exec()

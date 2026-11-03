@@ -31,6 +31,7 @@ payload.pid=999; assert(provider.capture()==nil); payload.pid=123
 payload.window_title='wrong'; assert(provider.capture()==nil); payload.window_title=title
 local real_title=title; title='not Pip Rot'; assert(provider.capture()==nil); title=real_title
 package.loaded['config.launcher.action_context']=provider
+package.loaded['config.launcher.app_actions']={choices=function() return {} end}
 local file_actions=assert(loadfile('.config/hammerspoon/config/launcher/file_actions.lua'))()
 file_actions.show()
 for _, action in ipairs(actions) do assert(action.action~='trash', 'root fallback must not offer Trash') end

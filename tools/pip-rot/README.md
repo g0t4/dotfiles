@@ -237,3 +237,33 @@ the editor perform normal text editing, rather than previewing/trashing files.
 ```sh
 QT_QPA_PLATFORM=offscreen uv run --project tools/pip-rot python tools/pip-rot/rename_test.py
 ```
+
+## Restart App
+
+From Pip Rot, open the Hammerspoon action picker (`Option+Command+/`) and choose
+**Restart App**. File → Restart App is also available inside Pip Rot. Relaunch
+once after installing this feature so the running process advertises support.
+
+Pip Rot writes a private session snapshot, starts a new process using the same
+Python virtualenv and current checkout, then closes the original window only
+when the replacement publishes a ready context. The snapshot restores tab roots,
+active tab, current item, scroll position, window size, and hidden-file setting.
+Back/Forward history and preview windows are not restored yet. If startup fails
+(including a directory no longer existing), the original stays open and reports
+the local `~/.local/state/pip-rot/restart-<pid>.log` path.
+
+`app_actions.lua` holds app-specific restart handlers. Pip Rot advertises the
+`restart` capability in its context. The picker atomically writes:
+
+```json
+{"version": 1, "pid": 12345, "command": "restart"}
+```
+
+to `~/.local/state/pip-rot/request-12345.json`. Pip Rot checks only its own request
+file, accepts the versioned restart command addressed to its PID, and consumes it.
+There is no generic process-kill/relaunch fallback for other apps.
+
+```sh
+QT_QPA_PLATFORM=offscreen uv run --project tools/pip-rot python tools/pip-rot/restart_test.py
+lua tools/pip-rot/app_actions_test.lua
+```

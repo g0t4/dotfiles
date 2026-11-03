@@ -193,3 +193,8 @@ window before the picker takes focus. Pip Rot writes a versioned JSON record at
 `~/.local/state/pip-rot/context-<pid>.json`; validate PID and window title before
 using it. The picker freezes those paths for action dispatch. Finder selection
 is returned as an AppleScript list so newlines in filenames remain intact.
+
+`app_actions.lua` supplies app-specific lifecycle actions alongside file actions.
+Pip Rot advertises `capabilities: ["restart"]`; its handler writes a versioned
+JSON restart request to the target PID. Only registered, advertised handlers are
+offered. No generic kill/relaunch fallback is used.
