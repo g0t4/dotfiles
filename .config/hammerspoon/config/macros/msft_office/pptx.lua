@@ -4,6 +4,24 @@ end
 
 function PPTX_ChangePictureFromClipboard()
     -- Requires Wes's custom "Wes" ribbon tab with the Change Picture > From Clipboard command.
+    -- Keep this as primary: acts on the selection without depending on the pointer position.
+    -- Alternatives investigated 2026-11-04 (keep both working macros for now):
+    -- * Quick Access Toolbar could avoid switching tabs, IF this specific command can be added.
+    --   Not tested; Office does not support every command in that toolbar.
+    -- * No Change Picture / From Clipboard command found in the live macOS menu bar,
+    --   so a normal macOS App Shortcut is not currently a verified option.
+    -- * Direct AppleScript: PowerPoint's installed dictionary advertises `execute` for
+    --   command bar controls, which would invoke the command without clicking UI.
+    --   Live enumeration exposed only Status Bar and Ribbon, each with one placeholder
+    --   control. Ribbon lookups for From Clipboard, From Clipboard..., Change Picture,
+    --   and PictureChangeFromClipboard all failed with -1728 (object does not exist).
+    --   No usable direct AppleScript entry point found; no replacement was executed.
+    -- * VBA/add-in + CommandBars.ExecuteMso remains an unverified avenue, requiring a
+    --   supported command ID and a callable macro. The published Mac list includes
+    --   PictureChange, but does not establish the specific From Clipboard action.
+    -- References:
+    -- https://support.microsoft.com/en-us/office/foundations-experiences/customize-the-ribbon-in-office
+    -- https://learn.microsoft.com/en-us/office/vba/office-mac/idmsopowerpointmac
     MicrosoftOfficeClickTabButtonByTitle("Microsoft PowerPoint", "Wes", "From Clipboard")
 end
 
