@@ -82,8 +82,8 @@ with tempfile.TemporaryDirectory() as directory:
         with patch.object(window, 'gather_selected') as gather:
             request('new-folder-with-selection')
             gather.assert_called_once()
-        with patch.object(window, 'new_nested_directory') as nested:
-            request('new-nested-directory-path')
+        with patch.object(window, 'new_path') as nested:
+            request('new-path')
             nested.assert_called_once()
         with patch.object(window, 'new_directory') as create:
             request('new-folder-inside', [str(file)])

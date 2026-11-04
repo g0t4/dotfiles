@@ -315,7 +315,7 @@ class Browser(QMainWindow):
         self.action(file_menu, "Copy Path", "Ctrl+Shift+C", self.copy_paths)
         self.action(file_menu, "Copy File Contents", "Ctrl+Alt+Shift+C", self.copy_contents)
         self.action(file_menu, "New Folder Inside", "Ctrl+Shift+N", self.new_directory)
-        self.action(file_menu, "New Nested Directory Path…", "", self.new_nested_directory)
+        self.action(file_menu, "New Path…", "", self.new_path)
         self.gather_action = self.action(file_menu, "New Folder with Selection", ("Meta+Ctrl+N" if sys.platform == "darwin" else "Ctrl+Alt+N"), self.gather_selected)
         self.gather_action.setShortcutContext(Qt.ShortcutContext.WidgetShortcut)
         self.duplicate_action = self.action(file_menu, "Duplicate", "Ctrl+D", self.duplicate_selected)
@@ -416,7 +416,7 @@ class Browser(QMainWindow):
         menu.addAction("Copy Path", self.copy_paths)
         menu.addAction("Copy File Contents", self.copy_contents)
         menu.addAction("New Folder Inside", self.new_directory)
-        menu.addAction("New Nested Directory Path…", self.new_nested_directory)
+        menu.addAction("New Path…", self.new_path)
         menu.addAction(self.gather_action)
         menu.addAction(self.duplicate_action)
         menu.addAction(self.rename_action)
@@ -699,18 +699,22 @@ class Browser(QMainWindow):
         tab.refresh()
         self.edit_created_folder(tab, target)
 
-    def new_nested_directory(self):
+    def new_path(self):
         parent = self.action_directory()
-        name, accepted = QInputDialog.getText(self, "New Nested Directory Path", f"Create inside {parent}:")
+        name, accepted = QInputDialog.getText(self, "New Path", f"Create inside {parent}:\nEnd with / for a directory; otherwise create a file.")
         if not accepted or not name.strip():
             return
         relative = Path(name.strip())
         if relative.is_absolute() or '..' in relative.parts or relative == Path('.'):
-            QMessageBox.warning(self, "Pip Rot", "Use a relative directory name without '..'.")
+            QMessageBox.warning(self, "Pip Rot", "Use a relative path without '..'.")
             return
         target = parent / relative
         try:
-            target.mkdir(parents=True)
+            if name.strip().endswith('/'):
+                target.mkdir(parents=True, exist_ok=True)
+            else:
+                target.parent.mkdir(parents=True, exist_ok=True)
+                target.touch()
         except OSError as error:
             QMessageBox.warning(self, "Pip Rot", str(error))
             return

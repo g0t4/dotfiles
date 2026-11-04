@@ -47,16 +47,44 @@ with tempfile.TemporaryDirectory() as directory:
         with patch('pip_rot.subprocess.Popen') as popen:
             window.open_terminal()
             assert popen.call_args.args[0] == ['/usr/bin/open', '-a', 'iTerm', str(nested)]
-        with patch('pip_rot.QInputDialog.getText', return_value=('new/deep', True)):
-            window.new_nested_directory()
+        with patch('pip_rot.QInputDialog.getText', return_value=('new/deep/', True)):
+            window.new_path()
         pump()
         assert (nested / 'new/deep').is_dir()
         assert tab.selected() == nested / 'new/deep'
         tab.tree.setCurrentIndex(tab.model.index(str(nested)))
         with patch('pip_rot.QInputDialog.getText', return_value=('../escape', True)), patch('pip_rot.QMessageBox.warning') as warning:
-            window.new_nested_directory()
+            window.new_path()
             warning.assert_called_once()
         assert not (root / 'escape').exists()
+        def create_path(name, accepted=True):
+            tab.tree.setCurrentIndex(tab.model.index(str(nested)))
+            with patch('pip_rot.QInputDialog.getText', return_value=(name, accepted)):
+                window.new_path()
+            pump()
+        create_path('drafts/my notes.md')
+        created = nested / 'drafts/my notes.md'
+        assert created.is_file() and created.read_bytes() == b''
+        assert tab.selected() == created
+        created.write_text('keep existing content')
+        create_path('drafts/my notes.md')
+        assert created.read_text() == 'keep existing content'
+        create_path('drafts/')
+        assert (nested / 'drafts').is_dir()
+        create_path('extensionless')
+        assert (nested / 'extensionless').is_file()
+        create_path('looks.like.file/')
+        assert (nested / 'looks.like.file').is_dir()
+        create_path('canceled/file', accepted=False)
+        assert not (nested / 'canceled').exists()
+        with patch('pip_rot.QMessageBox.warning') as warning:
+            create_path('/absolute/path')
+            warning.assert_called_once()
+        with patch('pip_rot.QMessageBox.warning') as warning:
+            create_path('drafts/my notes.md/child')
+            warning.assert_called_once()
+        assert created.read_text() == 'keep existing content'
+
         window.add_tab(nested)
         assert json.loads(context_path().read_text())['directory'] == str(nested)
         window.close()

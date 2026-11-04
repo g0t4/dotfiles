@@ -100,11 +100,14 @@ Native Pip Rot actions are also available in File and the tree's context menu:
 | ⌘OptionShiftC | Copy File Contents (text files) |
 | ⌃⌘N | New Folder with Selection, then inline rename (items must share a parent) |
 | ⌘ShiftN | New Folder Inside: create immediately inside the selected directory, or file's parent, then rename inline |
-| File / action picker | New Nested Directory Path…: prompt for a relative path such as `drafts/notes` |
+| File / action picker | New Path…: prompt for a relative file or directory path (`mkpath` semantics) |
 | ⌘Backspace | Move explicitly selected files/directories to Trash |
 
-New Nested Directory Path… accepts paths such as `drafts/notes`, selects the created
-directory, and refuses existing targets or `..` traversal. The filesystem view
+New Path… follows the shell `mkpath` convention: `drafts/notes/` creates a
+directory; `drafts/notes.md` creates a file. Missing parents are created in both
+cases, then the result is selected. Existing directories are accepted; existing
+files are touched without truncating their contents. Absolute paths and `..`
+traversal are refused. The filesystem view
 supports directory drops; renaming, creation, and moving items to Trash are
 explicit actions. The Hammerspoon Copy Path action retains its existing shell-escaped output.
 
@@ -479,9 +482,9 @@ new folder and the error reports the partial result.
 
 Pip Rot advertises the `folder-actions` capability. Its app actions include
 **New Folder Inside**, **New Folder with Selection** (explicit siblings only),
-and **New Nested Directory Path…**. The launcher sends a versioned JSON request
+and **New Path…**. The launcher sends a versioned JSON request
 to the captured process, with the captured directory and paths; Pip Rot rejects
 stale selections and handles creation/selection/rename itself. Finder retains
 its existing New Nested Folder AppleScript behavior. Restart Pip Rot once to
 load the new capability. Ordinary folder creation and gathering share the inline
-rename completion helper; path creation retains a prompt for slash-separated paths.
+rename completion helper; path creation retains a prompt for slash-separated paths (trailing `/` means directory).

@@ -31,7 +31,7 @@ function M.choices(context)
                     command = command, app_context = context, image = hs.image.imageFromName("NSFolder")})
             end
             add("New Folder Inside", "new-folder-inside", "Create inside the selected folder, or file's parent; rename inline")
-            add("New Nested Directory Path…", "new-nested-directory-path", "Create a relative path such as drafts/notes")
+            add("New Path…", "new-path", "Trailing / creates directories; otherwise a file, with parents")
             local parent
             local siblings = context.selection_explicit == true and #(context.paths or {}) > 0
             for _, path in ipairs(context.paths or {}) do
@@ -49,7 +49,7 @@ end
 
 function M.folderAction(context, command)
     local allowed = { ["new-folder-inside"] = true, ["new-folder-with-selection"] = true,
-        ["new-nested-directory-path"] = true }
+        ["new-path"] = true }
     if not context or context.source ~= "pip-rot" or not allowed[command] then return false end
     local directory = os.getenv("HOME") .. "/.local/state/pip-rot/"
     local live = hs.json.read(directory .. "context-" .. context.pid .. ".json")

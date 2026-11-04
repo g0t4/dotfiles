@@ -89,7 +89,7 @@ class RestartController(QObject):
         command = request.get('command')
         if command == 'restart':
             self.restart()
-        elif command in ('new-folder-inside', 'new-folder-with-selection', 'new-nested-directory-path'):
+        elif command in ('new-folder-inside', 'new-folder-with-selection', 'new-path'):
             # Reject stale picker contexts instead of acting on a different selection.
             if (request.get('paths') != list(map(str, self.window.selected_paths()))
                     or request.get('directory') != str(self.window.current().root)):
@@ -101,7 +101,7 @@ class RestartController(QObject):
             self.window.current().tree.setFocus()
             callback = {'new-folder-inside': self.window.new_directory,
                         'new-folder-with-selection': self.window.gather_selected,
-                        'new-nested-directory-path': self.window.new_nested_directory}[command]
+                        'new-path': self.window.new_path}[command]
             QTimer.singleShot(100, callback)
 
     def poll_status(self):
