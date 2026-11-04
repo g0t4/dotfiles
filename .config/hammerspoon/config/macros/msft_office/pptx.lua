@@ -3,7 +3,34 @@ function PPTX_EnsureTabOpen(tabName)
 end
 
 function PPTX_ChangePictureFromClipboard()
+    -- Requires Wes's custom "Wes" ribbon tab with the Change Picture > From Clipboard command.
     MicrosoftOfficeClickTabButtonByTitle("Microsoft PowerPoint", "Wes", "From Clipboard")
+end
+
+function PPTX_ChangePictureFromClipboardContextMenu()
+    -- Point at the picture first; this entry point does not depend on the custom ribbon tab.
+    local app = hs.application.get("com.microsoft.Powerpoint")
+    assert(app and app:isFrontmost(), "PowerPoint must be frontmost")
+    local window = hs.axuielement.applicationElement(app):expectFocusedMainWindow()
+    hs.eventtap.rightClick(hs.mouse.absolutePosition())
+    hs.timer.doAfter(0.1, function()
+        FindOneElement(window, function(element)
+            return element:attributeValue("AXRole") == "AXMenuItem"
+                and element:attributeValue("AXTitle") == "Change Picture"
+        end, function(_, results)
+            local changePicture = results[1]
+            if not changePicture then
+                hs.alert.show("No Change Picture context menu; point at a picture first")
+                return
+            end
+            local item = changePicture:menu(1):menuItem_by_title("From Clipboard...")
+            if not item or not item:attributeValue("AXEnabled") then
+                hs.alert.show("Change Picture > From Clipboard is unavailable")
+                return
+            end
+            item:performAction("AXPress")
+        end)
+    end)
 end
 
 ---@return hs.axuielement
