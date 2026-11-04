@@ -53,3 +53,33 @@ assert(launches==1 and stopped==2, 'canceled or pending quit must not relaunch')
 app.bundleID=function() return 'com.apple.finder' end
 assert(not handler.restart(powerpoint), 'PID belonging to another app must be rejected')
 print('PASS: PowerPoint graceful quit, duplicate/stale PID guards, exit-before-relaunch, canceled quit timeout')
+
+-- Folder actions belong only to capable Pip Rot contexts.
+hs.application.applicationForPID=function(pid) return pid==123 and {} end
+context.capabilities={'restart','folder-actions'}
+context.paths={'/tmp/a','/tmp/b'}
+context.directory='/tmp'
+context.selection_explicit=true
+live=context
+assert(#handler.choices(context)==4)
+context.paths={'/tmp/a','/other/b'}
+assert(#handler.choices(context)==3, 'selection action requires siblings')
+context.paths={'/tmp/a'}
+context.selection_explicit=false
+assert(#handler.choices(context)==3, 'root fallback is not an explicit selection')
+context.selection_explicit=true
+hs.json.encode=function(payload)
+    assert(payload.command=='new-folder-inside' and payload.pid==123)
+    assert(payload.paths==context.paths and payload.directory=='/tmp')
+    return 'folder request'
+end
+io.open=function() return {write=function(_,value) written=value end,close=noop} end
+os.rename=function(_,target) destination=target;return true end
+assert(handler.folderAction(context,'new-folder-inside'))
+assert(written=='folder request' and destination:match('/request%-123.json$'))
+assert(not handler.folderAction(context,'delete-everything'))
+live={pid=123,source='pip-rot',capabilities={'restart'}}
+assert(not handler.folderAction(context,'new-folder-inside'))
+io.open,os.rename=savedOpen,savedRename
+assert(#handler.choices(powerpoint)==1, 'other apps must not gain folder actions')
+print('PASS: Pip Rot folder choices, sibling/explicit-selection gating, atomic command payload and capability checks')

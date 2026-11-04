@@ -88,7 +88,7 @@ or Pip Rot. It captures the current selection before showing the picker. In an
 empty tree (or with no selected rows), Pip Rot supplies the tab's root directory.
 Multiple rows can be selected with Command/Shift. Existing Copy Path, Copy File
 Contents, Open Terminal Here, Reveal, and other actions use this captured context.
-New Nested Folder uses the selected directory directly when invoked from Pip Rot;
+New Folder Inside uses the selected directory directly when invoked from Pip Rot;
 the Finder action retains its existing Finder workflow.
 
 Native Pip Rot actions are also available in File and the tree's context menu:
@@ -99,10 +99,11 @@ Native Pip Rot actions are also available in File and the tree's context menu:
 | ⌘ShiftC | Copy Path (raw paths, one per line) |
 | ⌘OptionShiftC | Copy File Contents (text files) |
 | ⌃⌘N | New Folder with Selection, then inline rename (items must share a parent) |
-| ⌘ShiftN | New Nested Directory inside the selected directory, or file's parent |
+| ⌘ShiftN | New Folder Inside: create immediately inside the selected directory, or file's parent, then rename inline |
+| File / action picker | New Nested Directory Path…: prompt for a relative path such as `drafts/notes` |
 | ⌘Backspace | Move explicitly selected files/directories to Trash |
 
-New Nested Directory accepts paths such as `drafts/notes`, selects the created
+New Nested Directory Path… accepts paths such as `drafts/notes`, selects the created
 directory, and refuses existing targets or `..` traversal. The filesystem view
 supports directory drops; renaming, creation, and moving items to Trash are
 explicit actions. The Hammerspoon Copy Path action retains its existing shell-escaped output.
@@ -475,3 +476,12 @@ New Folder with Selection creates `New Folder` (or the next free `New Folder~2`,
 inline rename. Escape keeps the created folder and its contents. Moves run in
 the background; if an error interrupts a move, completed items remain in the
 new folder and the error reports the partial result.
+
+Pip Rot advertises the `folder-actions` capability. Its app actions include
+**New Folder Inside**, **New Folder with Selection** (explicit siblings only),
+and **New Nested Directory Path…**. The launcher sends a versioned JSON request
+to the captured process, with the captured directory and paths; Pip Rot rejects
+stale selections and handles creation/selection/rename itself. Finder retains
+its existing New Nested Folder AppleScript behavior. Restart Pip Rot once to
+load the new capability. Ordinary folder creation and gathering share the inline
+rename completion helper; path creation retains a prompt for slash-separated paths.

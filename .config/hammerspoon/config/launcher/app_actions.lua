@@ -17,9 +17,67 @@ function M.choices(context)
     local description = context.source == "powerpoint"
         and "PowerPoint · quit and relaunch; reopen your presentation afterward"
         or "Pip Rot · restore tabs and current directory"
-    return {{text = "Restart App", subText = description,
+    local choices = {{text = "Restart App", subText = description,
         action = "restart_app", app_context = context,
         image = hs.image.imageFromName("NSRefreshTemplate")}}
+    if context.source == "pip-rot" then
+        local folders = false
+        for _, capability in ipairs(context.capabilities or {}) do
+            if capability == "folder-actions" then folders = true end
+        end
+        if folders then
+            local function add(text, command, detail)
+                table.insert(choices, {text = text, subText = detail, action = "pip_rot_folder",
+                    command = command, app_context = context, image = hs.image.imageFromName("NSFolder")})
+            end
+            add("New Folder Inside", "new-folder-inside", "Create inside the selected folder, or file's parent; rename inline")
+            add("New Nested Directory Path…", "new-nested-directory-path", "Create a relative path such as drafts/notes")
+            local parent
+            local siblings = context.selection_explicit == true and #(context.paths or {}) > 0
+            for _, path in ipairs(context.paths or {}) do
+                local directory = path:match("^(.*)/[^/]+$")
+                if parent and parent ~= directory then siblings = false end
+                parent = directory
+            end
+            if siblings then
+                add("New Folder with Selection", "new-folder-with-selection", "Move selected siblings into a new folder; rename inline")
+            end
+        end
+    end
+    return choices
+end
+
+function M.folderAction(context, command)
+    local allowed = { ["new-folder-inside"] = true, ["new-folder-with-selection"] = true,
+        ["new-nested-directory-path"] = true }
+    if not context or context.source ~= "pip-rot" or not allowed[command] then return false end
+    local directory = os.getenv("HOME") .. "/.local/state/pip-rot/"
+    local live = hs.json.read(directory .. "context-" .. context.pid .. ".json")
+    if not live or live.pid ~= context.pid or live.source ~= "pip-rot"
+        or not hs.application.applicationForPID(context.pid) then
+        hs.alert.show("Pip Rot is no longer available")
+        return false
+    end
+    local capable = false
+    for _, capability in ipairs(live.capabilities or {}) do
+        if capability == "folder-actions" then capable = true end
+    end
+    if not capable then hs.alert.show("Restart Pip Rot to enable folder actions"); return false end
+    local filename = directory .. "request-" .. context.pid .. ".json"
+    local temporary = filename .. ".tmp"
+    local file, err = io.open(temporary, "w")
+    if file then
+        file:write(hs.json.encode({version = 1, pid = context.pid, command = command,
+            paths = context.paths, directory = context.directory}))
+        file:close()
+        local ok
+        ok, err = os.rename(temporary, filename)
+        if ok then return true end
+        os.remove(temporary)
+    end
+    log:error("Could not request folder action:", err)
+    hs.alert.show("Could not request Pip Rot folder action")
+    return false
 end
 
 function M.restart(context)

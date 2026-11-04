@@ -48,13 +48,13 @@ with tempfile.TemporaryDirectory() as directory:
             window.open_terminal()
             assert popen.call_args.args[0] == ['/usr/bin/open', '-a', 'iTerm', str(nested)]
         with patch('pip_rot.QInputDialog.getText', return_value=('new/deep', True)):
-            window.new_directory()
+            window.new_nested_directory()
         pump()
         assert (nested / 'new/deep').is_dir()
         assert tab.selected() == nested / 'new/deep'
         tab.tree.setCurrentIndex(tab.model.index(str(nested)))
         with patch('pip_rot.QInputDialog.getText', return_value=('../escape', True)), patch('pip_rot.QMessageBox.warning') as warning:
-            window.new_directory()
+            window.new_nested_directory()
             warning.assert_called_once()
         assert not (root / 'escape').exists()
         window.add_tab(nested)

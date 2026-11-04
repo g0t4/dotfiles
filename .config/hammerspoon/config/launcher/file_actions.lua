@@ -225,12 +225,12 @@ local function onChoice(choice)
         return
     end
 
-    local paths = choice.paths
-
-    if choice.action == "new_nested_folder" and choice.context_source == "pip-rot" then
-        M.newNestedFolder(paths[1])
+    if choice.action == "pip_rot_folder" then
+        require("config.launcher.app_actions").folderAction(choice.app_context, choice.command)
         return
     end
+
+    local paths = choice.paths
 
     if choice.action == "new_nested_folder" then
         local script = os.getenv("HOME") .. "/repos/github/g0t4/dotfiles/misc/alfred/file-actions/finder-new-nested-folder.applescript"
@@ -384,28 +384,6 @@ function M.openPath(args)
     if not task or not task:start() then hs.alert.show("Could not start open") end
 end
 
-function M.newNestedFolder(parent)
-    local button, name = hs.dialog.textPrompt("New Nested Directory", "Create inside " .. parent, "", "Create", "Cancel")
-    if button ~= "Create" or name == "" then return end
-    if name:sub(1, 1) == "/" then hs.alert.show("Use a relative directory name"); return end
-    local components = {}
-    for component in name:gmatch("[^/]+") do
-        if component == ".." then hs.alert.show("Parent traversal is not allowed"); return end
-        if component ~= "." then table.insert(components, component) end
-    end
-    if #components == 0 then return end
-    local target = parent .. "/" .. table.concat(components, "/")
-    if hs.fs.attributes(target) then hs.alert.show("Directory already exists"); return end
-    local current = parent
-    for _, component in ipairs(components) do
-        current = current .. "/" .. component
-        if not hs.fs.attributes(current) then
-            local ok, err = hs.fs.mkdir(current)
-            if not ok then log:error("Create directory failed:", err); hs.alert.show("Could not create directory"); return end
-        end
-    end
-end
-
 -- Show "Open With" app chooser
 function M.showOpenWith(paths)
     local appChooser = hs.chooser.new(function(choice)
@@ -467,6 +445,11 @@ function M.show()
     if context and context.source == "pip-rot" and context.selection_explicit ~= true then
         for index = #actions, 1, -1 do
             if actions[index].action == "trash" then table.remove(actions, index) end
+        end
+    end
+    if context and context.source == "pip-rot" then
+        for index = #actions, 1, -1 do
+            if actions[index].action == "new_nested_folder" then table.remove(actions, index) end
         end
     end
     for _, action in ipairs(actions) do

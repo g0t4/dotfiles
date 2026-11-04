@@ -314,7 +314,8 @@ class Browser(QMainWindow):
         self.action(file_menu, "Open Terminal Here", "Ctrl+Alt+T", self.open_terminal)
         self.action(file_menu, "Copy Path", "Ctrl+Shift+C", self.copy_paths)
         self.action(file_menu, "Copy File Contents", "Ctrl+Alt+Shift+C", self.copy_contents)
-        self.action(file_menu, "New Nested Directory…", "Ctrl+Shift+N", self.new_directory)
+        self.action(file_menu, "New Folder Inside", "Ctrl+Shift+N", self.new_directory)
+        self.action(file_menu, "New Nested Directory Path…", "", self.new_nested_directory)
         self.gather_action = self.action(file_menu, "New Folder with Selection", ("Meta+Ctrl+N" if sys.platform == "darwin" else "Ctrl+Alt+N"), self.gather_selected)
         self.gather_action.setShortcutContext(Qt.ShortcutContext.WidgetShortcut)
         self.duplicate_action = self.action(file_menu, "Duplicate", "Ctrl+D", self.duplicate_selected)
@@ -414,7 +415,8 @@ class Browser(QMainWindow):
         menu.addAction("Open Terminal Here", self.open_terminal)
         menu.addAction("Copy Path", self.copy_paths)
         menu.addAction("Copy File Contents", self.copy_contents)
-        menu.addAction("New Nested Directory…", self.new_directory)
+        menu.addAction("New Folder Inside", self.new_directory)
+        menu.addAction("New Nested Directory Path…", self.new_nested_directory)
         menu.addAction(self.gather_action)
         menu.addAction(self.duplicate_action)
         menu.addAction(self.rename_action)
@@ -440,6 +442,9 @@ class Browser(QMainWindow):
         self.transfer_finished(completed, errors)
         if errors or tab is None or self.tabs.indexOf(tab) < 0:
             return
+        self.edit_created_folder(tab, folder)
+
+    def edit_created_folder(self, tab, folder):
         # Wait for the replacement model's asynchronous directory loading.
         def edit_when_ready(attempt=0):
             if self.tabs.indexOf(tab) < 0 or self.current() is not tab or not tab.tree.hasFocus():
@@ -625,7 +630,7 @@ class Browser(QMainWindow):
                 publish_context(
                     self.current().root, self.selected_paths(), self.windowTitle(),
                     selection_explicit=bool(self.current().tree.selectionModel().selectedRows(0)),
-                    capabilities=["restart", "status"] if self.restart_controller else [],
+                    capabilities=["restart", "status", "folder-actions"] if self.restart_controller else [],
                 )
             except OSError as error:
                 self.statusBar().showMessage(f"Could not update action picker context: {error}", 7000, warning=True)
@@ -676,8 +681,27 @@ class Browser(QMainWindow):
             QMessageBox.warning(self, "Pip Rot", str(error))
 
     def new_directory(self):
+        tab = self.current()
         parent = self.action_directory()
-        name, accepted = QInputDialog.getText(self, "New Nested Directory", f"Create inside {parent}:")
+        number = 1
+        try:
+            while True:
+                target = parent / ('New Folder' if number == 1 else f'New Folder~{number}')
+                try:
+                    target.mkdir()
+                    break
+                except FileExistsError:
+                    number += 1
+        except OSError as error:
+            self.statusBar().showMessage(str(error), 7000, warning=True)
+            return
+        tab.tree.expand(tab.model.index(str(parent)))
+        tab.refresh()
+        self.edit_created_folder(tab, target)
+
+    def new_nested_directory(self):
+        parent = self.action_directory()
+        name, accepted = QInputDialog.getText(self, "New Nested Directory Path", f"Create inside {parent}:")
         if not accepted or not name.strip():
             return
         relative = Path(name.strip())

@@ -84,8 +84,25 @@ class RestartController(QObject):
         except (OSError, ValueError):
             request = {}
         filename.unlink(missing_ok=True)
-        if request.get('version') == 1 and request.get('pid') == os.getpid() and request.get('command') == 'restart':
+        if request.get('version') != 1 or request.get('pid') != os.getpid():
+            return
+        command = request.get('command')
+        if command == 'restart':
             self.restart()
+        elif command in ('new-folder-inside', 'new-folder-with-selection', 'new-nested-directory-path'):
+            # Reject stale picker contexts instead of acting on a different selection.
+            if (request.get('paths') != list(map(str, self.window.selected_paths()))
+                    or request.get('directory') != str(self.window.current().root)):
+                self.window.statusBar().showMessage('Selection changed; reopen the action picker.', 5000, warning=True)
+                return
+            self.window.show()
+            self.window.raise_()
+            self.window.activateWindow()
+            self.window.current().tree.setFocus()
+            callback = {'new-folder-inside': self.window.new_directory,
+                        'new-folder-with-selection': self.window.gather_selected,
+                        'new-nested-directory-path': self.window.new_nested_directory}[command]
+            QTimer.singleShot(100, callback)
 
     def poll_status(self):
         filename = context_path().with_name(f'status-{os.getpid()}.json')
