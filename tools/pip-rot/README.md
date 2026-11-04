@@ -351,3 +351,21 @@ StreamDeckPipRot("/absolute/path/to/file.mov") -- select file in its parent
 
 From a shell action, use `/opt/homebrew/bin/hs -c 'StreamDeckPipRot()'`.
 It returns immediately; each invocation currently opens a new Pip Rot process.
+
+## Address bar
+
+Entering an existing file path navigates to its containing directory and updates
+the address bar to that directory. Relative paths start at the current tab's
+directory; `~` expands to Home.
+
+For a missing path, Pip Rot walks upward to the nearest existing directory and
+asks whether that is what you meant. **Yes** navigates there and updates the
+address bar. **No** (the default) keeps the typed address available for editing
+and leaves the directory and navigation history unchanged.
+
+The integration test submits addresses with Return and clicks both buttons in
+real Qt dialogs, checking directory, address bar, and back/forward history:
+
+```sh
+QT_QPA_PLATFORM=offscreen uv run --project tools/pip-rot python tools/pip-rot/location_test.py
+```

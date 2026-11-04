@@ -596,9 +596,24 @@ class Browser(QMainWindow):
         path = Path(self.location.text()).expanduser()
         if not path.is_absolute():
             path = self.current().root / path
+        if path.is_file():
+            path = path.parent
         if not path.is_dir():
-            QMessageBox.warning(self, "Pip Rot", f"Not a directory: {path}")
-            return
+            parent = path.parent
+            while not parent.is_dir() and parent != parent.parent:
+                parent = parent.parent
+            if not parent.is_dir():
+                QMessageBox.warning(self, "Pip Rot", f"No existing parent directory found for: {path}")
+                return
+            answer = QMessageBox.question(
+                self, "Pip Rot",
+                f"Directory does not exist:\n{path}\n\nThis directory exists:\n{parent}\n\nIs that what you meant?",
+                QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No,
+                QMessageBox.StandardButton.No,
+            )
+            if answer != QMessageBox.StandardButton.Yes:
+                return
+            path = parent
         self.current().navigate(Path(QDir.cleanPath(str(path.absolute()))))
         self.update_location()
 
