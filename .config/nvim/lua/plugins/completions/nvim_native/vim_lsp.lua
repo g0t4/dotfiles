@@ -19,6 +19,7 @@
 --
 -- Native LSP for source buffers. Command-line completion stays in cmdline_cmp.lua.
 require('plugins.completions.nvim_native.trace').setup()
+require('plugins.completions.nvim_native.keymaps').setup()
 vim.opt.completeopt = { "menuone", "noselect", "popup", "fuzzy", }
 vim.diagnostic.config({
     signs = true, -- gutter signs
@@ -472,14 +473,7 @@ vim.api.nvim_create_autocmd("LspAttach", {
         map("x", "<S-M-f>", format_selection, "Format selection")
         map("i", "<S-M-f>", "<C-o>:FormatBuffer<CR>", "Format buffer")
         map("i", "<C-Space>", vim.lsp.completion.get, "LSP completion")
-        vim.keymap.set("i", "<CR>", function()
-            if vim.fn.pumvisible() == 0 then return "<CR>" end
-            -- CoC accepted the first item on Enter even before moving in its menu.
-            return vim.fn.complete_info().selected == -1 and "<C-n><C-y>" or "<C-y>"
-        end, { buffer = args.buf, expr = true, silent = true, desc = "Accept completion" })
-        vim.keymap.set("i", "<S-CR>", function()
-            return vim.fn.pumvisible() == 1 and "<C-e>" or "<S-CR>"
-        end, { buffer = args.buf, expr = true, silent = true, desc = "Dismiss completion" })
+
     end,
 })
 

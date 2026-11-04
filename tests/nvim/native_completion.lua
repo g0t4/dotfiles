@@ -1,0 +1,43 @@
+-- Run from the repository root:
+-- nvim --clean --headless '+luafile tests/nvim/native_completion.lua'
+vim.opt.rtp:prepend(vim.fn.getcwd() .. '/.config/nvim')
+require('plugins.completions.nvim_native.keymaps').setup()
+vim.o.completeopt='menuone,noselect,fuzzy'
+local function keys(s) vim.api.nvim_feedkeys(vim.keycode(s), 'xt', false) end
+vim.keymap.set('i','<F2>',function() vim.fn.complete(1,{'hello','help'}) end)
+local function check(seq, expected, undo)
+ vim.cmd.enew({bang=true})
+ keys(seq)
+ assert(vim.deep_equal(vim.api.nvim_buf_get_lines(0,0,-1,false),expected),seq .. ': ' .. vim.inspect(vim.api.nvim_buf_get_lines(0,0,-1,false)))
+ if undo then vim.cmd.undo(); assert(vim.api.nvim_get_current_line()==undo,seq .. ' undo: '..vim.api.nvim_get_current_line()) end
+ print('PASS '..seq)
+end
+check('i<F2><CR><Esc>',{'',''})
+check('ihel<F2><CR><Esc>',{'hel',''})
+check('ihel<F2><C-n><CR><Esc>',{'hello'},'hel')
+check('ihel<F2><Down><CR><Esc>',{'hello'},'hel')
+check('ihel<F2><C-n><C-p><CR><Esc>',{'hel',''})
+check('ihel<F2><C-n><CR> there<Esc>',{'hello there'},'hello')
+vim.cmd.undo(); assert(vim.api.nvim_get_current_line()=='hel')
+check('ihel<F2><C-n><C-y><Esc>',{'hello'},'hel')
+check('ihello<CR>world<Esc>',{'hello','world'})
+vim.opt.rtp:prepend(vim.fn.stdpath('data') .. '/lazy/LuaSnip')
+local ls = require('luasnip')
+ls.add_snippets('all',{ ls.snippet('hellosnip', { ls.text_node('EXPANDED SNIPPET') }) })
+require('plugins.completions.nvim_native.snippets').setup()
+vim.o.autocomplete=false
+vim.keymap.set('i','<F3>',function()
+ vim.fn.complete(1,{{word='hellosnip',user_data={native_snippet={filetype='all',index=1}}}})
+end)
+vim.cmd.enew({bang=true})
+vim.defer_fn(function()
+ local ok, err = pcall(function()
+  assert(vim.api.nvim_get_current_line()=='EXPANDED SNIPPET',vim.api.nvim_get_current_line())
+  keys('<Esc>')
+  vim.cmd.undo()
+  assert(vim.api.nvim_get_current_line()=='hel', 'snippet undo: '..vim.api.nvim_get_current_line())
+  print('PASS snippet expansion and undo')
+ end)
+ if not ok then print(err); vim.cmd.cquit() else vim.cmd.qa({bang=true}) end
+end,100)
+vim.api.nvim_feedkeys(vim.keycode('ihel<F3><C-n><CR>'), 'xt!', false)

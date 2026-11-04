@@ -44,9 +44,12 @@ function M.setup()
                 local row, col = unpack(vim.api.nvim_win_get_cursor(0))
                 local start = col - #snippet.trigger
                 if start < 0 or vim.api.nvim_get_current_line():sub(start + 1, col) ~= snippet.trigger then return end
+                -- Keep the trigger replacement and expansion in one undo step.
+                vim.cmd.undojoin()
                 require("luasnip").snip_expand(snippet, {
                     clear_region = { from = { row - 1, start }, to = { row - 1, col } },
                 })
+                require("plugins.completions.nvim_native.keymaps").break_undo()
             end)
         end,
     })
