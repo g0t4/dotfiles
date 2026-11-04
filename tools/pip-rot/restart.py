@@ -21,6 +21,7 @@ def snapshot(window):
     for index in range(window.tabs.count()):
         tab = window.tabs.widget(index)
         tabs.append({'directory': str(tab.root),
+                     'expanded': tab.expanded_paths(),
                      'selected': str(tab.selected()) if tab.tree.selectionModel().selectedRows(0) else None,
                      'scroll': tab.tree.verticalScrollBar().value()})
     return {'version': 1, 'tabs': tabs, 'active_tab': window.tabs.currentIndex(),
@@ -33,6 +34,8 @@ def restore(window, session):
         tab.pending_reveal = Path(entry['selected']) if entry['selected'] else None
         tab.restore_scroll = entry['scroll']
         tab.initial_selection_done = False
+        tab.pending_expansions = {path for path in entry.get('expanded', [])
+                                  if Path(path).is_relative_to(tab.root) and Path(path).is_dir()}
         QTimer.singleShot(0, lambda tab=tab: tab.loaded(str(tab.root)))
     window.hidden_action.setChecked(session.get('hidden', False))
     window.toggle_hidden()

@@ -463,3 +463,8 @@ publication finishes, preserving tree state instead of depending solely on Qt's
 watcher. A transfer finishing during a refresh queues another read afterward.
 Diagnostics include transfer submission, completed source/target pairs, copy/move
 mode, and errors alongside the refresh entries.
+
+Explicit **Restart App** also snapshots expanded folders for each tab. Nested
+expansions are restored as directories load, before selection and scroll are
+restored; directories that no longer exist are skipped. This state exists only
+in the restart handoff: ordinary launches do not resume prior expansions.

@@ -28,25 +28,44 @@ with tempfile.TemporaryDirectory() as directory:
     two.mkdir()
     for number in range(100):
         (two/f'row-{number:03}.txt').touch()
+    nested = two/'expanded'/'nested'
+    nested.mkdir(parents=True)
+    (nested/'child.txt').touch()
     file = two/'selected.txt'
     file.write_text('keep')
     with patch('action_context.Path.home', return_value=root):
         window = Browser([str(one), str(two)])
         window.show()
         pump()
+        tab = window.current()
+        tab.tree.expand(tab.model.index(str(nested.parent)))
+        pump()
+        tab.tree.expand(tab.model.index(str(nested)))
+        pump()
         window.current().tree.setCurrentIndex(window.current().model.index(str(file)))
         window.current().tree.verticalScrollBar().setValue(40)
         saved_scroll = window.current().tree.verticalScrollBar().value()
         assert saved_scroll > 0
         state = snapshot(window)
+        assert set(state['tabs'][1]['expanded']) == {str(nested.parent), str(nested)}
+        # Deleted expanded paths are safely ignored during restore.
+        state['tabs'][1]['expanded'].append(str(two/'missing'))
         replacement = Browser([entry['directory'] for entry in state['tabs']])
         restore(replacement, state)
         replacement.show()
         pump()
         assert replacement.tabs.count() == 2 and replacement.tabs.currentIndex() == 1
         assert replacement.current().root == two and replacement.current().selected() == file
+        assert replacement.current().tree.isExpanded(replacement.current().model.index(str(nested)))
+        assert replacement.current().tree.isExpanded(replacement.current().model.index(str(nested.parent)))
+        assert not replacement.current().pending_expansions
         assert replacement.current().tree.verticalScrollBar().value() == saved_scroll
         replacement.close()
+        cold = Browser([str(two)])
+        cold.show()
+        pump()
+        assert not cold.current().tree.isExpanded(cold.current().model.index(str(nested.parent)))
+        cold.close()
         controller = RestartController(window)
         window.restart_controller = controller
         fake_child = SimpleNamespace(pid=987654321, poll=lambda: None, terminate=lambda: None)

@@ -47,6 +47,7 @@ class FileTab(QWidget):
         super().__init__()
         self.refresh_state = None
         self.refresh_again = False
+        self.pending_expansions = set()
         self.root = root
         self.history = [Location(root, reveal)]
         self.history_index = 0
@@ -88,10 +89,7 @@ class FileTab(QWidget):
         self.tree.doubleClicked.connect(self.open_file)
         QTimer.singleShot(0, lambda: self.loaded(str(root)))
 
-    def refresh(self):
-        if self.refresh_state is not None:
-            self.refresh_again = True
-            return
+    def expanded_paths(self):
         expanded = []
 
         def collect(parent):
@@ -102,6 +100,13 @@ class FileTab(QWidget):
                     collect(index)
 
         collect(self.tree.rootIndex())
+        return expanded
+
+    def refresh(self):
+        if self.refresh_state is not None:
+            self.refresh_again = True
+            return
+        expanded = self.expanded_paths()
         log_refresh('refresh-start', self.root, {
             path: self.model.rowCount(self.model.index(path))
             for path in [str(self.root), *expanded]
@@ -189,6 +194,14 @@ class FileTab(QWidget):
                 self.restore_scroll = None
 
     def loaded(self, directory, complete=False):
+        if self.pending_expansions:
+            if complete:
+                self.pending_expansions.discard(directory)
+            for path in sorted(self.pending_expansions):
+                self.tree.expand(self.model.index(path))
+            if self.pending_expansions:
+                return
+            directory, complete = str(self.root), True
         if self.refresh_state is not None:
             if complete:
                 self.refresh_state['waiting'].discard(directory)
@@ -233,6 +246,7 @@ class FileTab(QWidget):
 
     def show_location(self):
         self.refresh_state = None
+        self.pending_expansions.clear()
         entry = self.history[self.history_index]
         self.root = entry.root
         self.pending_reveal = entry.selected
