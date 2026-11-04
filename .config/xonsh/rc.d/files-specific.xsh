@@ -10,6 +10,7 @@ import shutil
 import subprocess
 import sys
 from pathlib import Path
+from typing import Optional
 
 from prompt_toolkit.application import run_in_terminal
 from prompt_toolkit.filters import EmacsInsertMode, ViInsertMode
@@ -81,13 +82,60 @@ for _files_fish_function in (
 
 
 _files_original_cd = aliases["cd"]
+import sys
+import termios
+import tty
 
+def get_char():
+    fd = sys.stdin.fileno()
+    old = termios.tcgetattr(fd)
+    try:
+        tty.setraw(fd)
+        return sys.stdin.read(1)
+    finally:
+        termios.tcsetattr(fd, termios.TCSADRAIN, old)
+
+def _find_first_parent_that_exists(path) -> Optional[Path]:
+    parent = path.parent
+    if parent.exists():
+        return parent
+    if parent == path:
+        return None # parent does not exist
+    return _find_first_parent_that_exists(parent)
 
 def _files_cd(args, stdin=None, **_):
     adjusted = list(args)
+    # TODO add tests and handling of `cd` args? if any in xonsh? (is it just `cd -` and `cd -\d` for when it's not a path arg?
+    # PRN should I support ... if multiple args try gluing together into one path and if it exists cd to it over using first arg only?
+    #   OR should we leave it so that is broken so I have to build path strings appropriately?
     if len(adjusted) == 1:
-        if os.path.isfile(os.path.expanduser(adjusted[0])):
-            adjusted[0] = os.path.dirname(os.path.expanduser(adjusted[0])) or "."
+        # skip if `cd -` or `cd -1` etc
+        # TODO clean up this hack of hacks to merge features... if we extract a function we can return early
+        if not adjusted[0].startswith("-"):
+            path = Path(adjusted[0]).expanduser()
+            if path.is_file():
+                path = path.parent
+            # * if dir doesn't exist, walk parents until find one that does (and if one does then prompt user if that is what they want to cd to instead)=> yes/no
+            if not path.exists():
+                # TODO add tests of this feature to use parent dir instead (integration test that types in responses?!)
+                path = _find_first_parent_that_exists(path)
+                if path == None:
+                    # warn nothing exists
+                    msg = f"_files_cd cannot cd to any of {adjusted[0]} or its parent directories"
+                    print(msg)
+                    # log.info(msg)
+                    return
+                else:
+                    # prompt user (no is default unless `y`/`Y` typed)
+                    print(f"First parent that exist is {path} do you want to cd to that? [y/N]", end="")
+                    confirm = get_char().lower() in ("y")
+                    print()
+                    if not confirm:
+                        print("aborting...")
+                        return
+
+            adjusted[0] = str(path)
+
     olddir = os.getcwd()
     path_before = [str(entry) for entry in $PATH]
     log.info(
