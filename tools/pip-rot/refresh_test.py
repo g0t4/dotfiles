@@ -66,8 +66,26 @@ with tempfile.TemporaryDirectory() as directory:
         window.refresh_current()
         wait(lambda: tab.refresh_state is None)
         assert tab.tree.isExpanded(tab.model.index(str(nested)))
+        # Simulate missed watcher delivery for a completed drag/drop move.
+        destination = root / 'destination'
+        destination.mkdir()
+        tab.model.setOption(QFileSystemModel.Option.DontWatchForChanges)
+        source = selected[0]
+        moved = destination / source.name
+        source.rename(moved)
+        window.transfer_finished([(source, moved, False)], [])
+        wait(lambda: tab.refresh_state is None)
+        assert not tab.model.index(str(source)).isValid()
+        assert tab.model.index(str(moved)).isValid()
+        assert tab.tree.isExpanded(tab.model.index(str(nested)))
+        # A completion during an in-flight refresh schedules another fresh read.
+        tab.refresh()
+        window.transfer_finished([(selected[1], destination / selected[1].name, True)], [])
+        assert tab.refresh_again
+        wait(lambda: tab.refresh_state is None and not tab.refresh_again)
         log = (root / '.local/share/devtools/pip-rot.log').read_text()
         assert 'refresh-start' in log and 'refresh-finished' in log
+        assert 'transfer-finished' in log
         assert 'loaded_rows=' in log and str(nested) in log
         window.close()
 print('PASS: F5 reloads stale model, nested expansions, multi-selection, current row, scroll, history, repeated refresh')

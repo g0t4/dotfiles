@@ -139,7 +139,7 @@ with tempfile.TemporaryDirectory() as directory:
         # Blank space targets the tab root; ordinary files are never destinations.
         assert tab.tree.destination(QPoint(5, tab.tree.viewport().height()-5))[0] == root
         moved_index = tab.model.index(str(target))
-        tab.tree.expand(index)
+        tab.tree.expand(tab.model.index(str(destination)))
         pump()
         assert tab.tree.destination(tab.tree.visualRect(moved_index).center())[0] is None
         # Hovering another tab while dragging exposes that tab's destination tree.

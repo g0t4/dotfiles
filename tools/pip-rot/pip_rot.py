@@ -46,6 +46,7 @@ class FileTab(QWidget):
     def __init__(self, root: Path, cache: DurationCache, reveal: Path | None = None):
         super().__init__()
         self.refresh_state = None
+        self.refresh_again = False
         self.root = root
         self.history = [Location(root, reveal)]
         self.history_index = 0
@@ -89,6 +90,7 @@ class FileTab(QWidget):
 
     def refresh(self):
         if self.refresh_state is not None:
+            self.refresh_again = True
             return
         expanded = []
 
@@ -155,6 +157,9 @@ class FileTab(QWidget):
         self.tree.verticalScrollBar().setValue(state['scroll'])
         self.tree.horizontalScrollBar().setValue(state['horizontal'])
         self.update_duration_column()
+        if self.refresh_again:
+            self.refresh_again = False
+            self.refresh()
 
     def sort_changed(self, column, order):
         # QFileSystemModel sorts its four built-in columns only.
@@ -432,11 +437,16 @@ class Browser(QMainWindow):
             editor.setSelection(0, len(name_parts(target)[0].encode("utf-16-le")) // 2)
 
     def transfer_files(self, paths, destination, copy):
+        log_refresh('transfer-submit', destination, {'sources': list(map(str, paths)), 'copy': copy})
         self.transfers.submit(paths, destination, copy)
         verb = "Copying" if copy else "Moving"
         self.statusBar().showMessage(f"{verb} {len(paths)} item(s) to {destination}…")
 
     def transfer_finished(self, completed, errors):
+        log_refresh('transfer-finished', self.current().root, {
+            'completed': [(str(source), str(target), copy) for source, target, copy in completed],
+            'errors': list(map(str, errors)),
+        })
         # Keep tabs/history pointing at directories moved elsewhere in this window.
         for source, target, copy in completed:
             if copy:
@@ -453,6 +463,13 @@ class Browser(QMainWindow):
                     entry.selected = remap(entry.selected)
                 if tab.root != tab.history[tab.history_index].root:
                     tab.show_location()
+        # Worker completion is emitted only after rename/copy publication finishes.
+        # Rebuild affected views instead of relying solely on filesystem watchers.
+        parents = {path.parent for source, target, _ in completed for path in (source, target)}
+        for index in range(self.tabs.count()):
+            tab = self.tabs.widget(index)
+            if any(parent.is_relative_to(tab.root) or tab.root.is_relative_to(parent) for parent in parents):
+                tab.refresh()
         self.update_location()
         if errors:
             cross_volume = next((error for error in errors if isinstance(error, CrossVolumeMove)), None)

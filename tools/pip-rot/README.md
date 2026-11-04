@@ -457,3 +457,9 @@ QT_QPA_PLATFORM=offscreen uv run --project tools/pip-rot python tools/pip-rot/re
 The test disables watching, changes real files, triggers F5, then checks fresh
 contents, nested expansions, multiple selection, scroll, history, repeated
 refreshes, and diagnostic output.
+
+Completed drag/drop transfers explicitly refresh affected tabs after filesystem
+publication finishes, preserving tree state instead of depending solely on Qt's
+watcher. A transfer finishing during a refresh queues another read afterward.
+Diagnostics include transfer submission, completed source/target pairs, copy/move
+mode, and errors alongside the refresh entries.
