@@ -488,3 +488,14 @@ stale selections and handles creation/selection/rename itself. Finder retains
 its existing New Nested Folder AppleScript behavior. Restart Pip Rot once to
 load the new capability. Ordinary folder creation and gathering share the inline
 rename completion helper; path creation retains a prompt for slash-separated paths (trailing `/` means directory).
+
+The first inline rename of a **new, empty folder** also accepts a relative path:
+`drafts/notes.md` creates a file with its parents; `drafts/notes/` creates a directory
+path. A plain name still renames the folder normally. Slash-containing input is
+resolved relative to the temporary folder's parent, and the temporary folder is
+removed/replaced only while empty. Existing destinations are refused, without
+merging or overwriting. Absolute paths, `..`, paths inside the temporary folder,
+and symlinks leading outside the creation directory are rejected. Escape or
+finishing the first edit disables this behavior; later renames and folders with
+gathered contents remain ordinary filename-only renames. Unlike the New Path…
+prompt, this inline creation flow never touches an existing target.

@@ -392,6 +392,7 @@ class Browser(QMainWindow):
         tab.model.fileRenamed.connect(
             lambda directory, _old, new: QTimer.singleShot(0, lambda: self.renamed_item(tab, Path(directory) / new))
         )
+        tab.model.path_created.connect(lambda path: QTimer.singleShot(0, lambda: self.created_path(tab, Path(path))))
         tab.model.rename_failed.connect(lambda message: self.statusBar().showMessage(message, 7000, warning=True))
         tab.tree.setFocus()
         self.publish_selection()
@@ -457,8 +458,26 @@ class Browser(QMainWindow):
             if index.isValid():
                 self.renamed_item(tab, folder)
                 tab.tree.scrollTo(index)
+                model = tab.model
+                # Enable path semantics only for this first creation editor.
+                if not any(folder.iterdir()):
+                    model.path_edit_source = folder
+                    delegate = tab.tree.itemDelegate(index)
+                    def clear_path_edit(*_):
+                        model.path_edit_source = None
+                        delegate.closeEditor.disconnect(clear_path_edit)
+                    delegate.closeEditor.connect(clear_path_edit)
                 tab.tree.edit(index)
         QTimer.singleShot(0, edit_when_ready)
+
+    def created_path(self, tab, target):
+        if self.tabs.indexOf(tab) < 0:
+            return
+        tab.pending_reveal = target
+        tab.initial_selection_done = False
+        tab.loaded(str(tab.root))
+        self.publish_selection()
+        self.statusBar().showMessage(f"Created {target}", 5000, success=True)
 
     def duplicate_selected(self):
         tab = self.current()

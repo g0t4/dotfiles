@@ -8,6 +8,7 @@ from PySide6.QtCore import QModelIndex, QObject, QRunnable, QThreadPool, Qt, Sig
 from PySide6.QtWidgets import QFileSystemModel
 
 from file_icons import FileIcons
+from path_creation import finish_empty_folder
 
 VIDEO_SUFFIXES = frozenset('.mp4 .m4v .mov .mkv .avi .webm .mpg .mpeg .mts .m2ts .ts .vob .wmv .flv .ogv .3gp'.split())
 
@@ -92,16 +93,27 @@ class DurationCache(QObject):
 
 class MediaModel(QFileSystemModel):
     rename_failed = Signal(str)
+    path_created = Signal(str)
 
     def __init__(self, cache, parent=None):
         super().__init__(parent)
         self.cache = cache
         self.icons = FileIcons()
+        self.path_edit_source = None
         cache.updated.connect(self.duration_ready)
 
     def setData(self, index, value, role=Qt.ItemDataRole.EditRole):
         if role == Qt.ItemDataRole.EditRole and index.column() == 0:
             name = str(value)
+            source = Path(self.filePath(index))
+            if '/' in name and source == self.path_edit_source:
+                try:
+                    target = finish_empty_folder(source, name)
+                except (OSError, ValueError) as error:
+                    self.rename_failed.emit(str(error))
+                    return False
+                self.path_created.emit(str(target))
+                return True
             if not name or name in ('.', '..') or '/' in name or '\0' in name:
                 self.rename_failed.emit('Rename requires a filename, without path separators.')
                 return False
