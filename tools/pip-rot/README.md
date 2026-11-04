@@ -369,3 +369,34 @@ real Qt dialogs, checking directory, address bar, and back/forward history:
 ```sh
 QT_QPA_PLATFORM=offscreen uv run --project tools/pip-rot python tools/pip-rot/location_test.py
 ```
+
+## Directory picker everywhere
+
+Hammerspoon provides **Control+Option+P** globally and **Control+P** inside
+standard macOS Open/Save panels. The latter passes through unchanged elsewhere,
+including Neovim and terminals. The picker reuses Pip Rot's shared z history.
+
+- Type a fuzzy directory query; use arrows to select a result.
+- **Return** uses the folder in the active Open/Save dialog, or opens it in Pip Rot elsewhere.
+- **Command+Return** explicitly opens the folder in Pip Rot, even from a file dialog.
+- **Option+Return** copies the full folder path and returns focus to the original app;
+  it does not navigate the dialog or open a browser.
+- **Control+R** toggles fuzzy search and `zr` semantic search, preserving the query.
+  Semantic search uses the existing embedding/reranking service at `build21.lan:8015`.
+  If unavailable, its error appears in the picker; Control+R returns to local fuzzy search.
+- **Escape / F9** cancels.
+- From an Open/Save panel, selection navigates that same panel through its Go to
+  Folder sheet. The filename is preserved; you still press Open/Save yourself.
+- Elsewhere, selection opens the directory in Pip Rot.
+
+The panel handoff uses Accessibility identifiers (`save-panel` / `open-panel`,
+`GoToWindow`, `PathTextField`). Custom app dialogs without these identifiers are
+not recognized. It sets the path directly through Accessibility, without using
+the clipboard. Missing/closed panels abort the handoff.
+
+Standalone selection for other consumers (JSON with `path` and `action`
+(`use`, `open`, or `copy`) on stdout; empty stdout on cancel):
+
+```sh
+uv run --project tools/pip-rot python tools/pip-rot/directory_picker.py
+```

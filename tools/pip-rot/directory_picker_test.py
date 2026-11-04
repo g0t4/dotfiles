@@ -81,3 +81,80 @@ with tempfile.TemporaryDirectory() as directory:
         assert backend.records[-4:] == [root, one, root, two]
         window.close()
 print('PASS: async shared backend, recent/frecency ordering, fuzzy filtering, new-tab intent, current-tab history, shared visit recording')
+
+# Semantic results keep server ranking and do not undergo literal fuzzy filtering.
+class Semantic:
+    async def retrieve(self, query, entries, *, limit):
+        assert query == 'my configuration' and limit == 100
+        return [SimpleNamespace(path=entry.path) for entry in entries]
+
+with tempfile.TemporaryDirectory() as directory:
+    target = Path(directory) / 'dotfiles'
+    target.mkdir()
+    history = DirectoryHistory(backend=Backend([target]))
+    history.semantic_search = Semantic()
+    picker = DirectoryPicker(history, standalone=True)
+    pump()
+    picker.toggle_semantic()
+    picker.query.setText('my configuration')
+    for _ in range(30):
+        pump()
+        if picker.results.count():
+            break
+    assert picker.results.count() == 1
+    assert 'new tab' not in picker.message.text()
+    picker.query.setText('newer query')
+    assert picker.results.count() == 0 and picker.request is None
+    # An older worker result must not overwrite the current query.
+    picker.loaded(-1, [target], '')
+    assert picker.results.count() == 0
+    picker.toggle_semantic()
+    picker.query.setText('dot')
+    for _ in range(30):
+        pump()
+        if picker.results.count():
+            break
+    assert picker.results.count() == 1
+    picker.reject()
+    assert not picker.debounce.isActive()
+print('PASS: semantic mode, nonliteral results, stale-result rejection, fuzzy toggle, cancellation')
+
+class Unavailable:
+    async def retrieve(self, *args, **kwargs):
+        raise TimeoutError()
+
+history = DirectoryHistory(backend=Backend([]))
+history.semantic_search = Unavailable()
+picker = DirectoryPicker(history, standalone=True)
+pump()
+picker.toggle_semantic()
+picker.query.setText('offline service')
+for _ in range(30):
+    pump()
+    if 'TimeoutError' in picker.message.text():
+        break
+assert 'Semantic search unavailable: TimeoutError' in picker.message.text()
+picker.reject()
+print('PASS: unavailable semantic backend reports a useful error')
+
+# Exercise actual shortcut dispatch, including QLineEdit's own Return handling.
+from PySide6.QtCore import Qt
+from PySide6.QtTest import QTest
+with tempfile.TemporaryDirectory() as directory:
+    target = Path(directory)
+    history = DirectoryHistory(backend=Backend([target]))
+    for modifiers, action in [(Qt.KeyboardModifier.NoModifier, 'use'),
+                              (Qt.KeyboardModifier.ControlModifier, 'open'),
+                              (Qt.KeyboardModifier.AltModifier, 'copy')]:
+        picker = DirectoryPicker(history, standalone=True)
+        picker.show()
+        for _ in range(30):
+            pump()
+            if picker.results.count():
+                break
+        assert picker.windowTitle() == 'Directory Launcher'
+        picker.query.setFocus()
+        QTest.keyClick(picker.query, Qt.Key.Key_Return, modifiers)
+        assert picker.destination == target and picker.action == action, (action, picker.action)
+        assert picker.result() == picker.DialogCode.Accepted
+print('PASS: standalone Return, Command+Return, Option+Return dispatch distinct actions')

@@ -98,6 +98,7 @@ hs.window.animationDuration = 0 -- default is 0.2 (FYI this means window layout 
 require("config.macros.init")
 require("config.launcher").init()
 require("config.launcher.file_actions").init()
+require("config.launcher.directory_picker").init()
 
 
 

@@ -1,8 +1,10 @@
 """A directory jumper over the same z history used by Xonsh."""
+import asyncio
+import json
 from pathlib import Path
 import sys
 
-from PySide6.QtCore import QObject, QRunnable, QThreadPool, Qt, Signal, QEvent
+from PySide6.QtCore import QObject, QRunnable, QThreadPool, Qt, Signal, QEvent, QTimer
 from PySide6.QtWidgets import QComboBox, QDialog, QLabel, QLineEdit, QListWidget, QListWidgetItem, QVBoxLayout
 from PySide6.QtGui import QAction, QKeySequence
 
@@ -31,6 +33,7 @@ class DirectoryHistory(QObject):
         self.pool = QThreadPool(self)
         self.pool.setMaxThreadCount(1)
         self.generation = 0
+        self.semantic_search = None
 
     def load(self, recent=True):
         self.generation += 1
@@ -41,9 +44,30 @@ class DirectoryHistory(QObject):
                 entries = self.backend.entries(recent=recent)
                 self.loaded.emit(generation, [entry.path for entry in sorted(entries, key=lambda e: e.frecency, reverse=True)], '')
             except Exception as error:
-                self.loaded.emit(generation, [], str(error))
+                self.loaded.emit(generation, [], str(error) or type(error).__name__)
 
         self.pool.start(Job(query))
+        return generation
+
+    def semantic(self, query):
+        self.generation += 1
+        generation = self.generation
+
+        def search():
+            if generation != self.generation:
+                return
+            try:
+                from wes_semantic_history import InferenceClient
+                from wes_semantic_z import SemanticZ
+                if self.semantic_search is None:
+                    self.semantic_search = SemanticZ(InferenceClient())
+                matches = asyncio.run(self.semantic_search.retrieve(
+                    query, self.backend.entries(recent=False), limit=100))
+                self.loaded.emit(generation, [match.path for match in matches], '')
+            except Exception as error:
+                self.loaded.emit(generation, [], str(error) or type(error).__name__)
+
+        self.pool.start(Job(search))
         return generation
 
     def record(self, path):
@@ -78,14 +102,22 @@ def fuzzy_score(path, query):
 
 
 class DirectoryPicker(QDialog):
-    def __init__(self, history, parent=None):
+    def __init__(self, history, parent=None, *, standalone=False):
         super().__init__(parent)
-        self.setWindowTitle('Jump to Directory')
+        self.base_title = 'Directory Launcher' if standalone else 'Jump to Directory'
+        self.setWindowTitle(self.base_title)
         self.resize(850, 500)
         self.history = history
         self.entries = []
         self.destination = None
         self.new_tab = False
+        self.standalone = standalone
+        self.action = 'use'
+        self.semantic_mode = False
+        self.debounce = QTimer(self)
+        self.debounce.setSingleShot(True)
+        self.debounce.setInterval(350)
+        self.debounce.timeout.connect(self.search_semantic)
         layout = QVBoxLayout(self)
         self.query = QLineEdit()
         self.query.setPlaceholderText('Fuzzy search your shared z directories…')
@@ -95,7 +127,7 @@ class DirectoryPicker(QDialog):
         self.message = QLabel('Return: navigate · ⌘Return: new tab · Escape: cancel')
         for widget in (self.query, self.order, self.results, self.message):
             layout.addWidget(widget)
-        self.query.textChanged.connect(self.filter)
+        self.query.textChanged.connect(self.query_changed)
         self.query.returnPressed.connect(self.choose)
         self.query.installEventFilter(self)
         self.results.itemActivated.connect(lambda *_: self.choose())
@@ -103,12 +135,59 @@ class DirectoryPicker(QDialog):
         history.loaded.connect(self.loaded)
         open_tab = QAction(self)
         open_tab.setShortcut(QKeySequence('Ctrl+Return'))
-        open_tab.triggered.connect(lambda: self.choose(True))
+        open_tab.triggered.connect(lambda: self.choose(True, action='open' if self.standalone else 'use'))
         self.addAction(open_tab)
+        if standalone:
+            copy_path = QAction(self)
+            copy_path.setShortcut(QKeySequence('Alt+Return'))
+            copy_path.triggered.connect(lambda: self.choose(action='copy'))
+            self.addAction(copy_path)
+        toggle = QAction(self)
+        control = 'Meta' if sys.platform == 'darwin' else 'Ctrl'
+        toggle.setShortcut(QKeySequence(f'{control}+R'))
+        toggle.triggered.connect(self.toggle_semantic)
+        self.addAction(toggle)
+        quit_action = QAction(self)
+        quit_action.setShortcut(QKeySequence('F9'))
+        quit_action.triggered.connect(self.reject)
+        self.addAction(quit_action)
+        self.finished.connect(self.stop_search)
         self.reload()
         self.query.setFocus()
 
+    def stop_search(self, *_):
+        self.debounce.stop()
+        self.history.generation += 1
+        self.request = None
+
+    def toggle_semantic(self):
+        self.semantic_mode = not self.semantic_mode
+        self.debounce.stop()
+        self.order.setEnabled(not self.semantic_mode)
+        self.query.setPlaceholderText('Describe the directory…' if self.semantic_mode
+                                      else 'Fuzzy search your shared z directories…')
+        self.setWindowTitle(self.base_title + (' — semantic (zr)' if self.semantic_mode else ''))
+        self.reload()
+
+    def query_changed(self, *_):
+        if self.semantic_mode:
+            self.request = None  # Invalidate an in-flight query immediately.
+            self.results.clear()
+            self.message.setText('Searching semantic z… · Ctrl+R: fuzzy search')
+            self.debounce.start()
+        else:
+            self.filter()
+
+    def search_semantic(self):
+        if not self.query.text().strip():
+            self.message.setText('Describe a directory · Ctrl+R: fuzzy search')
+            return
+        self.request = self.history.semantic(self.query.text())
+
     def reload(self, *_):
+        if self.semantic_mode:
+            self.query_changed()
+            return
         self.message.setText('Loading shared z history…')
         self.entries = []
         self.filter()
@@ -120,12 +199,15 @@ class DirectoryPicker(QDialog):
         self.entries = entries
         self.filter()
         if error:
-            self.message.setText(f'Could not read z history: {error}')
+            source = 'Semantic search unavailable' if self.semantic_mode else 'Could not read z history'
+            self.message.setText(f'{source}: {error} · Ctrl+R: switch search mode')
 
     def filter(self, *_):
         query = self.query.text()
-        matches = [(score, order, path) for order, path in enumerate(self.entries)
-                   if (score := fuzzy_score(path, query)) is not None]
+        matches = ([(0, order, path) for order, path in enumerate(self.entries)]
+                   if self.semantic_mode else
+                   [(score, order, path) for order, path in enumerate(self.entries)
+                    if (score := fuzzy_score(path, query)) is not None])
         matches.sort(key=lambda item: (-item[0], item[1]))
         self.results.clear()
         home = str(Path.home())
@@ -139,7 +221,9 @@ class DirectoryPicker(QDialog):
             self.results.addItem(item)
         if matches:
             self.results.setCurrentRow(0)
-        self.message.setText(f'{len(matches)} directories · Return: navigate · ⌘Return: new tab · Escape: cancel')
+        action = 'use folder · ⌘Return: Pip Rot · ⌥Return: copy path' if self.standalone else 'navigate · ⌘Return: new tab'
+        mode = 'fuzzy' if self.semantic_mode else 'semantic (zr)'
+        self.message.setText(f'{len(matches)} directories · Return: {action} · Ctrl+R: {mode} · Escape: cancel')
 
     def eventFilter(self, watched, event):
         if watched is self.query and event.type() == QEvent.Type.KeyPress:
@@ -149,9 +233,31 @@ class DirectoryPicker(QDialog):
                 return True
         return super().eventFilter(watched, event)
 
-    def choose(self, new_tab=False):
+    def choose(self, new_tab=False, *, action='use'):
         item = self.results.currentItem()
         if item:
             self.destination = Path(item.data(Qt.ItemDataRole.UserRole))
             self.new_tab = new_tab
+            self.action = action
             self.accept()
+
+
+def main():
+    from PySide6.QtWidgets import QApplication
+    app = QApplication(sys.argv[:1])
+    app.setApplicationName('Pip Rot Directory Picker')
+    history = DirectoryHistory()
+    picker = DirectoryPicker(history, standalone=True)
+    picker.show()
+    picker.raise_()
+    picker.activateWindow()
+    accepted = picker.exec()
+    if accepted and picker.destination:
+        history.record(picker.destination)
+        history.pool.waitForDone()
+        print(json.dumps({'path': str(picker.destination), 'action': picker.action}), flush=True)
+    return 0
+
+
+if __name__ == '__main__':
+    sys.exit(main())
