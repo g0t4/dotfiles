@@ -9,6 +9,7 @@ import os
 import shutil
 import subprocess
 import sys
+import rich
 from pathlib import Path
 from typing import Optional
 
@@ -87,10 +88,11 @@ import termios
 import tty
 
 def get_char():
+    sys.stdout.flush()
     fd = sys.stdin.fileno()
     old = termios.tcgetattr(fd)
     try:
-        tty.setraw(fd)
+        tty.setcbreak(fd)
         return sys.stdin.read(1)
     finally:
         termios.tcsetattr(fd, termios.TCSADRAIN, old)
@@ -117,22 +119,32 @@ def _files_cd(args, stdin=None, **_):
                 path = path.parent
             # * if dir doesn't exist, walk parents until find one that does (and if one does then prompt user if that is what they want to cd to instead)=> yes/no
             if not path.exists():
+                if not sys.stdin.isatty:
+                    print("path does not exist... aborting cd b/c STDIN is not a tty, cannot ask to cd elsewhere")
+                    return
+                # TODO if not interactive, skip this
                 # TODO add tests of this feature to use parent dir instead (integration test that types in responses?!)
-                path = _find_first_parent_that_exists(path)
-                if path == None:
+                parent_exists = _find_first_parent_that_exists(path)
+                if parent_exists is None:
                     # warn nothing exists
                     msg = f"_files_cd cannot cd to any of {adjusted[0]} or its parent directories"
                     print(msg)
                     # log.info(msg)
                     return
-                else:
-                    # prompt user (no is default unless `y`/`Y` typed)
-                    print(f"First parent that exist is {path} do you want to cd to that? [y/N]", end="")
-                    confirm = get_char().lower() in ("y")
-                    print()
-                    if not confirm:
-                        print("aborting...")
-                        return
+
+                does_not_exist_part = path.relative_to(parent_exists)
+                # prompt user (no is default unless `y`/`Y` typed)
+                print(f"First parent that exist is (green)")
+                rich.print(f"    [green]{parent_exists}[/]/[red]{does_not_exist_part}[/]")
+                print()
+                print(f"    do you want to cd to that? [y/N]", end="")
+                confirm = get_char().lower() in ("y")
+                print()
+                if not confirm:
+                    print("aborting...")
+                    return
+
+                path = parent_exists
 
             adjusted[0] = str(path)
 
