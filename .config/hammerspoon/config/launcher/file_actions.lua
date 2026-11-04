@@ -169,7 +169,7 @@ local function buildActions(paths)
         subText = summary,
         action = "reveal_pip_rot",
         paths = paths,
-        image = hs.image.imageFromName("NSRevealFreestandingTemplate"),
+        image = hs.image.imageFromPath(os.getenv("HOME") .. "/repos/github/g0t4/dotfiles/tools/pip-rot/assets/pip-rot.png"),
     })
 
     -- Reveal in Finder (useful if triggered from non-Finder app later)

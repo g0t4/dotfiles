@@ -10,7 +10,7 @@ local actions, callback, task_args
 hs = {
     application={frontmostApplication=function() return app end},
     json={read=function() return payload end},
-    image={imageFromName=noop},
+    image={imageFromName=noop, imageFromPath=noop},
     fs={attributes=function(path, key)
         local attrs = {mode='file', size=12, modification=os.time()}
         return key and attrs[key] or attrs
