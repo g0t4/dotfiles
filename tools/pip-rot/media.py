@@ -7,6 +7,8 @@ import subprocess
 from PySide6.QtCore import QModelIndex, QObject, QRunnable, QThreadPool, Qt, Signal
 from PySide6.QtWidgets import QFileSystemModel
 
+from file_icons import FileIcons
+
 VIDEO_SUFFIXES = frozenset('.mp4 .m4v .mov .mkv .avi .webm .mpg .mpeg .mts .m2ts .ts .vob .wmv .flv .ogv .3gp'.split())
 
 
@@ -94,6 +96,7 @@ class MediaModel(QFileSystemModel):
     def __init__(self, cache, parent=None):
         super().__init__(parent)
         self.cache = cache
+        self.icons = FileIcons()
         cache.updated.connect(self.duration_ready)
 
     def setData(self, index, value, role=Qt.ItemDataRole.EditRole):
@@ -129,6 +132,10 @@ class MediaModel(QFileSystemModel):
         return not self.isDir(index) and Path(self.filePath(index)).suffix.lower() in VIDEO_SUFFIXES
 
     def data(self, index, role=Qt.ItemDataRole.DisplayRole):
+        if index.isValid() and index.column() == 0 and role == Qt.ItemDataRole.DecorationRole:
+            icon = self.icons.icon(self.fileName(index), self.isDir(index))
+            if icon is not None:
+                return icon
         if index.column() != 4:
             return super().data(index, role)
         if not self.is_video(index):

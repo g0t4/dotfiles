@@ -401,3 +401,17 @@ Standalone selection for other consumers (JSON with `path` and `action`
 ```sh
 uv run --project tools/pip-rot python tools/pip-rot/directory_picker.py
 ```
+
+## File icons
+
+The tree uses bundled `nvim-web-devicons` filename/extension mappings and colors,
+with light/dark variants selected from Qt's palette. SauceCodePro Nerd Font is
+preferred, followed by another installed Nerd Font. Icons are rendered separately
+from filenames, cached, and drawn at Retina resolution. Directories get a folder
+glyph; unknown extensions get a generic file glyph. Without a suitable font or
+when a glyph is unavailable, Qt's native icon remains the fallback. Neovim is
+not needed at runtime. Upstream attribution and license are in `assets/devicons`.
+
+```sh
+QT_QPA_PLATFORM=offscreen uv run --project tools/pip-rot python tools/pip-rot/file_icons_test.py
+```
