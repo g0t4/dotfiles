@@ -1345,7 +1345,7 @@ local bookmarks = {
         keywords = {"pip", "pip-rot", "pip rot"},
         text = "Open Pip Rot",
         subText = "Browse files starting at Home",
-        image = hs.image.imageFromName("NSFolder"),
+        image = hs.image.imageFromPath(os.getenv("HOME") .. "/repos/github/g0t4/dotfiles/tools/pip-rot/assets/pip-rot.png"),
     },
     {
         name = "trash",

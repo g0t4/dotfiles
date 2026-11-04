@@ -21,7 +21,7 @@ end})
 local shortcuts = {}
 hs = {
     shutdownCallback=function() previousShutdownCalled=previousShutdownCalled+1 end,
-    image={imageFromName=noop},
+    image={imageFromName=noop, imageFromPath=noop},
     osascript={applescript=function(script) launched="finder"; return true, nil end},
     chooser={new=function(fn) callback=fn; return chooser end},
     hotkey={bind=noop,new=function(mods,key,fn)
