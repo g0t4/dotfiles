@@ -169,9 +169,47 @@ class TransferJob(QRunnable):
         self.owner.finished.emit(completed, errors)
 
 
+class GatherJob(QRunnable):
+    """Create a sibling folder, then use the same exclusive move primitives."""
+    def __init__(self, owner, paths):
+        super().__init__()
+        self.owner, self.paths = owner, paths
+
+    def run(self):
+        completed, errors, folder = [], [], None
+        try:
+            parents = {path.parent for path in self.paths}
+            if len(parents) != 1:
+                raise ValueError('Select items with the same parent directory.')
+            parent = parents.pop()
+            number = 1
+            while True:
+                candidate = parent / ('New Folder' if number == 1 else f'New Folder~{number}')
+                try:
+                    candidate.mkdir()
+                    folder = candidate
+                    break
+                except FileExistsError:
+                    number += 1
+            plan = plan_transfer(self.paths, folder, False)
+            for source, target, copy in plan:
+                transfer_one(source, target, copy)
+                completed.append((source, target, copy))
+        except Exception as error:
+            errors.append(str(error))
+            # Never remove a folder containing successfully moved items.
+            if folder is not None and not completed:
+                try:
+                    folder.rmdir()
+                except OSError:
+                    pass
+        self.owner.gathered.emit(folder, completed, errors)
+
+
 class Transfers(QObject):
     finished = Signal(object, object)
     duplicated = Signal(object, object)
+    gathered = Signal(object, object, object)
 
     def __init__(self, parent=None):
         super().__init__(parent)
@@ -180,6 +218,7 @@ class Transfers(QObject):
         self.pending = 0
         self.finished.connect(self.done)
         self.duplicated.connect(self.done)
+        self.gathered.connect(self.done)
 
     @property
     def busy(self):
@@ -192,6 +231,10 @@ class Transfers(QObject):
     def duplicate(self, source):
         self.pending += 1
         self.pool.start(DuplicateJob(self, Path(source)))
+
+    def gather(self, paths):
+        self.pending += 1
+        self.pool.start(GatherJob(self, paths))
 
     def done(self, *_):
         self.pending -= 1

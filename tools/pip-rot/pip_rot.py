@@ -282,6 +282,8 @@ class Browser(QMainWindow):
         self.transfers = Transfers(self)
         self.transfers.finished.connect(self.transfer_finished)
         self.transfers.duplicated.connect(self.duplicate_finished)
+        self.transfers.gathered.connect(self.gather_finished)
+        self.gather_tab = None
         self.preview = PreviewController(self)
         self.preview.error.connect(lambda message: QMessageBox.warning(self, "Pip Rot Preview", message))
         self.tabs = QTabWidget()
@@ -313,6 +315,8 @@ class Browser(QMainWindow):
         self.action(file_menu, "Copy Path", "Ctrl+Shift+C", self.copy_paths)
         self.action(file_menu, "Copy File Contents", "Ctrl+Alt+Shift+C", self.copy_contents)
         self.action(file_menu, "New Nested Directory…", "Ctrl+Shift+N", self.new_directory)
+        self.gather_action = self.action(file_menu, "New Folder with Selection", ("Meta+Ctrl+N" if sys.platform == "darwin" else "Ctrl+Alt+N"), self.gather_selected)
+        self.gather_action.setShortcutContext(Qt.ShortcutContext.WidgetShortcut)
         self.duplicate_action = self.action(file_menu, "Duplicate", "Ctrl+D", self.duplicate_selected)
         self.duplicate_action.setShortcutContext(Qt.ShortcutContext.WidgetShortcut)
         self.rename_action = self.action(file_menu, "Rename…", "Ctrl+R", self.rename_selected)
@@ -369,6 +373,7 @@ class Browser(QMainWindow):
         self.tabs.setTabToolTip(self.tabs.currentIndex(), str(root))
         tab.tree.files_dropped.connect(self.transfer_files)
         tab.tree.drop_hint.connect(lambda text: self.statusBar().showMessage(text, 4000))
+        tab.tree.addAction(self.gather_action)
         tab.tree.addAction(self.duplicate_action)
         tab.tree.addAction(self.rename_action)
         tab.tree.addAction(self.trash_action)
@@ -410,11 +415,45 @@ class Browser(QMainWindow):
         menu.addAction("Copy Path", self.copy_paths)
         menu.addAction("Copy File Contents", self.copy_contents)
         menu.addAction("New Nested Directory…", self.new_directory)
+        menu.addAction(self.gather_action)
         menu.addAction(self.duplicate_action)
         menu.addAction(self.rename_action)
         menu.addAction(self.trash_action)
         menu.addAction(self.preview_action)
         menu.exec(tab.tree.viewport().mapToGlobal(point))
+
+    def gather_selected(self):
+        tab = self.current()
+        paths = [Path(tab.model.filePath(row)) for row in tab.tree.selectionModel().selectedRows(0)]
+        if not paths or len({path.parent for path in paths}) != 1:
+            self.statusBar().showMessage("Select items with the same parent directory", 5000, warning=True)
+            return
+        if self.transfers.busy:
+            self.statusBar().showMessage("Let the current transfer finish first", 4000, warning=True)
+            return
+        self.gather_tab = tab
+        self.transfers.gather(paths)
+        self.statusBar().showMessage(f"Moving {len(paths)} item(s) into a new folder…")
+
+    def gather_finished(self, folder, completed, errors):
+        tab, self.gather_tab = self.gather_tab, None
+        self.transfer_finished(completed, errors)
+        if errors or tab is None or self.tabs.indexOf(tab) < 0:
+            return
+        # Wait for the replacement model's asynchronous directory loading.
+        def edit_when_ready(attempt=0):
+            if self.tabs.indexOf(tab) < 0 or self.current() is not tab or not tab.tree.hasFocus():
+                return
+            if tab.refresh_state is not None:
+                if attempt < 100:
+                    QTimer.singleShot(50, lambda: edit_when_ready(attempt + 1))
+                return
+            index = tab.model.index(str(folder))
+            if index.isValid():
+                self.renamed_item(tab, folder)
+                tab.tree.scrollTo(index)
+                tab.tree.edit(index)
+        QTimer.singleShot(0, edit_when_ready)
 
     def duplicate_selected(self):
         tab = self.current()

@@ -98,6 +98,7 @@ Native Pip Rot actions are also available in File and the tree's context menu:
 | ⌘OptionT | Open Terminal Here (iTerm; selected directory or file's parent) |
 | ⌘ShiftC | Copy Path (raw paths, one per line) |
 | ⌘OptionShiftC | Copy File Contents (text files) |
+| ⌃⌘N | New Folder with Selection, then inline rename (items must share a parent) |
 | ⌘ShiftN | New Nested Directory inside the selected directory, or file's parent |
 | ⌘Backspace | Move explicitly selected files/directories to Trash |
 
@@ -468,3 +469,9 @@ Explicit **Restart App** also snapshots expanded folders for each tab. Nested
 expansions are restored as directories load, before selection and scroll are
 restored; directories that no longer exist are skipped. This state exists only
 in the restart handoff: ordinary launches do not resume prior expansions.
+
+New Folder with Selection creates `New Folder` (or the next free `New Folder~2`,
+`New Folder~3`, …), moves the selected items without overwriting, and starts
+inline rename. Escape keeps the created folder and its contents. Moves run in
+the background; if an error interrupts a move, completed items remain in the
+new folder and the error reports the partial result.
