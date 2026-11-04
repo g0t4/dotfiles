@@ -7,7 +7,7 @@ from dataclasses import dataclass
 from pathlib import Path
 import sys
 
-from PySide6.QtCore import QDir, QItemSelectionModel, QProcess, Qt, QUrl, QTimer
+from PySide6.QtCore import QDir, QItemSelectionModel, QProcess, Qt, QUrl, QTimer, Signal
 from PySide6.QtGui import QAction, QDesktopServices, QIcon, QKeySequence
 from PySide6.QtWidgets import (
     QApplication, QAbstractItemView, QFileSystemModel, QHeaderView, QInputDialog, QLineEdit, QMainWindow,
@@ -23,6 +23,7 @@ from restart import RestartController, restore
 from file_tree import FileTree
 from transfers import CrossVolumeMove, Transfers, name_parts
 from status_line import StatusLine
+from diagnostics import log_refresh
 
 
 def finder_trash_executable():
@@ -40,8 +41,11 @@ class Location:
 
 
 class FileTab(QWidget):
+    model_replaced = Signal()
+
     def __init__(self, root: Path, cache: DurationCache, reveal: Path | None = None):
         super().__init__()
+        self.refresh_state = None
         self.root = root
         self.history = [Location(root, reveal)]
         self.history_index = 0
@@ -83,6 +87,75 @@ class FileTab(QWidget):
         self.tree.doubleClicked.connect(self.open_file)
         QTimer.singleShot(0, lambda: self.loaded(str(root)))
 
+    def refresh(self):
+        if self.refresh_state is not None:
+            return
+        expanded = []
+
+        def collect(parent):
+            for row in range(self.model.rowCount(parent)):
+                index = self.model.index(row, 0, parent)
+                if self.tree.isExpanded(index):
+                    expanded.append(self.model.filePath(index))
+                    collect(index)
+
+        collect(self.tree.rootIndex())
+        log_refresh('refresh-start', self.root, {
+            path: self.model.rowCount(self.model.index(path))
+            for path in [str(self.root), *expanded]
+        })
+        self.refresh_state = {
+            'expanded': expanded,
+            'selected': [self.model.filePath(i) for i in self.tree.selectionModel().selectedRows(0)],
+            'current': self.model.filePath(self.tree.currentIndex()),
+            'scroll': self.tree.verticalScrollBar().value(),
+            'horizontal': self.tree.horizontalScrollBar().value(),
+            'waiting': {str(self.root), *(p for p in expanded if Path(p).is_dir())},
+        }
+        refresh_state = self.refresh_state
+        QTimer.singleShot(5000, lambda: log_refresh(
+            'refresh-still-waiting', self.root, sorted(refresh_state['waiting'])
+        ) if self.refresh_state is refresh_state else None)
+        old = self.model
+        self.model = MediaModel(old.cache, self)
+        self.model.setReadOnly(False)
+        self.model.setOptions(old.options())
+        self.model.setFilter(old.filter())
+        self.model.rowsInserted.connect(self.update_duration_column)
+        self.model.rowsRemoved.connect(self.update_duration_column)
+        self.model.dataChanged.connect(self.update_duration_column)
+        self.model.directoryLoaded.connect(lambda directory: self.loaded(directory, complete=True))
+        self.tree.setModel(self.model)
+        self.tree.setRootIndex(self.model.setRootPath(str(self.root)))
+        self.tree.sortByColumn(*self.last_sort)
+        self.model_replaced.emit()
+        old.deleteLater()
+        for path in expanded:
+            if Path(path).is_dir():
+                self.tree.expand(self.model.index(path))
+
+    def finish_refresh(self):
+        state = self.refresh_state
+        if state is None or state['waiting']:
+            return
+        self.refresh_state = None
+        log_refresh('refresh-finished', self.root, {
+            path: self.model.rowCount(self.model.index(path))
+            for path in [str(self.root), *state['expanded']]
+        })
+        selection = self.tree.selectionModel()
+        current = self.model.index(state['current'])
+        selection.setCurrentIndex(current, QItemSelectionModel.SelectionFlag.NoUpdate)
+        selection.clearSelection()
+        for path in state['selected']:
+            index = self.model.index(path)
+            if index.isValid():
+                selection.select(index, QItemSelectionModel.SelectionFlag.Select | QItemSelectionModel.SelectionFlag.Rows)
+        self.tree.doItemsLayout()
+        self.tree.verticalScrollBar().setValue(state['scroll'])
+        self.tree.horizontalScrollBar().setValue(state['horizontal'])
+        self.update_duration_column()
+
     def sort_changed(self, column, order):
         # QFileSystemModel sorts its four built-in columns only.
         if column == 4:
@@ -111,6 +184,11 @@ class FileTab(QWidget):
                 self.restore_scroll = None
 
     def loaded(self, directory, complete=False):
+        if self.refresh_state is not None:
+            if complete:
+                self.refresh_state['waiting'].discard(directory)
+                QTimer.singleShot(0, self.finish_refresh)
+            return
         self.update_duration_column()
         if self.restore_scroll is not None and Path(directory) == self.root:
             QTimer.singleShot(0, lambda: self.restore_view_scroll(complete))
@@ -149,6 +227,7 @@ class FileTab(QWidget):
         self.show_location()
 
     def show_location(self):
+        self.refresh_state = None
         entry = self.history[self.history_index]
         self.root = entry.root
         self.pending_reveal = entry.selected
@@ -208,6 +287,7 @@ class Browser(QMainWindow):
         toolbar.addWidget(self.location)
         file_menu = self.menuBar().addMenu("File")
         view_menu = self.menuBar().addMenu("View")
+        self.action(view_menu, "Refresh", "F5", self.refresh_current)
         self.preview_action = self.action(view_menu, "Quick Look", "Space", self.preview_selected)
         self.preview_action.setShortcutContext(Qt.ShortcutContext.WidgetShortcut)
         self.action(file_menu, "Open Terminal Here", "Ctrl+Alt+T", self.open_terminal)
@@ -276,6 +356,12 @@ class Browser(QMainWindow):
         tab.tree.setContextMenuPolicy(Qt.ContextMenuPolicy.CustomContextMenu)
         tab.tree.customContextMenuRequested.connect(lambda point: self.context_menu(tab, point))
         self.apply_hidden(tab)
+        tab.model_replaced.connect(lambda: self.connect_tab_model(tab))
+        self.connect_tab_model(tab)
+        tab.tree.setFocus()
+        self.publish_selection()
+
+    def connect_tab_model(self, tab):
         tab.tree.selectionModel().selectionChanged.connect(self.publish_selection)
         tab.model.fileRenamed.connect(
             lambda directory, _old, new: QTimer.singleShot(0, lambda: self.renamed_item(tab, Path(directory) / new))
@@ -283,6 +369,13 @@ class Browser(QMainWindow):
         tab.model.rename_failed.connect(lambda message: self.statusBar().showMessage(message, 7000, warning=True))
         tab.tree.setFocus()
         self.publish_selection()
+
+    def refresh_current(self):
+        tab = self.current()
+        if not tab.root.is_dir():
+            self.statusBar().showMessage('Directory is no longer available.', 5000, warning=True)
+            return
+        tab.refresh()
 
     def context_menu(self, tab, point):
         index = tab.tree.indexAt(point)

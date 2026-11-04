@@ -435,3 +435,25 @@ Pip Rot's existing request timer and checks the destination PID.
 lua tools/pip-rot/compare_files_test.lua
 QT_QPA_PLATFORM=offscreen uv run --project tools/pip-rot python tools/pip-rot/comparison_status_test.py
 ```
+
+## Refresh and filesystem diagnostics
+
+Qt normally watches the filesystem automatically. **F5** or **View → Refresh**
+rebuilds the current tab's filesystem model to force a fresh read, preserving
+surviving expanded folders, selected rows, current item, scroll position, filters,
+sort order, and navigation history. Cmd+R remains Rename.
+
+Refresh diagnostics append to `~/.local/share/devtools/pip-rot.log`, rotating at
+2 MB with two backups. Start/completion entries include the PID, root, and loaded
+row counts for the root and expanded directories. A refresh still waiting after
+five seconds logs the outstanding directories. If a view looks stale, press F5
+and inspect these entries; they diagnose manual refreshes, not every OS watcher
+event, and cannot reconstruct earlier missed events.
+
+```sh
+QT_QPA_PLATFORM=offscreen uv run --project tools/pip-rot python tools/pip-rot/refresh_test.py
+```
+
+The test disables watching, changes real files, triggers F5, then checks fresh
+contents, nested expansions, multiple selection, scroll, history, repeated
+refreshes, and diagnostic output.
