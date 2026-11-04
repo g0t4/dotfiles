@@ -191,9 +191,10 @@ local function buildActions(paths)
     })
 
     -- Diff (only for exactly 2 files)
-    if #paths == 2 then
+    if #paths == 2 and hs.fs.attributes(paths[1], "mode") == "file"
+        and hs.fs.attributes(paths[2], "mode") == "file" then
         table.insert(actions, {
-            text = "Diff",
+            text = "Compare File Contents",
             subText = getFilename(paths[1]) .. " vs " .. getFilename(paths[2]),
             action = "diff",
             paths = paths,
@@ -345,19 +346,7 @@ local function onChoice(choice)
         M.showOpenWith(paths)
 
     elseif choice.action == "diff" then
-        local output, status = hs.execute('diff ' .. shellQuote(paths[1]) .. ' ' .. shellQuote(paths[2]))
-        if status then
-            hs.alert.show("Files are identical")
-        else
-            -- diff returns exit code 1 when files differ
-            local result = output and output:gsub("%s+$", "") or ""
-            if result ~= "" then
-                hs.pasteboard.setContents(result)
-                hs.alert.show("Files differ - diff copied to clipboard")
-            else
-                hs.alert.show("Files differ")
-            end
-        end
+        require("config.launcher.compare_files").compare(paths, choice.file_context)
 
     elseif choice.action == "trash" then
         local args = {"-F"}
@@ -482,6 +471,7 @@ function M.show()
     end
     for _, action in ipairs(actions) do
         action.context_source = context and context.source
+        action.file_context = context
     end
     for _, action in ipairs(require("config.launcher.app_actions").choices(context)) do
         table.insert(actions, 1, action)

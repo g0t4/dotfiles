@@ -415,3 +415,22 @@ not needed at runtime. Upstream attribution and license are in `assets/devicons`
 ```sh
 QT_QPA_PLATFORM=offscreen uv run --project tools/pip-rot python tools/pip-rot/file_icons_test.py
 ```
+
+## Compare file contents
+
+Select exactly two regular files and choose **Compare File Contents** from the
+Hammerspoon file-actions picker (Option+Command+/). `/usr/bin/cmp -s` compares
+bytes in the background, including binary files, without opening a diff viewer
+or changing the clipboard. Results distinguish identical files, different files,
+and comparison errors. Pip Rot receives a status-line message for 15 seconds;
+differences/errors use the amber warning style. Finder and older Pip Rot
+processes get a Hammerspoon alert instead. Restart Pip Rot to enable status delivery.
+
+The comparison ignores names and metadata. It reads live files, so avoid modifying
+them while comparing. The versioned `status-<pid>.json` transport is consumed by
+Pip Rot's existing request timer and checks the destination PID.
+
+```sh
+lua tools/pip-rot/compare_files_test.lua
+QT_QPA_PLATFORM=offscreen uv run --project tools/pip-rot python tools/pip-rot/comparison_status_test.py
+```

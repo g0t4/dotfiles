@@ -461,7 +461,7 @@ class Browser(QMainWindow):
                 publish_context(
                     self.current().root, self.selected_paths(), self.windowTitle(),
                     selection_explicit=bool(self.current().tree.selectionModel().selectedRows(0)),
-                    capabilities=["restart"] if self.restart_controller else [],
+                    capabilities=["restart", "status"] if self.restart_controller else [],
                 )
             except OSError as error:
                 self.statusBar().showMessage(f"Could not update action picker context: {error}", 7000, warning=True)

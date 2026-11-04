@@ -55,6 +55,7 @@ class RestartController(QObject):
         self.timer.start()
 
     def poll(self):
+        self.poll_status()
         if self.child:
             ready_file = context_path().with_name(f'context-{self.child.pid}.json')
             try:
@@ -82,6 +83,21 @@ class RestartController(QObject):
         filename.unlink(missing_ok=True)
         if request.get('version') == 1 and request.get('pid') == os.getpid() and request.get('command') == 'restart':
             self.restart()
+
+    def poll_status(self):
+        filename = context_path().with_name(f'status-{os.getpid()}.json')
+        try:
+            payload = json.loads(filename.read_text())
+        except FileNotFoundError:
+            return
+        except (OSError, ValueError):
+            payload = {}
+        filename.unlink(missing_ok=True)
+        if (payload.get('version') == 1 and payload.get('pid') == os.getpid()
+                and isinstance(payload.get('message'), str)):
+            self.window.statusBar().showMessage(
+                payload['message'], 15000, warning=payload.get('warning') is True,
+            )
 
     def restart(self):
         if self.window.transfers.busy:

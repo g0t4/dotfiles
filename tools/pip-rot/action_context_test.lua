@@ -62,8 +62,4 @@ hs.fs.attributes=function(path) return path=='/tmp' and {mode='directory'} or ni
 hs.fs.mkdir=function(path) table.insert(created,path); return true end
 callback({action='new_nested_folder',context_source='pip-rot',paths={'/tmp'}})
 assert(created[1]=='/tmp/new' and created[2]=="/tmp/new/child $ ' name")
-local command
-hs.execute=function(value) command=value; return '',true end
-callback({action='diff',paths={"/tmp/a'b",'/tmp/$(nope)'}})
-assert(command == "diff '/tmp/a'\\''b' '/tmp/$(nope)'")
-print('PASS: picker creates nested directories from captured parent; shell filenames are quoted literally')
+print('PASS: picker creates nested directories from captured parent')
