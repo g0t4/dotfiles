@@ -69,6 +69,7 @@ require("lazy").setup({
         require("plugins.learning"),
         require("plugins.lualine.lualine"),
         require("plugins.misc"),
+        require("plugins.nvim-mini"),
         require("plugins.vcs"),
         require("plugins.terminals"),
         require("plugins.pickers"),
