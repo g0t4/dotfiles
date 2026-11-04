@@ -226,7 +226,7 @@ launcher. Artwork provenance and the generation prompt are in `assets/README.md`
 
 ## Rename
 
-Select one file or directory and press **Command+R** (File → Rename, or the
+Select one file or directory and press **Return/Enter** or **Command+R** (File → Rename, or the
 context menu). Qt opens an inline editor in the Name column. Return commits;
 Escape cancels. Typing to jump and double-click behavior remain unchanged;
 editing begins only through the Rename action. Existing destination names are

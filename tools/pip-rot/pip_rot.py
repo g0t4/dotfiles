@@ -297,6 +297,7 @@ class Browser(QMainWindow):
         self.duplicate_action = self.action(file_menu, "Duplicate", "Ctrl+D", self.duplicate_selected)
         self.duplicate_action.setShortcutContext(Qt.ShortcutContext.WidgetShortcut)
         self.rename_action = self.action(file_menu, "Rename…", "Ctrl+R", self.rename_selected)
+        self.rename_action.setShortcuts([QKeySequence("Ctrl+R"), QKeySequence("Return"), QKeySequence("Enter")])
         self.rename_action.setShortcutContext(Qt.ShortcutContext.WidgetShortcut)
         self.trash_action = self.action(file_menu, "Move to Trash", "Ctrl+Backspace", self.trash_selected)
         self.trash_action.setShortcutContext(Qt.ShortcutContext.WidgetShortcut)
