@@ -8,6 +8,7 @@ function PPTX_ChangePictureFromClipboard()
 end
 
 function PPTX_ChangePictureFromClipboardContextMenu()
+    -- Fallback to the ribbon macro above; keep both entry points until we choose a preferred approach.
     -- Point at the picture first; this entry point does not depend on the custom ribbon tab.
     local app = hs.application.get("com.microsoft.Powerpoint")
     assert(app and app:isFrontmost(), "PowerPoint must be frontmost")
