@@ -29,7 +29,7 @@ function M.compare(paths, context)
                 local temporary = filename .. ".tmp"
                 local file = io.open(temporary, "w")
                 if file then
-                    file:write(hs.json.encode({version=1, pid=context.pid, message=message, warning=warning}))
+                    file:write(hs.json.encode({version=1, pid=context.pid, message=message, warning=warning, success=code == 0}))
                     file:close()
                     if os.rename(temporary, filename) then return end
                     os.remove(temporary)

@@ -19,9 +19,12 @@ with tempfile.TemporaryDirectory() as directory:
         filename = root / f'status-{os.getpid()}.json'
         for message, warning in [('Files are identical', False), ('Files differ', True),
                                  ('Could not compare files', True)]:
-            filename.write_text(json.dumps(dict(version=1, pid=os.getpid(), message=message, warning=warning)))
+            filename.write_text(json.dumps(dict(version=1, pid=os.getpid(), message=message, warning=warning, success=not warning)))
             controller.poll_status()
             assert window.statusBar().currentMessage().endswith(message)
+            status = window.statusBar()
+            assert status.property('success') is (not warning)
+            assert status.styleSheet() == (status.WARNING_STYLE if warning else status.SUCCESS_STYLE)
             assert not filename.exists()
         filename.write_text(json.dumps(dict(version=1, pid=-1, message='wrong process')))
         controller.poll_status()

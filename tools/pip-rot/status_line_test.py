@@ -44,6 +44,20 @@ with tempfile.TemporaryDirectory() as directory:
         pump(40)
         assert not status.currentMessage() and status.property('warning') is False
         assert status.styleSheet() == status.NORMAL_STYLE
+        status.showMessage('Files are identical', success=True)
+        assert status.property('success') is True
+        assert status.styleSheet() == status.SUCCESS_STYLE
+        assert status.currentMessage() == '✓ Files are identical'
+        assert app.focusWidget() is focus
+        status.showMessage('Working…')
+        assert status.property('success') is False
+        assert status.styleSheet() == status.NORMAL_STYLE
+        status.showMessage('Success expires', 1, success=True)
+        pump(40)
+        assert status.property('success') is False and status.styleSheet() == status.NORMAL_STYLE
+        status.showMessage('Success clears', success=True)
+        status.clearMessage()
+        assert status.property('success') is False and status.styleSheet() == status.NORMAL_STYLE
         status.showMessage('Another warning', warning=True)
         status.clearMessage()
         assert status.property('warning') is False

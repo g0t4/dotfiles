@@ -97,6 +97,7 @@ class RestartController(QObject):
                 and isinstance(payload.get('message'), str)):
             self.window.statusBar().showMessage(
                 payload['message'], 15000, warning=payload.get('warning') is True,
+                success=payload.get('success') is True,
             )
 
     def restart(self):

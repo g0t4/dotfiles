@@ -423,7 +423,8 @@ Hammerspoon file-actions picker (Option+Command+/). `/usr/bin/cmp -s` compares
 bytes in the background, including binary files, without opening a diff viewer
 or changing the clipboard. Results distinguish identical files, different files,
 and comparison errors. Pip Rot receives a status-line message for 15 seconds;
-differences/errors use the amber warning style. Finder and older Pip Rot
+identical files use a prominent green band and checkmark; differences/errors use
+the amber warning style. Finder and older Pip Rot
 processes get a Hammerspoon alert instead. Restart Pip Rot to enable status delivery.
 
 The comparison ignores names and metadata. It reads live files, so avoid modifying
