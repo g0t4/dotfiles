@@ -4,6 +4,38 @@ local log = require("config.logs").hammerspoons()
 local ensure_in_coroutine = require("devtools.co.ensure_in_coroutine")
 
 local M = {}
+local openTasks = {}
+
+---Open a filesystem path with its default handler, without shell parsing.
+---@param path string Use literal spaces; ~/ expands to the current user's Home.
+---@return boolean started
+function StreamDeckOpen(path)
+    if type(path) ~= "string" or path == "" then
+        hs.alert.show("StreamDeckOpen needs a file or folder path")
+        return false
+    end
+    if path == "~" then
+        path = os.getenv("HOME")
+    elseif path:sub(1, 2) == "~/" then
+        path = os.getenv("HOME") .. path:sub(2)
+    end
+    local task
+    task = hs.task.new("/usr/bin/open", function(code, _, stderr)
+        openTasks[task] = nil
+        if code ~= 0 then
+            log:error("StreamDeckOpen failed:", path, stderr)
+            hs.alert.show("Could not open path; see Hammerspoon log")
+        end
+    end, {"--", path})
+    if task then
+        openTasks[task] = true
+        if task:start() then return true end
+        openTasks[task] = nil
+    end
+    log:error("StreamDeckOpen could not start:", path)
+    hs.alert.show("Could not start open")
+    return false
+end
 
 ---@param path? string Directory to open, or file to select; defaults to Home.
 function StreamDeckPipRot(path)
