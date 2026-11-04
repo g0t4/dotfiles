@@ -2,6 +2,10 @@ function PPTX_EnsureTabOpen(tabName)
     MicrosoftOfficeEnsureTabSelected("Microsoft PowerPoint", tabName)
 end
 
+function PPTX_ChangePictureFromClipboard()
+    MicrosoftOfficeClickTabButtonByTitle("Microsoft PowerPoint", "Wes", "From Clipboard")
+end
+
 ---@return hs.axuielement
 function GetPowerPointAppElement()
     return GetAppElement("PowerPoint")
