@@ -27,6 +27,7 @@ Each invocation opens a separate window. Tabs and layouts are currently in memor
 | ⌘↓ / ⌘O | Enter directory in current tab, or open file with its default app |
 | ⌘W / F8 | Close tab (last tab closes the window) |
 | F9 | Close current window |
+| ⌘` / ⌘Shift` | Next / previous Pip Rot window across processes (Hammerspoon) |
 | ⌘L | Enter a directory path (Return to navigate in current tab) |
 | ⌘↑ / Option↑ | Parent directory |
 | ⌘[ / ⌘] | Back / forward in this tab’s directory history |

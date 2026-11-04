@@ -99,6 +99,7 @@ require("config.macros.init")
 require("config.launcher").init()
 require("config.launcher.file_actions").init()
 require("config.launcher.directory_picker").init()
+require("config.launcher.pip_rot_windows").init()
 
 
 
