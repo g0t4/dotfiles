@@ -1,5 +1,14 @@
 -- FYI these are mission critical things to have during a failure
 
+-- Plugins still use this API; don't interrupt editing with its deprecation warning.
+local original_deprecate = vim.deprecate
+vim.deprecate = function(name, ...)
+    if name == "vim.tbl_flatten" then
+        return
+    end
+    return original_deprecate(name, ...)
+end
+
 -- timeoutlen = 1000 by default, always felt SLUGGISH... why did I not try to change this before!
 --   this affects overlapping keymaps:
 --   i.e. <S-k> and <S-k><S-k>
