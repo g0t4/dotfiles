@@ -198,3 +198,9 @@ is returned as an AppleScript list so newlines in filenames remain intact.
 Pip Rot advertises `capabilities: ["restart"]`; its handler writes a versioned
 JSON restart request to the target PID. Only registered, advertised handlers are
 offered. No generic kill/relaunch fallback is used.
+
+PowerPoint captures an app-only context (bundle ID `com.microsoft.Powerpoint`).
+Its Restart App handler requests a graceful quit, waits for the captured PID to
+exit, then relaunches by bundle ID. Save/cancel prompts remain interactive; after
+60 seconds without exit the restart stops. No document or slide restoration is
+implemented; reopen the presentation manually if PowerPoint does not restore it.

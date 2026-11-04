@@ -5,6 +5,10 @@ local log = require("config.logs").hammerspoons()
 function M.capture()
     local app = hs.application.frontmostApplication()
     if not app then return nil end
+    if app:bundleID() == "com.microsoft.Powerpoint" then
+        return {kind = "app", source = "powerpoint", pid = app:pid(), paths = {},
+            capabilities = {"restart"}}
+    end
     if app:bundleID() == "com.apple.finder" then
         local ok, paths = hs.osascript.applescript([[
             tell application "Finder"

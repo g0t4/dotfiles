@@ -63,3 +63,9 @@ hs.fs.mkdir=function(path) table.insert(created,path); return true end
 callback({action='new_nested_folder',context_source='pip-rot',paths={'/tmp'}})
 assert(created[1]=='/tmp/new' and created[2]=="/tmp/new/child $ ' name")
 print('PASS: picker creates nested directories from captured parent')
+
+app.bundleID=function() return 'com.microsoft.Powerpoint' end
+local powerpoint=provider.capture()
+assert(powerpoint.kind=='app' and powerpoint.source=='powerpoint' and powerpoint.pid==123)
+assert(#powerpoint.paths==0 and powerpoint.capabilities[1]=='restart')
+print('PASS: PowerPoint app-only restart context')
