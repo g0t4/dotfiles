@@ -2,4 +2,6 @@
 # Resolve the checkout even when invoked through a symlink.
 SCRIPT_PATH=$(python3 -c 'import os,sys; print(os.path.realpath(sys.argv[1]))' "$0")
 PROJECT_DIR=$(dirname "$SCRIPT_PATH")
+APP_EXEC="$HOME/Applications/Pip Rot.app/Contents/MacOS/Pip Rot"
+if [ -x "$APP_EXEC" ]; then exec "$APP_EXEC" "$@"; fi
 exec uv run --project "$PROJECT_DIR" -- python "$PROJECT_DIR/pip_rot.py" "$@"

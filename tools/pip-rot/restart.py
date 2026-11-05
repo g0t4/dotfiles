@@ -3,13 +3,13 @@ import json
 import os
 from pathlib import Path
 import subprocess
-import sys
 import tempfile
 import time
 
 from PySide6.QtCore import QObject, QTimer
 
 from action_context import context_path
+from macos_app import launch_command
 
 
 def request_path():
@@ -58,6 +58,10 @@ class RestartController(QObject):
         self.timer.start()
 
     def poll(self):
+        from PySide6.QtWidgets import QApplication
+        active = getattr(QApplication.instance(), "last_browser", None) or QApplication.activeWindow()
+        if not self.child and active not in (None, self.window):
+            return
         self.poll_status()
         if self.child:
             ready_file = context_path().with_name(f'context-{self.child.pid}.json')
@@ -136,7 +140,7 @@ class RestartController(QObject):
                 json.dump(snapshot(self.window), stream)
             with self.log_path.open('w') as log:
                 self.child = subprocess.Popen(
-                    [sys.executable, str(Path(__file__).with_name('pip_rot.py')), '--restore-session', filename],
+                    launch_command(['--restore-session', filename]),
                     stdin=subprocess.DEVNULL, stdout=log, stderr=subprocess.STDOUT, start_new_session=True,
                 )
             self.started = time.monotonic()

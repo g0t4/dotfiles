@@ -5,6 +5,9 @@ local log = require("config.logs").hammerspoons()
 local function launch(paths, reveal)
     local project = os.getenv("HOME") .. "/repos/github/g0t4/dotfiles/tools/pip-rot"
     local args = { "run", "--project", project, "--", "python", project .. "/pip_rot.py" }
+    local executable = "/opt/homebrew/bin/uv"
+    local bundle = os.getenv("HOME") .. "/Applications/Pip Rot.app/Contents/MacOS/Pip Rot"
+    if hs.fs.attributes(bundle) then executable = bundle; args = {} end
     if reveal then table.insert(args, "--reveal") end
     table.insert(args, "--")
     for _, path in ipairs(paths) do
@@ -13,7 +16,7 @@ local function launch(paths, reveal)
     -- hs.task bypasses shell expansion, including for unusual filenames.
     log:info("Launching Pip Rot:", args)
     local task
-    task = hs.task.new("/opt/homebrew/bin/uv", function(code, _, stderr)
+    task = hs.task.new(executable, function(code, _, stderr)
         tasks[task] = nil
         if code ~= 0 then
             log:error("Pip Rot exited:", code, stderr or "")

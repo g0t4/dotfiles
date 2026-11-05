@@ -573,3 +573,23 @@ path pickers; arbitrary non-path results would need a separate result handler.
 
 Picker command startup, completion counts, and errors are recorded in
 `~/.local/share/devtools/pip-rot.log`; failed commands also show an error in the picker.
+
+### macOS development app
+
+Run `./tools/pip-rot/install-macos.sh` to install `~/Applications/Pip Rot.app`.
+The app has its own Dock/app-switcher identity and logo. Its py2app alias bundle
+loads this checkout and virtualenv directly: edit and restart as usual. Reinstall
+if you move the checkout or replace the Python environment. This is a local
+development installation, not a portable app distribution.
+
+The launcher and `pip-rot` command prefer the installed bundle executable;
+without it they retain source execution. Explicit macOS folder opens work with
+`open -a 'Pip Rot' ~/Downloads`. Folder-open events create new windows in the
+existing process; direct command/launcher invocations retain separate processes.
+Restart App uses the bundle too and preserves the selected window's session.
+
+Finder remains the system default. Optional `install-macos.sh --set-default`
+tries `duti` registration for `public.folder`; this macOS installation rejects
+that operation with error -50. `--restore-default` restores the saved handler
+only if Pip Rot is currently the default; `--uninstall` also moves the installed
+bundle to Trash. No `public.directory` association is changed.

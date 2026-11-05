@@ -927,13 +927,20 @@ def main():
     for path in args.paths:
         if not Path(path).expanduser().exists():
             parser.error(f"Path does not exist: {path}")
-    app = QApplication(sys.argv[:1])
+    from macos_app import Application
+    app = Application(sys.argv[:1])
     app.setApplicationName("Pip Rot")
     app.setOrganizationName("Pip Rot")
     app.setWindowIcon(QIcon(str(Path(__file__).resolve().parent / "assets/pip-rot.png")))
+    if getattr(sys, 'frozen', '') == 'macosx_app' and len(sys.argv) == 1:
+        app.start_bundle()
+        return app.exec()
+    app.ready = True
     window = Browser(args.paths, args.reveal, record_history=True)
     if session:
         restore(window, session)
+    app.windows.append(window)
+    app.last_browser = window
     window.restart_controller = RestartController(window)
     window.show()
     window.publish_selection()
