@@ -29,7 +29,7 @@ Each invocation opens a separate window. Tabs and layouts are currently in memor
 | F9 | Close current window |
 | ⌘` / ⌘Shift` | Next / previous Pip Rot window across processes (Hammerspoon) |
 | ⌘L | Enter a directory path (Return to navigate in current tab) |
-| ⌘↑ / Option↑ | Parent directory |
+| ⌘↑ / Option↑ / Shift+P | Parent directory (Shift+P only when the tree has focus) |
 | ⌘[ / ⌘] | Back / forward in this tab’s directory history |
 | ControlTab / ControlShiftTab | Next / previous tab |
 | ControlPageDown / ControlPageUp | Next / previous tab |

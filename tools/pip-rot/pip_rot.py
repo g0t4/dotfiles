@@ -337,6 +337,8 @@ class Browser(QMainWindow):
         self.action(view_menu, "Go to Directory…", "Ctrl+L", self.focus_location)
         parent_directory = self.action(view_menu, "Parent Directory", "Ctrl+Up", self.go_parent)
         parent_directory.setShortcuts([QKeySequence("Ctrl+Up"), QKeySequence("Alt+Up")])
+        self.tree_parent_action = self.action(view_menu, "Parent Directory (Tree)", "Shift+P", self.go_parent)
+        self.tree_parent_action.setShortcutContext(Qt.ShortcutContext.WidgetShortcut)
         hidden = self.action(view_menu, "Show Hidden Files", "Ctrl+Shift+.", self.toggle_hidden)
         hidden.setCheckable(True)
         self.hidden_action = hidden
@@ -374,6 +376,7 @@ class Browser(QMainWindow):
         self.tabs.setTabToolTip(self.tabs.currentIndex(), str(root))
         tab.tree.files_dropped.connect(self.transfer_files)
         tab.tree.drop_hint.connect(lambda text: self.statusBar().showMessage(text, 4000))
+        tab.tree.addAction(self.tree_parent_action)
         tab.tree.addAction(self.gather_action)
         tab.tree.addAction(self.duplicate_action)
         tab.tree.addAction(self.rename_action)
