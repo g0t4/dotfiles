@@ -698,6 +698,11 @@ if command -q claude
     abbr cld 'claude --dangerously-skip-permissions'
 end
 
+if command -q codex
+    abbr cy 'claude --yolo'
+    # PRN use `cx` for codex?
+end
+
 # *** nix
 abbr --command nix -- -h --help
 abbr -- nixh "nix --help"
