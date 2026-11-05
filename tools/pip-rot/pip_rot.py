@@ -19,6 +19,7 @@ from media import DurationCache, MediaModel
 from action_context import publish_context, remove_context
 from preview import PreviewController
 from directory_picker import DirectoryHistory, DirectoryPicker
+from path_picker import PathPicker, PROVIDERS
 from restart import RestartController, restore
 from file_tree import FileTree
 from transfers import CrossVolumeMove, Transfers, name_parts
@@ -352,6 +353,9 @@ class Browser(QMainWindow):
         # Qt swaps Ctrl/Meta on macOS: Meta means the physical Control key.
         control = "Meta" if sys.platform == "darwin" else "Ctrl"
         self.action(go_menu, "Jump to Directory…", f"{control}+P", self.jump_directory)
+        for provider in PROVIDERS:
+            self.action(go_menu, provider.title + "…", provider.shortcut,
+                        lambda _checked=False, provider=provider: self.pick_path(provider))
         next_tab = self.action(view_menu, "Next Tab", f"{control}+Tab", lambda: self.cycle_tab(1))
         next_tab.setShortcuts([QKeySequence(f"{control}+Tab"), QKeySequence(f"{control}+PgDown")])
         previous_tab = self.action(view_menu, "Previous Tab", f"{control}+Shift+Tab", lambda: self.cycle_tab(-1))
@@ -795,6 +799,24 @@ class Browser(QMainWindow):
             self.back_action.setEnabled(bool(tab and tab.history_index > 0))
             self.forward_action.setEnabled(bool(tab and tab.history_index + 1 < len(tab.history)))
         self.publish_selection()
+
+    def pick_path(self, provider):
+        tab = self.current()
+        picker = PathPicker(tab.root, provider, self)
+        if picker.exec() and picker.destination:
+            path = picker.destination
+            root = path if path.is_dir() else path.parent
+            if picker.new_tab:
+                self.add_tab(root, None if path.is_dir() else path)
+            else:
+                tab.navigate(root)
+                if not path.is_dir():
+                    tab.pending_reveal = path
+                    tab.initial_selection_done = False
+                    tab.loaded(str(root))
+                self.update_location()
+        picker.deleteLater()
+        self.current().tree.setFocus()
 
     def jump_directory(self):
         picker = DirectoryPicker(self.directory_history, self)

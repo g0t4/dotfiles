@@ -539,3 +539,32 @@ and parent identity preserved, destination collisions, and conversion safety.
 Shift+P and sibling shortcuts operate only with tree focus. Rename/path editors
 retain normal text input, lowercase `p` retains type-to-jump, and these selection
 movements leave the tab root, expansions, and navigation history unchanged.
+
+### Nested path pickers
+
+Search beneath the current tab's directory with the shell's picker shortcuts:
+
+| Shortcut | Source |
+| --- | --- |
+| ⌥⇧D | Directories |
+| ⌥⇧F | Files and symlinks |
+| ⌥⇧B | Files, directories, and symlinks |
+| ⌥⇧U | Files and symlinks, including hidden/ignored paths |
+
+These also appear in **Go**. Requires `fd` on PATH. Results arrive asynchronously;
+Escape cancels the scan. Type to fuzzy filter, use Up/Down to select, Return to
+navigate to a directory or reveal a file, and ⌘Return for a new tab.
+Ctrl+P remains the shared z-history directory picker.
+
+MRU is shared with Fish/Xonsh at `~/.cache/fzf-mru/<picker>/<sha1(cwd + newline)>`,
+using the same relative-path format and 30-entry cap. Empty queries show recent
+selections first, followed by fresh results; query scores rank matches with MRU
+order breaking ties. Only accepted selections enter MRU. Newline-containing
+filenames can be picked but are not written into the shell's line-based cache.
+
+`path_picker.PathProvider` supplies a namespace, title, shortcut, and argv command.
+Commands run in the tab root and emit NUL-delimited relative paths. The dialog
+handles fuzzy matching, shared MRU, cancellation, and selection independently
+of the producer, so another path-producing command can reuse it. Commands are
+executed directly, without shell interpolation. This initial interface is for
+path pickers; arbitrary non-path results would need a separate result handler.
