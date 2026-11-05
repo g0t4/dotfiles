@@ -499,3 +499,37 @@ and symlinks leading outside the creation directory are rejected. Escape or
 finishing the first edit disables this behavior; later renames and folders with
 gathered contents remain ordinary filename-only renames. Unlike the New Path…
 prompt, this inline creation flow never touches an existing target.
+
+
+### Inline path creation contract
+
+Paths entered during the first rename of a new, empty folder are relative to
+that folder's **parent**, not to the folder itself. Existing parent directories
+are reused; only the missing suffix is created. For example, if `drafts/` already
+contains other work, entering `drafts/new/notes.md` creates `new/notes.md` under
+it without moving, replacing, or merging the existing work.
+
+| Filesystem state | Result |
+| --- | --- |
+| All parents are missing | Create the parents and final file or directory. |
+| Some or all parents already exist as directories | Reuse those parents and create the missing suffix. Existing contents stay intact. |
+| A file occupies a required parent component | Refuse the path; preserve the file and temporary folder. |
+| The final destination already exists as a file, directory, or symlink | Refuse the path; never overwrite, merge, or touch the destination. |
+| The temporary folder acquired contents during editing | Refuse path conversion; preserve those contents. |
+
+On a blocked conversion, the status line reports the error and the temporary
+folder remains available for another ordinary rename. Missing parents created
+by a failed attempt are removed only if still empty. This is not a general
+transaction or an app-wide undo facility.
+
+Keep this contract distinct from **New Path…**: that explicit prompt follows
+`mkpath`/`touch` semantics, accepts existing directories, and touches existing
+files without truncating them. Inline creation instead requires a fresh final
+destination (except leaving the temporary folder itself unchanged with its
+current name plus `/`). Future creation actions should explicitly choose which
+contract they follow rather than accidentally inheriting overwrite behavior.
+
+Regression coverage lives in `inline_path_test.py`: real Qt editor commits,
+partially existing parents ending in files and directories, existing contents
+and parent identity preserved, destination collisions, and conversion safety.
+`actions_test.py` covers the separate New Path… prompt behavior.
