@@ -1519,7 +1519,7 @@ end
 local function openPath(path)
     local attrs = hs.fs.attributes(path)
     if attrs and attrs.mode == "directory" then
-        openInFinder(path)
+        require("config.launcher.pip_rot").open(path)
     else
         hs.execute(string.format('open "%s"', path))
     end
