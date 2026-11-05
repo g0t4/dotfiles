@@ -29,7 +29,9 @@ Each invocation opens a separate window. Tabs and layouts are currently in memor
 | F9 | Close current window |
 | ⌘` / ⌘Shift` | Next / previous Pip Rot window across processes (Hammerspoon) |
 | ⌘L | Enter a directory path (Return to navigate in current tab) |
-| ⌘↑ / Option↑ / Shift+P | Parent directory (Shift+P only when the tree has focus) |
+| ⌘↑ / Option↑ | Move the tab root up a directory |
+| Shift+P | Select the parent node within the tree (stops at the tab root) |
+| < / > | Previous / next sibling, skipping expanded descendants (no wrapping) |
 | ⌘[ / ⌘] | Back / forward in this tab’s directory history |
 | ControlTab / ControlShiftTab | Next / previous tab |
 | ControlPageDown / ControlPageUp | Next / previous tab |
@@ -533,3 +535,7 @@ Regression coverage lives in `inline_path_test.py`: real Qt editor commits,
 partially existing parents ending in files and directories, existing contents
 and parent identity preserved, destination collisions, and conversion safety.
 `actions_test.py` covers the separate New Path… prompt behavior.
+
+Shift+P and sibling shortcuts operate only with tree focus. Rename/path editors
+retain normal text input, lowercase `p` retains type-to-jump, and these selection
+movements leave the tab root, expansions, and navigation history unchanged.

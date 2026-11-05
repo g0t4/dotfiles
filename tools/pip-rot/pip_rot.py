@@ -337,8 +337,15 @@ class Browser(QMainWindow):
         self.action(view_menu, "Go to Directory…", "Ctrl+L", self.focus_location)
         parent_directory = self.action(view_menu, "Parent Directory", "Ctrl+Up", self.go_parent)
         parent_directory.setShortcuts([QKeySequence("Ctrl+Up"), QKeySequence("Alt+Up")])
-        self.tree_parent_action = self.action(view_menu, "Parent Directory (Tree)", "Shift+P", self.go_parent)
+        self.tree_parent_action = self.action(view_menu, "Select Parent Node", "Shift+P", self.select_parent_node)
         self.tree_parent_action.setShortcutContext(Qt.ShortcutContext.WidgetShortcut)
+        self.previous_sibling_action = self.action(view_menu, "Previous Sibling", "<", lambda: self.select_sibling(-1))
+        self.next_sibling_action = self.action(view_menu, "Next Sibling", ">", lambda: self.select_sibling(1))
+        # Qt can report shifted punctuation with or without an explicit Shift.
+        self.previous_sibling_action.setShortcuts([QKeySequence("<"), QKeySequence("Shift+<")])
+        self.next_sibling_action.setShortcuts([QKeySequence(">"), QKeySequence("Shift+>")])
+        for action in (self.previous_sibling_action, self.next_sibling_action):
+            action.setShortcutContext(Qt.ShortcutContext.WidgetShortcut)
         hidden = self.action(view_menu, "Show Hidden Files", "Ctrl+Shift+.", self.toggle_hidden)
         hidden.setCheckable(True)
         self.hidden_action = hidden
@@ -377,6 +384,8 @@ class Browser(QMainWindow):
         tab.tree.files_dropped.connect(self.transfer_files)
         tab.tree.drop_hint.connect(lambda text: self.statusBar().showMessage(text, 4000))
         tab.tree.addAction(self.tree_parent_action)
+        tab.tree.addAction(self.previous_sibling_action)
+        tab.tree.addAction(self.next_sibling_action)
         tab.tree.addAction(self.gather_action)
         tab.tree.addAction(self.duplicate_action)
         tab.tree.addAction(self.rename_action)
@@ -844,6 +853,21 @@ class Browser(QMainWindow):
         tab.history_index = target
         tab.show_location()
         self.update_location()
+
+    def select_tree_node(self, index):
+        tab = self.current()
+        if index.isValid() and index != tab.tree.rootIndex():
+            self.renamed_item(tab, Path(tab.model.filePath(index)))
+            tab.tree.scrollTo(index)
+
+    def select_parent_node(self):
+        self.select_tree_node(self.current().tree.currentIndex().parent())
+
+    def select_sibling(self, delta):
+        tab = self.current()
+        current = tab.tree.currentIndex()
+        if current.isValid() and current != tab.tree.rootIndex():
+            self.select_tree_node(tab.model.index(current.row() + delta, 0, current.parent()))
 
     def go_parent(self):
         self.location.setText(str(self.current().root.parent))
