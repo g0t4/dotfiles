@@ -54,6 +54,27 @@ with tempfile.TemporaryDirectory() as directory:
         assert (root / 'more/nested').is_dir()
         assert not (root / 'New Folder').exists()
         assert tab.selected() == root / 'more/nested'
+        # Reuse existing parents while creating only the missing suffix.
+        existing = root / 'drafts'
+        marker = existing / 'keep.txt'
+        marker.write_text('existing contents')
+        original_inode = existing.stat().st_ino
+        editor = new_editor()
+        commit(editor, 'drafts/new parents/final.txt')
+        assert (existing / 'new parents/final.txt').is_file()
+        assert tab.selected() == existing / 'new parents/final.txt'
+        assert not (root / 'New Folder').exists()
+        assert existing.stat().st_ino == original_inode
+        assert marker.read_text() == 'existing contents'
+        # The directory variant reuses two existing levels and grows two more.
+        editor = new_editor()
+        commit(editor, 'drafts/new parents/deeper/final dir/')
+        assert (existing / 'new parents/deeper/final dir').is_dir()
+        assert tab.selected() == existing / 'new parents/deeper/final dir'
+        assert not (root / 'New Folder').exists()
+        assert existing.stat().st_ino == original_inode
+        assert marker.read_text() == 'existing contents'
+        assert (existing / 'new parents/final.txt').is_file()
         # Cancel disarms path behavior: later ordinary rename cannot use slash.
         editor = new_editor()
         QTest.keyClick(editor, Qt.Key.Key_Escape)
@@ -98,4 +119,4 @@ with tempfile.TemporaryDirectory() as directory:
         raise AssertionError('converted nonempty folder')
     except ValueError:
         assert (source / 'contents').read_text() == 'preserved'
-print('PASS: inline file/directory paths, reveal, Escape disarming, collisions, nonempty protection, traversal/self-nesting/symlink escape rejection')
+print('PASS: inline file/directory paths, partially existing parents, reveal, Escape disarming, collisions, nonempty protection, traversal/self-nesting/symlink escape rejection')
