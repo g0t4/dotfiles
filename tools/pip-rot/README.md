@@ -551,7 +551,9 @@ Search beneath the current tab's directory with the shell's picker shortcuts:
 | ⌥⇧B | Files, directories, and symlinks |
 | ⌥⇧U | Files and symlinks, including hidden/ignored paths |
 
-These also appear in **Go**. Requires `fd` on PATH. Results arrive asynchronously;
+These also appear in **Go**. Requires `fd`; lookup checks PATH, then
+`~/.nix-profile/bin`, `/opt/homebrew/bin`, and `/usr/local/bin` so Hammerspoon
+launches work without an interactive shell. Results arrive asynchronously;
 Escape cancels the scan. Type to fuzzy filter, use Up/Down to select, Return to
 navigate to a directory or reveal a file, and ⌘Return for a new tab.
 Ctrl+P remains the shared z-history directory picker.
@@ -568,3 +570,6 @@ handles fuzzy matching, shared MRU, cancellation, and selection independently
 of the producer, so another path-producing command can reuse it. Commands are
 executed directly, without shell interpolation. This initial interface is for
 path pickers; arbitrary non-path results would need a separate result handler.
+
+Picker command startup, completion counts, and errors are recorded in
+`~/.local/share/devtools/pip-rot.log`; failed commands also show an error in the picker.

@@ -4,6 +4,7 @@ from pathlib import Path
 import tempfile
 import time
 import sys
+import os
 from unittest.mock import patch
 
 from PySide6.QtWidgets import QApplication
@@ -65,6 +66,16 @@ with tempfile.TemporaryDirectory() as temporary:
     assert '.hidden' in picker.entries
     picker.reject()
     assert picker.destination is None
+
+    # Real Hammerspoon launch PATH: fd lives in Nix, outside the GUI PATH.
+    with patch.dict(os.environ, {'PATH': '/opt/homebrew/bin:/usr/bin:/bin:/usr/sbin:/sbin'}):
+        picker = PathPicker(root, PROVIDERS[1], mru=mru)
+        wait(lambda: not picker.scanning)
+        assert not picker.error, picker.error
+        assert Path(picker.command[0]).is_absolute(), picker.command
+        assert 'nested space/sample.txt' in picker.entries
+        assert picker.results.count() > 0
+        picker.reject()
 
     # A non-fd producer reuses the same UI, and NUL framing preserves newlines.
     odd = root / 'line\nbreak.txt'

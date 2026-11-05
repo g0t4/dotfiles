@@ -2,11 +2,13 @@
 from dataclasses import dataclass
 from pathlib import Path
 import os
+import shutil
 
 from PySide6.QtCore import QEvent, QProcess, QTimer, Qt
 from PySide6.QtGui import QAction, QKeySequence
 from PySide6.QtWidgets import QDialog, QLabel, QLineEdit, QListWidget, QListWidgetItem, QVBoxLayout
 
+from diagnostics import log_refresh
 from directory_picker import fuzzy_score
 from wes_fzf_pickers import FzfMru, ordered_candidates
 
@@ -21,6 +23,16 @@ class PathProvider:
 
 def fd_command(*arguments):
     return ('fd', *arguments, '--print0', '--color', 'never')
+
+
+def resolve_command(command):
+    """GUI launchers do not inherit the interactive shell's Nix/Homebrew PATH."""
+    executable = command[0]
+    if executable == 'fd':
+        search = os.pathsep.join(filter(None, [os.environ.get('PATH', ''),
+            str(Path.home() / '.nix-profile/bin'), '/opt/homebrew/bin', '/usr/local/bin']))
+        executable = shutil.which(executable, path=search) or executable
+    return (executable, *command[1:])
 
 
 PROVIDERS = (
@@ -51,6 +63,7 @@ class PathPicker(QDialog):
         self.query.setPlaceholderText('Fuzzy search nested paths…')
         self.results = QListWidget()
         self.message = QLabel()
+        self.message.setWordWrap(True)
         for widget in (self.query, self.results, self.message):
             layout.addWidget(widget)
         try:
@@ -76,7 +89,9 @@ class PathPicker(QDialog):
         self.process.errorOccurred.connect(self.scan_error)
         self.finished.connect(self.stop)
         self.filter()
-        self.process.start(provider.command[0], list(provider.command[1:]))
+        self.command = resolve_command(provider.command)
+        log_refresh('picker-start', self.root, {'provider': provider.key, 'command': self.command})
+        self.process.start(self.command[0], list(self.command[1:]))
         self.query.setFocus()
 
     def read_output(self):
@@ -88,7 +103,8 @@ class PathPicker(QDialog):
             self.redraw.start()
 
     def scan_error(self, *_):
-        self.error = self.process.errorString()
+        self.error = f'{self.command[0]}: {self.process.errorString()}'
+        log_refresh('picker-error', self.root, {'provider': self.provider.key, 'error': self.error})
         self.scanning = False
         self.filter()
 
@@ -97,6 +113,8 @@ class PathPicker(QDialog):
         self.scanning = False
         if code:
             self.error = bytes(self.process.readAllStandardError()).decode(errors='replace').strip() or f'Command exited {code}'
+        log_refresh('picker-finished', self.root, {
+            'provider': self.provider.key, 'exit_code': code, 'entries': len(self.entries), 'error': self.error})
         self.filter()
 
     def filter(self, *_):
