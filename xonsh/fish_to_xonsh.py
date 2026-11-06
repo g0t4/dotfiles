@@ -205,7 +205,26 @@ _REPLACEMENTS = {
 _PLATFORM_REPLACEMENTS = {
     "pkill": ("pkill -9 -ilf", "pkill -9 -if"),
     "pkillu": ("pkill -9 -U $USER -ilf", "pkill -9 -U $USER -if"),
-    "lsusb": ("system_profiler SPUSBDataType", "lsusb -tv"),
+    "lsusb": ("system_profiler SPUSBHostDataType", "lsusb -tv"),
+    "sp": ("system_profiler", ""),
+    "sp_list_datatypes": ("system_profiler -listDataTypes", ""),
+    "lspci": ("system_profiler SPPCIDataType", ""),
+    "lscpu": ("sysctl -n machdep.cpu.brand_string; sysctl -n hw.physicalcpu; sysctl -n hw.logicalcpu", ""),
+    "lsblk": ("diskutil list", ""),
+    "dmidecode": ("system_profiler SPHardwareDataType", ""),
+    "inxi": ("system_profiler SPHardwareDataType; system_profiler SPSoftwareDataType", ""),
+    "hwinfo": ("system_profiler SPHardwareDataType", ""),
+    "free": ("vm_stat", ""),
+    "dmesg": ("log show --predicate 'eventMessage contains \"kernel\"' --info --debug --last 1m", ""),
+    "lsblk_fs": ("", "lsblk --fs"),
+    "lsblk_nvme": ("", "lsblk --nvme"),
+    "lsblk_scsi": ("", "lsblk --scsi"),
+    "lsblk_virtio": ("", "lsblk --virtio"),
+    "lsblk_topology": ("", "lsblk --topology"),
+    "fdisk_ls": ("", "sudo fdisk -l"),
+    "fdisk_details": ("", "sudo fdisk -lx"),
+    "findmnt_fstab": ("", "findmnt --fstab"),
+    "findmnt_verify": ("", "findmnt --verify --verbose"),
 }
 
 # Fish-native implementations whose Xonsh ports intentionally use structured
