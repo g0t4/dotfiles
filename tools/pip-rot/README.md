@@ -600,8 +600,8 @@ Put Markdown in `.rotten.md` inside any directory. Pip Rot displays it above
 that directory's files: above the tree for the tab root, or beneath the folder
 name when expanded. Notes aren't extra selectable nodes, so navigation and file
 actions continue to operate on real files and folders. The backing dotfile is
-visible when Show Hidden Files is enabled. Click a rendered blurb to edit its
-Markdown in place. **⌘Return** (Control+Return outside macOS) or **Save** writes
+visible when Show Hidden Files is enabled. Press **⌘Shift+R** from the tree to
+edit directory Markdown in place. Clicking a description does not start editing. **⌘Return** (Control+Return outside macOS) or **Save** writes
 it; **Escape** or **Cancel** discards the draft and returns focus to the tree.
 File → **Edit Directory Notes**, the tree context menu, and Pip Rot's launcher
 App Actions also open the editor, including a blank field if no notes exist.

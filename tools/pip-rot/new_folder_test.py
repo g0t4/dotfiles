@@ -95,6 +95,12 @@ with tempfile.TemporaryDirectory() as directory:
         assert window.tabs.count() == count  # Save must beat the window's new-tab shortcut.
         assert (parent / '.rotten.md').read_text() == '# Launcher notes'
         assert tab.tree.notes.editing is None
+        tab.tree.setFocus()
+        QTest.keyClick(tab.tree, Qt.Key.Key_R, Qt.KeyboardModifier.ControlModifier | Qt.KeyboardModifier.ShiftModifier)
+        assert tab.tree.notes.editing == str(parent)
+        assert app.focusWidget() is tab.tree.notes.input
+        QTest.keyClick(tab.tree.notes.input, Qt.Key.Key_Escape)
+        assert tab.tree.notes.editing is None
         with patch.object(window, 'new_directory') as create:
             request('new-folder-inside', [str(file)])
             create.assert_not_called()

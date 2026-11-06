@@ -64,8 +64,10 @@ with tempfile.TemporaryDirectory() as directory:
     note.write_text('After refresh')
     wait(lambda: tab.tree.notes.root_box.toPlainText() == 'After refresh')
     notes = tab.tree.notes
-    # Clicking the rendered root starts a raw Markdown editor; watcher updates don't erase drafts.
+    # Clicking descriptions must not open the editor; watcher updates preserve explicit drafts.
     QTest.mouseClick(notes.root_box.viewport(), Qt.MouseButton.LeftButton)
+    assert notes.editing is None
+    notes.begin_edit(folder)
     assert notes.editing == str(folder)
     notes.input.setPlainText('**Edited**\n\nTwo paragraphs.')
     note.write_text('External change')
@@ -100,6 +102,8 @@ with tempfile.TemporaryDirectory() as directory:
     point.setX(point.x() + 40)
     point.setY(point.y() - 8)
     QTest.mouseClick(tab.tree.viewport(), Qt.MouseButton.LeftButton, pos=point)
+    assert notes.editing is None
+    notes.begin_edit(folder)
     assert notes.editing == str(folder)
     notes.input.setPlainText('Nested edit')
     notes.save()

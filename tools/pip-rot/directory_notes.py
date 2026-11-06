@@ -104,9 +104,7 @@ class DirectoryNotes(QObject):
         self.root_box.setAutoFillBackground(True)
         self.root_box.setDocument(NoteDocument(self.root_box))
         self.root_box.hide()
-        self.root_box.setToolTip('Click to edit Markdown notes')
-        self.root_box.viewport().installEventFilter(self)
-        tree.viewport().installEventFilter(self)
+        self.root_box.setToolTip('Edit Directory Notes: ⌘Shift+R from the tree, or File menu')
         tree.verticalScrollBar().valueChanged.connect(self.position_editor)
         tree.horizontalScrollBar().valueChanged.connect(self.position_editor)
         self.watcher = QFileSystemWatcher(tree)
@@ -207,21 +205,6 @@ class DirectoryNotes(QObject):
         context.palette.setColor(QPalette.ColorRole.Text, muted(foreground, background))
         doc.documentLayout().draw(painter, context)
         painter.restore()
-
-    def eventFilter(self, watched, event):
-        if event.type() == QEvent.Type.MouseButtonPress and event.button() == Qt.MouseButton.LeftButton:
-            if watched == self.root_box.viewport():
-                self.begin_edit(self.tree.model().filePath(self.tree.rootIndex()))
-                return True
-            index = self.tree.indexAt(event.position().toPoint())
-            if index.isValid():
-                index = index.siblingAtColumn(0)
-                rect = self.tree.visualRect(index)
-                extra = self.extra_height(index)
-                if extra and event.position().y() > rect.bottom() - extra:
-                    self.begin_edit(self.tree.model().filePath(index))
-                    return True
-        return super().eventFilter(watched, event)
 
     def begin_edit(self, directory):
         if self.editing is not None:
