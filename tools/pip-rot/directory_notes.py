@@ -2,7 +2,7 @@
 from pathlib import Path
 
 from PySide6.QtCore import QEvent, QFileSystemWatcher, QIODevice, QObject, QRectF, QSaveFile, Qt, QTimer, Signal
-from PySide6.QtGui import QAbstractTextDocumentLayout, QColor, QPalette, QTextDocument
+from PySide6.QtGui import QAbstractTextDocumentLayout, QColor, QPalette, QTextCursor, QTextDocument
 from PySide6.QtWidgets import (
     QFrame, QHBoxLayout, QLabel, QMessageBox, QPlainTextEdit, QPushButton,
     QStyle, QStyleOptionViewItem, QStyledItemDelegate, QTextBrowser, QVBoxLayout,
@@ -32,6 +32,18 @@ class NoteDocument(QTextDocument):
     def __init__(self, parent=None):
         super().__init__(parent)
         self.setDocumentMargin(0)
+
+    def setMarkdown(self, markdown, *args):
+        super().setMarkdown(markdown, *args)
+        # Qt gives each list item paragraph margins; keep lists compact in blurbs.
+        block = self.begin()
+        while block.isValid():
+            if block.textList() is not None:
+                formatting = block.blockFormat()
+                formatting.setTopMargin(0)
+                formatting.setBottomMargin(0)
+                QTextCursor(block).setBlockFormat(formatting)
+            block = block.next()
 
     def loadResource(self, _kind, _url):
         # Notes are text: don't fetch network images or read embedded local resources.
