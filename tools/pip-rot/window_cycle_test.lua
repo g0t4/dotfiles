@@ -1,4 +1,4 @@
-local focused, apps, contexts, callback, activation
+local focused, apps, contexts, callback, activation, frontApp
 local scans, tapping, watching = 0, false, false
 local function window(id, title)
     return {id = function() return id end, title = function() return title end,
@@ -11,7 +11,7 @@ local function app(pid, windows)
 end
 hs = {
     application = {runningApplications = function() scans = scans + 1; return apps end,
-        frontmostApplication = function() return app(4, {focused}) end,
+        frontmostApplication = function() return frontApp or app(4, {focused}) end,
         watcher = {activated = 1, deactivated = 2, new = function(fn)
             activation = fn
             return {start = function(self) watching = true; return self end,
@@ -65,15 +65,19 @@ assert(not key({cmd = true}, 12))
 contexts[3].pid = 3
 assert(key({cmd = true, shift = true})); assert(focused == c)
 assert(key({cmd = true})); assert(focused == a)
+-- A late deactivation of the previous app must not disable the active Pip Rot hook.
+activation('Editor', hs.application.watcher.deactivated, app(4, {unrelated}))
+assert(tapping, 'late deactivation must reconcile the current front app')
+focused = unrelated
 activation('Python', hs.application.watcher.deactivated, app(1, {a}))
 assert(not tapping)
-focused = unrelated
 activation('Editor', hs.application.watcher.activated, app(4, {unrelated}))
 assert(not tapping, 'other apps must leave the hook stopped')
-activation('Pip Rot', hs.application.watcher.activated, {
+frontApp = {
     focusedWindow = function() return nil end,
     bundleID = function() return 'com.g0t4.pip-rot' end,
-})
+}
+activation('Pip Rot', hs.application.watcher.activated, frontApp)
 assert(tapping, 'bundle activation should work before its window gains focus')
 cycle.shutdown()
 assert(not tapping and not watching)

@@ -65,11 +65,11 @@ function M.init()
             or (window and (window:title() or ''):sub(-#suffix) == suffix))
         if pipRot then tap:start() else tap:stop() end
     end
-    watcher = hs.application.watcher.new(function(_, event, app)
-        if event == hs.application.watcher.activated then
-            update(app)
-        elseif event == hs.application.watcher.deactivated then
-            tap:stop()
+    watcher = hs.application.watcher.new(function(_, event)
+        if event == hs.application.watcher.activated or event == hs.application.watcher.deactivated then
+            -- macOS may deliver old-app deactivation after new-app activation.
+            -- Reconcile actual focus instead of letting the last event win.
+            update(hs.application.frontmostApplication())
         end
     end):start()
     update(hs.application.frontmostApplication())
