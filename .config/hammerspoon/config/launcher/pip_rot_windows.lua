@@ -1,6 +1,6 @@
 -- Treat independent Pip Rot processes as one family for window cycling.
 local M = {}
-local tap
+local tap, watcher
 local suffix = ' — Pip Rot'
 
 function M.windows()
@@ -29,7 +29,7 @@ end
 
 function M.cycle(direction)
     local focused = hs.window.focusedWindow()
-    if not focused then return false end
+    if not focused or (focused:title() or ''):sub(-#suffix) ~= suffix then return false end
     local windows = M.windows()
     for index, window in ipairs(windows) do
         if window:id() == focused:id() then
@@ -45,6 +45,7 @@ function M.cycle(direction)
 end
 
 function M.shutdown()
+    if watcher then watcher:stop(); watcher = nil end
     if tap then tap:stop(); tap = nil end
 end
 
@@ -55,7 +56,23 @@ function M.init()
         if event:getKeyCode() ~= hs.keycodes.map['`'] or not flags.cmd
             or flags.ctrl or flags.alt then return false end
         return M.cycle(flags.shift and -1 or 1)
+    end)
+    local function update(app)
+        -- Do not intercept keyboard events at all while another app is active.
+        -- The title check retains support for source launches hosted by Python.
+        local window = app and app:focusedWindow()
+        local pipRot = app and (app:bundleID() == 'com.g0t4.pip-rot'
+            or (window and (window:title() or ''):sub(-#suffix) == suffix))
+        if pipRot then tap:start() else tap:stop() end
+    end
+    watcher = hs.application.watcher.new(function(_, event, app)
+        if event == hs.application.watcher.activated then
+            update(app)
+        elseif event == hs.application.watcher.deactivated then
+            tap:stop()
+        end
     end):start()
+    update(hs.application.frontmostApplication())
     local previous = hs.shutdownCallback
     hs.shutdownCallback = function()
         M.shutdown()
