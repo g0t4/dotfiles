@@ -91,10 +91,10 @@ with tempfile.TemporaryDirectory() as directory:
     with patch('file_history.QDesktopServices.openUrl', return_value=True) as open_url, patch('file_history.FileHistory') as file_history:
         window.open_selected()
         assert open_url.call_args.args[0].toLocalFile() == str(movie)
-        file_history.return_value.record.assert_called_once_with(movie)
+        file_history.return_value.record.assert_called_once_with(movie, source='pip-rot')
         file_history.return_value.record.reset_mock()
         window.current().open_file(window.current().model.index(str(movie)))
-        file_history.return_value.record.assert_called_once_with(str(movie))
+        file_history.return_value.record.assert_called_once_with(str(movie), source='pip-rot')
     assert window.tabs.count() == count
     window.close()
 print('PASS: back/forward, selection restore, branching, duplicate suppression, tab isolation, parent history, missing directory')

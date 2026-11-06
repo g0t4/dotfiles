@@ -1246,6 +1246,11 @@ local function showModes()
             image = hs.image.imageFromName("NSAdvanced"),
         },
         {
+            text = "info <query or path>",
+            subText = "Inspect file and directory history, including missing paths",
+            image = hs.image.imageFromName("NSInfo"),
+        },
+        {
             text = "<search>",
             subText = "Files and directories from usage history",
             image = hs.image.imageFromName("NSFolder"),
@@ -1503,7 +1508,7 @@ local bookmarkActions = {
 local tabCompletions = {}
 
 -- Prefix shortcuts (typing "a" + Tab → "a " enters app mode)
-local prefixShortcuts = {"a", "as", "applescript", "b", "s", "d", "define", "g", "l", "o", "f", "py", "e", "v"}
+local prefixShortcuts = {"a", "as", "applescript", "b", "s", "d", "define", "g", "l", "o", "f", "py", "e", "v", "info"}
 for _, p in ipairs(prefixShortcuts) do
     table.insert(tabCompletions, {match = p, result = p .. " "})
 end
@@ -1916,6 +1921,11 @@ local function onQueryChange(query)
     log:info("Matches ^a :", query:match("^a ") ~= nil)
     log:info("Matches ^s :", query:match("^s ") ~= nil)
 
+    if query:match("^info ") then
+        currentCancelFunc = require("config.launcher.file_history").info(query:sub(6), thisSearchId, handleResults)
+        return
+    end
+
     -- Check for bookmarks mode
     if query:match("^b ") then
         local bookmarkQuery = query:sub(3)  -- Remove "b " prefix
@@ -2170,6 +2180,11 @@ local function onChoice(choice)
         return
     end
 
+    if choice.diagnostic then
+        require("config.launcher.file_history").inspect(choice.diagnostic)
+        return
+    end
+
     -- Handle bookmark action
     if choice.bookmark then
         local action = bookmarkActions[choice.bookmark]
@@ -2303,6 +2318,7 @@ end
 
 -- Create and show the launcher
 function M.show()
+    require("config.launcher.file_history").closeInspector()
     if not chooser then
         chooser = hs.chooser.new(onChoice)
         chooser:queryChangedCallback(onQueryChange)
@@ -2377,6 +2393,7 @@ end
 -- Release native windows before Lua teardown; garbage collection can leave
 -- a visible chooser behind across reloads.
 function M.shutdown()
+    require("config.launcher.file_history").closeInspector()
     log:info("Shutting down launcher")
     if currentCancelFunc then
         local cancel = currentCancelFunc

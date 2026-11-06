@@ -122,3 +122,30 @@ class FishZ:
             print(f"z: failed to record {directory}: {detail}", file=sys.stderr)
             return False
         return True
+
+    def diagnostic_snapshot(self):
+        """Read configured z records including missing paths, without cleaning them."""
+        try:
+            completed = self.runner(
+                [self._fish(), '-c', 'printf "%s" "$Z_DATA"'],
+                capture_output=True, text=True, timeout=self.timeout,
+            )
+        except (OSError, subprocess.TimeoutExpired) as error:
+            raise FishZError(f'could not locate Fish z data: {error}') from error
+        if completed.returncode or not completed.stdout:
+            raise FishZError(completed.stderr.strip() or 'Fish Z_DATA is not configured')
+        database = Path(completed.stdout).expanduser()
+        records = []
+        try:
+            lines = database.read_text().splitlines() if database.exists() else []
+            for line in lines:
+                parts = line.rsplit('|', 2)
+                if len(parts) != 3:
+                    continue
+                try:
+                    records.append({'path': parts[0], 'rank': float(parts[1]), 'last_visit': float(parts[2])})
+                except ValueError:
+                    continue
+        except OSError as error:
+            raise FishZError(f'could not read Fish z data: {error}') from error
+        return str(database), records

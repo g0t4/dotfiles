@@ -13,7 +13,7 @@ def open_tracked_file(path):
     if not QDesktopServices.openUrl(QUrl.fromLocalFile(str(path))):
         return False
     try:
-        FileHistory().record(path)
+        FileHistory().record(path, source='pip-rot')
     except Exception as error:
         print(f'file history: could not record {path}: {error}', file=sys.stderr)
     return True

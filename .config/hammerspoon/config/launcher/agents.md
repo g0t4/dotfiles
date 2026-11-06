@@ -51,6 +51,7 @@ utilities.
 | `py `  | `py print(2+2)` | **Python code** – executes via the repository‑wide virtualenv. |
 | `e `   | `e smile` | **Emoji picker** – loads CLDR emoji data (cached) and filters by keyword. |
 | `v `   | `v repos ask` | **Live filter** – two‑stage: `mdfind` broad filter + fuzzy refine. |
+| `info ` | `info report` | **History diagnostics** – includes missing files/directories; Return opens a read-only metadata inspector. Explicit `/` or `~` paths can be untracked. |
 | (none) | `README.md` | **Usage search** – shared file opens and existing z directories. |
 | `/` or `~` | `/Applications` | **Path browsing** – shows folder contents; `Enter` opens or reveals in Finder. |
 
@@ -206,3 +207,18 @@ Its Restart App handler requests a graceful quit, waits for the captured PID to
 exit, then relaunches by bundle ID. Save/cancel prompts remain interactive; after
 60 seconds without exit the restart stops. No document or slide restoration is
 implemented; reopen the presentation manually if PowerPoint does not restore it.
+
+## Usage-history diagnostics
+
+`file_history.lua` dispatches `info ` to `wes_history_diagnostics.py` via the
+shared Python backend. Diagnostic choices carry `diagnostic` metadata rather
+than `path`, so Return inspects and never opens, reveals, or records usage.
+The inspector is a local escaped-HTML webview; Escape closes it. A new launcher
+invocation or shutdown closes any existing inspector.
+
+`FishZ.diagnostic_snapshot()` discovers Fish's configured `Z_DATA` and reads the
+raw path/rank/timestamp records without filtering missing directories or cleaning
+anything. Normal z queries still use Fish's authoritative implementation.
+File-open provenance is stored transactionally in `file_sources`; diagnostic
+reads tolerate the original schema without migrating it. Existing opens lacking
+source attribution are labelled as predating source tracking.

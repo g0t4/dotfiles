@@ -649,3 +649,26 @@ To remove a remembered file, run from the dotfiles checkout:
 ```
 
 Restart existing Pip Rot windows to activate tracking after an update.
+
+### Launcher history inspector
+
+Type `info report` in the Hammerspoon launcher to search remembered files and
+z directories, **including missing paths**. Press Return to inspect metadata;
+Escape closes the inspector. This does not open the file or record another use.
+`info /absolute/path` and `info ~/path` also inspect paths that have never been
+tracked. Paths supplied explicitly are treated literally, including spaces.
+
+The inspector shows each history store, accepted-open counts or z rank, last
+usage timestamps, match/usage scores, normal-search eligibility, and current
+filesystem type, size, permissions, owner IDs, and timestamps. Missing paths are
+retained; unavailable paths and broken symlinks are identified. Diagnostic
+queries do not clean z or migrate/write the SQLite database. File-open source
+attribution distinguishes new Pip Rot and launcher opens; older opens are marked
+as predating source tracking. z cannot distinguish shell visits from Pip Rot
+visits. Filesystem access time is shown separately from tracked usage.
+
+For terminal diagnostics, use:
+
+```sh
+.venv/bin/python .config/xonsh/lib/wes_file_history.py info 'report'
+```
