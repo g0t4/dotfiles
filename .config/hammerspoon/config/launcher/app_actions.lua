@@ -32,7 +32,7 @@ function M.choices(context)
             end
             add("New Folder Inside", "new-folder-inside", "Create inside the selected folder, or file's parent; rename inline")
             add("New Path…", "new-path", "Trailing / creates directories; otherwise a file, with parents")
-            add("Edit Directory Notes", "edit-directory-notes", "Edit .pip-rot.md in place; create notes if absent")
+            add("Edit Directory Notes", "edit-directory-notes", "Edit .rotten.md in place; create notes if absent")
             local parent
             local siblings = context.selection_explicit == true and #(context.paths or {}) > 0
             for _, path in ipairs(context.paths or {}) do

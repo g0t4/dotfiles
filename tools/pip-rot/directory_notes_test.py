@@ -26,8 +26,8 @@ with tempfile.TemporaryDirectory() as directory:
     folder = root / 'project'
     folder.mkdir()
     (folder / 'take.mkv').touch()
-    (root / '.pip-rot.md').write_text('# Course\n\nRecord intro next.')
-    note = folder / '.pip-rot.md'
+    (root / '.rotten.md').write_text('# Course\n\nRecord intro next.')
+    note = folder / '.rotten.md'
     note.write_text('**Best take:** 03\n\nKeep fallbacks.')
     tab = FileTab(root, DurationCache())
     tab.resize(900, 600)
@@ -82,13 +82,13 @@ with tempfile.TemporaryDirectory() as directory:
     fresh.mkdir()
     notes.begin_edit(fresh)
     notes.input.setPlainText('# New notes')
-    (fresh / '.pip-rot.md').mkdir()  # Cannot replace a directory with a note.
+    (fresh / '.rotten.md').mkdir()  # Cannot replace a directory with a note.
     notes.save()
     assert notes.editing == str(fresh)
     assert 'Could not save' in notes.error.text()
-    (fresh / '.pip-rot.md').rmdir()
+    (fresh / '.rotten.md').rmdir()
     notes.save()
-    assert (fresh / '.pip-rot.md').read_text() == '# New notes'
+    assert (fresh / '.rotten.md').read_text() == '# New notes'
     tab.navigate(root)
     wait(lambda: tab.tree.notes.root_box.isVisible())
     index = tab.model.index(str(folder))

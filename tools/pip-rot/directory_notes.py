@@ -8,7 +8,7 @@ from PySide6.QtWidgets import (
     QStyleOptionViewItem, QStyledItemDelegate, QTextBrowser, QVBoxLayout,
 )
 
-NAME = '.pip-rot.md'
+NAME = '.rotten.md'
 LIMIT = 64 * 1024
 
 

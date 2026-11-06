@@ -596,7 +596,7 @@ bundle to Trash. No `public.directory` association is changed.
 
 ### Directory notes
 
-Put Markdown in `.pip-rot.md` inside any directory. Pip Rot displays it above
+Put Markdown in `.rotten.md` inside any directory. Pip Rot displays it above
 that directory's files: above the tree for the tab root, or beneath the folder
 name when expanded. Notes aren't extra selectable nodes, so navigation and file
 actions continue to operate on real files and folders. The backing dotfile is
@@ -608,7 +608,7 @@ App Actions also open the editor, including a blank field if no notes exist.
 They target the selected directory, or a selected file's parent (the tab root
 when nothing is selected). The file is created only on Save.
 
-Saves replace `.pip-rot.md` atomically; last write wins. External updates never
+Saves replace `.rotten.md` atomically; last write wins. External updates never
 replace an open draft. Save failures keep the draft open for retry. You can also
 edit the file with your usual editor.
 Changes, including atomic editor saves, update live. Moving or copying the whole

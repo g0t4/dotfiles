@@ -88,12 +88,12 @@ with tempfile.TemporaryDirectory() as directory:
         request('edit-directory-notes')
         assert tab.tree.notes.editing == str(parent)
         assert app.focusWidget() is tab.tree.notes.input
-        assert not (parent / '.pip-rot.md').exists()
+        assert not (parent / '.rotten.md').exists()
         tab.tree.notes.input.setPlainText('# Launcher notes')
         count = window.tabs.count()
         QTest.keyClick(tab.tree.notes.input, Qt.Key.Key_Return, Qt.KeyboardModifier.ControlModifier)
         assert window.tabs.count() == count  # Save must beat the window's new-tab shortcut.
-        assert (parent / '.pip-rot.md').read_text() == '# Launcher notes'
+        assert (parent / '.rotten.md').read_text() == '# Launcher notes'
         assert tab.tree.notes.editing is None
         with patch.object(window, 'new_directory') as create:
             request('new-folder-inside', [str(file)])
