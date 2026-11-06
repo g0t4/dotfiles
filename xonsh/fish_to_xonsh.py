@@ -166,7 +166,6 @@ _SKIPPED_ABBREVIATIONS = {
     # Linux alternatives folded into platform-aware declarations.
     AbbreviationSelector("pkill", replacement="pkill -9 -if"),
     AbbreviationSelector("pkillu", replacement="pkill -9 -U $USER -if"),
-    AbbreviationSelector("lsusb", replacement="system_profiler SPUSBDataType"),
     # Fish-only help_online; intentionally not ported to Xonsh.
     "help",
     # Templates have native registration helpers, not literal triggers.
@@ -205,31 +204,6 @@ _REPLACEMENTS = {
 _PLATFORM_REPLACEMENTS = {
     "pkill": ("pkill -9 -ilf", "pkill -9 -if"),
     "pkillu": ("pkill -9 -U $USER -ilf", "pkill -9 -U $USER -if"),
-
-    # map some abbrs so I can get similar info on my mac to what I am used to using on linux/arch
-    # FYI these are just a first take, ok to change and/or nuke
-    "sp": ("system_profiler", ""),
-    "sp_list_datatypes": ("system_profiler -listDataTypes", ""),
-    "lsusb": ("system_profiler SPUSBHostDataType", "lsusb -tv"), # FYI macos Tahoe renamed SPUSBDataType => SPUSBHostDataType
-    "lspci": ("system_profiler SPPCIDataType", ""),
-    "lscpu": ("sysctl -n machdep.cpu.brand_string; sysctl -n hw.physicalcpu; sysctl -n hw.logicalcpu", ""),
-    "lsblk": ("diskutil list", ""),
-    "dmidecode": ("system_profiler SPHardwareDataType", ""),
-    "inxi": ("system_profiler SPHardwareDataType; system_profiler SPSoftwareDataType", ""),
-    "hwinfo": ("system_profiler SPHardwareDataType", ""),
-    "free": ("vm_stat", ""),
-    "dmesg": ("log show --predicate 'eventMessage contains \"kernel\"' --info --debug --last 1m", ""),
-
-    # linux only
-    "lsblk_fs": ("", "lsblk --fs"),
-    "lsblk_nvme": ("", "lsblk --nvme"),
-    "lsblk_scsi": ("", "lsblk --scsi"),
-    "lsblk_virtio": ("", "lsblk --virtio"),
-    "lsblk_topology": ("", "lsblk --topology"),
-    "fdisk_ls": ("", "sudo fdisk -l"),
-    "fdisk_details": ("", "sudo fdisk -lx"),
-    "findmnt_fstab": ("", "findmnt --fstab"), # based on /etc/fstab (not necessarily loaded)
-    "findmnt_verify": ("", "findmnt --verify --verbose"), # will report warning if new fstab entries are not yet loaded, that is ok
 }
 
 # Fish-native implementations whose Xonsh ports intentionally use structured
