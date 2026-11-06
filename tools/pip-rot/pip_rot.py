@@ -318,6 +318,8 @@ class Browser(QMainWindow):
         self.action(file_menu, "Copy File Contents", "Ctrl+Alt+Shift+C", self.copy_contents)
         self.action(file_menu, "New Folder Inside", "Ctrl+Shift+N", self.new_directory)
         self.action(file_menu, "New Path…", "", self.new_path)
+        self.action(file_menu, "Edit Directory Notes", "",
+                    self.edit_directory_notes)
         self.gather_action = self.action(file_menu, "New Folder with Selection", ("Meta+Ctrl+N" if sys.platform == "darwin" else "Ctrl+Alt+N"), self.gather_selected)
         self.gather_action.setShortcutContext(Qt.ShortcutContext.WidgetShortcut)
         self.duplicate_action = self.action(file_menu, "Duplicate", "Ctrl+D", self.duplicate_selected)
@@ -435,6 +437,7 @@ class Browser(QMainWindow):
         menu.addAction("Copy File Contents", self.copy_contents)
         menu.addAction("New Folder Inside", self.new_directory)
         menu.addAction("New Path…", self.new_path)
+        menu.addAction("Edit Directory Notes", self.edit_directory_notes)
         menu.addAction(self.gather_action)
         menu.addAction(self.duplicate_action)
         menu.addAction(self.rename_action)
@@ -709,6 +712,9 @@ class Browser(QMainWindow):
     def action_directory(self):
         path = self.current().selected()
         return path if path.is_dir() else path.parent
+
+    def edit_directory_notes(self):
+        self.current().tree.notes.begin_edit(self.action_directory())
 
     def open_terminal(self):
         try:

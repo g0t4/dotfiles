@@ -61,12 +61,12 @@ context.paths={'/tmp/a','/tmp/b'}
 context.directory='/tmp'
 context.selection_explicit=true
 live=context
-assert(#handler.choices(context)==4)
+assert(#handler.choices(context)==5)
 context.paths={'/tmp/a','/other/b'}
-assert(#handler.choices(context)==3, 'selection action requires siblings')
+assert(#handler.choices(context)==4, 'selection action requires siblings')
 context.paths={'/tmp/a'}
 context.selection_explicit=false
-assert(#handler.choices(context)==3, 'root fallback is not an explicit selection')
+assert(#handler.choices(context)==4, 'root fallback is not an explicit selection')
 context.selection_explicit=true
 hs.json.encode=function(payload)
     assert(payload.command=='new-folder-inside' and payload.pid==123)
@@ -77,6 +77,13 @@ io.open=function() return {write=function(_,value) written=value end,close=noop}
 os.rename=function(_,target) destination=target;return true end
 assert(handler.folderAction(context,'new-folder-inside'))
 assert(written=='folder request' and destination:match('/request%-123.json$'))
+hs.json.encode=function(payload)
+    assert(payload.command=='edit-directory-notes' and payload.pid==123)
+    assert(payload.paths==context.paths and payload.directory=='/tmp')
+    return 'notes request'
+end
+assert(handler.folderAction(context,'edit-directory-notes'))
+assert(written=='notes request')
 assert(not handler.folderAction(context,'delete-everything'))
 live={pid=123,source='pip-rot',capabilities={'restart'}}
 assert(not handler.folderAction(context,'new-folder-inside'))

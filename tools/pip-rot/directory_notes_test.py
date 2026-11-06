@@ -3,6 +3,7 @@ from pathlib import Path
 import tempfile
 import time
 
+from PySide6.QtCore import Qt
 from PySide6.QtTest import QTest
 from PySide6.QtWidgets import QApplication
 
@@ -60,6 +61,47 @@ with tempfile.TemporaryDirectory() as directory:
     wait(lambda: tab.tree.notes.root_box.toPlainText() == 'Recreated')
     note.write_text('After refresh')
     wait(lambda: tab.tree.notes.root_box.toPlainText() == 'After refresh')
+    notes = tab.tree.notes
+    # Clicking the rendered root starts a raw Markdown editor; watcher updates don't erase drafts.
+    QTest.mouseClick(notes.root_box.viewport(), Qt.MouseButton.LeftButton)
+    assert notes.editing == str(folder)
+    notes.input.setPlainText('**Edited**\n\nTwo paragraphs.')
+    note.write_text('External change')
+    QTest.qWait(150)
+    assert notes.input.toPlainText() == '**Edited**\n\nTwo paragraphs.'
+    QTest.keyClick(notes.input, Qt.Key.Key_Return, Qt.KeyboardModifier.ControlModifier)
+    assert notes.editing is None
+    assert note.read_text() == '**Edited**\n\nTwo paragraphs.'  # Last write wins.
+    notes.begin_edit(folder)
+    notes.input.setPlainText('Discard this')
+    QTest.keyClick(notes.input, Qt.Key.Key_Escape)
+    assert note.read_text().startswith('**Edited**')
+    assert notes.editing is None
+    # Start notes for a directory with no file, and preserve the draft on a save error.
+    fresh = folder / 'fresh'
+    fresh.mkdir()
+    notes.begin_edit(fresh)
+    notes.input.setPlainText('# New notes')
+    (fresh / '.pip-rot.md').mkdir()  # Cannot replace a directory with a note.
+    notes.save()
+    assert notes.editing == str(fresh)
+    assert 'Could not save' in notes.error.text()
+    (fresh / '.pip-rot.md').rmdir()
+    notes.save()
+    assert (fresh / '.pip-rot.md').read_text() == '# New notes'
+    tab.navigate(root)
+    wait(lambda: tab.tree.notes.root_box.isVisible())
+    index = tab.model.index(str(folder))
+    tab.tree.expand(index)
+    wait(lambda: notes.extra_height(index) > 0)
+    point = tab.tree.visualRect(index).bottomLeft()
+    point.setX(point.x() + 40)
+    point.setY(point.y() - 8)
+    QTest.mouseClick(tab.tree.viewport(), Qt.MouseButton.LeftButton, pos=point)
+    assert notes.editing == str(folder)
+    notes.input.setPlainText('Nested edit')
+    notes.save()
+    assert note.read_text() == 'Nested edit'
     note.write_bytes(b'\xff' + b'a' * LIMIT)
     assert '[Note truncated' in read_note(folder)
     assert '\ufffd' in read_note(folder)
