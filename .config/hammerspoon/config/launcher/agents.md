@@ -26,7 +26,7 @@ utilities.
   (`chooser:rows(0)`) and opens a separate `hs.webview` window to render the
   streamed AI response as markdown.  All other modes use normal chooser results.
 * **Result merging** – the default (file‑search) mode merges bookmark matches
-  (`matchBookmarks`) with Spotlight (`mdfind`) results before feeding the
+  (`matchBookmarks`) with shared file-open history and existing z directory results before feeding the
   chooser.
 * **History** – queries are persisted in
   `~/.local/share/hammerspoon/launcher-history.txt`.  `Cmd+Up/Down` navigates the
@@ -51,7 +51,7 @@ utilities.
 | `py `  | `py print(2+2)` | **Python code** – executes via the repository‑wide virtualenv. |
 | `e `   | `e smile` | **Emoji picker** – loads CLDR emoji data (cached) and filters by keyword. |
 | `v `   | `v repos ask` | **Live filter** – two‑stage: `mdfind` broad filter + fuzzy refine. |
-| (none) | `README.md` | **File search** – default Spotlight (`mdfind`) file search. |
+| (none) | `README.md` | **Usage search** – shared file opens and existing z directories. |
 | `/` or `~` | `/Applications` | **Path browsing** – shows folder contents; `Enter` opens or reveals in Finder. |
 
 ### Tab Completion
@@ -165,8 +165,10 @@ When a chooser entry is chosen (`onChoice`):
   `hs.chooser` only for the input box (`rows(0)` hides results), and show output
   in a custom `hs.webview` or other window.  Future modes can follow this pattern
   to escape the limitations of the chooser results list.
-* The module relies heavily on **Spotlight (`mdfind`)** and **`stdbuf -o0`** to get
-  unbuffered line‑by‑line output.
+* Default search uses `file_history.lua` and `.config/xonsh/lib/wes_file_history.py`.
+  Empty input shows usage history; prefixed app/directory/live-filter modes still use Spotlight.
+  Record only accepted opens, never reveals or copied paths. The shared SQLite store
+  is `~/.local/state/file-history/history.sqlite3`; z stays in its existing database.
 * Adding a new mode typically requires:
   1. A handler function `handle<Mode>(query, searchId, callback)` that returns a
      cancel function.

@@ -7,8 +7,8 @@ from dataclasses import dataclass
 from pathlib import Path
 import sys
 
-from PySide6.QtCore import QDir, QItemSelectionModel, QProcess, Qt, QUrl, QTimer, Signal
-from PySide6.QtGui import QAction, QDesktopServices, QIcon, QKeySequence
+from PySide6.QtCore import QDir, QItemSelectionModel, QProcess, Qt, QTimer, Signal
+from PySide6.QtGui import QAction, QIcon, QKeySequence
 from PySide6.QtWidgets import (
     QApplication, QAbstractItemView, QFileSystemModel, QHeaderView, QInputDialog, QLineEdit, QMainWindow,
     QMenu, QMessageBox, QTabWidget, QVBoxLayout, QWidget,
@@ -25,6 +25,7 @@ from file_tree import FileTree
 from transfers import CrossVolumeMove, Transfers, name_parts
 from status_line import StatusLine
 from diagnostics import log_refresh
+from file_history import open_tracked_file
 
 
 def finder_trash_executable():
@@ -267,7 +268,7 @@ class FileTab(QWidget):
 
     def open_file(self, index):
         if not self.model.isDir(index):
-            QDesktopServices.openUrl(QUrl.fromLocalFile(self.model.filePath(index)))
+            open_tracked_file(self.model.filePath(index))
 
 
 class Browser(QMainWindow):
@@ -780,7 +781,7 @@ class Browser(QMainWindow):
             self.current().navigate(path)
             self.update_location()
         else:
-            QDesktopServices.openUrl(QUrl.fromLocalFile(str(path)))
+            open_tracked_file(path)
 
     def close_tab(self, index):
         if self.tabs.count() == 1 and self.transfers.busy:

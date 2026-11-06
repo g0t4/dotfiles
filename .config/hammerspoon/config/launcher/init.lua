@@ -2,7 +2,7 @@ local log = require("config.logs").launcher()
 local casing = require("config.launcher.casing")
 local M = {}
 
--- File launcher using mdfind (Spotlight index)
+-- File launcher using shared usage history
 local chooser = nil
 local currentCancelFunc = nil  -- Function to cancel current search
 local currentSearchId = 0  -- Track current search across all searchers
@@ -205,92 +205,8 @@ local function searchDirectories(query, searchId, callback)
     end
 end
 
--- Perform mdfind search
--- Returns a cancel function
-local function searchFiles(query, searchId, callback)
-    if query == "" or query == nil then
-        callback(searchId, {})
-        return function() end  -- No-op cancel
-    end
-
-    -- Build mdfind command
-    -- Full Spotlight search (faster than -name in practice)
-    -- Use stdbuf to force unbuffered output so we get results as they're found
-    local cmd = "/usr/bin/stdbuf"
-    local args = {"-o0", "/usr/bin/mdfind", query}
-    log:info("Starting new mdfind for query:", query, "searchId:", searchId)
-
-    local results = {}
-    local buffer = ""
-    local task = nil
-
-    task = hs.task.new(cmd, function(exitCode, _, stdErr)
-        -- Ignore if this isn't the current search anymore
-        if searchId ~= currentSearchId then
-            log:info("Ignoring old search", searchId)
-            return
-        end
-
-        if exitCode ~= 0 and exitCode ~= 15 then  -- 15 is SIGTERM (expected when we terminate)
-            log:error("mdfind error:", stdErr)
-        end
-
-        -- Final callback with results we've accumulated
-        callback(searchId, results)
-    end, function(_, stdOut, _)
-        -- Ignore if this isn't the current search anymore
-        if searchId ~= currentSearchId then
-            return true
-        end
-
-        -- Accumulate partial line in buffer
-        buffer = buffer .. stdOut
-
-        -- Process complete lines
-        while true do
-            local line, rest = buffer:match("([^\r\n]+)[\r\n](.*)")
-            if not line then
-                break
-            end
-            buffer = rest
-
-            -- Skip hidden files/directories (those with /. in path)
-            if not line:match("/%.[^/]") then
-                table.insert(results, {
-                    text = getFilename(line),
-                    subText = getDirectory(line),
-                    path = line,
-                    image = hs.image.iconForFile(line),
-                })
-
-                -- Update UI with partial results
-                callback(searchId, results)
-
-                -- Terminate if we have enough results
-                if #results >= MAX_RESULTS then
-                    if task then
-                        task:terminate()
-                        task = nil
-                    end
-                    return false  -- Stop streaming
-                end
-            end
-        end
-
-        return true  -- Continue streaming
-    end, args)
-
-    task:start()
-
-    -- Return cancel function
-    return function()
-        if task then
-            log:info("Canceling mdfind search", searchId)
-            task:terminate()
-            task = nil
-        end
-    end
-end
+-- Default search uses deliberate file opens and the existing shared z history.
+local searchFiles = require("config.launcher.file_history").search
 
 -- Application search mode using mdfind for system-wide search
 -- Returns a cancel function
@@ -1331,7 +1247,7 @@ local function showModes()
         },
         {
             text = "<search>",
-            subText = "File search using mdfind (Spotlight)",
+            subText = "Files and directories from usage history",
             image = hs.image.imageFromName("NSFolder"),
         },
     }
@@ -1521,7 +1437,7 @@ local function openPath(path)
     if attrs and attrs.mode == "directory" then
         require("config.launcher.pip_rot").open(path)
     else
-        hs.execute(string.format('open "%s"', path))
+        require("config.launcher.file_history").open(path)
     end
 end
 
@@ -1987,9 +1903,9 @@ local function onQueryChange(query)
         end
     end
 
-    -- Show available modes when query is empty
+    -- Show recent files and z directories when query is empty
     if query == "" or query == nil then
-        handleResults(thisSearchId, showModes())
+        currentCancelFunc = searchFiles("", thisSearchId, handleResults)
         return
     end
 
@@ -2105,10 +2021,10 @@ local function onQueryChange(query)
         return
     end
 
-    -- Default to file search, with bookmarks/prefix hints prepended
+    -- Default to usage history, with bookmarks/prefix hints prepended
     local bookmarkMatches = matchBookmarks(query)
 
-    -- Wrap handleResults to prepend bookmark matches to mdfind results
+    -- Prepend bookmark matches to usage-history results
     local function handleResultsWithBookmarks(searchId, results)
         if searchId ~= currentSearchId then return end
 

@@ -618,3 +618,34 @@ Expanded-folder previews occupy at most 200 pixels. Enter the folder to read its
 notes in the scrollable root box. Markdown images/resources are disabled; this
 is a text surface. Reads are bounded to 64 KiB, with a truncation notice for
 larger notes. Missing/unreadable notes display nothing. File notes are left for later.
+
+### Shared file-open history
+
+Double-click and keyboard opens record files after the default app handler accepts
+an open. Browsing, selecting, revealing, and previewing do not record a file.
+The Hammerspoon launcher's file opens use the same store. Code/editor and shell
+activity are not tracked automatically.
+
+History lives at `~/.local/state/file-history/history.sqlite3` (or beneath
+`XDG_STATE_HOME`), with an absolute path, open count, and last-open timestamp.
+SQLite transactions support independent Pip Rot processes and the launcher.
+No contents are read and no directories are crawled. History errors are logged
+without blocking the file open. A successful handler handoff does not prove that
+the target app finished loading the document.
+
+The launcher's command-less mode searches these files alongside the existing
+shared z directory history. Words fuzzy-match filenames and parent paths; match
+quality takes priority over usage. Empty input shows recent files and z directories.
+Bookmarks and prefix hints still match when typing. Explicit path browsing and
+prefixed search modes remain available. The z database is unchanged. Missing
+paths are omitted from results but retained for disconnected drives; moved files
+are learned at their new path when opened. History starts empty; picker selections
+are not imported as opens.
+
+To remove a remembered file, run from the dotfiles checkout:
+
+```sh
+.venv/bin/python .config/xonsh/lib/wes_file_history.py forget '/absolute/path/to/file'
+```
+
+Restart existing Pip Rot windows to activate tracking after an update.
