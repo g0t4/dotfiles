@@ -55,6 +55,10 @@ class FileTree(QTreeView):
         self.notes.resize_root()
         self.notes.schedule()
 
+    def drawBranches(self, painter, rect, index):
+        top = rect.adjusted(0, 0, 0, -self.notes.extra_height(index))
+        super().drawBranches(painter, top, index)
+
     def drawRow(self, painter, option, index):
         super().drawRow(painter, option, index)
         self.notes.paint(painter, option, index)

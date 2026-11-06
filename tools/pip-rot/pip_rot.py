@@ -83,6 +83,7 @@ class FileTab(QWidget):
         self.model.dataChanged.connect(self.update_duration_column)
         layout = QVBoxLayout(self)
         layout.setContentsMargins(0, 0, 0, 0)
+        layout.setSpacing(0)
         layout.addWidget(self.tree.notes.root_box)
         layout.addWidget(self.tree)
         self.model.directoryLoaded.connect(lambda directory: self.loaded(directory, complete=True))

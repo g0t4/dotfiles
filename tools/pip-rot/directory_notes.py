@@ -2,14 +2,20 @@
 from pathlib import Path
 
 from PySide6.QtCore import QEvent, QFileSystemWatcher, QIODevice, QObject, QRectF, QSaveFile, Qt, QTimer, Signal
-from PySide6.QtGui import QAbstractTextDocumentLayout, QTextDocument
+from PySide6.QtGui import QAbstractTextDocumentLayout, QColor, QPalette, QTextDocument
 from PySide6.QtWidgets import (
     QFrame, QHBoxLayout, QLabel, QMessageBox, QPlainTextEdit, QPushButton,
-    QStyleOptionViewItem, QStyledItemDelegate, QTextBrowser, QVBoxLayout,
+    QStyle, QStyleOptionViewItem, QStyledItemDelegate, QTextBrowser, QVBoxLayout,
 )
 
 NAME = '.rotten.md'
 LIMIT = 64 * 1024
+NOTE_PADDING = 2
+NOTE_LEFT = 24
+
+
+def muted(foreground, background):
+    return QColor(*(round(foreground.getRgb()[i] * 0.65 + background.getRgb()[i] * 0.35) for i in range(3)))
 
 
 def read_note(directory):
@@ -23,6 +29,10 @@ def read_note(directory):
 
 
 class NoteDocument(QTextDocument):
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        self.setDocumentMargin(0)
+
     def loadResource(self, _kind, _url):
         # Notes are text: don't fetch network images or read embedded local resources.
         return None
@@ -72,6 +82,14 @@ class DirectoryNotes(QObject):
         self.root_box = QTextBrowser()
         self.root_box.setAccessibleName('Directory notes')
         self.root_box.setOpenLinks(False)
+        self.root_box.setFrameShape(QFrame.Shape.NoFrame)
+        self.root_box.setContentsMargins(0, 0, 0, 0)
+        self.root_box.setViewportMargins(tree.indentation() + NOTE_LEFT, NOTE_PADDING, 0, NOTE_PADDING)
+        palette = tree.palette()
+        palette.setColor(QPalette.ColorRole.Text, muted(palette.text().color(), palette.base().color()))
+        palette.setColor(QPalette.ColorRole.Window, palette.base().color())
+        self.root_box.setPalette(palette)
+        self.root_box.setAutoFillBackground(True)
         self.root_box.setDocument(NoteDocument(self.root_box))
         self.root_box.hide()
         self.root_box.setToolTip('Click to edit Markdown notes')
@@ -126,14 +144,15 @@ class DirectoryNotes(QObject):
 
     def resize_root(self):
         doc = self.root_box.document()
-        doc.setTextWidth(max(80, self.tree.viewport().width() - 24))
+        doc.setTextWidth(max(80, self.tree.viewport().width() - self.tree.indentation() - NOTE_LEFT))
         root = self.tree.model().filePath(self.tree.rootIndex()) if self.tree.model() else None
-        height = 180 if self.editing == root else min(200, int(doc.size().height()) + 16)
+        height = 180 if self.editing == root else min(200, int(doc.size().height()) + NOTE_PADDING * 2)
         self.root_box.setFixedHeight(height)
 
     def document(self, index):
         if not index.isValid():
             return None
+        index = index.siblingAtColumn(0)
         text = self.texts.get(self.tree.model().filePath(index))
         if not text or not self.tree.isExpanded(index):
             return None
@@ -145,30 +164,35 @@ class DirectoryNotes(QObject):
             depth += 1
             parent = parent.parent()
         left = depth * self.tree.indentation()
-        doc.setTextWidth(max(80, self.tree.viewport().width() - left - 24))
+        doc.setTextWidth(max(80, self.tree.viewport().width() - left - NOTE_LEFT - 8))
         return doc
 
     def extra_height(self, index):
+        if index.isValid():
+            index = index.siblingAtColumn(0)
         if index.isValid() and self.editing == self.tree.model().filePath(index):
             return 180
         doc = self.document(index)
-        return min(200, int(doc.size().height()) + 16) if doc else 0
+        return min(200, int(doc.size().height()) + NOTE_PADDING * 2) if doc else 0
 
     def paint(self, painter, option, index):
         doc = self.document(index)
         if doc is None:
             return
-        height = min(200, int(doc.size().height()) + 16)
+        height = min(200, int(doc.size().height()) + NOTE_PADDING * 2)
         painter.save()
         rect = QRectF(option.rect)
         rect.setTop(rect.bottom() - height + 1)
-        rect.setLeft(self.tree.visualRect(index).left() + 6)
+        rect.setLeft(self.tree.visualRect(index).left() + NOTE_LEFT)
         rect.setRight(self.tree.viewport().width() - 8)
         painter.setClipRect(rect)
-        painter.fillRect(rect, self.tree.palette().alternateBase())
-        painter.translate(rect.left() + 4, rect.top() + 6)
+        painter.translate(rect.left(), rect.top() + NOTE_PADDING)
         context = QAbstractTextDocumentLayout.PaintContext()
         context.palette = self.tree.palette()
+        selected = bool(option.state & QStyle.StateFlag.State_Selected)
+        foreground = context.palette.highlightedText().color() if selected else context.palette.text().color()
+        background = context.palette.highlight().color() if selected else context.palette.base().color()
+        context.palette.setColor(QPalette.ColorRole.Text, muted(foreground, background))
         doc.documentLayout().draw(painter, context)
         painter.restore()
 

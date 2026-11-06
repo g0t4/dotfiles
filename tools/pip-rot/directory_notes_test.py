@@ -39,6 +39,8 @@ with tempfile.TemporaryDirectory() as directory:
     tab.tree.expand(index)
     wait(lambda: tab.tree.notes.extra_height(index) > 0)
     assert tab.tree.visualRect(index).height() > 45
+    # Every column reserves the same note height; metadata stays on the name line.
+    assert tab.tree.notes.extra_height(index) == tab.tree.notes.extra_height(index.siblingAtColumn(3))
     assert tab.tree.notes.document(index).toPlainText().startswith('Best take: 03')
     tab.tree.collapse(index)
     assert tab.tree.notes.extra_height(index) == 0
