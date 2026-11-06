@@ -663,6 +663,7 @@ if $IS_LINUX then
 
 end
 
+# TODO get rid of need to have these here too
 if $IS_MACOS
 
     # map some abbrs so I can get similar info on my mac to what I am used to using on linux/arch
