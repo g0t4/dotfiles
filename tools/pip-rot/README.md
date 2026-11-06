@@ -593,3 +593,19 @@ tries `duti` registration for `public.folder`; this macOS installation rejects
 that operation with error -50. `--restore-default` restores the saved handler
 only if Pip Rot is currently the default; `--uninstall` also moves the installed
 bundle to Trash. No `public.directory` association is changed.
+
+### Directory notes
+
+Put Markdown in `.pip-rot.md` inside any directory. Pip Rot displays it above
+that directory's files: above the tree for the tab root, or beneath the folder
+name when expanded. Notes aren't extra selectable nodes, so navigation and file
+actions continue to operate on real files and folders. The backing dotfile is
+visible when Show Hidden Files is enabled; edit it with your usual editor.
+Changes, including atomic editor saves, update live. Moving or copying the whole
+directory naturally carries its notes along.
+
+Expanded-folder previews occupy at most 200 pixels. Enter the folder to read its
+notes in the scrollable root box. Markdown images/resources are disabled; this
+is a text surface. Reads are bounded to 64 KiB, with a truncation notice for
+larger notes. Missing/unreadable notes display nothing. File notes and an inline
+notes editor are left for later.

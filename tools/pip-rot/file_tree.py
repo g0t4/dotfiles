@@ -5,6 +5,8 @@ from PySide6.QtCore import QModelIndex, Qt, Signal
 from PySide6.QtGui import QDrag, QPainter, QPen
 from PySide6.QtWidgets import QAbstractItemView, QTreeView
 
+from directory_notes import DirectoryNotes
+
 PIP_ROT_FILES = 'application/x-pip-rot-files'
 
 
@@ -35,6 +37,27 @@ class FileTree(QTreeView):
         self.setAutoExpandDelay(600)
         self.drop_index = QModelIndex()
         self.drop_active = False
+        self.notes = DirectoryNotes(self)
+
+    def setModel(self, model):
+        super().setModel(model)
+        model.directoryLoaded.connect(self.notes.schedule)
+        model.rowsInserted.connect(self.notes.schedule)
+        model.rowsRemoved.connect(self.notes.schedule)
+        self.notes.schedule()
+
+    def setRootIndex(self, index):
+        super().setRootIndex(index)
+        self.notes.schedule()
+
+    def resizeEvent(self, event):
+        super().resizeEvent(event)
+        self.notes.resize_root()
+        self.notes.schedule()
+
+    def drawRow(self, painter, option, index):
+        super().drawRow(painter, option, index)
+        self.notes.paint(painter, option, index)
 
     def startDrag(self, _supported):
         indexes = self.selectionModel().selectedRows(0)
