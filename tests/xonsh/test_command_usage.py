@@ -147,7 +147,11 @@ inspect-args $CAPTURE_INPUT
 ''')
     assert completed.returncode == 0, completed.stderr
     invocations = [e for e in store.events() if e['kind'] == 'invocation']
-    assert any(e['alias'] == 'inspect-args' and 'input.txt' in e['argv'] for e in invocations)
+    event = next(e for e in invocations if e['alias'] == 'inspect-args')
+    assert event['argv'] == ['inspect-args', 'input.txt']
+    assert event['resolved_args'] == ['input.txt']
+    assert event['observed_arguments']['input.txt']['exists']
+    assert any(r['path'] == str(tmp_path/'input.txt') for r in store.rebuild())
 
 
 def test_incompatible_store_requires_reset_not_migration(tmp_path):

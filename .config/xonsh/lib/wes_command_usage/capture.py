@@ -84,14 +84,19 @@ class Recorder:
             def stream(value):
                 name = getattr(value, 'name', None)
                 return {'path': name if isinstance(name, str) else None, 'mode': getattr(value, 'mode', None)}
-            argv = [str(a) for a in spec.cmd]
+            resolved_args = [str(a) for a in spec.cmd]
+            argv = resolved_args
+            # Callable aliases receive only their operands in spec.cmd.
+            if callable(spec.alias):
+                name = spec.alias_name or getattr(spec.alias, '__name__', '<callable>')
+                argv = [name, *resolved_args]
             observed = {}
             for arg in argv[1:]:
                 try:
                     observed[arg] = {'exists': Path(arg).exists(), 'directory': Path(arg).is_dir()}
                 except (OSError, ValueError):
                     pass
-            invocation = self.emit('invocation', argv=argv,
+            invocation = self.emit('invocation', argv=argv, resolved_args=resolved_args,
                 original_args=[str(a) for a in spec.args], alias=getattr(spec, 'alias_name', None),
                 executable=getattr(spec, 'binary_loc', None), background=spec.background,
                 pipeline_index=spec.pipeline_index, observed_arguments=observed,
