@@ -699,7 +699,7 @@ if command -q claude
 end
 
 if command -q codex
-    abbr cy 'claude --yolo'
+    abbr cy 'codex --yolo'
     # PRN use `cx` for codex?
 end
 
