@@ -7,6 +7,9 @@ function M.complete(findstart, base)
         return #before - #(before:match("[%w_#*@=]+$") or "")
     end
 
+    -- Deleting a word back to whitespace must not offer every snippet.
+    if base == "" then return {} end
+
     local snippets = require("luasnip")
     local matches = {}
     for _, filetype in ipairs(snippets.get_snippet_filetypes()) do
