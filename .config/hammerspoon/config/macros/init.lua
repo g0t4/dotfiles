@@ -50,16 +50,6 @@ end
 local python_exe = os.getenv("HOME") .. "/repos/github/g0t4/dotfiles/.venv/bin/python3"
 local airpods_script = os.getenv("HOME") .. "/repos/github/g0t4/dotfiles/.config/hammerspoon/config/macros/streamdeck/airpods.py"
 
----Default the device-name substring to the AirPods Pro #2.
----@param name_substring string|nil
----@return string
-local function default_audio_output_device_name(name_substring)
-    if name_substring == nil or name_substring == "" then
-        return "AirPods Pro #2"
-    end
-    return name_substring
-end
-
 ---Find the audio output device registered with CoreAudio whose name contains
 ---`name_substring` (first match).
 ---@param name_substring string
@@ -106,7 +96,6 @@ end
 ---@param name_substring string
 ---@return boolean true if now connected
 function StreamDeckConnectAudioDevice(name_substring)
-    name_substring = default_audio_output_device_name(name_substring)
     if find_audio_device(name_substring) then
         return true -- already connected
     end
@@ -122,7 +111,6 @@ end
 ---@param name_substring string
 ---@return boolean true if now disconnected
 function StreamDeckDisconnectAudioDevice(name_substring)
-    name_substring = default_audio_output_device_name(name_substring)
     if not find_audio_device(name_substring) then
         return true -- already disconnected
     end
@@ -140,7 +128,6 @@ end
 ---@param name_substring string
 ---@return boolean true if the device is now the default output
 function StreamDeckToggleAudioDevice(name_substring)
-    name_substring = default_audio_output_device_name(name_substring)
     local device = find_audio_device(name_substring)
     local default = hs.audiodevice.defaultOutputDevice()
     local is_default = device and default and default:name() == device:name()
@@ -167,7 +154,10 @@ function StreamDeckToggleAudioDevice(name_substring)
     return connect_ok -- connection initiated but CoreAudio hasn't registered yet
 end
 
----Backward-compatible AirPods Pro #2 wrappers.
+function StreamDeckConnectAirPodsPro2()
+    return StreamDeckConnectAudioDevice("Wes’s AirPods Pro")
+end
+
 function StreamDeckConnectAirPodsPro2()
     return StreamDeckConnectAudioDevice("AirPods Pro #2")
 end
