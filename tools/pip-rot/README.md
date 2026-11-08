@@ -672,3 +672,9 @@ For terminal diagnostics, use:
 ```sh
 .venv/bin/python .config/xonsh/lib/wes_file_history.py info 'report'
 ```
+
+### Opening selections
+
+Cmd+Down / Cmd+O opens all selected files together through their default apps (for example, a selection of MP4s in VLC). Double-clicking a selected file also opens the selected files together. Right-clicking within a selection preserves it. A single selected directory navigates in the current tab; multiple selected directories open in separate tabs.
+
+Regression checks: `QT_QPA_PLATFORM=offscreen tools/pip-rot/.venv/bin/python tools/pip-rot/open_selection_test.py`.

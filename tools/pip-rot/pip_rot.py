@@ -25,7 +25,7 @@ from file_tree import FileTree
 from transfers import CrossVolumeMove, Transfers, name_parts
 from status_line import StatusLine
 from diagnostics import log_refresh
-from file_history import open_tracked_file
+from file_history import open_tracked_files
 
 
 def finder_trash_executable():
@@ -268,7 +268,9 @@ class FileTab(QWidget):
 
     def open_file(self, index):
         if not self.model.isDir(index):
-            open_tracked_file(self.model.filePath(index))
+            rows = self.tree.selectionModel().selectedRows(0)
+            paths = [Path(self.model.filePath(row)) for row in rows if not self.model.isDir(row)]
+            open_tracked_files(paths or [Path(self.model.filePath(index))])
 
 
 class Browser(QMainWindow):
@@ -334,7 +336,7 @@ class Browser(QMainWindow):
         self.trash_action.setShortcutContext(Qt.ShortcutContext.WidgetShortcut)
         self.action(file_menu, "Open Directory in New Tab", "Ctrl+Return", self.tab_selected)
         self.action(file_menu, "Duplicate Tab", "Ctrl+T", lambda: self.add_tab(self.current().root))
-        open_item = self.action(file_menu, "Open Selected Item", "Ctrl+Down", self.open_selected)
+        open_item = self.action(file_menu, "Open Selected Items", "Ctrl+Down", self.open_selected)
         open_item.setShortcuts([QKeySequence("Ctrl+Down"), QKeySequence("Ctrl+O")])
         close_tab = self.action(file_menu, "Close Tab", "Ctrl+W", lambda: self.close_tab(self.tabs.currentIndex()))
         close_tab.setShortcuts([QKeySequence("Ctrl+W"), QKeySequence("F8")])
@@ -430,12 +432,13 @@ class Browser(QMainWindow):
     def context_menu(self, tab, point):
         index = tab.tree.indexAt(point)
         if index.isValid():
-            tab.tree.setCurrentIndex(index)
+            if not tab.tree.selectionModel().isSelected(index):
+                tab.tree.setCurrentIndex(index)
         menu = QMenu(self)
         if tab.selected().is_dir():
             menu.addAction("Open Directory in New Tab", self.tab_selected)
         else:
-            menu.addAction("Open File", self.open_selected)
+            menu.addAction("Open Selected Files", self.open_selected)
         menu.addAction("Open Terminal Here", self.open_terminal)
         menu.addAction("Copy Path", self.copy_paths)
         menu.addAction("Copy File Contents", self.copy_contents)
@@ -776,12 +779,17 @@ class Browser(QMainWindow):
             self.add_tab(path)
 
     def open_selected(self):
-        path = self.current().selected()
-        if path.is_dir():
-            self.current().navigate(path)
+        paths = self.selected_paths()
+        if len(paths) == 1 and paths[0].is_dir():
+            self.current().navigate(paths[0])
             self.update_location()
-        else:
-            open_tracked_file(path)
+            return
+        files = [path for path in paths if not path.is_dir()]
+        if files and not open_tracked_files(files):
+            self.statusBar().showMessage("Could not open selected files.", 6000, warning=True)
+        for path in paths:
+            if path.is_dir():
+                self.add_tab(path)
 
     def close_tab(self, index):
         if self.tabs.count() == 1 and self.transfers.busy:
