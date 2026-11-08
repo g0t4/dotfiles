@@ -220,6 +220,28 @@ function M.setup()
     vim.keymap.set("n", "<leader>g3", function()
         M.git_hunks({ rev = "HEAD~2" })
     end)
+
+    -- go further back without keymaps: e.g. `:GitHunks 5` or `:GitHunks HEAD~10`
+    vim.api.nvim_create_user_command("GitHunks", function(command)
+        local rev = command.args
+        if rev:match("^%d+$") then
+            rev = "HEAD~" .. rev
+        end
+        if rev == "" then
+            rev = "HEAD"
+        end
+        M.git_hunks({ rev = rev })
+    end, {
+        nargs = "?",
+        desc = "Show git hunks for a commit (default HEAD)",
+        complete = function()
+            local candidates = {}
+            for i = 0, 9 do
+                candidates[#candidates + 1] = "HEAD~" .. i
+            end
+            return candidates
+        end,
+    })
 end
 
 return M
