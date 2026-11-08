@@ -154,20 +154,25 @@ function StreamDeckToggleAudioDevice(name_substring)
     return connect_ok -- connection initiated but CoreAudio hasn't registered yet
 end
 
-function StreamDeckConnectAirPodsPro2()
-    return StreamDeckConnectAudioDevice("Wes’s AirPods Pro")
+local AIRPODS = {
+    PRO = "Wes’s AirPods Pro",
+    PRO_2 = "AirPods Pro #2",
+}
+
+function StreamDeckConnectAirPodsPro()
+    return StreamDeckConnectAudioDevice(AIRPODS.PRO)
 end
 
 function StreamDeckConnectAirPodsPro2()
-    return StreamDeckConnectAudioDevice("AirPods Pro #2")
+    return StreamDeckConnectAudioDevice(AIRPODS.PRO_2)
 end
 
 function StreamDeckDisconnectAirPodsPro2()
-    return StreamDeckDisconnectAudioDevice("AirPods Pro #2")
+    return StreamDeckDisconnectAudioDevice(AIRPODS.PRO_2)
 end
 
 function StreamDeckToggleAirPodsPro2()
-    return StreamDeckToggleAudioDevice("AirPods Pro #2")
+    return StreamDeckToggleAudioDevice(AIRPODS.PRO_2)
 end
 
 function nudge_human_to_check_log()
