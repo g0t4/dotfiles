@@ -53,7 +53,7 @@ local airpods_script = os.getenv("HOME") .. "/repos/github/g0t4/dotfiles/.config
 ---Default the device-name substring to the AirPods Pro #2.
 ---@param name_substring string|nil
 ---@return string
-local function default_name(name_substring)
+local function default_audio_output_device_name(name_substring)
     if name_substring == nil or name_substring == "" then
         return "AirPods Pro #2"
     end
@@ -106,7 +106,7 @@ end
 ---@param name_substring string
 ---@return boolean true if now connected
 function StreamDeckConnectAudioDevice(name_substring)
-    name_substring = default_name(name_substring)
+    name_substring = default_audio_output_device_name(name_substring)
     if find_audio_device(name_substring) then
         return true -- already connected
     end
@@ -122,7 +122,7 @@ end
 ---@param name_substring string
 ---@return boolean true if now disconnected
 function StreamDeckDisconnectAudioDevice(name_substring)
-    name_substring = default_name(name_substring)
+    name_substring = default_audio_output_device_name(name_substring)
     if not find_audio_device(name_substring) then
         return true -- already disconnected
     end
@@ -140,7 +140,7 @@ end
 ---@param name_substring string
 ---@return boolean true if the device is now the default output
 function StreamDeckToggleAudioDevice(name_substring)
-    name_substring = default_name(name_substring)
+    name_substring = default_audio_output_device_name(name_substring)
     local device = find_audio_device(name_substring)
     local default = hs.audiodevice.defaultOutputDevice()
     local is_default = device and default and default:name() == device:name()
