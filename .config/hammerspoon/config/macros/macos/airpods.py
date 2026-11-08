@@ -7,20 +7,22 @@ across Macs. macOS auto-selects a freshly-connected bluetooth output device as
 the default and reverts the default when it disconnects, so this just toggles
 the bluetooth link. Requires the macOS-only dependency pyobjc-framework-IOBluetooth.
 
-Usage: airpods.py connect|disconnect [name]
+Usage: airpods.py connect|disconnect [pattern]
 
-`name` is a partial device-name match (first match is used); defaults to
-"AirPods Pro #2".
+`pattern` is a regex matched against the paired device name (first match is
+used). Use `$` to anchor the end (e.g. "AirPods Pro$" vs "AirPods Pro #2$").
+Defaults to "AirPods Pro #2$".
 """
 
+import re
 import subprocess
 import sys
 import time
 
 import IOBluetooth
 
-# partial name match against the paired-device list
-AIRPODS_NAME = "AirPods Pro #2"
+# regex matched against the paired-device list
+AIRPODS_NAME = "AirPods Pro #2$"
 CONNECT_WAIT_SECONDS = 5.0
 # `system_profiler` section headers (not device names)
 _SECTION_HEADERS = {"Bluetooth", "Bluetooth Controller", "Connected", "Not Connected"}
@@ -34,9 +36,9 @@ def system_bluetooth_text() -> str:
     return result.stdout
 
 
-def find_address_by_name(name_substring: str) -> str | None:
-    """Return the bluetooth address of the paired device whose name contains
-    `name_substring`, or None if no paired device matches."""
+def find_address_by_name(name_pattern: str) -> str | None:
+    """Return the bluetooth address of the first paired device whose name
+    matches `name_pattern`, or None if no paired device matches."""
     text = system_bluetooth_text()
     # device blocks look like: <name>: ... Address: AA:BB:CC:DD:EE:FF
     # track the current device name, binding each Address line to the device it
@@ -49,26 +51,26 @@ def find_address_by_name(name_substring: str) -> str | None:
             current_name = None if name in _SECTION_HEADERS else name
         elif stripped.startswith("Address:") and current_name:
             address = stripped.split(":", 1)[1].strip()
-            if name_substring in current_name:
+            if re.search(name_pattern, current_name):
                 return address
     return None
 
 
-def find_device(name_substring: str = AIRPODS_NAME) -> IOBluetooth.IOBluetoothDevice:
+def find_device(name_pattern: str = AIRPODS_NAME) -> IOBluetooth.IOBluetoothDevice:
     """Return the IOBluetoothDevice for the first bluetooth device whose name
-    contains `name_substring`."""
-    address = find_address_by_name(name_substring)
+    matches `name_pattern`."""
+    address = find_address_by_name(name_pattern)
     if address is None:
-        raise RuntimeError(f"no paired bluetooth device matching {name_substring!r}")
+        raise RuntimeError(f"no paired bluetooth device matching {name_pattern!r}")
     device = IOBluetooth.IOBluetoothDevice.deviceWithAddressString_(address)
     if device is None:
         raise RuntimeError(f"no IOBluetooth device for {address}")
     return device
 
 
-def connect(name_substring: str = AIRPODS_NAME) -> int:
+def connect(name_pattern: str = AIRPODS_NAME) -> int:
     """Open the bluetooth connection and wait for it to establish."""
-    device = find_device(name_substring)
+    device = find_device(name_pattern)
     if device.isConnected():
         print("already connected")
         return 0
@@ -86,9 +88,9 @@ def connect(name_substring: str = AIRPODS_NAME) -> int:
     return 1
 
 
-def disconnect(name_substring: str = AIRPODS_NAME) -> int:
+def disconnect(name_pattern: str = AIRPODS_NAME) -> int:
     """Close the bluetooth connection and wait for it to drop."""
-    device = find_device(name_substring)
+    device = find_device(name_pattern)
     if not device.isConnected():
         print("already disconnected")
         return 0
@@ -109,11 +111,11 @@ def disconnect(name_substring: str = AIRPODS_NAME) -> int:
 def main(argv: list[str]) -> int:
     """Dispatch to the requested subcommand."""
     command = argv[1] if len(argv) > 1 else "connect"
-    name_substring = argv[2] if len(argv) > 2 else AIRPODS_NAME
+    name_pattern = argv[2] if len(argv) > 2 else AIRPODS_NAME
     if command == "connect":
-        return connect(name_substring)
+        return connect(name_pattern)
     if command == "disconnect":
-        return disconnect(name_substring)
+        return disconnect(name_pattern)
     print(f"unknown command: {command}")
     return 2
 

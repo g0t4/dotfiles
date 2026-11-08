@@ -5,11 +5,13 @@ import pytest
 airpods = pytest.importorskip("airpods")
 
 
-# realistic system_profiler SPBluetoothDataType snippet, AirPods under "Connected"
+# realistic system_profiler SPBluetoothDataType snippet, both AirPods Pro pairs present
 SAMPLE_BT = """Bluetooth:
     Bluetooth Controller:
         Address: 11:22:33:44:55:66
     Connected:
+        Wes’s AirPods Pro:
+            Address: DE:AD:BE:EF:00:01
         Wes’s AirPods Pro #2:
             Address: AA:BB:CC:DD:EE:FF
     Not Connected:
@@ -18,29 +20,26 @@ SAMPLE_BT = """Bluetooth:
 """
 
 
-def test_find_address_by_name(monkeypatch):
+def test_find_address_by_name_anchored_ending(monkeypatch):
     monkeypatch.setattr(airpods, "system_bluetooth_text", lambda: SAMPLE_BT)
-    assert airpods.find_address_by_name("AirPods Pro #2") == "AA:BB:CC:DD:EE:FF"
+    assert airpods.find_address_by_name("AirPods Pro #2$") == "AA:BB:CC:DD:EE:FF"
 
 
-def test_find_address_by_name_partial_match(monkeypatch):
+def test_find_address_by_name_distinguishes_pairs(monkeypatch):
+    # `$`-anchored "AirPods Pro" must NOT match the "#2" pair
     monkeypatch.setattr(airpods, "system_bluetooth_text", lambda: SAMPLE_BT)
-    assert airpods.find_address_by_name("AirPods Pro") == "AA:BB:CC:DD:EE:FF"
+    assert airpods.find_address_by_name("AirPods Pro$") == "DE:AD:BE:EF:00:01"
 
 
 def test_find_address_by_name_unknown_returns_none(monkeypatch):
     monkeypatch.setattr(airpods, "system_bluetooth_text", lambda: SAMPLE_BT)
-    assert airpods.find_address_by_name("Bogus Device") is None
+    assert airpods.find_address_by_name("^Bogus") is None
 
 
 def test_find_address_by_name_first_match(monkeypatch):
-    # two devices contain "AirPods Pro"; the first in the output wins
-    both = SAMPLE_BT.replace(
-        "        Wes’s AirPods Pro #2:",
-        "        Wes’s AirPods Pro:\n            Address: DE:AD:BE:EF:00:01\n        Wes’s AirPods Pro #2:",
-    )
-    monkeypatch.setattr(airpods, "system_bluetooth_text", lambda: both)
-    assert airpods.find_address_by_name("AirPods Pro") == "DE:AD:BE:EF:00:01"
+    # "AirPods" matches both pairs; the first in the output wins (pair #1)
+    monkeypatch.setattr(airpods, "system_bluetooth_text", lambda: SAMPLE_BT)
+    assert airpods.find_address_by_name("AirPods") == "DE:AD:BE:EF:00:01"
 
 
 def test_main_passes_name_to_connect(monkeypatch):
@@ -54,7 +53,7 @@ def test_main_defaults_name_to_airpods(monkeypatch):
     received = []
     monkeypatch.setattr(airpods, "connect", lambda name: received.append(name) or 0)
     assert airpods.main(["airpods.py", "connect"]) == 0
-    assert received == ["AirPods Pro #2"]
+    assert received == ["AirPods Pro #2$"]
 
 
 def test_main_defaults_to_connect(monkeypatch):
