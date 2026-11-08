@@ -90,8 +90,11 @@ def register_wes_python():
     abbr('pt', 'pytest')
     abbr('ptc', 'pytest --collect-only')
     abbr('ptk', 'pytest -k "%"', cursor_marker="%")
+    abbr('ptwk', 'ptw -- -k "%"', cursor_marker="%")
     abbr('pytest_nocapture', 'pytest --capture=no')
     abbr('pytest_info_logs', 'pytest --log-cli-level=INFO')
     abbr('-s', '--capture=no', position="anywhere", commands=('pytest',))
+    abbr('--print', '--capture=no', position="anywhere", commands=('pytest',))
+    abbr('--print', '--capture=no', position="anywhere", commands=('ptw',))
 
 

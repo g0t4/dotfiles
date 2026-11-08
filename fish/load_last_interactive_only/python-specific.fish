@@ -294,8 +294,11 @@ end
 abbr -- pt 'pytest'
 abbr -- ptc 'pytest --collect-only'
 abbr --set-cursor -- ptk 'pytest -k "%"' # run tests matching expression
+abbr --set-cursor -- ptwk 'ptw -- -k "%"' # run tests matching expression
 # PRN ptm => -m MARKEXPR # if i use markers
 abbr -- pytest_nocapture 'pytest --capture=no'
 abbr -- pytest_info_logs  'pytest --log-cli-level=INFO'
 # expand short to long options:
 abbr --command pytest -- "-s" "--capture=no"
+abbr --command pytest -- "--print" "--capture=no" # made up.. so I can `pytest --print` :)
+abbr --command ptw -- "--print" "--capture=no" # made up.. so I can `pytest --print` :)
