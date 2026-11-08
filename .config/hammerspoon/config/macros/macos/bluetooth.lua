@@ -1,10 +1,5 @@
--- macOS-only helper for toggling bluetooth audio devices (e.g. "Wes's AirPods Pro #2")
--- via pyobjc (pyobjc-framework-IOBluetooth). Devices are matched by partial name,
--- first match wins. macOS auto-selects a freshly-connected bluetooth output as the
--- default and reverts the default when it disconnects, so this is really a
--- connect/disconnect of the bluetooth link. Script: config/macros/streamdeck/airpods.py
 local python_exe = os.getenv("HOME") .. "/repos/github/g0t4/dotfiles/.venv/bin/python3"
-local airpods_script = os.getenv("HOME") .. "/repos/github/g0t4/dotfiles/.config/hammerspoon/config/macros/streamdeck/airpods.py"
+local airpods_script = os.getenv("HOME") .. "/repos/github/g0t4/dotfiles/.config/hammerspoon/config/macros/macos/airpods.py"
 
 ---Find the audio output device registered with CoreAudio whose name contains
 ---`name_substring` (first match).
@@ -115,10 +110,6 @@ local AIRPODS = {
     PRO_2 = "AirPods Pro #2",
 }
 
-function StreamDeckConnectAirPodsPro()
-    return StreamDeckConnectAudioDevice(AIRPODS.PRO)
-end
-
 function StreamDeckConnectAirPodsPro2()
     return StreamDeckConnectAudioDevice(AIRPODS.PRO_2)
 end
@@ -127,8 +118,10 @@ function StreamDeckDisconnectAirPodsPro2()
     return StreamDeckDisconnectAudioDevice(AIRPODS.PRO_2)
 end
 
+function StreamDeckToggleAirPodsPro()
+    return StreamDeckToggleAudioDevice(AIRPODS.PRO)
+end
+
 function StreamDeckToggleAirPodsPro2()
     return StreamDeckToggleAudioDevice(AIRPODS.PRO_2)
 end
-
-
