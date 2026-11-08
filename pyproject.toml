@@ -47,6 +47,7 @@ dependencies = [
 [project.optional-dependencies]
 macos = [
     "pyobjc-framework-dictionaryservices>=12.1",
+    "pyobjc-framework-IOBluetooth>=13.0",
 ]
 
 #
