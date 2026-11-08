@@ -342,6 +342,7 @@ vim.api.nvim_create_autocmd("LspAttach", {
             -- 'autocomplete' collects the LSP omnifunc and LuaSnip source in
             -- the same popup. Keep native LSP acceptance and manual requests.
             vim.lsp.completion.enable(true, client.id, args.buf)
+            vim.bo[args.buf].omnifunc = "v:lua.require'plugins.completions.nvim_native.sources'.omnifunc"
         end
 
         local function map(mode, lhs, rhs, desc)
