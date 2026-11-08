@@ -36,6 +36,29 @@ local function parse_diff(lines)
     return results
 end
 
+---@param rev string
+---@param path string
+---@return string filepath to use for previewing
+local function preview_filepath(rev, path)
+    if not rev then
+        return path
+    end
+
+    local output = vim.fn.systemlist({ "git", "show", rev .. ":" .. path })
+    if vim.v.shell_error ~= 0 then
+        vim.notify("git show " .. rev .. ":" .. path .. " failed", vim.log.levels.WARN)
+        return path
+    end
+
+    local tmp = vim.fn.tempname()
+    local ext = path:match("%.([^.]+)$")
+    if ext then
+        tmp = tmp .. "." .. ext
+    end
+    vim.fn.writefile(output, tmp)
+    return tmp
+end
+
 M.git_hunks = function(opts)
     opts = opts or {}
 
@@ -74,14 +97,16 @@ M.git_hunks = function(opts)
     --     only to then have to step through hunks (if I have gitsigns)
     --     until I land on the hunk I already selected?
 
-    local cmd = {
-        "git",
-        "diff",
-        "--unified=0",
-        "--no-color",
-    }
-    if opts.staged then
-        table.insert(cmd, "--staged")
+    local rev = opts.rev
+    local cmd
+    if rev then
+        -- show the diff introduced by a specific commit (used by g1/g2/g3)
+        cmd = { "git", "show", "--pretty=format:", "--unified=0", "--no-color", rev }
+    else
+        cmd = { "git", "diff", "--unified=0", "--no-color" }
+        if opts.staged then
+            table.insert(cmd, "--staged")
+        end
     end
     log:warn(cmd)
 
@@ -95,8 +120,15 @@ M.git_hunks = function(opts)
 
     local hunks = parse_diff(output)
 
+    local prompt_title = "Git Hunks"
+    if rev then
+        prompt_title = "Git Hunks " .. rev
+    elseif opts.staged then
+        prompt_title = "Git Hunks (staged)"
+    end
+
     pickers.new(opts, {
-        prompt_title = "Git Hunks",
+        prompt_title = prompt_title,
 
         finder = finders.new_table({
             results = hunks,
@@ -129,8 +161,9 @@ M.git_hunks = function(opts)
             define_preview = function(self, entry, status)
                 log:info("selected entry", entry)
 
+                local preview_path = preview_filepath(rev, entry.filename)
                 previewers.buffer_previewer_maker(
-                    entry.filename,
+                    preview_path,
                     self.state.bufnr,
                     {
                         bufname = self.state.bufname,
@@ -176,6 +209,16 @@ function M.setup()
     vim.keymap.set("n", "<leader>gd", M.git_hunks)
     vim.keymap.set("n", "<leader>gds", function()
         M.git_hunks({ staged = true })
+    end)
+    -- show the changes introduced by the last few commits
+    vim.keymap.set("n", "<leader>g1", function()
+        M.git_hunks({ rev = "HEAD" })
+    end)
+    vim.keymap.set("n", "<leader>g2", function()
+        M.git_hunks({ rev = "HEAD~1" })
+    end)
+    vim.keymap.set("n", "<leader>g3", function()
+        M.git_hunks({ rev = "HEAD~2" })
     end)
 end
 
