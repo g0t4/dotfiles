@@ -5,7 +5,8 @@ function M.break_undo()
     vim.bo.undolevels = vim.bo.undolevels
 end
 
-function M.setup()
+function M.setup(opts)
+    opts = opts or {}
     vim.keymap.set('i', '<CR>', function()
         if vim.fn.pumvisible() == 0 then return '<CR>' end
         return vim.fn.complete_info().selected >= 0 and '<C-y><C-g>u' or '<C-e><CR>'
@@ -23,6 +24,19 @@ function M.setup()
             -- Start before navigation inserts a candidate. Completion-mode keys
             -- such as C-n are handled by Nvim itself, bypassing insert mappings.
             M.break_undo()
+            if opts.auto_select then
+                local bufnr, tick = args.buf, vim.api.nvim_buf_get_changedtick(args.buf)
+                vim.schedule(function()
+                    if vim.api.nvim_get_current_buf() ~= bufnr
+                        or vim.api.nvim_buf_get_changedtick(bufnr) ~= tick
+                        or vim.fn.pumvisible() == 0 then return end
+                    local info = vim.fn.complete_info({ 'selected', 'items' })
+                    local before = vim.api.nvim_get_current_line():sub(1, vim.api.nvim_win_get_cursor(0)[2])
+                    if info.selected == -1 and #info.items > 0 and before:match('%S$') then
+                        vim.api.nvim_select_popupmenu_item(0, false, false, {})
+                    end
+                end)
+            end
         end,
     })
     vim.api.nvim_create_autocmd('CompleteDone', {
