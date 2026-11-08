@@ -158,7 +158,6 @@ abbr fdE 'fd --exclude'
 #
 # reminders for some options
 abbr --command fd -- and --and # expand and, mostly a reminder
-abbr fdh 'fd --help'
 #
 # * expand short options => corresponding long option
 #   I can still use shorthand and always see it expand to the long option!
@@ -174,8 +173,11 @@ abbr --command fd -- -e --extension
 abbr --command fd -- -F --fixed-strings
 abbr --command fd -- -F --fixed-strings
 abbr --command fd -- -g --glob
-abbr --command fd -- -h --help
+abbr --command fd -- -h --hidden # I prefer to use -h for hidden :) ... ripgrep uses -h... and IIRC ag does too... so I want fd to have that :) for my use case
+#
+abbr fdh 'fd --hidden'
 abbr --command fd -- -H --hidden
+#
 abbr --command fd -- -i --ignore-case
 abbr --command fd -- -I --no-ignore
 abbr --command fd -- -j --threads
