@@ -1,3 +1,4 @@
+local log = require("config.logs").hammerspoons()
 local python_exe = os.getenv("HOME") .. "/repos/github/g0t4/dotfiles/.venv/bin/python3"
 local airpods_script = os.getenv("HOME") .. "/repos/github/g0t4/dotfiles/.config/hammerspoon/config/macros/macos/airpods.py"
 
