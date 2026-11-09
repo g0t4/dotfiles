@@ -62,19 +62,19 @@ import os
 # FYI use \\\\ => looks like \\ before expansion => \ when expanded b/c we want \. in the literal expanded text
 abbr("shift_only","""
 for i in $(@lines fd '\\\\.(mkv|mov)$'):
-    video_editing_just_shift_to_mp4_one_video(i)
+    video_editing_just_shift_to_mp4_one_video(i, 133)
 """)
 
-def video_editing_just_shift_to_mp4_one_video(video_file):
+def video_editing_just_shift_to_mp4_one_video(video_file, its_offset_ms):
     # TODO ensure old definition doesn't trump this when generatig xonsh from other fish config files
     # TODO merge with stage_1 below which does the same thing
-    # converts to mp4 + shifts by 100ms
+    its_offset = its_offset_ms / 1000
     video_file = os.path.realpath(video_file)
-    output_file = os.path.splitext(video_file)[0] + '.shifted100ms.mp4'
+    output_file = os.path.splitext(video_file)[0] + f'.shifted.{its_offset_ms}ms.mp4'
     if os.path.isfile(output_file):
         print(f"Skipping...file already exists: {output_file}")
     else:
-        ffmpeg -i @(video_file) -itsoffset 0.1 -i @(video_file) -map 0:v -map 1:a -c copy -avoid_negative_ts make_zero @(output_file)
+        ffmpeg -i @(video_file) -itsoffset @(its_offset) -i @(video_file) -map 0:v -map 1:a -c copy -avoid_negative_ts make_zero @(output_file)
 
 
 # * Apple decided to rename SPUSBDataType => SPUSBHostDataType w/ no failure if you use the old value... instead it just behaves as if there are no USB devices (empty STDOUT!)
