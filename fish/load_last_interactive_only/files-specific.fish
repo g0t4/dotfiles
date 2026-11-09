@@ -87,9 +87,11 @@ function _update_dotfile_et_al
 
     for repo in $repos
         set repo_path ~/repos/github/g0t4/$repo
-        echo
-        log_ --blue $repo
-        git -C $repo_path pull
+        if test -d $repo_path
+            echo
+            log_ --blue $repo
+            git -C $repo_path pull
+        end
     end
 end
 
