@@ -70,8 +70,8 @@ if $IS_MACOS:
 $sed_cmd = "sed"
 if $IS_MACOS:
     $sed_cmd = "gsed"
+    abbr('sed', $sed_cmd)
 
-abbr('sed', 'gsed')
 abbr('sede', f"{$sed_cmd} -Ei 's/%//g'", cursor_marker="%")
 abbr('sedd', f"{$sed_cmd} --debug -i 's/%//g'", cursor_marker="%")
 abbr('sedi', f"{$sed_cmd} -i 's/%//g'", cursor_marker="%")
