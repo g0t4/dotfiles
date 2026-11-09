@@ -55,6 +55,7 @@ end
 
 abbr bt browse_traces
 abbr bta browse_traces agents
+abbr bth browse_traces .     # think [h]ere ... like `oh` for `open .` (open here)
 abbr btr browse_traces rewrite
 abbr btf browse_traces fim
 abbr btsh browse_traces fish
