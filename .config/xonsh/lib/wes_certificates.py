@@ -18,7 +18,6 @@ import subprocess
 import sys
 import time
 
-import truststore
 from urllib.parse import urlsplit
 
 
@@ -124,6 +123,7 @@ def _verification_context(ca_file):
         return ssl.create_default_context(cafile=ca_file), f'PEM file: {ca_file}'
     source = {'darwin': 'macOS Keychain', 'win32': 'Windows certificate store'}.get(
         sys.platform, 'System trust (OpenSSL)')
+    import truststore
     return truststore.SSLContext(ssl.PROTOCOL_TLS_CLIENT), source
 
 
