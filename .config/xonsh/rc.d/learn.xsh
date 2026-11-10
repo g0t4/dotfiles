@@ -133,7 +133,7 @@ try:
     # note I could resort to always using ctrl+d but I won't remember that until after I've lost recent history :) ... don't fight it
     # alternative: override Cmd+W and if it is xonsh then just immediately Ctrl+D the shell to exit which does flush history with JSON backend (at least)
     if $XONSH_VERSION > "0.25":
-        print("you're using a new major version of xonsh, did they fix SIGHUP to flush history with JSON backend? if so drop this old stopgap")
+        log.info("you're using a new major version of xonsh, did they fix SIGHUP to flush history with JSON backend? if so drop this old stopgap")
     signal.signal(signalnum=signal.SIGHUP, handler=sighup_history_flush)
 except (OSError, RuntimeError, ValueError):
     log.info("failed to register SIGHUP")
