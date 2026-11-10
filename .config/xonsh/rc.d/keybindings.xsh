@@ -462,9 +462,9 @@ def _wes_keybindings(bindings: KeyBindings, prompter: PromptSession, **_):
         if version.startswith("xonsh/0.23"):
             return
         if not version.startswith("xonsh/0.24"):
-            print(f"""applying eager escape fix to a version ({version=}) of xonsh that may not need it?
-            next major version is a good time to check if my 0.24 fix is still necessary...
-            update warning code accordingly...""")
+            # print(f"""applying eager escape fix to a version ({version=}) of xonsh that may not need it?
+            # next major version is a good time to check if my 0.24 fix is still necessary...
+            # update warning code accordingly...""")
             return
         for b in bindings.bindings:
             if (
