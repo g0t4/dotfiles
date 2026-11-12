@@ -5,7 +5,18 @@ if _clanker_path not in sys.path:
 
 
 def _clank_alias(args, stdin=None, stdout=None, stderr=None):
-    from clanker_mode import clank
+    import warnings
+
+    # LangSmith 0.14.17 uses this deprecated asyncio helper during import.
+    # Hide only that notice; restore filters before running user/agent code.
+    with warnings.catch_warnings():
+        warnings.filterwarnings(
+            'ignore',
+            message=r"'asyncio\.iscoroutinefunction' is deprecated and slated for removal in Python 3\.16; use inspect\.iscoroutinefunction\(\) instead$",
+            category=DeprecationWarning,
+            module=r'langsmith\._internal\._beta_decorator$',
+        )
+        from clanker_mode import clank
     return clank(args, stdin=stdin, stdout=stdout, stderr=stderr)
 
 

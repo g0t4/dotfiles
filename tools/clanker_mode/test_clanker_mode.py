@@ -420,3 +420,56 @@ def test_invalid_suggestion_preserves_queued_command(shell, value, error):
     with pytest.raises(error):
         replace_commandline(value)
     assert shell.env["XONSH_PROMPT_NEXT_CMD"] == "echo original"
+
+
+def test_alias_suppresses_only_known_import_warning_and_restores_filters(
+    shell, monkeypatch
+):
+    import sys
+    import warnings
+    from pathlib import Path
+    from types import ModuleType
+
+    root = Path(__file__).resolve().parents[2]
+    monkeypatch.syspath_prepend(str(root / ".config/xonsh/lib"))
+    shell.ctx.update(
+        XONSH_LIB=root / ".config/xonsh/lib", sys=sys, aliases=shell.aliases
+    )
+    shell.execer.exec(
+        (root / ".config/xonsh/rc.d/clanker-mode.xsh").read_text(), glbs=shell.ctx
+    )
+    message = "'asyncio.iscoroutinefunction' is deprecated and slated for removal in Python 3.16; use inspect.iscoroutinefunction() instead"
+    module = "langsmith._internal._beta_decorator"
+    fake = ModuleType("clanker_mode")
+
+    def get_attribute(name):
+        if name != "clank":
+            raise AttributeError(name)
+        warnings.warn_explicit(
+            message, DeprecationWarning, "probe.py", 1, module=module
+        )
+        warnings.warn_explicit(
+            "unrelated deprecation", DeprecationWarning, "probe.py", 2, module=module
+        )
+        warnings.warn_explicit(
+            message, DeprecationWarning, "probe.py", 3, module="another_module"
+        )
+        warnings.warn_explicit(message, UserWarning, "probe.py", 4, module=module)
+        return lambda *args, **kwargs: 0
+
+    fake.__getattr__ = get_attribute
+    monkeypatch.setitem(sys.modules, "clanker_mode", fake)
+    with warnings.catch_warnings(record=True) as observed:
+        warnings.simplefilter("always")
+        original_filters = list(warnings.filters)
+        assert shell.aliases["clank"](["--help"]) == 0
+        assert warnings.filters == original_filters
+        assert len(observed) == 3
+        assert str(observed[0].message) == "unrelated deprecation"
+        assert observed[1].category is DeprecationWarning
+        assert observed[2].category is UserWarning
+        # The identical warning is visible again after the import scope ends.
+        warnings.warn_explicit(
+            message, DeprecationWarning, "probe.py", 5, module=module
+        )
+        assert len(observed) == 4
