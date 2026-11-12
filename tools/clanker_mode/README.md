@@ -99,3 +99,25 @@ Traces persist under `clanker_mode/validation/<run>/<model>/<case>/<attempt>/`. 
 with `--clanker-traces <directory>`. JUnit XML records answers and trace paths
 for completed calls, and failures retain their production traces too. Run the
 suite repeatedly when assessing reliability across sampling variation.
+
+## Suggested commands at the next prompt
+
+```xonsh
+clank "Help me write a command to find files larger than 100 MB; put it on my command line"
+```
+
+The model can call `from clanker_mode import replace_commandline` through its
+existing execution tool. `replace_commandline(command)` sets
+`XSH.env['XONSH_PROMPT_NEXT_CMD']`, the same one-shot mechanism as Esc+A
+(accept and hold). After `clank` returns, the command appears in your next
+editable prompt. You decide whether to edit, submit or discard it.
+
+Pass command source without Markdown fences. Multiline commands work. An optional
+`<cursor>` marker chooses where the cursor starts; otherwise it starts at the end.
+The latest call replaces an earlier suggestion. This is a regular in-process
+function, not a second model tool. Like other shell state mutations, a queued
+suggestion persists even if the agent is interrupted later in the turn.
+
+Capability validation also probes command-line suggestions: the model must call
+the helper and leave the requested command unexecuted. Only then does the test
+simulate accepting it and verify its behavior. The answer's prose is ungraded.

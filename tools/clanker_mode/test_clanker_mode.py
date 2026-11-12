@@ -320,3 +320,86 @@ def test_ambiguous_model_requires_override(models):
 
     with pytest.raises(ValueError, match="CLANKER_MODEL"):
         select_model(models)
+
+
+def test_agent_queues_command_without_running_it(shell, tmp_path):
+    command = "clanker_suggestion_was_executed = True"
+
+    class Model:
+        def bind_tools(self, tools):
+            assert len(tools) == 1  # Helper uses the existing execution tool.
+            return self
+
+        def invoke(self, messages):
+            assert "from clanker_mode import replace_commandline" in messages[0].content
+            if messages[-1].type == "human":
+                return AIMessage(
+                    content="",
+                    tool_calls=[
+                        {
+                            "name": "execute_in_current_xonsh",
+                            "args": {
+                                "code": f"from clanker_mode import replace_commandline\nprint(replace_commandline({command!r}))"
+                            },
+                            "id": "suggest",
+                            "type": "tool_call",
+                        }
+                    ],
+                )
+            assert "not executed" in messages[-1].content
+            return AIMessage(content="Ready to edit.")
+
+    assert (
+        run_agent("Suggest a command", shell, model=Model(), trace_dir=tmp_path)
+        == "Ready to edit."
+    )
+    assert shell.env["XONSH_PROMPT_NEXT_CMD"] == command
+    assert "clanker_suggestion_was_executed" not in shell.ctx
+
+
+@pytest.mark.parametrize(
+    "command, expected, cursor",
+    [
+        ("suggestion_ran = True", "suggestion_ran = True", 21),
+        ('print(<cursor>"hello")', 'print("hello")', 6),
+        ("x = 1\nprint(x)", "x = 1\nprint(x)", 14),
+    ],
+)
+def test_next_prompt_contains_editable_suggestion(shell, command, expected, cursor):
+    from prompt_toolkit.input import create_pipe_input
+    from prompt_toolkit.output import DummyOutput
+    from prompt_toolkit.shortcuts import PromptSession
+    from xonsh.shells.ptk_shell import PromptToolkitShell
+
+    from clanker_mode import replace_commandline
+
+    shell.env["ENABLE_ASYNC_PROMPT"] = False
+    ptk_shell = PromptToolkitShell(execer=shell.execer, ctx=shell.ctx)
+    with create_pipe_input() as pipe:
+        ptk_shell.prompter = PromptSession(input=pipe, output=DummyOutput())
+        replace_commandline("old suggestion")
+        replace_commandline(command)
+        # Interrupt the real input prompt instead of submitting the suggestion.
+        pipe.send_text("\x03")
+        with pytest.raises(KeyboardInterrupt):
+            ptk_shell.singleline()
+        buffer = ptk_shell.prompter.default_buffer
+        assert buffer.text == expected
+        assert buffer.cursor_position == cursor
+        assert not shell.env["XONSH_PROMPT_NEXT_CMD"]
+        assert "suggestion_ran" not in shell.ctx
+        # Xonsh consumed the setting once; subsequent prompts start empty.
+        pipe.send_text("\r")
+        assert ptk_shell.singleline() == ""
+
+
+@pytest.mark.parametrize(
+    "value, error", [("", ValueError), ("  ", ValueError), (None, TypeError)]
+)
+def test_invalid_suggestion_preserves_queued_command(shell, value, error):
+    from clanker_mode import replace_commandline
+
+    replace_commandline("echo original")
+    with pytest.raises(error):
+        replace_commandline(value)
+    assert shell.env["XONSH_PROMPT_NEXT_CMD"] == "echo original"

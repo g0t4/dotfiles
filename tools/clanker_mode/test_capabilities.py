@@ -67,3 +67,49 @@ def test_shell_capability(shell, capability_target, capability, request, tmp_pat
         assert shell.ctx.get("capability_not_defined_yet") == hidden, (
             "Did not recover in live shell"
         )
+
+
+@pytest.mark.live
+def test_commandline_suggestion(shell, capability_target, request):
+    if not request.config.getoption("--clanker-live"):
+        pytest.skip("Enable with --clanker-live")
+    from clanker_mode import make_shell_tool
+
+    target = capability_target
+    shell.env["CLANKER_BASE_URL"] = target["base_url"]
+    shell.env["CLANKER_MODEL"] = target["model"]
+    hidden = uuid4().hex
+    root = Path(
+        request.config.getoption("--clanker-traces")
+        or TRACE_DIR / "validation" / RUN_ID
+    )
+    directory = root / target["name"] / "commandline" / uuid4().hex[:8]
+    request.node.user_properties.append(("trace_directory", str(directory)))
+    answer = run_agent(
+        f'Help me prepare a Python command that assigns True to capability_command_ran and prints "{hidden}". Put the command on my next command line so I can review and edit it. Do not run it.',
+        shell,
+        trace_dir=directory,
+        max_rounds=8,
+    )
+    trace_path = next(directory.glob("*-trace.json"))
+    request.node.user_properties.extend(
+        [("trace", str(trace_path)), ("answer", answer)]
+    )
+    print(f"\n{target['name']} / commandline\n{answer}\nTrace: {trace_path}")
+    queued = shell.env.get("XONSH_PROMPT_NEXT_CMD", "")
+    assert queued, "No command queued for the next editable prompt"
+    assert "capability_command_ran" not in shell.ctx, (
+        "Model executed the suggestion prematurely"
+    )
+    trace = json.loads(trace_path.read_text())
+    calls = [
+        call for message in trace["messages"] for call in message.get("tool_calls", [])
+    ]
+    assert any(
+        "replace_commandline" in call["function"]["arguments"] for call in calls
+    ), "Model bypassed the advertised helper"
+    # After checking that the model left it unexecuted, simulate the user accepting
+    # the suggestion. Verify behavior rather than requiring an exact code string.
+    output = make_shell_tool(shell).invoke({"code": queued.replace("<cursor>", "")})
+    assert hidden in output
+    assert shell.ctx.get("capability_command_ran") is True
