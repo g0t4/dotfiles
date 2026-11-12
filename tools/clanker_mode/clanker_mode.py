@@ -162,7 +162,15 @@ def clank(args, stdin=None, stdout=None, stderr=None):
         )
         return 0
     try:
-        print(run_agent(" ".join(args), XSH), file=stdout)
+        from rich.console import Console
+        from wes_syntax import syntax
+
+        answer = run_agent(" ".join(args), XSH)
+        console = Console(file=stdout)
+        if console.is_terminal:
+            console.print(syntax(answer, "markdown", word_wrap=True))
+        else:
+            print(answer, file=stdout)
         return 0
     except KeyboardInterrupt:
         print("Clanker interrupted.", file=stderr or sys.stderr)

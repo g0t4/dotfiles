@@ -49,7 +49,7 @@ The dedicated venv is only for development. Runtime imports use Xonsh's own Pyth
 Install the provider there (the sibling provider checkout is also used by uv.lock):
 
 ```sh
-uv pip install --python ~/.local/share/uv/tools/xonsh/bin/python -e ../langchain-llama-server
+uv pip install --python ~/.local/share/uv/tools/xonsh/bin/python -e ../langchain-llama-server -e tools/syntax-lab
 ```
 
 Unit/integration tests cover real Xonsh state mutations, exceptions, caller-thread
@@ -58,3 +58,40 @@ provider. The opt-in live test generates a random hidden environment value and
 asks the model to discover it using its tool; it requires ask.lan to be available.
 
 To disable, remove `.config/xonsh/rc.d/clanker-mode.xsh` and start a new shell.
+
+## Model capability validation
+
+The terminal displays responses as Markdown source using syntax-lab's shared
+palette. Markdown punctuation remains visible; raw answers remain in traces.
+Pipes and redirection receive the original text without wrapping or ANSI escapes.
+
+`capability_models.json` names endpoints/models for DeepSeek, Muse and GPT-OSS.
+Edit or add entries to validate another model. Run one, several, or all entries:
+
+```sh
+tools/clanker_mode/.venv/bin/pytest -v -s tools/clanker_mode/test_capabilities.py \
+  --clanker-live --clanker-model muse --clanker-model gpt-oss \
+  --junitxml=/tmp/clanker-capabilities.xml
+```
+
+Omit `--clanker-model` to run all configured entries. Ordinary pytest runs skip
+these calls. Capability validation uses the production system prompt, provider,
+and tool with fresh disposable Xonsh state for each model/case. It never loads
+your startup files or real history. Each case checks:
+
+- Environment: discover a random value through the live shell tool.
+- Python state: discover and copy a variable, verifying the mutation persists.
+- History: discover a random argument from an actual Xonsh history object.
+- Recovery: observe a requested NameError, then fix state and report its value.
+
+Answers can use prose, Markdown or other formatting; no exact sentence matching
+or model judge. Checks require the random value in the answer and tool evidence,
+plus the applicable state changes. These are capability probes, not claims of
+universal reliability. Review the printed answers and traces as well as passes.
+Connection/protocol errors are reported separately in pytest's error text; they
+are not proof that a model lacks the capability.
+
+Traces persist under `clanker_mode/validation/<run>/<model>/<case>/<attempt>/`. Override
+with `--clanker-traces <directory>`. JUnit XML records answers and trace paths
+for completed calls, and failures retain their production traces too. Run the
+suite repeatedly when assessing reliability across sampling variation.

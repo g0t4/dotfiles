@@ -2,12 +2,13 @@
 name = "clanker-mode"
 version = "0.1.0"
 requires-python = ">=3.12"
-dependencies = ["langchain-llama-server", "xonsh>=0.24.2"]
+dependencies = ["langchain-llama-server", "xonsh>=0.24.2", "wes-syntax"]
 
 [dependency-groups]
 dev = ["pytest>=8.4", "ruff"]
 
 [tool.uv.sources]
+wes-syntax = { path = "../syntax-lab", editable = true }
 langchain-llama-server = { path = "../../../langchain-llama-server", editable = true }
 
 [tool.pytest.ini_options]

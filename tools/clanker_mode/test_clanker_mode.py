@@ -5,28 +5,8 @@ from uuid import uuid4
 
 import pytest
 from langchain_core.messages import AIMessage
-from xonsh.built_ins import XSH
-from xonsh.main import setup
 
 from clanker_mode import clank, make_shell_tool, run_agent
-
-
-@pytest.fixture
-def shell():
-    setup(
-        shell_type="none",
-        env={
-            **os.environ,
-            "XONSH_HISTORY_BACKEND": "dummy",
-            "UPDATE_OS_ENVIRON": False,
-        },
-        ctx={},
-    )
-    yield XSH
-    current_env = dict(os.environ)
-    XSH.unload()
-    os.environ.clear()
-    os.environ.update(current_env)
 
 
 def test_live_namespace_and_xonsh_syntax(shell):
@@ -240,3 +220,48 @@ def test_registered_alias_dispatches_inside_shell(shell, monkeypatch, capsys):
         ab.trigger == "c" and ab.replacement == "clank"
         for ab in XONSH_ABBREVIATIONS.abbreviations
     )
+
+
+def test_terminal_answer_uses_markdown_palette(monkeypatch):
+    import io
+
+    import rich.console
+
+    import clanker_mode
+
+    real_console = rich.console.Console
+    monkeypatch.setattr(
+        rich.console,
+        "Console",
+        lambda **kwargs: real_console(
+            **kwargs,
+            force_terminal=True,
+            color_system="truecolor",
+            no_color=False,
+            width=100,
+        ),
+    )
+    monkeypatch.setattr(
+        clanker_mode,
+        "run_agent",
+        lambda *args: "# Shell state\n\n`XSH.env` contains **typed values**.",
+    )
+    output = io.StringIO()
+    assert clanker_mode.clank(["help"], stdout=output) == 0
+    rendered = output.getvalue()
+    assert "\x1b[" in rendered
+    assert "# " in rendered
+    assert "XSH.env" in rendered
+    assert "**" in rendered
+
+
+def test_redirected_answer_preserves_source(monkeypatch):
+    import io
+
+    import clanker_mode
+
+    answer = "# Output\n\n```python\n" + 'x = "' + "long value " * 30 + '"\n```'
+    monkeypatch.setattr(clanker_mode, "run_agent", lambda *args: answer)
+    output = io.StringIO()
+    assert clanker_mode.clank(["help"], stdout=output) == 0
+    assert output.getvalue() == answer + "\n"
