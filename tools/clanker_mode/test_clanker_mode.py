@@ -69,7 +69,9 @@ def test_agent_tool_roundtrip_and_trace(shell, tmp_path):
     (path,) = tmp_path.glob("*.jsonl")
     records = read_records(path)
     messages = message_bodies(records)
-    assert records[0]["trace_type"] == "clanker_mode"
+    assert records[0]["type"] == "version"
+    assert records[0]["version"] == 1
+    assert records[1]["trace_type"] == "clanker_mode"
     assert [m["role"] for m in messages] == [
         "system",
         "user",

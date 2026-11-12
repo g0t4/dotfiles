@@ -61,16 +61,25 @@ def serialize_message(message):
 
 
 def _create_trace_file(directory, local_start):
-    """Readable local minute plus a sortable microsecond offset, not a hash."""
-    prefix = local_start.strftime("%Y-%m-%d_%H%M")
-    offset = local_start.second * 1_000_000 + local_start.microsecond
+    """Use only enough of the local start time to distinguish this trace."""
+    minute = local_start.strftime("%Y-%m-%d_%H%M")
+    offset = f"{local_start.second * 1_000_000 + local_start.microsecond:07x}"
+    # Most minutes need no suffix. Reveal timestamp precision from most to least
+    # significant, so increasing timestamps retain their lexical order.
+    candidates = [minute, *(f"{minute}_{offset[:width]}" for width in range(1, 8))]
+    duplicate = 0
     while True:
-        path = directory / f"{prefix}-{offset:07x}.jsonl"
+        if candidates:
+            stem = candidates.pop(0)
+        else:
+            # Identical microseconds can occur in different processes. A fixed
+            # width counter handles these without replacing or renaming files.
+            duplicate += 1
+            stem = f"{minute}_{offset}_{duplicate:08x}"
+        path = directory / f"{stem}.jsonl"
         try:
             descriptor = os.open(path, os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o600)
         except FileExistsError:
-            # Same clock tick (or repeated local time): never replace a trace.
-            offset += 1
             continue
         os.close(descriptor)
         return path
@@ -90,9 +99,9 @@ class Session:
         directory = Path(directory).expanduser()
         directory.mkdir(parents=True, exist_ok=True, mode=0o700)
         self.path = _create_trace_file(directory, datetime.now().astimezone())
+        self.append("version", version=1)
         self.append(
             "session",
-            schema_version=1,
             session_id=self.id,
             trace_type="clanker_mode",
             pid=self.pid,

@@ -36,72 +36,19 @@ Optional Xonsh environment overrides: `$CLANKER_BASE_URL`, `$CLANKER_MODEL`,
 `$CLANKER_API_KEY`. Uses a 120-second request timeout, no automatic retries,
 and at most 20 model rounds per invocation.
 
-Traces: `~/.local/state/nvim/ask-openai/clanker_mode/YYYY-MM-DD_HHMM-xxxxxxx.jsonl`.
-The prefix is local time; the seven-digit hexadecimal suffix is microseconds
-elapsed within that minute, preserving second/subsecond ordering. It is not a
-hash or random value. Exclusive creation retries the next suffix on collision,
-so even identical clock ticks cannot overwrite traces. Filenames are a browsing
-aid; record timestamps and session IDs are authoritative. Local clock changes
-(including daylight-saving fallback) can still affect filename ordering.
-One append-only trace per shell, created on first use. Files are user-only (0600).
-These traces can contain any shell state inspected by the agent, including secrets
-if explicitly requested. Tool side effects are not rolled back by interruption.
+Traces live in `~/.local/state/nvim/ask-openai/clanker_mode/`. Names begin with
+local time, for example `2026-11-12_1530.jsonl`. Only collisions add a suffix,
+revealing as little of the microsecond timestamp as needed: `_1`, `_1b`, etc.
+Files are user-only (0600), with one append-only JSONL trace per shell.
 
-## JSONL format (schema version 1)
+**[Trace format reference: version 1](SCHEMA.md)** documents every record type,
+field, filename rule, outbound filtering policy, and complete example for readers
+and agents. The first record explicitly declares `type: "version", version: 1`.
 
-Each line is a complete JSON object, flushed and terminated by a newline. Every
-record has `type`, a zero-based monotonic `sequence`, and an ISO 8601 UTC
-`timestamp`. Only newly created records are serialized; earlier bytes are never
-rewritten. Embedded newlines in content are JSON-escaped, so one event is one line.
-
-| Type | Additional fields |
-| --- | --- |
-| `session` | `schema_version`, `session_id`, `trace_type: "clanker_mode"`, `pid` |
-| `turn_start` | `turn_id` (one-based, increasing even across resets) |
-| `message` | `turn_id`, `message` (role/content and tool-call fields), `metadata` |
-| `error` | `turn_id`, `error: {class, message}` |
-| `turn_end` | `turn_id`, `status: "success"`, `"error"`, or `"interrupted"` |
-| `context_reset` | `after_turn_id` |
-
-Message `metadata` contains `finished_at` and, for assistant messages, `response`
-(provider response metadata) and `usage` (normalized token usage). Optional fields
-include `provider_message_id`, `invalid_tool_calls`, `raw_tool_calls`, and
-`synthetic: true` for tool-result placeholders created when a turn aborts.
-There is no duplicated top-level response summary. Errors and turn endings remain
-separate events, so later successes cannot overwrite earlier failures or timing.
-
-The first turn includes the system message; subsequent turns append user,
-assistant and tool messages. Resetting appends a `context_reset` event without
-removing old records; the next turn appends a new system message. A reader can
-show the whole shell lifetime or just messages after the most recent reset.
-
-Outbound inference input is built separately from the current context's message
-records. Event envelopes and local metadata are never sent. Reasoning from older
-turns is omitted from outbound input, while the original reasoning remains in
-the trace. The current provider also omits reasoning on the wire within a turn.
-The system prompt is frozen until reset, and prior message content is not
-summarized or edited. HTTP tests verify that earlier wire-message prefixes remain
-identical across follow-ups. Server caching itself remains server-controlled.
-
-Interrupted pending tool calls get synthetic result messages, never automatic
-re-execution. This keeps follow-ups valid even when an interruption happens
-mid-tool. Completed side effects remain in the live shell.
-
-```xonsh
-clank --trace
-```
-
-Prints this shell's trace path. From another terminal, use:
-
-```sh
-tail -n +1 -f /path/printed/above.jsonl | your-formatter
-```
-
-Readers should buffer until a newline and tolerate an incomplete final line after
-a crash. Records are flushed to the OS on each append, not fsynced per record.
-The session is kept in process memory; the file is an event log, not an automatic
-restart/resume mechanism. Prior JSON traces are left untouched. Conversation
-context grows until you clear it; no automatic trimming or compaction is applied.
+`clank --trace` prints this shell's trace path for `tail -f` or a live formatter.
+`clank --clear` appends a context reset; it does not delete the trace. These files
+can contain shell state inspected by the agent, including explicitly requested
+secrets. Tool side effects are not rolled back by interruption.
 
 ## Development
 
