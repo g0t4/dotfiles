@@ -27,6 +27,9 @@ def test_live_namespace_and_xonsh_syntax(shell):
 
 
 def test_agent_tool_roundtrip_and_trace(shell, tmp_path):
+    from xonsh.history.dummy import DummyHistory
+
+    shell.history = DummyHistory()
     caller = threading.get_ident()
 
     class Model:
@@ -38,6 +41,10 @@ def test_agent_tool_roundtrip_and_trace(shell, tmp_path):
 
         def invoke(self, messages):
             assert threading.get_ident() == caller
+            assert (
+                "history backend is xonsh.history.dummy.DummyHistory"
+                in messages[0].content
+            )
             self.calls += 1
             if self.calls == 1:
                 return AIMessage(

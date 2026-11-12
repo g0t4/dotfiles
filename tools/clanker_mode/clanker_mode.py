@@ -23,8 +23,9 @@ changes, aliases, cwd changes and other side effects persist in the user's shell
 Use `from xonsh.built_ins import XSH` to access shell internals: XSH.env (including
 typed environment values), XSH.ctx (Python variables), XSH.aliases, and XSH.history.
 To investigate recent commands, prefer history objects: e.g.
-`print(list(XSH.history.inps)[-10:])`, similarly `rtns` and `tss`. History backend
-capabilities vary; inspect them as needed. The `history` command is also available.
+`print(list(XSH.history.inps)[-10:])`, similarly `rtns` and `tss`.
+The current shell's history backend is {history_backend}.
+The `history` command is also available.
 Print values you want returned; source is executed as statements, not evaluated
 as an expression. Tool stdout/stderr and exceptions are returned to you. Inspect
 only relevant state; do not dump the entire environment or unrelated secrets.
@@ -124,7 +125,16 @@ def trace_message(message):
 
 
 def run_agent(prompt, xsh, *, model=None, trace_dir=None, max_rounds=20):
-    messages = [SystemMessage(SYSTEM_PROMPT), HumanMessage(prompt)]
+    history_type = type(xsh.history)
+    history_backend = (
+        f"{history_type.__module__}.{history_type.__qualname__}"
+        if xsh.history is not None
+        else "disabled (XSH.history is None)"
+    )
+    messages = [
+        SystemMessage(SYSTEM_PROMPT.format(history_backend=history_backend)),
+        HumanMessage(prompt),
+    ]
     trace = {"session_id": time.time_ns(), "trace_type": "clanker_mode", "response": {}}
     directory = Path(trace_dir or TRACE_DIR)
     directory.mkdir(parents=True, exist_ok=True, mode=0o700)
