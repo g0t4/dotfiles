@@ -11,6 +11,7 @@ from clanker_mode import TRACE_DIR, run_agent
 from trace_test_helpers import message_bodies, read_records
 
 CASES = ["environment", "python_state", "history", "error_recovery"]
+VALIDATION_TRACE_DIR = TRACE_DIR.with_name("clanker_mode_validation")
 RUN_ID = str(time.time_ns())
 
 
@@ -38,8 +39,7 @@ def test_shell_capability(shell, capability_target, capability, request, tmp_pat
         "error_recovery": "First execute print(capability_not_defined_yet) to see the error. Then recover by setting capability_not_defined_yet to the value of capability_hidden in my live shell, and report that value.",
     }
     root = Path(
-        request.config.getoption("--clanker-traces")
-        or TRACE_DIR / "validation" / RUN_ID
+        request.config.getoption("--clanker-traces") or VALIDATION_TRACE_DIR / RUN_ID
     )
     directory = root / target["name"] / capability / uuid4().hex[:8]
     request.node.user_properties.append(("trace_directory", str(directory)))
@@ -80,8 +80,7 @@ def test_commandline_suggestion(shell, capability_target, request):
     shell.env["CLANKER_MODEL"] = target["model"]
     hidden = uuid4().hex
     root = Path(
-        request.config.getoption("--clanker-traces")
-        or TRACE_DIR / "validation" / RUN_ID
+        request.config.getoption("--clanker-traces") or VALIDATION_TRACE_DIR / RUN_ID
     )
     directory = root / target["name"] / "commandline" / uuid4().hex[:8]
     request.node.user_properties.append(("trace_directory", str(directory)))
@@ -122,8 +121,7 @@ def test_conversation_memory(shell, capability_target, request):
     shell.env["CLANKER_MODEL"] = target["model"]
     hidden = uuid4().hex
     root = Path(
-        request.config.getoption("--clanker-traces")
-        or TRACE_DIR / "validation" / RUN_ID
+        request.config.getoption("--clanker-traces") or VALIDATION_TRACE_DIR / RUN_ID
     )
     directory = root / target["name"] / "conversation_memory" / uuid4().hex[:8]
     request.node.user_properties.append(("trace_directory", str(directory)))

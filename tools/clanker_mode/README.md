@@ -105,7 +105,9 @@ universal reliability. Review the printed answers and traces as well as passes.
 Connection/protocol errors are reported separately in pytest's error text; they
 are not proof that a model lacks the capability.
 
-Traces persist under `clanker_mode/validation/<run>/<model>/<case>/<attempt>/`. Override
+Validation and demo traces persist separately under
+`~/.local/state/nvim/ask-openai/clanker_mode_validation/<run>/<model>/<case>/<attempt>/`.
+They are retained between runs; interactive shell traces stay in `clanker_mode/`. Override
 with `--clanker-traces <directory>`. JUnit XML records answers and trace paths
 for completed calls, and failures retain their production traces too. Run the
 suite repeatedly when assessing reliability across sampling variation.
