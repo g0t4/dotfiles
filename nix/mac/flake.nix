@@ -41,6 +41,7 @@
           # infrastructure for editing flakes (etc):
           pkgs.nixfmt # nix fmt fails for formatting currently with coc... doc is wiped (server says to erase entire doc on format so likely `nix fmt` is not outputing the updated document over STDOUT ... likely need to pass different args to fix?
           pkgs.nix
+          pkgs.mpv
         ];
       };
     };
