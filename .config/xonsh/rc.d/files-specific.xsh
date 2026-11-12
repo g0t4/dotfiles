@@ -119,7 +119,7 @@ def _files_cd(args, stdin=None, **_):
                 path = path.parent
             # * if dir doesn't exist, walk parents until find one that does (and if one does then prompt user if that is what they want to cd to instead)=> yes/no
             if not path.exists():
-                if not sys.stdin.isatty:
+                if not sys.stdin.isatty():
                     print("path does not exist... aborting cd b/c STDIN is not a tty, cannot ask to cd elsewhere")
                     return
                 # TODO if not interactive, skip this
