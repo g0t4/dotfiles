@@ -1,6 +1,5 @@
 """Observable shell capabilities; prose format is deliberately not graded."""
 
-import json
 import time
 from pathlib import Path
 from uuid import uuid4
@@ -9,6 +8,7 @@ import pytest
 from xonsh.history.json import JsonHistory
 
 from clanker_mode import TRACE_DIR, run_agent
+from trace_test_helpers import message_bodies, read_records
 
 CASES = ["environment", "python_state", "history", "error_recovery"]
 RUN_ID = str(time.time_ns())
@@ -44,15 +44,15 @@ def test_shell_capability(shell, capability_target, capability, request, tmp_pat
     directory = root / target["name"] / capability / uuid4().hex[:8]
     request.node.user_properties.append(("trace_directory", str(directory)))
     answer = run_agent(prompts[capability], shell, trace_dir=directory, max_rounds=8)
-    trace_path = next(directory.glob("*-trace.json"))
-    trace = json.loads(trace_path.read_text())
+    trace_path = next(directory.glob("*.jsonl"))
+    messages = message_bodies(read_records(trace_path))
     request.node.user_properties.extend(
         [("trace", str(trace_path)), ("answer", answer)]
     )
     print(f"\n{target['name']} / {capability}\n{answer}\nTrace: {trace_path}")
     # Require evidence from the tool, plus the discovered nonce somewhere in the
     # answer; Markdown, explanation, quoting and other prose are all acceptable.
-    results = [m["content"] for m in trace["messages"] if m["role"] == "tool"]
+    results = [m["content"] for m in messages if m["role"] == "tool"]
     assert results, "Model did not use its shell tool"
     assert hidden in answer, "Answer did not report the discovered value"
     assert any(hidden in result for result in results), "No tool evidence for the value"
@@ -91,7 +91,7 @@ def test_commandline_suggestion(shell, capability_target, request):
         trace_dir=directory,
         max_rounds=8,
     )
-    trace_path = next(directory.glob("*-trace.json"))
+    trace_path = next(directory.glob("*.jsonl"))
     request.node.user_properties.extend(
         [("trace", str(trace_path)), ("answer", answer)]
     )
@@ -101,10 +101,8 @@ def test_commandline_suggestion(shell, capability_target, request):
     assert "capability_command_ran" not in shell.ctx, (
         "Model executed the suggestion prematurely"
     )
-    trace = json.loads(trace_path.read_text())
-    calls = [
-        call for message in trace["messages"] for call in message.get("tool_calls", [])
-    ]
+    messages = message_bodies(read_records(trace_path))
+    calls = [call for message in messages for call in message.get("tool_calls", [])]
     assert any(
         "replace_commandline" in call["function"]["arguments"] for call in calls
     ), "Model bypassed the advertised helper"
@@ -113,3 +111,42 @@ def test_commandline_suggestion(shell, capability_target, request):
     output = make_shell_tool(shell).invoke({"code": queued.replace("<cursor>", "")})
     assert hidden in output
     assert shell.ctx.get("capability_command_ran") is True
+
+
+@pytest.mark.live
+def test_conversation_memory(shell, capability_target, request):
+    if not request.config.getoption("--clanker-live"):
+        pytest.skip("Enable with --clanker-live")
+    target = capability_target
+    shell.env["CLANKER_BASE_URL"] = target["base_url"]
+    shell.env["CLANKER_MODEL"] = target["model"]
+    hidden = uuid4().hex
+    root = Path(
+        request.config.getoption("--clanker-traces")
+        or TRACE_DIR / "validation" / RUN_ID
+    )
+    directory = root / target["name"] / "conversation_memory" / uuid4().hex[:8]
+    request.node.user_properties.append(("trace_directory", str(directory)))
+    run_agent(
+        f"Remember this token for our conversation: {hidden}. Acknowledge briefly.",
+        shell,
+        trace_dir=directory,
+        max_rounds=8,
+    )
+    (path,) = directory.glob("*.jsonl")
+    before = path.read_bytes()
+    answer = run_agent(
+        "What token did I ask you to remember? Report its exact value.",
+        shell,
+        trace_dir=directory,
+        max_rounds=8,
+    )
+    request.node.user_properties.extend([("trace", str(path)), ("answer", answer)])
+    print(f"\n{target['name']} / conversation_memory\n{answer}\nTrace: {path}")
+
+    assert hidden in answer
+    assert path.read_bytes().startswith(before)
+    records = read_records(path)
+    assert sum(r["type"] == "session" for r in records) == 1
+    assert sum(r["type"] == "turn_end" for r in records) == 2
+    assert sum(m["role"] == "system" for m in message_bodies(records)) == 1

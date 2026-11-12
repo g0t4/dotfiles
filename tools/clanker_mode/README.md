@@ -15,7 +15,10 @@ print(clanker_greeting)
 
 `c` expands to `clank` on Space or Enter through the existing abbreviation system.
 Quote requests containing shell syntax to pass them literally. `clank --help`
-shows usage. Each invocation is a fresh conversation; live shell state persists.
+shows usage. Conversation and live shell state persist for this shell process.
+`clank --clear` clears model context while retaining the trace with a reset event.
+The next question starts a fresh context in the same trace. A new shell gets its
+own conversation and trace; old shell traces are not automatically resumed.
 Ctrl+C interrupts the turn (already executed changes persist).
 
 The sole tool, `execute_in_current_xonsh`, runs Xonsh source directly against
@@ -33,12 +36,66 @@ Optional Xonsh environment overrides: `$CLANKER_BASE_URL`, `$CLANKER_MODEL`,
 `$CLANKER_API_KEY`. Uses a 120-second request timeout, no automatic retries,
 and at most 20 model rounds per invocation.
 
-Traces: `~/.local/state/nvim/ask-openai/clanker_mode/*-trace.json`, with
-`trace_type: clanker_mode` and the existing `session_id`, `messages`, `response`
-shape. Includes tool arguments/results, response metadata and errors, saved after
-each step and on interruption. Files are user-only (0600). These traces can contain
-any shell state inspected by the agent, including secrets if explicitly requested.
-Tool side effects themselves are not rolled back by interruption.
+Traces: `~/.local/state/nvim/ask-openai/clanker_mode/<session_id>.jsonl`.
+One append-only trace per shell, created on first use. Files are user-only (0600).
+These traces can contain any shell state inspected by the agent, including secrets
+if explicitly requested. Tool side effects are not rolled back by interruption.
+
+## JSONL format (schema version 1)
+
+Each line is a complete JSON object, flushed and terminated by a newline. Every
+record has `type`, a zero-based monotonic `sequence`, and an ISO 8601 UTC
+`timestamp`. Only newly created records are serialized; earlier bytes are never
+rewritten. Embedded newlines in content are JSON-escaped, so one event is one line.
+
+| Type | Additional fields |
+| --- | --- |
+| `session` | `schema_version`, `session_id`, `trace_type: "clanker_mode"`, `pid` |
+| `turn_start` | `turn_id` (one-based, increasing even across resets) |
+| `message` | `turn_id`, `message` (role/content and tool-call fields), `metadata` |
+| `error` | `turn_id`, `error: {class, message}` |
+| `turn_end` | `turn_id`, `status: "success"`, `"error"`, or `"interrupted"` |
+| `context_reset` | `after_turn_id` |
+
+Message `metadata` contains `finished_at` and, for assistant messages, `response`
+(provider response metadata) and `usage` (normalized token usage). Optional fields
+include `provider_message_id`, `invalid_tool_calls`, `raw_tool_calls`, and
+`synthetic: true` for tool-result placeholders created when a turn aborts.
+There is no duplicated top-level response summary. Errors and turn endings remain
+separate events, so later successes cannot overwrite earlier failures or timing.
+
+The first turn includes the system message; subsequent turns append user,
+assistant and tool messages. Resetting appends a `context_reset` event without
+removing old records; the next turn appends a new system message. A reader can
+show the whole shell lifetime or just messages after the most recent reset.
+
+Outbound inference input is built separately from the current context's message
+records. Event envelopes and local metadata are never sent. Reasoning from older
+turns is omitted from outbound input, while the original reasoning remains in
+the trace. The current provider also omits reasoning on the wire within a turn.
+The system prompt is frozen until reset, and prior message content is not
+summarized or edited. HTTP tests verify that earlier wire-message prefixes remain
+identical across follow-ups. Server caching itself remains server-controlled.
+
+Interrupted pending tool calls get synthetic result messages, never automatic
+re-execution. This keeps follow-ups valid even when an interruption happens
+mid-tool. Completed side effects remain in the live shell.
+
+```xonsh
+clank --trace
+```
+
+Prints this shell's trace path. From another terminal, use:
+
+```sh
+tail -n +1 -f /path/printed/above.jsonl | your-formatter
+```
+
+Readers should buffer until a newline and tolerate an incomplete final line after
+a crash. Records are flushed to the OS on each append, not fsynced per record.
+The session is kept in process memory; the file is an event log, not an automatic
+restart/resume mechanism. Prior JSON traces are left untouched. Conversation
+context grows until you clear it; no automatic trimming or compaction is applied.
 
 ## Development
 

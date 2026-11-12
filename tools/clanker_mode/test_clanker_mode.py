@@ -7,6 +7,7 @@ import pytest
 from langchain_core.messages import AIMessage
 
 from clanker_mode import clank, make_shell_tool, run_agent
+from trace_test_helpers import message_bodies, read_records
 
 
 def test_live_namespace_and_xonsh_syntax(shell):
@@ -65,10 +66,11 @@ def test_agent_tool_roundtrip_and_trace(shell, tmp_path):
 
     assert run_agent("help", shell, model=Model(), trace_dir=tmp_path) == "done"
     assert shell.ctx["clanker_thread"] == caller
-    (path,) = tmp_path.glob("*-trace.json")
-    trace = json.loads(path.read_text())
-    assert trace["trace_type"] == "clanker_mode"
-    assert [m["role"] for m in trace["messages"]] == [
+    (path,) = tmp_path.glob("*.jsonl")
+    records = read_records(path)
+    messages = message_bodies(records)
+    assert records[0]["trace_type"] == "clanker_mode"
+    assert [m["role"] for m in messages] == [
         "system",
         "user",
         "assistant",
@@ -76,8 +78,7 @@ def test_agent_tool_roundtrip_and_trace(shell, tmp_path):
         "assistant",
     ]
     assert (
-        trace["messages"][2]["tool_calls"][0]["function"]["name"]
-        == "execute_in_current_xonsh"
+        messages[2]["tool_calls"][0]["function"]["name"] == "execute_in_current_xonsh"
     )
     assert path.stat().st_mode & 0o777 == 0o600
     assert clank.__xonsh_threadable__ is False
@@ -90,8 +91,10 @@ def test_interruption_trace(shell, tmp_path):
 
     with pytest.raises(KeyboardInterrupt):
         run_agent("help", shell, model=Model(), trace_dir=tmp_path)
-    trace = json.loads(next(tmp_path.glob("*.json")).read_text())
-    assert trace["error"] == "KeyboardInterrupt: "
+    records = read_records(next(tmp_path.glob("*.jsonl")))
+    error = next(record for record in records if record["type"] == "error")
+    assert error["error"] == {"class": "KeyboardInterrupt", "message": ""}
+    assert records[-1]["status"] == "interrupted"
 
 
 @pytest.mark.live
@@ -107,10 +110,10 @@ def test_live_model_discovers_hidden_shell_value(shell, tmp_path):
         trace_dir=tmp_path,
     )
     assert hidden in answer
-    trace = json.loads(next(tmp_path.glob("*.json")).read_text())
+    messages = message_bodies(read_records(next(tmp_path.glob("*.jsonl"))))
     assert any(
         message["role"] == "tool" and hidden in message["content"]
-        for message in trace["messages"]
+        for message in messages
     )
 
 
@@ -165,7 +168,17 @@ def test_provider_http_tool_roundtrip(shell, tmp_path):
                 }
                 reason = "tool_calls"
             else:
-                assert request["messages"][-1]["content"].strip() == hidden
+                if len(requests) == 2:
+                    assert request["messages"][-1]["content"].strip() == hidden
+                else:
+                    previous = requests[1]["messages"]
+                    assert request["messages"][: len(previous)] == previous
+                    assert request["messages"][-2]["content"] == hidden
+                    assert request["messages"][-1]["content"] == "follow-up"
+                    assert all(
+                        "metadata" not in m and "response_metadata" not in m
+                        for m in request["messages"]
+                    )
                 message = {"role": "assistant", "content": hidden}
                 reason = "stop"
             body = json.dumps(
@@ -197,7 +210,11 @@ def test_provider_http_tool_roundtrip(shell, tmp_path):
             )
             == hidden
         )
-        assert len(requests) == 2
+        assert (
+            run_agent("follow-up", shell, model=get_model(shell), trace_dir=tmp_path)
+            == hidden
+        )
+        assert len(requests) == 3
     finally:
         server.shutdown()
         thread.join()
