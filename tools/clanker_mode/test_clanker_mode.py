@@ -241,7 +241,7 @@ def test_registered_alias_dispatches_inside_shell(shell, monkeypatch, capsys):
     )
     caller = threading.get_ident()
 
-    def agent(prompt, xsh):
+    def agent(prompt, xsh, **kwargs):
         assert xsh is shell
         assert threading.get_ident() == caller
         assert prompt == "inspect shell"
@@ -281,7 +281,7 @@ def test_terminal_answer_uses_markdown_palette(monkeypatch):
     monkeypatch.setattr(
         clanker_mode,
         "run_agent",
-        lambda *args: "# Shell state\n\n`XSH.env` contains **typed values**.",
+        lambda *args, **kwargs: "# Shell state\n\n`XSH.env` contains **typed values**.",
     )
     output = io.StringIO()
     assert clanker_mode.clank(["help"], stdout=output) == 0
@@ -298,7 +298,7 @@ def test_redirected_answer_preserves_source(monkeypatch):
     import clanker_mode
 
     answer = "# Output\n\n```python\n" + 'x = "' + "long value " * 30 + '"\n```'
-    monkeypatch.setattr(clanker_mode, "run_agent", lambda *args: answer)
+    monkeypatch.setattr(clanker_mode, "run_agent", lambda *args, **kwargs: answer)
     output = io.StringIO()
     assert clanker_mode.clank(["help"], stdout=output) == 0
     assert output.getvalue() == answer + "\n"

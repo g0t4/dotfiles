@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import io
 import traceback
-from contextlib import contextmanager, redirect_stderr, redirect_stdout
+from contextlib import contextmanager, nullcontext, redirect_stderr, redirect_stdout
 from pathlib import Path
 
 from langchain_core.messages import HumanMessage, SystemMessage, ToolMessage
@@ -170,7 +170,7 @@ def get_model(xsh):
     )
 
 
-def run_agent(prompt, xsh, *, model=None, trace_dir=None, max_rounds=20):
+def run_agent(prompt, xsh, *, model=None, trace_dir=None, max_rounds=20, on_event=None):
     session = get_session(xsh, trace_dir or TRACE_DIR)
     if session.active:
         raise RuntimeError("A Clanker turn is already running in this shell")
@@ -179,6 +179,11 @@ def run_agent(prompt, xsh, *, model=None, trace_dir=None, max_rounds=20):
     pending = {}
     executing_call = None
     status = "error"
+
+    def emit(event, payload=None):
+        if on_event is not None:
+            on_event(event, payload)
+
     try:
         session.append("turn_start", turn_id=session.turn)
         if not session.messages:
@@ -192,13 +197,17 @@ def run_agent(prompt, xsh, *, model=None, trace_dir=None, max_rounds=20):
                 SystemMessage(SYSTEM_PROMPT.format(history_backend=history_backend))
             )
         session.add_message(HumanMessage(prompt))
+        emit("thinking")
         model = model if model is not None else get_model(xsh)
         shell_tool = make_shell_tool(xsh)
         bound = model.bind_tools([shell_tool])
-        for _ in range(max_rounds):
+        for round_index in range(max_rounds):
+            if round_index:
+                emit("thinking")
             answer = bound.invoke(session.outbound())
             session.add_message(answer)
             pending = {call["id"]: call for call in answer.tool_calls}
+            emit("assistant", answer)
             if not answer.tool_calls:
                 if answer.invalid_tool_calls:
                     raise RuntimeError(
@@ -206,7 +215,11 @@ def run_agent(prompt, xsh, *, model=None, trace_dir=None, max_rounds=20):
                     )
                 status = "success"
                 return answer.text
-            for call in answer.tool_calls:
+            for index, call in enumerate(answer.tool_calls):
+                emit(
+                    "tool_start",
+                    {"call": call, "index": index, "total": len(answer.tool_calls)},
+                )
                 executing_call = call["id"]
                 if call["name"] != shell_tool.name:
                     result = f"Unknown tool: {call['name']}"
@@ -215,13 +228,13 @@ def run_agent(prompt, xsh, *, model=None, trace_dir=None, max_rounds=20):
                         result = shell_tool.invoke(call["args"])
                     except Exception as error:
                         result = f"{type(error).__name__}: {error}"
-                session.add_message(
-                    ToolMessage(
-                        content=result, tool_call_id=call["id"], name=call["name"]
-                    )
+                result_message = ToolMessage(
+                    content=result, tool_call_id=call["id"], name=call["name"]
                 )
+                session.add_message(result_message)
                 pending.pop(call["id"])
                 executing_call = None
+                emit("tool_result", result_message)
         raise RuntimeError(f"Clanker reached its limit of {max_rounds} model rounds")
     except BaseException as error:
         status = "interrupted" if isinstance(error, KeyboardInterrupt) else "error"
@@ -262,7 +275,6 @@ def clank(args, stdin=None, stdout=None, stderr=None):
         return 0
     try:
         from rich.console import Console
-        from wes_syntax import syntax
 
         if args == ["--trace"]:
             print(get_session(XSH, TRACE_DIR).path, file=stdout)
@@ -271,10 +283,15 @@ def clank(args, stdin=None, stdout=None, stderr=None):
             get_session(XSH, TRACE_DIR).clear()
             print("Clanker conversation cleared; trace retained.", file=stdout)
             return 0
-        answer = run_agent(" ".join(args), XSH)
+        from clanker_display import TurnDisplay, assistant_panel
+
+        status_console = Console(file=stderr or sys.stderr)
+        display = TurnDisplay(status_console) if status_console.is_terminal else None
+        with display if display is not None else nullcontext():
+            answer = run_agent(" ".join(args), XSH, on_event=display)
         console = Console(file=stdout)
         if console.is_terminal:
-            console.print(syntax(answer, "markdown", word_wrap=True))
+            console.print(assistant_panel(answer, console.width))
         else:
             print(answer, file=stdout)
         return 0

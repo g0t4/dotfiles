@@ -86,6 +86,25 @@ asks the model to discover it using its tool; it requires ask.lan to be availabl
 
 To disable, remove `.config/xonsh/rc.d/clanker-mode.xsh` and start a new shell.
 
+## Watching agent execution
+
+Interactive `clank` displays a transient thinking spinner while waiting for a
+complete model response. Before each tool executes, a message box shows the tool
+name and syntax-lab-highlighted Xonsh source in an indented tree, matching the
+chat trace viewer's style. Calls are numbered within each returned batch.
+
+Tool results follow in separate boxes with literal output (including failures),
+then the next tool or model response appears below. These boxes remain in terminal
+scrollback so you can follow the agent's work and take over the shell afterward.
+Intermediate assistant text and the final Markdown answer use assistant boxes.
+
+Progress and tool boxes use stderr and are enabled only when it is a terminal.
+The final answer uses stdout; pipes and redirection receive plain original answer
+text. The thinking spinner is stopped before tool execution and on failures or
+Ctrl+C. UI output is outside tool capture, excluded from trace messages, and never
+sent back to the model. Direct `run_agent` callers are quiet unless they provide
+an `on_event(event, payload)` callback.
+
 ## Model capability validation
 
 The terminal displays responses as Markdown source using syntax-lab's shared
