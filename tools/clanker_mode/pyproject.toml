@@ -1,0 +1,18 @@
+[project]
+name = "clanker-mode"
+version = "0.1.0"
+requires-python = ">=3.12"
+dependencies = ["langchain-llama-server", "xonsh>=0.24.2"]
+
+[dependency-groups]
+dev = ["pytest>=8.4", "ruff"]
+
+[tool.uv.sources]
+langchain-llama-server = { path = "../../../langchain-llama-server", editable = true }
+
+[tool.pytest.ini_options]
+markers = ["live: calls ask.lan (opt in with CLANKER_LIVE_TEST=1)"]
+
+[tool.ruff.lint]
+# Tool/alias boundaries report arbitrary execution/provider failures to the caller.
+ignore = ["BLE001"]
