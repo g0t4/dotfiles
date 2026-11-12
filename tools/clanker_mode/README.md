@@ -27,6 +27,19 @@ Python variables, aliases, history, cwd, and execute commands with your privileg
 There is deliberately no sandbox or subprocess boundary. Print values to return
 results. The system prompt explains shell internals and history object access.
 
+During each agent execution tool call, the interactive `cat` alias is temporarily
+removed, so `cat` resolves to the executable on PATH. The exact alias and its
+explicit help text are restored even after an exception or interruption. Other
+aliases and unrelated shell state changes retain their normal behavior.
+`AGENT_ALIAS_OVERRIDES` in `clanker_mode.py` is the policy: `None` removes an alias
+for the scope; another value supplies a temporary replacement. Changes to those
+scoped alias names are temporary too.
+
+The system prompt tells the agent to explicitly capture external output, e.g.
+`print($(cat path/to/file))`. Bare external commands (notably Xonsh's unthreadable
+`cat`) can write directly to the terminal without returning their output to the
+model. Python prints and explicitly captured output are included in tool results.
+
 Connection defaults: `http://ask.lan:8014/v1`, key `none`.
 Without a model override, `/v1/models` supplies the model ID: use the sole model
 on a dedicated endpoint (including VLLM), or the sole loaded model on a router.

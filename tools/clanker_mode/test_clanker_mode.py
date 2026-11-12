@@ -475,3 +475,68 @@ def test_alias_suppresses_only_known_import_warning_and_restores_filters(
             message, DeprecationWarning, "probe.py", 5, module=module
         )
         assert len(observed) == 4
+
+
+def test_agent_cat_bypasses_interactive_alias_and_restores_it(shell, tmp_path):
+    calls = []
+
+    def interactive_cat(args, stdout=None):
+        calls.append(args)
+        print("\x1b[31minteractive override\x1b[0m", file=stdout)
+
+    shell.aliases["cat"] = {"alias": interactive_cat, "doc": "My interactive cat"}
+    original = shell.aliases["cat"]
+    path = tmp_path / "plain.txt"
+    path.write_text("plain agent input\n")
+    shell.ctx["cat_test_path"] = str(path)
+    tool = make_shell_tool(shell)
+    result = tool.invoke({"code": "print($(cat @(cat_test_path)))"})
+    assert "plain agent input" in result
+    assert "\x1b" not in result
+    assert calls == []
+    assert shell.aliases["cat"] is original
+    assert shell.aliases.get_doc("cat") == "My interactive cat"
+    error_output = tool.invoke(
+        {
+            "code": 'from xonsh.built_ins import XSH\nassert "cat" not in XSH.aliases\n1 / 0'
+        }
+    )
+    assert "ZeroDivisionError" in error_output
+    assert shell.aliases["cat"] is original
+    with pytest.raises(KeyboardInterrupt):
+        tool.invoke({"code": "raise KeyboardInterrupt()"})
+    assert shell.aliases["cat"] is original
+    # A real command after the tool still uses the user's original alias.
+    shell.execer.exec("cat ignored\n", glbs=shell.ctx)
+    assert calls == [["ignored"]]
+
+
+@pytest.mark.parametrize("failure", [ValueError, KeyboardInterrupt])
+def test_alias_scope_restores_after_failure_and_keeps_unrelated_changes(shell, failure):
+    from clanker_mode import alias_scope
+
+    shell.aliases["cat"] = ["bat", "--color=always"]
+    original = shell.aliases["cat"]
+    with (
+        pytest.raises(failure),
+        alias_scope(shell.aliases, {"cat": None, "scoped_new": ["echo", "temporary"]}),
+    ):
+        assert "cat" not in shell.aliases
+        shell.aliases["unrelated_new"] = ["echo", "persistent"]
+        raise failure("probe")
+    assert shell.aliases["cat"] is original
+    assert "scoped_new" not in shell.aliases
+    assert shell.aliases["unrelated_new"] == ["echo", "persistent"]
+
+
+def test_alias_scope_restores_missing_cat_and_supports_nested_scopes(shell):
+    from clanker_mode import alias_scope
+
+    if "cat" in shell.aliases:
+        del shell.aliases["cat"]
+    with alias_scope(shell.aliases, {"cat": None}):
+        with alias_scope(shell.aliases, {"cat": ["echo", "nested"]}):
+            assert shell.aliases["cat"] == ["echo", "nested"]
+        assert "cat" not in shell.aliases
+        shell.aliases["cat"] = ["echo", "temporary mutation"]
+    assert "cat" not in shell.aliases

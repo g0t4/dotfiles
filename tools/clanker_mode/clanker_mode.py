@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import io
 import traceback
-from contextlib import redirect_stderr, redirect_stdout
+from contextlib import contextmanager, redirect_stderr, redirect_stdout
 from pathlib import Path
 
 from langchain_core.messages import HumanMessage, SystemMessage, ToolMessage
@@ -20,6 +20,12 @@ Xonsh subprocess syntax are both available. Imports, assignments, environment
 changes, aliases, cwd changes and other side effects persist in the user's shell.
 Use `from xonsh.built_ins import XSH` to access shell internals: XSH.env (including
 typed environment values), XSH.ctx (Python variables), XSH.aliases, and XSH.history.
+During tool execution, the interactive `cat` alias is temporarily disabled, so
+`cat` resolves through PATH to the ordinary executable. It is restored afterward.
+To return external command output to yourself, explicitly capture and print it:
+for example `print($(cat path/to/file))`. Bare external commands can write to the
+terminal without their output being included in this tool's returned text.
+Other aliases remain available; changes to other shell state still persist.
 To investigate recent commands, prefer history objects: e.g.
 `print(list(XSH.history.inps)[-10:])`, similarly `rtns` and `tss`.
 The current shell's history backend is {history_backend}.
@@ -66,6 +72,40 @@ def replace_commandline(command: str) -> str:
     return "Command queued for the next editable prompt; not executed."
 
 
+# None means bypass this alias and resolve the executable through Xonsh's PATH.
+AGENT_ALIAS_OVERRIDES = {"cat": None}
+
+
+@contextmanager
+def alias_scope(aliases, overrides):
+    """Temporarily override or remove selected aliases, then restore raw values."""
+    missing = object()
+    # Aliases.get() expands aliases; indexing preserves the original object.
+    previous = {
+        name: aliases[name] if name in aliases else missing  # noqa: SIM401 - get() resolves Xonsh aliases
+        for name in overrides
+    }
+    docs = getattr(aliases, "_docs", {})
+    previous_docs = {name: docs.get(name, missing) for name in overrides}
+    try:
+        for name, value in overrides.items():
+            if value is None:
+                if name in aliases:
+                    del aliases[name]
+            else:
+                aliases[name] = value
+        yield
+    finally:
+        for name, value in previous.items():
+            if value is missing:
+                if name in aliases:
+                    del aliases[name]
+            elif previous_docs[name] is not missing:
+                aliases[name] = {"alias": value, "doc": previous_docs[name]}
+            else:
+                aliases[name] = value
+
+
 def make_shell_tool(xsh):
     @tool
     def execute_in_current_xonsh(code: str) -> str:
@@ -76,7 +116,11 @@ def make_shell_tool(xsh):
         """
         output = io.StringIO()
         try:
-            with redirect_stdout(output), redirect_stderr(output):
+            with (
+                redirect_stdout(output),
+                redirect_stderr(output),
+                alias_scope(xsh.aliases, AGENT_ALIAS_OVERRIDES),
+            ):
                 xsh.execer.exec(code.rstrip() + "\n", glbs=xsh.ctx, locs=xsh.ctx)
         except Exception:
             traceback.print_exc(file=output)
