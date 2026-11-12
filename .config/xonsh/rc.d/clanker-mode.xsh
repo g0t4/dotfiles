@@ -24,3 +24,23 @@ _clank_alias.__xonsh_threadable__ = False
 aliases['clank'] = _clank_alias
 from wes_abbreviations import abbr
 abbr('c', 'clank')
+
+
+from xonsh.built_ins import XSH
+from xonsh.events import events
+
+
+@events.on_transform_command
+def _clanker_literal_syntax_fallback(cmd, **kwargs):
+    """Treat syntax-invalid clank submissions as literal natural language."""
+    if not cmd or not cmd.startswith('clank'):
+        return
+    if len(cmd) == 5 or not cmd[5].isspace():
+        return
+    try:
+        XSH.execer.compile(cmd, mode='single', glbs=XSH.ctx)
+    except SyntaxError:
+        # A Python call bypasses shell expansion, comments and quoting. Its
+        # different prefix also makes repeated transform events idempotent.
+        prompt = cmd[5:].lstrip().rstrip('\n')
+        return f'_clank_alias([{prompt!r}])\n'

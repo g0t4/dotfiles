@@ -14,8 +14,14 @@ print(clanker_greeting)
 ```
 
 `c` expands to `clank` on Space or Enter through the existing abbreviation system.
-Quote requests containing shell syntax to pass them literally. `clank --help`
-shows usage. Conversation and live shell state persist for this shell process.
+Interactive input starting with `clank` that fails Xonsh syntax parsing is
+dispatched as a literal request, e.g. `clank what does {} mean in c#`. The
+`on_transform_command` handler runs before execution; it never executes the
+request while checking syntax. Valid shell syntax keeps its normal behavior,
+including expansion, comments, pipelines and redirects. Quote requests when
+you want literal text regardless of whether Xonsh considers it valid syntax.
+This fallback applies to interactive submissions, not scripts or tool code.
+`clank --help` shows usage. Conversation and live shell state persist for this shell process.
 `clank --clear` clears model context while retaining the trace with a reset event.
 The next question starts a fresh context in the same trace. A new shell gets its
 own conversation and trace; old shell traces are not automatically resumed.
