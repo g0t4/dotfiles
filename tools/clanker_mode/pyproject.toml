@@ -2,7 +2,7 @@
 name = "clanker-mode"
 version = "0.1.0"
 requires-python = ">=3.12"
-dependencies = ["langchain-llama-server", "xonsh>=0.24.2", "wes-syntax"]
+dependencies = ["langchain-llama-server", "xonsh>=0.24.2", "wes-syntax", "httpx>=0.28"]
 
 [dependency-groups]
 dev = ["pytest>=8.4", "ruff"]

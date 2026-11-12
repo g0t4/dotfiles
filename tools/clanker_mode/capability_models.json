@@ -1,5 +1,17 @@
 [
-  {"name": "deepseek", "base_url": "http://ask.lan:8014/v1", "model": "FIXED_MODEL"},
-  {"name": "muse", "base_url": "http://build21.lan:8016/v1", "model": "unsloth/Muse-Glimmer-30B-GGUF:UD-Q8_K_XL"},
-  {"name": "gpt-oss", "base_url": "http://build21.lan:8013/v1", "model": "ggml-org/gpt-oss-120b-GGUF"}
+  {
+    "name": "deepseek",
+    "base_url": "http://ask.lan:8014/v1",
+    "model": "ggml-org/DeepSeek-V4-Flash-0731-GGUF:MXFP4"
+  },
+  {
+    "name": "muse",
+    "base_url": "http://build21.lan:8016/v1",
+    "model": "unsloth/Muse-Glimmer-30B-GGUF:UD-Q8_K_XL"
+  },
+  {
+    "name": "gpt-oss",
+    "base_url": "http://build21.lan:8013/v1",
+    "model": "ggml-org/gpt-oss-120b-GGUF"
+  }
 ]

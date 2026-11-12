@@ -169,6 +169,7 @@ name = "clanker-mode"
 version = "0.1.0"
 source = { virtual = "." }
 dependencies = [
+    { name = "httpx" },
     { name = "langchain-llama-server" },
     { name = "wes-syntax" },
     { name = "xonsh" },
@@ -182,6 +183,7 @@ dev = [
 
 [package.metadata]
 requires-dist = [
+    { name = "httpx", specifier = ">=0.28" },
     { name = "langchain-llama-server", editable = "../../../langchain-llama-server" },
     { name = "wes-syntax", editable = "../syntax-lab" },
     { name = "xonsh", specifier = ">=0.24.2" },

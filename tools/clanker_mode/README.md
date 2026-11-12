@@ -24,7 +24,11 @@ Python variables, aliases, history, cwd, and execute commands with your privileg
 There is deliberately no sandbox or subprocess boundary. Print values to return
 results. The system prompt explains shell internals and history object access.
 
-Connection defaults: `http://ask.lan:8014/v1`, model `FIXED_MODEL`, key `none`.
+Connection defaults: `http://ask.lan:8014/v1`, key `none`.
+Without a model override, `/v1/models` supplies the model ID: use the sole model
+on a dedicated endpoint (including VLLM), or the sole loaded model on a router.
+Ambiguous model lists require an explicit `$CLANKER_MODEL`; nothing is chosen
+arbitrarily or loaded merely by discovery. Discovery has a 10-second timeout.
 Optional Xonsh environment overrides: `$CLANKER_BASE_URL`, `$CLANKER_MODEL`,
 `$CLANKER_API_KEY`. Uses a 120-second request timeout, no automatic retries,
 and at most 20 model rounds per invocation.

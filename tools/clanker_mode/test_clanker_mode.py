@@ -120,9 +120,19 @@ def test_provider_http_tool_roundtrip(shell, tmp_path):
         def log_message(self, *args):
             pass
 
+        def do_GET(self):
+            body = json.dumps({"data": [{"id": "test", "owned_by": "vllm"}]}).encode()
+            assert self.path == "/v1/models"
+            self.send_response(200)
+            self.send_header("Content-Type", "application/json")
+            self.send_header("Content-Length", str(len(body)))
+            self.end_headers()
+            self.wfile.write(body)
+
         def do_POST(self):
             request = json.loads(self.rfile.read(int(self.headers["Content-Length"])))
             requests.append(request)
+            assert request["model"] == "test"
             if len(requests) == 1:
                 assert (
                     request["tools"][0]["function"]["name"]
@@ -173,6 +183,7 @@ def test_provider_http_tool_roundtrip(shell, tmp_path):
     thread.start()
     try:
         shell.env["CLANKER_BASE_URL"] = f"http://127.0.0.1:{server.server_port}/v1"
+        shell.env.pop("CLANKER_MODEL", None)
         assert (
             run_agent(
                 "find hidden value", shell, model=get_model(shell), trace_dir=tmp_path
@@ -265,3 +276,40 @@ def test_redirected_answer_preserves_source(monkeypatch):
     output = io.StringIO()
     assert clanker_mode.clank(["help"], stdout=output) == 0
     assert output.getvalue() == answer + "\n"
+
+
+@pytest.mark.parametrize(
+    "models, expected",
+    [
+        ([{"id": "deepseek-v4.1-flash", "owned_by": "vllm"}], "deepseek-v4.1-flash"),
+        (
+            [
+                {"id": "other", "status": {"value": "unloaded"}},
+                {"id": "deepseek", "status": {"value": "loaded"}},
+            ],
+            "deepseek",
+        ),
+    ],
+)
+def test_model_discovery_selection(models, expected):
+    from clanker_mode import select_model
+
+    assert select_model(models) == expected
+
+
+@pytest.mark.parametrize(
+    "models",
+    [
+        [],
+        [{"id": "a"}, {"id": "b"}],
+        [
+            {"id": "a", "status": {"value": "loaded"}},
+            {"id": "b", "status": {"value": "loaded"}},
+        ],
+    ],
+)
+def test_ambiguous_model_requires_override(models):
+    from clanker_mode import select_model
+
+    with pytest.raises(ValueError, match="CLANKER_MODEL"):
+        select_model(models)

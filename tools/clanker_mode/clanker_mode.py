@@ -57,13 +57,42 @@ def make_shell_tool(xsh):
     return execute_in_current_xonsh
 
 
+def select_model(models):
+    """Use a dedicated endpoint's model or a router's sole loaded model."""
+    available = [
+        entry for entry in models if isinstance(entry.get("id"), str) and entry["id"]
+    ]
+    if len(available) == 1:
+        return available[0]["id"]
+    loaded = [
+        entry for entry in available if entry.get("status", {}).get("value") == "loaded"
+    ]
+    if len(loaded) == 1:
+        return loaded[0]["id"]
+    raise ValueError(
+        "Cannot select a unique served model; set $CLANKER_MODEL to an ID from /v1/models"
+    )
+
+
 def get_model(xsh):
+    import httpx
     from langchain_llama_server.chat_models import ChatLlamaServer
 
+    base_url = xsh.env.get("CLANKER_BASE_URL", "http://ask.lan:8014/v1")
+    api_key = xsh.env.get("CLANKER_API_KEY", "none")
+    model = xsh.env.get("CLANKER_MODEL")
+    if not model:
+        response = httpx.get(
+            base_url.rstrip("/") + "/models",
+            headers={"Authorization": f"Bearer {api_key}"},
+            timeout=10,
+        )
+        response.raise_for_status()
+        model = select_model(response.json().get("data", []))
     return ChatLlamaServer(
-        base_url=xsh.env.get("CLANKER_BASE_URL", "http://ask.lan:8014/v1"),
-        model=xsh.env.get("CLANKER_MODEL", "FIXED_MODEL"),
-        api_key=xsh.env.get("CLANKER_API_KEY", "none"),
+        base_url=base_url,
+        model=model,
+        api_key=api_key,
         timeout=120,
         max_retries=0,
     )
