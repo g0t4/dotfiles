@@ -264,3 +264,43 @@ def test_malformed_tool_call_is_logged_but_not_replayed_as_a_pending_call(
     assert assistant["metadata"]["invalid_tool_calls"]
     assert assistant["metadata"]["raw_tool_calls"] == [raw_call]
     assert "tool_calls" not in assistant["message"]
+
+
+def test_trace_filenames_sort_within_and_across_minutes(tmp_path):
+    from datetime import datetime
+
+    from clanker_session import _create_trace_file
+
+    moments = [
+        datetime(2026, 11, 12, 15, 30, 0, 0),
+        datetime(2026, 11, 12, 15, 30, 0, 1),
+        datetime(2026, 11, 12, 15, 30, 1, 0),
+        datetime(2026, 11, 12, 15, 30, 59, 999999),
+        datetime(2026, 11, 12, 15, 31, 0, 0),
+    ]
+    paths = [_create_trace_file(tmp_path, moment) for moment in moments]
+    names = [path.name for path in paths]
+    assert names[0] == "2026-11-12_1530-0000000.jsonl"
+    assert names[1] == "2026-11-12_1530-0000001.jsonl"
+    assert names[-1] == "2026-11-12_1531-0000000.jsonl"
+    assert sorted(names) == names
+    assert all(len(path.stem.rsplit("-", 1)[1]) == 7 for path in paths)
+
+
+def test_trace_filename_collisions_preserve_existing_files(tmp_path):
+    from concurrent.futures import ThreadPoolExecutor
+    from datetime import datetime
+
+    from clanker_session import _create_trace_file
+
+    moment = datetime(2026, 11, 12, 15, 30, 12, 345678)
+    original = _create_trace_file(tmp_path, moment)
+    original.write_text("existing trace\n")
+    with ThreadPoolExecutor(max_workers=4) as workers:
+        paths = list(
+            workers.map(lambda _: _create_trace_file(tmp_path, moment), range(12))
+        )
+    assert len(set(paths)) == 12
+    assert original not in paths
+    assert original.read_text() == "existing trace\n"
+    assert all(path.stat().st_mode & 0o777 == 0o600 for path in paths)

@@ -60,6 +60,22 @@ def serialize_message(message):
     return body, metadata
 
 
+def _create_trace_file(directory, local_start):
+    """Readable local minute plus a sortable microsecond offset, not a hash."""
+    prefix = local_start.strftime("%Y-%m-%d_%H%M")
+    offset = local_start.second * 1_000_000 + local_start.microsecond
+    while True:
+        path = directory / f"{prefix}-{offset:07x}.jsonl"
+        try:
+            descriptor = os.open(path, os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o600)
+        except FileExistsError:
+            # Same clock tick (or repeated local time): never replace a trace.
+            offset += 1
+            continue
+        os.close(descriptor)
+        return path
+
+
 class Session:
     """One writer and one JSONL file for this Xonsh process's lifetime."""
 
@@ -73,8 +89,7 @@ class Session:
         self.active = False
         directory = Path(directory).expanduser()
         directory.mkdir(parents=True, exist_ok=True, mode=0o700)
-        self.path = directory / f"{self.id}.jsonl"
-        os.close(os.open(self.path, os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o600))
+        self.path = _create_trace_file(directory, datetime.now().astimezone())
         self.append(
             "session",
             schema_version=1,

@@ -36,7 +36,13 @@ Optional Xonsh environment overrides: `$CLANKER_BASE_URL`, `$CLANKER_MODEL`,
 `$CLANKER_API_KEY`. Uses a 120-second request timeout, no automatic retries,
 and at most 20 model rounds per invocation.
 
-Traces: `~/.local/state/nvim/ask-openai/clanker_mode/<session_id>.jsonl`.
+Traces: `~/.local/state/nvim/ask-openai/clanker_mode/YYYY-MM-DD_HHMM-xxxxxxx.jsonl`.
+The prefix is local time; the seven-digit hexadecimal suffix is microseconds
+elapsed within that minute, preserving second/subsecond ordering. It is not a
+hash or random value. Exclusive creation retries the next suffix on collision,
+so even identical clock ticks cannot overwrite traces. Filenames are a browsing
+aid; record timestamps and session IDs are authoritative. Local clock changes
+(including daylight-saving fallback) can still affect filename ordering.
 One append-only trace per shell, created on first use. Files are user-only (0600).
 These traces can contain any shell state inspected by the agent, including secrets
 if explicitly requested. Tool side effects are not rolled back by interruption.
