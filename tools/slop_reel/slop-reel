@@ -1,0 +1,4 @@
+#!/bin/sh
+SCRIPT_PATH=$(python3 -c 'import os,sys; print(os.path.realpath(sys.argv[1]))' "$0")
+PROJECT_DIR=$(dirname "$SCRIPT_PATH")
+exec env -u VIRTUAL_ENV uv run --project "$PROJECT_DIR" -- python "$PROJECT_DIR/app.py" "$@"
