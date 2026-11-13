@@ -1,6 +1,7 @@
 """libmpv rendering in Qt's OpenGL context (no foreign-window embedding)."""
 
 import ctypes.util
+import locale
 from pathlib import Path
 
 # Homebrew and Nix may expose libmpv outside dyld's default search paths.
@@ -33,6 +34,9 @@ class Player(QOpenGLWidget):
     def __init__(self, path, parent=None):
         super().__init__(parent)
         self.path = str(path)
+        # QApplication applies the user's locale after python-mpv's import-time
+        # reset. libmpv requires C numeric parsing for its entire lifetime.
+        locale.setlocale(locale.LC_NUMERIC, "C")
         self.engine = mpv.MPV(
             vo="libmpv",
             pause=True,
