@@ -1,6 +1,7 @@
 """Generate tiny, inspectable source videos without altering course footage."""
 
 import argparse
+import json
 import subprocess
 from pathlib import Path
 
@@ -100,7 +101,66 @@ def generate(directory):
         ],
         check=True,
     )
+    generate_change_review(directory)
     return directory
+
+
+def generate_change_review(directory):
+    """Static slides, material changes, and one isolated black frame."""
+    directory = Path(directory)
+    target = directory / "slide-changes.mp4"
+    process = subprocess.Popen(
+        [
+            "ffmpeg",
+            "-v",
+            "error",
+            "-y",
+            "-f",
+            "rawvideo",
+            "-pix_fmt",
+            "rgb24",
+            "-s",
+            "640x360",
+            "-r",
+            "30",
+            "-i",
+            "pipe:0",
+            "-an",
+            "-c:v",
+            "libx264",
+            "-pix_fmt",
+            "yuv420p",
+            str(target),
+        ],
+        stdin=subprocess.PIPE,
+    )
+    colors = ["#6ab7c8", "#ffcc66", "#c792ea", "#89ca78"]
+    for index in range(240):
+        stage = index // 20
+        image = Image.new("RGB", (640, 360), "#171b23")
+        draw = ImageDraw.Draw(image)
+        draw.text((25, 25), "Slop Reel change review", fill="white", font_size=35)
+        draw.rectangle((100, 110, 540, 270), fill=colors[stage % 4])
+        draw.text((150, 155), f"SLIDE {stage:02d}", fill="#171b23", font_size=50)
+        if index == 115:
+            image = Image.new("RGB", image.size, "black")
+        process.stdin.write(image.tobytes())
+    process.stdin.close()
+    if process.wait():
+        raise RuntimeError("Failed generating change review fixture")
+    (directory / "slide-changes.json").write_text(
+        json.dumps(
+            {
+                "fps": 30,
+                "frames": 240,
+                "black_frames": [115],
+                "changed_frames": sorted([*range(20, 240, 20), 115, 116]),
+                "description": "Static slides with an isolated black frame; entry and exit both matter.",
+            },
+            indent=2,
+        )
+        + "\n"
+    )
 
 
 if __name__ == "__main__":

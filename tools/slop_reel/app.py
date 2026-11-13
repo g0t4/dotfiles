@@ -6,21 +6,18 @@ from concurrent.futures import ThreadPoolExecutor
 from html import escape
 from pathlib import Path
 
-from PySide6.QtCore import QObject, Qt, QTimer, Signal
+from PySide6.QtCore import QEvent, QObject, Qt, QTimer, Signal
 from PySide6.QtGui import (
     QColor,
     QImage,
     QKeySequence,
     QPainter,
     QPen,
-    QPixmap,
     QShortcut,
     QTextCursor,
 )
 from PySide6.QtWidgets import (
     QApplication,
-    QDialog,
-    QGridLayout,
     QHBoxLayout,
     QLabel,
     QMainWindow,
@@ -33,8 +30,10 @@ from PySide6.QtWidgets import (
     QWidget,
 )
 
+from changes import next_change, page_changes, scan, sequence
 from chat import Chat, request_content
 from commands import Commands
+from inspection import FrameStrip
 from media import Media, waveform
 from player import Player
 
@@ -91,48 +90,13 @@ class Waveform(QWidget):
         self.seek.emit(event.position().x() / self.width() * self.duration)
 
 
-def frame_pixmap(frame, width=300):
-    image = QImage.fromData(frame.jpeg)
-    return QPixmap.fromImage(image).scaledToWidth(
-        width, Qt.TransformationMode.SmoothTransformation
-    )
-
-
-class FrameZoom(QDialog):
-    def __init__(self, parent, center, frames):
-        super().__init__(parent)
-        self.setWindowTitle("Frames around playhead — click a frame to select")
-        layout = QGridLayout(self)
-        by_index = {f.index: f for f in frames}
-        for slot, index in enumerate(range(center - 3, center + 4)):
-            frame = by_index.get(index)
-            box = QWidget()
-            contents = QVBoxLayout(box)
-            if frame:
-                button = QPushButton()
-                from PySide6.QtGui import QIcon
-
-                pixmap = frame_pixmap(frame)
-                button.setIcon(QIcon(pixmap))
-                button.setIconSize(pixmap.size())
-                button.clicked.connect(
-                    lambda checked=False, t=frame.seconds: parent.player.seek(t)
-                )
-                contents.addWidget(button)
-                contents.addWidget(
-                    QLabel(
-                        f"Frame {frame.index} · {frame.seconds:.6f}s · {index - center:+d}"
-                    )
-                )
-            else:
-                contents.addWidget(QLabel("No frame (start/end of video)"))
-            if index == center:
-                box.setStyleSheet("background:#394355;")
-            layout.addWidget(box, slot // 4, slot % 4)
-        self.resize(1250, 500)
+class FrameZoom(FrameStrip):
+    """The familiar seven-neighbor strip, now with adjacent frame diffs."""
 
 
 class Window(QMainWindow):
+    change_progress = Signal(int, int)
+
     def __init__(self, path, trace_dir=None):
         super().__init__()
         self.path = path
@@ -141,6 +105,12 @@ class Window(QMainWindow):
         self.closed = False
         self.commands = Commands()
         self.media = None
+        self.changes = None
+        self.change_error = None
+        self.change_dialog = None
+        self.change_target = None
+        self.pending_review = None
+        self.review_busy = False
         self.busy = False
         self.chat = Chat(trace_dir)
         self.media_jobs, self.chat_jobs, self.wave_jobs = (
@@ -149,7 +119,10 @@ class Window(QMainWindow):
             Jobs(self),
         )
         self.player = Player(path)
+        self.player.navigation.connect(self.clear_change_target)
         self.player.failed.connect(lambda error: self.notice("Playback error", error))
+        self.change_jobs = Jobs(self)
+        self.change_progress.connect(self.change_scanning)
         self.wave = Waveform()
         self.wave.seek.connect(self.player.seek)
         self.clock = QLabel("Loading media…")
@@ -169,6 +142,19 @@ class Window(QMainWindow):
             controls.addWidget(button)
         controls.addWidget(self.clock)
         layout.addLayout(controls)
+        review = QHBoxLayout()
+        for label, callback in [
+            ("Previous change ↓", lambda: self.jump_change(-1)),
+            ("Next change ↑", lambda: self.jump_change(1)),
+            ("Change sequence", self.show_changes),
+        ]:
+            button = QPushButton(label)
+            button.clicked.connect(callback)
+            review.addWidget(button)
+        layout.addLayout(review)
+        self.change_status = QLabel("Waiting for frame index…")
+        layout.addWidget(self.change_status)
+        QApplication.instance().installEventFilter(self)
         right = QWidget()
         chat_layout = QVBoxLayout(right)
         self.transcript = QTextBrowser()
@@ -209,19 +195,176 @@ class Window(QMainWindow):
             lambda: waveform(path, commands=self.commands), self.wave_ready
         )
 
-    def keyPressEvent(self, event):
-        if event.key() == Qt.Key.Key_Space and not self.input.hasFocus():
-            self.toggle()
-        elif event.key() == Qt.Key.Key_Right and not self.input.hasFocus():
-            self.player.step(1)
-        elif event.key() == Qt.Key.Key_Left and not self.input.hasFocus():
-            self.player.step(-1)
-        elif event.key() == Qt.Key.Key_Z and not self.input.hasFocus():
-            self.zoom()
+    def eventFilter(self, watched, event):
+        # Capture player keys before focused buttons/scroll views consume them;
+        # leave all editor keys alone, including ordinary Up/Down text navigation.
+        if (
+            not self.closed
+            and event.type() == QEvent.Type.KeyPress
+            and isinstance(watched, QWidget)
+            and (
+                watched is self
+                or self.isAncestorOf(watched)
+                or watched.window().parentWidget() is self
+            )
+            and not self.input.hasFocus()
+            and watched is not self.input
+            and not self.input.isAncestorOf(watched)
+        ):
+            key = event.key()
+            if key == Qt.Key.Key_Up:
+                self.jump_change(1)
+            elif key == Qt.Key.Key_Down:
+                self.jump_change(-1)
+            elif key == Qt.Key.Key_Space:
+                self.toggle()
+            elif key == Qt.Key.Key_Right:
+                self.player.step(1)
+            elif key == Qt.Key.Key_Left:
+                self.player.step(-1)
+            elif key == Qt.Key.Key_Z:
+                if event.modifiers() & Qt.KeyboardModifier.ShiftModifier:
+                    self.show_changes()
+                else:
+                    self.zoom()
+            else:
+                return super().eventFilter(watched, event)
+            return True
+        return super().eventFilter(watched, event)
+
+    def change_scanning(self, count, total):
+        if not self.closed:
+            self.change_status.setText(f"Scanning frame changes: {count}/{total}…")
+
+    def changes_ready(self, changes, error):
+        if self.closed:
+            return
+        if error:
+            self.change_error = str(error)
+            self.change_status.setText(f"Change scan unavailable: {error}")
         else:
-            super().keyPressEvent(event)
+            self.changes = changes
+            self.change_status.setText(
+                f"{len(changes)} changed frames · Up next / Down previous · Shift+Z sequence"
+            )
+
+    def ready_to_review(self):
+        if self.changes is None:
+            if self.change_error:
+                self.change_status.setText(
+                    f"Change scan unavailable: {self.change_error}"
+                )
+            else:
+                self.change_status.setText("Change index is still scanning…")
+            return False
+        if not self.changes:
+            self.change_status.setText("No material frame changes detected.")
+            return False
+        return True
+
+    def clear_change_target(self):
+        self.change_target = None
+
+    def jump_change(self, direction):
+        if not self.ready_to_review():
+            return
+        self.player.engine.pause = True
+        index = (
+            self.change_target
+            if self.change_target is not None
+            else self.media.index_at(self.player.position)
+        )
+        change = next_change(self.changes, index, direction)
+        if change is None:
+            self.change_status.setText(
+                "No later change." if direction > 0 else "No earlier change."
+            )
+            return
+        self.player.seek(change.seconds)
+        self.change_target = change.index
+        self.change_status.setText(
+            f"Change #{change.index} · {change.seconds:.6f}s · {change.fraction:.2%} pixels"
+        )
+        if self.change_dialog and self.change_dialog.isVisible():
+            self.show_changes(frame_index=change.index)
+
+    def show_changes(self, checked=False, *, frame_index=None, selection=None):
+        if not self.ready_to_review():
+            return
+        if self.review_busy:
+            self.pending_review = (frame_index, selection)
+            return
+        self.player.engine.pause = True
+        index = (
+            self.media.index_at(self.player.position)
+            if frame_index is None
+            else frame_index
+        )
+        if selection is None:
+            center, selected = sequence(self.changes, index)
+        else:
+            selected = selection
+            center = selected[min(3, len(selected) - 1)].index
+        indices = [change.index for change in selected]
+        self.review_busy = True
+        self.change_status.setText("Loading changed frames…")
+
+        def extract():
+            nearby = self.media.frames_at(
+                [i for index in indices for i in (index - 1, index)]
+            )
+            by_index = {frame.index: frame for frame in nearby}
+            return [by_index[i] for i in indices], by_index
+
+        def ready(result, error):
+            self.review_busy = False
+            if self.closed:
+                return
+            if self.pending_review is not None:
+                frame_index, selection = self.pending_review
+                self.pending_review = None
+                self.show_changes(frame_index=frame_index, selection=selection)
+                return
+            if error:
+                self.change_status.setText(f"Change sequence unavailable: {error}")
+                return
+            frames, predecessors = result
+            old = self.change_dialog
+
+            def page(dialog, direction):
+                boundary = max(dialog.frames) if direction > 0 else min(dialog.frames)
+                items = page_changes(self.changes, boundary, direction)
+                if items:
+                    self.show_changes(selection=items)
+                else:
+                    self.change_status.setText(
+                        "No later changes." if direction > 0 else "No earlier changes."
+                    )
+
+            dialog = FrameStrip(
+                self,
+                center,
+                frames,
+                predecessors=predecessors,
+                slots=indices,
+                title="Material changes — each diff compares to its previous source frame",
+                page=page,
+            )
+            dialog.setWindowModality(Qt.WindowModality.WindowModal)
+            if old:
+                dialog.diff.setChecked(old.diff.isChecked())
+                old.close()
+                old.deleteLater()
+            self.change_dialog = dialog
+            dialog.show()
+            self.change_status.setText(
+                f"Showing {len(frames)} changed frames · Up/Down to step changes"
+            )
+
+        self.media_jobs.submit(extract, ready)
 
     def toggle(self):
+        self.clear_change_target()
         self.player.engine.pause = not self.player.engine.pause
 
     def tick(self):
@@ -239,6 +382,13 @@ class Window(QMainWindow):
             self.notice("Frame decoding unavailable", str(error))
         else:
             self.media = media
+            self.change_status.setText("Scanning frame changes…")
+            self.change_jobs.submit(
+                lambda: scan(
+                    self.path, media.times, self.commands, self.change_progress.emit
+                ),
+                self.changes_ready,
+            )
 
     def wave_ready(self, result, error):
         if self.closed:
@@ -265,9 +415,12 @@ class Window(QMainWindow):
             if error:
                 self.notice("Frame extraction failed", str(error))
             else:
-                FrameZoom(self, *result).exec()
+                center, frames, predecessors = result
+                dialog = FrameZoom(self, center, frames, predecessors=predecessors)
+                dialog.exec()
+                dialog.deleteLater()
 
-        self.media_jobs.submit(lambda: self.media.frames(position), ready)
+        self.media_jobs.submit(lambda: self.media.inspection(position), ready)
 
     def append_text(self, title, text):
         cursor = self.transcript.textCursor()
@@ -376,6 +529,7 @@ class Window(QMainWindow):
 
     def closeEvent(self, event):
         self.closed = True
+        QApplication.instance().removeEventFilter(self)
         self.commands.stop()
         self.timer.stop()
         self.chat.cancelled.set()
@@ -383,7 +537,7 @@ class Window(QMainWindow):
         if self.media:
             self.media_jobs.pool.submit(self.media.close)
         self.chat_jobs.pool.submit(self.chat.close)
-        for jobs in (self.media_jobs, self.wave_jobs, self.chat_jobs):
+        for jobs in (self.media_jobs, self.wave_jobs, self.chat_jobs, self.change_jobs):
             jobs.pool.shutdown(wait=False)
         event.accept()
 

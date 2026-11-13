@@ -99,6 +99,19 @@ class Media:
                 self.cache.popitem(last=False)
         return center, [self.cache[i] for i in indices if i in self.cache]
 
+    def frames_at(self, indices):
+        """Fetch sparse source frames without decoding all intervening spans."""
+        return [
+            self.frames(self.times[index], radius=0)[1][0]
+            for index in sorted(set(indices))
+            if 0 <= index < len(self.times)
+        ]
+
+    def inspection(self, seconds):
+        center, nearby = self.frames(seconds, radius=4)
+        frames = [frame for frame in nearby if abs(frame.index - center) <= 3]
+        return center, frames, {frame.index: frame for frame in nearby}
+
     def close(self):
         pass
 

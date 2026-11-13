@@ -30,6 +30,7 @@ from PySide6.QtOpenGLWidgets import QOpenGLWidget
 class Player(QOpenGLWidget):
     redraw = Signal()
     failed = Signal(str)
+    navigation = Signal()
 
     def __init__(self, path, parent=None):
         super().__init__(parent)
@@ -84,9 +85,11 @@ class Player(QOpenGLWidget):
         return self.engine.time_pos or 0.0
 
     def seek(self, seconds):
+        self.navigation.emit()
         self.engine.seek(max(0, seconds), "absolute+exact")
 
     def step(self, direction):
+        self.navigation.emit()
         self.engine.pause = True
         self.engine.command("frame-step" if direction > 0 else "frame-back-step")
 

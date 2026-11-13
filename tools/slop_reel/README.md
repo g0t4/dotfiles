@@ -93,3 +93,48 @@ OpenGL context; they check rendering, playback, both step directions, seek, seve
 zoom, and optionally live image chat plus follow-up. Screenshots and traces persist
 under `slop_reel_validation/` for review. Human listening remains part of the audio
 playback acceptance check; automated position checks alone do not prove audibility.
+
+## Reviewing material changes
+
+After the frame index loads, a background pass decodes **every frame** once and
+caches the detected change positions for this window. Playback/chat remain usable;
+the status line shows scan progress. Closing kills the scan subprocess too.
+
+- **Up**: next material change; **Down**: previous material change. Both pause and
+  seek to the changed source frame. Existing Left/Right still step every frame.
+- **Change sequence** or **Shift+Z**: show nearby material changes, skipping the
+  static gaps. Earlier/Later buttons page through up to seven changes at a time.
+  Up/Down also work inside the sequence popup; clicking a thumbnail seeks there.
+- Frame zoom and change sequence both have **Diff against previous source frame**.
+  Unchanged pixels are dimmed and changed pixels use the warm palette accent.
+  A change's comparison is always its immediately preceding source frame, even
+  when the sequence skips hundreds of unchanged frames. Labels identify that
+  reference and show changed-area/local-tile percentages.
+- Player keys leave the chat editor's typing and cursor navigation alone.
+
+MVP definition: fit frames into a 640×360 canvas, apply a small spatial blur, then
+mark pixels whose maximum RGB-channel difference is at least 24/255. A transition
+counts when at least 0.3% of the canvas changes, **or** 25% of any 32×32 tile changes.
+The local check helps retain small concentrated changes. These are fixed initial
+heuristics in `changes.py`, not model judgments or scene-cut detection. Motion can
+produce many consecutive changes; subtle/very small changes can still fall below
+the threshold. This is a review aid, not a guarantee that sensitive content is absent.
+
+There is no temporal subsampling, smoothing, or minimum duration: a one-frame flash
+can produce both an entry and an exit. No previous-frame comparison exists for the
+first source frame. Indexes live in memory and are rebuilt on a fresh launch.
+
+`fixtures.py` also creates `slide-changes.mp4` and its ground-truth JSON in the test
+media directory: static slides plus a single black frame at index 115. This is a
+useful demo of skipping unchanged spans, browsing event pages, and inspecting diffs.
+
+Native change-review acceptance check (uses the generated slide fixture):
+
+```sh
+./tools/slop_reel/.venv/bin/python tools/slop_reel/change_smoke_test.py '/Users/wesdemos/FCT Dropbox/Wes Higbee/Sync/auto-edit-videos/face2camera/slop_reel/slide-changes.mp4'
+```
+
+It checks keyboard jumps in both directions (including rapid repeats), sequence
+paging, source-adjacent diff references, and isolation from chat-editor keys.
+Model-assisted review, extra sensitivity levels, and the named macOS app wrapper
+are tracked in [TODO.md](TODO.md).
