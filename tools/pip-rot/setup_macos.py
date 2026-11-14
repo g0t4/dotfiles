@@ -9,6 +9,7 @@ setup(
     options={'py2app': {
         'alias': True,
         'argv_emulation': False,
+        'no_chdir': True,  # Preserve the shell's cwd for paths such as `.`.
         'iconfile': str(ROOT / 'assets/pip-rot.icns'),
         'plist': {
             'CFBundleIdentifier': 'com.g0t4.pip-rot',

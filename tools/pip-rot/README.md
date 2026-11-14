@@ -583,7 +583,10 @@ if you move the checkout or replace the Python environment. This is a local
 development installation, not a portable app distribution.
 
 The launcher and `pip-rot` command prefer the installed bundle executable;
-without it they retain source execution. Explicit macOS folder opens work with
+without it they retain source execution. Relative CLI paths resolve from the
+calling shell's working directory, so
+`pip-rot .` opens that directory, including when its path contains spaces.
+Explicit macOS folder opens work with
 `open -a 'Pip Rot' ~/Downloads`. Folder-open events create new windows in the
 existing process; direct command/launcher invocations retain separate processes.
 Restart App uses the bundle too and preserves the selected window's session.

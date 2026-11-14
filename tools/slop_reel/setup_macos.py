@@ -26,6 +26,7 @@ setup(
         "py2app": {
             "alias": True,
             "argv_emulation": False,
+            "no_chdir": True,  # CLI paths belong to the caller's working directory.
             "iconfile": str(ROOT / "assets/slop-reel.icns"),
             "plist": {
                 "CFBundleIdentifier": "com.g0t4.slop-reel",

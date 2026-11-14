@@ -37,6 +37,9 @@ window; **⌘Q** or **F9** quits and closes all review windows, stopping their w
 `sr`/`slop-reel` prefer the installed bundle executable and keep their original
 source/uv fallback when it is absent. Direct CLI invocations start a separate
 process; Finder/`open -a` delivers files to an existing application process.
+CLI relative paths resolve from the calling shell's working directory, including
+quoted filenames containing spaces. Pass a video file to Slop Reel; `.` itself is
+a directory, not a video. Bundle startup preserves the caller's working directory.
 
 This is a py2app **alias bundle**, like Pip Rot: it loads this live checkout and
 its virtualenv, rather than copying the project into a portable distribution.
