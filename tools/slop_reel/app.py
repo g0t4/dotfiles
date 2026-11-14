@@ -589,7 +589,7 @@ class Window(QMainWindow):
         if error:
             self.append_text("Error", str(error))
         elif answer is not None:
-            self.append_text("Slop Reel", answer)
+            self.append_text("Sloppy", answer)
         else:
             self.append_text("Status", "Request cancelled.")
         self.status.setText(f"Trace: {self.chat.session.path.name}")
