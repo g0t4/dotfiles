@@ -36,6 +36,8 @@ from commands import Commands
 from inspection import FrameStrip
 from media import Media, waveform
 from player import Player
+from video_tools import VideoTools
+from voice import Dictation
 
 
 class Jobs(QObject):
@@ -95,6 +97,7 @@ class FrameZoom(FrameStrip):
 
 
 class Window(QMainWindow):
+    tool_status = Signal(str)
     change_progress = Signal(int, int)
     review_closed = Signal(object)
 
@@ -114,6 +117,11 @@ class Window(QMainWindow):
         self.review_busy = False
         self.busy = False
         self.chat = Chat(trace_dir)
+        self.chat.video = VideoTools(
+            path, Commands(), self.chat.cancelled, self.tool_status.emit
+        )
+        self.chat.notify = self.tool_status.emit
+        self.tool_status.connect(self.show_tool_status)
         self.media_jobs, self.chat_jobs, self.wave_jobs = (
             Jobs(self),
             Jobs(self),
@@ -175,6 +183,18 @@ class Window(QMainWindow):
         chat_layout.addWidget(self.status)
         chat_layout.addWidget(self.input)
         row = QHBoxLayout()
+        self.dictation = Dictation(self)
+        self.dictation_cursor = None
+        self.dictation.transcript.connect(self.insert_dictation)
+        self.dictation.status.connect(self.status.setText)
+        self.dictation.active_changed.connect(self.dictation_active)
+        self.talk_button = QPushButton("Hold to talk · F6")
+        self.talk_button.setToolTip(
+            "Private Whisper dictation via voiced; release to insert, then send."
+        )
+        self.talk_button.pressed.connect(self.start_dictation)
+        self.talk_button.released.connect(self.dictation.release)
+        row.addWidget(self.talk_button)
         row.addWidget(self.send_button)
         row.addWidget(self.cancel_button)
         chat_layout.addLayout(row)
@@ -199,6 +219,23 @@ class Window(QMainWindow):
         )
 
     def eventFilter(self, watched, event):
+        if (
+            not self.closed
+            and isinstance(watched, QWidget)
+            and (watched is self or self.isAncestorOf(watched))
+        ):
+            if (
+                event.type() in (QEvent.Type.KeyPress, QEvent.Type.KeyRelease)
+                and event.key() == Qt.Key.Key_F6
+            ):
+                if not event.isAutoRepeat():
+                    if event.type() == QEvent.Type.KeyPress:
+                        self.start_dictation()
+                    else:
+                        self.dictation.release()
+                return True
+            if watched is self and event.type() == QEvent.Type.WindowDeactivate:
+                self.dictation.release()
         # Capture player keys before focused buttons/scroll views consume them;
         # leave all editor keys alone, including ordinary Up/Down text navigation.
         if (
@@ -435,9 +472,35 @@ class Window(QMainWindow):
         self.transcript.setTextCursor(cursor)
         self.transcript.ensureCursorVisible()
 
+    def show_tool_status(self, text):
+        if not self.closed:
+            self.status.setText(text)
+            self.append_text("Inspection", text)
+
+    def start_dictation(self):
+        if not self.dictation.active:
+            self.dictation_cursor = self.input.textCursor()
+            self.dictation.press()
+
+    def dictation_active(self, active):
+        self.send_button.setEnabled(not active and not self.busy)
+        self.input.setReadOnly(active)
+
+    def insert_dictation(self, text):
+        cursor = self.dictation_cursor or self.input.textCursor()
+        before = self.input.toPlainText()[: cursor.selectionStart()]
+        after = self.input.toPlainText()[cursor.selectionEnd() :]
+        cursor.insertText(
+            (" " if before and not before[-1].isspace() else "")
+            + text
+            + (" " if after and not after[0].isspace() else "")
+        )
+        self.input.setTextCursor(cursor)
+        self.input.setFocus()
+
     def send(self):
         text = self.input.toPlainText().strip()
-        if not text or self.busy:
+        if not text or self.busy or self.dictation.active:
             return
         command = text.partition(" ")[0]
         if command.startswith("/") and command not in ("/frame", "/frames"):
@@ -514,13 +577,14 @@ class Window(QMainWindow):
 
     def cancel(self):
         self.chat.cancelled.set()
+        self.chat.video.commands.stop()
         self.status.setText("Cancelling…")
 
     def answered(self, answer, error):
         if self.closed:
             return
         self.busy = False
-        self.send_button.setEnabled(True)
+        self.send_button.setEnabled(not self.dictation.active)
         self.cancel_button.setEnabled(False)
         if error:
             self.append_text("Error", str(error))
@@ -533,6 +597,8 @@ class Window(QMainWindow):
     def closeEvent(self, event):
         self.closed = True
         QApplication.instance().removeEventFilter(self)
+        self.dictation.close()
+        self.chat.video.commands.stop()
         self.commands.stop()
         self.timer.stop()
         self.chat.cancelled.set()

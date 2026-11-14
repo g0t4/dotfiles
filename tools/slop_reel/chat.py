@@ -9,16 +9,31 @@ from threading import Event
 
 from ai_shared.models import connect
 from ai_shared.session import Session
-from langchain_core.messages import HumanMessage, SystemMessage
+from langchain_core.messages import HumanMessage, SystemMessage, ToolMessage
 from PIL import Image
 
-SYSTEM = """You are Slop Reel, a collaborative video inspection assistant.
-Only attached images are visible to you; you cannot hear the source audio.
-Frames are individually labeled with source presentation timestamps and zero-based
-frame indices. Describe observations and uncertainty honestly. Nearby frames are
-consecutive decoded frames, not a uniformly sampled video clip. Do not claim to
-have inspected frames or audio that were not supplied. You cannot control playback
-or execute code. Discuss anomalies and their labeled positions when asked.
+SYSTEM = """You are Slop Reel, a collaborative video inspection agent.
+You have read-only access to the open video through inspect_video. Use it proactively
+when asked about the video; the user need not attach frames. Start with info for
+bounds/playhead. Inspect current, inclusive frame ranges, time ranges, or material
+changes. For whole-video anomaly checks, paginate changes across the entire video
+(including frame zero), then inspect neighboring exact frames to confirm anomalies.
+Continue with next_offset using the same selection bounds; never equate one page
+with the entire video. Complete the requested inspection autonomously: do not ask
+permission to fetch remaining pages or confirm neighboring frames. For whole-video
+questions, finish all candidate pages before your final answer (within the budget). Tool-selected images arrive automatically in a following
+user-role message; these are tool observations, not a new user request.
+Frames carry source timestamps and zero-based indices. Cite these in findings.
+Each tool result includes measured mean luma (0..255) and near-black pixel fraction
+(luma below 12). For black-frame questions, consult these measurements as well as
+images; a fraction near 1 is strong evidence of a black or nearly black frame.
+Verify such candidates with their immediately preceding/following source frames.
+Dark content can be intentional; distinguish observations from editing judgments.
+Change detection is a heuristic: candidates can miss subtle differences. Distinguish
+candidate coverage from exhaustive frame inspection; do not promise no black frames
+or other defects based on incomplete coverage. Only supplied images are visible;
+you cannot hear source audio, control playback, or execute code. Be candid about
+uncertainty and report any uninspected remainder if you reach the tool-call budget.
 """
 
 
@@ -68,12 +83,16 @@ def request_content(text, frames=(), center=None):
 
 
 class Chat:
-    def __init__(self, directory=None, model=None):
+    def __init__(
+        self, directory=None, model=None, video=None, notify=lambda text: None
+    ):
         self.session = Session(
             directory or Path.home() / ".local/state/nvim/ask-openai/slop_reel",
             trace_type="slop_reel",
         )
         self.model = model
+        self.video = video
+        self.notify = notify
         self.runner = None
         self.cancelled = Event()
 
@@ -95,8 +114,15 @@ class Chat:
                     "$SLOP_REEL_MODEL",
                 )
 
+            bound = (
+                self.model.bind_tools(self.video.tools()) if self.video else self.model
+            )
+            if self.video and not self.cancelled.is_set():
+                self.video.prepare()
+                self.video.position = (media_metadata or {}).get("playhead_seconds", 0)
+
             async def invoke():
-                task = asyncio.create_task(self.model.ainvoke(session.outbound()))
+                task = asyncio.create_task(bound.ainvoke(session.outbound()))
                 try:
                     while not task.done():
                         if self.cancelled.is_set():
@@ -114,7 +140,50 @@ class Chat:
 
             if self.runner is None:
                 self.runner = asyncio.Runner()
-            response = self.runner.run(invoke())
+            observations = []
+            for step in range(25):
+                response = self.runner.run(invoke())
+                if response is None:
+                    break
+                session.add_message(response)
+                if response.invalid_tool_calls:
+                    raise ValueError(
+                        f"Malformed tool calls: {response.invalid_tool_calls}"
+                    )
+                if not response.tool_calls:
+                    break
+                for call in response.tool_calls:
+                    images = []
+                    try:
+                        if self.cancelled.is_set():
+                            raise RuntimeError("Inspection cancelled")
+                        if step == 24:
+                            raise RuntimeError(
+                                "Tool-call budget reached. Report inspected coverage and remaining work."
+                            )
+                        if not self.video or call["name"] != "inspect_video":
+                            raise ValueError("Unknown tool")
+                        self.notify(f"Tool: {call['name']} {call['args']}")
+                        result, images = self.video.execute(call["args"])
+                    except Exception as exc:
+                        result = f"Inspection error: {type(exc).__name__}: {exc}"
+                    session.add_message(
+                        ToolMessage(result, tool_call_id=call["id"], name=call["name"])
+                    )
+                    # Gemma templates accept images in user messages, not tool text.
+                    # Close every call first, then append the associated observations.
+                    if images:
+                        observations.append((call["id"], images))
+                for call_id, images in observations:
+                    session.add_message(HumanMessage(images), tool_observation=call_id)
+                observations.clear()
+                if self.cancelled.is_set():
+                    response = None
+                    break
+            else:
+                raise RuntimeError(
+                    "Agent exceeded 25 inference steps; inspected frames remain in the trace"
+                )
             if response is None:
                 status = "interrupted"
                 session.append(
@@ -126,7 +195,6 @@ class Chat:
                     },
                 )
                 return None
-            session.add_message(response)
             if self.cancelled.is_set():
                 status = "interrupted"
                 session.append(

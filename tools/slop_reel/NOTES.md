@@ -8,7 +8,8 @@ replaying the same passage. Playback/frame zoom is useful independently of AI.
 ## POC boundary
 
 Implemented first: native split player/chat, waveform, accurate bidirectional
-stepping, seven-frame popup, explicit `/frame` and `/frames` image questions.
+stepping, seven-frame popup, explicit `/frame` and `/frames` image questions,
+private voiced dictation, and read-only agent-selected frame/time/change inspection.
 No audio attachment, autonomous player tools, timeline editing, or model-driven
 whole-video scanning yet. A proposed `/clip [question]` would capture a default
 one-second interval centered on the playhead, clamped to the source bounds.

@@ -1,7 +1,7 @@
 # Slop Reel
 
 A local video inspection workbench: libmpv playback and waveform on the left,
-explicit multimodal chat on the right. It shares LangChain connections and the
+a video inspection agent on the right. It shares LangChain connections and the
 append-only trace serializer with Clanker, but runs in its own process/venv.
 
 ## Run
@@ -89,7 +89,7 @@ throughout this window's lifetime; a new window starts a fresh conversation.
 Default: `http://build21.lan:8011/v1`, currently serving Gemma 4 E4B Q8_0 through
 llama-server. The model ID is discovered from `/v1/models`.
 Overrides: `SLOP_REEL_BASE_URL`, `SLOP_REEL_MODEL`, `SLOP_REEL_API_KEY`.
-The same `ChatLlamaServer` provider as Clanker is used without tool binding.
+The same `ChatLlamaServer` provider as Clanker is used, with read-only video inspection tools.
 
 Attached images are individual JPEGs capped at 640 pixels on the longest edge.
 Frame inspection uses 1280-pixel previews and an approximately 42-frame JPEG cache.
@@ -177,8 +177,76 @@ Native change-review acceptance check (uses the generated slide fixture):
 
 It checks keyboard jumps in both directions (including rapid repeats), sequence
 paging, source-adjacent diff references, and isolation from chat-editor keys.
-Model-assisted review, extra sensitivity levels, and desktop-wrapper acceptance
+Model-judged candidate filtering, extra sensitivity levels, and desktop-wrapper acceptance
 are tracked in [TODO.md](TODO.md). Desktop file-open/lifecycle checks run without
 OpenGL using `pytest -q tools/slop_reel/test_macos_app.py`; they cover queued and
 running Finder events, duplicate opens, picker/drop paths, menus, and multi-window
 quit cleanup. They do not substitute for Finder/Dock acceptance on a live desktop.
+
+
+## Talking to the agent
+
+Hold **F6** (with this review window focused) or the **Hold to talk** button,
+then release. Whisper's final transcript is inserted at your captured text-box
+cursor/selection; review it and send separately. Existing text is preserved outside
+the selection. Live hypotheses appear in the status line, without repeatedly
+rewriting your draft. Losing window focus releases dictation too.
+
+This uses the **resident voiced daemon** in the adjacent `ask-openai.nvim` repo;
+no second Whisper model is loaded in Slop Reel. Start it with:
+
+```sh
+cd ../ask-openai.nvim
+.venv/bin/python -m tools.voiced
+```
+
+Restart an older running daemon after updating it. Slop Reel requires the private
+protocol handshake and deliberately refuses to record through older broadcast-only
+versions. Its private session's live/final transcripts go only to its connection,
+not Clankerd or Neovim. Global hardware PTT/VAD do not interrupt an owned session.
+If another utterance is already active, dictation reports that the microphone is
+busy. The daemon remains running after Slop Reel closes; an owned recording is
+released on close/disconnect. Whisper errors release microphone ownership too.
+
+Socket default: `$XDG_STATE_HOME/ask-openai/voiced.sock`, falling back to
+`~/.local/state/ask-openai/voiced.sock`. Override with `SLOP_REEL_VOICED_SOCKET`.
+Other clients can adopt the same protocol documented in voiced's README. Ownership
+is explicit per connection; foreground-app detection is not required.
+
+## Agent-controlled video inspection
+
+Ask naturally, e.g. **“Are there any black frames in this video?”** No slash command
+or manual attachment is required. The agent has a read-only `inspect_video` tool:
+
+- `info`: source frame count, timestamp bounds, and the playhead captured at Send.
+- `current`: that playhead's source frame.
+- `frames`: inclusive source frame index range; defaults to three neighbors either side.
+- `time`: inclusive source timestamp range; defaults to +/-0.5 seconds around the playhead.
+- `changes`: material-change candidates throughout the video, plus source frame zero;
+  optional start/end source timestamps restrict the search to a nearby period.
+
+Images are delivered in pages of at most eight, with `total_candidates`,
+`returned_indices`, and `next_offset`. The agent can keep paging or request exact
+neighbors. Results include source timestamps plus measured mean luma and the pixel
+fraction below luma 12, useful for black-frame checks. Dark frames can be intentional.
+Changed-frame candidates are heuristic coverage, not an exhaustive guarantee about
+all frames. The system prompt requires honest coverage reporting and confirmation
+of anomalies. The model still makes mistakes: the first live test missed a visible
+blackout until measured brightness was added to tool results.
+
+Tool calls and images are saved in the same append-only JSONL conversation as
+ordinary chat. Tool-selected images use an automatically generated user-role
+observation after tool replies for compatibility with Gemma's image template;
+`metadata.tool_observation` links it to the call. Tool status appears in the chat.
+There is a 25-inference-step limit per request. Cancel stops both inference and
+agent-owned media subprocesses without stopping playback or the UI's change scan.
+The agent uses its own worker-owned decoder and lazily cached change scan to avoid
+sharing mutable decoding state with the frame zoom worker. No source audio or
+playback-control capability is exposed. `/frame` and `/frames` remain available.
+
+Validation: `test_agent.py` checks actual decoded black-frame identity, pagination,
+bounds, automatic tool observations, and trace replay. `test_voice.py` exercises Qt
+socket framing, final-only insertion, release-before-connect, and refusal of an old
+daemon. The voiced tests verify isolation from other subscribers, busy handling,
+disconnect cleanup, recognition failures, and legacy global PTT behavior. Live model
+validation traces stay under `slop_reel_validation/agent-tools/`.
