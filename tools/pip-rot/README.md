@@ -25,8 +25,8 @@ Each invocation opens a separate window. Tabs and layouts are currently in memor
 | ⌘Return | Open selected directory in a new tab |
 | ⌘T | Duplicate current tab's root |
 | ⌘↓ / ⌘O | Enter directory in current tab, or open file with its default app |
-| ⌘W / F8 | Close tab (last tab closes the window) |
-| F9 | Close current window |
+| F8 | Close tab (last tab closes the window) |
+| ⌘W / F9 | Close current window (last window quits) |
 | ⌘` / ⌘Shift` | Next / previous Pip Rot window across processes (Hammerspoon) |
 | ⌘L | Enter a directory path (Return to navigate in current tab) |
 | ⌘↑ / Option↑ | Move the tab root up a directory |
