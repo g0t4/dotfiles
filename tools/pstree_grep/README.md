@@ -14,6 +14,12 @@ The existing Fish/Xonsh command still works. From the dotfiles root you can also
 run `.venv/bin/python -m tools.pstree_grep`. Dependencies are in the root
 `pyproject.toml` / `uv.lock`.
 
+Xonsh registers a direct command-list alias in `rc.d/python-specific.xsh`, so the
+Python process inherits terminal stdin/stdout/stderr. A callable Fish bridge can
+receive Xonsh's captured stdout pipe, which prevents interactive mode from seeing
+a terminal. After updating an existing shell, run
+`source ~/.config/xonsh/rc.d/python-specific.xsh` or start a fresh Xonsh session.
+
 The TUI refreshes processes every second, independently of typing. Matches are
 pink with `*`; compact names can match arguments you cannot see. The actual
 running Python helper is marked `[self: pstree_grep]`. Colors come from
@@ -38,5 +44,5 @@ by the remaining content. Nothing signals or changes the inspected processes.
 Validation:
 
 ```sh
-PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 .venv/bin/python -m pytest -q tools/pstree_grep/test_pstree_grep.py
+PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 .venv/bin/python -m pytest -q tools/pstree_grep/test_*.py
 ```

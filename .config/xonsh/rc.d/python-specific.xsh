@@ -21,6 +21,13 @@ $PYTEST_ADDOPTS = "-o verbosity_assertions=2"
 
 register_wes_python()
 
+# Launch directly so interactive mode inherits the terminal, rather than the
+# captured stdout pipe Xonsh supplies to callable Fish wrappers.
+aliases["pstree_grep"] = [
+    str(Path($WES_DOTFILES) / ".venv/bin/python3"),
+    str(Path($WES_DOTFILES) / "zsh/compat_fish/pythons/pstree_grep.py"),
+]
+
 _wcl_script = Path($WES_DOTFILES) / "zsh/compat_fish/pythons/wcl.py"
 _wcl_python = Path($WES_DOTFILES) / ".venv/bin/python3"
 
