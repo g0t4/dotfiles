@@ -24,7 +24,7 @@ def registry():
 def test_inventory_and_all_static_cursor_markers():
     entries = registry().abbreviations
 
-    assert len(entries) == 193
+    assert len(entries) == 202
     for entry in entries:
         assert isinstance(entry.replacement, str)
         if entry.cursor_marker:

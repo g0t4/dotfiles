@@ -226,6 +226,17 @@ abbr dcoud 'docker compose up --detach'
 abbr dcouw 'docker compose up --watch' # TBD if I want this abbr (dco ~2.24.7 added --watch)
 abbr dcov 'docker compose version'
 
+## Docker Desktop
+abbr ddt 'docker desktop'
+abbr ddtl 'docker desktop logs'
+abbr ddtre 'docker desktop restart'
+abbr ddtstart 'docker desktop start'
+abbr ddtstatus 'docker desktop status'
+abbr ddtstop 'docker desktop stop'
+abbr ddtu 'docker desktop update'
+abbr ddtuc 'docker desktop update --check-only'
+abbr ddtv 'docker desktop version'
+
 ## dld - docker labs debug: # dld commands are hanging after latest update to DDfM
 # abbr dlda 'dld attach'
 # abbr dlds 'dld shell'
