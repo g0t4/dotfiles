@@ -48,7 +48,7 @@ def register_wes_processes():
     abbr('kill9', 'kill -9')
     abbr('psfull', "grc ps -o 'user,pid,pcpu,pmem,vsz,rss,tty,stat,start,time,comm' -ax")
     abbr('psf', 'grc ps f')
-    abbr('pstreeg', "pstree_grep '%'", cursor_marker="%")
+    abbr('pstreeg', "pstree_grep --show-full-cmd '%'", cursor_marker="%")
     abbr('pstreeg_watch', 'viddy \'fish -i -c "pstree_grep \\\'%\\\'"\'', cursor_marker="%")
     abbr(re.compile('pstree\\d+'), abbr_from_fish_function('pstreeX'))
     abbr('pstrees', 'pstree -s "%"', cursor_marker="%")

@@ -119,7 +119,7 @@ end
 #       ps -o "user:5,pid,pcpu,pmem,vsz,rss,tty,stat,start,time,comm" -ax
 #
 # *** pstree_grep.py
-abbr --set-cursor -- pstreeg "pstree_grep '%'"
+abbr --set-cursor -- pstreeg "pstree_grep --show-full-cmd '%'"
 abbr --set-cursor -- pstreeg_watch "viddy 'fish -i -c \"pstree_grep \\'%\\'\"'"
 #
 complete --command pstree_grep --short-option h --long-option help --description 'show this help message and exit'
