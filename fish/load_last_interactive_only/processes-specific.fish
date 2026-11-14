@@ -123,6 +123,7 @@ abbr --set-cursor -- pstreeg "pstree_grep --show-full-cmd '%'"
 abbr --set-cursor -- pstreeg_watch "viddy 'fish -i -c \"pstree_grep \\'%\\'\"'"
 #
 complete --command pstree_grep --short-option h --long-option help --description 'show this help message and exit'
+complete --command pstree_grep --short-option t --long-option tui --description 'live interactive process tree'
 complete --command pstree_grep --short-option i --long-option ignore-case --description 'case‑insensitive regex matching'
 complete --command pstree_grep --long-option ascii --description 'use ASCII tree connectors'
 complete --command pstree_grep --short-option f --long-option show-full-cmd --description 'display the full command line instead of name(pid)'
