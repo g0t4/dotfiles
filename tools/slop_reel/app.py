@@ -3,7 +3,6 @@
 import argparse
 import sys
 from concurrent.futures import ThreadPoolExecutor
-from html import escape
 from pathlib import Path
 
 from PySide6.QtCore import QEvent, QObject, Qt, QTimer, Signal
@@ -32,6 +31,7 @@ from PySide6.QtWidgets import (
 
 from changes import next_change, page_changes, scan, sequence
 from chat import Chat, request_content
+from chat_theme import append_markdown, apply_chat_theme, trace_link
 from commands import Commands
 from inspection import FrameStrip
 from media import Media, waveform
@@ -173,7 +173,12 @@ class Window(QMainWindow):
         self.input.setPlaceholderText(
             "Chat, /frame question, or /frames question\nCtrl+Return to send"
         )
-        self.status = QLabel(f"Trace: {self.chat.session.path.name}")
+        self.status = QLabel()
+        self.status.setOpenExternalLinks(False)
+        self.status.linkActivated.connect(self.copy_trace_path)
+        trace_link(self.status, self.chat.session.path)
+        apply_chat_theme(self.transcript, self.input, self.status, right)
+        right.setAutoFillBackground(True)
         self.send_button = QPushButton("Send")
         self.send_button.clicked.connect(self.send)
         self.cancel_button = QPushButton("Cancel request")
@@ -463,14 +468,11 @@ class Window(QMainWindow):
         self.media_jobs.submit(lambda: self.media.inspection(position), ready)
 
     def append_text(self, title, text):
-        cursor = self.transcript.textCursor()
-        cursor.movePosition(QTextCursor.MoveOperation.End)
-        cursor.insertHtml(f"<p><b>{escape(title)}</b></p>")
-        cursor.insertBlock()
-        cursor.insertMarkdown(text)
-        cursor.insertText("\n\n")
-        self.transcript.setTextCursor(cursor)
-        self.transcript.ensureCursorVisible()
+        append_markdown(self.transcript, title, text)
+
+    def copy_trace_path(self, link=None):
+        QApplication.clipboard().setText(str(self.chat.session.path.resolve()))
+        trace_link(self.status, self.chat.session.path, copied=True)
 
     def show_tool_status(self, text):
         if not self.closed:
@@ -592,7 +594,7 @@ class Window(QMainWindow):
             self.append_text("Sloppy", answer)
         else:
             self.append_text("Status", "Request cancelled.")
-        self.status.setText(f"Trace: {self.chat.session.path.name}")
+        trace_link(self.status, self.chat.session.path)
 
     def closeEvent(self, event):
         self.closed = True

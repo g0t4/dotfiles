@@ -2,7 +2,14 @@
 name = "slop-reel"
 version = "0.1.0"
 requires-python = ">=3.12"
-dependencies = ["PySide6>=6.8,<7", "python-mpv>=1.0", "Pillow>=11", "wes-ai-shared", "langchain-llama-server"]
+dependencies = [
+    "PySide6>=6.8,<7",
+    "python-mpv>=1.0",
+    "Pillow>=11",
+    "wes-ai-shared",
+    "langchain-llama-server",
+    "wes-syntax",
+]
 
 [dependency-groups]
 dev = ["pytest>=8.4", "ruff"]
@@ -14,6 +21,7 @@ macos = [
 [tool.uv.sources]
 wes-ai-shared = { path = "../ai_shared", editable = true }
 langchain-llama-server = { path = "../../../langchain-llama-server", editable = true }
+wes-syntax = { path = "../syntax-lab", editable = true }
 
 [tool.ruff.lint]
 ignore = ["E402", "BLE001"]

@@ -588,6 +588,27 @@ wheels = [
 ]
 
 [[package]]
+name = "markdown-it-py"
+version = "4.3.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "mdurl" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/16/fc/cee2c45553c9a9bf77d8b0c391560c556d7ed756b1f0bb35eb5d48db09ea/markdown_it_py-4.3.0.tar.gz", hash = "sha256:91a58fa5b72c71a40cf7177250fd767480d7a2bb3ac426ccfb76fb90305fdaaa", size = 242701, upload-time = "2026-11-10T16:18:30.467Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/c9/31/5f0ac2f1a1c67423c995c731a11cd4ad05d081a2be969d74f868bdb9cc70/markdown_it_py-4.3.0-py3-none-any.whl", hash = "sha256:7aa1511a46c39138de78d9eba92ce47e63124d8003fc98b3a351909e04239efa", size = 96951, upload-time = "2026-11-10T16:18:28.975Z" },
+]
+
+[[package]]
+name = "mdurl"
+version = "0.1.2"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/d6/54/cfe61301667036ec958cb99bd3efefba235e65cdeb9c84d24a8293ba1d90/mdurl-0.1.2.tar.gz", hash = "sha256:bb413d29f5eea38f31dd4754dd7377d4465116fb207585f97bf925588687c1ba", size = 8729, upload-time = "2022-08-14T12:40:10.846Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/b3/38/89ba8ad64ae25be8de66a6d463314cf1eb366222074cfda9ee839c56a4b4/mdurl-0.1.2-py3-none-any.whl", hash = "sha256:84008a41e51615a49fc9966191ff91509e3c40b939176e643fd50a5c2196b8f8", size = 9979, upload-time = "2022-08-14T12:40:09.779Z" },
+]
+
+[[package]]
 name = "modulegraph"
 version = "0.19.7"
 source = { registry = "https://pypi.org/simple" }
@@ -1236,6 +1257,19 @@ wheels = [
 ]
 
 [[package]]
+name = "rich"
+version = "14.3.4"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "markdown-it-py" },
+    { name = "pygments" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/e9/67/cae617f1351490c25a4b8ac3b8b63a4dda609295d8222bad12242dfdc629/rich-14.3.4.tar.gz", hash = "sha256:817e02727f2b25b40ef56f5aa2217f400c8489f79ca8f46ea2b70dd5e14558a9", size = 230524, upload-time = "2026-04-11T02:57:45.419Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/b3/76/6d163cfac87b632216f71879e6b2cf17163f773ff59c00b5ff4900a80fa3/rich-14.3.4-py3-none-any.whl", hash = "sha256:07e7adb4690f68864777b1450859253bed81a99a31ac321ac1817b2313558952", size = 310480, upload-time = "2026-04-11T02:57:47.484Z" },
+]
+
+[[package]]
 name = "ruff"
 version = "0.17.5"
 source = { registry = "https://pypi.org/simple" }
@@ -1291,6 +1325,7 @@ dependencies = [
     { name = "pyside6" },
     { name = "python-mpv" },
     { name = "wes-ai-shared" },
+    { name = "wes-syntax" },
 ]
 
 [package.dev-dependencies]
@@ -1310,6 +1345,7 @@ requires-dist = [
     { name = "pyside6", specifier = ">=6.8,<7" },
     { name = "python-mpv", specifier = ">=1.0" },
     { name = "wes-ai-shared", editable = "../ai_shared" },
+    { name = "wes-syntax", editable = "../syntax-lab" },
 ]
 
 [package.metadata.requires-dev]
@@ -1633,6 +1669,35 @@ dependencies = [
 requires-dist = [
     { name = "httpx", specifier = ">=0.28" },
     { name = "langchain-llama-server" },
+]
+
+[[package]]
+name = "wes-syntax"
+version = "0.1.0"
+source = { editable = "../syntax-lab" }
+dependencies = [
+    { name = "pygments" },
+    { name = "rich" },
+    { name = "xonsh" },
+]
+
+[package.metadata]
+requires-dist = [
+    { name = "pygments", specifier = ">=2.19,<3" },
+    { name = "rich", specifier = ">=13.9,<15" },
+    { name = "xonsh", specifier = ">=0.24,<0.25" },
+]
+
+[[package]]
+name = "xonsh"
+version = "0.24.2"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/c1/28/974f44afd5c05bcfb012d52a91b514e629706048c85d669a29eab2f0369a/xonsh-0.24.2.tar.gz", hash = "sha256:461244cf1de8ed28d0c07cc548342b9e7969d46e17ef8d71b5d3064307930a25", size = 1217004, upload-time = "2026-08-23T15:41:03.929Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/16/32/2dc9f6142d6744fa584a59507030a851971e4088af86f187437344f60315/xonsh-0.24.2-py311-none-any.whl", hash = "sha256:60015217f74663d52c4038e495546710ecdffeb0beae96834b4ac3ea970a3927", size = 821746, upload-time = "2026-08-23T15:41:02.525Z" },
+    { url = "https://files.pythonhosted.org/packages/b0/77/9a9b1e1fcf377b412bb45626be1af9a97414f8a3aa96df566e06b8ebb092/xonsh-0.24.2-py312-none-any.whl", hash = "sha256:68e93b77bbf9e2a26f70bf323a1c311014dc2aed9ebcf036e68e7fe59ed0849c", size = 821749, upload-time = "2026-08-23T15:40:25.865Z" },
+    { url = "https://files.pythonhosted.org/packages/08/6a/aaae1f889eec7f015aa8b7041f807871cb18a2c2bc8f0564c5ca70f4bc16/xonsh-0.24.2-py313-none-any.whl", hash = "sha256:da19e84ad0361c0c8052f5119fd08bd111995df60fa233b8a61a3d66ea253d78", size = 822213, upload-time = "2026-08-23T15:40:24.572Z" },
+    { url = "https://files.pythonhosted.org/packages/5f/63/7a0e86b907ee1ff7d0e20d0e90777d261abed2e15da1896d3ca76cfef76e/xonsh-0.24.2-py314-none-any.whl", hash = "sha256:158c155a179b6883f2289b3788bb12d18988feb59c6ab6224009306c0214b83d", size = 822278, upload-time = "2026-08-23T15:40:22.085Z" },
 ]
 
 [[package]]

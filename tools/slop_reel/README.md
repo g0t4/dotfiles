@@ -81,6 +81,12 @@ original course files are never modified.
 
 The submitted playhead is frozen for extraction; playback may continue during chat.
 Previews show the attached frame indices and source presentation timestamps.
+Chat uses syntax-lab’s shared Markdown source theme: purple headings, amber
+emphasis, teal inline code, blue links, and language-colored fenced code. Markdown
+markers remain visible and copyable, with no bold/italic font changes. The chat
+and input share its dark palette; edits to syntax-lab colors are picked up on
+restart. Click the trace filename to copy its full absolute path; hover to see it.
+
 Model answers use Markdown. Chat retains earlier messages and image attachments
 throughout this window's lifetime; a new window starts a fresh conversation.
 
