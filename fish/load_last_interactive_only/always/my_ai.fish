@@ -55,14 +55,14 @@ end
 
 abbr bt browse_traces
 abbr bta browse_traces agents
-abbr bth browse_traces .     # think [h]ere ... like `oh` for `open .` (open here)
-abbr btr browse_traces rewrite
-abbr btf browse_traces fim
-abbr btsh browse_traces shell
 abbr btcm browse_traces clanker_mode
-abbr btsr browse_traces slop_reel
+abbr btf browse_traces fim
 abbr bth browse_traces .     # think [h]ere ... like `oh` for `open .` (open here)
-abbr btx browse_traces xonsh
+abbr btrag browse_traces rag
+abbr btre browse_traces rewrite
+abbr btsh browse_traces shell
+abbr btsr browse_traces slop_reel
+
 function browse_traces
     set _python3 "$ASK_REPO/.venv/bin/python3"
     env PYTHONPATH="$ASK_REPO" $_python3 -m tools.chat_viewer.browser $argv

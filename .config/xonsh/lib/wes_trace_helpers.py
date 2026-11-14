@@ -30,11 +30,14 @@ FISH_FUNCTIONS = (
 
 abbr('bt', 'browse_traces')
 abbr('bta', 'browse_traces agents')
-abbr('bth', 'browse_traces .') # think [h]ere ... like `oh` for `open .` (open here)
-abbr('btr', 'browse_traces rewrite')
+abbr('btcm', 'browse_traces clanker_mode')
 abbr('btf', 'browse_traces fim')
-abbr('btsh', 'browse_traces fish')
-abbr('btx', 'browse_traces xonsh')
+abbr('bth', 'browse_traces .') # think [h]ere ... like `oh` for `open .` (open here)
+abbr('btrag', 'browse_traces rag')
+abbr('btre', 'browse_traces rewrite')
+abbr('btsh', 'browse_traces shell')
+abbr('btsr', 'browse_traces slop_reel')
+
 abbr('td', 'trace_dump')
 abbr('pii', 'pii_scanner')
 abbr('ri', 'rag_indexer')
