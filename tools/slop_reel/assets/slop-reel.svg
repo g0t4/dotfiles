@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024">
+  <defs>
+    <linearGradient id="body" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#303a4a"/><stop offset="1" stop-color="#171b23"/>
+    </linearGradient>
+    <linearGradient id="screen" x1="0" y1="0" x2="0" y2="1">
+      <stop stop-color="#85d4da"/><stop offset="1" stop-color="#4793a8"/>
+    </linearGradient>
+  </defs>
+  <rect x="64" y="72" width="896" height="896" rx="200" fill="#10141c" opacity=".24"/>
+  <rect x="64" y="56" width="896" height="896" rx="200" fill="url(#body)"/>
+  <rect x="86" y="78" width="852" height="852" rx="180" fill="none" stroke="#566277" stroke-width="3"/>
+  <!-- Film perforations and a large, readable review frame. -->
+  <g fill="#6ab7c8">
+    <rect x="176" y="202" width="88" height="48" rx="12"/>
+    <rect x="322" y="202" width="88" height="48" rx="12"/>
+    <rect x="468" y="202" width="88" height="48" rx="12"/>
+    <rect x="614" y="202" width="88" height="48" rx="12"/>
+    <rect x="760" y="202" width="88" height="48" rx="12"/>
+  </g>
+  <rect x="168" y="298" width="688" height="348" rx="44" fill="url(#screen)"/>
+  <rect x="190" y="320" width="644" height="304" rx="27" fill="#171b23"/>
+  <path d="M448 376 L448 568 L606 472 Z" fill="#ffcc66" stroke="#ffcc66" stroke-width="16" stroke-linejoin="round"/>
+  <!-- A frame-accurate playhead through the audio waveform. -->
+  <path d="M179 754 H249 L271 716 L299 794 L330 688 L361 809 L393 738 L420 754 H468 L495 717 L524 784 L552 727 L577 754 H626 L655 700 L688 800 L718 731 L742 754 H845"
+        fill="none" stroke="#6ab7c8" stroke-width="17" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M610 678 V833" stroke="#ffcc66" stroke-width="14" stroke-linecap="round"/>
+  <circle cx="610" cy="678" r="14" fill="#ffcc66"/>
+</svg>

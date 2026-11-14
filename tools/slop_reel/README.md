@@ -16,7 +16,45 @@ detected. `brew install mpv ffmpeg` supplies these dependencies on another Mac.
 
 Fresh Xonsh sessions also have `slop-reel /path/to/video.mp4`.
 The launcher provisions/uses `tools/slop_reel/.venv` with uv.
-Pass one file, not a wildcard expanding to multiple files. There is no file picker.
+Pass one or more video paths; each opens a review window. With no paths, a launch
+screen offers a file picker and accepts dropped files. **⌘O** opens more videos.
+
+## macOS application
+
+```sh
+./tools/slop_reel/install-macos.sh
+open -a 'Slop Reel' '/path/to/video.mp4'
+```
+
+The installer builds and registers `~/Applications/Slop Reel.app`, with a dedicated
+icon, Dock identity, app-switcher entry, and video document types for Finder's
+**Open With** menu. Launch it from Applications/Dock/Spotlight to select a file,
+drop videos onto its Dock icon or launch screen, or use **File → Open Video…**.
+Opening an already-open video focuses its existing review and conversation;
+different videos have independent playback and traces. **⌘W** closes the current
+window; **⌘Q** or **F9** quits and closes all review windows, stopping their work.
+
+`sr`/`slop-reel` prefer the installed bundle executable and keep their original
+source/uv fallback when it is absent. Direct CLI invocations start a separate
+process; Finder/`open -a` delivers files to an existing application process.
+
+This is a py2app **alias bundle**, like Pip Rot: it loads this live checkout and
+its virtualenv, rather than copying the project into a portable distribution.
+Edit and restart normally. Reinstall after moving the checkout, replacing Python
+or its virtualenv, changing media-tool locations, or updating the icon/bundle
+metadata. Finder gets the `ffmpeg`/`ffprobe` directories discovered at install time;
+it does not need to load Xonsh configuration. Build dependencies are locked in the
+optional `macos` uv group. Build output/log: `tools/slop_reel/build/`.
+
+Registration requires a working macOS desktop/Launch Services session. If the
+installer reports a registration failure after copying the bundle, rerun it from
+your normal desktop terminal. It leaves existing default video handlers alone.
+To make Slop Reel your default, select a video in Finder → **Get Info → Open with
+→ Slop Reel → Change All…**; repeat for each desired video type. To uninstall,
+move `~/Applications/Slop Reel.app` to Trash; source files and traces remain.
+
+The editable icon master is [assets/slop-reel.svg](assets/slop-reel.svg).
+`build_icon.py` renders the PNG preview and multi-resolution ICNS used by the app.
 
 Your course clips are in
 `/Users/wesdemos/FCT Dropbox/Wes Higbee/Sync/auto-edit-videos/face2camera/video1/`.
@@ -136,5 +174,8 @@ Native change-review acceptance check (uses the generated slide fixture):
 
 It checks keyboard jumps in both directions (including rapid repeats), sequence
 paging, source-adjacent diff references, and isolation from chat-editor keys.
-Model-assisted review, extra sensitivity levels, and the named macOS app wrapper
-are tracked in [TODO.md](TODO.md).
+Model-assisted review, extra sensitivity levels, and desktop-wrapper acceptance
+are tracked in [TODO.md](TODO.md). Desktop file-open/lifecycle checks run without
+OpenGL using `pytest -q tools/slop_reel/test_macos_app.py`; they cover queued and
+running Finder events, duplicate opens, picker/drop paths, menus, and multi-window
+quit cleanup. They do not substitute for Finder/Dock acceptance on a live desktop.

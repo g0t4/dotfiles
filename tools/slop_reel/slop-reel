@@ -1,4 +1,6 @@
 #!/bin/sh
 SCRIPT_PATH=$(python3 -c 'import os,sys; print(os.path.realpath(sys.argv[1]))' "$0")
 PROJECT_DIR=$(dirname "$SCRIPT_PATH")
+APP_EXEC="$HOME/Applications/Slop Reel.app/Contents/MacOS/Slop Reel"
+if [ -x "$APP_EXEC" ]; then exec "$APP_EXEC" "$@"; fi
 exec env -u VIRTUAL_ENV uv run --project "$PROJECT_DIR" -- python "$PROJECT_DIR/app.py" "$@"

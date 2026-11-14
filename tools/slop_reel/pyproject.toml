@@ -6,6 +6,10 @@ dependencies = ["PySide6>=6.8,<7", "python-mpv>=1.0", "Pillow>=11", "wes-ai-shar
 
 [dependency-groups]
 dev = ["pytest>=8.4", "ruff"]
+macos = [
+    "py2app==0.28.10",
+    "setuptools>=84.2.1",
+]
 
 [tool.uv.sources]
 wes-ai-shared = { path = "../ai_shared", editable = true }

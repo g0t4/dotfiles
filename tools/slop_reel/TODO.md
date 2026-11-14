@@ -1,9 +1,10 @@
 # Slop Reel next steps
 
-- macOS application wrapper, following Pip Rot: named **Slop Reel.app**, with a
-  dedicated icon, normal Dock identity, CLI launch and file-open handling. Keep
-  the source project and independent uv environment; inspect Pip Rot's existing
-  install/build scripts before deciding packaging details.
+- macOS wrapper implemented: **Slop Reel.app**, dedicated icon, live-checkout
+  alias bundle, CLI launch and Finder file-open handling. Desktop acceptance:
+  confirm Dock/Spotlight launch, Open With, repeated/multiple opens and quit on
+  the normal desktop session (the build session has no desktop screens or
+  working Launch Services registration). See README.md for installation.
 - Model-assisted change review: use a more sensitive deterministic candidate
   pass, ask a model whether each candidate is meaningful, cache judgments with
   model/prompt/input provenance. Preserve original source frame/time mapping.

@@ -96,6 +96,7 @@ class FrameZoom(FrameStrip):
 
 class Window(QMainWindow):
     change_progress = Signal(int, int)
+    review_closed = Signal(object)
 
     def __init__(self, path, trace_dir=None):
         super().__init__()
@@ -183,6 +184,8 @@ class Window(QMainWindow):
         split.setSizes([900, 500])
         self.setCentralWidget(split)
         for key, callback in [("F9", self.close), ("Ctrl+Return", self.send)]:
+            if key == "F9" and hasattr(QApplication.instance(), "close_reviews"):
+                continue  # The desktop application owns one global quit action.
             shortcut = QShortcut(QKeySequence(key), self)
             if key == "F9":
                 shortcut.setContext(Qt.ShortcutContext.ApplicationShortcut)
@@ -540,23 +543,29 @@ class Window(QMainWindow):
         for jobs in (self.media_jobs, self.wave_jobs, self.chat_jobs, self.change_jobs):
             jobs.pool.shutdown(wait=False)
         event.accept()
+        self.review_closed.emit(self)
 
 
 def main():
     parser = argparse.ArgumentParser(
         description="Video inspection with local multimodal chat"
     )
-    parser.add_argument("video", type=Path)
+    parser.add_argument(
+        "videos",
+        type=Path,
+        nargs="*",
+        help="Videos to open, one review window per file",
+    )
     args = parser.parse_args()
-    if not args.video.is_file():
-        parser.error(f"Video does not exist: {args.video}")
-    app = QApplication(sys.argv)
-    app.setApplicationName("Slop Reel")
-    app.setStyle("Fusion")
-    window = Window(args.video.resolve())
-    window.show()
-    sys.exit(app.exec())
+    for video in args.videos:
+        if not video.expanduser().is_file():
+            parser.error(f"Video does not exist: {video}")
+    from macos_app import Application
+
+    app = Application(sys.argv[:1])
+    app.start(args.videos)
+    return app.exec()
 
 
 if __name__ == "__main__":
-    main()
+    sys.exit(main())
