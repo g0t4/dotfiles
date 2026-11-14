@@ -699,7 +699,9 @@ if command -q claude
 end
 
 if command -q codex
-    abbr cy 'codex --yolo'
+    # --no-daemon avoids issues with sandbox restricting access to some things like enumerating UIDs
+    #  sandbox is supposed to be relaxed (non-existant) with --yolo but that doesn't happen when using background daemon
+    abbr cy 'codex --yolo --no-daemon'
     # PRN use `cx` for codex?
 end
 

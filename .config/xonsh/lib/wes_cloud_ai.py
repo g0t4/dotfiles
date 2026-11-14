@@ -186,7 +186,7 @@ def register_wes_cloud_ai():
     abbr('clm', 'ANTHROPIC_BASE_URL="http://ask.lan:8012" claude --model Qwen/Qwen3-Coder-Next-GGUF:Q8_0')
     abbr('clr', 'claude --resume')
     abbr('cld', 'claude --dangerously-skip-permissions')
-    abbr('cy', 'codex --yolo')
+    abbr('cy', 'codex --yolo --no-daemon')
     abbr('-h', '--help', position="anywhere", commands=('nix',))
     abbr('nixh', 'nix --help')
     abbr('nixpls', 'nix profile list')
