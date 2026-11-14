@@ -131,6 +131,8 @@ def draw_rootmost_tree(rootmost_match_pid, all_processes, children_by_ppid, matc
         text = label(process)
         if pid in matching_pids:
             text = highlight_match(text, regex)
+        if pid == os.getpid():
+            text += " [self: pstree_grep]"
         print(f"{prefix}{connector} {text}" if connector else text)
 
         children = [k for k in children_by_ppid.get(pid, []) if k in all_processes]
