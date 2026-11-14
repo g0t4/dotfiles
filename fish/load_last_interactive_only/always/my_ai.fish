@@ -58,7 +58,10 @@ abbr bta browse_traces agents
 abbr bth browse_traces .     # think [h]ere ... like `oh` for `open .` (open here)
 abbr btr browse_traces rewrite
 abbr btf browse_traces fim
-abbr btsh browse_traces fish
+abbr btsh browse_traces shell
+abbr btcm browse_traces clanker_mode
+abbr btsr browse_traces slop_reel
+abbr bth browse_traces .     # think [h]ere ... like `oh` for `open .` (open here)
 abbr btx browse_traces xonsh
 function browse_traces
     set _python3 "$ASK_REPO/.venv/bin/python3"
