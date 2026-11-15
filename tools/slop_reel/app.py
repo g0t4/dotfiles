@@ -290,7 +290,7 @@ class Window(QMainWindow):
         else:
             self.changes = changes
             self.change_status.setText(
-                f"{len(changes)} changed frames · Up next / Down previous · Shift+Z sequence"
+                f"{len(changes)} changed frames · Shift+Z sequence"
             )
 
     def ready_to_review(self):
@@ -403,7 +403,7 @@ class Window(QMainWindow):
             self.change_dialog = dialog
             dialog.show()
             self.change_status.setText(
-                f"Showing {len(frames)} changed frames · Up/Down to step changes"
+                f"Showing {len(frames)} changed frames"
             )
 
         self.media_jobs.submit(extract, ready)

@@ -37,7 +37,7 @@ changes = QHBoxLayout()
 left.addLayout(changes)
 for name in ('Previous change ↓', 'Next change ↑', 'Change sequence'):
     changes.addWidget(QPushButton(name))
-left.addWidget(QLabel('14 changed frames · Up next / Down previous · Shift+Z sequence'))
+left.addWidget(QLabel('14 changed frames · Shift+Z sequence'))
 browser, editor = QTextBrowser(), QPlainTextEdit()
 apply_chat_theme(browser, editor)
 append_markdown(browser, 'Sloppy', '# Found a one-frame flash\n\n**Frame 115** at `3.833333s` is black.\n\nIts neighbors show the same slide.\n\n```python\nframes = [114, 115, 116]\n```')
