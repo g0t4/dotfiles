@@ -4,7 +4,7 @@ import traceback
 
 from commandlines import yank_last_command_output_and_paste_to_commandline
 from scrape_ask import copy_screen_to_clipboard
-from f9command import on_f9
+from f9command import on_f9, on_f10, on_f11
 from logs import log
 from og_ask import ask_openai
 from split import (
@@ -109,6 +109,14 @@ async def main(connection: iterm2.Connection):
         await on_f9(connection)
 
     @iterm2.RPC
+    async def wes_keymap_f10():
+        await on_f10(connection)
+
+    @iterm2.RPC
+    async def wes_keymap_f11():
+        await on_f11(connection)
+
+    @iterm2.RPC
     async def wes_keymap_yank_last_command_output():
         # key_a and control and command
         await yank_last_command_output_and_paste_to_commandline(connection)
@@ -136,6 +144,8 @@ async def main(connection: iterm2.Connection):
     await wes_keymap_copy_screen_to_clipboard.async_register(connection, timeout=timeout_seconds)
     await wes_keymap_copy_screen_to_clipboard_history.async_register(connection, timeout=timeout_seconds)
     await wes_keymap_f9.async_register(connection, timeout=timeout_seconds)
+    await wes_keymap_f10.async_register(connection, timeout=timeout_seconds)
+    await wes_keymap_f11.async_register(connection, timeout=timeout_seconds)
     await wes_keymap_yank_last_command_output.async_register(connection, timeout=timeout_seconds)
 
 
