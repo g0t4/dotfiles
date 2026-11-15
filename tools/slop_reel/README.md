@@ -66,6 +66,7 @@ original course files are never modified.
 
 ## Controls
 
+- **?** outside the chat editor (or the **?** button): show keyboard shortcuts; Escape closes the reference.
 - Play/Pause button or Space outside the chat editor. Playback includes sound.
 - Previous/next frame buttons or Left/Right outside the editor. Stepping pauses.
 - Click the waveform to seek. Videos without audio still have a seekable timeline.

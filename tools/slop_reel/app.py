@@ -36,6 +36,7 @@ from commands import Commands
 from inspection import FrameStrip
 from media import Media, waveform
 from player import Player
+from shortcut_help import ShortcutHelp
 from video_tools import VideoTools
 from voice import Dictation
 
@@ -107,6 +108,7 @@ class Window(QMainWindow):
         self.setWindowTitle(f"Slop Reel — {path.name}")
         self.resize(1400, 850)
         self.closed = False
+        self.shortcut_help = None
         self.commands = Commands()
         self.media = None
         self.changes = None
@@ -150,6 +152,12 @@ class Window(QMainWindow):
             button.clicked.connect(callback)
             controls.addWidget(button)
         controls.addWidget(self.clock)
+        help_button = QPushButton("?")
+        help_button.setFixedWidth(32)
+        help_button.setToolTip("Keyboard shortcuts (?)")
+        help_button.setAccessibleName("Keyboard shortcuts")
+        help_button.clicked.connect(self.show_shortcuts)
+        controls.addWidget(help_button)
         layout.addLayout(controls)
         review = QHBoxLayout()
         for label, callback in [
@@ -223,7 +231,20 @@ class Window(QMainWindow):
             lambda: waveform(path, commands=self.commands), self.wave_ready
         )
 
+    def show_shortcuts(self):
+        if self.shortcut_help is None:
+            self.shortcut_help = ShortcutHelp(self)
+            self.shortcut_help.setWindowModality(Qt.WindowModality.WindowModal)
+        self.shortcut_help.show()
+        self.shortcut_help.raise_()
+        self.shortcut_help.activateWindow()
+
     def eventFilter(self, watched, event):
+        if (
+            isinstance(watched, QWidget)
+            and watched.window().objectName() == "shortcutHelp"
+        ):
+            return super().eventFilter(watched, event)
         if (
             not self.closed
             and isinstance(watched, QWidget)
@@ -257,7 +278,9 @@ class Window(QMainWindow):
             and not self.input.isAncestorOf(watched)
         ):
             key = event.key()
-            if key == Qt.Key.Key_Up:
+            if key == Qt.Key.Key_Question or event.text() == "?":
+                self.show_shortcuts()
+            elif key == Qt.Key.Key_Up:
                 self.jump_change(1)
             elif key == Qt.Key.Key_Down:
                 self.jump_change(-1)
@@ -402,9 +425,7 @@ class Window(QMainWindow):
                 old.deleteLater()
             self.change_dialog = dialog
             dialog.show()
-            self.change_status.setText(
-                f"Showing {len(frames)} changed frames"
-            )
+            self.change_status.setText(f"Showing {len(frames)} changed frames")
 
         self.media_jobs.submit(extract, ready)
 
