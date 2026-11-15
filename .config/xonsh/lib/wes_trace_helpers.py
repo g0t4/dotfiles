@@ -12,6 +12,7 @@ from wes_fish_bridge import fish_function_stream_invoke
 
 
 FISH_FUNCTIONS = (
+    "doctor_show_tty",
     "ask_rewrite_diff_reviewer",
     "browse_traces",
     "love_agents",

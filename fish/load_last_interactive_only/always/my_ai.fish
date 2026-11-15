@@ -63,6 +63,18 @@ abbr btre browse_traces rewrite
 abbr btsh browse_traces shell
 abbr btsr browse_traces slop_reel
 
+function doctor_show_tty
+    if isatty stdin
+        echo "STDIN is a tty"
+    end
+    if isatty stdout
+        echo "STDOUT is a tty"
+    end
+    if isatty stderr
+        echo "STDERR is a tty"
+    end
+end
+
 function browse_traces
     set _python3 "$ASK_REPO/.venv/bin/python3"
     env PYTHONPATH="$ASK_REPO" $_python3 -m tools.chat_viewer.browser $argv
