@@ -50,6 +50,7 @@ def register_files_abbreviations():
     abbr('batll', 'bat --list-languages')
     abbr('bath', 'bat --style=header')
     abbr('batf', 'bat --style=full')
+    abbr('du', 'dust')
     abbr(re.compile('(du|dust)\\d+'), abbr_from_fish_function('dustX'))
     abbr('dust_HOME_2G', 'dust --number-of-lines 500 ~/ +2G')
     abbr('dust_HOMES_2G', 'dust --number-of-lines 500 /Users +2G')

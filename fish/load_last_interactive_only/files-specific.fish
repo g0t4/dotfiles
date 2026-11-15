@@ -497,6 +497,9 @@ if status --is-interactive
 end
 
 # *** DISK USAGE (use `dust` now) ***
+#
+abbr du dust
+#
 # show only N levels deep
 #   du1 => dust --depth 1
 #   dust1 => dust --depth 1
@@ -504,6 +507,7 @@ abbr --add dustX --regex '(du|dust)\d+' --function dustX
 function dustX
     string replace --regex '^(du|dust)' 'dust --depth ' $argv
 end
+
 # cumulative size on end (right most number) => + means greater than, - means less thatn
 set dust_lots_of_lines "--number-of-lines 500"
 abbr dust_HOME_2G "dust $dust_lots_of_lines ~/ +2G"
