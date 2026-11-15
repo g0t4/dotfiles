@@ -63,7 +63,8 @@ abbr btre browse_traces rewrite
 abbr btsh browse_traces shell
 abbr btsr browse_traces slop_reel
 
-function doctor_show_tty
+function doctor_show_tty_fish
+    echo "running in fish"
     if isatty stdin
         echo "STDIN is a tty"
     end
