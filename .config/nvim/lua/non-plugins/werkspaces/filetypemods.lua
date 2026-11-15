@@ -88,8 +88,12 @@ vim.filetype.add({
 
 vim.api.nvim_create_autocmd("FileType", {
     group = "filetypemods",
-    pattern = "xonsh",
+    pattern = {"xonsh", "python"},
     callback = function()
+        -- FYI neovim inherits some bullshit fuckering SHIT indentexpr for python (python.GetIndent) that fucks up when an string has a [ square bracket in it!!!! if you add ] too it wont but when only one it thinks its fucking syntax for a list or some bullshit... fuck that just use my xonsh indenter as it can do python (obviously)
+        --  then I can improve my xonsh one some more
+        --  see my wes.py for examples of the issue where I have "\x1b[" for ANSI escape code forwarding
+        --
         vim.bo.commentstring = "# %s" -- %s is original text
         vim.bo.indentexpr = "v:lua.require('non-plugins.werkspaces.xonsh_indent').indent()"
         -- re-evaluate indentexpr when ':' is typed so `else:`/`elif:`/`except:` auto-dedent
