@@ -8,6 +8,7 @@ PREVIEW = r"""
 import sys
 from pathlib import Path
 from types import SimpleNamespace
+from PySide6.QtCore import Qt
 from PySide6.QtGui import QTextCursor
 from PySide6.QtWidgets import QApplication, QWidget, QVBoxLayout, QTextBrowser, QPlainTextEdit, QLabel
 from app import Window
@@ -53,7 +54,10 @@ status.linkActivated.emit('copy-trace')
 assert QApplication.clipboard().text() == str(path.resolve())
 assert str(path) in status.toolTip()
 assert path.name in status.text()
-assert 'Copied trace path' in status.text()
+assert status.text().startswith('<a ')
+assert 'Trace:' not in status.text()
+assert 'Copied full trace path' in status.toolTip()
+assert status.alignment() & Qt.AlignmentFlag.AlignRight
 window.show()
 app.processEvents()
 if len(sys.argv) > 1:

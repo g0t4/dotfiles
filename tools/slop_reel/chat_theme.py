@@ -1,5 +1,6 @@
 """Qt chat rendering with syntax-lab's shared Markdown token styles."""
 
+from PySide6.QtCore import Qt
 from PySide6.QtGui import QColor, QFontDatabase, QPalette, QTextCharFormat, QTextCursor
 from wes_syntax import load_style, source_lexer, style_for_lexer
 
@@ -73,8 +74,10 @@ def trace_link(label, path, *, copied=False):
     from html import escape
 
     colors, _ = load_style()
-    label.setToolTip(f"Click to copy full trace path:\n{path}")
+    label.setAlignment(Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
+    hint = "Copied full trace path" if copied else "Click to copy full trace path"
+    label.setToolTip(f"{hint}:\n{path}")
     link_color = colors["function"]
     label.setText(
-        f'{"Copied trace path" if copied else "Trace"}: <a href="copy-trace" style="color:{link_color};">{escape(path.name)}</a>'
+        f'<a href="copy-trace" style="color:{link_color};">{escape(path.name)}</a>'
     )
