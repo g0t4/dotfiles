@@ -64,7 +64,7 @@ def apply_app_theme(app):
         QPushButton:disabled {{ background:{background}; color:{disabled}; border-color:{border}; }}
         QPlainTextEdit, QTextBrowser {{ border:1px solid {border}; border-radius:4px; }}
         QPlainTextEdit:focus {{ border-color:{colors["function"]}; }}
-        QSplitter::handle {{ background:{button}; }}
+        QSplitter::handle {{ background:transparent; border:none; }}
         QMenu {{ background:{background}; color:{text}; border:1px solid {border}; }}
         QMenu::item:selected {{ background:{hover}; }}
         QToolTip {{ background:{button}; color:{text}; border:1px solid {border}; padding:4px; }}
