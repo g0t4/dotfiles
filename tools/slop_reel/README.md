@@ -85,7 +85,13 @@ Chat uses syntax-lab’s shared Markdown source theme: purple headings, amber
 emphasis, teal inline code, blue links, and language-colored fenced code. Markdown
 markers remain visible and copyable, with no bold/italic font changes. The chat
 and input share its dark palette; edits to syntax-lab colors are picked up on
-restart. Click the trace filename to copy its full absolute path; hover to see it.
+restart. The application panels, menus, frame dialogs, and buttons use the same
+background, with blue-tinted button fills and distinct hover/pressed/focus/disabled
+states. Native macOS title bars match the background while retaining the traffic
+lights, resizing, and standard window behavior. This uses public AppKit
+[title-bar transparency](https://developer.apple.com/documentation/appkit/nswindow/titlebarappearstransparent)
+and window background color, without replacing the title bar or expanding content
+under it. Click the trace filename to copy its full absolute path; hover to see it.
 
 Model answers use Markdown. Chat retains earlier messages and image attachments
 throughout this window's lifetime; a new window starts a fresh conversation.

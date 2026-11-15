@@ -15,6 +15,8 @@ from PySide6.QtWidgets import (
     QWidget,
 )
 
+from app_theme import apply_app_theme
+
 ROOT = Path(__file__).resolve().parent
 VIDEO_FILTER = "Videos (*.mp4 *.mov *.m4v *.mkv *.webm *.avi *.mpg *.mpeg *.mts *.m2ts *.ts *.ogv);;All files (*)"
 
@@ -43,9 +45,7 @@ class Welcome(QMainWindow):
         button.clicked.connect(application.choose_videos)
         layout.addWidget(button)
         self.setCentralWidget(widget)
-        self.setStyleSheet(
-            "QWidget { background:#171b23; color:#cad3df; } QPushButton { padding:12px; background:#394355; border-radius:8px; }"
-        )
+        button.setMinimumHeight(44)
 
     def dragEnterEvent(self, event):
         if event.mimeData().hasUrls() and any(
@@ -72,6 +72,7 @@ class Application(QApplication):
         self.setOrganizationDomain("g0t4.com")
         self.setWindowIcon(QIcon(str(ROOT / "assets/slop-reel.png")))
         self.setStyle("Fusion")
+        apply_app_theme(self)
         self.aboutToQuit.connect(self.close_reviews)
         self.installEventFilter(self)
 
