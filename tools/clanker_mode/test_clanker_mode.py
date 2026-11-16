@@ -542,12 +542,16 @@ def test_alias_scope_restores_missing_cat_and_supports_nested_scopes(shell):
     assert "cat" not in shell.aliases
 
 
+@pytest.mark.parametrize("capture_always", [False, True])
 @pytest.mark.parametrize("threaded", [False, True])
 @pytest.mark.parametrize("kind", ["external", "python-child", "raw-fd", "alias"])
-def test_tool_captures_output_paths(shell, tmp_path, capfd, threaded, kind):
+def test_tool_captures_output_paths(
+    shell, tmp_path, capfd, threaded, kind, capture_always
+):
     import sys
 
     shell.env["THREAD_SUBPROCS"] = threaded
+    shell.env["XONSH_CAPTURE_ALWAYS"] = capture_always
     script = tmp_path / "emit.py"
     script.write_text(
         "import os\nos.write(1, b'child-out\\n')\nos.write(2, b'child-err\\n')\n"

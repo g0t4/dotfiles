@@ -48,7 +48,9 @@ writes, and ordinary Python prints are covered. Explicit Xonsh capture such as
 `print($(cat path/to/file))` still works. The file is automatically closed and
 removed; completed tool results remain in the conversation trace. Xonsh terminal
 title updates are suppressed during tool calls to keep their escape sequences
-out of results.
+out of results. Capture works with `$XONSH_CAPTURE_ALWAYS` either on or off;
+Clanker does not override it. That setting enables Xonsh capture for threadable
+commands but does not cover all the descriptor writes handled here.
 
 Capture applies process-wide while Clanker owns the foreground shell. Stdout and
 stderr are not TTYs during execution, so commands may disable colors or change
