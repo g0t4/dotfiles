@@ -25,8 +25,6 @@ FISH_FUNCTIONS = (
     "rag_validate_index",
     "strip_trailing_newline",
     "trace_dump",
-    "view_trace",
-    "view_trace_tui",
     "mcp_server_semantic_grep",
 )
 

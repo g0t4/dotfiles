@@ -85,22 +85,8 @@ complete -c browse_traces -a '(command ls $WES_ASK_CAPTURES)' --no-files
 abbr vtw view_trace --watch
 
 abbr vt view_trace
-function view_trace
-    # Run the chat viewer tool using the module namespace.
-    # ``tools`` is now a proper Python package, so we invoke the module with
-    # ``-m tools.chat_viewer.__main__``. To ensure the package can be resolved,
-    # add the repository root to ``PYTHONPATH``.
-    set _python3 "$ASK_REPO/.venv/bin/python3"
-    env PYTHONPATH="$ASK_REPO" $_python3 -m tools.chat_viewer.__main__ $argv
-end
 
 abbr vtt view_trace_tui
-function view_trace_tui
-    # Interactive Textual chat viewer (a: toggle all content, q: quit).
-    # Reuses the same rendering as ``view_trace`` but in a scrollable TUI.
-    set _python3 "$ASK_REPO/.venv/bin/python3"
-    env PYTHONPATH="$ASK_REPO" $_python3 -m tools.chat_viewer.textual_viewer $argv
-end
 
 abbr td trace_dump
 function trace_dump
