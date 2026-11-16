@@ -136,6 +136,7 @@ async def on_f10(connection: iterm2.Connection, then: Callable[[RunningInfo], Aw
 
         # # TODO! if top level shell is the only one then I need this to behave more like restart pane does
         # # for now lets have it refuse if there is no child process?
+        # # see logic in wes_replace_pane
         #
         # if running.deepestJob in ["fish", "bash", "zsh", "xonsh", "Python", "lldb", "gdb", "codex"] \
         #   or running.is_python():
