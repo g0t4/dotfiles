@@ -168,5 +168,9 @@ abbr('watch_cert', f'watch -c -n 2 {$WES_DOTFILES}/.venv/bin/python {$WES_DOTFIL
 abbr('-c', '--create', commands=("git", "switch"))
 
 abbr('lsof_stdio', 'sudo lsof -p % -a -d 0,1,2', cursor_marker="%")
-abbr('lsof_stdio_xonsh', 'sudo lsof -p @(os.getpid()) -a -d 0,1,2')
-
+abbr('lsof_stdio_xonsh', 'sudo lsof -p @(os.getpid()) -a -d 0,1,2')  # -a == and (FML b/c you can't have --and)
+abbr('lsof_numeric_fds', 'sudo lsof -p % -a -d 0-1000000', cursor_marker="%")  # AFAICT there isn't a filter for only numeric fds so I just provide a huge range :) .. or awk it
+if $WATCH_COMMAND:
+    abbr('lsof_numeric_fds_watch', $WATCH_COMMAND + ' sudo lsof -p % -a -d 0-1000000', cursor_marker="%")  # AFAICT there isn't a filter for only numeric fds so I just provide a huge range :) .. or awk it
+else:
+    raise RuntimeError("WATCH_COMMAND environment variable not set")
