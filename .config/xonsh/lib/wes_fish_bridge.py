@@ -205,14 +205,21 @@ def wrap_fish_functions(aliases, function_names):
         fish_func_definition = fish_function_source(name)
         console.print(Syntax(fish_func_definition, "fish", theme=syntax_theme(), background_color="default"))
 
+    use_fish_value_func = {
+        "_repo_root"
+    }
     aliases["_fish_help"] = fish_help
     for function_name in function_names:
         reason = UNSUPPORTED_FISH_FUNCTIONS.get(function_name)
-        aliases[function_name] = (
-            unsupported_fish_alias(function_name, reason)
-            if reason
-            else fish_function_stream_tty_invoke(function_name)
-        )
+        def w():
+            if reason:
+                return unsupported_fish_alias(function_name, reason)
+            elif function_name in use_fish_value_func:
+                # TODO how about we just stop all auto converting now and bifurcate the set of funcs so I can wrap both separately and if I need a 3rd or 4th wrapper approach I can have that too...
+                return captured_fish_alias(function_name)
+            else:
+                return fish_function_stream_tty_invoke(function_name)
+        aliases[function_name] = w()
         # register enhanced "superhelp" that includes the fish function body
         abbr(function_name + "??", f"_fish_help {shlex.quote(function_name)}")
 
