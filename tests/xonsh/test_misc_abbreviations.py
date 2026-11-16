@@ -21,7 +21,7 @@ from generate_misc_fish_abbreviations import (  # noqa: E402
     render as render_misc_fish,
 )
 from wes_abbreviations import AbbreviationContext, reset_registry  # noqa: E402
-from wes_fish_bridge import UnsupportedFishFunctionError, fish_function_stream_invoke
+from wes_fish_bridge import UnsupportedFishFunctionError, fish_function_stream_tty_invoke
 from wes_filetype_abbreviations import (  # noqa: E402
     FILETYPE_GLOBS,
 )
@@ -214,7 +214,7 @@ def test_safe_function_alias_delegates_to_interactive_fish(monkeypatch):
         return 4
 
     monkeypatch.setattr("wes_fish_bridge.fish_function_stream", fake_command)
-    alias = fish_function_stream_invoke("which_versions")
+    alias = fish_function_stream_tty_invoke("which_versions")
 
     assert alias(["python"], stdin="in", stdout="out", stderr="err") == 4
     assert calls == [

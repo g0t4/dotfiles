@@ -101,7 +101,7 @@ def fish_function_source(function_name: str) -> str:
     return fish_function_capture_stdout("functions", "--color", "never", function_name)
 
 
-def fish_function_stream_invoke(function_name):
+def fish_function_stream_tty_invoke(function_name):
     def invoke(args, stdin=None, stdout=None, stderr=None, **_):
         try:
             return fish_function_stream_tty(function_name, args, stdin=stdin, stdout=stdout, stderr=stderr)
@@ -199,7 +199,7 @@ def wrap_fish_functions(aliases, function_names):
         aliases[function_name] = (
             unsupported_fish_alias(function_name, reason)
             if reason
-            else fish_function_stream_invoke(function_name)
+            else fish_function_stream_tty_invoke(function_name)
         )
         # register enhanced "superhelp" that includes the fish function body
         abbr(function_name + "??", f"_fish_help {shlex.quote(function_name)}")

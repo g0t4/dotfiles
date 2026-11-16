@@ -7,7 +7,7 @@ import sys
 from wes_fish_bridge import (
     captured_fish_alias,
     unsupported_fish_alias,
-    fish_function_stream_invoke,
+    fish_function_stream_tty_invoke,
 )
 
 
@@ -78,7 +78,7 @@ def register_files_search_functions(aliases):
     ]
     # PRN override ripgrep to add color by default too? i.e. RIPGREP_CONFIG_PATH
     for function_name in STREAMED_FISH_FUNCTIONS:
-        aliases[function_name] = fish_function_stream_invoke(function_name)
+        aliases[function_name] = fish_function_stream_tty_invoke(function_name)
     for function_name in CAPTURED_FISH_FUNCTIONS:
         aliases[function_name] = captured_fish_alias(function_name)
 

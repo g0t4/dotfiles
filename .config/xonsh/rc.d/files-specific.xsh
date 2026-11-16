@@ -21,7 +21,7 @@ from prompt_toolkit.keys import Keys
 from xonsh.parsers.completion_context import CompletionContextParser
 
 from wes_files_abbreviations import register_files_abbreviations
-from wes_fish_bridge import FishFunctionError, fish_function_stream_invoke
+from wes_fish_bridge import FishFunctionError, fish_function_stream_tty_invoke
 from wes_fish_z import FishZ, FishZError
 from wes_interactive_cat import InteractiveCat
 from wes_logging import ensure_logger_is_setup, get_wes_logger
@@ -79,7 +79,7 @@ for _files_fish_function in (
     "prepend_to_file",
     "shebangify",
 ):
-    aliases[_files_fish_function] = fish_function_stream_invoke(_files_fish_function)
+    aliases[_files_fish_function] = fish_function_stream_tty_invoke(_files_fish_function)
 
 
 _files_original_cd = aliases["cd"]
