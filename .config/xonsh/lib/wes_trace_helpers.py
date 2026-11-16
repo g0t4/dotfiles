@@ -27,6 +27,7 @@ FISH_FUNCTIONS = (
     "trace_dump",
     "view_trace",
     "view_trace_tui",
+    "mcp_server_semantic_grep",
 )
 
 abbr('bt', 'browse_traces')
@@ -133,7 +134,7 @@ def expand_message_field(context, match):
 
 
 def register_trace_helpers(aliases, dotfiles):
-    for name in (*FISH_FUNCTIONS, "mcp_server_semantic_grep"):
+    for name in FISH_FUNCTIONS:
         aliases[name] = fish_function_stream_tty_invoke(name)
     for trigger in ("nat", "notes_about_trace"):
         abbr(trigger, "notes_about_trace '%'", cursor_marker="%")
