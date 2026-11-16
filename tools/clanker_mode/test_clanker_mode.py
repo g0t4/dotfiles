@@ -540,3 +540,84 @@ def test_alias_scope_restores_missing_cat_and_supports_nested_scopes(shell):
         assert "cat" not in shell.aliases
         shell.aliases["cat"] = ["echo", "temporary mutation"]
     assert "cat" not in shell.aliases
+
+
+@pytest.mark.parametrize("threaded", [False, True])
+@pytest.mark.parametrize("kind", ["external", "python-child", "raw-fd", "alias"])
+def test_tool_captures_output_paths(shell, tmp_path, capfd, threaded, kind):
+    import sys
+
+    shell.env["THREAD_SUBPROCS"] = threaded
+    script = tmp_path / "emit.py"
+    script.write_text(
+        "import os\nos.write(1, b'child-out\\n')\nos.write(2, b'child-err\\n')\n"
+    )
+    if kind == "external":
+        code = f"clanker_cmd = {[sys.executable, str(script)]!r}\n@(clanker_cmd)"
+    elif kind == "python-child":
+        code = (
+            f"import subprocess\nsubprocess.run([{sys.executable!r}, {str(script)!r}])"
+        )
+    elif kind == "raw-fd":
+        code = "import os\nos.write(1, b'child-out\\n')\nos.write(2, b'child-err\\n')"
+    else:
+
+        def emit(args, stdout=None, stderr=None):
+            print("child-out", file=stdout)
+            print("child-err", file=stderr)
+
+        shell.aliases["clanker-emit"] = emit
+        code = "clanker-emit"
+    result = make_shell_tool(shell).invoke({"code": code})
+    assert "child-out" in result
+    assert "child-err" in result
+    leaked = capfd.readouterr()
+    assert "child-out" not in leaked.out
+    assert "child-err" not in leaked.err
+
+
+@pytest.mark.parametrize("failure", ["ValueError", "KeyboardInterrupt"])
+def test_capture_restores_streams_after_failure(shell, capfd, failure):
+    import sys
+
+    original_title = shell.env["TITLE"]
+    original_streams = (sys.stdout, sys.stderr)
+    original_fds = [os.fstat(fd) for fd in (1, 2)]
+    tool = make_shell_tool(shell)
+    code = f"print('before failure')\nraise {failure}('test failure')"
+    if failure == "KeyboardInterrupt":
+        with pytest.raises(KeyboardInterrupt):
+            tool.invoke({"code": code})
+    else:
+        result = tool.invoke({"code": code})
+        assert "before failure" in result
+        assert "ValueError: test failure" in result
+    assert shell.env["TITLE"] == original_title
+    assert (sys.stdout, sys.stderr) == original_streams
+    for fd, original in zip((1, 2), original_fds):
+        restored = os.fstat(fd)
+        assert (restored.st_dev, restored.st_ino) == (original.st_dev, original.st_ino)
+        os.write(fd, b"outside capture\n")
+    leaked = capfd.readouterr()
+    assert "outside capture" in leaked.out
+    assert "outside capture" in leaked.err
+    assert "before failure" not in leaked.out
+    assert tool.invoke({"code": "print('next call')"}) == "next call\n"
+
+
+def test_capture_large_output_and_mixed_write_order(shell, tmp_path):
+    path = tmp_path / "large.txt"
+    path.write_text("x" * (2 * 1024 * 1024))
+    result = make_shell_tool(shell).invoke({"code": f"cat {str(path)!r}"})
+    assert result == path.read_text()
+    result = make_shell_tool(shell).invoke(
+        {
+            "code": (
+                "import os, sys\n"
+                "print('first', end='')\n"
+                "os.write(1, b'-second')\n"
+                "print('-third', file=sys.stderr)"
+            )
+        }
+    )
+    assert result == "first-second-third\n"

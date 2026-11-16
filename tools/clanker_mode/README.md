@@ -41,10 +41,21 @@ aliases and unrelated shell state changes retain their normal behavior.
 for the scope; another value supplies a temporary replacement. Changes to those
 scoped alias names are temporary too.
 
-The system prompt tells the agent to explicitly capture external output, e.g.
-`print($(cat path/to/file))`. Bare external commands (notably Xonsh's unthreadable
-`cat`) can write directly to the terminal without returning their output to the
-model. Python prints and explicitly captured output are included in tool results.
+Tool execution captures both Python streams and OS stdout/stderr descriptors into
+one anonymous temporary file, returning the combined text to the model. Bare
+external commands, Python subprocesses with inherited output, direct descriptor
+writes, and ordinary Python prints are covered. Explicit Xonsh capture such as
+`print($(cat path/to/file))` still works. The file is automatically closed and
+removed; completed tool results remain in the conversation trace. Xonsh terminal
+title updates are suppressed during tool calls to keep their escape sequences
+out of results.
+
+Capture applies process-wide while Clanker owns the foreground shell. Stdout and
+stderr are not TTYs during execution, so commands may disable colors or change
+buffering. Prefer noninteractive commands and wait for child processes to finish:
+background writers are not isolated, and output after a call returns is not
+reliably included. Explicit redirection to files or `/dev/tty` remains outside
+capture. Streams and descriptors are restored after errors and Ctrl+C.
 
 Connection defaults: `http://ask.lan:8014/v1`, key `none`.
 Without a model override, `/v1/models` supplies the model ID: use the sole model

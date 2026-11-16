@@ -3,6 +3,9 @@
 from __future__ import annotations
 
 import io
+import os
+import sys
+import tempfile
 import traceback
 from contextlib import contextmanager, nullcontext, redirect_stderr, redirect_stdout
 from pathlib import Path
@@ -22,9 +25,10 @@ Use `from xonsh.built_ins import XSH` to access shell internals: XSH.env (includ
 typed environment values), XSH.ctx (Python variables), XSH.aliases, and XSH.history.
 During tool execution, the interactive `cat` alias is temporarily disabled, so
 `cat` resolves through PATH to the ordinary executable. It is restored afterward.
-To return external command output to yourself, explicitly capture and print it:
-for example `print($(cat path/to/file))`. Bare external commands can write to the
-terminal without their output being included in this tool's returned text.
+Python output and ordinary external command stdout/stderr are captured and returned
+together. Output streams are not TTYs during execution; prefer noninteractive
+commands and wait for child processes to finish before returning. Explicit Xonsh
+capture such as `print($(cat path/to/file))` also works.
 Other aliases remain available; changes to other shell state still persist.
 To investigate recent commands, prefer history objects: e.g.
 `print(list(XSH.history.inps)[-10:])`, similarly `rtns` and `tss`.
@@ -106,6 +110,38 @@ def alias_scope(aliases, overrides):
                 aliases[name] = value
 
 
+@contextmanager
+def capture_shell_output():
+    """Capture Python streams and inherited fds while Clanker owns the shell.
+
+    File-backed capture avoids pipe capacity deadlocks without a reader thread.
+    This is process-wide: concurrent/background writers are not isolated.
+    """
+    with tempfile.TemporaryFile(mode="w+b", buffering=0) as raw:
+        output = io.TextIOWrapper(
+            raw, encoding="utf-8", errors="replace", write_through=True
+        )
+        saved = {}
+        try:
+            for stream in (sys.stdout, sys.stderr):
+                stream.flush()
+            for fd in (1, 2):
+                saved[fd] = os.dup(fd)
+                os.dup2(raw.fileno(), fd)
+            with redirect_stdout(output), redirect_stderr(output):
+                yield output
+        finally:
+            try:
+                output.flush()
+            finally:
+                for fd, original in saved.items():
+                    try:
+                        os.dup2(original, fd)
+                    finally:
+                        os.close(original)
+                output.detach()
+
+
 def make_shell_tool(xsh):
     @tool
     def execute_in_current_xonsh(code: str) -> str:
@@ -114,17 +150,20 @@ def make_shell_tool(xsh):
         Has full access to live XSH.env, XSH.ctx, aliases and history. Mutations
         persist. Runs in process on the calling thread, without sandboxing.
         """
-        output = io.StringIO()
-        try:
-            with (
-                redirect_stdout(output),
-                redirect_stderr(output),
-                alias_scope(xsh.aliases, AGENT_ALIAS_OVERRIDES),
-            ):
-                xsh.execer.exec(code.rstrip() + "\n", glbs=xsh.ctx, locs=xsh.ctx)
-        except Exception:
-            traceback.print_exc(file=output)
-        return output.getvalue() or "(completed with no output)"
+        with capture_shell_output() as output:
+            try:
+                # Xonsh writes title escape sequences directly to fd 1.
+                with (
+                    xsh.env.swap(overlay={"TITLE": None}),
+                    alias_scope(xsh.aliases, AGENT_ALIAS_OVERRIDES),
+                ):
+                    xsh.execer.exec(code.rstrip() + "\n", glbs=xsh.ctx, locs=xsh.ctx)
+            except Exception:
+                traceback.print_exc(file=output)
+            output.flush()
+            output.seek(0)
+            result = output.read()
+        return result or "(completed with no output)"
 
     return execute_in_current_xonsh
 
