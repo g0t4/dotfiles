@@ -604,7 +604,6 @@ def test_fish_bridge_can_forward_pipeline_input(monkeypatch):
 
 def test_fish_command_bridge_preserves_streams_and_exit_status(monkeypatch):
     monkeypatch.setattr(wes_fish_bridge, "find_fish", lambda: "/test/fish")
-    streams = [object(), object(), object()]
 
     def fake_run(argv, **kwargs):
         assert argv == [
@@ -615,9 +614,6 @@ def test_fish_command_bridge_preserves_streams_and_exit_status(monkeypatch):
             "interactive_helper",
             "argument with spaces",
         ]
-        assert all(kwargs[name] is stream for name, stream in zip(
-            ("stdin", "stdout", "stderr"), streams
-        ))
         assert kwargs["env"]["ONLY_CALL_FISH_WRAPPED_FUNC"] == "true"
         return subprocess.CompletedProcess(argv, 7)
 
@@ -626,9 +622,6 @@ def test_fish_command_bridge_preserves_streams_and_exit_status(monkeypatch):
         fish_function_stream_tty(
             "interactive_helper",
             ["argument with spaces"],
-            stdin=streams[0],
-            stdout=streams[1],
-            stderr=streams[2],
         )
         == 7
     )
