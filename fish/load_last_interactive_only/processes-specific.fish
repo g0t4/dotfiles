@@ -337,6 +337,7 @@ if command -q lsof
     # sudo lsof -i :8080 (for now hardcode 8080 as reminder, once that's annoying I can remove it)
     abbr --set-cursor lsofi 'sudo lsof -i :8080%'
     abbr --set-cursor lsof_process_for_port 'sudo lsof -i :8080%' # reminder (so I can tab complete it when I inevitably forget the lsof options again)
+    abbr --set-cursor lsof_processes_for_port_range 'sudo lsof -i :8080-8100%' # reminder (so I can tab complete it when I inevitably forget the lsof options again)
 
     # files for a process:
     # TODO how to deal with multiple matches, I don't like using head but at least it is obvious in the expanded command so leave it for now

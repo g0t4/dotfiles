@@ -82,6 +82,7 @@ def register_wes_processes():
     abbr('tformu', 'terraform untaint')
     abbr('lsofi', 'sudo lsof -i :8080%', cursor_marker="%")
     abbr('lsof_process_for_port', 'sudo lsof -i :8080%', cursor_marker="%")
+    abbr('lsof_processes_for_port_range', 'sudo lsof -i :8080-8100%', cursor_marker="%")
     abbr('lsofp', 'sudo lsof -p $(pgrep -if "%" | head -1)', cursor_marker="%")
     abbr('lsof_ports_for_process_pgrep', 'sudo lsof -p $(pgrep -if "%" | head -1)', cursor_marker="%")
     abbr('lsofpi', 'sudo lsof -p $(pgrep -if "%" | head -1) -a -i', cursor_marker="%")
