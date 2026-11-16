@@ -31,8 +31,7 @@ class FishFunctionError(RuntimeError):
 class UnsupportedFishFunctionError(RuntimeError):
     pass
 
-
-def fish_function_stream(
+def fish_function_stream_tty(
     name: str,
     args: Sequence[str],
     stdin: _FILE = None,
@@ -45,9 +44,19 @@ def fish_function_stream(
     env["ONLY_CALL_FISH_WRAPPED_FUNC"] = "true"
     completed = subprocess.run(
         [find_fish(), "-ic", "$argv[1] $argv[2..]", "--", name, *map(str, args)],
-        stdin=stdin,
-        stdout=stdout,
-        stderr=stderr,
+
+        # DO NOT PASS stdin/out/err if you want TTY to carry through (inherit from parent xonsh shell)
+        #  else things that check for tty will not detect a tty (b/c of pipe that xonsh uses otherwise with aliases)
+        #  `browse_traces` colorful output depends on tty detection (I will be changing that)
+        #   rich.print in general checks TTY
+        #
+        # TODO if there are things that need you to capture the output, then don't use this overload and route those separately
+        #  i.e. to run a fish function and get back a single result use capture version below
+        #
+        # stdin=stdin,
+        # stdout=stdout,
+        # stderr=stderr,
+
         env=env
     )
     return completed.returncode
@@ -95,7 +104,7 @@ def fish_function_source(function_name: str) -> str:
 def fish_function_stream_invoke(function_name):
     def invoke(args, stdin=None, stdout=None, stderr=None, **_):
         try:
-            return fish_function_stream(function_name, args, stdin=stdin, stdout=stdout, stderr=stderr)
+            return fish_function_stream_tty(function_name, args, stdin=stdin, stdout=stdout, stderr=stderr)
         except FishFunctionError as error:
             print(error, file=stderr or sys.stderr)
             return 1
