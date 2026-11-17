@@ -208,6 +208,8 @@ def wrap_fish_functions(aliases, function_names):
     use_fish_value_func = {
         '_repo_root',
         '_get_ask_traces_dir',
+        '_get_datasets_repo_dir',
+        '_get_local_state_dir',
     }
     aliases["_fish_help"] = fish_help
     for function_name in function_names:
