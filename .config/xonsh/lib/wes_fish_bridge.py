@@ -173,7 +173,7 @@ def unsupported_fish_alias(function_name, reason):
     return invoke
 
 
-def wrap_fish_functions(aliases, function_names):
+def wrap_fish_functions(aliases, function_names, is_value_getter = False):
 
     # !!! FYI if there are any ANSI escape codes coming out of fish...
     # ! ... do not fix them here, instead fix them in the fish config
@@ -206,10 +206,9 @@ def wrap_fish_functions(aliases, function_names):
         console.print(Syntax(fish_func_definition, "fish", theme=syntax_theme(), background_color="default"))
 
     use_fish_value_func = {
+        # use this when generating calls to wrapped functions
+        # else pass the param is_value_getter
         '_repo_root',
-        '_get_ask_traces_dir',
-        '_get_datasets_repo_dir',
-        '_get_local_state_dir',
     }
     aliases["_fish_help"] = fish_help
     for function_name in function_names:
@@ -217,7 +216,7 @@ def wrap_fish_functions(aliases, function_names):
         def w():
             if reason:
                 return unsupported_fish_alias(function_name, reason)
-            elif function_name in use_fish_value_func:
+            elif function_name in use_fish_value_func or is_value_getter:
                 # TODO how about we just stop all auto converting now and bifurcate the set of funcs so I can wrap both separately and if I need a 3rd or 4th wrapper approach I can have that too...
                 return captured_fish_alias(function_name)
             else:
