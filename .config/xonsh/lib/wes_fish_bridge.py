@@ -217,6 +217,10 @@ def wrap_fish_functions(aliases, function_names, is_value_getter = False):
             if reason:
                 return unsupported_fish_alias(function_name, reason)
             elif function_name in use_fish_value_func or is_value_getter:
+                # btw side effect worth observing
+                #  if you define _repo_root with fish_function_stream_tty_invoke
+                #    echo foo $(_repo_root) bar
+                #    the repo root prints _before_ `foo  bar` and rr prints a \n after repo root before `foo` ... yikes!
                 # TODO how about we just stop all auto converting now and bifurcate the set of funcs so I can wrap both separately and if I need a 3rd or 4th wrapper approach I can have that too...
                 return captured_fish_alias(function_name)
             else:
