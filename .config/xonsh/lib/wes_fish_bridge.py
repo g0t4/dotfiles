@@ -206,7 +206,8 @@ def wrap_fish_functions(aliases, function_names):
         console.print(Syntax(fish_func_definition, "fish", theme=syntax_theme(), background_color="default"))
 
     use_fish_value_func = {
-        "_repo_root"
+        '_repo_root',
+        '_get_ask_traces_dir',
     }
     aliases["_fish_help"] = fish_help
     for function_name in function_names:
