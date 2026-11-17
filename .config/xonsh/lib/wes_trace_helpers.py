@@ -55,9 +55,10 @@ def double_quote(value):
 def trace_files(*, recursive=False):
     # Deterministic selection, including names containing spaces. Avoid walking
     # a repository's Git internals when looking for a nested capture.
-    pattern = "**/*-trace.json" if recursive else "*-trace.json"
+    patterns = ["**/*-trace.json", "**/*.jsonl"] if recursive else ["*-trace.json", "*.jsonl"]
     return sorted(
-        path for path in Path('.').glob(pattern)
+        path for pattern in patterns
+        for path in Path('.').glob(pattern)
         if path.is_file() and '.git' not in path.parts
     )
 
