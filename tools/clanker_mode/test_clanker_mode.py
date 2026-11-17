@@ -37,7 +37,8 @@ def test_agent_tool_roundtrip_and_trace(shell, tmp_path):
         calls = 0
 
         def bind_tools(self, tools):
-            assert len(tools) == 1
+            assert len(tools) == 2
+            assert {t.name for t in tools} == {"execute_in_current_xonsh", "apply_patch"}
             return self
 
         def invoke(self, messages):
@@ -346,7 +347,7 @@ def test_agent_queues_command_without_running_it(shell, tmp_path):
 
     class Model:
         def bind_tools(self, tools):
-            assert len(tools) == 1  # Helper uses the existing execution tool.
+            assert len(tools) == 2  # Helper uses the existing execution tool + apply_patch.
             return self
 
         def invoke(self, messages):
@@ -625,3 +626,38 @@ def test_capture_large_output_and_mixed_write_order(shell, tmp_path):
         }
     )
     assert result == "first-second-third\n"
+
+
+def test_apply_patch_tool_updates_and_adds_files(tmp_path):
+    """apply_patch tool scoped to repo root: update and add work."""
+    import subprocess
+    from pathlib import Path
+    from clanker_mode import apply_patch
+
+    # Build a temp git repo so apply_patch is scoped to a real root.
+    repo = tmp_path / "repo"
+    repo.mkdir()
+    subprocess.run(["git", "init", "-q"], cwd=repo, check=True, capture_output=True)
+    subprocess.run(["git", "config", "user.email", "t@t"], cwd=repo, check=True, capture_output=True)
+    subprocess.run(["git", "config", "user.name", "t"], cwd=repo, check=True, capture_output=True)
+    (repo / "hello.txt").write_text("old line\n")
+
+    # Patch: update hello.txt and add new.py
+    patch = (
+        "*** Begin Patch\n"
+        "*** Update File: hello.txt\n"
+        "@@\n"
+        "-old line\n"
+        "+new line\n"
+        "*** Add File: new.py\n"
+        "+print('hi')\n"
+        "*** End Patch\n"
+    )
+    old_cwd = os.getcwd()
+    os.chdir(repo)
+    result = apply_patch.invoke({"patch": patch})
+    os.chdir(old_cwd)
+
+    assert (repo / "hello.txt").read_text() == "new line\n"
+    assert (repo / "new.py").exists()
+    assert "Success" in result or "Updated" in result

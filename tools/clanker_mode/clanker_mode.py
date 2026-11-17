@@ -5,6 +5,7 @@ from __future__ import annotations
 import io
 import os
 import sys
+import subprocess
 import tempfile
 import traceback
 from contextlib import contextmanager, nullcontext, redirect_stderr, redirect_stdout
@@ -17,10 +18,12 @@ from clanker_session import get_session
 
 SYSTEM_PROMPT = """You are Clanker Mode, an assistant living inside the user's current
 Xonsh process alongside Shell Mode and Python Mode. Give concise, practical help.
-Your only tool, execute_in_current_xonsh, executes Xonsh source synchronously in
-this very shell's live namespace, not a child process or sandbox. Python and
-Xonsh subprocess syntax are both available. Imports, assignments, environment
-changes, aliases, cwd changes and other side effects persist in the user's shell.
+Your tools: execute_in_current_xonsh (executes Xonsh source synchronously in this
+very shell's live namespace, not a child process or sandbox; Python and Xonsh
+subprocess syntax are both available; imports, assignments, environment changes,
+aliases, cwd changes and other side effects persist in the user's shell) and
+apply_patch (applies a '*** Begin Patch' / '*** End Patch' diff scoped to the git
+root of the current cwd, for editing repo files).
 Use `from xonsh.built_ins import XSH` to access shell internals: XSH.env (including
 typed environment values), XSH.ctx (Python variables), XSH.aliases, and XSH.history.
 During tool execution, the interactive `cat` alias is temporarily disabled, so
@@ -168,6 +171,74 @@ def make_shell_tool(xsh):
     return execute_in_current_xonsh
 
 
+# Paths to the apply_patch tooling, wired like ask-openai.nvim. The git root of
+# the current shell cwd scopes patches so apply_patch cannot escape the repo.
+def _apply_patch_binary():
+    return Path.home() / "repos/github/openai/codex/codex-rs/target/release/apply_patch"
+
+
+def _apply_patch_wrapper():
+    return (
+        Path.home() / "repos/github/g0t4/ask-openai.nvim/lua/ask-openai/tools/inproc/apply_patch_wrapper.py"
+    )
+
+
+@tool
+def apply_patch(patch: str) -> str:
+    """Apply a patch to files in the current repo, rooted at the shell cwd's git root.
+
+    The patch uses the ask-openai '*** Begin Patch' / '*** End Patch' diff format
+    (Add/Delete/Update File, hunks with +/-, optional Move to, *** End of File).
+    The tool runs in-process in the live shell and is scoped to the repo at the
+    current working directory; it refuses to touch paths outside that root.
+    Errors are returned as text so the model can correct its patch.
+    """
+    import subprocess
+
+    if not patch or not patch.strip():
+        return "apply_patch got empty patch; nothing to do."
+
+    # Resolve the repo root for the current cwd. If not in a repo, run in cwd.
+    repo_root = os.getcwd()
+    proc = subprocess.run(
+        ["git", "rev-parse", "--show-toplevel"],
+        capture_output=True, text=True, cwd=repo_root,
+    )
+    if proc.returncode == 0 and proc.stdout.strip():
+        repo_root = proc.stdout.strip()
+
+    python = str(Path.home() / "repos/github/g0t4/gpt-oss/.venv/bin/python3")
+    wrapper = str(_apply_patch_wrapper())
+    binary = _apply_patch_binary()
+
+    if not os.path.exists(binary):
+        return (
+            f"apply_patch binary not found at {binary}\n"
+            "Build it (cargo build --release) or drop a binary at that path."
+        )
+
+    if os.path.exists(python) and os.path.exists(wrapper):
+        # Use the wrapper so multi-patch and de-duplicating End Patch work.
+        cmd = [python, wrapper]
+    else:
+        cmd = [str(binary)]
+
+    proc = subprocess.run(
+        cmd,
+        input=patch,
+        text=True,
+        capture_output=True,
+        cwd=repo_root,
+    )
+    out = proc.stdout or ""
+    err = proc.stderr or ""
+    if proc.returncode != 0 or err.strip():
+        # apply_patch reports DiffError on stdout/stderr without non-zero on some
+        # errors; surface both so the model can fix the patch.
+        return (out + err).strip() or f"apply_patch failed (exit {proc.returncode})"
+    return out.strip() or "(applied with no output)"
+
+
 def select_model(models):
     from ai_shared.models import select_model as shared_select_model
 
@@ -185,7 +256,7 @@ def get_model(xsh):
     )
 
 
-def run_agent(prompt, xsh, *, model=None, trace_dir=None, max_rounds=20, on_event=None):
+def run_agent(prompt, xsh, *, model=None, trace_dir=None, max_rounds=50, on_event=None):
     session = get_session(xsh, trace_dir or TRACE_DIR)
     if session.active:
         raise RuntimeError("A Clanker turn is already running in this shell")
@@ -215,7 +286,7 @@ def run_agent(prompt, xsh, *, model=None, trace_dir=None, max_rounds=20, on_even
         emit("thinking")
         model = model if model is not None else get_model(xsh)
         shell_tool = make_shell_tool(xsh)
-        bound = model.bind_tools([shell_tool])
+        bound = model.bind_tools([shell_tool, apply_patch])
         for round_index in range(max_rounds):
             if round_index:
                 emit("thinking")
@@ -236,13 +307,18 @@ def run_agent(prompt, xsh, *, model=None, trace_dir=None, max_rounds=20, on_even
                     {"call": call, "index": index, "total": len(answer.tool_calls)},
                 )
                 executing_call = call["id"]
-                if call["name"] != shell_tool.name:
-                    result = f"Unknown tool: {call['name']}"
-                else:
+                if call["name"] == shell_tool.name:
                     try:
                         result = shell_tool.invoke(call["args"])
                     except Exception as error:
                         result = f"{type(error).__name__}: {error}"
+                elif call["name"] == apply_patch.name:
+                    try:
+                        result = apply_patch.invoke(call["args"])
+                    except Exception as error:
+                        result = f"{type(error).__name__}: {error}"
+                else:
+                    result = f"Unknown tool: {call['name']}"
                 result_message = ToolMessage(
                     content=result, tool_call_id=call["id"], name=call["name"]
                 )

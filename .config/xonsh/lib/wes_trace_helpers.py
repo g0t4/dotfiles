@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import re
+import os
 import subprocess
 from pathlib import Path
 
@@ -54,13 +55,23 @@ def double_quote(value):
 
 def trace_files(*, recursive=False):
     # Deterministic selection, including names containing spaces. Avoid walking
-    # a repository's Git internals when looking for a nested capture.
-    patterns = ["**/*-trace.json", "**/*.jsonl"] if recursive else ["*-trace.json", "*.jsonl"]
-    return sorted(
-        path for pattern in patterns
-        for path in Path('.').glob(pattern)
-        if path.is_file() and '.git' not in path.parts
-    )
+    # a repository's Git internals when looking for a nested capture. Uses a
+    # single os.walk pass (faster, and includes hidden files) rather than glob.
+    matches = []
+    if recursive:
+        for root, dirs, names in os.walk('.'):
+            # Prune .git internals so we don't churn through repo metadata.
+            dirs[:] = [d for d in dirs if d != '.git']
+            for name in names:
+                if name.endswith('-trace.json') or name.endswith('.jsonl'):
+                    matches.append(Path(os.path.join(root, name)))
+    else:
+        for name in os.listdir('.'):
+            if name.endswith('-trace.json') or name.endswith('.jsonl'):
+                path = Path(name)
+                if path.is_file() and '.git' not in path.parts:
+                    matches.append(path)
+    return sorted(matches)
 
 
 def expand_trace_file(context, match):
