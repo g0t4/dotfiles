@@ -107,9 +107,13 @@ function __gh_depoliticize
 
 end
 
-function _build_github_link --argument-names file type
+function _build_github_link --argument-names file type # xonsh-value-getter
     # TODO fish tests with fishtape?
     # copy_github_link /Users/wesdemos/repos/github/g0t4/ask-openai.nvim/lua/ask-openai/api.lua
+    if test "$file" = ""
+        # use current dir if nothing passed
+        set file $PWD
+    end
 
     # get repo root directory (of $file, not current repo necessarily)
     # use that to find path within repo
@@ -142,7 +146,7 @@ function _build_github_link --argument-names file type
     set link_type (if test -d $file; echo tree; else; echo blob; end)
 
     # FYI dir_relative_to_repo_root has trailing / from rev-parse --show-prefix
-    if test $type = raw
+    if test "$type" = raw
         # https://raw.githubusercontent.com/g0t4/ask-openai.nvim/refs/heads/master/lua/ask-openai/api.lua
         set github_url "https://raw.githubusercontent.com/$owner/$repo/refs/heads/$branch/$dir_relative_to_repo_root""$filename"
     else
@@ -152,11 +156,10 @@ function _build_github_link --argument-names file type
     echo "$github_url" | pbcopy
 end
 
-function copy_github_link --argument-names file
-    _build_github_link $file ""
+function copy_github_link --argument-names file # xonsh-value-getter
+    _build_github_link "$file" not_raw # quote else no file == no file arg
 end
 
-function copy_github_raw_link --argument-names file
-    _build_github_link $file raw
+function copy_github_raw_link --argument-names file # xonsh-value-getter
+    _build_github_link "$file" raw # quote else no file == "raw" as file
 end
-
