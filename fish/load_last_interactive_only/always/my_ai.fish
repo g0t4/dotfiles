@@ -76,10 +76,6 @@ function doctor_show_tty_fish
     end
 end
 
-function browse_traces
-    set _python3 "$ASK_REPO/.venv/bin/python3"
-    env PYTHONPATH="$ASK_REPO" $_python3 -m tools.chat_viewer.browser $argv
-end
 complete -c browse_traces -a '(command ls $WES_ASK_CAPTURES)' --no-files
 
 abbr vtw view_trace --watch

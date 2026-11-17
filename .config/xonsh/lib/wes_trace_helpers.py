@@ -14,7 +14,6 @@ from wes_fish_bridge import fish_function_stream_tty_invoke
 FISH_FUNCTIONS = (
     "doctor_show_tty_fish",
     "ask_rewrite_diff_reviewer",
-    "browse_traces",
     "love_agents",
     "love_fim",
     "love_rewrites",
