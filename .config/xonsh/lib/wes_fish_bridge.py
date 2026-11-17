@@ -205,18 +205,13 @@ def wrap_fish_functions(aliases, function_names, is_value_getter = False):
         fish_func_definition = fish_function_source(name)
         console.print(Syntax(fish_func_definition, "fish", theme=syntax_theme(), background_color="default"))
 
-    use_fish_value_func = {
-        # use this when generating calls to wrapped functions
-        # else pass the param is_value_getter
-        '_repo_root',
-    }
     aliases["_fish_help"] = fish_help
     for function_name in function_names:
         reason = UNSUPPORTED_FISH_FUNCTIONS.get(function_name)
         def w():
             if reason:
                 return unsupported_fish_alias(function_name, reason)
-            elif function_name in use_fish_value_func or is_value_getter:
+            elif is_value_getter:
                 # btw side effect worth observing
                 #  if you define _repo_root with fish_function_stream_tty_invoke
                 #    echo foo $(_repo_root) bar

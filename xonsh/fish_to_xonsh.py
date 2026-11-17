@@ -89,6 +89,7 @@ def generate(
     # print("gen mapping", mapping)
     declarations = []
     functions = []
+    value_functions = []
     seen = set()
     for line in source.read_text().splitlines():
         if "# fish-only" in line:
@@ -103,11 +104,27 @@ def generate(
             seen.add(identity)
         function_match = re.match(r"^\s*function\s+([^\s]+)", line)
         if function_match:
-            functions.append(function_match.group(1))
+            func_name = function_match.group(1)
+            if re.search(r"#.*xonsh-value-getter", line):
+
+                value_functions.append(func_name)
+                continue
+            functions.append(func_name)
 
     declaration_text = "\n".join(declarations)
 
     register_text = "" if not call_register else f"\n\n{register_module_func_name}()"
+
+    value_functions_text = ""
+    if any(value_functions):
+        value_functions_text = f"""
+
+    wrap_fish_functions(XSH.aliases, is_value_getter = True, function_names = (
+{"".join(f"        {name!r},\n" for name in value_functions if name not in SKIPPED_FISH_FUNCTIONS)}\
+    ))
+
+"""
+
 
     return f'''\
 """{title}"""
@@ -133,6 +150,7 @@ def {register_module_func_name}():
 {"".join(f"        {name!r},\n" for name in functions if name not in SKIPPED_FISH_FUNCTIONS)}\
     )
     wrap_fish_functions(XSH.aliases, fish_funcs)
+{value_functions_text}
 {declaration_text}
 
 {register_text}

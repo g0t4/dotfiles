@@ -38,7 +38,6 @@ def register_wes_git():
         'pwd',
         '_pwd',
         'prd',
-        '_repo_root',
         '_abbr_expand_grbi_d',
         '_repo_is_index_clean',
         '_repo_is_worktree_clean',
@@ -48,6 +47,13 @@ def register_wes_git():
         'get_license_MIT0',
     )
     wrap_fish_functions(XSH.aliases, fish_funcs)
+
+
+    wrap_fish_functions(XSH.aliases, is_value_getter = True, function_names = (
+        '_repo_root',
+    ))
+
+
     abbr('-W', abbr_from_fish_function('_abbr_git_short_to_long'), position="anywhere", commands=('git',))
     abbr('man_gitrevisions', 'man gitrevisions')
     abbr(re.compile('reflog\\d+'), abbr_from_fish_function('_abbr_expand_reflog_d'), position="anywhere")

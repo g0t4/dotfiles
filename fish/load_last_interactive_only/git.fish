@@ -629,7 +629,7 @@ function prd --description "print repo dir (pwd relative to repo root)"
 end
 
 abbr rr _repo_root
-function _repo_root
+function _repo_root # xonsh-value-getter
 
     # FYI missing git command should break returning a path
     if not command -q git
