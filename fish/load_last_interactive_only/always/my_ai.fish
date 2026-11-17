@@ -76,7 +76,8 @@ function doctor_show_tty_fish
     end
 end
 
-complete -c browse_traces -a '(command ls $WES_ASK_CAPTURES)' --no-files
+# TODO move away from fixed completions (let the command dictate completions)
+# complete -c browse_traces -a '(command ls $WES_ASK_CAPTURES)' --no-files
 
 abbr vtw view_trace --watch
 
@@ -85,21 +86,8 @@ abbr vt view_trace
 abbr vtt view_trace_tui
 
 abbr td trace_dump
-function trace_dump
-    # Dump run_process commands from a trace file.
-    set _python3 "$ASK_REPO/.venv/bin/python3"
-    env PYTHONPATH="$ASK_REPO" $_python3 -m tools.trace_dump $argv
-end
 
 abbr pii pii_scanner
-function pii_scanner
-    # Run the PII scanner tool using the module namespace.
-    # tools is now a proper Python package, so we invoke the module with
-    # -m tools.pii_scanner.__main__. To ensure the package can be resolved,
-    # add the repository root to PYTHONPATH.
-    set _python3 "$ASK_REPO/tools/pii_scanner/.venv/bin/python3"
-    env PYTHONPATH="$ASK_REPO" $_python3 -m tools.pii_scanner.__main__ $argv
-end
 
 abbr ri rag_indexer
 function rag_indexer

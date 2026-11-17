@@ -19,11 +19,9 @@ FISH_FUNCTIONS = (
     "love_rewrites",
     "love_shell",
     "notes_about_trace",
-    "pii_scanner",
     "rag_indexer",
     "rag_validate_index",
     "strip_trailing_newline",
-    "trace_dump",
     "mcp_server_semantic_grep",
 )
 
