@@ -20,6 +20,7 @@ def register_wes_hashicorp():
     fish_funcs = (
     )
     wrap_fish_functions(XSH.aliases, fish_funcs)
+
     abbr('pa', 'packer')
     abbr('pai', 'packer init .')
     abbr('pav', 'packer validate .')

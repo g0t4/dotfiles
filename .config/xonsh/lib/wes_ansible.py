@@ -22,6 +22,7 @@ def register_wes_ansible():
         '_ansible-config_option_details_contains',
     )
     wrap_fish_functions(XSH.aliases, fish_funcs)
+
     abbr('aclsn', '_ansible-config_options_name_contains')
     abbr('aclsd', '_ansible-config_option_details_contains')
     abbr('ap', 'ansible-playbook')

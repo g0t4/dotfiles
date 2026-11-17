@@ -29,6 +29,7 @@ def register_wes_processes():
         'toggle-git_commit_command',
     )
     wrap_fish_functions(XSH.aliases, fish_funcs)
+
     abbr('els', 'env | bat --language dotenv -p')
     abbr('egr', 'env | rg_grep -i ')
     abbr('envb', 'env | bat -l env')

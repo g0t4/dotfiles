@@ -65,6 +65,7 @@ def register_wes_media():
         'string_indent',
     )
     wrap_fish_functions(XSH.aliases, fish_funcs)
+
     abbr('_150', abbr_from_fish_function('abbr_thumbnail_check'))
     abbr('_1', abbr_from_fish_function('abbr_check'))
     abbr('_2', abbr_from_fish_function('abbr_30fps'))

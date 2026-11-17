@@ -27,6 +27,7 @@ def register_wes_dotnet():
         'dnd_tools',
     )
     wrap_fish_functions(XSH.aliases, fish_funcs)
+
     abbr('dotnet_versions', 'skopeo --override-os linux inspect docker://mcr.microsoft.com/dotnet/sdk | jq ".RepoTags | .[]" -r')
     abbr('dotnet_versions_major_only', 'skopeo --override-os linux inspect docker://mcr.microsoft.com/dotnet/sdk | jq ".RepoTags | .[]" -r | grep -o "\\d\\.\\d" | sort | uniq')
     abbr('dotnet_versions_major_only_nightly', 'skopeo --override-os linux inspect docker://mcr.microsoft.com/dotnet/nightly/sdk | jq ".RepoTags | .[]" -r | grep -o "\\d\\.\\d" | sort | uniq')

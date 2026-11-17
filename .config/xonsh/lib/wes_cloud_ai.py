@@ -33,6 +33,7 @@ def register_wes_cloud_ai():
         'test_vllm_v1_completions_raw_text',
     )
     wrap_fish_functions(XSH.aliases, fish_funcs)
+
     abbr('actw', abbr_from_fish_function('actw_expanded'), cursor_marker="%")
     abbr('azal', 'az account list --output table')
     abbr('azall', 'az account list-locations --output table')

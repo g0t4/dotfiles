@@ -20,6 +20,7 @@ def register_wes_docker():
     fish_funcs = (
     )
     wrap_fish_functions(XSH.aliases, fish_funcs)
+
     abbr('din', 'docker inspect')
     abbr('dmo', 'docker model')
     abbr('dmols', 'docker model list')

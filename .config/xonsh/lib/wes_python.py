@@ -33,6 +33,7 @@ def register_wes_python():
         '__ptw_one',
     )
     wrap_fish_functions(XSH.aliases, fish_funcs)
+
     abbr('py_profile_import_time', '$PYTHONPROFILEIMPORTTIME=1 python -c "from sentence_transformers import SentenceTransformer"')
     abbr('ipy', 'ipython3')
     abbr('py', 'python3')

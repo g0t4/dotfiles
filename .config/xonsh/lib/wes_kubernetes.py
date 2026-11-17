@@ -30,6 +30,7 @@ def register_wes_kubernetes():
     XSH.aliases["kgdump"] = kgdump
     XSH.completers["kgdump"] = complete_kgdump
     XSH.completers.move_to_end("kgdump", last=False)
+
     abbr('k3s', 'sudo k3s')
     abbr('k3dls', 'k3d cluster list')
     abbr('k3dcreate', 'k3d cluster create')

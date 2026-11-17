@@ -21,6 +21,7 @@ def register_wes_system_services():
         'toggle_show_verbose_prompt',
     )
     wrap_fish_functions(XSH.aliases, fish_funcs)
+
     abbr('lcl', 'launchctl list')
     abbr('lcp', 'launchctl print system')
     abbr('lcpu', 'launchctl print user/$(id -u)')

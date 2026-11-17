@@ -39,6 +39,7 @@ def register_wes_packages_hardware():
         '_fish_from_source',
     )
     wrap_fish_functions(XSH.aliases, fish_funcs)
+
     abbr('apts', 'apt search')
     abbr('apti', 'sudo apt install')
     abbr('aptu', 'sudo apt update')
