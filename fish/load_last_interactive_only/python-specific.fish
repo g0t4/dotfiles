@@ -85,6 +85,7 @@ abbr uvlu 'uv lock --upgrade'
 abbr uvlup 'uv lock --upgrade-package' # <package==version> upgrade just one package
 abbr uvlc 'uv lock --check' # check if lock is up to date
 abbr uvs 'uv sync'
+abbr uvsr 'uv sync --reinstall' # will put back `.venv/bin/entrypoints`
 # optional deps (extras):
 #   https://docs.astral.sh/uv/concepts/projects/dependencies/#optional-dependencies
 abbr uvsa 'uv sync --all-extras' # sync al extras packages
@@ -145,6 +146,8 @@ abbr uvtr 'uv tool run'
 abbr uvtls 'uv tool list'
 abbr uvtlso 'uv tool list --outdated'
 abbr uvti 'uv tool install'
+abbr uvtie 'uv tool install --editable .'
+abbr uvt_install_global_tool 'uv tool install --editable .'
 abbr uvtup 'uv tool upgrade --all'
 abbr uvtun 'uv tool uninstall'
 abbr uvx 'uv tool run' # uvx command is an alias for `uv tool run`, so just expand it anyways?
