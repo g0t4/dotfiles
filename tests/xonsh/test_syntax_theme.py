@@ -48,6 +48,25 @@ def test_bash_and_sh_use_palette_for_files_and_explicit_languages(tmp_path):
         assert re.sub(r'\x1b\[[0-9;]*m', '', result.stdout) == source
 
 
+def test_yaml_uses_palette_without_falling_back_to_stock_bat(tmp_path):
+    source = 'services:\n  app:\n    image: example:latest\n    read_only: true\n'
+    env = {**os.environ, 'PATH': ''}
+
+    for name in ('compose.yaml', 'compose.yml'):
+        path = tmp_path / name
+        path.write_text(source)
+        result = run_bat('--color=always', str(path), env=env)
+        assert result.returncode == 0, result.stderr
+        assert '\x1b[38;2;' in result.stdout
+        assert re.sub(r'\x1b\[[0-9;]*m', '', result.stdout) == source
+
+    for language in ('yaml', 'yml'):
+        result = run_bat('-pl', language, '--color=always', input=source, env=env)
+        assert result.returncode == 0, result.stderr
+        assert '\x1b[38;2;' in result.stdout
+        assert re.sub(r'\x1b\[[0-9;]*m', '', result.stdout) == source
+
+
 def test_bash_commands_are_distinct_from_arguments_and_quoted_text():
     from pygments import lex
     from pygments.token import Name, Text

@@ -13,19 +13,22 @@ import sys
 from pygments import highlight
 from pygments.formatters import TerminalTrueColorFormatter
 
-from highlight import ROOT, load_style, style_for_lexer
-from wes_syntax import source_lexer
+from wes_syntax import load_style, source_lexer, style_for_lexer
+
+ROOT = Path(__file__).resolve().parent
 
 LANGUAGES = {
     "py": "python", "python": "python", "python3": "python",
     "lua": "lua", "md": "markdown", "markdown": "markdown",
     "xsh": "xonsh", "xonsh": "xonsh",
     "bash": "bash", "sh": "bash", "shell": "bash",
+    "yaml": "yaml", "yml": "yaml",
 }
 FILE_LANGUAGES = {
     ".py": "python", ".pyi": "python", ".lua": "lua",
     ".md": "markdown", ".markdown": "markdown", ".xsh": "xonsh",
     ".sh": "bash", ".bash": "bash",
+    ".yaml": "yaml", ".yml": "yaml",
 }
 SHELL_FILENAMES = {".bashrc", ".bash_profile", ".bash_login", ".bash_logout", ".profile"}
 

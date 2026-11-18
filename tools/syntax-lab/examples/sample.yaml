@@ -1,0 +1,9 @@
+services:
+  target: &target
+    image: harbor-and-pine:latest
+    read_only: true
+
+  operations:
+    <<: *target
+    environment:
+      INSTANCE: operations

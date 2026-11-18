@@ -1,16 +1,29 @@
 # Syntax lab
 
-Run from the dotfiles root (uv installs the isolated script dependencies):
+Install the command globally from this directory. The editable install keeps
+palette and source changes live:
 
 ```sh
-uv run tools/syntax-lab/highlight.py
-uv run tools/syntax-lab/highlight.py --swatches
-uv run tools/syntax-lab/highlight.py --renderer rich --line-numbers
-uv run tools/syntax-lab/highlight.py .config/xonsh/apps/hex.py
-uv run tools/syntax-lab/highlight.py --language lua
-cat tools/syntax-lab/examples/sample.py | uv run tools/syntax-lab/highlight.py - -l python
-uv run tools/syntax-lab/highlight.py --force-color | less -R
+cd tools/syntax-lab
+uv tool install --editable .
 ```
+
+`highlight` is the explicit renderer: it never delegates unsupported languages
+or options to stock `bat`. Run it from any directory:
+
+```sh
+highlight
+highlight --swatches
+highlight --renderer rich --line-numbers
+highlight ~/.config/xonsh/apps/hex.py
+highlight --language lua
+cat path/to/source.py | highlight - -l python
+highlight --force-color | less -R
+```
+
+Python, Lua, Markdown, Xonsh, Bash/sh, and YAML are also handled directly by
+the daily `bat.py` interceptor. Other `bat` languages or options still delegate
+to stock `bat` without consuming stdin.
 
 Edit `palette.json`, then rerun the same specimen. `--palette path/to/variant.json`
 lets you compare copies. No terminal preferences are changed. Output uses truecolor
@@ -70,10 +83,10 @@ original arguments and stdin. `bat-stock` bypasses the wrapper explicitly.
 Piped/redirected output remains plain unless color is forced. The wrapper is
 interactive-only; noninteractive Xonsh commands retain stock bat/cat.
 
-Existing command transforms that append `| bat -l json` or `yaml` naturally reach
-the wrapper and delegate to stock bat. Python source previews in abbreviation
-help and Fish-wrapper help use this same palette through Rich. Palette edits
-apply to the next invocation, without reloading Xonsh.
+Existing command transforms that append `| bat -l yaml` now use this palette;
+JSON and other unsupported languages still delegate to stock bat. Python source
+previews in abbreviation help and Fish-wrapper help use this same palette through
+Rich. Palette edits apply to the next invocation, without reloading Xonsh.
 
 Bash and `sh` views color external command words (for example `git` and `jq`)
 blue at command positions, while flags and other plain arguments remain neutral.
@@ -91,10 +104,10 @@ or italic font styles are applied. Interactive `cat file.md` no longer implicitl
 pipes through glow; use `glow file.md` explicitly for its rendered view.
 
 ```sh
-uv run tools/syntax-lab/highlight.py -l md
-uv run tools/syntax-lab/highlight.py -l md --grayscale
-uv run tools/syntax-lab/highlight.py --grayscale
-uv run tools/syntax-lab/highlight.py --grayscale --swatches
+highlight -l md
+highlight -l md --grayscale
+highlight --grayscale
+highlight --grayscale --swatches
 ```
 
 In interactive Xonsh:
@@ -122,27 +135,27 @@ same text in each cell and never change your saved palette or terminal settings.
 
 ```sh
 # Real files work as the sample for every sweep.
-uv run tools/syntax-lab/highlight.py path/to/project.py --sweep background
-uv run tools/syntax-lab/highlight.py path/to/project.py --sweep background-tint
-uv run tools/syntax-lab/highlight.py path/to/project.py --sweep vision
-uv run tools/syntax-lab/highlight.py path/to/project.py --sweep hue-shuffle --seed 42
+highlight path/to/project.py --sweep background
+highlight path/to/project.py --sweep background-tint
+highlight path/to/project.py --sweep vision
+highlight path/to/project.py --sweep hue-shuffle --seed 42
 
 # Zoom out, then rerun to fit more cells; or force a column count.
-uv run tools/syntax-lab/highlight.py -l md --sweep background --sample-lines 18 --columns 3
+highlight -l md --sweep background --sample-lines 18 --columns 3
 
 # Actual raster blur, shown inline in iTerm2.
-uv run tools/syntax-lab/highlight.py path/to/project.py --blur
-uv run tools/syntax-lab/highlight.py path/to/project.py --sweep blur --steps 5 --blur 3 --output /tmp/blur.png
+highlight path/to/project.py --blur
+highlight path/to/project.py --sweep blur --steps 5 --blur 3 --output /tmp/blur.png
 
 # One-off transforms and combinations.
-uv run tools/syntax-lab/highlight.py path/to/project.py --vision deutan --severity 75
-uv run tools/syntax-lab/highlight.py path/to/project.py --hue-shuffle --seed 42
-uv run tools/syntax-lab/highlight.py path/to/project.py --sweep background --grayscale
-uv run tools/syntax-lab/highlight.py path/to/project.py --sweep background --blur 2 --output /tmp/backgrounds.png
+highlight path/to/project.py --vision deutan --severity 75
+highlight path/to/project.py --hue-shuffle --seed 42
+highlight path/to/project.py --sweep background --grayscale
+highlight path/to/project.py --sweep background --blur 2 --output /tmp/backgrounds.png
 
 # Keep variants so you can retry a favorite by number.
-uv run tools/syntax-lab/highlight.py path/to/project.py --sweep hue-shuffle --seed 42 --export-dir /tmp/themes
-uv run tools/syntax-lab/highlight.py path/to/project.py --palette /tmp/themes/03.json
+highlight path/to/project.py --sweep hue-shuffle --seed 42 --export-dir /tmp/themes
+highlight path/to/project.py --palette /tmp/themes/03.json
 ```
 
 The grid defaults to `terminal columns / (longest sample line + divider)` with a
@@ -195,7 +208,7 @@ Sweep builders live in `explorer.py`'s `SWEEPS` registry and return labeled
 `Variant` objects. Terminal layout, image rendering, composition, and palette
 exports are shared, so new sweep techniques can use the same machinery. Exports
 contain numbered palette JSON files and a manifest with labels and blur radii.
-These explorer flags belong to `highlight.py`; the daily `bat` wrapper is unchanged.
+These explorer flags belong to `highlight`; the daily `bat` wrapper is unchanged.
 
 ## Xonsh
 
@@ -212,8 +225,8 @@ bat -pl xonsh .config/xonsh/rc.d/learn.xsh
 ```
 
 ```sh
-uv run tools/syntax-lab/highlight.py -l xonsh
-uv run tools/syntax-lab/highlight.py .config/xonsh/rc.d/learn.xsh --sweep background
+highlight -l xonsh
+highlight .config/xonsh/rc.d/learn.xsh --sweep background
 ```
 
 Explicit subprocess constructs such as `$(cat foo.py)` and `$[cat ./foo.py]`
@@ -258,7 +271,7 @@ It preserves the terminal background and forwards Rich options such as
 `palette=` accepts another palette JSON path. The CLI and library share the same
 implementation; the existing `palette.json` path is a symlink to the packaged
 palette in `wes_syntax/palette.json`. Editable installs read palette edits on
-each new renderable. No explorer/image dependencies are needed by the library.
+each new renderable. Library calls do not invoke the explorer or image renderer.
 
 Pygments' `diff` lexer uses our green for inserted lines, red for deleted lines,
 blue for file headers, teal for hunk headers, and neutral context. Use

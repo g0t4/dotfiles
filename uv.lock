@@ -233,6 +233,18 @@ wheels = [
 ]
 
 [[package]]
+name = "colorspacious"
+version = "1.1.2"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "numpy" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/75/e4/aa41ae14c5c061205715006c8834496d86ec7500f1edda5981f0f0190cc6/colorspacious-1.1.2.tar.gz", hash = "sha256:5e9072e8cdca889dac445c35c9362a22ccf758e97b00b79ff0d5a7ba3e11b618", size = 688573, upload-time = "2018-04-08T04:27:30.83Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/ab/a1/318b9aeca7b9856410ededa4f52d6f82174d1a41e64bdd70d951e532675a/colorspacious-1.1.2-py2.py3-none-any.whl", hash = "sha256:c78befa603cea5dccb332464e7dd29e96469eebf6cd5133029153d1e69e3fd6f", size = 37735, upload-time = "2018-04-08T04:27:22.143Z" },
+]
+
+[[package]]
 name = "comm"
 version = "0.2.2"
 source = { registry = "https://pypi.org/simple" }
@@ -2778,6 +2790,9 @@ name = "wes-syntax"
 version = "0.1.0"
 source = { editable = "tools/syntax-lab" }
 dependencies = [
+    { name = "argcomplete" },
+    { name = "colorspacious" },
+    { name = "pillow" },
     { name = "pygments" },
     { name = "rich" },
     { name = "xonsh" },
@@ -2785,6 +2800,9 @@ dependencies = [
 
 [package.metadata]
 requires-dist = [
+    { name = "argcomplete", specifier = ">=3.7,<4" },
+    { name = "colorspacious", specifier = ">=1.1.2,<2" },
+    { name = "pillow", specifier = ">=11,<13" },
     { name = "pygments", specifier = ">=2.19,<3" },
     { name = "rich", specifier = ">=13.9,<15" },
     { name = "xonsh", specifier = ">=0.24,<0.25" },

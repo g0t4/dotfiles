@@ -119,25 +119,15 @@ SWEEPS = {'background': backgrounds, 'background-tint': background_tints, 'hue-s
 
 
 def add_arguments(parser):
-    parser.add_argument('--sweep', choices=SWEEPS)
-    parser.add_argument('--steps', type=int, default=7, help='variants for background/hue/blur sweeps (includes original for hue)')
-    parser.add_argument('--columns', type=int, help='grid columns; default fits sample width to terminal columns')
-    parser.add_argument('--sample-lines', type=int, default=0, help='excerpt length for sweeps; 0 uses entire file')
-    parser.add_argument('--blur', type=float, nargs='?', const=2.0, help='Gaussian radius in image pixels; saves PNG (default 2)')
-    parser.add_argument('--vision', choices=VISION, help='protan: red, deutan: green, tritan: blue/yellow discrimination simulation')
-    parser.add_argument('--severity', type=float, default=100, help='Machado simulation severity, 0..100')
-    parser.add_argument('--hue-shuffle', action='store_true')
-    parser.add_argument('--seed', type=int, default=0)
-    parser.add_argument('--background', help='one-off #RRGGBB background')
-    parser.add_argument('--bg-span', type=float, default=.21, help='total OKLab lightness span, centered on current background')
-    parser.add_argument('--output', type=Path, help='PNG output; implies image view')
-    parser.add_argument('--font-size', type=int, default=16)
-    parser.add_argument('--font', type=Path, help='monospace TTF/TTC for image views')
-    parser.add_argument('--export-dir', type=Path, help='save numbered palette JSON variants for later testing')
+    # Keep legacy imports working while the first-class command owns the one
+    # parser definition used by help and shell completion.
+    from tools.highlight.__main__ import add_explorer_arguments
+
+    add_explorer_arguments(parser)
 
 
 def text_sample(code, lexer, colors, console):
-    from highlight import make_style, style_for_lexer
+    from wes_syntax import make_style, style_for_lexer
     style = style_for_lexer(lexer, colors, make_style(colors))
     syntax = Syntax(code, lexer, theme=PygmentsSyntaxTheme(style), background_color=colors['background'])
     return syntax.highlight(code)
