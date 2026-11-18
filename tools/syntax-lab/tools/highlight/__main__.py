@@ -109,6 +109,7 @@ def build_parser() -> argparse.ArgumentParser:
         help="inspect lexer token assignments instead of coloring",
     )
     parser.add_argument("--renderer", choices=("pygments", "rich"), default="pygments")
+    parser.add_argument("--pad-tables", action="store_true", help="align Markdown pipe tables in the output")
     parser.add_argument("--line-numbers", action="store_true")
     parser.add_argument(
         "--force-color",
@@ -197,6 +198,10 @@ def run(args: argparse.Namespace) -> int:
     )
     code = sys.stdin.read() if args.file == "-" else path.read_text()
     lexer = source_lexer(args.language, filename=path)
+    if args.pad_tables and lexer.name == "Markdown":
+        from wes_syntax.markdown_tables import pad_tables
+
+        code = pad_tables(code)
     if (
         args.sweep
         or args.blur is not None

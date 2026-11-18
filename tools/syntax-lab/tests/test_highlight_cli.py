@@ -70,3 +70,20 @@ def test_markdown_fences_use_shared_lexers(tmp_path) -> None:
         assert "38;2;130;176;223mgit" in result.stdout
         assert "38;2;179;148;227mreturn" in result.stdout
         assert re.sub(r"\x1b\[[0-9;]*m", "", result.stdout) == source
+
+
+def test_markdown_table_padding_is_opt_in_and_skips_fences(tmp_path) -> None:
+    table = "| 名 | Note |\n| :---: | ---: |\n| x | a\\|b |\n"
+    fenced = "````md\n```\n" + table + "````\n"
+    source = table + "\n" + fenced
+    path = tmp_path / "table.md"
+    path.write_text(source)
+    assert run_highlight(str(path)).stdout == source
+
+    result = run_highlight(str(path), "--pad-tables", "--force-color")
+    assert result.returncode == 0, result.stderr
+    plain = re.sub(r"\x1b\[[0-9;]*m", "", result.stdout)
+    assert plain == (
+        "| 名    | Note |\n| :---: | ---: |\n| x     | a\\|b |\n\n" + fenced
+    )
+    assert path.read_text() == source
