@@ -87,16 +87,10 @@ def style_for_yaml(colors, base_style):
     class WesYAML(base_style):
         styles = {
             **base_style.styles,
-            # Generic.Heading: colors["keyword"],
-            # Generic.Subheading: colors["keyword"],
-            # Generic.Strong: colors["type"],
-            # Generic.Emph: colors["builtin"],
-            # Generic.Deleted: colors["comment"],
-            # String.Backtick: colors["builtin"],
-            # Name.Tag: colors["function"],
-            # Name.Attribute: colors["comment"],
-            # Name.Label: colors["function"],
-            # Name.Entity: colors["function"],
+            Token.Name.Tag: colors["function"],
+            Token.Name.Label: colors["builtin"],
+            Token.Name.Variable: colors["keyword"],
+            # Token.Literal.String: colors["string"],
         }
 
     return WesYAML
