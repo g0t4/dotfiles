@@ -83,10 +83,25 @@ def make_style(colors):
     return WesDark
 
 
-def style_for_lexer(lexer, colors, base_style):
-    if lexer.name != "Markdown":
-        return base_style
+def style_for_yaml(colors, base_style):
+    class WesYAML(base_style):
+        styles = {
+            **base_style.styles,
+            # Generic.Heading: colors["keyword"],
+            # Generic.Subheading: colors["keyword"],
+            # Generic.Strong: colors["type"],
+            # Generic.Emph: colors["builtin"],
+            # Generic.Deleted: colors["comment"],
+            # String.Backtick: colors["builtin"],
+            # Name.Tag: colors["function"],
+            # Name.Attribute: colors["comment"],
+            # Name.Label: colors["function"],
+            # Name.Entity: colors["function"],
+        }
 
+    return WesYAML
+
+def style_for_markdown(colors, base_style):
     class WesMarkdown(base_style):
         styles = {
             **base_style.styles,
@@ -104,6 +119,15 @@ def style_for_lexer(lexer, colors, base_style):
 
     return WesMarkdown
 
+
+def style_for_lexer(lexer, colors, base_style):
+    if lexer.name == "YAML":
+        return style_for_yaml(colors, base_style)
+
+    if lexer.name == "Markdown":
+        return style_for_markdown(colors, base_style)
+
+    return base_style
 
 
 def syntax(source, language="python", *, palette=None, grayscale=False, **options):
