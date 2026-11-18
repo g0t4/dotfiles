@@ -16,6 +16,9 @@ def source_lexer(language=None, *, filename=None):
         return ApplyPatchLexer()
     from pygments.lexers import get_lexer_by_name, get_lexer_for_filename
     lexer = get_lexer_by_name(language) if language is not None else get_lexer_for_filename(str(filename))
+    if lexer.name == "Markdown":
+        from .markdown import SourceMarkdownLexer
+        return SourceMarkdownLexer()
     if "xonsh" in lexer.aliases:
         from .lexers import SourceXonshLexer
         return SourceXonshLexer()

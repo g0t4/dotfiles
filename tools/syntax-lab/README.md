@@ -98,7 +98,8 @@ whether a command is installed or execute the source.
 
 Markdown source (`.md`, `.markdown`, `-l md`, `-l markdown`) now uses the same
 palette: purple headings, teal inline code/quotes, amber emphasis, blue link
-labels, and slate URLs. Fenced code uses its language lexer with our code colors.
+labels, and slate URLs. Language-tagged triple-backtick fences use the same
+lexer selection as standalone source, including the custom Bash and Xonsh lexers.
 Markdown punctuation stays visible; tables retain their source layout. No bold
 or italic font styles are applied. Interactive `cat file.md` no longer implicitly
 pipes through glow; use `glow file.md` explicitly for its rendered view.

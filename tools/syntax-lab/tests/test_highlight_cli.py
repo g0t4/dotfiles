@@ -50,3 +50,23 @@ def test_language_completion_filters_the_xonsh_prefix() -> None:
     completer = SimpleNamespace(command=SimpleNamespace(prefix="ya"))
 
     assert list(complete_languages(completer=completer)) == ["yaml"]
+
+
+def test_markdown_fences_use_shared_lexers(tmp_path) -> None:
+    source = (
+        "# Example\n\n"
+        "```sh title=demo\ngit status\n```\n\n"
+        "```python\nreturn 42\n```\n\n"
+        "```unknown-language\nunknown body\n```\n"
+    )
+    path = tmp_path / "example.md"
+    path.write_text(source)
+
+    for result in (
+        run_highlight(str(path), "--force-color"),
+        run_highlight("-", "-l", "md", "--force-color", input=source),
+    ):
+        assert result.returncode == 0, result.stderr
+        assert "38;2;130;176;223mgit" in result.stdout
+        assert "38;2;179;148;227mreturn" in result.stdout
+        assert re.sub(r"\x1b\[[0-9;]*m", "", result.stdout) == source
