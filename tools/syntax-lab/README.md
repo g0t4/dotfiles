@@ -101,7 +101,10 @@ palette: purple headings, teal inline code/quotes, amber emphasis, blue link
 labels, and slate URLs. Language-tagged triple-backtick fences use the same
 lexer selection as standalone source, including the custom Bash and Xonsh lexers.
 Markdown punctuation stays visible. Use `highlight --pad-tables README.md` to
-align pipe tables and draw box borders in the output. The flag leaves the file and fenced examples intact. No bold
+align pipe tables and draw box borders in the output. Wide tables wrap to the terminal width in
+interactive use. Pass `--width 80` to choose a limit, including when piping.
+Tables keep their natural width when the limit cannot fit the borders and
+minimum column widths. The flag leaves the file and fenced examples intact. No bold
 or italic font styles are applied. Interactive `cat file.md` no longer implicitly
 pipes through glow; use `glow file.md` explicitly for its rendered view.
 

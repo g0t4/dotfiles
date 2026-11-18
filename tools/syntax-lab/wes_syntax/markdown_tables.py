@@ -1,8 +1,11 @@
 """Align pipe tables for terminal source display."""
 
+from itertools import zip_longest
 import re
 
 from rich.cells import cell_len
+from rich.console import Console
+from rich.text import Text
 
 
 FENCE = re.compile(r"^ {0,3}(`{3,}|~{3,})(.*)$")
@@ -24,7 +27,47 @@ def _cells(line):
     return cells[start:end]
 
 
-def pad_tables(source):
+def _render_table(lines, rows, max_width):
+    widths = [max(3, max(map(cell_len, column))) for column in zip(*rows)]
+    indents = [line[:len(line) - len(line.lstrip(" "))] for line in lines]
+    if max_width is not None:
+        available = max_width - max(map(len, indents)) - 3 * len(widths) - 1
+        minimums = [min(width, 4) for width in widths]
+        if available >= sum(minimums):
+            while sum(widths) > available:
+                column = max(
+                    (i for i, width in enumerate(widths) if width > minimums[i]),
+                    key=widths.__getitem__,
+                )
+                widths[column] -= 1
+
+    console = Console()
+    for index, (line, indent, row) in enumerate(zip(lines, indents, rows)):
+        ending = line[len(line.rstrip("\r\n")):]
+        if index == 1:
+            rule = "┼".join("─" * (width + 2) for width in widths)
+            yield f"{indent}├{rule}┤{ending}"
+            continue
+
+        columns = [
+            [part.plain for part in Text(cell).wrap(console, width, overflow="fold")]
+            if cell_len(cell) > width else [cell]
+            for cell, width in zip(row, widths)
+        ]
+        rendered = []
+        for parts in zip_longest(*columns, fillvalue=""):
+            padded = [
+                part + " " * (width - cell_len(part))
+                for part, width in zip(parts, widths)
+            ]
+            rendered.append(indent + "│ " + " │ ".join(padded) + " │")
+        yield (ending or "\n").join(rendered) + ending
+
+
+def pad_tables(source, max_width=None):
+    """Draw pipe tables, optionally wrapping their cells to a terminal width."""
+    if max_width is not None and max_width < 1:
+        raise ValueError("table width must be positive")
     lines = source.splitlines(keepends=True)
     fence = ""
     index = 0
@@ -50,25 +93,10 @@ def pad_tables(source):
                         break
                     rows.append(row)
 
-                widths = [
-                    max(3, max(map(cell_len, column))) for column in zip(*rows)
-                ]
-                for row_index, row in enumerate(rows):
-                    line_index = index + row_index
-                    original = lines[line_index]
-                    ending = original[len(original.rstrip("\r\n")):]
-                    indent = original[:len(original) - len(original.lstrip(" "))]
-                    if row_index == 1:
-                        rule = "┼".join("─" * (width + 2) for width in widths)
-                        rendered = f"├{rule}┤"
-                    else:
-                        padded = [
-                            cell + " " * (width - cell_len(cell))
-                            for cell, width in zip(row, widths)
-                        ]
-                        rendered = "│ " + " │ ".join(padded) + " │"
-                    lines[line_index] = indent + rendered + ending
-                index += len(rows)
+                end = index + len(rows)
+                rendered = list(_render_table(lines[index:end], rows, max_width))
+                lines[index:end] = rendered
+                index += len(rendered)
                 continue
         index += 1
     return "".join(lines)

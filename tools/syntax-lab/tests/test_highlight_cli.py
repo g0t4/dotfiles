@@ -87,3 +87,36 @@ def test_markdown_table_padding_is_opt_in_and_skips_fences(tmp_path) -> None:
         "│ 名    │ Note │\n├───────┼──────┤\n│ x     │ a\\|b │\n\n" + fenced
     )
     assert path.read_text() == source
+
+
+def test_padded_tables_wrap_to_explicit_width_on_stdout() -> None:
+    from rich.cells import cell_len
+
+    source = "| ID | Note |\n| --- | --- |\n| 1 | cedar oak maple |\n"
+    result = run_highlight("-", "-l", "md", "--pad-tables", "--width", "15", input=source)
+    assert result.returncode == 0, result.stderr
+    assert result.stdout.splitlines() == [
+        "│ ID  │ Note  │",
+        "├─────┼───────┤",
+        "│ 1   │ cedar │",
+        "│     │ oak   │",
+        "│     │ maple │",
+    ]
+    assert all(cell_len(line) == 15 for line in result.stdout.splitlines())
+    unbounded = run_highlight("-", "-l", "md", "--pad-tables", input=source)
+    assert "cedar oak maple" in unbounded.stdout
+
+
+def test_pad_tables_width_counts_wide_characters_and_indentation() -> None:
+    from rich.cells import cell_len
+    from wes_syntax.markdown_tables import pad_tables
+
+    source = "  | ID | Note |\r\n  | --- | --- |\r\n  | 1 | 名名名名名 |"
+    wrapped = pad_tables(source, max_width=16)
+
+    assert wrapped.count("\r\n") == 2
+    assert not wrapped.endswith("\n")
+    assert wrapped.count("名") == 5
+    assert all(cell_len(line) == 16 for line in wrapped.splitlines())
+    assert pad_tables(source, max_width=15) == pad_tables(source)
+    assert pad_tables(source, max_width=80) == pad_tables(source)

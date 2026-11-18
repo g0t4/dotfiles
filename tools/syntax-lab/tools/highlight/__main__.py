@@ -110,6 +110,7 @@ def build_parser() -> argparse.ArgumentParser:
     )
     parser.add_argument("--renderer", choices=("pygments", "rich"), default="pygments")
     parser.add_argument("--pad-tables", action="store_true", help="align Markdown pipe tables in the output")
+    parser.add_argument("--width", type=int, help="maximum padded table width in terminal columns")
     parser.add_argument("--line-numbers", action="store_true")
     parser.add_argument(
         "--force-color",
@@ -201,7 +202,10 @@ def run(args: argparse.Namespace) -> int:
     if args.pad_tables and lexer.name == "Markdown":
         from wes_syntax.markdown_tables import pad_tables
 
-        code = pad_tables(code)
+        max_width = args.width
+        if max_width is None and sys.stdout.isatty():
+            max_width = console.width
+        code = pad_tables(code, max_width=max_width)
     if (
         args.sweep
         or args.blur is not None
