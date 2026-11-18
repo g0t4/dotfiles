@@ -58,15 +58,16 @@ def pad_tables(source):
                     original = lines[line_index]
                     ending = original[len(original.rstrip("\r\n")):]
                     indent = original[:len(original) - len(original.lstrip(" "))]
-                    padded = []
-                    for cell, width in zip(row, widths):
-                        padding = width - cell_len(cell)
-                        if row_index == 1:
-                            cell = cell.replace("-", "-" * (padding + 1), 1)
-                        else:
-                            cell += " " * padding
-                        padded.append(cell)
-                    lines[line_index] = indent + "| " + " | ".join(padded) + " |" + ending
+                    if row_index == 1:
+                        rule = "┼".join("─" * (width + 2) for width in widths)
+                        rendered = f"├{rule}┤"
+                    else:
+                        padded = [
+                            cell + " " * (width - cell_len(cell))
+                            for cell, width in zip(row, widths)
+                        ]
+                        rendered = "│ " + " │ ".join(padded) + " │"
+                    lines[line_index] = indent + rendered + ending
                 index += len(rows)
                 continue
         index += 1

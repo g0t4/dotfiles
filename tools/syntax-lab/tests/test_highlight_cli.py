@@ -84,6 +84,6 @@ def test_markdown_table_padding_is_opt_in_and_skips_fences(tmp_path) -> None:
     assert result.returncode == 0, result.stderr
     plain = re.sub(r"\x1b\[[0-9;]*m", "", result.stdout)
     assert plain == (
-        "| 名    | Note |\n| :---: | ---: |\n| x     | a\\|b |\n\n" + fenced
+        "│ 名    │ Note │\n├───────┼──────┤\n│ x     │ a\\|b │\n\n" + fenced
     )
     assert path.read_text() == source
