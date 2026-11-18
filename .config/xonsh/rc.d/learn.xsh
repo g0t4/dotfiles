@@ -81,6 +81,11 @@ def wes_colorful_output(cmd: str, **kwargs):
         # when I use `command` I am expressly requesting to not make changes to what I am running (i.e. my overrides for cat, or even these coloring of output)
         return
 
+    if first_token == "docker":
+        if "docker compose config" in cmd:
+            if not "| bat -l yaml" in cmd:
+                return f"{cmd} | bat -l yaml"
+
     # PRN add commands from docker that I had setup with `grcify` that I removed in the fish configs too
     if first_token == "kubectl":
         if "-o yaml" in cmd:
