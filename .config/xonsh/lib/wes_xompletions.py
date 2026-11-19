@@ -204,12 +204,15 @@ class XompletionManager:
         self.tool_directory = tool_directory or uv_tool_directory()
         self.global_scope = LoadedXompletions({}, ())
         self.local_scope = LoadedXompletions({}, ())
+        self.global_loaded = False
+        self.local_loaded = False
         self.local_venv: Path | None = None
 
     def load_global(self) -> None:
         self.global_scope.unload()
         roots = source_roots_for_uv_tools(self.tool_directory)
         self.global_scope = load_xompletions(roots, namespace="global")
+        self.global_loaded = True
 
     def update_local(self, venv: str | os.PathLike[str] | None) -> None:
         resolved = Path(venv).resolve() if venv else None
@@ -217,13 +220,25 @@ class XompletionManager:
             return
         self.local_scope.unload()
         self.local_scope = LoadedXompletions({}, ())
+        self.local_loaded = False
         self.local_venv = resolved
+
+    def _load_local(self) -> None:
+        resolved = self.local_venv
         if resolved is not None:
             self.local_scope = load_xompletions(
                 source_roots_for_venv(resolved), namespace=f"local:{resolved}"
             )
+        self.local_loaded = True
+
+    def _ensure_loaded(self) -> None:
+        if not self.global_loaded:
+            self.load_global()
+        if not self.local_loaded:
+            self._load_local()
 
     def get(self, command: str) -> Callable | None:
+        self._ensure_loaded()
         return self.local_scope.completions.get(
             command
         ) or self.global_scope.completions.get(command)

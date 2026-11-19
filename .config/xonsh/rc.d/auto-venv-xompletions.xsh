@@ -11,7 +11,6 @@ from wes_xompletions import XompletionManager
 
 
 _wes_xompletions = XompletionManager()
-_wes_xompletions.load_global()
 _wes_xompletions.update_local(@.env.get("VIRTUAL_ENV"))
 
 

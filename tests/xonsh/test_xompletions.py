@@ -122,6 +122,30 @@ def test_local_venv_overrides_global_and_unloads_on_exit(tmp_path):
     manager.global_scope.unload()
 
 
+def test_discovery_is_deferred_until_first_completion(tmp_path):
+    global_source = tmp_path / "global-source"
+    local_source = tmp_path / "local-source"
+    make_project(global_source, "cats", "global")
+    make_project(local_source, "cats", "local")
+    tool_dir = tmp_path / "uv-tools"
+    make_editable_venv(tool_dir / "global-tool", global_source)
+    local_venv = make_editable_venv(tmp_path / "project" / ".venv", local_source)
+
+    manager = XompletionManager(tool_directory=tool_dir)
+    manager.update_local(local_venv)
+
+    assert not manager.global_loaded
+    assert not manager.local_loaded
+    assert manager.global_scope.completions == {}
+    assert manager.local_scope.completions == {}
+
+    assert list(manager.complete("cats", "ctx")) == ["local:ctx"]
+    assert manager.global_loaded
+    assert manager.local_loaded
+    manager.global_scope.unload()
+    manager.local_scope.unload()
+
+
 def test_same_project_can_be_global_and_local(tmp_path):
     source = tmp_path / "source"
     make_project(source, "cats", "shared")
