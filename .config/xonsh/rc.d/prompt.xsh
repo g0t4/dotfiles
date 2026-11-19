@@ -43,15 +43,6 @@ def _prompt_repo_info(cwd):
             if lines:
                 return os.path.realpath(lines[0]), (lines[1] if len(lines) > 1 else "").rstrip("/")
 
-    if shutil.which("hg"):
-        result = subprocess.run(
-            ["hg", "--cwd", cwd, "root"], capture_output=True, text=True
-        )
-        if result.returncode == 0:
-            root = os.path.realpath(result.stdout.strip())
-            relative = os.path.relpath(cwd, root)
-            return root, "" if relative == "." else relative
-
     return cwd, ""
 
 
