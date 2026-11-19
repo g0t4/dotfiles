@@ -164,8 +164,19 @@ aliases['cert_connect'] = cert_connect
 # watch uses an external command, so invoke the same helper directly with Python.
 abbr('watch_cert', f'watch -c -n 2 {$WES_DOTFILES}/.venv/bin/python {$WES_DOTFILES}/.config/xonsh/lib/wes_certificates.py')
 
-# git abbr xonsh only additions until I permanently migrate the rest
+# * git abbrs xonsh only
 abbr('-c', '--create', commands=("git", "switch"))
+#
+# * git bisect
+abbr('gbs', 'git bisect')
+abbr('gbsg', 'git bisect good')
+abbr('gbsb', 'git bisect bad')
+abbr('gbsr', 'git bisect run')
+abbr('gbs_visualize', 'git bisect visualize')
+abbr('gbs_next', 'git bisect next')
+abbr('gbs_skip', 'git bisect skip')
+abbr('gbs_reset', 'git bisect reset')
+abbr('gbs_start', 'git bisect start')
 
 abbr('lsof_stdio', 'sudo lsof -p % -a -d 0,1,2', cursor_marker="%")
 abbr('lsof_stdio_xonsh', 'sudo lsof -p @(os.getpid()) -a -d 0,1,2')  # -a == and (FML b/c you can't have --and)
