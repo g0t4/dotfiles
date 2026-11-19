@@ -1,0 +1,6 @@
+#!/usr/bin/env python3
+
+from xonsh_startup_profile import main
+
+
+raise SystemExit(main())
