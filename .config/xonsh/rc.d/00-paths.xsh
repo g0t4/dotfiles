@@ -44,20 +44,28 @@ ensure_logger_is_setup()
 #         # one way sync XONSH $PATH => os.environ["PATH"]
 #         os.environ["PATH"] = ":".join($PATH)
 
-def _path_move_prepend(*paths):
-    """Put existing directories at the front of PATH, without duplicates."""
+def _path_with_prepend(current, *paths):
+    """Return PATH with existing directories moved to the front."""
     paths = [os.path.abspath(os.path.expanduser(path)) for path in paths]
     paths = [path for path in paths if os.path.isdir(path)]
-    current = [path for path in $PATH if path not in paths]
-    $PATH = paths + current
+    return paths + [path for path in current if path not in paths]
+
+
+def _path_with_append(current, *paths):
+    """Return PATH with existing directories moved to the end."""
+    paths = [os.path.abspath(os.path.expanduser(path)) for path in paths]
+    paths = [path for path in paths if os.path.isdir(path)]
+    return [path for path in current if path not in paths] + paths
+
+
+def _path_move_prepend(*paths):
+    """Put existing directories at the front of PATH, without duplicates."""
+    $PATH = _path_with_prepend(list($PATH), *paths)
 
 
 def _path_move_append(*paths):
     """Put existing directories at the end of PATH, without duplicates."""
-    paths = [os.path.abspath(os.path.expanduser(path)) for path in paths]
-    paths = [path for path in paths if os.path.isdir(path)]
-    current = [path for path in $PATH if path not in paths]
-    $PATH = current + paths
+    $PATH = _path_with_append(list($PATH), *paths)
 
 
 def _env_path_prepend(name, *paths):
@@ -67,11 +75,16 @@ def _env_path_prepend(name, *paths):
     @.env[name] = list(paths) + current
 
 
+_startup_path = list($PATH)
+
+
 if os.path.isfile("/opt/homebrew/bin/brew"):
     $HOMEBREW_PREFIX = "/opt/homebrew"
     $HOMEBREW_CELLAR = "/opt/homebrew/Cellar"
     $HOMEBREW_REPOSITORY = "/opt/homebrew"
-    _path_move_prepend("/opt/homebrew/bin", "/opt/homebrew/sbin")
+    _startup_path = _path_with_prepend(
+        _startup_path, "/opt/homebrew/bin", "/opt/homebrew/sbin"
+    )
 
     # This is the static equivalent of the remaining `brew shellenv` output.
     if @.env.get("MANPATH"):
@@ -103,11 +116,12 @@ for path in (
     os.path.join(home, "repos/github/tree-sitter/tree-sitter/target/release"),
     os.path.join(home, "repos/github/ribru17/ts_query_ls/target/release"),
 ):
-    _path_move_prepend(path)
+    _startup_path = _path_with_prepend(_startup_path, path)
 
 # Preserve the Fish file's debug-directory test and release-directory PATH.
 if os.path.isdir(os.path.join(home, "repos/github/zed-industries/zed/target/debug")):
-    _path_move_prepend(
+    _startup_path = _path_with_prepend(
+        _startup_path,
         os.path.join(home, "repos/github/zed-industries/zed/target/release")
     )
 
@@ -121,24 +135,24 @@ for path in (
     "/opt/homebrew/opt/postgresql@17/bin",
     "/opt/homebrew/share/google-cloud-sdk/bin",
 ):
-    _path_move_prepend(path)
+    _startup_path = _path_with_prepend(_startup_path, path)
 
 llama_bin = os.path.join(home, "repos/github/ggml-org/llama.cpp/build/bin")
 if os.path.isdir(llama_bin):
-    _path_move_prepend(llama_bin)
+    _startup_path = _path_with_prepend(_startup_path, llama_bin)
     $GGUF_MODELS = os.path.join(home, "repos/github/ggml-org/llama.cpp/models")
 
 for path in (
     "/opt/cuda/bin",
     os.path.join(home, ".npm-global/bin"),
 ):
-    _path_move_prepend(path)
+    _startup_path = _path_with_prepend(_startup_path, path)
 
 # Rancher Desktop was the sole append in paths.fish.
-_path_move_append(os.path.join(home, ".rd/bin"))
+_startup_path = _path_with_append(_startup_path, os.path.join(home, ".rd/bin"))
 
 if os.path.exists("/usr/lib/llvm-18/bin"):
-    _path_move_prepend("/usr/lib/llvm-18/bin")
+    _startup_path = _path_with_prepend(_startup_path, "/usr/lib/llvm-18/bin")
 
 
 def use_brew_llvm():
@@ -191,4 +205,7 @@ def _path_list():
             )
 
 # Pip Rot file browser (external command retains native path completion).
-_path_move_prepend(str(XONSH_LIB.resolve().parents[2] / "tools" / "pip-rot"))
+_startup_path = _path_with_prepend(
+    _startup_path, str(XONSH_LIB.resolve().parents[2] / "tools" / "pip-rot")
+)
+$PATH = _startup_path
