@@ -1,4 +1,5 @@
 #!/usr/bin/env xonsh
+import rich
 
 # * ansible
 uv tool install \
@@ -14,7 +15,13 @@ uv tool install huggingface-hub
 uv tool install jina-cli
 uv tool install rich-cli
 uv tool install icdiff
-uv tool install xonsh-lsp
+
+# uv tool install xonsh-lsp
+repo = Path('~/repos/github/g0t4/xonsh-language-server').expanduser()
+if repo.exists():
+    uv tool install --force --editable @(str(repo))
+else:
+    rich.print(f"[bold red]{repo} not cloned; skipping install[/]")
 
 # * previous pipx installs (not using AFAICT right now):
 # uv tool install py-spy
