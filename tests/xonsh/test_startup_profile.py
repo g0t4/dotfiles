@@ -35,3 +35,11 @@ def test_xonsh_command_places_options_before_command():
         "-c",
         "exit",
     ]
+
+
+def test_active_cases_are_centralized_and_drop_completed_xontrib_experiment():
+    assert set(startup_profile.STARTUP_CASES) == {
+        "current",
+        "no_rc",
+        "persistent_command_cache",
+    }

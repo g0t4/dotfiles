@@ -21,6 +21,14 @@ from typing import Sequence
 
 ROOT = Path(__file__).resolve().parents[1]
 RC_DIRECTORY = ROOT / ".config/xonsh/rc.d"
+STARTUP_CASES = {
+    "current": ("Current configuration", ()),
+    "no_rc": ("No rc files", ("--no-rc",)),
+    "persistent_command_cache": (
+        "Persistent command cache",
+        ("-DCOMMANDS_CACHE_SAVE_INTERMEDIATE=True",),
+    ),
+}
 
 
 @dataclass(frozen=True)
@@ -93,19 +101,8 @@ def xonsh_command(xonsh: str, *arguments: str) -> list[str]:
 
 def startup_matrix(xonsh: str, runs: int) -> dict[str, TimingSummary]:
     cases = {
-        "current": xonsh_command(xonsh),
-        "no_rc": xonsh_command(xonsh, "--no-rc"),
-        "xontrib_autoload_disabled": xonsh_command(
-            xonsh, "-DXONTRIBS_AUTOLOAD_DISABLED=True"
-        ),
-        "persistent_command_cache": xonsh_command(
-            xonsh, "-DCOMMANDS_CACHE_SAVE_INTERMEDIATE=True"
-        ),
-        "both_optimizations": xonsh_command(
-            xonsh,
-            "-DXONTRIBS_AUTOLOAD_DISABLED=True",
-            "-DCOMMANDS_CACHE_SAVE_INTERMEDIATE=True",
-        ),
+        name: xonsh_command(xonsh, *arguments)
+        for name, (_label, arguments) in STARTUP_CASES.items()
     }
     return {name: measure(command, runs=runs) for name, command in cases.items()}
 
@@ -212,25 +209,20 @@ def build_snapshot(args) -> dict[str, object]:
     xonsh = shutil.which(requested_xonsh) or requested_xonsh
     matrix = startup_matrix(xonsh, args.runs)
     snapshot: dict[str, object] = {
-        "schema_version": 1,
+        "schema_version": 2,
         "metadata": metadata(xonsh),
         "timings": {name: asdict(value) for name, value in matrix.items()},
         "estimates": {
             "rc_overhead_ms": (
                 matrix["current"].median_ms - matrix["no_rc"].median_ms
             ),
-            "disable_xontrib_autoload_ms": (
-                matrix["current"].median_ms
-                - matrix["xontrib_autoload_disabled"].median_ms
-            ),
-            "persistent_command_cache_ms": (
-                matrix["current"].median_ms
-                - matrix["persistent_command_cache"].median_ms
-            ),
-            "both_optimizations_ms": (
-                matrix["current"].median_ms
-                - matrix["both_optimizations"].median_ms
-            ),
+            **{
+                f"{name}_ms": (
+                    matrix["current"].median_ms - timing.median_ms
+                )
+                for name, timing in matrix.items()
+                if name not in {"current", "no_rc"}
+            },
         },
     }
     if args.deep:
@@ -254,14 +246,7 @@ def render(snapshot: dict[str, object], previous: dict[str, object] | None) -> N
     print()
     print(f"{'Case':29} {'Median':>10} {'Min':>10} {'p95':>10} {'Delta':>10}")
     print("-" * 73)
-    labels = {
-        "current": "Current configuration",
-        "no_rc": "No rc files",
-        "xontrib_autoload_disabled": "Xontrib autoload disabled",
-        "persistent_command_cache": "Persistent command cache",
-        "both_optimizations": "Both optimizations",
-    }
-    for name, label in labels.items():
+    for name, (label, _arguments) in STARTUP_CASES.items():
         timing = timings[name]
         delta = ""
         if name in previous_timings:
