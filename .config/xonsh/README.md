@@ -29,6 +29,42 @@ This makes the export boundary visible in the code. Xonsh uses `XSH.env` when
 constructing environments for child processes. With `UPDATE_OS_ENVIRON` enabled,
 the same assignment is also synchronized into Python's `os.environ`.
 
+`XSH.env` retains typed Python values inside Xonsh. Access through `$NAME` returns
+the same typed value; conventional process-environment interfaces receive its
+detyped string representation:
+
+```python
+import os
+from pathlib import Path
+from xonsh.built_ins import XSH
+
+project_root = Path("/Users/wesdemos/repos/github/g0t4/example")
+XSH.env["PROJECT_ROOT"] = project_root
+
+assert XSH.env["PROJECT_ROOT"] is project_root
+assert isinstance(XSH.env["PROJECT_ROOT"], Path)
+
+# UPDATE_OS_ENVIRON mirrors the detyped value for ordinary Python libraries.
+assert os.getenv("PROJECT_ROOT") == str(project_root)
+assert isinstance(os.getenv("PROJECT_ROOT"), str)
+```
+
+The equivalent access in Xonsh syntax also retains the `Path`:
+
+```xonsh
+assert isinstance($PROJECT_ROOT, Path)
+```
+
+Child processes can only receive strings, so Xonsh detypes the value when it
+constructs their environment as well. This is independent of
+`UPDATE_OS_ENVIRON`; that setting controls the additional in-process mirror into
+Python's `os.environ`.
+
+Names ending in `PATH` are a special case in Xonsh: they normally match its
+`EnvPath` type and detype to an OS-separated path string. Use a name such as
+`PROJECT_ROOT` when the intended in-shell value is one `Path` object rather than
+a path-list environment variable.
+
 Do not use `$NAME = value` in committed configuration files. The `$` syntax is
 fine for ad-hoc commands at the interactive Xonsh prompt, where its shell meaning
 is obvious:
