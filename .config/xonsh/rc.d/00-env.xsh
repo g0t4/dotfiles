@@ -32,6 +32,10 @@ $WES_ASK_CAPTURES = str(Path($XDG_STATE_HOME) / "nvim/ask-openai")
 
 $VI_MODE = True
 
+# All shell features are loaded explicitly from this rc directory. Avoid scanning
+# installed package entry points for xontribs that are not part of this config.
+$XONTRIBS_AUTOLOAD_DISABLED = True
+
 # after running `echo foo` you can do `foo<UP_ARROW>` to select it from history instead of only commands that start with `foo` which is the default behavior
 # I use this to find commands based on an argument value instead of the command
 $XONSH_HISTORY_MATCH_ANYWHERE = True
