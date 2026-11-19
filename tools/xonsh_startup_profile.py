@@ -24,10 +24,6 @@ RC_DIRECTORY = ROOT / ".config/xonsh/rc.d"
 STARTUP_CASES = {
     "current": ("Current configuration", ()),
     "no_rc": ("No rc files", ("--no-rc",)),
-    "persistent_command_cache": (
-        "Persistent command cache",
-        ("-DCOMMANDS_CACHE_SAVE_INTERMEDIATE=True",),
-    ),
 }
 
 
@@ -209,7 +205,7 @@ def build_snapshot(args) -> dict[str, object]:
     xonsh = shutil.which(requested_xonsh) or requested_xonsh
     matrix = startup_matrix(xonsh, args.runs)
     snapshot: dict[str, object] = {
-        "schema_version": 2,
+        "schema_version": 3,
         "metadata": metadata(xonsh),
         "timings": {name: asdict(value) for name, value in matrix.items()},
         "estimates": {

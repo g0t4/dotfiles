@@ -2,9 +2,6 @@
 
 ## Active experiments
 
-- Evaluate `COMMANDS_CACHE_SAVE_INTERMEDIATE=True`. It currently saves roughly
-  30–40 ms, but command discovery must remain correct after PATH changes and tool
-  installs before making it the baseline.
 - Profile the private Xonsh loader. Sourcing eight files from `wes-bootstrap`
   costs roughly 20–30 ms in wall-clock A/B measurements; determine whether direct
   execution can preserve the shared context with less parser and command setup.
@@ -39,3 +36,5 @@ saved JSON snapshot instead of repeatedly benchmarking an already-removed cost.
 - Built PATH in memory and assigned it once.
 - Removed Git and Mercurial subprocesses from prompt repository resolution.
 - Disabled unused xontrib autoload discovery.
+- Enabled Xonsh's persistent command cache after validating cache reuse, command
+  addition/removal, PATH replacement, and auto-venv behavior.

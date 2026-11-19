@@ -37,9 +37,8 @@ def test_xonsh_command_places_options_before_command():
     ]
 
 
-def test_active_cases_are_centralized_and_drop_completed_xontrib_experiment():
+def test_active_cases_are_centralized_and_exclude_completed_experiments():
     assert set(startup_profile.STARTUP_CASES) == {
         "current",
         "no_rc",
-        "persistent_command_cache",
     }

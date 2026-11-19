@@ -36,6 +36,10 @@ $VI_MODE = True
 # installed package entry points for xontribs that are not part of this config.
 $XONTRIBS_AUTOLOAD_DISABLED = True
 
+# Reuse executable listings across shells and rescan PATH directories whose
+# mtimes changed. This avoids rebuilding the complete command cache at startup.
+$COMMANDS_CACHE_SAVE_INTERMEDIATE = True
+
 # after running `echo foo` you can do `foo<UP_ARROW>` to select it from history instead of only commands that start with `foo` which is the default behavior
 # I use this to find commands based on an argument value instead of the command
 $XONSH_HISTORY_MATCH_ANYWHERE = True
