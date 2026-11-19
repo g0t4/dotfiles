@@ -73,6 +73,18 @@ def test_discovery_finds_nested_tool_completion(tmp_path):
     ]
 
 
+def test_discovery_prunes_environment_and_generated_directories(tmp_path):
+    wanted = make_project(tmp_path, "cats", "global")
+    for directory in (".venv", "venv", "node_modules", "__pycache__", ".git"):
+        ignored = tmp_path / "tools" / directory / "xompletions" / "__init__.py"
+        ignored.parent.mkdir(parents=True)
+        ignored.write_text("raise AssertionError('must not be discovered')\n")
+
+    assert discover_xompletion_files([tmp_path]) == [
+        (tmp_path.resolve(), wanted.resolve())
+    ]
+
+
 def test_loader_supports_relative_imports_without_importing_tools(tmp_path):
     make_project(tmp_path, "cats", "native")
     before = set(sys.modules)

@@ -14,7 +14,13 @@ from types import ModuleType
 from urllib.parse import unquote, urlparse
 
 
-XOMPLETION_GLOB = "tools/**/xompletions/__init__.py"
+XOMPLETION_PRUNED_DIRECTORIES = {
+    ".git",
+    ".venv",
+    "__pycache__",
+    "node_modules",
+    "venv",
+}
 
 
 def uv_tool_directory(env: Mapping[str, object] | None = None) -> Path:
@@ -91,13 +97,29 @@ def discover_xompletion_files(roots: Iterable[Path]) -> list[tuple[Path, Path]]:
     matches: list[tuple[Path, Path]] = []
     seen: set[Path] = set()
     for root in roots:
-        if not (root / "tools").is_dir():
+        root = root.resolve()
+        tools = root / "tools"
+        if not tools.is_dir():
             continue
-        for path in sorted(root.glob(XOMPLETION_GLOB)):
+
+        discovered: list[Path] = []
+        for directory, child_directories, files in os.walk(tools):
+            child_directories[:] = sorted(
+                name
+                for name in child_directories
+                if name not in XOMPLETION_PRUNED_DIRECTORIES
+            )
+            path = Path(directory)
+            if path.name != "xompletions" or "__init__.py" not in files:
+                continue
+            discovered.append(path / "__init__.py")
+            child_directories.clear()
+
+        for path in sorted(discovered):
             resolved = path.resolve()
             if resolved not in seen:
                 seen.add(resolved)
-                matches.append((root.resolve(), resolved))
+                matches.append((root, resolved))
     return matches
 
 
