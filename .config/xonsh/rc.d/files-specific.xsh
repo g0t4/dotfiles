@@ -33,6 +33,8 @@ from wes_fzf_pickers import (
     parse_git_ref_token,
     xonsh_env_candidates,
 )
+import re
+from wes_abbreviations import abbr
 
 
 # Entering a directory in command position changes to it without an explicit cd.
@@ -574,3 +576,20 @@ def _files_fzf_picker_bindings(bindings, prompter=None, **_):
 # TODO SKIPPED_MIGRATION: Fish's ls/tree overrides. Delegating them through
 # `fish -ic` loses native TTY/streaming semantics, so stock Xonsh commands remain.
 # TODO SKIPPED_MIGRATION: `complete -c batman -w man`; no Xonsh completion wrapper yet.
+
+
+## loop helpers (i.e. forr30<SPACE> for testing line height, not sure why I dont just use $LINES)
+def forr_abbr(context, _match):
+    # return str(context)
+    count = re.sub(r'^for+', '', context.token)
+
+    response = ""
+    if not count:
+        response += "echo LINES: $(tput lines)\n"
+        response += "echo COLUMNS: $(tput cols)"
+        return response
+    return f"seq 1 {count}"
+
+# forr10 => seq 1 10   # historically I used `forr` as in `for range`
+# for10 => seq 1 10    # but why not allow just `for`
+abbr(re.compile('for+\\d*'), forr_abbr)

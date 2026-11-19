@@ -63,7 +63,6 @@ def register_files_abbreviations():
     abbr('dust_past_month', 'dust --mtime -30')
     abbr('df', 'grc df -h')
     abbr('dfm', 'grc df -h /System/Volumes/Data')
-    abbr(re.compile('forr\\d*'), abbr_from_fish_function('forr_abbr'))
     abbr('findd', 'find . -type d -iname "*%*"', cursor_marker="%")
     abbr('finddr', 'find . -type d -iregex ".*%.*"', cursor_marker="%")
     abbr(re.compile('tree\\d+'), abbr_from_fish_function('treeX'))

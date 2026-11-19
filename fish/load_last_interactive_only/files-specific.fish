@@ -535,18 +535,6 @@ function gpristine_nested_repos
     end
 end
 
-## loop helpers (i.e. forr30<SPACE> for testing line height, not sure why I dont just use $LINES)
-abbr --add forr --regex "forr\d*" --function forr_abbr
-function forr_abbr
-    set count (string replace "forr" "" $argv)
-    if test -z "$count"; or test $count -eq 30
-        echo 'echo LINES: $(tput lines)'
-        echo 'echo COLUMNS: $(tput cols)'
-        return
-    end
-    echo "seq 1 $count"
-end
-
 ##### find helpers #####
 # WIP - new ideas to consider (added when trying to find ~/Library/Application\ Support/*elgato* dirs for streamdeck config)
 # find directories by name
