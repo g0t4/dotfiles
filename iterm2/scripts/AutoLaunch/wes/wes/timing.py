@@ -18,7 +18,7 @@ class Timer:
         else:
             elapsed_ms = elapsed_us / 1000
             duration = f'{elapsed_ms=}'
-        print(f"{self.description}: {duration}")
+        print(f"{duration} {self.description}")
 
     def elapsed_us(self):
         if self.end_ns is None:
