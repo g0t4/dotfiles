@@ -6,10 +6,8 @@ from xonsh.events import events
 import getpass
 import os
 import re
-import shutil
 import signal
 import socket
-import subprocess
 
 # from wes_logging import get_wes_logger
 # log = get_wes_logger("prompt")
@@ -31,19 +29,20 @@ def _prompt_flag(name):
 
 
 def _prompt_repo_info(cwd):
-    """Return (repo root, prefix within repo), falling back to cwd."""
-    if shutil.which("git"):
-        result = subprocess.run(
-            ["git", "-C", cwd, "rev-parse", "--show-toplevel", "--show-prefix"],
-            capture_output=True,
-            text=True,
-        )
-        if result.returncode == 0:
-            lines = result.stdout.splitlines()
-            if lines:
-                return os.path.realpath(lines[0]), (lines[1] if len(lines) > 1 else "").rstrip("/")
+    """Resolve ``~/repos/<host>/<org>/<repo>`` without spawning Git."""
+    cwd = os.path.realpath(cwd)
+    repos = os.path.realpath(os.path.join(os.path.expanduser("~"), "repos"))
+    relative = os.path.relpath(cwd, repos)
+    if relative == os.pardir or relative.startswith(os.pardir + os.sep):
+        return cwd, ""
 
-    return cwd, ""
+    parts = relative.split(os.sep)
+    if len(parts) < 3:
+        return cwd, ""
+
+    root = os.path.join(repos, *parts[:3])
+    prefix = os.path.join(*parts[3:]) if len(parts) > 3 else ""
+    return root, prefix
 
 
 def _prompt_verbose_pwd(cwd):

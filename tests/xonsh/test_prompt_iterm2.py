@@ -32,6 +32,33 @@ def test_disabled_iterm2_integration_does_not_wrap_prompt(tmp_path):
     assert completed.returncode == 0, completed.stderr
 
 
+def test_repo_info_uses_host_org_repo_convention(tmp_path):
+    prompt = ROOT / ".config/xonsh/rc.d/prompt.xsh"
+    repo = tmp_path / "repos/github/g0t4/dotfiles"
+    nested = repo / "tools/syntax-lab"
+    completed = run_xonsh(
+        f"source {prompt}; "
+        f"assert _prompt_repo_info({str(repo)!r}) == ({str(repo)!r}, ''); "
+        f"assert _prompt_repo_info({str(nested)!r}) == "
+        f"({str(repo)!r}, 'tools/syntax-lab')",
+        tmp_path,
+    )
+
+    assert completed.returncode == 0, completed.stderr
+
+
+def test_repo_info_leaves_paths_outside_repo_convention_alone(tmp_path):
+    prompt = ROOT / ".config/xonsh/rc.d/prompt.xsh"
+    outside = tmp_path / "projects/example"
+    completed = run_xonsh(
+        f"source {prompt}; "
+        f"assert _prompt_repo_info({str(outside)!r}) == ({str(outside)!r}, '')",
+        tmp_path,
+    )
+
+    assert completed.returncode == 0, completed.stderr
+
+
 def test_enabled_iterm2_integration_registers_fields_and_wraps_prompt(tmp_path):
     iterm2 = ROOT / ".config/xonsh/rc.d/iterm2.xsh"
     prompt = ROOT / ".config/xonsh/rc.d/prompt.xsh"
