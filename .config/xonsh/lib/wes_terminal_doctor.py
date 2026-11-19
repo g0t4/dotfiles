@@ -1,4 +1,4 @@
-"""Terminal preference checks used by the Xonsh startup doctor."""
+"""Terminal preference checks used by the on-demand Xonsh doctor."""
 
 from __future__ import annotations
 

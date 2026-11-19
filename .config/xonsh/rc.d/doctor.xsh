@@ -13,9 +13,6 @@ from wes_terminal_doctor import (
 )
 
 
-@.env.setdefault("XONSH_ITERM_OPTION_KEY_CHECK", True)
-
-
 def _iterm_option_profile():
     profiles = read_iterm_option_profiles()
     return select_iterm_profile(profiles, @.env.get("ITERM_PROFILE"))
@@ -52,18 +49,3 @@ def _xonsh_doctor_alias(args, stderr=None, **_):
 
 
 aliases["xonsh_doctor"] = _xonsh_doctor_alias
-
-
-if (
-    bool(@.env.get("XONSH_ITERM_OPTION_KEY_CHECK", True))
-    and @.env.get("TERM_PROGRAM") == "iTerm.app"
-):
-    try:
-        _wes_iterm_profile = _iterm_option_profile()
-    except (OSError, RuntimeError, ValueError):
-        _wes_iterm_profile = None
-    if _wes_iterm_profile is not None and not _wes_iterm_profile.left_is_esc_plus:
-        print(
-            "xonsh: warning: iTerm2 Left Option must send Esc+; run xonsh_doctor",
-            file=sys.stderr,
-        )
