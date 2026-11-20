@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import asyncio
+import weakref
 from contextlib import suppress
 
 from prompt_toolkit import PromptSession
@@ -14,14 +15,24 @@ from clanker_voice import PrivateDictation
 class TerminalSteering:
     """Collect complete lines until the model reaches its next response boundary."""
 
-    def __init__(self):
+    def __init__(self, loop=None):
         self.voice = PrivateDictation()
         self.session = PromptSession(
             key_bindings=self.voice.bindings(), bottom_toolbar=self.voice.toolbar
         )
         self.exit_requested = False
         self.unsent_text = ""
-        self.loop = asyncio.new_event_loop()
+        self.owns_loop = loop is None
+        self.loop = loop or asyncio.new_event_loop()
+
+    @classmethod
+    def for_session(cls, session):
+        loop = getattr(session, "_clanker_steering_loop", None)
+        if loop is None or loop.is_closed():
+            loop = asyncio.new_event_loop()
+            session._clanker_steering_loop = loop
+            weakref.finalize(session, loop.close)
+        return cls(loop=loop)
 
     def invoke(self, model, messages):
         return self.loop.run_until_complete(self._invoke(model, messages))
@@ -29,7 +40,8 @@ class TerminalSteering:
     def close(self):
         if not self.loop.is_closed():
             self.loop.run_until_complete(self.voice.close())
-            self.loop.close()
+            if self.owns_loop:
+                self.loop.close()
 
     async def _invoke(self, model, messages):
         model_task = asyncio.create_task(model.ainvoke(messages))

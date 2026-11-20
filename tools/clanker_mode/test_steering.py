@@ -57,6 +57,36 @@ def test_model_rounds_share_one_event_loop_until_steering_closes():
     assert steering.loop.is_closed()
 
 
+def test_separate_turn_prompts_share_session_loop_without_closing_it():
+    class Session:
+        pass
+
+    class Input:
+        async def prompt_async(self, *args, **kwargs):
+            await asyncio.Event().wait()
+
+    class Model:
+        expected_loop = None
+
+        async def ainvoke(self, messages):
+            running = asyncio.get_running_loop()
+            if Model.expected_loop is None:
+                Model.expected_loop = running
+            assert running is Model.expected_loop
+            return AIMessage(content="finished")
+
+    session = Session()
+    for _ in range(2):
+        steering = TerminalSteering.for_session(session)
+        steering.session = Input()
+        answer, _ = steering.invoke(Model(), [])
+        steering.close()
+        assert answer.content == "finished"
+        assert steering.loop.is_closed() is False
+
+    session._clanker_steering_loop.close()
+
+
 def test_unsubmitted_text_carries_to_the_next_steering_prompt():
     class Buffer:
         text = "keep this partial thought"
