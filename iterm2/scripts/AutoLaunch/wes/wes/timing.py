@@ -3,12 +3,13 @@ import time
 
 class Timer:
 
-    def __init__(self, description: str, nested: bool = False):
+    def __init__(self, description: str, nested: bool = False, quiet=False):
         self.description = description
         self.nested = nested
         self.children = []
         self.elapsed_us = 0.0
         self.duration = ""
+        self.quiet = quiet
 
     def __enter__(self):
         self.start_ns = time.time_ns()
@@ -25,7 +26,7 @@ class Timer:
             duration = f'{elapsed_ms=}'
         self.elapsed_us = elapsed_us
         self.duration = duration
-        if not self.nested:
+        if not self.quiet and not self.nested:
             print(f"{duration} {self.description}")
             for c in self.children:
                 # PRN multiple nesting levels
