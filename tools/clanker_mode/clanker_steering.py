@@ -15,6 +15,7 @@ class TerminalSteering:
     def __init__(self):
         self.session = PromptSession()
         self.exit_requested = False
+        self.unsent_text = ""
         self.loop = asyncio.new_event_loop()
 
     def invoke(self, model, messages):
@@ -33,8 +34,10 @@ class TerminalSteering:
                     self.session.prompt_async(
                         HTML("<ansicyan>steer › </ansicyan>"),
                         multiline=False,
+                        default=self.unsent_text,
                     )
                 )
+                self.unsent_text = ""
                 done, _ = await asyncio.wait(
                     {model_task, prompt_task}, return_when=asyncio.FIRST_COMPLETED
                 )
@@ -47,6 +50,7 @@ class TerminalSteering:
                     if text:
                         queued.append(text)
                 else:
+                    self.unsent_text = self._current_buffer_text()
                     prompt_task.cancel()
                     with suppress(asyncio.CancelledError):
                         await prompt_task
@@ -58,6 +62,13 @@ class TerminalSteering:
             with suppress(asyncio.CancelledError):
                 await model_task
             raise
+
+    def _current_buffer_text(self):
+        """Read unfinished input before cancelling prompt_toolkit's prompt."""
+        try:
+            return self.session.app.current_buffer.text
+        except (AttributeError, RuntimeError):
+            return ""
 
 
 def steering_message(messages):

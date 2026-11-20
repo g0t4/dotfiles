@@ -96,6 +96,7 @@ class Session:
         self.turn = 0
         self.messages = []
         self.active = False
+        self.pending_prompt = ""
         directory = Path(directory).expanduser()
         directory.mkdir(parents=True, exist_ok=True, mode=0o700)
         self.path = _create_trace_file(directory, datetime.now().astimezone())

@@ -40,6 +40,12 @@ next model request. A blank steering line is ignored. Tool execution remains on
 the foreground Xonsh thread; steering input is offered during model inference,
 not while a shell tool owns the terminal.
 
+Text still being edited when inference finishes is not submitted or discarded.
+It pre-fills the next steering prompt, or the next `clank ›` prompt when the turn
+has completed. This pending input also survives leaving and re-entering `clank`
+within the same Xonsh process; it is local UI state and is not written to the
+conversation trace until submitted.
+
 `rollback_turn` is also available to the model, and `clank --rollback` or
 `/rollback` invokes the same operation manually. Rollback is context management
 only: it excludes the latest prior active turn from future model requests. The

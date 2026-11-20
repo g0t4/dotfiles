@@ -451,12 +451,17 @@ def clank(args, stdin=None, stdout=None, stderr=None):
                     answer = run_agent(prompt, XSH, **kwargs)
                 finally:
                     if steering is not None:
+                        get_session(XSH, TRACE_DIR).pending_prompt = (
+                            steering.unsent_text
+                        )
                         steering.close()
             if console.is_terminal:
                 console.print(assistant_panel(answer, console.width))
             else:
                 print(answer, file=stdout)
-            return steering is not None and steering.exit_requested
+            if steering is None:
+                return False, ""
+            return steering.exit_requested, steering.unsent_text
 
         if args:
             ask(" ".join(args))
@@ -474,10 +479,20 @@ def clank(args, stdin=None, stdout=None, stderr=None):
         from prompt_toolkit.formatted_text import HTML
 
         repl = PromptSession()
+        session = get_session(XSH, TRACE_DIR)
+        prefill = session.pending_prompt
         while True:
             try:
-                prompt = repl.prompt(HTML("<ansiyellow>clank › </ansiyellow>")).strip()
+                prompt = repl.prompt(
+                    HTML("<ansiyellow>clank › </ansiyellow>"), default=prefill
+                ).strip()
+                session.pending_prompt = ""
+                prefill = ""
             except EOFError:
+                try:
+                    session.pending_prompt = repl.app.current_buffer.text
+                except (AttributeError, RuntimeError):
+                    session.pending_prompt = prefill
                 break
             except KeyboardInterrupt:
                 continue
@@ -510,7 +525,8 @@ def clank(args, stdin=None, stdout=None, stderr=None):
                     print(f"Clanker: {error}", file=stderr or sys.stderr)
                 continue
             try:
-                if ask(prompt):
+                exit_requested, prefill = ask(prompt)
+                if exit_requested:
                     break
             except KeyboardInterrupt:
                 print("Clanker turn interrupted.", file=stderr or sys.stderr)
