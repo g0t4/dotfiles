@@ -2,7 +2,7 @@
 
 from wes_timing import Timer
 
-with Timer("00-private.xsh"):
+with Timer("00-private.xsh", quiet=True):
     from pathlib import Path
     import wes_env
 
