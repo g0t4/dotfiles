@@ -4,8 +4,8 @@ from __future__ import annotations
 
 import io
 import os
-import sys
 import subprocess
+import sys
 import tempfile
 import traceback
 from contextlib import contextmanager, nullcontext, redirect_stderr, redirect_stdout
@@ -23,7 +23,9 @@ very shell's live namespace, not a child process or sandbox; Python and Xonsh
 subprocess syntax are both available; imports, assignments, environment changes,
 aliases, cwd changes and other side effects persist in the user's shell) and
 apply_patch (applies a '*** Begin Patch' / '*** End Patch' diff scoped to the git
-root of the current cwd, for editing repo files).
+root of the current cwd, for editing repo files). rollback_turn removes the latest
+prior completed turn from future conversation context. It retains the trace and
+does not undo shell, filesystem, process, network, or other external side effects.
 Use `from xonsh.built_ins import XSH` to access shell internals: XSH.env (including
 typed environment values), XSH.ctx (Python variables), XSH.aliases, and XSH.history.
 During tool execution, the interactive `cat` alias is temporarily disabled, so
@@ -171,6 +173,24 @@ def make_shell_tool(xsh):
     return execute_in_current_xonsh
 
 
+def make_rollback_tool(session):
+    @tool
+    def rollback_turn() -> str:
+        """Remove the latest prior completed turn from future conversation context.
+
+        This is context management only. The append-only trace is retained, and
+        shell, filesystem, process, network, and other tool side effects are not
+        undone. The current turn containing this tool call always remains.
+        """
+        turn_id = session.rollback_previous_turn()
+        return (
+            f"Rolled back conversation turn {turn_id} from future model context. "
+            "The trace and all external side effects remain unchanged."
+        )
+
+    return rollback_turn
+
+
 # Paths to the apply_patch tooling, wired like ask-openai.nvim. The git root of
 # the current shell cwd scopes patches so apply_patch cannot escape the repo.
 def _apply_patch_binary():
@@ -193,8 +213,6 @@ def apply_patch(patch: str) -> str:
     current working directory; it refuses to touch paths outside that root.
     Errors are returned as text so the model can correct its patch.
     """
-    import subprocess
-
     if not patch or not patch.strip():
         return "apply_patch got empty patch; nothing to do."
 
@@ -202,7 +220,10 @@ def apply_patch(patch: str) -> str:
     repo_root = os.getcwd()
     proc = subprocess.run(
         ["git", "rev-parse", "--show-toplevel"],
-        capture_output=True, text=True, cwd=repo_root,
+        capture_output=True,
+        text=True,
+        cwd=repo_root,
+        check=False,
     )
     if proc.returncode == 0 and proc.stdout.strip():
         repo_root = proc.stdout.strip()
@@ -229,6 +250,7 @@ def apply_patch(patch: str) -> str:
         text=True,
         capture_output=True,
         cwd=repo_root,
+        check=False,
     )
     out = proc.stdout or ""
     err = proc.stderr or ""
@@ -256,7 +278,16 @@ def get_model(xsh):
     )
 
 
-def run_agent(prompt, xsh, *, model=None, trace_dir=None, max_rounds=50, on_event=None):
+def run_agent(
+    prompt,
+    xsh,
+    *,
+    model=None,
+    trace_dir=None,
+    max_rounds=50,
+    on_event=None,
+    steering=None,
+):
     session = get_session(xsh, trace_dir or TRACE_DIR)
     if session.active:
         raise RuntimeError("A Clanker turn is already running in this shell")
@@ -286,19 +317,23 @@ def run_agent(prompt, xsh, *, model=None, trace_dir=None, max_rounds=50, on_even
         emit("thinking")
         model = model if model is not None else get_model(xsh)
         shell_tool = make_shell_tool(xsh)
-        bound = model.bind_tools([shell_tool, apply_patch])
+        rollback_tool = make_rollback_tool(session)
+        bound = model.bind_tools([shell_tool, apply_patch, rollback_tool])
         for round_index in range(max_rounds):
             if round_index:
                 emit("thinking")
-            answer = bound.invoke(session.outbound())
+            if steering is None:
+                answer = bound.invoke(session.outbound())
+                steers = []
+            else:
+                emit("steering_start")
+                answer, steers = steering.invoke(bound, session.outbound())
             session.add_message(answer)
             pending = {call["id"]: call for call in answer.tool_calls}
             emit("assistant", answer)
-            if not answer.tool_calls:
-                if answer.invalid_tool_calls:
-                    raise RuntimeError(
-                        f"Invalid tool calls: {answer.invalid_tool_calls}"
-                    )
+            if not answer.tool_calls and answer.invalid_tool_calls:
+                raise RuntimeError(f"Invalid tool calls: {answer.invalid_tool_calls}")
+            if not answer.tool_calls and not steers:
                 status = "success"
                 return answer.text
             for index, call in enumerate(answer.tool_calls):
@@ -317,6 +352,11 @@ def run_agent(prompt, xsh, *, model=None, trace_dir=None, max_rounds=50, on_even
                         result = apply_patch.invoke(call["args"])
                     except Exception as error:
                         result = f"{type(error).__name__}: {error}"
+                elif call["name"] == rollback_tool.name:
+                    try:
+                        result = rollback_tool.invoke(call["args"])
+                    except Exception as error:
+                        result = f"{type(error).__name__}: {error}"
                 else:
                     result = f"Unknown tool: {call['name']}"
                 result_message = ToolMessage(
@@ -326,6 +366,17 @@ def run_agent(prompt, xsh, *, model=None, trace_dir=None, max_rounds=50, on_even
                 pending.pop(call["id"])
                 executing_call = None
                 emit("tool_result", result_message)
+            if steers:
+                if not answer.tool_calls and answer.text:
+                    emit("assistant_intermediate", answer)
+                from clanker_steering import steering_message
+
+                session.add_message(
+                    HumanMessage(steering_message(steers)),
+                    steering=True,
+                    steering_messages=steers,
+                )
+                emit("steering_queued", steers)
         raise RuntimeError(f"Clanker reached its limit of {max_rounds} model rounds")
     except BaseException as error:
         status = "interrupted" if isinstance(error, KeyboardInterrupt) else "error"
@@ -353,14 +404,16 @@ def run_agent(prompt, xsh, *, model=None, trace_dir=None, max_rounds=50, on_even
 
 
 def clank(args, stdin=None, stdout=None, stderr=None):
-    """Ask Clanker using the current shell state: clank <request>."""
+    """Ask once, or enter Clanker's conversational sub-REPL with bare clank."""
     import sys
 
     from xonsh.built_ins import XSH
 
-    if not args or args == ["--help"]:
+    if args == ["--help"]:
         print(
-            "Usage: clank <request> | clank --clear | clank --trace\nClanker Mode can inspect and change this live Xonsh shell.",
+            "Usage: clank [request] | clank --rollback | clank --clear | clank --trace\n"
+            "Bare clank opens a sub-REPL; Ctrl+D exits. Clanker Mode can inspect "
+            "and change this live Xonsh shell.",
             file=stdout,
         )
         return 0
@@ -374,17 +427,91 @@ def clank(args, stdin=None, stdout=None, stderr=None):
             get_session(XSH, TRACE_DIR).clear()
             print("Clanker conversation cleared; trace retained.", file=stdout)
             return 0
+        if args == ["--rollback"]:
+            turn_id = get_session(XSH, TRACE_DIR).rollback_previous_turn()
+            print(
+                f"Rolled back conversation turn {turn_id}; trace and external side effects retained.",
+                file=stdout,
+            )
+            return 0
         from clanker_display import TurnDisplay, assistant_panel
+        from clanker_steering import TerminalSteering
 
         status_console = Console(file=stderr or sys.stderr)
-        display = TurnDisplay(status_console) if status_console.is_terminal else None
-        with display if display is not None else nullcontext():
-            answer = run_agent(" ".join(args), XSH, on_event=display)
         console = Console(file=stdout)
-        if console.is_terminal:
-            console.print(assistant_panel(answer, console.width))
-        else:
-            print(answer, file=stdout)
+
+        def ask(prompt):
+            display = TurnDisplay(status_console) if status_console.is_terminal else None
+            with display if display is not None else nullcontext():
+                steering = TerminalSteering() if status_console.is_terminal else None
+                kwargs = {"on_event": display}
+                if steering is not None:
+                    kwargs["steering"] = steering
+                answer = run_agent(prompt, XSH, **kwargs)
+            if console.is_terminal:
+                console.print(assistant_panel(answer, console.width))
+            else:
+                print(answer, file=stdout)
+            return steering is not None and steering.exit_requested
+
+        if args:
+            ask(" ".join(args))
+            return 0
+
+        input_stream = stdin or sys.stdin
+        if not input_stream.isatty() or not status_console.is_terminal:
+            print(
+                "Clanker sub-REPL requires an interactive terminal.",
+                file=stderr or sys.stderr,
+            )
+            return 1
+
+        from prompt_toolkit import PromptSession
+        from prompt_toolkit.formatted_text import HTML
+
+        repl = PromptSession()
+        while True:
+            try:
+                prompt = repl.prompt(HTML("<ansiyellow>clank › </ansiyellow>")).strip()
+            except EOFError:
+                break
+            except KeyboardInterrupt:
+                continue
+            if not prompt:
+                break
+            if prompt in {"/exit", "/quit"}:
+                break
+            if prompt == "/help":
+                print(
+                    "Enter a follow-up, or use /rollback, /clear, /trace, /exit. "
+                    "Ctrl+D exits.",
+                    file=stdout,
+                )
+                continue
+            if prompt == "/trace":
+                print(get_session(XSH, TRACE_DIR).path, file=stdout)
+                continue
+            if prompt == "/clear":
+                get_session(XSH, TRACE_DIR).clear()
+                print("Clanker conversation cleared; trace retained.", file=stdout)
+                continue
+            if prompt == "/rollback":
+                try:
+                    turn_id = get_session(XSH, TRACE_DIR).rollback_previous_turn()
+                    print(
+                        f"Rolled back conversation turn {turn_id}; trace and external side effects retained.",
+                        file=stdout,
+                    )
+                except RuntimeError as error:
+                    print(f"Clanker: {error}", file=stderr or sys.stderr)
+                continue
+            try:
+                if ask(prompt):
+                    break
+            except KeyboardInterrupt:
+                print("Clanker turn interrupted.", file=stderr or sys.stderr)
+            except Exception as error:
+                print(f"Clanker: {error}", file=stderr or sys.stderr)
         return 0
     except KeyboardInterrupt:
         print("Clanker interrupted.", file=stderr or sys.stderr)

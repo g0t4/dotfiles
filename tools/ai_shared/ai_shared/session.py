@@ -149,6 +149,36 @@ class Session:
         self.append("context_reset", after_turn_id=self.turn)
         self.messages.clear()
 
+    def rollback_previous_turn(self):
+        """Exclude the latest prior active turn from future model input.
+
+        Trace records and external side effects are intentionally untouched. The
+        system message is session context rather than part of the user-visible
+        turn, so it remains active when the first turn is rolled back in-band.
+        """
+        ceiling = self.turn - 1 if self.active else self.turn
+        candidates = {
+            record["turn_id"]
+            for record in self.messages
+            if record["turn_id"] <= ceiling
+            and record["message"]["role"] != "system"
+        }
+        if not candidates:
+            raise RuntimeError("No prior conversation turn is available to roll back")
+        rolled_back_turn_id = max(candidates)
+        self.messages[:] = [
+            record
+            for record in self.messages
+            if record["turn_id"] != rolled_back_turn_id
+            or record["message"]["role"] == "system"
+        ]
+        self.append(
+            "context_rollback",
+            rolled_back_turn_id=rolled_back_turn_id,
+            during_turn_id=self.turn if self.active else None,
+        )
+        return rolled_back_turn_id
+
 
 def get_session(xsh, directory):
     session = getattr(xsh, "_clanker_mode_session", None)

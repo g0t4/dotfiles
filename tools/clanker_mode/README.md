@@ -13,6 +13,12 @@ clank "Set a Python variable named clanker_greeting to hello"
 print(clanker_greeting)
 ```
 
+Run bare `clank` to enter a conversational sub-REPL. Type follow-ups directly at
+`clank ›` without repeating the command. Ctrl+D or Enter on an empty prompt exits
+only after the current turn is complete; entering `clank` again resumes the same
+in-shell conversation. `/rollback`, `/clear`, `/trace`, and `/exit` are available
+at the idle sub-REPL prompt.
+
 `c` expands to `clank` on Space or Enter through the existing abbreviation system.
 Interactive input starting with `clank` that fails Xonsh syntax parsing is
 dispatched as a literal request, e.g. `clank what does {} mean in c#`. The
@@ -26,6 +32,21 @@ This fallback applies to interactive submissions, not scripts or tool code.
 The next question starts a fresh context in the same trace. A new shell gets its
 own conversation and trace; old shell traces are not automatically resumed.
 Ctrl+C interrupts the turn (already executed changes persist).
+
+While the model is thinking in an interactive terminal, `steer ›` accepts one or
+more messages. Complete lines queue in order until the current model response and
+its tool-result batch finish, then enter the conversation together before the
+next model request. A blank steering line is ignored. Tool execution remains on
+the foreground Xonsh thread; steering input is offered during model inference,
+not while a shell tool owns the terminal.
+
+`rollback_turn` is also available to the model, and `clank --rollback` or
+`/rollback` invokes the same operation manually. Rollback is context management
+only: it excludes the latest prior active turn from future model requests. The
+append-only trace retains the original turn and the rollback event, and no shell,
+filesystem, process, network, or other external side effect is undone. This makes
+it convenient to fork into a small exploration and pull the conversational context
+back afterward, including after accidentally collecting noisy irrelevant output.
 
 The sole tool, `execute_in_current_xonsh`, runs Xonsh source directly against
 `XSH.ctx` on the foreground thread. It can read and change environment variables,

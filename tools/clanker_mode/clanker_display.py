@@ -91,3 +91,13 @@ class TurnDisplay:
             )
         elif event == "tool_result":
             self.console.print(tool_result_panel(payload, self.console.width))
+        elif event == "assistant_intermediate":
+            self.console.print(assistant_panel(payload.text, self.console.width))
+        elif event == "steering_queued":
+            count = len(payload)
+            self.console.print(
+                Text(
+                    f"Queued {count} steering message{'s' if count != 1 else ''}.",
+                    style="dim cyan",
+                )
+            )

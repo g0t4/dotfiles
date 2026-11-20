@@ -117,6 +117,147 @@ def test_clear_preserves_file_and_starts_a_fresh_context(shell, tmp_path, capsys
     assert len(list(tmp_path.glob("*.jsonl"))) == 1
 
 
+def test_manual_rollback_removes_one_turn_from_context_but_retains_trace(
+    shell, tmp_path, capsys
+):
+    run_agent("first question", shell, model=Reply("first answer"), trace_dir=tmp_path)
+    run_agent("second question", shell, model=Reply("second answer"), trace_dir=tmp_path)
+    (path,) = tmp_path.glob("*.jsonl")
+    before = path.read_bytes()
+
+    assert clank(["--rollback"]) == 0
+    assert "external side effects retained" in capsys.readouterr().out
+    assert path.read_bytes().startswith(before)
+
+    next_model = Reply("third answer")
+    run_agent("third question", shell, model=next_model, trace_dir=tmp_path)
+    assert [message.content for message in next_model.inputs[0][1:]] == [
+        "first question",
+        "first answer",
+        "third question",
+    ]
+    records = read_records(path)
+    rollback = next(r for r in records if r["type"] == "context_rollback")
+    assert rollback["rolled_back_turn_id"] == 2
+    assert rollback["during_turn_id"] is None
+    assert any(
+        body["content"] == "second question" for body in message_bodies(records)
+    )
+
+
+def test_model_can_rollback_prior_turn_without_removing_current_turn(shell, tmp_path):
+    run_agent("bad exploration", shell, model=Reply("too much output"), trace_dir=tmp_path)
+
+    class Model(Reply):
+        calls = 0
+
+        def bind_tools(self, tools):
+            assert "rollback_turn" in {tool.name for tool in tools}
+            return self
+
+        def invoke(self, messages):
+            self.inputs.append(deepcopy(messages))
+            self.calls += 1
+            if self.calls == 1:
+                return AIMessage(
+                    content="",
+                    tool_calls=[
+                        {
+                            "id": "rollback",
+                            "name": "rollback_turn",
+                            "args": {},
+                            "type": "tool_call",
+                        }
+                    ],
+                )
+            return AIMessage(content="rolled back")
+
+    model = Model("")
+    assert (
+        run_agent("forget that exploration", shell, model=model, trace_dir=tmp_path)
+        == "rolled back"
+    )
+    assert [message.type for message in model.inputs[1]] == [
+        "system",
+        "human",
+        "ai",
+        "tool",
+    ]
+    assert model.inputs[1][1].content == "forget that exploration"
+    assert "bad exploration" not in [message.content for message in model.inputs[1]]
+    assert "external side effects remain unchanged" in model.inputs[1][-1].content
+    (path,) = tmp_path.glob("*.jsonl")
+    rollback = next(
+        record for record in read_records(path) if record["type"] == "context_rollback"
+    )
+    assert rollback["rolled_back_turn_id"] == 1
+    assert rollback["during_turn_id"] == 2
+
+
+def test_repeated_steering_is_queued_as_one_ordered_message_at_response_boundary(
+    shell, tmp_path
+):
+    class Model(Reply):
+        calls = 0
+
+        def invoke(self, messages):
+            self.inputs.append(deepcopy(messages))
+            self.calls += 1
+            if self.calls == 1:
+                return AIMessage(
+                    content="checking",
+                    tool_calls=[
+                        {
+                            "id": "inspect",
+                            "name": "execute_in_current_xonsh",
+                            "args": {"code": 'print("small result")'},
+                            "type": "tool_call",
+                        }
+                    ],
+                )
+            return AIMessage(content="adjusted")
+
+    class Steering:
+        calls = 0
+
+        def invoke(self, model, messages):
+            self.calls += 1
+            answer = model.invoke(messages)
+            if self.calls == 1:
+                return answer, ["skip hidden directories", "keep the output short"]
+            return answer, []
+
+    model = Model("")
+    assert (
+        run_agent(
+            "inspect this",
+            shell,
+            model=model,
+            trace_dir=tmp_path,
+            steering=Steering(),
+        )
+        == "adjusted"
+    )
+    assert [message.type for message in model.inputs[1][-3:]] == [
+        "ai",
+        "tool",
+        "human",
+    ]
+    assert model.inputs[1][-1].content.endswith(
+        "1. skip hidden directories\n2. keep the output short"
+    )
+    (path,) = tmp_path.glob("*.jsonl")
+    steering_record = next(
+        record
+        for record in read_records(path)
+        if record.get("metadata", {}).get("steering")
+    )
+    assert steering_record["metadata"]["steering_messages"] == [
+        "skip hidden directories",
+        "keep the output short",
+    ]
+
+
 def test_interrupted_tool_calls_are_closed_without_retry_before_followup(
     shell, tmp_path
 ):

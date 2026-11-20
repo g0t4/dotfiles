@@ -37,8 +37,11 @@ def test_agent_tool_roundtrip_and_trace(shell, tmp_path):
         calls = 0
 
         def bind_tools(self, tools):
-            assert len(tools) == 2
-            assert {t.name for t in tools} == {"execute_in_current_xonsh", "apply_patch"}
+            assert {tool.name for tool in tools} == {
+                "execute_in_current_xonsh",
+                "apply_patch",
+                "rollback_turn",
+            }
             return self
 
         def invoke(self, messages):
@@ -347,7 +350,11 @@ def test_agent_queues_command_without_running_it(shell, tmp_path):
 
     class Model:
         def bind_tools(self, tools):
-            assert len(tools) == 2  # Helper uses the existing execution tool + apply_patch.
+            assert {tool.name for tool in tools} == {
+                "execute_in_current_xonsh",
+                "apply_patch",
+                "rollback_turn",
+            }
             return self
 
         def invoke(self, messages):
@@ -631,7 +638,7 @@ def test_capture_large_output_and_mixed_write_order(shell, tmp_path):
 def test_apply_patch_tool_updates_and_adds_files(tmp_path):
     """apply_patch tool scoped to repo root: update and add work."""
     import subprocess
-    from pathlib import Path
+
     from clanker_mode import apply_patch
 
     # Build a temp git repo so apply_patch is scoped to a real root.
