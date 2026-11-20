@@ -15,9 +15,14 @@ class TerminalSteering:
     def __init__(self):
         self.session = PromptSession()
         self.exit_requested = False
+        self.loop = asyncio.new_event_loop()
 
     def invoke(self, model, messages):
-        return asyncio.run(self._invoke(model, messages))
+        return self.loop.run_until_complete(self._invoke(model, messages))
+
+    def close(self):
+        if not self.loop.is_closed():
+            self.loop.close()
 
     async def _invoke(self, model, messages):
         model_task = asyncio.create_task(model.ainvoke(messages))

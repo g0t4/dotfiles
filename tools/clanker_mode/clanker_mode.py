@@ -442,12 +442,16 @@ def clank(args, stdin=None, stdout=None, stderr=None):
 
         def ask(prompt):
             display = TurnDisplay(status_console) if status_console.is_terminal else None
+            steering = TerminalSteering() if status_console.is_terminal else None
             with display if display is not None else nullcontext():
-                steering = TerminalSteering() if status_console.is_terminal else None
                 kwargs = {"on_event": display}
                 if steering is not None:
                     kwargs["steering"] = steering
-                answer = run_agent(prompt, XSH, **kwargs)
+                try:
+                    answer = run_agent(prompt, XSH, **kwargs)
+                finally:
+                    if steering is not None:
+                        steering.close()
             if console.is_terminal:
                 console.print(assistant_panel(answer, console.width))
             else:
