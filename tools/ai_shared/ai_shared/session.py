@@ -9,8 +9,7 @@ from datetime import UTC, datetime
 from pathlib import Path
 from uuid import uuid4
 
-from langchain_core.messages import convert_to_messages
-from langchain_core.messages import SystemMessage
+from langchain_core.messages import SystemMessage, convert_to_messages
 
 
 def timestamp():
@@ -137,15 +136,18 @@ class Session:
         )
         self.messages.append(record)
 
-    def outbound(self):
+    def outbound_bodies(self):
         messages = []
         for record in self.messages:
             body = deepcopy(record["message"])
             if record["turn_id"] < self.turn:
                 body.pop("reasoning_content", None)
             messages.append(body)
+        return messages
+
+    def outbound(self):
         # Our event envelope and metadata never enter the inference request.
-        return convert_to_messages(messages)
+        return convert_to_messages(self.outbound_bodies())
 
     def clear(self):
         if self.active:

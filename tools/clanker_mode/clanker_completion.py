@@ -19,6 +19,7 @@ ROOT_COMMANDS = {
     "--rollback": "Roll back the prior context turn",
     "--clear": "Clear active model context",
     "--trace": "Print this shell's trace path",
+    "--messages": "Dump active conversation JSON",
 }
 
 MANAGE_COMMANDS = {
@@ -30,6 +31,7 @@ MANAGE_COMMANDS = {
     "rollback": "Roll back the prior context turn",
     "clear": "Clear active model context",
     "trace": "Print this shell's trace path",
+    "messages": "Dump active conversation JSON",
 }
 
 REPL_COMMANDS = {
@@ -41,6 +43,7 @@ REPL_COMMANDS = {
     "/rollback": "Roll back the prior context turn",
     "/clear": "Clear active model context",
     "/trace": "Print this shell's trace path",
+    "/messages": "Dump active conversation JSON",
     "/help": "Show sub-REPL controls",
     "/exit": "Leave the sub-REPL",
 }

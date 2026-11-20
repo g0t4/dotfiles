@@ -94,6 +94,10 @@ rollback or clear are not resurrected. Snapshot JSON is user-only (0600) and
 separate from append-only traces. A restore adds a `context_restore` link to the
 current trace; the complete restored messages stay in the snapshot.
 
+Use `clank manage messages` (or `/messages` inside the sub-REPL) to dump the
+active conversation as JSON, including restored messages and tool results.
+The dump can contain private conversation content.
+
 `clank --compact` or `/compact` explicitly asks the current model for a durable
 continuation summary, then reduces active inference context to the original system
 instructions plus that summary. Compaction is never automatic. Original messages

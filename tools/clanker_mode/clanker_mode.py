@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import io
+import json
 import os
 import subprocess
 import sys
@@ -442,11 +443,12 @@ def clank(args, stdin=None, stdout=None, stderr=None):
             "rollback",
             "clear",
             "trace",
+            "messages",
         }
         if len(args) == 1 or args[1] in {"--help", "help"}:
             print(
                 "Usage: clank manage "
-                "<list|save|rename|restore|compact|rollback|clear|trace> [value]",
+                "<list|save|rename|restore|compact|rollback|clear|trace|messages> [value]",
                 file=stdout,
             )
             return 0
@@ -462,7 +464,7 @@ def clank(args, stdin=None, stdout=None, stderr=None):
         print(
             "Usage: clank [request] | clank manage <command> [value]\n"
             "Manage commands: list, save, rename, restore, compact, rollback, "
-            "clear, trace. Legacy --options remain supported.\n"
+            "clear, trace, messages. Legacy --options remain supported.\n"
             "Bare clank opens a sub-REPL; Ctrl+D exits. Clanker Mode can inspect "
             "and change this live Xonsh shell.",
             file=stdout,
@@ -478,6 +480,15 @@ def clank(args, stdin=None, stdout=None, stderr=None):
         session = get_session(XSH, TRACE_DIR)
         saved = SavedConversations(SAVED_DIR)
 
+        def dump_messages():
+            print(
+                json.dumps(session.outbound_bodies(), ensure_ascii=False, indent=2, default=str),
+                file=stdout,
+            )
+
+        if args == ["--messages"]:
+            dump_messages()
+            return 0
         if args == ["--trace"]:
             print(get_session(XSH, TRACE_DIR).path, file=stdout)
             return 0
@@ -606,9 +617,12 @@ def clank(args, stdin=None, stdout=None, stderr=None):
                 print(
                     "Enter a follow-up, or use /save [title], /rename title, "
                     "/restore [title], /list, /compact, /rollback, /clear, "
-                    "/trace, /exit. Ctrl+D exits.",
+                    "/trace, /messages, /exit. Ctrl+D exits.",
                     file=stdout,
                 )
+                continue
+            if prompt == "/messages":
+                dump_messages()
                 continue
             if prompt == "/trace":
                 print(get_session(XSH, TRACE_DIR).path, file=stdout)
