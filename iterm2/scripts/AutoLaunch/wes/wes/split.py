@@ -1,6 +1,7 @@
 import rich
 import os
 from common import *
+from typing import Callable, Awaitable
 
 
 async def close_other_tabs(connection):
@@ -241,7 +242,7 @@ async def wes_split_pane(connection: iterm2.Connection, split_vert: bool = False
 
 
 # *** replace pane (split + close original):
-async def wes_replace_pane(connection: iterm2.Connection, force_local=False):
+async def wes_replace_pane(connection: iterm2.Connection, force_local=False, then: Callable[[], Awaitable[None]] | None = None):
     # Split the current pane, then close the original (focus moves to new pane)
     # effectively "replacing" the current pane with a fresh one
 
@@ -273,13 +274,18 @@ async def wes_replace_pane(connection: iterm2.Connection, force_local=False):
     async def ctrl_d_quit():
         await current_session.async_send_text("\x04")  # ctrl+d (exit)
 
+    then = then or NOOP
     if force_local or not use_ssh:
         await ctrl_d_quit()
+        await then()
         return
 
     await new_session.async_send_text(f"cd {path}; clear\n")
 
     await ctrl_d_quit()
+
+    await then()
+
     # FYI if it was a nested shell, the window will remain open which is fine! let me close it for now
     # - no reason to warn unless I get confused about this later on...
     # - alternative is to keep closing shells (loop) until all nested shells are gone (maybe go this route if I want later)

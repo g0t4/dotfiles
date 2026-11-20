@@ -140,3 +140,8 @@ async def set_font_size(session: iterm2.Session, new_size):
         return
     print("setting font size:", new_size)
     await profile.async_set_normal_font(f"{font_name} {new_size}")
+
+async def NOOP(*args):
+    return
+
+
