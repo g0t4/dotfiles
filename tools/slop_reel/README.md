@@ -59,8 +59,7 @@ move `~/Applications/Slop Reel.app` to Trash; source files and traces remain.
 The editable icon master is [assets/slop-reel.svg](assets/slop-reel.svg).
 `build_icon.py` renders the PNG preview and multi-resolution ICNS used by the app.
 
-Your course clips are in
-`/Users/wesdemos/FCT Dropbox/Wes Higbee/Sync/auto-edit-videos/face2camera/video1/`.
+Your course clips are in `face2camera/video1/`.
 Generated fixtures and derivatives belong under its sibling `slop_reel/` directory;
 original course files are never modified.
 
@@ -185,7 +184,7 @@ useful demo of skipping unchanged spans, browsing event pages, and inspecting di
 Native change-review acceptance check (uses the generated slide fixture):
 
 ```sh
-./tools/slop_reel/.venv/bin/python tools/slop_reel/change_smoke_test.py '/Users/wesdemos/FCT Dropbox/Wes Higbee/Sync/auto-edit-videos/face2camera/slop_reel/slide-changes.mp4'
+./tools/slop_reel/.venv/bin/python tools/slop_reel/change_smoke_test.py 'slide-changes.mp4'
 ```
 
 It checks keyboard jumps in both directions (including rapid repeats), sequence

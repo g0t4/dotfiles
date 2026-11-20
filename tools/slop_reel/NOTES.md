@@ -100,6 +100,6 @@ identify words; treat this as a hypothesis to test, not an assumed capability.
 
 Original course clips: `face2camera/video1/*.mp4`. Preserve them.
 Generated fixtures, sliced/resampled derivatives, and future downloaded test assets:
-`/Users/wesdemos/FCT Dropbox/Wes Higbee/Sync/auto-edit-videos/face2camera/slop_reel/`.
+`face2camera/slop_reel/`.
 Keep provenance and exact ground truth alongside future eval assets. No outside
 media downloads are needed for the initial checks.

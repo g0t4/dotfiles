@@ -26,9 +26,7 @@ if not "XDG_CACHE_HOME" in @.env:
     $XDG_CACHE_HOME = str(_home / ".cache")
 
 $WES_REPOS = str(_home / "repos")
-$WES_BOOTSTRAP = str(Path($WES_REPOS) / "wes-config/wes-bootstrap")
 $WES_DOTFILES = str(Path($WES_REPOS) / "github/g0t4/dotfiles")
-$WES_ASK_CAPTURES = str(Path($XDG_STATE_HOME) / "nvim/ask-openai")
 
 $VI_MODE = True
 

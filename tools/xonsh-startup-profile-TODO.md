@@ -2,9 +2,6 @@
 
 ## Active experiments
 
-- Profile the private Xonsh loader. Sourcing eight files from `wes-bootstrap`
-  costs roughly 20–30 ms in wall-clock A/B measurements; determine whether direct
-  execution can preserve the shared context with less parser and command setup.
 - Remove the Fish subprocess from every `cd` used to update the shared z database.
   A bare Fish launch costs roughly 10–20 ms before the database update itself.
 - Add a native Xonsh F4 binding for the verbose-prompt toggle instead of retaining

@@ -3,13 +3,12 @@
 import argparse
 import json
 import subprocess
+import os
 from pathlib import Path
 
 from PIL import Image, ImageDraw
 
-DEFAULT = Path(
-    "/Users/wesdemos/FCT Dropbox/Wes Higbee/Sync/auto-edit-videos/face2camera/slop_reel"
-)
+DEFAULT = Path(os.getenv("dropbox_sync_dir")) / "auto-edit-videos/face2camera/slop_reel"
 
 
 def generate(directory):
