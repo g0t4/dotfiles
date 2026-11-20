@@ -1,9 +1,15 @@
 import time
 
+
 class Timer:
 
-    def __init__(self, description: str):
+    def __init__(self, description: str, group: bool = False, nested: bool = False):
         self.description = description
+        self.nested = nested
+        self.group = group
+        self.children = []
+        self.elapsed_us = 0.0
+        self.duration = ""
 
     def __enter__(self):
         self.start_ns = time.time_ns()
@@ -18,7 +24,21 @@ class Timer:
         else:
             elapsed_ms = elapsed_us / 1000
             duration = f'{elapsed_ms=}'
-        print(f"{duration} {self.description}")
+        self.elapsed_us = elapsed_us
+        self.duration = duration
+        if not self.nested:
+            print(f"{duration} {self.description}")
+            for c in self.children:
+                # PRN multiple nesting levels
+                print(f"    {c.duration} {c.description}")
+
+    def group(self, description: str):
+        return Timer(description, group=True)
+
+    def nest(self, description: str):
+        child = Timer(description, nested=True)
+        self.children.append(child)
+        return child
 
     def elapsed_us(self):
         if self.end_ns is None:
