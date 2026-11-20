@@ -63,6 +63,27 @@ filesystem, process, network, or other external side effect is undone. This make
 it convenient to fork into a small exploration and pull the conversational context
 back afterward, including after accidentally collecting noisy irrelevant output.
 
+## Saved conversations and compaction
+
+`clank --save [title]` stores the active context as a named snapshot under the
+Clanker state directory. With no title it uses the first user message. Subsequent
+`--save` updates the bound snapshot; `clank --rename <title>` renames it and also
+saves an unsaved conversation. `clank --restore [title-or-unique-fragment]`
+restores a snapshot, while bare `--restore` selects the most reused snapshot.
+`clank --saved` lists snapshots by restore count and recent use. The sub-REPL has
+matching `/save`, `/rename`, `/restore`, and `/saved` commands.
+
+Snapshots contain only the currently active model context, so turns removed by
+rollback or clear are not resurrected. Snapshot JSON is user-only (0600) and
+separate from append-only traces. A restore adds a `context_restore` link to the
+current trace; the complete restored messages stay in the snapshot.
+
+`clank --compact` or `/compact` explicitly asks the current model for a durable
+continuation summary, then reduces active inference context to the original system
+instructions plus that summary. Compaction is never automatic. Original messages
+and a `context_compaction` boundary remain in the trace; shell, filesystem and
+other external state are unaffected.
+
 The sole tool, `execute_in_current_xonsh`, runs Xonsh source directly against
 `XSH.ctx` on the foreground thread. It can read and change environment variables,
 Python variables, aliases, history, cwd, and execute commands with your privileges.

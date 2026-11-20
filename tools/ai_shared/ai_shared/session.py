@@ -10,6 +10,7 @@ from pathlib import Path
 from uuid import uuid4
 
 from langchain_core.messages import convert_to_messages
+from langchain_core.messages import SystemMessage
 
 
 def timestamp():
@@ -97,6 +98,8 @@ class Session:
         self.messages = []
         self.active = False
         self.pending_prompt = ""
+        self.saved_conversation_id = None
+        self.saved_conversation_title = None
         directory = Path(directory).expanduser()
         directory.mkdir(parents=True, exist_ok=True, mode=0o700)
         self.path = _create_trace_file(directory, datetime.now().astimezone())
@@ -149,6 +152,8 @@ class Session:
             raise RuntimeError("Cannot clear a conversation during an active turn")
         self.append("context_reset", after_turn_id=self.turn)
         self.messages.clear()
+        self.saved_conversation_id = None
+        self.saved_conversation_title = None
 
     def rollback_previous_turn(self):
         """Exclude the latest prior active turn from future model input.
@@ -179,6 +184,39 @@ class Session:
             during_turn_id=self.turn if self.active else None,
         )
         return rolled_back_turn_id
+
+    def compact(self, summary):
+        """Replace active inference context with system instructions plus summary."""
+        if self.active:
+            raise RuntimeError("Cannot compact a conversation during an active turn")
+        if not summary.strip():
+            raise RuntimeError("Compaction produced an empty summary")
+        system = next(
+            (
+                record
+                for record in self.messages
+                if record["message"]["role"] == "system"
+                and not record["metadata"].get("compaction")
+            ),
+            None,
+        )
+        if system is None:
+            raise RuntimeError("No conversation is available to compact")
+        before_count = len(self.messages)
+        self.append(
+            "context_compaction",
+            before_message_count=before_count,
+            after_turn_id=self.turn,
+        )
+        body, metadata = serialize_message(
+            SystemMessage(f"Compacted prior conversation context:\n\n{summary.strip()}")
+        )
+        metadata.update(compaction=True, synthetic=True)
+        compacted = self.append(
+            "message", turn_id=self.turn, message=body, metadata=metadata
+        )
+        self.messages[:] = [system, compacted]
+        return before_count
 
 
 def get_session(xsh, directory):

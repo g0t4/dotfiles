@@ -67,6 +67,8 @@ order, even if the wall clock moves backward.
 | `turn_end` | `turn_id`, `status`: `"success"`, `"error"`, or `"interrupted"` |
 | `context_reset` | `after_turn_id`: last allocated turn ID, possibly `0` |
 | `context_rollback` | `rolled_back_turn_id`: turn excluded from future model input; `during_turn_id`: active turn that requested it, or `null` for a manual idle rollback |
+| `context_restore` | `conversation_id`, `title`, and `snapshot_version` identify a separately stored saved-context snapshot |
+| `context_compaction` | `before_message_count` and `after_turn_id` mark replacement of active input by the following synthetic summary message |
 
 Turn IDs increase across context resets. A normal turn starts with `turn_start`
 and ends with `turn_end`. An error record precedes an unsuccessful turn ending.
@@ -77,6 +79,10 @@ in the trace, while the named turn is omitted from subsequent inference requests
 It does not represent or imply reversal of tool side effects. Replaying a trace
 must apply reset and rollback records in sequence to reconstruct the active input
 view.
+
+Restore snapshots live outside the trace; a `context_restore` record is a link,
+not an embedded copy. Compaction keeps original records and appends a synthetic
+system message with `metadata.compaction` and `metadata.synthetic` set to true.
 
 ### Message bodies
 

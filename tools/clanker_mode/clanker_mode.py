@@ -62,6 +62,14 @@ in this shell until the user clears it. Use prior chat, shell state and history
 for continuity when useful.
 """
 TRACE_DIR = Path.home() / ".local/state/nvim/ask-openai/clanker_mode"
+SAVED_DIR = TRACE_DIR / "saved"
+
+COMPACTION_PROMPT = """Create a durable, concise summary of the conversation so far.
+Preserve the user's goals and preferences, decisions and rationale, completed
+changes, exact names or paths still needed, unresolved work, and important safety
+or compatibility boundaries. Omit transient chatter and noisy tool output. Write
+the summary as context for another assistant continuing the conversation. Do not
+call tools and do not address the user."""
 
 
 def replace_commandline(command: str) -> str:
@@ -278,6 +286,21 @@ def get_model(xsh):
     )
 
 
+def compact_session(session, xsh, *, model=None):
+    from langchain_core.messages import HumanMessage
+
+    if session.active:
+        raise RuntimeError("Cannot compact a conversation during an active turn")
+    if not session.messages:
+        raise RuntimeError("No conversation is available to compact")
+    model = model if model is not None else get_model(xsh)
+    answer = model.invoke([*session.outbound(), HumanMessage(COMPACTION_PROMPT)])
+    if answer.tool_calls or answer.invalid_tool_calls:
+        raise RuntimeError("Compaction model returned a tool call instead of a summary")
+    before_count = session.compact(answer.text)
+    return before_count, answer.text
+
+
 def run_agent(
     prompt,
     xsh,
@@ -411,7 +434,9 @@ def clank(args, stdin=None, stdout=None, stderr=None):
 
     if args == ["--help"]:
         print(
-            "Usage: clank [request] | clank --rollback | clank --clear | clank --trace\n"
+            "Usage: clank [request] | clank --save [title] | clank --rename title | "
+            "clank --restore [title] | clank --saved | clank --compact | "
+            "clank --rollback | clank --clear | clank --trace\n"
             "Bare clank opens a sub-REPL; Ctrl+D exits. Clanker Mode can inspect "
             "and change this live Xonsh shell.",
             file=stdout,
@@ -420,25 +445,64 @@ def clank(args, stdin=None, stdout=None, stderr=None):
     try:
         from rich.console import Console
 
+        from clanker_saved import SavedConversations
+
+        status_console = Console(file=stderr or sys.stderr)
+        console = Console(file=stdout)
+        session = get_session(XSH, TRACE_DIR)
+        saved = SavedConversations(SAVED_DIR)
+
         if args == ["--trace"]:
             print(get_session(XSH, TRACE_DIR).path, file=stdout)
             return 0
         if args == ["--clear"]:
-            get_session(XSH, TRACE_DIR).clear()
+            session.clear()
             print("Clanker conversation cleared; trace retained.", file=stdout)
             return 0
         if args == ["--rollback"]:
-            turn_id = get_session(XSH, TRACE_DIR).rollback_previous_turn()
+            turn_id = session.rollback_previous_turn()
             print(
                 f"Rolled back conversation turn {turn_id}; trace and external side effects retained.",
                 file=stdout,
             )
             return 0
+        if args and args[0] == "--save":
+            snapshot = saved.save(session, " ".join(args[1:]).strip() or None)
+            print(f"Saved Clanker conversation: {snapshot['title']}", file=stdout)
+            return 0
+        if args and args[0] == "--rename":
+            snapshot = saved.rename(session, " ".join(args[1:]))
+            print(f"Saved Clanker conversation: {snapshot['title']}", file=stdout)
+            return 0
+        if args and args[0] == "--restore":
+            snapshot = saved.restore(session, " ".join(args[1:]).strip() or None)
+            print(f"Restored Clanker conversation: {snapshot['title']}", file=stdout)
+            return 0
+        if args == ["--saved"]:
+            snapshots = saved.list()
+            if not snapshots:
+                print("No saved Clanker conversations.", file=stdout)
+            for snapshot in snapshots:
+                print(
+                    f"{snapshot.get('restore_count', 0):>3} restores  "
+                    f"{snapshot['updated_at']}  {snapshot['title']}",
+                    file=stdout,
+                )
+            return 0
+        if args == ["--compact"]:
+            with (
+                status_console.status("Compacting Clanker context…")
+                if status_console.is_terminal
+                else nullcontext()
+            ):
+                before_count, _ = compact_session(session, XSH)
+            print(
+                f"Compacted {before_count} messages into durable context; trace retained.",
+                file=stdout,
+            )
+            return 0
         from clanker_display import TurnDisplay, assistant_panel
         from clanker_steering import TerminalSteering
-
-        status_console = Console(file=stderr or sys.stderr)
-        console = Console(file=stdout)
 
         def ask(prompt):
             display = TurnDisplay(status_console) if status_console.is_terminal else None
@@ -484,7 +548,6 @@ def clank(args, stdin=None, stdout=None, stderr=None):
         repl = PromptSession(
             key_bindings=voice.bindings(), bottom_toolbar=voice.toolbar
         )
-        session = get_session(XSH, TRACE_DIR)
         prefill = session.pending_prompt
         while True:
             try:
@@ -507,8 +570,9 @@ def clank(args, stdin=None, stdout=None, stderr=None):
                 break
             if prompt == "/help":
                 print(
-                    "Enter a follow-up, or use /rollback, /clear, /trace, /exit. "
-                    "Ctrl+D exits.",
+                    "Enter a follow-up, or use /save [title], /rename title, "
+                    "/restore [title], /saved, /compact, /rollback, /clear, "
+                    "/trace, /exit. Ctrl+D exits.",
                     file=stdout,
                 )
                 continue
@@ -527,6 +591,56 @@ def clank(args, stdin=None, stdout=None, stderr=None):
                         file=stdout,
                     )
                 except RuntimeError as error:
+                    print(f"Clanker: {error}", file=stderr or sys.stderr)
+                continue
+            if prompt == "/saved":
+                snapshots = saved.list()
+                if not snapshots:
+                    print("No saved Clanker conversations.", file=stdout)
+                for snapshot in snapshots:
+                    print(
+                        f"{snapshot.get('restore_count', 0):>3} restores  "
+                        f"{snapshot['updated_at']}  {snapshot['title']}",
+                        file=stdout,
+                    )
+                continue
+            if prompt == "/save" or prompt.startswith("/save "):
+                try:
+                    snapshot = saved.save(session, prompt[5:].strip() or None)
+                    print(
+                        f"Saved Clanker conversation: {snapshot['title']}", file=stdout
+                    )
+                except Exception as error:
+                    print(f"Clanker: {error}", file=stderr or sys.stderr)
+                continue
+            if prompt == "/rename" or prompt.startswith("/rename "):
+                try:
+                    snapshot = saved.rename(session, prompt[len("/rename") :])
+                    print(
+                        f"Saved Clanker conversation: {snapshot['title']}", file=stdout
+                    )
+                except Exception as error:
+                    print(f"Clanker: {error}", file=stderr or sys.stderr)
+                continue
+            if prompt == "/restore" or prompt.startswith("/restore "):
+                try:
+                    snapshot = saved.restore(session, prompt[8:].strip() or None)
+                    print(
+                        f"Restored Clanker conversation: {snapshot['title']}",
+                        file=stdout,
+                    )
+                except Exception as error:
+                    print(f"Clanker: {error}", file=stderr or sys.stderr)
+                continue
+            if prompt == "/compact":
+                try:
+                    with status_console.status("Compacting Clanker context…"):
+                        before_count, _ = compact_session(session, XSH)
+                    print(
+                        f"Compacted {before_count} messages into durable context; trace retained.",
+                        file=stdout,
+                    )
+                except Exception as error:
                     print(f"Clanker: {error}", file=stderr or sys.stderr)
                 continue
             try:
