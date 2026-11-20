@@ -168,7 +168,8 @@ The dedicated venv is only for development. Runtime imports use Xonsh's own Pyth
 Install the provider there (the sibling provider checkout is also used by uv.lock):
 
 ```sh
-uv pip install --python ~/.local/share/uv/tools/xonsh/bin/python -e ../langchain-llama-server -e tools/syntax-lab
+uv tool install 'xonsh[full]' --with-requirements xonsh/requirements.txt \
+  --with-editable ../langchain-llama-server --with-editable tools/syntax-lab
 ```
 
 Unit/integration tests cover real Xonsh state mutations, exceptions, caller-thread
