@@ -8,12 +8,17 @@ from contextlib import suppress
 from prompt_toolkit import PromptSession
 from prompt_toolkit.formatted_text import HTML
 
+from clanker_voice import PrivateDictation
+
 
 class TerminalSteering:
     """Collect complete lines until the model reaches its next response boundary."""
 
     def __init__(self):
-        self.session = PromptSession()
+        self.voice = PrivateDictation()
+        self.session = PromptSession(
+            key_bindings=self.voice.bindings(), bottom_toolbar=self.voice.toolbar
+        )
         self.exit_requested = False
         self.unsent_text = ""
         self.loop = asyncio.new_event_loop()
@@ -23,6 +28,7 @@ class TerminalSteering:
 
     def close(self):
         if not self.loop.is_closed():
+            self.loop.run_until_complete(self.voice.close())
             self.loop.close()
 
     async def _invoke(self, model, messages):

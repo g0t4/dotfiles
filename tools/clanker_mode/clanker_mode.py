@@ -478,7 +478,12 @@ def clank(args, stdin=None, stdout=None, stderr=None):
         from prompt_toolkit import PromptSession
         from prompt_toolkit.formatted_text import HTML
 
-        repl = PromptSession()
+        from clanker_voice import PrivateDictation
+
+        voice = PrivateDictation()
+        repl = PromptSession(
+            key_bindings=voice.bindings(), bottom_toolbar=voice.toolbar
+        )
         session = get_session(XSH, TRACE_DIR)
         prefill = session.pending_prompt
         while True:
@@ -532,6 +537,7 @@ def clank(args, stdin=None, stdout=None, stderr=None):
                 print("Clanker turn interrupted.", file=stderr or sys.stderr)
             except Exception as error:
                 print(f"Clanker: {error}", file=stderr or sys.stderr)
+        voice.close_nowait()
         return 0
     except KeyboardInterrupt:
         print("Clanker interrupted.", file=stderr or sys.stderr)

@@ -46,6 +46,15 @@ has completed. This pending input also survives leaving and re-entering `clank`
 within the same Xonsh process; it is local UI state and is not written to the
 conversation trace until submitted.
 
+Shift-F7 toggles private voice dictation at both `clank ›` and `steer ›` prompts.
+It connects to the existing `voiced` Unix socket, requires private-dictation
+support, and owns the microphone until Shift-F7 is pressed again. The final
+transcript is inserted at the current cursor in that same editable buffer; it
+does not submit the prompt or enter conversation context by itself. Existing text
+is preserved. A bottom toolbar shows listening/finalizing state and socket or
+microphone errors. Private transcription is routed only to this prompt and is not
+broadcast to Clankerd.
+
 `rollback_turn` is also available to the model, and `clank --rollback` or
 `/rollback` invokes the same operation manually. Rollback is context management
 only: it excludes the latest prior active turn from future model requests. The
