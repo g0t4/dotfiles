@@ -2,6 +2,7 @@ import sys
 from pathlib import Path
 
 import pytest
+from xonsh.completer import Completer
 from xonsh.events import events
 from xonsh.shell import transform_command
 
@@ -61,3 +62,11 @@ def test_invalid_submission_dispatches_literal_text(clanker_input, prompt):
 def test_other_input_is_unchanged(clanker_input, source):
     _, handler = clanker_input
     assert handler(source) is None
+
+
+def test_manage_completion_runs_through_real_xonsh_completer(clanker_input):
+    shell, _ = clanker_input
+    completions, _ = Completer().complete_line("clank manage ")
+    values = {str(completion).strip() for completion in completions}
+    assert {"list", "save", "restore", "compact"} <= values
+    assert "clanker" in shell.completers

@@ -43,7 +43,7 @@ def _clanker_completer(command):
 
     saved = Path.home() / '.local/state/nvim/ask-openai/clanker_mode/saved'
     args = [arg.value for arg in command.args]
-    return [
+    return (
         RichCompletion(
             value,
             prefix_len=len(command.prefix),
@@ -55,7 +55,7 @@ def _clanker_completer(command):
         for value, display, description in shell_candidates(
             args, command.arg_index, command.prefix, saved
         )
-    ]
+    )
 
 
 add_one_completer('clanker', _clanker_completer, 'start')
