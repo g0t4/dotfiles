@@ -194,13 +194,13 @@ async def on_f11(connection: iterm2.Connection):
         log(f'after_restart {was_running=}')
 
         if was_running.is_xonsh():
-            # await was_running.session.async_send_text(":\x1b[A\r")
-            await asyncio.sleep(0)
+            await asyncio.sleep(1) # if you send arrow too soon the prompt won't be ready to up into history... so just wait
+            # TODO check for shell integration status to know when it is safe to send arrow?
             session = await get_current_session(connection)
             if not session:
                 log("NO SESSION found after xonsh restarted... WTF did you shut down iterm?")
                 return
-            await session.async_send_text("suck a fat faggot cock")
+            await session.async_send_text("\x1b[A\r")
             return
 
         if was_running.is_nvim():
