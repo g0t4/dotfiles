@@ -238,7 +238,7 @@ def test_registered_alias_dispatches_inside_shell(shell, monkeypatch, capsys):
         XONSH_LIB=root / ".config/xonsh/lib", sys=sys, aliases=shell.aliases
     )
     shell.execer.exec(
-        (root / ".config/xonsh/rc.d/clanker-mode.xsh").read_text(), glbs=shell.ctx
+        (root / ".config/xonsh/rc.d/clanker-mode.py").read_text(), glbs=shell.ctx
     )
     caller = threading.get_ident()
 
@@ -439,7 +439,7 @@ def test_alias_suppresses_only_known_import_warning_and_restores_filters(
         XONSH_LIB=root / ".config/xonsh/lib", sys=sys, aliases=shell.aliases
     )
     shell.execer.exec(
-        (root / ".config/xonsh/rc.d/clanker-mode.xsh").read_text(), glbs=shell.ctx
+        (root / ".config/xonsh/rc.d/clanker-mode.py").read_text(), glbs=shell.ctx
     )
     message = "'asyncio.iscoroutinefunction' is deprecated and slated for removal in Python 3.16; use inspect.iscoroutinefunction() instead"
     module = "langsmith._internal._beta_decorator"

@@ -38,7 +38,7 @@ def test_vagrant_and_packer_abbreviations_are_available():
 
 def test_hashicorp_rc_registers_with_the_live_abbreviation_registry():
     abbreviations = ROOT / ".config/xonsh/rc.d/abbreviations.xsh"
-    hashicorp = ROOT / ".config/xonsh/rc.d/hashicorp.xsh"
+    hashicorp = ROOT / ".config/xonsh/rc.d/hashicorp.py"
     command = (
         f"source {abbreviations}; source {hashicorp}; "
         "matches = [entry for entry in wes_abbreviations.XONSH_ABBREVIATIONS.abbreviations "

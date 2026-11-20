@@ -58,13 +58,13 @@ the same sample, then verify it on a real file.
 
 ## Daily use in Xonsh
 
-Interactive Xonsh loads `rc.d/syntax-theme.xsh` to make `bat` and interactive
+Interactive Xonsh loads `rc.d/syntax-theme.py` to make `bat` and interactive
 `cat` use this palette for Python (`.py`, `.pyi`), Lua (`.lua`), Xonsh (`.xsh`),
 Bash (`.bash`, `.sh` and common shell startup files), and Markdown. Enable it in
 an existing REPL from the dotfiles root:
 
 ```xonsh
-source .config/xonsh/rc.d/syntax-theme.xsh
+source .config/xonsh/rc.d/syntax-theme.py
 bat tools/syntax-lab/examples/sample.py
 bat tools/syntax-lab/examples/sample.lua
 bat bash/.bashrc

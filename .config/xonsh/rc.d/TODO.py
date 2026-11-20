@@ -22,7 +22,7 @@
 # Performance is the secondary test: measure startup overhead for hot paths, and
 # port only when the bridge is observably costly.
 #
-# Process substitution (implemented in diff-specific.xsh / wes_diff.py):
+# Process substitution (implemented in diff-specific.py / wes_diff.py):
 #   Xonsh has captured subprocess forms but no built-in `<(...)` pathname syntax.
 #   Our `$(producer | psub)` callable alias writes stdin to a tempfile and prints
 #   its path; `events.on_postcommand` removes all substitutions after the outer
@@ -82,7 +82,7 @@
 #   https://xon.sh/completers.html
 
 
-# Completion menu search (implemented in completion-menu.xsh / wes_completion_menu.py):
+# Completion menu search (implemented in completion-menu.py / wes_completion_menu.py):
 #   - Tab collects candidates normally; Ctrl-S opens a separate Filter field.
 #   - Scored subsequence matching searches values, labels, then descriptions.
 #   - Up/Down and Tab/Shift-Tab select; Enter inserts without executing.

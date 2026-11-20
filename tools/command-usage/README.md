@@ -6,7 +6,7 @@ Three components, deliberately independent of GUI history and file pickers:
 - `wes_command_usage.analysis`: deterministic evidence interpretation and non-executing Xonsh source explanation.
 - `wes_command_usage.store.Store`: disposable raw events and a replaceable resource index.
 
-New interactive Xonsh sessions load `.config/xonsh/rc.d/command-usage.xsh`.
+New interactive Xonsh sessions load `.config/xonsh/rc.d/command-usage.py`.
 Already running shells need a restart. Defaults:
 
 ```xonsh

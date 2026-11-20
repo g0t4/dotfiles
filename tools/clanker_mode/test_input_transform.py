@@ -14,7 +14,7 @@ def clanker_input(shell, monkeypatch):
         XONSH_LIB=root / ".config/xonsh/lib", sys=sys, aliases=shell.aliases
     )
     shell.execer.exec(
-        (root / ".config/xonsh/rc.d/clanker-mode.xsh").read_text(), glbs=shell.ctx
+        (root / ".config/xonsh/rc.d/clanker-mode.py").read_text(), glbs=shell.ctx
     )
     handler = shell.ctx["_clanker_literal_syntax_fallback"]
     yield shell, handler

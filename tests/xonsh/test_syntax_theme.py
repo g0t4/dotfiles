@@ -136,7 +136,7 @@ def test_shell_dispatch_uses_theme_and_keeps_explicit_color_override():
 
 
 def test_reload_file_installs_aliases_and_routes_a_real_pipeline():
-    rc = ROOT / '.config/xonsh/rc.d/syntax-theme.xsh'
+    rc = ROOT / '.config/xonsh/rc.d/syntax-theme.py'
     command = f'$XONSH_INTERACTIVE = True; source {rc}; source {rc}; echo \'print("hello")\' | bat -pl py --color=always'
     result = subprocess.run([sys.executable, '-m', 'xonsh', '--no-rc', '-c', command], capture_output=True, text=True, env={**os.environ, 'PYTHONPATH': str(ROOT / '.config/xonsh/lib')})
     assert result.returncode == 0, result.stderr

@@ -48,7 +48,7 @@ def test_playbook_inventory_and_cursor_abbreviations():
 
 def test_ansible_rc_loads_with_abbreviations_and_bridged_functions():
     abbreviations = ROOT / ".config/xonsh/rc.d/abbreviations.xsh"
-    ansibles = ROOT / ".config/xonsh/rc.d/ansibles.xsh"
+    ansibles = ROOT / ".config/xonsh/rc.d/ansibles.py"
     command = (
         f"source {abbreviations}; source {ansibles}; "
         "print(len(wes_abbreviations.XONSH_ABBREVIATIONS.abbreviations)); "

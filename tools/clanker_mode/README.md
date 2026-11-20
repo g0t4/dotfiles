@@ -103,7 +103,7 @@ execution, traces, interruption, and an HTTP tool round trip through the real
 provider. The opt-in live test generates a random hidden environment value and
 asks the model to discover it using its tool; it requires ask.lan to be available.
 
-To disable, remove `.config/xonsh/rc.d/clanker-mode.xsh` and start a new shell.
+To disable, remove `.config/xonsh/rc.d/clanker-mode.py` and start a new shell.
 
 ## Watching agent execution
 

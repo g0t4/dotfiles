@@ -7,7 +7,7 @@ import subprocess
 
 
 ROOT = Path(__file__).parents[2]
-RC = ROOT / ".config/xonsh/rc.d/python-call-completions.xsh"
+RC = ROOT / ".config/xonsh/rc.d/python-call-completions.py"
 LIB = ROOT / ".config/xonsh/lib"
 
 

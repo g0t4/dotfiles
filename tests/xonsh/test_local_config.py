@@ -6,11 +6,13 @@ from pathlib import Path
 
 ROOT = Path(__file__).parents[2]
 LIB = ROOT / ".config/xonsh/lib"
-LOADER = ROOT / ".config/xonsh/rc.d/zzzz-local-config.xsh"
+LOADER = ROOT / ".config/xonsh/rc.d/zzzz-local-config.py"
 
 
 def test_loader_runs_after_global_abbreviation_setup():
-    rc_files = sorted(LOADER.parent.glob("*.xsh"))
+    rc_files = sorted(
+        path for path in LOADER.parent.iterdir() if path.suffix in {".py", ".xsh"}
+    )
     assert rc_files[-1] == LOADER
 
 

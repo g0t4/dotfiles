@@ -127,7 +127,7 @@ def test_repo_root_value_can_drive_cd_without_terminal_codes():
     command = "; ".join((
         f"source {ROOT / '.config/xonsh/rc.d/abbreviations.xsh'}",
         f"source {ROOT / '.config/xonsh/rc.d/files-specific.xsh'}",
-        f"source {ROOT / '.config/xonsh/rc.d/git.xsh'}",
+        f"source {ROOT / '.config/xonsh/rc.d/git.py'}",
         "cd tests",
         "cd $(_repo_root)",
         "print(__import__('os').getcwd())",

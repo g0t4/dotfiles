@@ -243,13 +243,13 @@ def test_all_split_rc_files_load_together():
     rc_files.extend(
         ROOT / f".config/xonsh/rc.d/{name}"
         for name in (
-            "cloud-ai.xsh",
+            "cloud-ai.py",
             "kubernetes.xsh",
-            "media.xsh",
-            "misc-specific.xsh",
+            "media.py",
+            "misc-specific.py",
             "packages-hardware.xsh",
-            "processes.xsh",
-            "system-services.xsh",
+            "processes.py",
+            "system-services.py",
         )
     )
     command = "; ".join(f"source {path}" for path in rc_files)

@@ -88,7 +88,7 @@ def test_real_audio_expanders_and_rc_registration(registry, tmp_path, monkeypatc
     assert 'test.wav' in expand(registry, 'ff_wav').text
     assert '-show_streams' in expand(registry, 'ffpshow_streams').text
     rc = ROOT / '.config/xonsh/rc.d'
-    code = '; '.join(f'source {rc / name}' for name in ('audio-video.xsh', 'http-network.xsh', 'github-cli.xsh'))
+    code = '; '.join(f'source {rc / name}' for name in ('audio-video.py', 'http-network.xsh', 'github-cli.py'))
     code += "; assert XSH.aliases['ffmpeg'] == ['ffmpeg', '-hide_banner']; assert callable(XSH.aliases['gitignores_for'])"
     env = os.environ | {'WES_DOTFILES': str(ROOT), 'PYTHONPATH': str(rc.parent / 'lib')}
     result = subprocess.run(['xonsh', '--no-rc', '-c', code], env=env, capture_output=True, text=True)

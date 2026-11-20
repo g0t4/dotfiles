@@ -1,4 +1,4 @@
-"""Diff helpers, including native Xonsh command-output process substitution."""
+"""Pure-Python diff helpers, including Xonsh command-output substitution."""
 
 import subprocess
 import sys

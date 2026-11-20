@@ -12,9 +12,9 @@ from typing import Callable
 SKIPPED_FISH_FUNCTIONS = {
     # This is a Fish variable event handler, not a user-facing command.
     "on_change_show_verbose_prompt",
-    # z.xsh already provides a state-aware bridge that changes Xonsh's cwd.
+    # z.py already provides a state-aware bridge that changes Xonsh's cwd.
     "z",
-    # processes.xsh installs the native current-shell implementation.
+    # processes.py installs the native current-shell implementation.
     "build_abbrs_for_filetype",
     # python-specific.xsh installs a native wrapper that can change Xonsh's cwd.
     "wcl",

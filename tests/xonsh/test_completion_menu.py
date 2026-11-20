@@ -306,7 +306,7 @@ def test_real_xonsh_bindings_keep_filter_enter_and_escape_local(tmp_path, search
     )
     script.write_text(f"""
 source {rc / "abbreviations.xsh"}
-source {rc / "completion-menu.xsh"}
+source {rc / "completion-menu.py"}
 source {rc / "keybindings.xsh"}
 source {rc / "ai-autosuggest.xsh"}
 source {rc / "voice-intent.xsh"}
