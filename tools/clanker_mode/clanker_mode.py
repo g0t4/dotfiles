@@ -432,11 +432,37 @@ def clank(args, stdin=None, stdout=None, stderr=None):
 
     from xonsh.built_ins import XSH
 
+    if args and args[0] == "manage":
+        commands = {
+            "list",
+            "save",
+            "rename",
+            "restore",
+            "compact",
+            "rollback",
+            "clear",
+            "trace",
+        }
+        if len(args) == 1 or args[1] in {"--help", "help"}:
+            print(
+                "Usage: clank manage "
+                "<list|save|rename|restore|compact|rollback|clear|trace> [value]",
+                file=stdout,
+            )
+            return 0
+        if args[1] not in commands:
+            print(
+                f"Clanker: unknown manage command: {args[1]}",
+                file=stderr or sys.stderr,
+            )
+            return 2
+        args = [f"--{args[1]}", *args[2:]]
+
     if args == ["--help"]:
         print(
-            "Usage: clank [request] | clank --save [title] | clank --rename title | "
-            "clank --restore [title] | clank --saved | clank --compact | "
-            "clank --rollback | clank --clear | clank --trace\n"
+            "Usage: clank [request] | clank manage <command> [value]\n"
+            "Manage commands: list, save, rename, restore, compact, rollback, "
+            "clear, trace. Legacy --options remain supported.\n"
             "Bare clank opens a sub-REPL; Ctrl+D exits. Clanker Mode can inspect "
             "and change this live Xonsh shell.",
             file=stdout,
@@ -478,7 +504,7 @@ def clank(args, stdin=None, stdout=None, stderr=None):
             snapshot = saved.restore(session, " ".join(args[1:]).strip() or None)
             print(f"Restored Clanker conversation: {snapshot['title']}", file=stdout)
             return 0
-        if args == ["--saved"]:
+        if args in (["--list"], ["--saved"]):
             snapshots = saved.list()
             if not snapshots:
                 print("No saved Clanker conversations.", file=stdout)
@@ -542,11 +568,15 @@ def clank(args, stdin=None, stdout=None, stderr=None):
         from prompt_toolkit import PromptSession
         from prompt_toolkit.formatted_text import HTML
 
+        from clanker_completion import ClankerReplCompleter
         from clanker_voice import PrivateDictation
 
         voice = PrivateDictation()
         repl = PromptSession(
-            key_bindings=voice.bindings(), bottom_toolbar=voice.toolbar
+            key_bindings=voice.bindings(),
+            bottom_toolbar=voice.toolbar,
+            completer=ClankerReplCompleter(SAVED_DIR),
+            complete_while_typing=False,
         )
         prefill = session.pending_prompt
         while True:
@@ -571,7 +601,7 @@ def clank(args, stdin=None, stdout=None, stderr=None):
             if prompt == "/help":
                 print(
                     "Enter a follow-up, or use /save [title], /rename title, "
-                    "/restore [title], /saved, /compact, /rollback, /clear, "
+                    "/restore [title], /list, /compact, /rollback, /clear, "
                     "/trace, /exit. Ctrl+D exits.",
                     file=stdout,
                 )
@@ -593,7 +623,7 @@ def clank(args, stdin=None, stdout=None, stderr=None):
                 except RuntimeError as error:
                     print(f"Clanker: {error}", file=stderr or sys.stderr)
                 continue
-            if prompt == "/saved":
+            if prompt in {"/list", "/saved"}:
                 snapshots = saved.list()
                 if not snapshots:
                     print("No saved Clanker conversations.", file=stdout)

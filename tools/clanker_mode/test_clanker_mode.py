@@ -257,8 +257,13 @@ def test_registered_alias_dispatches_inside_shell(shell, monkeypatch, capsys):
     assert shell.ctx["alias_was_here"] is True
     assert "alias worked" in capsys.readouterr().out
     assert shell.aliases["clank"].__xonsh_threadable__ is False
+    assert "clanker" in shell.completers
     assert any(
         ab.trigger == "c" and ab.replacement == "clank"
+        for ab in XONSH_ABBREVIATIONS.abbreviations
+    )
+    assert any(
+        ab.trigger == "cm" and ab.replacement == "clank manage"
         for ab in XONSH_ABBREVIATIONS.abbreviations
     )
 

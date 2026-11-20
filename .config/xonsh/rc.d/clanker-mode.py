@@ -1,4 +1,6 @@
 """Clanker runs inside this Xonsh process; dependencies load only when invoked."""
+from pathlib import Path
+
 _clanker_path = str(XONSH_LIB.resolve().parents[2] / 'tools' / 'clanker_mode')
 if _clanker_path not in sys.path:
     sys.path.insert(0, _clanker_path)
@@ -24,10 +26,39 @@ _clank_alias.__xonsh_threadable__ = False
 aliases['clank'] = _clank_alias
 from wes_abbreviations import abbr
 abbr('c', 'clank')
+abbr('cm', 'clank manage')
 
 
 from xonsh.built_ins import XSH
+from xonsh.completers.completer import add_one_completer
+from xonsh.completers.tools import RichCompletion, contextual_command_completer
 from xonsh.events import events
+
+
+@contextual_command_completer
+def _clanker_completer(command):
+    if command.command != 'clank' or command.arg_index < 1:
+        return None
+    from clanker_completion import shell_candidates
+
+    saved = Path.home() / '.local/state/nvim/ask-openai/clanker_mode/saved'
+    args = [arg.value for arg in command.args]
+    return [
+        RichCompletion(
+            value,
+            prefix_len=len(command.prefix),
+            display=display,
+            description=description,
+            append_space=True,
+            provider='clanker',
+        )
+        for value, display, description in shell_candidates(
+            args, command.arg_index, command.prefix, saved
+        )
+    ]
+
+
+add_one_completer('clanker', _clanker_completer, 'start')
 
 
 @events.on_transform_command

@@ -1,8 +1,26 @@
+import io
+
+import clanker_mode
 from clanker_mode import compact_session, run_agent
 from clanker_saved import SavedConversations
 from clanker_session import get_session
 from test_session import Reply
 from trace_test_helpers import message_bodies, read_records
+
+
+def test_manage_list_and_legacy_list_alias(shell, tmp_path, monkeypatch):
+    monkeypatch.setattr(clanker_mode, "TRACE_DIR", tmp_path / "traces")
+    monkeypatch.setattr(clanker_mode, "SAVED_DIR", tmp_path / "saved")
+
+    managed = io.StringIO()
+    legacy = io.StringIO()
+    assert clanker_mode.clank(["manage", "list"], stdout=managed) == 0
+    assert clanker_mode.clank(["--list"], stdout=legacy) == 0
+    assert managed.getvalue() == legacy.getvalue() == "No saved Clanker conversations.\n"
+
+    errors = io.StringIO()
+    assert clanker_mode.clank(["manage", "unknown"], stderr=errors) == 2
+    assert "unknown manage command" in errors.getvalue()
 
 
 def test_save_restore_and_rename_preserve_active_context(shell, tmp_path):

@@ -65,13 +65,29 @@ back afterward, including after accidentally collecting noisy irrelevant output.
 
 ## Saved conversations and compaction
 
-`clank --save [title]` stores the active context as a named snapshot under the
-Clanker state directory. With no title it uses the first user message. Subsequent
-`--save` updates the bound snapshot; `clank --rename <title>` renames it and also
-saves an unsaved conversation. `clank --restore [title-or-unique-fragment]`
-restores a snapshot, while bare `--restore` selects the most reused snapshot.
-`clank --saved` lists snapshots by restore count and recent use. The sub-REPL has
-matching `/save`, `/rename`, `/restore`, and `/saved` commands.
+Infrequent context controls live under `clank manage`; `cm` expands to that prefix:
+
+```xonsh
+clank manage list
+clank manage save [title]
+clank manage rename <title>
+clank manage restore [title-or-unique-fragment]
+clank manage compact
+```
+
+Save stores the active context as a named snapshot under the Clanker state
+directory. With no title it uses the first user message. Subsequent saves update
+the bound snapshot; rename also saves an unsaved conversation. Bare restore
+selects the most reused snapshot. List sorts snapshots by restore count and recent
+use. The original `--list`, `--saved`, `--save`, `--rename`, `--restore`,
+`--compact`, `--rollback`, `--clear`, and `--trace` spellings remain compatible.
+The sub-REPL has matching `/list`, `/save`, `/rename`, `/restore`, `/compact`,
+`/rollback`, `/clear`, and `/trace` controls; `/saved` remains an alias for `/list`.
+
+Native Xonsh completion describes the management commands and completes saved
+titles after either `clank manage restore` or `clank --restore`. The sub-REPL
+completes slash controls and saved titles after `/restore`; ordinary conversation
+text never receives management completions.
 
 Snapshots contain only the currently active model context, so turns removed by
 rollback or clear are not resurrected. Snapshot JSON is user-only (0600) and
