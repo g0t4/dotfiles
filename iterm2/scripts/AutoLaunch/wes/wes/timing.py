@@ -3,10 +3,9 @@ import time
 
 class Timer:
 
-    def __init__(self, description: str, group: bool = False, nested: bool = False):
+    def __init__(self, description: str, nested: bool = False):
         self.description = description
         self.nested = nested
-        self.group = group
         self.children = []
         self.elapsed_us = 0.0
         self.duration = ""
@@ -31,9 +30,6 @@ class Timer:
             for c in self.children:
                 # PRN multiple nesting levels
                 print(f"    {c.duration} {c.description}")
-
-    def group(self, description: str):
-        return Timer(description, group=True)
 
     def nest(self, description: str):
         child = Timer(description, nested=True)
