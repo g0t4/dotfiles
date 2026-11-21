@@ -1,37 +1,75 @@
-vim.api.nvim_create_user_command("RunEverywhere", function(opts)
-    local run = assert(loadstring(opts.args, ":RunEverywhere"))
-    local self = vim.fn.getpid()
-    local seen = { [self] = true }
-    local errors = {}
-    local count = 0
+-- Format values in their originating editor, including values RPC cannot encode.
+local evaluate = [[
+    local function format_returns(...)
+        local values = {}
+        for i = 1, select("#", ...) do
+            local value = select(i, ...)
+            values[i] = type(value) == "string" and value or vim.inspect(value)
+        end
+        return values
+    end
+    return format_returns(assert(loadstring(..., ":RunEverywhere"))())
+]]
 
-    for _, address in ipairs(vim.fn.serverlist({ peer = true })) do
-        if not vim.tbl_contains(vim.fn.serverlist(), address) then
-            local channel
-            local ok, err = pcall(function()
-                channel = vim.fn.sockconnect("pipe", address, { rpc = true })
-                assert(channel > 0, "could not connect")
-                local pid = vim.rpcrequest(channel, "nvim_call_function", "getpid", {})
-                if not seen[pid] then
-                    seen[pid] = true
-                    -- Discard the chunk's return value, which may not be RPC-serializable.
-                    vim.rpcrequest(channel, "nvim_exec_lua", "assert(loadstring(...))()", { opts.args })
-                    count = count + 1
-                end
-            end)
-            if channel and channel > 0 then vim.fn.chanclose(channel) end
-            if not ok then table.insert(errors, address .. ": " .. tostring(err)) end
+local function run_everywhere(source, title)
+    assert(loadstring(source, ":RunEverywhere"))
+    local self = vim.fn.getpid()
+    local rows = {}
+    local pending = 0
+    local function record(pid, ok, values)
+        rows[pid] = ok and table.concat(values, "  ") or ("Error: " .. tostring(values))
+    end
+
+    local function display()
+        local messages = require("devtools.messages")
+        messages.ensure_open()
+        messages.header(title)
+        local pids = vim.tbl_keys(rows)
+        table.sort(pids)
+        for _, pid in ipairs(pids) do
+            local label = tostring(pid) .. (pid == self and " (here)" or "")
+            messages.append(label .. "  " .. rows[pid])
         end
     end
 
-    local ok, err = pcall(run)
-    if ok then
-        count = count + 1
-    else
-        table.insert(errors, "current instance: " .. tostring(err))
+    -- serverlist({ peer = true }) synchronously probes each editor and can hang
+    -- while one is waiting at a command prompt. Discover its sockets directly.
+    local root = vim.fs.dirname(vim.fn.stdpath("run"))
+    local sockets = vim.fn.globpath(root, "*/nvim.*.0", false, true)
+    local expression = "json_encode(luaeval(" .. vim.fn.string(
+        "assert(loadstring(" .. string.format("%q", evaluate) .. "))(_A)"
+    ) .. ", " .. vim.fn.string(source) .. "))"
+
+    for _, address in ipairs(sockets) do
+        local pid = tonumber(address:match("/nvim%.(%d+)%.0$"))
+        if pid and pid ~= self and vim.uv.kill(pid, 0) == 0 then
+            pending = pending + 1
+            vim.system({ vim.v.progpath, "--server", address, "--remote-expr", expression },
+                { text = true, timeout = 3000 }, vim.schedule_wrap(function(reply)
+                    if reply.code == 0 then
+                        record(pid, pcall(vim.json.decode, reply.stdout))
+                    elseif reply.code == 124 or reply.signal == 15 then
+                        rows[pid] = "No reply within 3s (editor may be busy)"
+                    else
+                        record(pid, false, vim.trim(reply.stderr))
+                    end
+                    pending = pending - 1
+                    if pending == 0 then display() end
+                end))
+        end
     end
 
-    local summary = ("Ran Lua in %d Neovim instance(s)"):format(count)
-    if #errors > 0 then error(summary .. "\n" .. table.concat(errors, "\n")) end
-    print(summary)
-end, { nargs = "+", desc = "Run Lua in every running Neovim instance" })
+    record(self, pcall(assert(loadstring(evaluate)), source))
+    if pending == 0 then display() end
+end
+
+vim.api.nvim_create_user_command("RunEverywhere", function(opts)
+    run_everywhere(opts.args, ":RunEverywhere " .. opts.args)
+end, { nargs = "+", complete = "lua", desc = "Run Lua in every running Neovim instance" })
+
+vim.api.nvim_create_user_command("NvimInstances", function()
+    run_everywhere([[
+        local file = vim.fn.expand("%:p:~")
+        return vim.fn.fnamemodify(vim.fn.getcwd(), ":~"), file ~= "" and file or "[No Name]"
+    ]], "Neovim instances  |  PID  working directory  active file")
+end, { desc = "Show Neovim PIDs, working directories and active files" })
