@@ -128,3 +128,6 @@ vim.api.nvim_create_user_command("NvimInstancesCWD", function(opts)
     end
     instances(command, ":NvimInstancesCWD " .. directory .. " :" .. command, directory)
 end, { nargs = "*", desc = "List or command instances under [directory] [:Ex command]" })
+
+vim.keymap.set("n", "<leader>ni", "<Cmd>NvimInstances<CR>", { desc = "List Neovim instances" })
+vim.keymap.set("n", "<leader>niw", "<Cmd>NvimInstancesCWD<CR>", { desc = "List Neovim instances in this workspace" })
