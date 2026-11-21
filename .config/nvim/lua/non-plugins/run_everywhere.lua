@@ -11,7 +11,7 @@ local evaluate = [[
     return format_returns(assert(loadstring(..., ":RunEverywhere"))())
 ]]
 
-local function run_everywhere(source, title)
+local function run_everywhere(source, title, local_last)
     assert(loadstring(source, ":RunEverywhere"))
     local self = vim.fn.getpid()
     local rows = {}
@@ -30,6 +30,11 @@ local function run_everywhere(source, title)
             local label = tostring(pid) .. (pid == self and " (here)" or "")
             messages.append(label .. "  " .. rows[pid])
         end
+    end
+
+    local function finish()
+        if local_last then record(self, pcall(assert(loadstring(evaluate)), source)) end
+        display()
     end
 
     -- serverlist({ peer = true }) synchronously probes each editor and can hang
@@ -54,22 +59,27 @@ local function run_everywhere(source, title)
                         record(pid, false, vim.trim(reply.stderr))
                     end
                     pending = pending - 1
-                    if pending == 0 then display() end
+                    if pending == 0 then finish() end
                 end))
         end
     end
 
-    record(self, pcall(assert(loadstring(evaluate)), source))
-    if pending == 0 then display() end
+    if not local_last then record(self, pcall(assert(loadstring(evaluate)), source)) end
+    if pending == 0 then finish() end
 end
 
 vim.api.nvim_create_user_command("RunEverywhere", function(opts)
     run_everywhere(opts.args, ":RunEverywhere " .. opts.args)
 end, { nargs = "+", complete = "lua", desc = "Run Lua in every running Neovim instance" })
 
-vim.api.nvim_create_user_command("NvimInstances", function()
+vim.api.nvim_create_user_command("NvimInstances", function(opts)
+    if opts.args ~= "" then
+        local command = opts.args:gsub("^:", "")
+        run_everywhere(("vim.cmd(%q)"):format(command), ":NvimInstances " .. opts.args, true)
+        return
+    end
     run_everywhere([[
         local file = vim.fn.expand("%:p:~")
         return vim.fn.fnamemodify(vim.fn.getcwd(), ":~"), file ~= "" and file or "[No Name]"
     ]], "Neovim instances  |  PID  working directory  active file")
-end, { desc = "Show Neovim PIDs, working directories and active files" })
+end, { nargs = "*", complete = "command", desc = "List Neovim instances or run an Ex command in each" })
