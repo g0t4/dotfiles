@@ -66,16 +66,19 @@ vim.lsp.config("lua", {
     },
 })
 
-vim.lsp.config("pyright", {
-    cmd = { "pyright-langserver", "--stdio" },
+vim.lsp.config("basedpyright", {
+    cmd = { "basedpyright-langserver", "--stdio" },
     filetypes = { "python" },
     root_markers = { "pyrightconfig.json", "pyproject.toml", "setup.py", ".git" },
     workspace_required = false,
     settings = {
-        python = {
+        basedpyright = {
             analysis = {
+                -- Keep Pyright's checking level; Basedpyright defaults to stricter checks.
+                typeCheckingMode = "standard",
                 inlayHints = {
-                    variableTypes = false, parameterTypes = false, functionReturnTypes = false,
+                    variableTypes = false, callArgumentNames = false,
+                    functionReturnTypes = false, genericTypes = false,
                 }
             }
         },
@@ -480,7 +483,7 @@ vim.api.nvim_create_autocmd("LspAttach", {
 
 vim.lsp.enable({
     "lua",
-    "pyright",
+    "basedpyright",
     "xonsh",
     "typescript",
     "docker",

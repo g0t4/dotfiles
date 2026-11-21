@@ -15,6 +15,7 @@ uv tool install huggingface-hub
 uv tool install jina-cli
 uv tool install rich-cli
 uv tool install icdiff
+uv tool install basedpyright
 
 # uv tool install xonsh-lsp
 repo = Path('~/repos/github/g0t4/xonsh-language-server').expanduser()
