@@ -117,17 +117,22 @@ class VoiceIntent:
             try:
                 returncode = await asyncio.to_thread(recorder.wait, 3)
             except subprocess.TimeoutExpired:
+                print("TimeoutExpired")
                 recorder.terminate()
                 try:
                     returncode = await asyncio.to_thread(recorder.wait, 1)
                 except subprocess.TimeoutExpired:
+                    print("TimeoutExpired2")
                     recorder.kill()
                     returncode = await asyncio.to_thread(recorder.wait)
             if returncode not in (0, 255):
-                error = (recorder.stderr.read() if recorder.stderr else b"").decode(
+                stderr = (recorder.stderr.read() if recorder.stderr else b"").decode(
                     errors="replace"
-                )
-                raise RuntimeError(f"audio recording failed: {error.strip()}")
+                ).strip()
+                stdout = (recorder.stdout.read() if recorder.stdout else b"").decode(
+                    errors="replace"
+                ).strip()
+                raise RuntimeError(f"audio recording failed {returncode=}:\n{stderr=}\n{stdout=}")
             if not self.model.exists():
                 raise RuntimeError(f"Whisper model not found: {self.model}")
             completed = await asyncio.to_thread(
