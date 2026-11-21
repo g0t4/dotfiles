@@ -1,4 +1,4 @@
-"""Let the prompt layout request rows as needed during split-pane testing."""
+"""Let the prompt layout request rows as needed."""
 
 from xonsh.built_ins import XSH
 from xonsh.events import events
@@ -8,7 +8,7 @@ from xonsh.tools import to_bool
 XSH.env.register(
     "WES_XONSH_COMPACT_PROMPT",
     type="bool",
-    default=False,
+    default=True,
     doc="Avoid filling idle prompt space with blank lines before a pane resize.",
 )
 
