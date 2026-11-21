@@ -592,4 +592,4 @@ def forr_abbr(context, _match):
 
 # forr10 => seq 1 10   # historically I used `forr` as in `for range`
 # for10 => seq 1 10    # but why not allow just `for`
-abbr(re.compile(r'^(forr+|seq)\d*'), forr_abbr)
+abbr(re.compile(r'^(forr+\d*|seq\d+)'), forr_abbr)
