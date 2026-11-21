@@ -451,3 +451,40 @@ def test_trace_filename_collisions_preserve_existing_files(tmp_path):
     assert original not in paths
     assert original.read_text() == "existing trace\n"
     assert all(path.stat().st_mode & 0o777 == 0o600 for path in paths)
+
+
+@pytest.mark.parametrize("ids", [[None], ["repeat", "repeat"]])
+def test_unusable_call_ids_leave_followup_valid(shell, tmp_path, ids):
+    class Invalid(Reply):
+        def invoke(self, messages):
+            return AIMessage(content="", tool_calls=[
+                {"id": identifier, "name": "execute_in_current_xonsh", "args": {"code": "ran = True"}}
+                for identifier in ids
+            ])
+
+    with pytest.raises(RuntimeError, match="tool call IDs"):
+        run_agent("hello", shell, trace_dir=tmp_path, model=Invalid(""))
+    recovery = Reply("ok")
+    run_agent("try again", shell, trace_dir=tmp_path, model=recovery)
+    assert "ran" not in shell.ctx
+    assert all(not getattr(message, "tool_calls", []) for message in recovery.inputs[0])
+
+
+def test_queued_steering_survives_interrupted_tool_batch(shell, tmp_path):
+    class Steering:
+        def invoke(self, model, messages):
+            return (
+                AIMessage(content="", tool_calls=[{
+                    "id": "one", "name": "execute_in_current_xonsh",
+                    "args": {"code": "raise KeyboardInterrupt()"},
+                }]),
+                ["take another look"],
+            )
+
+    with pytest.raises(KeyboardInterrupt):
+        run_agent("go", shell, model=Reply(""), trace_dir=tmp_path, steering=Steering())
+    followup = Reply("ok")
+    run_agent("continue", shell, model=followup, trace_dir=tmp_path)
+    tail = followup.inputs[0][-3:]
+    assert [msg.type for msg in tail] == ["tool", "human", "human"]
+    assert "take another look" in tail[1].content

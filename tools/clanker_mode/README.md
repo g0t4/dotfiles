@@ -52,8 +52,9 @@ support, and owns the microphone until Shift-F7 is pressed again. The final
 transcript is inserted at the current cursor in that same editable buffer; it
 does not submit the prompt or enter conversation context by itself. Existing text
 is preserved. A bottom toolbar shows listening/finalizing state and socket or
-microphone errors. Private transcription is routed only to this prompt and is not
-broadcast to Clankerd.
+microphone errors. If a model reply arrives during dictation, the steering prompt
+waits for your final transcript before carrying the draft forward. Private
+transcription goes directly to this prompt.
 
 `rollback_turn` is also available to the model, and `clank --rollback` or
 `/rollback` invokes the same operation manually. Rollback is context management
@@ -105,7 +106,7 @@ instructions plus that summary. Compaction is never automatic. Original messages
 and a `context_compaction` boundary remain in the trace; shell, filesystem and
 other external state are unaffected.
 
-The sole tool, `execute_in_current_xonsh`, runs Xonsh source directly against
+The shell tool, `execute_in_current_xonsh`, runs Xonsh source directly against
 `XSH.ctx` on the foreground thread. It can read and change environment variables,
 Python variables, aliases, history, cwd, and execute commands with your privileges.
 There is deliberately no sandbox or subprocess boundary. Print values to return
@@ -144,7 +145,7 @@ Ambiguous model lists require an explicit `$CLANKER_MODEL`; nothing is chosen
 arbitrarily or loaded merely by discovery. Discovery has a 10-second timeout.
 Optional Xonsh environment overrides: `$CLANKER_BASE_URL`, `$CLANKER_MODEL`,
 `$CLANKER_API_KEY`. Uses a 120-second request timeout, no automatic retries,
-and at most 20 model rounds per invocation.
+and at most 50 model rounds per invocation.
 
 Traces live in `~/.local/state/nvim/ask-openai/clanker_mode/`. Names begin with
 local time, for example `2026-11-12_1530.jsonl`. Only collisions add a suffix,

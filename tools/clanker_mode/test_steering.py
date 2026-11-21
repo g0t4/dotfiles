@@ -118,3 +118,84 @@ def test_unsubmitted_text_carries_to_the_next_steering_prompt():
     steering.close()
 
     assert steering.session.defaults == ["", "keep this partial thought"]
+
+
+def test_real_ctrl_c_cancels_model_and_leaves_loop_ready_for_next_turn():
+    import pytest
+    from prompt_toolkit.input import create_pipe_input
+    from prompt_toolkit.output import DummyOutput
+
+    class Model:
+        cancelled = False
+
+        async def ainvoke(self, messages):
+            try:
+                await asyncio.Event().wait()
+            finally:
+                self.cancelled = True
+
+    with create_pipe_input() as pipe:
+        steering = TerminalSteering(input=pipe, output=DummyOutput())
+        model = Model()
+        pipe.send_bytes(b"\x03")
+        try:
+            with pytest.raises(KeyboardInterrupt):
+                steering.invoke(model, [])
+            assert model.cancelled
+            assert not asyncio.all_tasks(steering.loop)
+            steering.loop.run_until_complete(asyncio.sleep(0))
+        finally:
+            steering.close()
+
+
+def test_exit_request_suppresses_prompts_in_later_tool_rounds():
+    class Model:
+        async def ainvoke(self, messages):
+            return AIMessage(content="next round")
+
+    class Input:
+        async def prompt_async(self, *args, **kwargs):
+            raise AssertionError("prompt reopened after EOF")
+
+    steering = TerminalSteering()
+    steering.session = Input()
+    steering.exit_requested = True
+    try:
+        assert steering.invoke(Model(), [])[0].text == "next round"
+    finally:
+        steering.close()
+
+
+def test_voice_final_at_model_boundary_reaches_unsubmitted_draft():
+    from types import SimpleNamespace
+
+    started = asyncio.Event()
+    steering = TerminalSteering()
+    buffer = SimpleNamespace(text="")
+
+    class Input:
+        app = SimpleNamespace(current_buffer=buffer)
+
+        async def prompt_async(self, *args, **kwargs):
+            steering.voice.finished = asyncio.get_running_loop().create_future()
+            started.set()
+            await asyncio.Event().wait()
+
+    class Model:
+        async def ainvoke(self, messages):
+            await started.wait()
+
+            def finish_dictation():
+                buffer.text = "spoken draft"
+                steering.voice.finished.set_result(None)
+
+            asyncio.get_running_loop().call_later(0.02, finish_dictation)
+            return AIMessage(content="done")
+
+    steering.session = Input()
+    try:
+        answer, queued = steering.invoke(Model(), [])
+        assert answer.text == "done" and not queued
+        assert steering.unsent_text == "spoken draft"
+    finally:
+        steering.close()

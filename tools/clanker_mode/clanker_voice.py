@@ -25,7 +25,11 @@ def insert_transcript(buffer, transcript):
         return
     before = buffer.document.text_before_cursor
     prefix = " " if before and not before[-1].isspace() else ""
-    buffer.insert_text(prefix + transcript)
+    after = buffer.document.text_after_cursor
+    suffix = " " if after[:1].isalnum() else ""
+    buffer.insert_text(prefix + transcript + suffix)
+    if suffix:
+        buffer.cursor_left()
 
 
 class PrivateDictation:
@@ -40,6 +44,7 @@ class PrivateDictation:
         self.read_task = None
         self.buffer = None
         self.app = None
+        self.finished = None
 
     def toolbar(self):
         if self.state == "idle":
@@ -67,10 +72,13 @@ class PrivateDictation:
 
     async def toggle(self, buffer, app):
         try:
-            if self.state in {"starting", "listening"}:
+            if self.state == "listening":
                 await self.stop()
             elif self.state == "idle" or self.state == "error":
                 await self.start(buffer, app)
+        except asyncio.CancelledError:
+            await self.close()
+            raise
         except Exception as error:
             self.state = "error"
             self.detail = str(error)
@@ -79,6 +87,7 @@ class PrivateDictation:
             app.invalidate()
 
     async def start(self, buffer, app):
+        self.finished = asyncio.get_running_loop().create_future()
         self.state = "starting"
         self.detail = ""
         self.buffer = buffer
@@ -126,6 +135,7 @@ class PrivateDictation:
                     break
                 self.app.invalidate()
         except asyncio.CancelledError:
+            self.state = "idle"
             raise
         except Exception as error:
             self.state = "error"
@@ -145,6 +155,7 @@ class PrivateDictation:
         return json.loads(line)
 
     async def _disconnect(self, *, from_reader=False):
+        finished = self.finished
         task = self.read_task
         self.read_task = None
         if task is not None and not from_reader and not task.done():
@@ -158,17 +169,9 @@ class PrivateDictation:
             writer.close()
             with suppress(Exception):
                 await writer.wait_closed()
+        if finished is not None and not finished.done():
+            finished.set_result(None)
 
     async def close(self):
         await self._disconnect()
-
-    def close_nowait(self):
-        """Release a prompt-owned connection after its event loop has stopped."""
-        if self.read_task is not None and not self.read_task.done():
-            self.read_task.cancel()
-        if self.writer is not None:
-            self.writer.close()
-        self.reader = None
-        self.writer = None
-        self.read_task = None
         self.state = "idle"

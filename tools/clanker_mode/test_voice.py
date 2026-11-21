@@ -81,3 +81,27 @@ def test_transcript_spacing_preserves_existing_buffer():
     buffer = Buffer(document=Document("hello world", cursor_position=5))
     insert_transcript(buffer, "  from   voice  ")
     assert buffer.text == "hello from voice world"
+
+
+def test_cancelled_voice_reader_releases_socket_and_can_start_again():
+    async def scenario():
+        voice = PrivateDictation()
+        voice.app = App()
+        voice.state = "listening"
+        voice.reader = asyncio.StreamReader()
+        voice.finished = asyncio.get_running_loop().create_future()
+        voice.read_task = asyncio.create_task(voice._read_events())
+        await asyncio.sleep(0)
+        await voice.close()
+        assert voice.reader is None
+        assert voice.finished.done()
+        assert voice.state == "idle"
+
+    asyncio.run(scenario())
+
+
+def test_dictation_before_word_preserves_word_boundary_and_cursor():
+    buffer = Buffer(document=Document("world", cursor_position=0))
+    insert_transcript(buffer, "hello")
+    assert buffer.text == "hello world"
+    assert buffer.cursor_position == len("hello")

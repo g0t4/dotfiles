@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import asyncio
 import io
 import json
 import os
@@ -29,6 +30,9 @@ prior completed turn from future conversation context. It retains the trace and
 does not undo shell, filesystem, process, network, or other external side effects.
 Use `from xonsh.built_ins import XSH` to access shell internals: XSH.env (including
 typed environment values), XSH.ctx (Python variables), XSH.aliases, and XSH.history.
+Read shell variables with native Xonsh syntax (for example, print($PATH)), or
+import XSH and read XSH.env. Python os.getenv/os.environ can differ whenever
+Xonsh has not synchronized its environment to the process.
 During tool execution, the interactive `cat` alias is temporarily disabled, so
 `cat` resolves through PATH to the ordinary executable. It is restored afterward.
 Python output and ordinary external command stdout/stderr are captured and returned
@@ -172,7 +176,7 @@ def make_shell_tool(xsh):
                     alias_scope(xsh.aliases, AGENT_ALIAS_OVERRIDES),
                 ):
                     xsh.execer.exec(code.rstrip() + "\n", glbs=xsh.ctx, locs=xsh.ctx)
-            except Exception:
+            except (Exception, SystemExit):
                 traceback.print_exc(file=output)
             output.flush()
             output.seek(0)
@@ -201,7 +205,7 @@ def make_rollback_tool(session):
 
 
 # Paths to the apply_patch tooling, wired like ask-openai.nvim. The git root of
-# the current shell cwd scopes patches so apply_patch cannot escape the repo.
+# the current shell cwd is the base for validating and applying patch paths.
 def _apply_patch_binary():
     return Path.home() / "repos/github/openai/codex/codex-rs/target/release/apply_patch"
 
@@ -219,7 +223,8 @@ def apply_patch(patch: str) -> str:
     The patch uses the ask-openai '*** Begin Patch' / '*** End Patch' diff format
     (Add/Delete/Update File, hunks with +/-, optional Move to, *** End of File).
     The tool runs in-process in the live shell and is scoped to the repo at the
-    current working directory; it refuses to touch paths outside that root.
+    current working directory (or cwd outside Git). Paths are checked against
+    that root before applying the patch.
     Errors are returned as text so the model can correct its patch.
     """
     if not patch or not patch.strip():
@@ -236,6 +241,19 @@ def apply_patch(patch: str) -> str:
     )
     if proc.returncode == 0 and proc.stdout.strip():
         repo_root = proc.stdout.strip()
+
+    root = Path(repo_root).resolve()
+    for line in patch.split("\n"):
+        header, separator, target = line.strip().partition(": ")
+        if (
+            separator
+            and header in {"*** Add File", "*** Delete File", "*** Update File", "*** Move to"}
+            and (
+                not Path(os.path.abspath(root / target)).is_relative_to(root)
+                or not (root / target).resolve().is_relative_to(root)
+            )
+        ):
+            return f"apply_patch: path outside patch root: {target}"
 
     python = str(Path.home() / "repos/github/g0t4/gpt-oss/.venv/bin/python3")
     wrapper = str(_apply_patch_wrapper())
@@ -323,11 +341,21 @@ def run_agent(
     session.turn += 1
     pending = {}
     executing_call = None
+    steers = []
     status = "error"
 
     def emit(event, payload=None):
         if on_event is not None:
             on_event(event, payload)
+
+    def append_steering(updates):
+        from clanker_steering import steering_message
+
+        session.add_message(
+            HumanMessage(steering_message(updates)),
+            steering=True,
+            steering_messages=updates,
+        )
 
     try:
         session.append("turn_start", turn_id=session.turn)
@@ -356,6 +384,9 @@ def run_agent(
             else:
                 emit("steering_start")
                 answer, steers = steering.invoke(bound, session.outbound())
+            ids = [call["id"] for call in answer.tool_calls]
+            if any(not identifier for identifier in ids) or len(set(ids)) != len(ids):
+                raise RuntimeError("Model returned missing or duplicate tool call IDs")
             session.add_message(answer)
             pending = {call["id"]: call for call in answer.tool_calls}
             emit("assistant", answer)
@@ -397,14 +428,9 @@ def run_agent(
             if steers:
                 if not answer.tool_calls and answer.text:
                     emit("assistant_intermediate", answer)
-                from clanker_steering import steering_message
-
-                session.add_message(
-                    HumanMessage(steering_message(steers)),
-                    steering=True,
-                    steering_messages=steers,
-                )
-                emit("steering_queued", steers)
+                append_steering(steers)
+                delivered, steers = steers, []
+                emit("steering_queued", delivered)
         raise RuntimeError(f"Clanker reached its limit of {max_rounds} model rounds")
     except BaseException as error:
         status = "interrupted" if isinstance(error, KeyboardInterrupt) else "error"
@@ -420,6 +446,8 @@ def run_agent(
                 ToolMessage(content=result, tool_call_id=call["id"], name=call["name"]),
                 synthetic=True,
             )
+        if steers:
+            append_steering(steers)
         session.append(
             "error",
             turn_id=session.turn,
@@ -540,42 +568,52 @@ def clank(args, stdin=None, stdout=None, stderr=None):
                 file=stdout,
             )
             return 0
+        from prompt_toolkit.input import create_input
+        from prompt_toolkit.output import create_output
+
         from clanker_display import TurnDisplay, assistant_panel
         from clanker_steering import TerminalSteering
+
+        input_stream = stdin or sys.stdin
+        interactive = status_console.is_terminal and input_stream.isatty()
+        prompt_io = (
+            {
+                "input": create_input(stdin=input_stream),
+                "output": create_output(stdout=status_console.file),
+            }
+            if interactive
+            else {}
+        )
 
         def ask(prompt):
             display = TurnDisplay(status_console) if status_console.is_terminal else None
             steering = (
-                TerminalSteering.for_session(session)
-                if status_console.is_terminal
+                TerminalSteering.for_session(session, **prompt_io)
+                if interactive
                 else None
             )
             with display if display is not None else nullcontext():
                 kwargs = {"on_event": display}
                 if steering is not None:
                     kwargs["steering"] = steering
+                    steering.unsent_text = session.pending_prompt
                 try:
                     answer = run_agent(prompt, XSH, **kwargs)
                 finally:
                     if steering is not None:
-                        get_session(XSH, TRACE_DIR).pending_prompt = (
-                            steering.unsent_text
-                        )
+                        session.pending_prompt = steering.unsent_text
                         steering.close()
             if console.is_terminal:
                 console.print(assistant_panel(answer, console.width))
             else:
                 print(answer, file=stdout)
-            if steering is None:
-                return False, ""
-            return steering.exit_requested, steering.unsent_text
+            return steering is not None and steering.exit_requested
 
         if args:
             ask(" ".join(args))
             return 0
 
-        input_stream = stdin or sys.stdin
-        if not input_stream.isatty() or not status_console.is_terminal:
+        if not interactive:
             print(
                 "Clanker sub-REPL requires an interactive terminal.",
                 file=stderr or sys.stderr,
@@ -593,23 +631,31 @@ def clank(args, stdin=None, stdout=None, stderr=None):
             key_bindings=voice.bindings(),
             bottom_toolbar=voice.toolbar,
             completer=ClankerReplCompleter(SAVED_DIR),
+            **prompt_io,
             complete_while_typing=False,
         )
-        prefill = session.pending_prompt
+
+        async def read_prompt():
+            try:
+                return await repl.prompt_async(
+                    HTML("<ansiyellow>clank › </ansiyellow>"),
+                    default=session.pending_prompt,
+                )
+            finally:
+                await voice.close()
+
         while True:
             try:
-                prompt = repl.prompt(
-                    HTML("<ansiyellow>clank › </ansiyellow>"), default=prefill
-                ).strip()
+                prompt = asyncio.run(read_prompt()).strip()
                 session.pending_prompt = ""
-                prefill = ""
             except EOFError:
                 try:
                     session.pending_prompt = repl.app.current_buffer.text
                 except (AttributeError, RuntimeError):
-                    session.pending_prompt = prefill
+                    pass
                 break
             except KeyboardInterrupt:
+                session.pending_prompt = ""
                 continue
             if not prompt:
                 break
@@ -623,85 +669,23 @@ def clank(args, stdin=None, stdout=None, stderr=None):
                     file=stdout,
                 )
                 continue
-            if prompt == "/messages":
-                dump_messages()
-                continue
-            if prompt == "/trace":
-                print(get_session(XSH, TRACE_DIR).path, file=stdout)
-                continue
-            if prompt == "/clear":
-                get_session(XSH, TRACE_DIR).clear()
-                print("Clanker conversation cleared; trace retained.", file=stdout)
-                continue
-            if prompt == "/rollback":
-                try:
-                    turn_id = get_session(XSH, TRACE_DIR).rollback_previous_turn()
-                    print(
-                        f"Rolled back conversation turn {turn_id}; trace and external side effects retained.",
-                        file=stdout,
-                    )
-                except RuntimeError as error:
-                    print(f"Clanker: {error}", file=stderr or sys.stderr)
-                continue
-            if prompt in {"/list", "/saved"}:
-                snapshots = saved.list()
-                if not snapshots:
-                    print("No saved Clanker conversations.", file=stdout)
-                for snapshot in snapshots:
-                    print(
-                        f"{snapshot.get('restore_count', 0):>3} restores  "
-                        f"{snapshot['updated_at']}  {snapshot['title']}",
-                        file=stdout,
-                    )
-                continue
-            if prompt == "/save" or prompt.startswith("/save "):
-                try:
-                    snapshot = saved.save(session, prompt[5:].strip() or None)
-                    print(
-                        f"Saved Clanker conversation: {snapshot['title']}", file=stdout
-                    )
-                except Exception as error:
-                    print(f"Clanker: {error}", file=stderr or sys.stderr)
-                continue
-            if prompt == "/rename" or prompt.startswith("/rename "):
-                try:
-                    snapshot = saved.rename(session, prompt[len("/rename") :])
-                    print(
-                        f"Saved Clanker conversation: {snapshot['title']}", file=stdout
-                    )
-                except Exception as error:
-                    print(f"Clanker: {error}", file=stderr or sys.stderr)
-                continue
-            if prompt == "/restore" or prompt.startswith("/restore "):
-                try:
-                    snapshot = saved.restore(session, prompt[8:].strip() or None)
-                    print(
-                        f"Restored Clanker conversation: {snapshot['title']}",
-                        file=stdout,
-                    )
-                except Exception as error:
-                    print(f"Clanker: {error}", file=stderr or sys.stderr)
-                continue
-            if prompt == "/compact":
-                try:
-                    with status_console.status("Compacting Clanker context…"):
-                        before_count, _ = compact_session(session, XSH)
-                    print(
-                        f"Compacted {before_count} messages into durable context; trace retained.",
-                        file=stdout,
-                    )
-                except Exception as error:
-                    print(f"Clanker: {error}", file=stderr or sys.stderr)
+            control, _, value = prompt.partition(" ")
+            if control.startswith("/") and (
+                control[1:] in MANAGE_COMMANDS or control == "/saved"
+            ):
+                command = "list" if control == "/saved" else control[1:]
+                arguments = ["manage", command]
+                if value.strip():
+                    arguments.append(value.strip())
+                clank(arguments, stdin=stdin, stdout=stdout, stderr=stderr)
                 continue
             try:
-                exit_requested, prefill = ask(prompt)
-                if exit_requested:
+                if ask(prompt):
                     break
             except KeyboardInterrupt:
                 print("Clanker turn interrupted.", file=stderr or sys.stderr)
             except Exception as error:
                 print(f"Clanker: {error}", file=stderr or sys.stderr)
-        voice.close_nowait()
         return 0
     except KeyboardInterrupt:
         print("Clanker interrupted.", file=stderr or sys.stderr)

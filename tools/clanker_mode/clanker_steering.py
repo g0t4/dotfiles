@@ -12,13 +12,20 @@ from prompt_toolkit.formatted_text import HTML
 from clanker_voice import PrivateDictation
 
 
+class _PromptInterrupt(Exception):
+    """Keep Ctrl+C inside the prompt task until both tasks have unwound."""
+
+
 class TerminalSteering:
     """Collect complete lines until the model reaches its next response boundary."""
 
-    def __init__(self, loop=None):
+    def __init__(self, loop=None, **prompt_io):
         self.voice = PrivateDictation()
         self.session = PromptSession(
-            key_bindings=self.voice.bindings(), bottom_toolbar=self.voice.toolbar
+            key_bindings=self.voice.bindings(),
+            bottom_toolbar=self.voice.toolbar,
+            interrupt_exception=_PromptInterrupt,
+            **prompt_io,
         )
         self.exit_requested = False
         self.unsent_text = ""
@@ -26,16 +33,25 @@ class TerminalSteering:
         self.loop = loop or asyncio.new_event_loop()
 
     @classmethod
-    def for_session(cls, session):
+    def for_session(cls, session, **prompt_io):
         loop = getattr(session, "_clanker_steering_loop", None)
         if loop is None or loop.is_closed():
             loop = asyncio.new_event_loop()
             session._clanker_steering_loop = loop
             weakref.finalize(session, loop.close)
-        return cls(loop=loop)
+        return cls(loop=loop, **prompt_io)
 
     def invoke(self, model, messages):
-        return self.loop.run_until_complete(self._invoke(model, messages))
+        task = self.loop.create_task(self._invoke(model, messages))
+        try:
+            return self.loop.run_until_complete(task)
+        except _PromptInterrupt:
+            raise KeyboardInterrupt from None
+        except KeyboardInterrupt:
+            task.cancel()
+            with suppress(asyncio.CancelledError):
+                self.loop.run_until_complete(task)
+            raise
 
     def close(self):
         if not self.loop.is_closed():
@@ -44,8 +60,11 @@ class TerminalSteering:
                 self.loop.close()
 
     async def _invoke(self, model, messages):
+        if self.exit_requested:
+            return await model.ainvoke(messages), []
         model_task = asyncio.create_task(model.ainvoke(messages))
         queued = []
+        prompt_task = None
         try:
             while not model_task.done():
                 prompt_task = asyncio.create_task(
@@ -59,7 +78,19 @@ class TerminalSteering:
                 done, _ = await asyncio.wait(
                     {model_task, prompt_task}, return_when=asyncio.FIRST_COMPLETED
                 )
-                if prompt_task in done:
+                if model_task in done and prompt_task not in done:
+                    # The current buffer owns private dictation. Give its final
+                    # transcript time to arrive before copying the draft.
+                    finished = self.voice.finished
+                    if (
+                        finished is not None
+                        and not finished.done()
+                        and model_task.exception() is None
+                    ):
+                        await asyncio.wait(
+                            {prompt_task, finished}, return_when=asyncio.FIRST_COMPLETED
+                        )
+                if prompt_task.done():
                     try:
                         text = prompt_task.result().strip()
                     except EOFError:
@@ -76,9 +107,13 @@ class TerminalSteering:
                     break
             return await model_task, queued
         except BaseException:
+            if prompt_task is not None and not prompt_task.done():
+                self.unsent_text = self._current_buffer_text()
+                prompt_task.cancel()
+            self.unsent_text = "\n".join(filter(None, [*queued, self.unsent_text]))
             model_task.cancel()
-            with suppress(asyncio.CancelledError):
-                await model_task
+            tasks = [model_task] if prompt_task is None else [model_task, prompt_task]
+            await asyncio.gather(*tasks, return_exceptions=True)
             raise
 
     def _current_buffer_text(self):
@@ -93,5 +128,7 @@ def steering_message(messages):
     """Combine ordered submissions into one unambiguous user update."""
     if len(messages) == 1:
         return f"Steering received while you were working:\n\n{messages[0]}"
-    items = "\n".join(f"{index}. {message}" for index, message in enumerate(messages, 1))
+    items = "\n".join(
+        f"{index}. {message}" for index, message in enumerate(messages, 1)
+    )
     return f"Steering received while you were working, in order:\n\n{items}"

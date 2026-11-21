@@ -672,3 +672,25 @@ def test_apply_patch_tool_updates_and_adds_files(tmp_path):
     assert (repo / "hello.txt").read_text() == "new line\n"
     assert (repo / "new.py").exists()
     assert "Success" in result or "Updated" in result
+
+
+def test_patch_validates_all_destinations_before_changing_files(tmp_path, monkeypatch):
+    from clanker_mode import apply_patch
+
+    repo = tmp_path / "repo"
+    repo.mkdir()
+    monkeypatch.chdir(repo)
+    (repo / "linked").symlink_to(tmp_path, target_is_directory=True)
+    for destination in ["../other", "linked/other", str(tmp_path / "other")]:
+        result = apply_patch.invoke({"patch": (
+            "*** Begin Patch\n*** Add File: one\n+first\n"
+            f"*** Update File: two\n*** Move to: {destination}\n-old\n+new\n*** End Patch"
+        )})
+        assert "outside patch root" in result
+        assert not (repo / "one").exists()
+
+
+def test_shell_tool_contains_python_system_exit(shell):
+    tool = make_shell_tool(shell)
+    assert "SystemExit: 2" in tool.invoke({"code": "raise SystemExit(2)"})
+    assert tool.invoke({"code": "print('still running')"}) == "still running\n"

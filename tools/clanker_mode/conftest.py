@@ -5,6 +5,14 @@ from xonsh.built_ins import XSH
 from xonsh.main import setup
 
 
+@pytest.fixture(autouse=True)
+def isolated_clanker_state(tmp_path, monkeypatch):
+    import clanker_mode
+
+    monkeypatch.setattr(clanker_mode, "TRACE_DIR", tmp_path / "traces")
+    monkeypatch.setattr(clanker_mode, "SAVED_DIR", tmp_path / "saved")
+
+
 @pytest.fixture
 def shell():
     setup(
