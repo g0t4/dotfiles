@@ -46,7 +46,8 @@ def _clanker_completer(command):
     return (
         RichCompletion(
             value,
-            prefix_len=len(command.prefix),
+            prefix_len=len(command.raw_prefix),
+            append_closing_quote=False,
             display=display,
             description=description,
             append_space=True,

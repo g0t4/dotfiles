@@ -292,13 +292,17 @@ def compact_session(session, xsh, *, model=None):
 
     if session.active:
         raise RuntimeError("Cannot compact a conversation during an active turn")
-    if not session.messages:
+    if not session.has_conversation():
         raise RuntimeError("No conversation is available to compact")
     model = model if model is not None else get_model(xsh)
     answer = model.invoke([*session.outbound(), HumanMessage(COMPACTION_PROMPT)])
     if answer.tool_calls or answer.invalid_tool_calls:
         raise RuntimeError("Compaction model returned a tool call instead of a summary")
+    from clanker_saved import conversation_title
+
+    title = session.saved_conversation_title or conversation_title(session)
     before_count = session.compact(answer.text)
+    session.saved_conversation_title = title
     return before_count, answer.text
 
 
@@ -433,18 +437,9 @@ def clank(args, stdin=None, stdout=None, stderr=None):
 
     from xonsh.built_ins import XSH
 
+    from clanker_completion import MANAGE_COMMANDS, ROOT_COMMANDS
+
     if args and args[0] == "manage":
-        commands = {
-            "list",
-            "save",
-            "rename",
-            "restore",
-            "compact",
-            "rollback",
-            "clear",
-            "trace",
-            "messages",
-        }
         if len(args) == 1 or args[1] in {"--help", "help"}:
             print(
                 "Usage: clank manage "
@@ -452,13 +447,21 @@ def clank(args, stdin=None, stdout=None, stderr=None):
                 file=stdout,
             )
             return 0
-        if args[1] not in commands:
+        if args[1] not in MANAGE_COMMANDS:
             print(
                 f"Clanker: unknown manage command: {args[1]}",
                 file=stderr or sys.stderr,
             )
             return 2
         args = [f"--{args[1]}", *args[2:]]
+
+    if (
+        len(args) > 1
+        and (args[0] in ROOT_COMMANDS or args[0] == "--saved")
+        and args[0] not in {"--save", "--rename", "--restore"}
+    ):
+        print(f"Clanker: {args[0]} takes no arguments", file=stderr or sys.stderr)
+        return 2
 
     if args == ["--help"]:
         print(

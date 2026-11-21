@@ -11,6 +11,10 @@ def write_snapshot(directory, title, restores, updated):
     path.write_text(
         json.dumps(
             {
+                "version": 1,
+                "conversation_id": path.stem,
+                "created_at": updated,
+                "messages": [{"message": {"role": "user", "content": title}, "metadata": {}}],
                 "title": title,
                 "restore_count": restores,
                 "updated_at": updated,

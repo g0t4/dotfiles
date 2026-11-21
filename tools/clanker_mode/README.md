@@ -89,8 +89,9 @@ titles after either `clank manage restore` or `clank --restore`. The sub-REPL
 completes slash controls and saved titles after `/restore`; ordinary conversation
 text never receives management completions.
 
-Snapshots contain only the currently active model context, so turns removed by
-rollback or clear are not resurrected. Snapshot JSON is user-only (0600) and
+Save captures the current active context and excludes turns removed by rollback
+or clear. You can save immediately after compacting. Restore preserves individual
+turns for rollback, including in older snapshots saved after a restore. Snapshot JSON is user-only (0600) and
 separate from append-only traces. A restore adds a `context_restore` link to the
 current trace; the complete restored messages stay in the snapshot.
 

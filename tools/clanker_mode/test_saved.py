@@ -1,5 +1,7 @@
 import io
 
+import pytest
+
 import clanker_mode
 from clanker_mode import compact_session, run_agent
 from clanker_saved import SavedConversations
@@ -95,3 +97,62 @@ def test_compaction_replaces_input_view_but_retains_original_trace(shell, tmp_pa
     assert any(
         body["content"] == "large question" for body in message_bodies(records)
     )
+
+
+def test_legacy_restore_rollback_preserves_turns_and_attached_steering(shell, tmp_path):
+    import json
+
+    from langchain_core.messages import HumanMessage
+
+    saved = SavedConversations(tmp_path / "saved")
+    session = get_session(shell, tmp_path)
+    for question in ["first", "second"]:
+        run_agent(question, shell, model=Reply(question + " answer"), trace_dir=tmp_path)
+        session.add_message(HumanMessage("extra"), steering=True)
+    snapshot = saved.save(session)
+    for record in snapshot["messages"]:
+        record["turn_id"] = 0
+    path = saved.directory / f"{snapshot['conversation_id']}.json"
+    path.write_text(json.dumps(snapshot))
+    session.clear()
+    saved.restore(session)
+    session.rollback_previous_turn()
+    assert [m.content for m in session.outbound()[1:]] == ["first", "first answer", "extra"]
+    session.rollback_previous_turn()
+    assert len(session.outbound()) == 1
+
+
+def test_compact_save_restore_without_an_intervening_turn(shell, tmp_path):
+    saved = SavedConversations(tmp_path / "saved")
+    session = get_session(shell, tmp_path)
+    run_agent("question", shell, model=Reply("answer"), trace_dir=tmp_path)
+    compact_session(session, shell, model=Reply("keep this"))
+    assert saved.save(session)["title"] == "question"
+    session.clear()
+    saved.restore(session)
+    assert session.outbound()[-1].content.endswith("keep this")
+
+
+def test_invalid_snapshots_and_overlapping_restores(shell, tmp_path):
+    from concurrent.futures import ThreadPoolExecutor
+
+    from clanker_session import Session
+
+    saved = SavedConversations(tmp_path / "saved")
+    session = get_session(shell, tmp_path)
+    run_agent("hello", shell, model=Reply("world"), trace_dir=tmp_path)
+    saved.save(session)
+    for i, invalid in enumerate([b"[]", b"{}", b"\xff", b'{"title":42}']):
+        (saved.directory / f"bad{i}.json").write_bytes(invalid)
+    with ThreadPoolExecutor(max_workers=4) as workers:
+        list(workers.map(lambda _: saved.restore(Session(tmp_path)), range(8)))
+    (snapshot,) = saved.list()
+    assert snapshot["restore_count"] == 8
+
+
+def test_manage_extra_argument_cannot_become_a_model_prompt(shell, tmp_path, monkeypatch):
+    monkeypatch.setattr(clanker_mode, "TRACE_DIR", tmp_path)
+    monkeypatch.setattr(clanker_mode, "run_agent", lambda *a, **kw: pytest.fail("ran model"))
+    errors = io.StringIO()
+    assert clanker_mode.clank(["manage", "clear", "extra"], stderr=errors) == 2
+    assert "takes no arguments" in errors.getvalue()

@@ -99,7 +99,7 @@ class Session:
         self.pending_prompt = ""
         self.saved_conversation_id = None
         self.saved_conversation_title = None
-        directory = Path(directory).expanduser()
+        directory = Path(directory).expanduser().resolve()
         directory.mkdir(parents=True, exist_ok=True, mode=0o700)
         self.path = _create_trace_file(directory, datetime.now().astimezone())
         self.append("version", version=1)
@@ -140,7 +140,7 @@ class Session:
         messages = []
         for record in self.messages:
             body = deepcopy(record["message"])
-            if record["turn_id"] < self.turn:
+            if not self.active or record["turn_id"] < self.turn:
                 body.pop("reasoning_content", None)
             messages.append(body)
         return messages
@@ -174,18 +174,24 @@ class Session:
         if not candidates:
             raise RuntimeError("No prior conversation turn is available to roll back")
         rolled_back_turn_id = max(candidates)
+        self.append(
+            "context_rollback",
+            rolled_back_turn_id=rolled_back_turn_id,
+            during_turn_id=self.turn if self.active else None,
+        )
         self.messages[:] = [
             record
             for record in self.messages
             if record["turn_id"] != rolled_back_turn_id
             or record["message"]["role"] == "system"
         ]
-        self.append(
-            "context_rollback",
-            rolled_back_turn_id=rolled_back_turn_id,
-            during_turn_id=self.turn if self.active else None,
-        )
         return rolled_back_turn_id
+
+    def has_conversation(self):
+        return any(
+            record["message"]["role"] != "system" or record["metadata"].get("compaction")
+            for record in self.messages
+        )
 
     def compact(self, summary):
         """Replace active inference context with system instructions plus summary."""

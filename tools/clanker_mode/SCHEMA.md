@@ -81,7 +81,9 @@ must apply reset and rollback records in sequence to reconstruct the active inpu
 view.
 
 Restore snapshots live outside the trace; a `context_restore` record is a link,
-not an embedded copy. Compaction keeps original records and appends a synthetic
+not an embedded copy. New restore records include `after_turn_id`, the last
+local turn before restore. Each restored non-steering user message starts a new
+local turn from that point. Compaction keeps original records and appends a synthetic
 system message with `metadata.compaction` and `metadata.synthetic` set to true.
 
 ### Message bodies
@@ -118,8 +120,9 @@ executable/replayed tool calls.
 The system message is recorded on the first turn, then held unchanged. Follow-ups
 append their messages and retain prior conversation. `context_reset` clears model
 context without removing any trace records. The next turn records a fresh system
-message. To reconstruct the current context, collect only message records after
-the latest reset (or all message records if there has been no reset).
+message. Reconstructing the active context also requires applying each rollback, restore,
+and compaction in order. Restore links reference mutable snapshots, so a trace
+alone cannot reconstruct an older version of an overwritten snapshot.
 
 Outbound input is constructed separately. Event envelopes and `metadata` are
 never sent. `reasoning_content` from earlier turns is omitted from that input,

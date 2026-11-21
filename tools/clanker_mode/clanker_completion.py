@@ -2,11 +2,11 @@
 
 from __future__ import annotations
 
-import json
-import shlex
 from pathlib import Path
 
 from prompt_toolkit.completion import Completer, Completion
+
+from clanker_saved import SavedConversations
 
 ROOT_COMMANDS = {
     "manage": "Saved context and conversation controls",
@@ -49,25 +49,6 @@ REPL_COMMANDS = {
 }
 
 
-def saved_snapshots(directory):
-    directory = Path(directory)
-    snapshots = []
-    if directory.is_dir():
-        for path in directory.glob("*.json"):
-            try:
-                snapshots.append(json.loads(path.read_text()))
-            except (OSError, json.JSONDecodeError, TypeError):
-                continue
-    return sorted(
-        snapshots,
-        key=lambda item: (
-            item.get("restore_count", 0),
-            item.get("last_restored_at") or item.get("updated_at", ""),
-        ),
-        reverse=True,
-    )
-
-
 def _matches(value, prefix, *, substring=False):
     value = value.casefold()
     prefix = prefix.strip("'\"").casefold()
@@ -100,11 +81,11 @@ def shell_candidates(args, arg_index, prefix, saved_directory):
         return []
     return [
         (
-            shlex.quote(snapshot["title"]),
+            repr(snapshot["title"]),
             snapshot["title"],
             f"{snapshot.get('restore_count', 0)} restores",
         )
-        for snapshot in saved_snapshots(saved_directory)
+        for snapshot in SavedConversations(saved_directory).list()
         if _matches(snapshot["title"], prefix, substring=True)
     ]
 
@@ -119,7 +100,7 @@ class ClankerReplCompleter(Completer):
             return
         if text.startswith("/restore "):
             prefix = text[len("/restore ") :]
-            for snapshot in saved_snapshots(self.saved_directory):
+            for snapshot in SavedConversations(self.saved_directory).list():
                 title = snapshot["title"]
                 if _matches(title, prefix, substring=True):
                     yield Completion(

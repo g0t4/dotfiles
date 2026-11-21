@@ -70,3 +70,22 @@ def test_manage_completion_runs_through_real_xonsh_completer(clanker_input):
     values = {str(completion).strip() for completion in completions}
     assert {"list", "save", "restore", "compact"} <= values
     assert "clanker" in shell.completers
+
+
+@pytest.mark.parametrize("prefix", ["Wes", "'Wes", '"Wes"'])
+def test_restore_completion_replaces_user_quotes_with_one_xonsh_argument(
+    clanker_input, tmp_path, monkeypatch, prefix
+):
+    from clanker_saved import SavedConversations
+
+    shell, _ = clanker_input
+    title = """Wes's "notes" on Python"""
+    monkeypatch.setattr(SavedConversations, "list", lambda self: [{"title": title}])
+    line = "clank manage restore " + prefix
+    candidates, _ = Completer().complete_line(line)
+    completion = next(item for item in candidates if getattr(item, "provider", "") == "clanker")
+    source = line[:-completion.prefix_len] + str(completion)
+    received = []
+    shell.aliases["clank"] = lambda args: received.append(args)
+    shell.execer.exec(source + "\n", glbs=shell.ctx)
+    assert received == [["manage", "restore", title]]
