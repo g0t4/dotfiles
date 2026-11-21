@@ -11,8 +11,13 @@ import tempfile
 from functools import cached_property
 from pathlib import Path
 from typing import Callable
+import logging
+from wes_logging import get_wes_logger
 
 from find_executables import resolve_executable
+
+log = get_wes_logger('wes_voice_intent')
+log.setLevel(logging.INFO) # only failures (effectively shuts up the logger)
 
 DEFAULT_MODEL = (
     Path.home()
@@ -85,6 +90,7 @@ class VoiceIntent:
             "-y",
             str(self._audio_path),
         ]
+        log.info(args)
         print(args)
         self._recorder = self._recorder_factory(
             args,
