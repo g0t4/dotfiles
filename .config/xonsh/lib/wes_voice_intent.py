@@ -69,23 +69,24 @@ class VoiceIntent:
         )
         handle.close()
         self._audio_path = Path(handle.name)
+        args = [
+            self.ffmpeg,
+            "-hide_banner",
+            "-loglevel",
+            "error",
+            "-f",
+            "avfoundation",
+            "-i",
+            f":{self.audio_device}",
+            "-ac",
+            "1",
+            "-ar",
+            "16000",
+            "-y",
+            str(self._audio_path),
+        ]
         self._recorder = self._recorder_factory(
-            [
-                self.ffmpeg,
-                "-hide_banner",
-                "-loglevel",
-                "error",
-                "-f",
-                "avfoundation",
-                "-i",
-                f":{self.audio_device}",
-                "-ac",
-                "1",
-                "-ar",
-                "16000",
-                "-y",
-                str(self._audio_path),
-            ],
+            args,
             # FFmpeg's interactive `q` command gives it a chance to finalize
             # the WAV header before exiting.
             stdin=subprocess.PIPE,
