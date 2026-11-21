@@ -32,6 +32,7 @@ return {
             require('non-plugins.devtools-wip')
             require('non-plugins.misc')
             require('non-plugins.keymaps')
+            require('non-plugins.clear_undos')
             -- require('non-plugins.spal_repl_client')
             require("non-plugins.nvr-focused")
             require("non-plugins.quickfixs")
