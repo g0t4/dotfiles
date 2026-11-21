@@ -581,7 +581,7 @@ def _files_fzf_picker_bindings(bindings, prompter=None, **_):
 ## loop helpers (i.e. forr30<SPACE> for testing line height, not sure why I dont just use $LINES)
 def forr_abbr(context, _match):
     # return str(context)
-    count = re.sub(r'^(for+|seq)', '', context.token)
+    count = re.sub(r'^(forr+|seq)', '', context.token)
 
     response = ""
     if not count:
@@ -592,4 +592,4 @@ def forr_abbr(context, _match):
 
 # forr10 => seq 1 10   # historically I used `forr` as in `for range`
 # for10 => seq 1 10    # but why not allow just `for`
-abbr(re.compile(r'^(for+|seq)\d*'), forr_abbr)
+abbr(re.compile(r'^(forr+|seq)\d*'), forr_abbr)
