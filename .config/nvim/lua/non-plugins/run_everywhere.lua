@@ -1,15 +1,26 @@
 -- Format values in their originating editor, including values RPC cannot encode.
-local evaluate = [[
-    local function format_returns(...)
-        local values = {}
-        for i = 1, select("#", ...) do
-            local value = select(i, ...)
-            values[i] = type(value) == "string" and value or vim.inspect(value)
+local evaluate = [=[
+    local source = ...
+    local capture = [[
+        local function emit(ok, ...)
+            if not ok then
+                print("Error: " .. tostring(...))
+                return
+            end
+            local values = {}
+            for i = 1, select("#", ...) do
+                local value = select(i, ...)
+                values[i] = type(value) == "string" and value or vim.inspect(value)
+            end
+            if #values > 0 then print(table.concat(values, "  ")) end
         end
-        return values
-    end
-    return format_returns(assert(loadstring(..., ":RunEverywhere"))())
-]]
+        emit(pcall(assert(loadstring(%q, ":RunEverywhere"))))
+    ]]
+    local output = vim.api.nvim_cmd({ cmd = "lua", args = { capture:format(source) } }, { output = true })
+    -- Capturing suppresses the original echo. Replay it in this editor as well.
+    if output ~= "" then vim.api.nvim_echo({ { output } }, true, {}) end
+    return { output }
+]=]
 
 local function run_everywhere(source, title, local_last)
     assert(loadstring(source, ":RunEverywhere"))
@@ -69,7 +80,8 @@ local function run_everywhere(source, title, local_last)
 end
 
 vim.api.nvim_create_user_command("RunEverywhere", function(opts)
-    run_everywhere(opts.args, ":RunEverywhere " .. opts.args)
+    local source = opts.args:gsub("^%s*=", "return ", 1)
+    run_everywhere(source, ":RunEverywhere " .. opts.args)
 end, { nargs = "+", complete = "lua", desc = "Run Lua in every running Neovim instance" })
 
 vim.api.nvim_create_user_command("NvimInstances", function(opts)
