@@ -140,3 +140,40 @@ def test_nonterminal_alias_has_no_progress_or_ansi(shell, monkeypatch):
     assert clanker_mode.clank(["help"], stdout=output, stderr=errors) == 0
     assert output.getvalue() == "plain answer\n"
     assert errors.getvalue() == ""
+
+
+@pytest.mark.parametrize("width", [32, 80, 160, 241])
+def test_content_sized_bubbles_use_centered_lane_and_visible_cell_width(width):
+    from rich.cells import cell_len
+
+    lane = min(width, 160)
+    left = (width - lane) // 2
+    short = render(assistant_panel("ok", width), width).splitlines()[0]
+    assert len(short) - len(short.lstrip()) == left
+    assert cell_len(short.strip()) == min(width, 50)
+
+    text = "界" * 30
+    result = ToolMessage(content=f"\x1b[31m{text}\x1b[0m", tool_call_id="1")
+    lines = render(tool_result_panel(result, width), width).splitlines()
+    assert cell_len(lines[0].rstrip()) == left + lane
+    assert cell_len(lines[0].strip()) == min(68, width)
+    assert all(cell_len(line) <= width and "\x1b" not in line for line in lines)
+    assert "".join(lines).count("界") == 30
+
+
+def test_console_tracks_output_pane_resize_despite_stale_env(monkeypatch):
+    import os
+    import termios
+
+    from clanker_display import TerminalConsole
+
+    monkeypatch.setenv("COLUMNS", "400")
+    master, slave = os.openpty()
+    try:
+        with os.fdopen(slave, "w") as output:
+            console = TerminalConsole(file=output)
+            for width in (210, 42):
+                termios.tcsetwinsize(output.fileno(), (24, width))
+                assert console.width == width
+    finally:
+        os.close(master)

@@ -471,12 +471,11 @@ def clank(args, stdin=None, stdout=None, stderr=None):
         )
         return 0
     try:
-        from rich.console import Console
-
+        from clanker_display import TerminalConsole
         from clanker_saved import SavedConversations
 
-        status_console = Console(file=stderr or sys.stderr)
-        console = Console(file=stdout)
+        status_console = TerminalConsole(file=stderr or sys.stderr)
+        console = TerminalConsole(file=stdout)
         session = get_session(XSH, TRACE_DIR)
         saved = SavedConversations(SAVED_DIR)
 

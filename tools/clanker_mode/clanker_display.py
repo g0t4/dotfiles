@@ -1,7 +1,11 @@
 """Shell scrollback for agent work, styled like the chat trace viewer."""
 
+import os
+from dataclasses import dataclass
 from typing import ClassVar
 
+from rich.console import Console, ConsoleDimensions
+from rich.padding import Padding
 from rich.panel import Panel
 from rich.pretty import Pretty
 from rich.text import Text
@@ -9,24 +13,56 @@ from rich.tree import Tree
 from wes_syntax import syntax
 
 
+class TerminalConsole(Console):
+    @property
+    def size(self):
+        # COLUMNS and LINES may still describe the pane before a split.
+        try:
+            columns, rows = os.get_terminal_size(self.file.fileno())
+        except (AttributeError, OSError, ValueError):
+            return super().size
+        if columns and rows:
+            return ConsoleDimensions(columns, rows)
+        return super().size
+
+
 class ToolTree(Tree):
     # The viewer's TreeWrapper uses indentation without visible connector lines.
     TREE_GUIDES: ClassVar = [("    ", "    ", "    ", "    ")]
 
 
-def message_panel(content, title, color, width):
-    return Panel(
-        content,
-        title=Text(title, style=color),
-        title_align="left",
-        border_style=color,
-        padding=(0, 1),
-        width=max(1, round(width * 0.9)),
-    )
+@dataclass
+class MessagePanel:
+    content: object
+    title: str
+    color: str
+    width: int
+    align: str = "left"
+
+    def __rich_console__(self, console, options):
+        width = min(self.width, options.max_width)
+        lane = min(width, 160)
+        left = (width - lane) // 2
+        # Use every available cell in narrow splits. On wider terminals leave
+        # room across from each bubble, as in the chat viewer.
+        limit = min(lane, max(50, round(lane * 0.9)))
+        natural = console.measure(self.content, options=options).maximum
+        bubble_width = min(limit, max(50, natural + 4))
+        panel = Panel(
+            self.content,
+            title=Text(self.title, style=self.color),
+            title_align=self.align,
+            border_style=self.color,
+            padding=(0, 1),
+            width=bubble_width,
+        )
+        if self.align == "right":
+            left += lane - bubble_width
+        yield Padding(panel, (0, 0, 0, left), expand=False)
 
 
 def assistant_panel(answer, width):
-    return message_panel(
+    return MessagePanel(
         syntax(answer, "markdown", word_wrap=True), "✨ Clanker", "yellow", width
     )
 
@@ -39,14 +75,14 @@ def tool_panel(call, index, total, width):
         else:
             node = root.add(Text(f"{name}:", style="blue"))
             node.add(Pretty(value))
-    return message_panel(root, f"Tool call {index + 1}/{total}", "yellow", width)
+    return MessagePanel(root, f"Tool call {index + 1}/{total}", "yellow", width)
 
 
 def tool_result_panel(message, width):
     root = ToolTree(Text(message.name or "Tool result", style="bold"))
     # Tool output is literal data, never Rich markup or Markdown instructions.
-    root.add(Text(str(message.content)))
-    return message_panel(root, "🔧 Tool result", "red", width)
+    root.add(Text.from_ansi(str(message.content)))
+    return MessagePanel(root, "🔧 Tool result", "red", width, "right")
 
 
 class TurnDisplay:

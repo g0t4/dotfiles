@@ -194,6 +194,12 @@ Tool results follow in separate boxes with literal output (including failures),
 then the next tool or model response appears below. These boxes remain in terminal
 scrollback so you can follow the agent's work and take over the shell afterward.
 Intermediate assistant text and the final Markdown answer use assistant boxes.
+Assistant text and calls align left. Tool results align right. Above 160 terminal
+columns the conversation is centered with equal outer margins (one cell more on
+the right for an odd remainder). Boxes fit their content, including borders and
+padding. They start at 50 cells and grow up to 90% of the conversation width.
+Below 50 cells they use the entire pane. ANSI colors in tool output occupy no
+cells; wide characters are measured in terminal cells.
 
 Progress and tool boxes use stderr and are enabled only when it is a terminal.
 The final answer uses stdout; pipes and redirection receive plain original answer

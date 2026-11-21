@@ -271,14 +271,13 @@ def test_registered_alias_dispatches_inside_shell(shell, monkeypatch, capsys):
 def test_terminal_answer_uses_markdown_palette(monkeypatch):
     import io
 
-    import rich.console
-
+    import clanker_display
     import clanker_mode
 
-    real_console = rich.console.Console
+    real_console = clanker_display.TerminalConsole
     monkeypatch.setattr(
-        rich.console,
-        "Console",
+        clanker_display,
+        "TerminalConsole",
         lambda **kwargs: real_console(
             **kwargs,
             force_terminal=True,
