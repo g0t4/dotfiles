@@ -85,6 +85,7 @@ class VoiceIntent:
             "-y",
             str(self._audio_path),
         ]
+        print(args)
         self._recorder = self._recorder_factory(
             args,
             # FFmpeg's interactive `q` command gives it a chance to finalize
