@@ -22,12 +22,24 @@ local evaluate = [=[
     return { output }
 ]=]
 
-local function run_everywhere(source, title, local_last)
+local function run_everywhere(source, title, local_last, directory)
     assert(loadstring(source, ":RunEverywhere"))
+    local evaluator = evaluate
+    if directory then
+        -- Check in the target editor immediately before running the command.
+        evaluator = ([[
+            local cwd = vim.uv.fs_realpath(vim.fn.getcwd())
+            local directory = %q
+            if not cwd or (cwd ~= directory and not vim.fs.relpath(directory, cwd)) then
+                return false
+            end
+        ]]):format(directory) .. evaluate
+    end
     local self = vim.fn.getpid()
     local rows = {}
     local pending = 0
     local function record(pid, ok, values)
+        if ok and values == false then return end
         rows[pid] = ok and table.concat(values, "  ") or ("Error: " .. tostring(values))
     end
 
@@ -35,6 +47,7 @@ local function run_everywhere(source, title, local_last)
         local messages = require("devtools.messages")
         messages.ensure_open()
         messages.header(title)
+        if not next(rows) then messages.append("No matching instances") end
         local pids = vim.tbl_keys(rows)
         table.sort(pids)
         for _, pid in ipairs(pids) do
@@ -44,7 +57,7 @@ local function run_everywhere(source, title, local_last)
     end
 
     local function finish()
-        if local_last then record(self, pcall(assert(loadstring(evaluate)), source)) end
+        if local_last then record(self, pcall(assert(loadstring(evaluator)), source)) end
         display()
     end
 
@@ -53,7 +66,7 @@ local function run_everywhere(source, title, local_last)
     local root = vim.fs.dirname(vim.fn.stdpath("run"))
     local sockets = vim.fn.globpath(root, "*/nvim.*.0", false, true)
     local expression = "json_encode(luaeval(" .. vim.fn.string(
-        "assert(loadstring(" .. string.format("%q", evaluate) .. "))(_A)"
+        "assert(loadstring(" .. string.format("%q", evaluator) .. "))(_A)"
     ) .. ", " .. vim.fn.string(source) .. "))"
 
     for _, address in ipairs(sockets) do
@@ -75,7 +88,7 @@ local function run_everywhere(source, title, local_last)
         end
     end
 
-    if not local_last then record(self, pcall(assert(loadstring(evaluate)), source)) end
+    if not local_last then record(self, pcall(assert(loadstring(evaluator)), source)) end
     if pending == 0 then finish() end
 end
 
@@ -84,14 +97,34 @@ vim.api.nvim_create_user_command("RunEverywhere", function(opts)
     run_everywhere(source, ":RunEverywhere " .. opts.args)
 end, { nargs = "+", complete = "lua", desc = "Run Lua in every running Neovim instance" })
 
-vim.api.nvim_create_user_command("NvimInstances", function(opts)
-    if opts.args ~= "" then
-        local command = opts.args:gsub("^:", "")
-        run_everywhere(("vim.cmd(%q)"):format(command), ":NvimInstances " .. opts.args, true)
+local function instances(command, title, directory)
+    if command ~= "" then
+        run_everywhere(("vim.cmd(%q)"):format(command), title, true, directory)
         return
     end
     run_everywhere([[
         local file = vim.fn.expand("%:p:~")
         return vim.fn.fnamemodify(vim.fn.getcwd(), ":~"), file ~= "" and file or "[No Name]"
-    ]], "Neovim instances  |  PID  working directory  active file")
+    ]], title .. "  |  PID  working directory  active file", false, directory)
+end
+
+vim.api.nvim_create_user_command("NvimInstances", function(opts)
+    instances(opts.args:gsub("^:", ""), ":NvimInstances " .. opts.args)
 end, { nargs = "*", complete = "command", desc = "List Neovim instances or run an Ex command in each" })
+
+vim.api.nvim_create_user_command("NvimInstancesCWD", function(opts)
+    -- A colon starts the Ex command, so the directory can contain spaces.
+    local path, command
+    if vim.startswith(opts.args, ":") then
+        path, command = "", opts.args:sub(2)
+    else
+        path, command = opts.args:match("^(.-)%s+:(.*)$")
+        if not path then path, command = opts.args, "" end
+    end
+    path = path ~= "" and vim.fn.fnamemodify(path, ":p") or vim.fn.getcwd()
+    local directory = vim.uv.fs_realpath(path)
+    if not directory or vim.fn.isdirectory(directory) == 0 then
+        error("Directory does not exist: " .. path)
+    end
+    instances(command, ":NvimInstancesCWD " .. directory .. " :" .. command, directory)
+end, { nargs = "*", desc = "List or command instances under [directory] [:Ex command]" })
