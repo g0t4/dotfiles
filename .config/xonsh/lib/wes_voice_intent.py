@@ -108,6 +108,7 @@ class VoiceIntent:
         recorder = self._recorder
         audio_path = self._audio_path
         if recorder.stdin is not None:
+            # q is ignored if the audio device is offline btw... super annoying
             recorder.stdin.write(b"q\n")
             recorder.stdin.flush()
             recorder.stdin.close()
