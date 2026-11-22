@@ -26,6 +26,17 @@ local function table_cell(text)
     return (text:gsub("\\", "\\\\"):gsub("|", "\\|"):gsub("[\r\n]+", "<br>"))
 end
 
+-- Take one OS snapshot so busy editors still have process metrics.
+local function process_metrics(pids)
+    local result = vim.system({ "ps", "-p", table.concat(pids, ","), "-o", "pid=,rss=,%cpu=" },
+        { text = true, env = { LC_ALL = "C" } }):wait()
+    local metrics = {}
+    for pid, kib, cpu in (result.stdout or ""):gmatch("(%d+)%s+(%d+)%s+([%d.]+)") do
+        metrics[tonumber(pid)] = { rss = ("%.1f"):format(tonumber(kib) / 1024), cpu = cpu }
+    end
+    return metrics
+end
+
 local function run_everywhere(source, title, local_last, directory, list_instances)
     assert(loadstring(source, ":RunEverywhere"))
     local evaluator = list_instances and "return assert(loadstring(...))()" or evaluate
@@ -55,19 +66,23 @@ local function run_everywhere(source, title, local_last, directory, list_instanc
             messages.append("No matching instances")
             return
         end
-        if list_instances then
-            messages.append("")
-            messages.append("| PID | Working directory | Active file |")
-            messages.append("| --- | --- | --- |")
-        end
         local pids = vim.tbl_keys(rows)
         table.sort(pids)
+        local metrics
+        if list_instances then
+            metrics = process_metrics(pids)
+            messages.append("")
+            messages.append("| PID | RSS (MiB) | CPU (%) | Working directory | Active file |")
+            messages.append("| --- | ---: | ---: | --- | --- |")
+        end
         for _, pid in ipairs(pids) do
             local label = tostring(pid) .. (pid == self and " (here)" or "")
             local row = rows[pid]
             if list_instances then
                 local cells = type(row) == "table" and row or { "", row }
-                messages.append(("| %s | %s | %s |"):format(label, table_cell(cells[1]), table_cell(cells[2])))
+                local usage = metrics[pid] or { rss = "—", cpu = "—" }
+                messages.append(("| %s | %s | %s | %s | %s |"):format(
+                    label, usage.rss, usage.cpu, table_cell(cells[1]), table_cell(cells[2])))
             else
                 messages.append(label .. "  " .. row)
             end
