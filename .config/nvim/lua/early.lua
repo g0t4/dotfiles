@@ -156,27 +156,22 @@ do
     local ns = vim.api.nvim_create_namespace("wes.ui_trace")
     local trace
     vim.api.nvim_create_user_command("UITraceStart", function()
+        local messages = require("devtools.messages")
         if trace then return end
+        messages.ensure_open()
+        messages.header("UI trace")
         trace = {}
         vim.ui_attach(ns, { ext_messages = true, set_cmdheight = false }, function(event, ...)
             -- Observe without claiming the event. UI2 still handles presentation.
-            trace[#trace + 1] = { event, ... }
+            messages.ensure_open()
+            messages.append(vim.inspect({ event, ... }, { newline = " ", indent = "" }))
         end)
     end, { desc = "Record message and command-line UI events" })
 
     vim.api.nvim_create_user_command("UITraceStop", function()
         if not trace then return end
         vim.ui_detach(ns)
-        local events = trace
         trace = nil
-        local messages = require("devtools.messages")
-        messages.ensure_open()
-        messages.header(("UI trace (%d events)"):format(#events))
-        local lines = {}
-        for i, args in ipairs(events) do
-            lines[i] = vim.inspect(args, { newline = " ", indent = "" })
-        end
-        messages.append(table.concat(lines, "\n"))
     end, { desc = "Stop recording and show the UI event trace" })
 end
 
