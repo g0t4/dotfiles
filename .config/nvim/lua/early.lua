@@ -149,3 +149,33 @@ package.cpath = package.cpath .. ";" .. luarocks_cpath
 -- i.e. I use ProFi for profiles (devtools performance module uses it)
 -- FYI!! do not use system wide path to luarocks for a few reasons:
 --  varies across OSes/distros
+
+-- :UITraceStart, try :nmap or :echo, then :UITraceStop to inspect the events.
+-- :help ui-messages and :help ui-cmdline document the positional arguments.
+do
+    local ns = vim.api.nvim_create_namespace("wes.ui_trace")
+    local trace
+    vim.api.nvim_create_user_command("UITraceStart", function()
+        if trace then return end
+        trace = {}
+        vim.ui_attach(ns, { ext_messages = true, set_cmdheight = false }, function(event, ...)
+            -- Observe without claiming the event. UI2 still handles presentation.
+            trace[#trace + 1] = { event, ... }
+        end)
+    end, { desc = "Record message and command-line UI events" })
+
+    vim.api.nvim_create_user_command("UITraceStop", function()
+        if not trace then return end
+        vim.ui_detach(ns)
+        local events = trace
+        trace = nil
+        local messages = require("devtools.messages")
+        messages.ensure_open()
+        messages.header(("UI trace (%d events)"):format(#events))
+        local lines = {}
+        for i, args in ipairs(events) do
+            lines[i] = vim.inspect(args, { newline = " ", indent = "" })
+        end
+        messages.append(table.concat(lines, "\n"))
+    end, { desc = "Stop recording and show the UI event trace" })
+end
