@@ -22,9 +22,13 @@ local evaluate = [=[
     return { output }
 ]=]
 
-local function run_everywhere(source, title, local_last, directory)
+local function table_cell(text)
+    return (text:gsub("\\", "\\\\"):gsub("|", "\\|"):gsub("[\r\n]+", "<br>"))
+end
+
+local function run_everywhere(source, title, local_last, directory, list_instances)
     assert(loadstring(source, ":RunEverywhere"))
-    local evaluator = evaluate
+    local evaluator = list_instances and "return assert(loadstring(...))()" or evaluate
     if directory then
         -- Check in the target editor immediately before running the command.
         evaluator = ([[
@@ -33,26 +37,40 @@ local function run_everywhere(source, title, local_last, directory)
             if not cwd or (cwd ~= directory and not vim.fs.relpath(directory, cwd)) then
                 return false
             end
-        ]]):format(directory) .. evaluate
+        ]]):format(directory) .. evaluator
     end
     local self = vim.fn.getpid()
     local rows = {}
     local pending = 0
     local function record(pid, ok, values)
         if ok and values == false then return end
-        rows[pid] = ok and table.concat(values, "  ") or ("Error: " .. tostring(values))
+        rows[pid] = ok and (list_instances and values or table.concat(values, "  ")) or ("Error: " .. tostring(values))
     end
 
     local function display()
         local messages = require("devtools.messages")
         messages.ensure_open()
         messages.header(title)
-        if not next(rows) then messages.append("No matching instances") end
+        if not next(rows) then
+            messages.append("No matching instances")
+            return
+        end
+        if list_instances then
+            messages.append("")
+            messages.append("| PID | Working directory | Active file |")
+            messages.append("| --- | --- | --- |")
+        end
         local pids = vim.tbl_keys(rows)
         table.sort(pids)
         for _, pid in ipairs(pids) do
             local label = tostring(pid) .. (pid == self and " (here)" or "")
-            messages.append(label .. "  " .. rows[pid])
+            local row = rows[pid]
+            if list_instances then
+                local cells = type(row) == "table" and row or { "", row }
+                messages.append(("| %s | %s | %s |"):format(label, table_cell(cells[1]), table_cell(cells[2])))
+            else
+                messages.append(label .. "  " .. row)
+            end
         end
     end
 
@@ -106,8 +124,8 @@ local function instances(command, title, directory)
         local cwd = vim.fn.getcwd()
         local file = vim.api.nvim_buf_get_name(0)
         local path = file ~= "" and (vim.fs.relpath(cwd, file) or file) or "[No Name]"
-        return vim.fn.fnamemodify(cwd, ":~"), path
-    ]], title .. "  |  PID  working directory  active file", false, directory)
+        return { vim.fn.fnamemodify(cwd, ":~"), path }
+    ]], title, false, directory, true)
 end
 
 vim.api.nvim_create_user_command("NvimInstances", function(opts)
