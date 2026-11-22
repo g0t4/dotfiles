@@ -1,7 +1,14 @@
 rich
-beautifulsoup4
 pip # so xpip list works
-#
+
+# Agent scripting in xonsh -c and .xsh files
+requests        # HTTP requests and JSON APIs
+PyYAML          # import yaml for manifests and configuration
+tomlkit         # edit TOML while preserving comments and formatting
+beautifulsoup4  # import bs4 to extract data from HTML
+lxml            # Beautiful Soup backend, XML parsing and XPath
+psutil          # inspect PIDs, child processes, CPU and memory
+
 # debuggers (prune when I pick one):
 ipdb # ipython based, xonsh compat debugger (https://xon.sh/debug.html) => @.debug.breakpoint("ipdb")
 pdbp
