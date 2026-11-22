@@ -103,8 +103,10 @@ local function instances(command, title, directory)
         return
     end
     run_everywhere([[
-        local file = vim.fn.expand("%:p:~")
-        return vim.fn.fnamemodify(vim.fn.getcwd(), ":~"), file ~= "" and file or "[No Name]"
+        local cwd = vim.fn.getcwd()
+        local file = vim.api.nvim_buf_get_name(0)
+        local path = file ~= "" and (vim.fs.relpath(cwd, file) or file) or "[No Name]"
+        return vim.fn.fnamemodify(cwd, ":~"), path
     ]], title .. "  |  PID  working directory  active file", false, directory)
 end
 
