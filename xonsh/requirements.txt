@@ -1,4 +1,5 @@
 rich
+beautifulsoup4
 pip # so xpip list works
 #
 # debuggers (prune when I pick one):
