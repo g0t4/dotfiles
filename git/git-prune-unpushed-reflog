@@ -1,0 +1,38 @@
+#!/usr/bin/env python3
+"""Forget historical tips within BASE..TIP in one remote-tracking reflog."""
+import subprocess
+import sys
+
+
+def git(*args):
+    return subprocess.check_output(["git", *args], text=True).splitlines()
+
+
+def main(ref, commits):
+    base, sep, tip = commits.partition("..")
+    if not ref.startswith("refs/remotes/") or not sep or not base or not tip or tip.startswith("."):
+        sys.exit("Expected refs/remotes/<remote>/<branch> and BASE..TIP")
+
+    base, = git("rev-parse", "--verify", "--end-of-options", base + "^{commit}")
+    tip, = git("rev-parse", "--verify", "--end-of-options", tip + "^{commit}")
+    if git("rev-parse", "--verify", ref) != [base]:
+        sys.exit(f"Skipping cleanup: {ref} does not point at the range base.")
+    if subprocess.run(["git", "merge-base", "--is-ancestor", base, tip]).returncode:
+        sys.exit("Skipping cleanup: range base is not an ancestor of the tip.")
+
+    removed = set(git("rev-list", f"{base}..{tip}"))
+    tips = git("reflog", "show", "--format=%H", ref)
+    # Deleting oldest first preserves the ordinals of newer entries.
+    entries = [f"{ref}@{{{i}}}" for i in reversed(range(len(tips))) if tips[i] in removed]
+    if entries:
+        git("reflog", "delete", "--rewrite", *entries)
+    print(f"Pruned {len(entries)} entries from {ref}'s reflog.")
+
+
+if __name__ == "__main__":
+    if len(sys.argv) != 3:
+        sys.exit("usage: git prune-unpushed-reflog refs/remotes/<remote>/<branch> BASE..TIP")
+    try:
+        main(*sys.argv[1:])
+    except subprocess.CalledProcessError as error:
+        sys.exit(error.returncode)

@@ -370,7 +370,13 @@ function _abbr_git_push_up_to
     end
     # refspec has object:dest_ref
     # TODO also use default remote? or?
-    echo "git push origin $commit_ref%:$(git_current_branch) $force"
+    set -l branch (git_current_branch)
+    set -l push "git push origin $commit_ref%:$branch $force"
+    if test -n "$num"; and set -q force
+        echo "$push && git prune-unpushed-reflog refs/remotes/origin/$branch $commit_ref..HEAD"
+    else
+        echo "$push"
+    end
 end
 
 # *** LOG RELATED ***

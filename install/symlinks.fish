@@ -93,6 +93,7 @@ if string match --quiet Linux (uname -s)
 end
 mkdir -p $HOME/bin
 ln -s $dotfiles_dir/git/git-commit-with-function-context $HOME/bin/.
+ln -s $dotfiles_dir/git/git-prune-unpushed-reflog $HOME/bin/.
 
 # *** hushlogin
 touch $HOME/.hushlogin
