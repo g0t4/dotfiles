@@ -116,6 +116,10 @@ There is no top-level response snapshot. Each assistant message retains its own
 response and usage. Malformed calls are kept in diagnostics and excluded from
 executable/replayed tool calls.
 
+When supplied by the backend, `metadata.response` also preserves `metrics`
+(including vLLM timing and speculative decoding statistics), `timings`, and
+`sglext` verbatim. These diagnostics are not sent back as conversation content.
+
 ### Context and outbound input
 
 The system message is recorded on the first turn, then held unchanged. Follow-ups

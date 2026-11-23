@@ -16,7 +16,7 @@ def select_model(models, setting="model override"):
 
 
 def connect(base_url, model=None, api_key="none", setting="model override"):
-    from langchain_llama_server.chat_models import ChatLlamaServer
+    from ai_shared.chat_model import LocalChatModel
 
     if not model:
         response = httpx.get(
@@ -26,6 +26,6 @@ def connect(base_url, model=None, api_key="none", setting="model override"):
         )
         response.raise_for_status()
         model = select_model(response.json().get("data", []), setting)
-    return ChatLlamaServer(
+    return LocalChatModel(
         base_url=base_url, model=model, api_key=api_key, timeout=120, max_retries=0
     )

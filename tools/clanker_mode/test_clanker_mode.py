@@ -124,7 +124,8 @@ def test_live_model_discovers_hidden_shell_value(shell, tmp_path):
 
 
 @pytest.mark.parametrize("asynchronous", [False, True])
-def test_provider_requests_streaming_usage(shell, asynchronous):
+@pytest.mark.parametrize("streaming", [False, True])
+def test_provider_requests_streaming_usage(shell, asynchronous, streaming):
     import asyncio
 
     import httpx
@@ -134,6 +135,14 @@ def test_provider_requests_streaming_usage(shell, asynchronous):
     shell.env["CLANKER_MODEL"] = "test"
     shell.env["CLANKER_BASE_URL"] = "http://backend.invalid/v1"
     requests = []
+    diagnostics = {
+        "metrics": {
+            "time_to_first_token_ms": 123.5,
+            "speculative_decoding": {"mean_acceptance_length": 4.2},
+        },
+        "timings": {"choices": [{"decode_time": 0.25}]},
+        "sglext": {"spec_tokens_details": {"spec_accept_rate": 0.8}},
+    }
 
     def respond(request):
         requests.append(json.loads(request.content))
@@ -164,6 +173,24 @@ def test_provider_requests_streaming_usage(shell, asynchronous):
                 },
             },
         ]
+        chunks[-1].update(diagnostics)
+        if not streaming:
+            return httpx.Response(
+                200,
+                json={
+                    **chunks[0],
+                    **diagnostics,
+                    "object": "chat.completion",
+                    "choices": [
+                        {
+                            "index": 0,
+                            "message": {"role": "assistant", "content": "hello"},
+                            "finish_reason": "stop",
+                        }
+                    ],
+                    "usage": chunks[-1]["usage"],
+                },
+            )
         content = "".join(f"data: {json.dumps(chunk)}\n\n" for chunk in chunks)
         return httpx.Response(
             200,
@@ -181,24 +208,44 @@ def test_provider_requests_streaming_usage(shell, asynchronous):
                     http_client=client
                 )
                 model.async_client = model.root_async_client.chat.completions
-                return [chunk async for chunk in model.astream("hello")]
+                if streaming:
+                    return [chunk async for chunk in model.astream("hello")]
+                return [await model.ainvoke("hello")]
 
         chunks = asyncio.run(collect())
     else:
         with httpx.Client(transport=transport) as client:
             model.root_client = model.root_client.with_options(http_client=client)
             model.client = model.root_client.chat.completions
-            chunks = list(model.stream("hello"))
+            chunks = (
+                list(model.stream("hello")) if streaming else [model.invoke("hello")]
+            )
     assert len(requests) == 1
-    assert requests[0]["stream"] is True
-    assert requests[0]["stream_options"]["include_usage"] is True
+    assert requests[0].get("stream", False) is streaming
+    if streaming:
+        assert requests[0]["stream_options"]["include_usage"] is True
     assert requests[0]["return_timings"] is True
     usage = next(chunk.usage_metadata for chunk in chunks if chunk.usage_metadata)
-    assert {key: usage[key] for key in ("input_tokens", "output_tokens", "total_tokens")} == {
+    assert {
+        key: usage[key] for key in ("input_tokens", "output_tokens", "total_tokens")
+    } == {
         "input_tokens": 10,
         "output_tokens": 2,
         "total_tokens": 12,
     }
+    from langchain_core.messages import message_chunk_to_message
+
+    from clanker_session import serialize_message
+
+    answer = chunks[0]
+    for chunk in chunks[1:]:
+        answer += chunk
+    if streaming:
+        answer = message_chunk_to_message(answer)
+    body, metadata = serialize_message(answer)
+    for field, value in diagnostics.items():
+        assert metadata["response"][field] == value
+        assert field not in body
 
 
 def test_provider_http_tool_roundtrip(shell, tmp_path):
