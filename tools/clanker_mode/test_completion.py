@@ -66,3 +66,15 @@ def test_subrepl_completion_is_scoped_to_controls_and_restore_titles(tmp_path):
     assert [item.text for item in titles] == ["how to print in python"]
     assert titles[0].start_position == -len("print")
     assert list(completer.get_completions(Document("tell me /list"), None)) == []
+
+
+def test_delete_completes_selectors_and_restore_titles(tmp_path):
+    write_snapshot(tmp_path, "shell notes", 1, "now")
+    args = ["clanker", "manage", "delete"]
+    assert {item[0] for item in shell_candidates(args, 3, "--", tmp_path)} == {
+        "--both", "--saved", "--trace",
+    }
+    for selector in [[], ["--trace"]]:
+        assert shell_candidates(args + selector, 3 + len(selector), "notes", tmp_path)[0][1] == "shell notes"
+    complete = ClankerReplCompleter(tmp_path).get_completions
+    assert [item.text for item in complete(Document("/delete --both notes"), None)] == ["shell notes"]

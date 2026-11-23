@@ -27,6 +27,7 @@ MANAGE_COMMANDS = {
     "save": "Save the active conversation",
     "rename": "Rename and save the active conversation",
     "restore": "Restore a saved conversation",
+    "delete": "Delete a saved snapshot, trace, or both",
     "compact": "Compact active model context",
     "rollback": "Roll back the prior context turn",
     "clear": "Clear active model context",
@@ -38,6 +39,7 @@ REPL_COMMANDS = {
     "/list": "List saved conversations",
     "/save": "Save the active conversation",
     "/rename": "Rename and save the active conversation",
+    "/delete": "Delete a saved snapshot, trace, or both",
     "/restore": "Restore a saved conversation",
     "/compact": "Compact active model context",
     "/rollback": "Roll back the prior context turn",
@@ -46,6 +48,13 @@ REPL_COMMANDS = {
     "/messages": "Dump active conversation JSON",
     "/help": "Show sub-REPL controls",
     "/exit": "Leave the sub-REPL",
+}
+
+
+DELETE_PARTS = {
+    "--both": "Delete snapshot and trace (default)",
+    "--saved": "Delete only the saved snapshot",
+    "--trace": "Delete only the raw session trace",
 }
 
 
@@ -77,9 +86,16 @@ def shell_candidates(args, arg_index, prefix, saved_directory):
         and args[1:3] == ["manage", "restore"]
         and arg_index == 3
     )
-    if not restore:
+    deleting = args[1:3] == ["manage", "delete"]
+    selector_position = deleting and arg_index == 3
+    after_selector = deleting and arg_index == 4 and args[3] in DELETE_PARTS
+    if not (restore or selector_position or after_selector):
         return []
-    return [
+    selectors = [
+        (value, value, description) for value, description in DELETE_PARTS.items()
+        if selector_position and _matches(value, prefix)
+    ]
+    return selectors + [
         (
             repr(snapshot["title"]),
             snapshot["title"],
@@ -98,8 +114,16 @@ class ClankerReplCompleter(Completer):
         text = document.text_before_cursor
         if not text.startswith("/"):
             return
-        if text.startswith("/restore "):
-            prefix = text[len("/restore ") :]
+        if text.startswith(("/restore ", "/delete ")):
+            command, _, prefix = text.partition(" ")
+            if command == "/delete":
+                selector, space, rest = prefix.partition(" ")
+                if space and selector in DELETE_PARTS:
+                    prefix = rest
+                else:
+                    for value, description in DELETE_PARTS.items():
+                        if _matches(value, prefix):
+                            yield Completion(value, start_position=-len(prefix), display_meta=description)
             for snapshot in SavedConversations(self.saved_directory).list():
                 title = snapshot["title"]
                 if _matches(title, prefix, substring=True):

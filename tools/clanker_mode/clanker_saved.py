@@ -100,6 +100,10 @@ class SavedConversations:
                 else None,
                 "messages": deepcopy(session.messages),
             }
+            if existing is None:
+                snapshot["trace_session_id"] = session.id
+            elif "trace_session_id" in existing:
+                snapshot["trace_session_id"] = existing["trace_session_id"]
             self._write(snapshot)
         session.saved_conversation_id = conversation_id
         session.saved_conversation_title = chosen_title
@@ -146,6 +150,123 @@ class SavedConversations:
         session.saved_conversation_id = snapshot["conversation_id"]
         session.saved_conversation_title = snapshot["title"]
         return snapshot
+
+    def delete(self, session, query, part):
+        if not query.strip() or part not in {"saved", "trace", "both"}:
+            raise RuntimeError(
+                "Usage: manage delete [--saved|--trace|--both] <name or ID>"
+            )
+        if session.active:
+            raise RuntimeError("Cannot delete during an active turn")
+        with self._locked():
+            snapshots = self.list()
+            selected = self._select(snapshots, query)
+            identifier = selected["conversation_id"]
+            if part != "saved":
+                self._delete_trace(
+                    session, selected, snapshots, required=part == "trace"
+                )
+            if part != "trace":
+                (self.directory / f"{identifier}.json").unlink()
+                if session.saved_conversation_id == identifier:
+                    session.saved_conversation_id = None
+                    session.saved_conversation_title = None
+        return selected["title"]
+
+    def _delete_trace(self, session, selected, snapshots, *, required):
+        identifier = selected["conversation_id"]
+        matches = []
+        for path in session.path.parent.glob("*.jsonl"):
+            if path.is_symlink() or not path.is_file():
+                continue
+            owners, pid, trace_id = self._trace_owners(path, snapshots)
+            if identifier in owners:
+                matches.append((path, owners, pid, trace_id))
+        if len(matches) > 1:
+            raise RuntimeError("Multiple trace files match this conversation")
+        if matches:
+            path, owners, pid, trace_id = matches[0]
+            if len(owners) > 1:
+                raise RuntimeError(
+                    "Trace is shared by other saved conversations; use --saved"
+                )
+            if path != session.path:
+                try:
+                    os.kill(pid, 0)
+                except ProcessLookupError:
+                    pass
+                else:
+                    raise RuntimeError(
+                        f"Trace belongs to a running shell (PID {pid}); close it first or use --saved"
+                    )
+            if "trace_session_id" not in selected:
+                selected["trace_session_id"] = trace_id
+                self._write(selected)
+            if path == session.path:
+                session.replace_trace()
+            else:
+                path.unlink()
+        elif not selected.get("trace_session_id"):
+            raise RuntimeError(
+                "Cannot identify the legacy trace; use --saved to delete the snapshot"
+            )
+        elif required:
+            raise RuntimeError("The conversation's trace is already absent")
+
+    @staticmethod
+    def _trace_owners(path, snapshots):
+        with path.open() as stream:
+            try:
+                version = json.loads(stream.readline())
+                header = json.loads(stream.readline())
+            except (ValueError, UnicodeError):
+                return set(), None, None
+            if (
+                not isinstance(version, dict)
+                or version.get("type") != "version"
+                or not isinstance(header, dict)
+                or header.get("type") != "session"
+                or header.get("trace_type") != "clanker_mode"
+                or not isinstance(header.get("session_id"), str)
+                or not isinstance(header.get("pid"), int)
+                or header["pid"] <= 0
+            ):
+                return set(), None, None
+            trace_id = header["session_id"]
+            owners = {
+                s["conversation_id"]
+                for s in snapshots
+                if s.get("trace_session_id") == trace_id
+            }
+            # Pre-link snapshots retain original sequence numbers and timestamps,
+            # even when restore remaps the turn IDs.
+            legacy = {}
+            for snapshot in snapshots:
+                if "trace_session_id" not in snapshot:
+                    first = snapshot["messages"][0]
+                    key = first.get("sequence"), first.get("timestamp")
+                    if isinstance(key[0], int) and isinstance(key[1], str):
+                        legacy.setdefault(key, set()).add(snapshot["conversation_id"])
+            if legacy:
+                last = max(seq for seq, _ in legacy)
+                for line in stream:
+                    try:
+                        record = json.loads(line)
+                    except ValueError:
+                        continue
+                    if not isinstance(record, dict) or not isinstance(
+                        record.get("sequence"), int
+                    ):
+                        continue
+                    if record["sequence"] > last:
+                        break
+                    if record.get("type") == "message":
+                        owners.update(
+                            legacy.get(
+                                (record["sequence"], record.get("timestamp")), ()
+                            )
+                        )
+            return owners, header["pid"], trace_id
 
     def _select(self, snapshots, query):
         if not query:

@@ -90,6 +90,7 @@ class Session:
 
     def __init__(self, directory, owner_ctx=None, *, trace_type="clanker_mode"):
         self.owner_ctx = owner_ctx
+        self.trace_type = trace_type
         self.pid = os.getpid()
         self.id = uuid4().hex
         self.sequence = 0
@@ -109,6 +110,21 @@ class Session:
             trace_type=trace_type,
             pid=self.pid,
         )
+
+    def replace_trace(self):
+        """Delete an idle shell's current trace and continue logging to a fresh file."""
+        if self.active:
+            raise RuntimeError("Cannot replace a trace during an active turn")
+        replacement = Session(self.path.parent, self.owner_ctx, trace_type=self.trace_type)
+        try:
+            replacement.append("trace_rotation", after_turn_id=self.turn)
+            self.path.unlink()
+        except BaseException:
+            replacement.path.unlink(missing_ok=True)
+            raise
+        self.id = replacement.id
+        self.path = replacement.path
+        self.sequence = replacement.sequence
 
     def append(self, kind, **fields):
         record = {

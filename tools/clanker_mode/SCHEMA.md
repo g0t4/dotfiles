@@ -65,6 +65,7 @@ order, even if the wall clock moves backward.
 | `message` | `turn_id`, `message`: conversation body; `metadata`: local diagnostics |
 | `error` | `turn_id`, `error`: object with exception `class` and string `message` |
 | `turn_end` | `turn_id`, `status`: `"success"`, `"error"`, or `"interrupted"` |
+| `trace_rotation` | `after_turn_id`: last local turn before deleting the current trace; subsequent events use the new file and earlier context remains in shell memory |
 | `context_reset` | `after_turn_id`: last allocated turn ID, possibly `0` |
 | `context_rollback` | `rolled_back_turn_id`: turn excluded from future model input; `during_turn_id`: active turn that requested it, or `null` for a manual idle rollback |
 | `context_restore` | `conversation_id`, `title`, and `snapshot_version` identify a separately stored saved-context snapshot |

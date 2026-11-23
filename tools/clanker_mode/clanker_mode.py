@@ -471,7 +471,7 @@ def clank(args, stdin=None, stdout=None, stderr=None):
         if len(args) == 1 or args[1] in {"--help", "help"}:
             print(
                 "Usage: clank manage "
-                "<list|save|rename|restore|compact|rollback|clear|trace|messages> [value]",
+                "<list|save|rename|restore|delete|compact|rollback|clear|trace|messages> [value]",
                 file=stdout,
             )
             return 0
@@ -486,7 +486,7 @@ def clank(args, stdin=None, stdout=None, stderr=None):
     if (
         len(args) > 1
         and (args[0] in ROOT_COMMANDS or args[0] == "--saved")
-        and args[0] not in {"--save", "--rename", "--restore"}
+        and args[0] not in {"--save", "--rename", "--restore", "--delete"}
     ):
         print(f"Clanker: {args[0]} takes no arguments", file=stderr or sys.stderr)
         return 2
@@ -494,7 +494,7 @@ def clank(args, stdin=None, stdout=None, stderr=None):
     if args == ["--help"]:
         print(
             "Usage: clank [request] | clank manage <command> [value]\n"
-            "Manage commands: list, save, rename, restore, compact, rollback, "
+            "Manage commands: list, save, rename, restore, delete, compact, rollback, "
             "clear, trace, messages. Legacy --options remain supported.\n"
             "Bare clank opens a sub-REPL; Ctrl+D exits. Clanker Mode can inspect "
             "and change this live Xonsh shell.",
@@ -547,6 +547,16 @@ def clank(args, stdin=None, stdout=None, stderr=None):
         if args and args[0] == "--restore":
             snapshot = saved.restore(session, " ".join(args[1:]).strip() or None)
             print(f"Restored Clanker conversation: {snapshot['title']}", file=stdout)
+            return 0
+        if args and args[0] == "--delete":
+            value = " ".join(args[1:]).strip()
+            part = "both"
+            if value.startswith("--"):
+                selector, _, value = value.partition(" ")
+                part = selector[2:]
+            title = saved.delete(session, value, part)
+            label = {"saved": "snapshot", "trace": "trace", "both": "snapshot and trace"}[part]
+            print(f"Deleted Clanker {label}: {title}", file=stdout)
             return 0
         if args in (["--list"], ["--saved"]):
             snapshots = saved.list()
@@ -667,7 +677,7 @@ def clank(args, stdin=None, stdout=None, stderr=None):
             if prompt == "/help":
                 print(
                     "Enter a follow-up, or use /save [title], /rename title, "
-                    "/restore [title], /list, /compact, /rollback, /clear, "
+                    "/restore [title], /delete [--saved|--trace|--both] title, /list, /compact, /rollback, /clear, "
                     "/trace, /messages, /exit. Ctrl+D exits.",
                     file=stdout,
                 )

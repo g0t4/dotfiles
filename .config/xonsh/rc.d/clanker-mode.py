@@ -24,6 +24,7 @@ def _clank_alias(args, stdin=None, stdout=None, stderr=None):
 
 _clank_alias.__xonsh_threadable__ = False
 aliases['clank'] = _clank_alias
+aliases['clanker'] = _clank_alias
 from wes_abbreviations import abbr
 abbr('c', 'clank')
 abbr('cm', 'clank manage')
@@ -43,7 +44,7 @@ from xonsh.events import events
 
 @contextual_command_completer
 def _clanker_completer(command):
-    if command.command != 'clank' or command.arg_index < 1:
+    if command.command not in {'clank', 'clanker'} or command.arg_index < 1:
         return None
     from clanker_completion import shell_candidates
 

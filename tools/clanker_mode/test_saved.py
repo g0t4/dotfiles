@@ -156,3 +156,65 @@ def test_manage_extra_argument_cannot_become_a_model_prompt(shell, tmp_path, mon
     errors = io.StringIO()
     assert clanker_mode.clank(["manage", "clear", "extra"], stderr=errors) == 2
     assert "takes no arguments" in errors.getvalue()
+
+
+@pytest.mark.parametrize("part", ["--saved", "--trace", "--both", None])
+def test_manage_delete_uses_restore_query_and_preserves_live_context(shell, tmp_path, part):
+    session = get_session(shell, tmp_path)
+    run_agent("hello", shell, trace_dir=tmp_path, model=Reply("world"))
+    saved = SavedConversations(clanker_mode.SAVED_DIR)
+    snapshot = saved.save(session, "A named conversation")
+    path = session.path
+    before = session.outbound_bodies()
+    selector = [part] if part else []
+    query = snapshot["conversation_id"][:12] if part == "--trace" else "named conv"
+    assert clanker_mode.clank(["manage", "delete", *selector, query]) == 0
+    assert path.exists() == (part == "--saved")
+    assert bool(saved.list()) == (part == "--trace")
+    assert session.outbound_bodies() == before
+    run_agent("continue", shell, trace_dir=tmp_path, model=Reply("ok"))
+    assert read_records(session.path)[-1]["status"] == "success"
+    if part == "--trace":
+        assert clanker_mode.clank(["manage", "delete", query]) == 0
+        assert saved.list() == []
+
+
+def test_delete_legacy_shared_trace_and_ambiguous_queries(shell, tmp_path):
+    import json
+
+    session = get_session(shell, tmp_path)
+    saved = SavedConversations(clanker_mode.SAVED_DIR)
+    for title in ["project one", "project two"]:
+        session.clear()
+        run_agent(title, shell, trace_dir=tmp_path, model=Reply("ok"))
+        snapshot = saved.save(session, title)
+        del snapshot["trace_session_id"]
+        (saved.directory / f"{snapshot['conversation_id']}.json").write_text(json.dumps(snapshot))
+    original = session.path
+    for query, error in [("", "Usage"), ("project", "ambiguous"), ("missing", "matches"), ("one", "shared")]:
+        with pytest.raises(RuntimeError, match=error):
+            saved.delete(session, query, "both")
+        assert original.exists() and len(saved.list()) == 2
+    saved.delete(session, "one", "saved")
+    saved.delete(session, "two", "both")
+    assert not original.exists() and saved.list() == []
+
+
+def test_delete_restored_snapshot_targets_original_closed_shell(shell, tmp_path, monkeypatch):
+    from clanker_session import Session
+
+    source = get_session(shell, tmp_path)
+    saved = SavedConversations(clanker_mode.SAVED_DIR)
+    run_agent("source", shell, trace_dir=tmp_path, model=Reply("ok"))
+    snapshot = saved.save(source)
+    current = Session(tmp_path)
+    saved.restore(current, snapshot["conversation_id"])
+    saved.save(current, "new title")
+    with pytest.raises(RuntimeError, match="running shell"):
+        saved.delete(current, "new title", "both")
+    def exited(pid, signal):
+        assert pid == source.pid
+        raise ProcessLookupError
+    monkeypatch.setattr("clanker_saved.os.kill", exited)
+    saved.delete(current, "new title", "both")
+    assert current.path.exists() and not source.path.exists()

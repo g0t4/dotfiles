@@ -76,6 +76,7 @@ clank manage save [title]
 clank manage rename <title>
 clank manage restore [title-or-unique-fragment]
 clank manage compact
+clank manage delete [--both|--saved|--trace] <title-or-ID>
 ```
 
 Save stores the active context as a named snapshot under the Clanker state
@@ -97,6 +98,14 @@ or clear. You can save immediately after compacting. Restore preserves individua
 turns for rollback, including in older snapshots saved after a restore. Snapshot JSON is user-only (0600) and
 separate from append-only traces. A restore adds a `context_restore` link to the
 current trace; the complete restored messages stay in the snapshot.
+
+Delete accepts the same title, unique title fragment, or ID prefix as restore.
+It requires a target. By default it deletes the snapshot and its originating
+shell's entire JSONL trace. Use `--saved` or `--trace` to remove one file.
+A trace can span multiple conversations. If another saved conversation shares
+the trace, use `--saved`. Close another running shell before deleting its trace.
+Deleting this shell's trace starts a fresh log and keeps the current chat in
+memory. The sub-REPL accepts the same selectors after `/delete`.
 
 Use `clank manage messages` (or `/messages` inside the sub-REPL) to dump the
 active conversation as JSON, including restored messages and tool results.

@@ -89,3 +89,21 @@ def test_restore_completion_replaces_user_quotes_with_one_xonsh_argument(
     shell.aliases["clank"] = lambda args: received.append(args)
     shell.execer.exec(source + "\n", glbs=shell.ctx)
     assert received == [["manage", "restore", title]]
+
+
+def test_clanker_alias_deletes_by_restore_fragment(clanker_input, capsys):
+    from langchain_core.messages import HumanMessage
+
+    import clanker_mode
+    from clanker_saved import SavedConversations
+    from clanker_session import get_session
+
+    shell, _ = clanker_input
+    session = get_session(shell, clanker_mode.TRACE_DIR)
+    session.add_message(HumanMessage("test message"))
+    old_trace = session.path
+    saved = SavedConversations(clanker_mode.SAVED_DIR)
+    saved.save(session, "shell experiments")
+    shell.execer.exec("clanker manage delete experiments\n", glbs=shell.ctx)
+    assert "Deleted Clanker snapshot and trace" in capsys.readouterr().out
+    assert not old_trace.exists() and not saved.list()
