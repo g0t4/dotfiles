@@ -510,14 +510,17 @@ def clank(args, stdin=None, stdout=None, stderr=None):
         session = get_session(XSH, TRACE_DIR)
         saved = SavedConversations(SAVED_DIR)
 
-        def dump_messages():
-            print(
-                json.dumps(session.outbound_bodies(), ensure_ascii=False, indent=2, default=str),
-                file=stdout,
-            )
-
         if args == ["--messages"]:
-            dump_messages()
+            source = json.dumps(
+                session.outbound_bodies(), ensure_ascii=False, indent=2, default=str
+            ) + "\n"
+            if console.is_terminal:
+                from wes_syntax import syntax
+
+                highlighted = syntax(source, "json").highlight(source)
+                console.print(highlighted, end="", soft_wrap=True)
+            else:
+                print(source, file=stdout, end="")
             return 0
         if args == ["--trace"]:
             print(get_session(XSH, TRACE_DIR).path, file=stdout)
