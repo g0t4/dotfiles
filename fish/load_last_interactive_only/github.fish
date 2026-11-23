@@ -120,6 +120,11 @@ function _build_github_link --argument-names file type # xonsh-value-getter
     if test -d $file
         set dir $file
         set filename ""
+        if test "$type" = raw
+            # FYI non-raw is fine for directories so don't prohibit dirs entirely
+            echo "doesn't make much sense to copy links to raw directories on github, only files work there"
+            return -1
+        end
     else
         set dir (dirname $file)
         set filename (basename $file)
