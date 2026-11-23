@@ -27,6 +27,12 @@ aliases['clank'] = _clank_alias
 from wes_abbreviations import abbr
 abbr('c', 'clank')
 abbr('cm', 'clank manage')
+abbr('cmr', 'clank manage restore')
+abbr('cmn', 'clank manage rename') # cm re[n]ame (b/c I suspect restore might become more useful, or at least w.r.t. rename)
+abbr('cml', 'clank manage list')
+abbr('cmc', 'clank manage compact')
+abbr('cmm', 'clank manage messages')
+abbr('cms', 'clank manage save')
 
 
 from xonsh.built_ins import XSH
