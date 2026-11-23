@@ -123,6 +123,83 @@ def test_live_model_discovers_hidden_shell_value(shell, tmp_path):
     )
 
 
+@pytest.mark.parametrize("asynchronous", [False, True])
+def test_provider_requests_streaming_usage(shell, asynchronous):
+    import asyncio
+
+    import httpx
+
+    from clanker_mode import get_model
+
+    shell.env["CLANKER_MODEL"] = "test"
+    shell.env["CLANKER_BASE_URL"] = "http://backend.invalid/v1"
+    requests = []
+
+    def respond(request):
+        requests.append(json.loads(request.content))
+        chunks = [
+            {
+                "id": "test",
+                "object": "chat.completion.chunk",
+                "created": 1,
+                "model": "test",
+                "choices": [
+                    {
+                        "index": 0,
+                        "delta": {"role": "assistant", "content": "hello"},
+                        "finish_reason": "stop",
+                    }
+                ],
+            },
+            {
+                "id": "test",
+                "object": "chat.completion.chunk",
+                "created": 1,
+                "model": "test",
+                "choices": [],
+                "usage": {
+                    "prompt_tokens": 10,
+                    "completion_tokens": 2,
+                    "total_tokens": 12,
+                },
+            },
+        ]
+        content = "".join(f"data: {json.dumps(chunk)}\n\n" for chunk in chunks)
+        return httpx.Response(
+            200,
+            headers={"Content-Type": "text/event-stream"},
+            content=content + "data: [DONE]\n\n",
+        )
+
+    model = get_model(shell)
+    transport = httpx.MockTransport(respond)
+    if asynchronous:
+
+        async def collect():
+            async with httpx.AsyncClient(transport=transport) as client:
+                model.root_async_client = model.root_async_client.with_options(
+                    http_client=client
+                )
+                model.async_client = model.root_async_client.chat.completions
+                return [chunk async for chunk in model.astream("hello")]
+
+        chunks = asyncio.run(collect())
+    else:
+        with httpx.Client(transport=transport) as client:
+            model.root_client = model.root_client.with_options(http_client=client)
+            model.client = model.root_client.chat.completions
+            chunks = list(model.stream("hello"))
+    assert len(requests) == 1
+    assert requests[0]["stream"] is True
+    assert requests[0]["stream_options"]["include_usage"] is True
+    usage = next(chunk.usage_metadata for chunk in chunks if chunk.usage_metadata)
+    assert {key: usage[key] for key in ("input_tokens", "output_tokens", "total_tokens")} == {
+        "input_tokens": 10,
+        "output_tokens": 2,
+        "total_tokens": 12,
+    }
+
+
 def test_provider_http_tool_roundtrip(shell, tmp_path):
     from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 

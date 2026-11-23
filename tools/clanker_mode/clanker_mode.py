@@ -297,12 +297,15 @@ def select_model(models):
 def get_model(xsh):
     from ai_shared.models import connect
 
-    return connect(
+    model = connect(
         xsh.env.get("CLANKER_BASE_URL", "http://ask.lan:8014/v1"),
         xsh.env.get("CLANKER_MODEL"),
         xsh.env.get("CLANKER_API_KEY", "none"),
         "$CLANKER_MODEL",
     )
+    # Custom backend URLs do not enable streaming usage reporting by default.
+    model.stream_usage = True
+    return model
 
 
 def compact_session(session, xsh, *, model=None):
