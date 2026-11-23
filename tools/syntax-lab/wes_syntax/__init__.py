@@ -126,7 +126,18 @@ def style_for_markdown(colors, base_style):
     return WesMarkdown
 
 
+def style_for_jinja(colors, base_style):
+    class WesJinja(base_style):
+        styles = {
+            **base_style.styles,
+            # Token.Comment.Preproc: colors.get("jinja_delim", colors["decorator"]),
+        }
+    return WesJinja
+
+
 def style_for_lexer(lexer, colors, base_style):
+    if "Django/Jinja" in lexer.name or lexer.name == "HTML+Django/Jinja":
+        return style_for_jinja(colors, base_style)
     if lexer.name == "YAML":
         return style_for_yaml(colors, base_style)
 
