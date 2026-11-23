@@ -14,6 +14,15 @@ def source_lexer(language=None, *, filename=None):
     if language in ("apply-patch", "apply_patch"):
         from .patch import ApplyPatchLexer
         return ApplyPatchLexer()
+    # Normalize Jinja aliases and .jinja filenames
+    if language is None and filename:
+        fname = str(filename).lower()
+        if fname.endswith(".jinja"):
+            language = "jinja"
+    if language in ("jinja", "jinja2", "jinja-template"):
+        # Pygments maps 'jinja' to DjangoLexer (HTML+Django/Jinja)
+        # Use html+jinja for plain-text Jinja templates
+        language = "html+jinja"
     from pygments.lexers import get_lexer_by_name, get_lexer_for_filename
     lexer = get_lexer_by_name(language) if language is not None else get_lexer_for_filename(str(filename))
     if lexer.name == "Markdown":
