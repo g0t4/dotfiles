@@ -96,8 +96,7 @@ ln -s $dotfiles_dir/git/git-commit-with-function-context $HOME/bin/.
 ln -s $dotfiles_dir/git/git-prune-unpushed-reflog $HOME/bin/.
 
 # *** lesskey
-mkdir -p $HOME/.config/lesskey
-ln -f -s $dotfiles_dir/.config/lesskey/lesskey $HOME/.config/lesskey/.
+ln -f -s $dotfiles_dir/.config/lesskey $HOME/.config/.
 
 # *** hushlogin
 touch $HOME/.hushlogin
