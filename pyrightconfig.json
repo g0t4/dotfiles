@@ -9,6 +9,20 @@
     "reportPrivateUsage": "information",
     "reportPrivateImportUsage": "information",
 
+    "reportImplicitStringConcatenation": "none",
+
+    // is it just me or are these insane diagnostics to have on warning by default?!
+    // these basically underline all code unless (anything untyped)
+    "reportUnknownParameterType": "none",
+    "reportMissingParameterType": "none",
+    "reportUnknownVariableType": "none",
+    "reportUnknownArgumentType": "none",
+    "reportUnknownMemberType": "none",
+    "reportAny": "none", // usage of Any is a report?!
+    "reportMissingTypeStubs": "none", // WTF requires a stub file for libraries?
+
+    "reportUnusedCallResult": "none", // WTF WHO CARES if I call method and don't use its return value?
+
     "extraPaths": [
         // deliberatiely redundant (../dotfiles) to copy pasta this into any of my repos
         "../dotfiles/.config/xonsh/lib",
