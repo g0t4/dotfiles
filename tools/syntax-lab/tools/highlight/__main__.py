@@ -10,7 +10,7 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[2]
-LANGUAGE_COMPLETIONS = ("bash", "lua", "markdown", "python", "xonsh", "yaml")
+LANGUAGE_COMPLETIONS = ("bash", "jinja", "lua", "markdown", "python", "xonsh", "yaml")
 
 
 def complete_languages(**kwargs: object) -> Iterable[str]:

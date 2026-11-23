@@ -22,13 +22,13 @@ LANGUAGES = {
     "lua": "lua", "md": "markdown", "markdown": "markdown",
     "xsh": "xonsh", "xonsh": "xonsh",
     "bash": "bash", "sh": "bash", "shell": "bash",
-    "yaml": "yaml", "yml": "yaml",
+    "yaml": "yaml", "yml": "yaml", "jinja": "jinja",
 }
 FILE_LANGUAGES = {
     ".py": "python", ".pyi": "python", ".lua": "lua",
     ".md": "markdown", ".markdown": "markdown", ".xsh": "xonsh",
     ".sh": "bash", ".bash": "bash",
-    ".yaml": "yaml", ".yml": "yaml",
+    ".yaml": "yaml", ".yml": "yaml", ".jinja": "jinja",
 }
 SHELL_FILENAMES = {".bashrc", ".bash_profile", ".bash_login", ".bash_logout", ".profile"}
 
