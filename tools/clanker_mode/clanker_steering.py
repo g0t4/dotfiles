@@ -22,6 +22,7 @@ class TerminalSteering:
     def __init__(self, loop=None, **prompt_io):
         self.voice = PrivateDictation()
         self.session = PromptSession(
+            erase_when_done=True,
             key_bindings=self.voice.bindings(),
             bottom_toolbar=self.voice.toolbar,
             interrupt_exception=_PromptInterrupt,

@@ -36,7 +36,9 @@ Ctrl+C interrupts the turn (already executed changes persist).
 While the model is thinking in an interactive terminal, `steer ›` accepts one or
 more messages. Complete lines queue in order until the current model response and
 its tool-result batch finish, then enter the conversation together before the
-next model request. A blank steering line is ignored. Tool execution remains on
+next model request. Only the active steering prompt appears below the message
+boxes. It clears before each new box and when Clanker finishes.
+A blank steering line is ignored. Tool execution remains on
 the foreground Xonsh thread; steering input is offered during model inference,
 not while a shell tool owns the terminal.
 
