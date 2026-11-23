@@ -192,6 +192,7 @@ def test_provider_requests_streaming_usage(shell, asynchronous):
     assert len(requests) == 1
     assert requests[0]["stream"] is True
     assert requests[0]["stream_options"]["include_usage"] is True
+    assert requests[0]["return_timings"] is True
     usage = next(chunk.usage_metadata for chunk in chunks if chunk.usage_metadata)
     assert {key: usage[key] for key in ("input_tokens", "output_tokens", "total_tokens")} == {
         "input_tokens": 10,
@@ -226,6 +227,7 @@ def test_provider_http_tool_roundtrip(shell, tmp_path):
             request = json.loads(self.rfile.read(int(self.headers["Content-Length"])))
             requests.append(request)
             assert request["model"] == "test"
+            assert request["return_timings"] is True
             if len(requests) == 1:
                 assert (
                     request["tools"][0]["function"]["name"]

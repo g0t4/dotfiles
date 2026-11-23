@@ -305,6 +305,8 @@ def get_model(xsh):
     )
     # Custom backend URLs do not enable streaming usage reporting by default.
     model.stream_usage = True
+    # The local SGLang timing overlay is opt-in independently of token usage.
+    model.extra_body = {**(model.extra_body or {}), "return_timings": True}
     return model
 
 
