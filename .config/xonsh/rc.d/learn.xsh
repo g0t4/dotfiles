@@ -67,7 +67,7 @@ def implicit_cat(cmd, **kwargs):
     if not all(c.isprintable() or c in "\n\r\t" for c in text):
         return None
 
-    return f"cat -- {str(target_path)!r}"
+    return f"highlight -- {str(target_path)!r}"
 
 import shlex
 
