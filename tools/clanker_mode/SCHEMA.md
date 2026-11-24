@@ -7,7 +7,7 @@ in values are escaped. Records are appended, never updated in place.
 
 ## File identity and naming
 
-One trace belongs to one Xonsh process, created on first use. Its session ID is
+Each Xonsh process opens a main trace on first use and a separate trace for each retry. Its session ID is
 inside the `session` record and is independent of its filename. Renaming a file
 does not change its identity. Files are created exclusively with permissions
 0600, and existing files are never overwritten to resolve a filename collision.
@@ -61,7 +61,8 @@ order, even if the wall clock moves backward.
 | --- | --- |
 | `version` | `version`: integer format version, currently `1` |
 | `session` | `session_id`: opaque string; `trace_type`: `"clanker_mode"`; `pid`: shell process ID |
-| `turn_start` | `turn_id`: positive integer identifying one `clank` request |
+| `turn_start` | `turn_id`: positive integer identifying one `clank` request. New records include the selected `profile` |
+| `context_fork` | `source_trace`, `source_session`, and `source_turn` identify the original request. The branch inherits context from immediately before that request and records its own user message and subsequent events |
 | `message` | `turn_id`, `message`: conversation body; `metadata`: local diagnostics |
 | `error` | `turn_id`, `error`: object with exception `class` and string `message` |
 | `turn_end` | `turn_id`, `status`: `"success"`, `"error"`, or `"interrupted"` |

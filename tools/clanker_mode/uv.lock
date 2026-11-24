@@ -195,7 +195,7 @@ dev = [
 requires-dist = [
     { name = "httpx", specifier = ">=0.28" },
     { name = "langchain-llama-server", editable = "../../../langchain-llama-server" },
-    { name = "prompt-toolkit", specifier = ">=3,<4" },
+    { name = "prompt-toolkit", specifier = ">=3.0.53,<4" },
     { name = "wes-syntax", editable = "../syntax-lab" },
     { name = "xonsh", specifier = ">=0.24.2" },
 ]

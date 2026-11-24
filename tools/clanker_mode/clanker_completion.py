@@ -6,10 +6,13 @@ from pathlib import Path
 
 from prompt_toolkit.completion import Completer, Completion
 
+from clanker_profiles import PROFILES
 from clanker_saved import SavedConversations
 
 ROOT_COMMANDS = {
     "manage": "Saved context and conversation controls",
+    "--profile": "Choose a model profile",
+    "--retry": "Retry last turn in a separate conversation",
     "--help": "Show Clanker usage",
     "--list": "List saved conversations",
     "--save": "Save the active conversation",
@@ -46,6 +49,8 @@ REPL_COMMANDS = {
     "/clear": "Clear active model context",
     "/trace": "Print this shell's trace path",
     "/messages": "Dump active conversation JSON",
+    "/profile": "Choose a model profile",
+    "/retry": "Retry last turn in a separate conversation",
     "/help": "Show sub-REPL controls",
     "/exit": "Leave the sub-REPL",
 }
@@ -78,6 +83,8 @@ def shell_candidates(args, arg_index, prefix, saved_directory):
             for value, description in MANAGE_COMMANDS.items()
             if _matches(value, prefix)
         ]
+    if arg_index == 2 and args[1:2] in (["--profile"], ["--retry"]):
+        return [(name, name, profile.base_url) for name, profile in PROFILES.items() if _matches(name, prefix)]
     restore = (
         len(args) > 1
         and args[1] == "--restore"
@@ -113,6 +120,12 @@ class ClankerReplCompleter(Completer):
     def get_completions(self, document, complete_event):
         text = document.text_before_cursor
         if not text.startswith("/"):
+            return
+        if text.startswith(("/profile ", "/retry ")):
+            _, _, prefix = text.partition(" ")
+            for name in PROFILES:
+                if _matches(name, prefix):
+                    yield Completion(name, start_position=-len(prefix))
             return
         if text.startswith(("/restore ", "/delete ")):
             command, _, prefix = text.partition(" ")

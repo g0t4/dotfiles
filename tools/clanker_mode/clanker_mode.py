@@ -16,7 +16,8 @@ from pathlib import Path
 from langchain_core.messages import HumanMessage, SystemMessage, ToolMessage
 from langchain_core.tools import tool
 
-from clanker_session import get_session
+from clanker_profiles import DEFAULT_PROFILE, PROFILES, get_model, selected_profile
+from clanker_session import Session, get_session
 
 SYSTEM_PROMPT = """You are Clanker Mode, an assistant living inside the user's current
 Xonsh process alongside Shell Mode and Python Mode. Give concise, practical help.
@@ -294,22 +295,6 @@ def select_model(models):
     return shared_select_model(models, "$CLANKER_MODEL")
 
 
-def get_model(xsh):
-    from ai_shared.models import connect
-
-    model = connect(
-        xsh.env.get("CLANKER_BASE_URL", "http://ask.lan:8014/v1"),
-        xsh.env.get("CLANKER_MODEL"),
-        xsh.env.get("CLANKER_API_KEY", "none"),
-        "$CLANKER_MODEL",
-    )
-    # Custom backend URLs do not enable streaming usage reporting by default.
-    model.stream_usage = True
-    # The local SGLang timing overlay is opt-in independently of token usage.
-    model.extra_body = {**(model.extra_body or {}), "return_timings": True}
-    return model
-
-
 def compact_session(session, xsh, *, model=None):
     from langchain_core.messages import HumanMessage
 
@@ -338,8 +323,11 @@ def run_agent(
     max_rounds=50,
     on_event=None,
     steering=None,
+    session=None,
+    profile=None,
 ):
-    session = get_session(xsh, trace_dir or TRACE_DIR)
+    session = session or get_session(xsh, trace_dir or TRACE_DIR)
+    profile = selected_profile(xsh, profile)
     if session.active:
         raise RuntimeError("A Clanker turn is already running in this shell")
     session.active = True
@@ -363,7 +351,7 @@ def run_agent(
         )
 
     try:
-        session.append("turn_start", turn_id=session.turn)
+        session.append("turn_start", turn_id=session.turn, profile=profile)
         if not session.messages:
             history_type = type(xsh.history)
             history_backend = (
@@ -374,9 +362,11 @@ def run_agent(
             session.add_message(
                 SystemMessage(SYSTEM_PROMPT.format(history_backend=history_backend))
             )
+        prior_context = tuple(session.messages)
         session.add_message(HumanMessage(prompt))
+        session.retry_input = (session.id, prior_context, session.messages[-1])
         emit("thinking")
-        model = model if model is not None else get_model(xsh)
+        model = model if model is not None else get_model(xsh, profile)
         shell_tool = make_shell_tool(xsh)
         rollback_tool = make_rollback_tool(session)
         bound = model.bind_tools([shell_tool, apply_patch, rollback_tool])
@@ -464,6 +454,26 @@ def run_agent(
         session.append("turn_end", turn_id=session.turn, status=status)
 
 
+def retry_agent(xsh, session, profile, **kwargs):
+    if session.active:
+        raise RuntimeError("A Clanker turn is already running in this shell")
+    source_id, prior, request = getattr(session, "retry_input", (None, (), None))
+    if source_id != session.id or not any(record is request for record in session.messages):
+        raise ValueError("No recent turn in the active conversation to retry")
+    branch = Session(session.path.parent, xsh.ctx)
+    branch.append(
+        "context_fork", source_session=source_id, source_trace=session.path.name,
+        source_turn=request["turn_id"],
+    )
+    branch.messages.extend(prior)
+    branch.turn = request["turn_id"] - 1
+    session.active = True
+    try:
+        return run_agent(request["message"]["content"], xsh, session=branch, profile=profile, **kwargs)
+    finally:
+        session.active = False
+
+
 def clank(args, stdin=None, stdout=None, stderr=None):
     """Ask once, or enter Clanker's conversational sub-REPL with bare clank."""
     import sys
@@ -491,7 +501,7 @@ def clank(args, stdin=None, stdout=None, stderr=None):
     if (
         len(args) > 1
         and (args[0] in ROOT_COMMANDS or args[0] == "--saved")
-        and args[0] not in {"--save", "--rename", "--restore", "--delete"}
+        and args[0] not in {"--save", "--rename", "--restore", "--delete", "--profile", "--retry"}
     ):
         print(f"Clanker: {args[0]} takes no arguments", file=stderr or sys.stderr)
         return 2
@@ -501,6 +511,7 @@ def clank(args, stdin=None, stdout=None, stderr=None):
             "Usage: clank [request] | clank manage <command> [value]\n"
             "Manage commands: list, save, rename, restore, delete, compact, rollback, "
             "clear, trace, messages. Legacy --options remain supported.\n"
+            "--profile [name] selects a profile. --retry [name] forks the last turn.\n"
             "Bare clank opens a sub-REPL; Ctrl+D exits. Clanker Mode can inspect "
             "and change this live Xonsh shell.",
             file=stdout,
@@ -603,7 +614,31 @@ def clank(args, stdin=None, stdout=None, stderr=None):
             else {}
         )
 
-        def ask(prompt):
+        def choose_profile(names):
+            if len(names) > 1:
+                raise ValueError("Expected one profile name")
+            if names:
+                return selected_profile(XSH, names[0])
+            current = selected_profile(XSH)
+            if not interactive:
+                return current
+            from prompt_toolkit.application import create_app_session
+            from prompt_toolkit.shortcuts import choice
+
+            with create_app_session(**prompt_io):
+                return choice(
+                    "Clanker profile (↑/↓, Enter)",
+                    options=[(name, name) for name in PROFILES],
+                    default=current,
+                )
+
+        if args[:1] == ["--profile"]:
+            name = choose_profile(args[1:])
+            XSH.env["CLANKER_PROFILE"] = name
+            print(f"Clanker profile: {name}", file=stdout)
+            return 0
+
+        def ask(prompt, retry_profile=None):
             display = TurnDisplay(status_console) if status_console.is_terminal else None
             steering = (
                 TerminalSteering.for_session(session, **prompt_io)
@@ -616,7 +651,10 @@ def clank(args, stdin=None, stdout=None, stderr=None):
                     kwargs["steering"] = steering
                     steering.unsent_text = session.pending_prompt
                 try:
-                    answer = run_agent(prompt, XSH, **kwargs)
+                    if retry_profile is None:
+                        answer = run_agent(prompt, XSH, **kwargs)
+                    else:
+                        answer = retry_agent(XSH, session, retry_profile, **kwargs)
                 finally:
                     if steering is not None:
                         session.pending_prompt = steering.unsent_text
@@ -626,6 +664,10 @@ def clank(args, stdin=None, stdout=None, stderr=None):
             else:
                 print(answer, file=stdout)
             return steering is not None and steering.exit_requested
+
+        if args[:1] == ["--retry"]:
+            ask(None, choose_profile(args[1:]))
+            return 0
 
         if args:
             ask(" ".join(args))
@@ -656,7 +698,9 @@ def clank(args, stdin=None, stdout=None, stderr=None):
         async def read_prompt():
             try:
                 return await repl.prompt_async(
-                    HTML("<ansiyellow>clank › </ansiyellow>"),
+                    HTML("<ansiyellow>clank [{}] › </ansiyellow>").format(
+                        XSH.env.get("CLANKER_PROFILE", DEFAULT_PROFILE)
+                    ),
                     default=session.pending_prompt,
                 )
             finally:
@@ -683,11 +727,15 @@ def clank(args, stdin=None, stdout=None, stderr=None):
                 print(
                     "Enter a follow-up, or use /save [title], /rename title, "
                     "/restore [title], /delete [--saved|--trace|--both] title, /list, /compact, /rollback, /clear, "
-                    "/trace, /messages, /exit. Ctrl+D exits.",
+                    "/trace, /messages, /profile [name], /retry [name], /exit. Ctrl+D exits.",
                     file=stdout,
                 )
                 continue
             control, _, value = prompt.partition(" ")
+            if control in {"/profile", "/retry"}:
+                arguments = [f"--{control[1:]}", *value.split()]
+                clank(arguments, stdin=stdin, stdout=stdout, stderr=stderr)
+                continue
             if control.startswith("/") and (
                 control[1:] in MANAGE_COMMANDS or control == "/saved"
             ):

@@ -14,7 +14,7 @@ print(clanker_greeting)
 ```
 
 Run bare `clank` to enter a conversational sub-REPL. Type follow-ups directly at
-`clank ›` without repeating the command. Ctrl+D or Enter on an empty prompt exits
+the profile-labeled prompt without repeating the command. Ctrl+D or Enter on an empty prompt exits
 only after the current turn is complete; entering `clank` again resumes the same
 in-shell conversation. `/rollback`, `/clear`, `/trace`, and `/exit` are available
 at the idle sub-REPL prompt.
@@ -43,12 +43,12 @@ the foreground Xonsh thread; steering input is offered during model inference,
 not while a shell tool owns the terminal.
 
 Text still being edited when inference finishes is not submitted or discarded.
-It pre-fills the next steering prompt, or the next `clank ›` prompt when the turn
+It pre-fills the next steering prompt, or the next Clanker prompt when the turn
 has completed. This pending input also survives leaving and re-entering `clank`
 within the same Xonsh process; it is local UI state and is not written to the
 conversation trace until submitted.
 
-Shift-F7 toggles private voice dictation at both `clank ›` and `steer ›` prompts.
+Shift-F7 toggles private voice dictation at both the Clanker and steering prompts.
 It connects to the existing `voiced` Unix socket, requires private-dictation
 support, and owns the microphone until Shift-F7 is pressed again. The final
 transcript is inserted at the current cursor in that same editable buffer; it
@@ -149,6 +149,31 @@ background writers are not isolated, and output after a call returns is not
 reliably included. Explicit redirection to files or `/dev/tty` remains outside
 capture. Streams and descriptors are restored after errors and Ctrl+C.
 
+## Model profiles and retries
+
+`clank --profile` opens a keyboard picker in the terminal. Use ↑/↓ and Enter.
+Use `/profile` inside Clanker. Both commands also accept a name and offer Tab
+completion. For a Stream Deck text action, submit the command in the target shell:
+
+```xonsh
+clank --profile inkling-2-mini
+clank --retry deepseek
+```
+
+Profile selection applies to follow-ups and compaction in that shell. The default
+`deepseek` profile discovers the model at `http://ask.lan:8014/v1` and honors
+the existing connection overrides. The `inkling-2-mini` profile uses the named
+model at `http://build21:8017/v1`. Both use the same LangChain client. Set
+`$CLANKER_PROFILE` to choose a startup default.
+
+`--retry` (or `/retry`) forks the latest locally submitted turn using its original
+conversation input. With no name, it opens the picker in a terminal or uses the
+selected profile in a pipeline. The alternate answer prints immediately and gets
+its own linked trace. Follow-ups continue the original conversation using the
+selected profile. Both runs can execute tools against the live shell, so a retry
+can repeat side effects or see different tool results. Clear, restore, compact,
+rollback of the latest turn, or trace replacement invalidates that retry.
+
 Connection defaults: `http://ask.lan:8014/v1`, key `none`.
 Without a model override, `/v1/models` supplies the model ID: use the sole model
 on a dedicated endpoint (including VLLM), or the sole loaded model on a router.
@@ -161,7 +186,7 @@ and at most 50 model rounds per invocation.
 Traces live in `~/.local/state/nvim/ask-openai/clanker_mode/`. Names begin with
 local time, for example `2026-11-12_1530.jsonl`. Only collisions add a suffix,
 revealing as little of the microsecond timestamp as needed: `_1`, `_1b`, etc.
-Files are user-only (0600), with one append-only JSONL trace per shell.
+Files are user-only (0600), with one main JSONL trace per shell and one per retry.
 
 **[Trace format reference: version 1](SCHEMA.md)** documents every record type,
 field, filename rule, outbound filtering policy, and complete example for readers
