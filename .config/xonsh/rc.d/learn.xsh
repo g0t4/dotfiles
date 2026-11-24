@@ -42,6 +42,33 @@ def what_shell():
 #     def _(event):
 #         " Do something if 'a' is pressed and then 'b' is pressed. "
 #         print("this is why timeoutlen matters :)")
+import codecs
+import stat
+from pathlib import Path
+
+@events.on_transform_command
+def implicit_cat(cmd, **kwargs):
+    target_path = Path(cmd.strip()).expanduser()
+
+    try:
+        mode = target_path.stat().st_mode
+        if not stat.S_ISREG(mode) or mode & 0o111:
+            return None
+
+        with target_path.open("rb") as f:
+            data = f.read(8192)
+
+        decoder = codecs.getincrementaldecoder("utf-8")()
+        text = decoder.decode(data, final=len(data) < 8192)
+
+    except (OSError, UnicodeDecodeError, ValueError):
+        return None
+
+    if not all(c.isprintable() or c in "\n\r\t" for c in text):
+        return None
+
+    return f"cat -- {str(target_path)!r}"
+
 
 @events.on_command_not_found
 def wes_command_not_found(cmd, **kwargs):
