@@ -28,6 +28,11 @@ aliases["pstree_grep"] = [
     str(Path($WES_DOTFILES) / "zsh/compat_fish/pythons/pstree_grep.py"),
 ]
 
+aliases["colorcode"] = [
+    str(Path($WES_DOTFILES) / ".venv/bin/python3"),
+    str(Path($WES_DOTFILES) / "tools/colorcode/colorcode.py"),
+]
+
 _wcl_script = Path($WES_DOTFILES) / "zsh/compat_fish/pythons/wcl.py"
 _wcl_python = Path($WES_DOTFILES) / ".venv/bin/python3"
 
