@@ -733,7 +733,7 @@ def clank(args, stdin=None, stdout=None, stderr=None):
         async def read_prompt():
             try:
                 return await repl.prompt_async(
-                    HTML("<ansiyellow>🐷 clank [{}] › </ansiyellow>").format(
+                    HTML("<ansiyellow>🐷🖕 clank [{}] › </ansiyellow>").format(
                         XSH.env.get("CLANKER_PROFILE", DEFAULT_PROFILE)
                     ),
                     default=session.pending_prompt,
