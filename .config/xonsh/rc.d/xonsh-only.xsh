@@ -179,7 +179,33 @@ aliases['gstiv'] = _gstiv
 
 # gstiv-style: show symlinks, optionally limited to a path.
 # internal == resolve to this dir and under; external == resolve anywhere else
+# each link is also annotated: self-loop, dangling, or fine
 from rich.markup import escape as _escape
+
+def _resolve_link(p):
+    """Walk the link chain stage by stage so loops/dangling aren't hidden.
+
+    Returns (resolved, kind, raw) where:
+      kind == 'ok'       -> resolved is the existing path reached at the end of the chain
+      kind == 'loop'     -> a stage in the chain was seen before (self-loop or cycle)
+      kind == 'dangling' -> the chain ends at a path that does not exist
+    """
+    raw = os.readlink(p)
+    seen = set()
+    cur = os.path.abspath(p)
+    while os.path.lexists(cur) and os.path.islink(cur):
+        if cur in seen:
+            return None, "loop", raw
+        seen.add(cur)
+        nxt = os.path.realpath(cur)
+        # nxt is the fully normalized target; don't loop through the same path
+        if nxt == cur:
+            # realpath returned itself (e.g. loop whose target is the link itself)
+            return None, "loop", raw
+        cur = nxt
+    if not os.path.lexists(cur):
+        return None, "dangling", raw
+    return cur, "ok", raw
 
 def _symlinks_for(subpath, outside):
     path = subpath if subpath else "."
@@ -188,26 +214,42 @@ def _symlinks_for(subpath, outside):
     if not os.path.isdir(path):
         raise ValueError(f"not a valid directory: {path}")
     root = os.path.realpath(path)
-    rows = []
+    ok_rows = []
+    flagged_rows = []
     for dirpath, dirnames, filenames in os.walk(root):
         for name in filenames + dirnames:
             p = os.path.join(dirpath, name)
             if not os.path.islink(p):
                 continue
-            target = os.path.realpath(p)
-            try:
-                rel = os.path.relpath(target, root)
-                inside = rel != ".." and not rel.startswith(".." + os.sep)
-            except ValueError:
-                inside = False
-            if inside == (not outside):
-                rows.append((os.path.relpath(p, path), os.readlink(p), target))
-    rows.sort(key=lambda r: r[0])
-    for rel, raw, target in rows:
-        print(rel)
+            rel = os.path.relpath(p, path)
+            target, kind, raw = _resolve_link(p)
+            inside = False
+            if kind == "ok":
+                try:
+                    rel_target = os.path.relpath(target, root)
+                    inside = rel_target != ".." and not rel_target.startswith(".." + os.sep)
+                except ValueError:
+                    inside = False
+            if kind == "ok" and inside == (not outside):
+                ok_rows.append((rel, raw, target))
+            elif kind != "ok":
+                # loops/dangling are always reported, independent of scope
+                flagged_rows.append((rel, raw, kind))
+    ok_rows.sort(key=lambda r: r[0])
+    flagged_rows.sort(key=lambda r: r[0])
+    for rel, raw, target in ok_rows:
+        rich.print(f"[bold]{_escape(rel)}[/]")
         print(f"  ->  {raw}")
         rich.print(f"[dim]    = {_escape(target)}[/dim]")
-    print(f"{'external' if outside else 'internal'} symlinks ({path}): {len(rows)}")
+    if flagged_rows:
+        print("flagged:")
+        for rel, raw, kind in flagged_rows:
+            if kind == "loop":
+                rich.print(f"  [bold red]{_escape(rel)}[/]  [bold red]loop[/]")
+            else:
+                rich.print(f"  [bold yellow]{_escape(rel)}[/]  [bold yellow]dangling[/]")
+            print(f"    ->  {raw}")
+    print(f"{'external' if outside else 'internal'} symlinks ({path}): {len(ok_rows)} ok, {len(flagged_rows)} flagged ({sum(1 for _,_,k in flagged_rows if k == 'loop')} loop, {sum(1 for _,_,k in flagged_rows if k == 'dangling')} dangling)")
 
 def _list_internal_symlinks(args, stdin=None, stdout=None, stderr=None):
     """List symlinks (limited to a path) whose real target is this dir and under."""
@@ -221,7 +263,6 @@ def _list_external_symlinks(args, stdin=None, stdout=None, stderr=None):
         raise ValueError(f"usage: list_external_symlinks [path]\ngot {len(args)} arguments: {args}")
     _symlinks_for(args[0] if args else None, outside=True)
 
-aliases['list_internal_symlinks'] = _list_internal_symlinks
 aliases['list_external_symlinks'] = _list_external_symlinks
 #
 # * git bisect
