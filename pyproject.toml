@@ -41,6 +41,7 @@ dependencies = [
     "argcomplete>=3.7.0",
     "pyright>=1.1.411",
     "xonsh>=0.24.2",
+    "prompt-toolkit>=3.0.53,<4",
     "truststore>=0.10.5",
     "textual>=8.2.8",
     "psutil>=7.0.0",
