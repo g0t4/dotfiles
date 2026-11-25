@@ -26,7 +26,7 @@ _clank_alias.__xonsh_threadable__ = False
 aliases['clank'] = _clank_alias
 aliases['clanker'] = _clank_alias
 from wes_abbreviations import abbr
-abbr('c', 'clank')
+abbr('c', 'clank!') # ! treats everything after it as an argument (that way if you do `clank hello and goodbye` you don't get a command failure b/c goodbye isn't real + with `clank! hello and goodbyte` the model gets your entire prompt
 abbr('cm', 'clank manage')
 abbr('cmr', 'clank manage restore')
 abbr('cmn', 'clank manage rename') # cm re[n]ame (b/c I suspect restore might become more useful, or at least w.r.t. rename)
