@@ -346,3 +346,9 @@ A small first experiment would be to try the shared draft inside the existing
 REPL. The gestures for opening it, accepting an edit, and running it are open
 questions. Trying those on a real command would help decide whether this feels
 good enough to make Clanker the terminal's default entry point.
+
+### Further out
+
+If the shared draft feels right in `clanksh`, the next idea is `clankerterm`:
+what would a terminal built around that interaction feel like? And if we keep
+going, there’s already a name for the operating system: `clankeros`. 🐷
