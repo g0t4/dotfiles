@@ -210,6 +210,8 @@ def _resolve_link(p):
 
 def _symlinks_for(subpath, outside):
     path = subpath if subpath else "."
+    if Path(path).is_symlink():
+        raise ValueError(f"scan root is a symlink: {path}")
     if not os.path.exists(path):
         raise ValueError(f"not a valid path: {path}")
     if not os.path.isdir(path):
