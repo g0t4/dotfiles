@@ -269,6 +269,7 @@ def test_repeated_steering_is_queued_as_one_ordered_message_at_response_boundary
             return answer, []
 
     model = Model("")
+    events = []
     assert (
         run_agent(
             "inspect this",
@@ -276,9 +277,18 @@ def test_repeated_steering_is_queued_as_one_ordered_message_at_response_boundary
             model=model,
             trace_dir=tmp_path,
             steering=Steering(),
+            on_event=lambda event, payload: events.append((event, payload)),
         )
         == "adjusted"
     )
+    assert [
+        (event, payload.content) for event, payload in events
+        if event in {"user_message", "tool_result"}
+    ] == [
+        ("user_message", "inspect this"),
+        ("tool_result", "small result\n"),
+        ("user_message", model.inputs[1][-1].content),
+    ]
     assert [message.type for message in model.inputs[1][-3:]] == [
         "ai",
         "tool",

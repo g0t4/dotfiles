@@ -41,7 +41,8 @@ more messages. Press Enter to queue a line. Its text appears immediately in
 scrollback above the live preview, prefixed with `Queued ›`. Complete lines
 queue in order until the current model response and
 its tool-result batch finish, then enter the conversation together before the
-next model request. Only the active steering prompt appears below the message
+next model request. A right-aligned **👤 You** box shows the initial prompt and
+each steering batch when its request starts. Only the active steering prompt appears below the message
 boxes. It clears before each new box and when Clanker finishes.
 A blank steering line is ignored. Tool execution remains on
 the foreground Xonsh thread; steering input is offered during model inference,

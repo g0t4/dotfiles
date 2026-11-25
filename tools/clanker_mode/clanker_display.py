@@ -150,6 +150,17 @@ class TurnDisplay:
                 )
                 self.waiting.start()
             return
+        if event == "user_message":
+            self.console.print(
+                MessagePanel(
+                    Text(TERMINAL_CONTROLS.sub("", payload.text)),
+                    "👤 You",
+                    "cyan",
+                    self.console.width,
+                    "right",
+                )
+            )
+            return
         self.stop_waiting()
         if event == "assistant_partial":
             panel = partial_panel(payload, self.console)

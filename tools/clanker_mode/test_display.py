@@ -87,6 +87,7 @@ def test_progress_precedes_execution_and_does_not_enter_tool_results(
     )
     assert events == [
         "thinking",
+        "user_message",
         "assistant",
         "tool_start",
         "tool_result",
@@ -199,3 +200,16 @@ def test_partial_box_tracks_latest_lines_and_literal_tool_arguments():
     assert 'shell {"code":"[red]lit' in preview
     assert "latest" in preview and "earliest" not in preview
     assert len(preview.splitlines()) <= console.height - 5
+
+
+def test_user_message_stays_in_scrollback_as_a_literal_right_aligned_box():
+    from langchain_core.messages import HumanMessage
+
+    output = io.StringIO()
+    with TurnDisplay(Console(file=output, width=100)) as display:
+        display("user_message", HumanMessage(content="read [red]this[/red]\nthen stop"))
+    lines = output.getvalue().splitlines()
+    assert lines[0].startswith(" " * 50 + "╭")
+    assert "👤 You" in lines[0]
+    assert "read [red]this[/red]" in lines[1]
+    assert "then stop" in lines[2]

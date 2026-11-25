@@ -411,12 +411,15 @@ def run_agent(
         for round_index in range(max_rounds):
             if round_index:
                 emit("thinking")
+            messages = session.outbound()
+            if isinstance(messages[-1], HumanMessage):
+                emit("user_message", messages[-1])
             if steering is None:
-                answer = bound.invoke(session.outbound())
+                answer = bound.invoke(messages)
                 steers = []
             else:
                 emit("steering_start")
-                answer, steers = steering.invoke(bound, session.outbound())
+                answer, steers = steering.invoke(bound, messages)
             ids = [call["id"] for call in answer.tool_calls]
             if any(not identifier for identifier in ids) or len(set(ids)) != len(ids):
                 raise RuntimeError("Model returned missing or duplicate tool call IDs")
