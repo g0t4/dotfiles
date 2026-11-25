@@ -181,6 +181,7 @@ aliases['gstiv'] = _gstiv
 # internal == resolve to this dir and under; external == resolve anywhere else
 # each link is also annotated: self-loop, dangling, or fine
 from rich.markup import escape as _escape
+from rich.text import Text as _Text
 
 def _resolve_link(p):
     """Walk the link chain stage by stage so loops/dangling aren't hidden.
@@ -240,7 +241,7 @@ def _symlinks_for(subpath, outside):
     for rel, raw, target in ok_rows:
         rich.print(f"[bold]{_escape(rel)}[/]")
         print(f"  ->  {raw}")
-        rich.print(f"[dim]    = {_escape(target)}[/dim]")
+        rich.print(_Text(f"    = {target}", style="dim"))
     if flagged_rows:
         print("flagged:")
         for rel, raw, kind in flagged_rows:
