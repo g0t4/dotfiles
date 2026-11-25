@@ -96,6 +96,7 @@ class Session:
         self.sequence = 0
         self.turn = 0
         self.messages = []
+        self._trace_tools = None
         self.active = False
         self.pending_prompt = ""
         self.saved_conversation_id = None
@@ -117,6 +118,8 @@ class Session:
             raise RuntimeError("Cannot replace a trace during an active turn")
         replacement = Session(self.path.parent, self.owner_ctx, trace_type=self.trace_type)
         try:
+            if self._trace_tools is not None:
+                replacement.record_tools(self._trace_tools)
             replacement.append("trace_rotation", after_turn_id=self.turn)
             self.path.unlink()
         except BaseException:
@@ -125,6 +128,12 @@ class Session:
         self.id = replacement.id
         self.path = replacement.path
         self.sequence = replacement.sequence
+
+    def record_tools(self, definitions):
+        """Record the tool schema once per trace, then only when it changes."""
+        if definitions != self._trace_tools:
+            self.append("tools", tools=definitions)
+            self._trace_tools = deepcopy(definitions)
 
     def append(self, kind, **fields):
         record = {

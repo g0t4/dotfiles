@@ -37,7 +37,7 @@ def test_agent_tool_roundtrip_and_trace(shell, tmp_path):
         calls = 0
 
         def bind_tools(self, tools):
-            assert {tool.name for tool in tools} == {
+            assert {tool["function"]["name"] for tool in tools} == {
                 "execute_in_current_xonsh",
                 "apply_patch",
                 "rollback_turn",
@@ -347,6 +347,14 @@ def test_provider_http_tool_roundtrip(shell, tmp_path):
             == hidden
         )
         assert len(requests) == 3
+        tool_records = [
+            record
+            for path in tmp_path.glob("*.jsonl")
+            for record in read_records(path)
+            if record["type"] == "tools"
+        ]
+        assert len(tool_records) == 1
+        assert all(request["tools"] == tool_records[0]["tools"] for request in requests)
     finally:
         server.shutdown()
         thread.join()
@@ -480,7 +488,7 @@ def test_agent_queues_command_without_running_it(shell, tmp_path):
 
     class Model:
         def bind_tools(self, tools):
-            assert {tool.name for tool in tools} == {
+            assert {tool["function"]["name"] for tool in tools} == {
                 "execute_in_current_xonsh",
                 "apply_patch",
                 "rollback_turn",

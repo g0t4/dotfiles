@@ -385,7 +385,14 @@ def run_agent(
         model = model if model is not None else get_model(xsh, profile)
         shell_tool = make_shell_tool(xsh)
         rollback_tool = make_rollback_tool(session)
-        bound = model.bind_tools([shell_tool, apply_patch, rollback_tool])
+        from langchain_core.utils.function_calling import convert_to_openai_tool
+
+        definitions = [
+            convert_to_openai_tool(tool)
+            for tool in (shell_tool, apply_patch, rollback_tool)
+        ]
+        session.record_tools(definitions)
+        bound = model.bind_tools(definitions)
         for round_index in range(max_rounds):
             if round_index:
                 emit("thinking")

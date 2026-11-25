@@ -13,6 +13,7 @@ class Reply:
         self.inputs = []
 
     def bind_tools(self, tools):
+        self.tools = deepcopy(tools)
         return self
 
     def invoke(self, messages):
@@ -49,11 +50,32 @@ def test_session_appends_and_replays_without_changing_earlier_bytes(shell, tmp_p
         "follow-up",
     ]
     assert len([r for r in records if r["type"] == "session"]) == 1
+    tool_records = [r for r in records if r["type"] == "tools"]
+    assert len(tool_records) == 1
+    assert tool_records[0]["tools"] == first.tools == second.tools
     assert [r["status"] for r in records if r["type"] == "turn_end"] == [
         "success",
         "success",
     ]
     assert path.stat().st_mode & 0o777 == 0o600
+
+
+def test_tool_definitions_changes_and_trace_rotation(tmp_path):
+    from clanker_session import Session
+
+    session = Session(tmp_path)
+    tools = [{"type": "function", "function": {"name": "first"}}]
+    session.record_tools(tools)
+    session.record_tools(deepcopy(tools))
+    tools[0]["function"]["name"] = "changed"
+    session.record_tools(tools)
+    records = [r for r in read_records(session.path) if r["type"] == "tools"]
+    assert [r["tools"][0]["function"]["name"] for r in records] == ["first", "changed"]
+    session.replace_trace()
+    session.record_tools(tools)
+    records = [r for r in read_records(session.path) if r["type"] == "tools"]
+    assert len(records) == 1
+    assert records[0]["tools"] == tools
 
 
 def test_metadata_and_old_reasoning_stay_local_and_original_records_stay_intact(
@@ -152,7 +174,7 @@ def test_model_can_rollback_prior_turn_without_removing_current_turn(shell, tmp_
         calls = 0
 
         def bind_tools(self, tools):
-            assert "rollback_turn" in {tool.name for tool in tools}
+            assert "rollback_turn" in {tool["function"]["name"] for tool in tools}
             return self
 
         def invoke(self, messages):
@@ -333,8 +355,8 @@ def test_tail_reader_sees_complete_records_before_model_returns(shell, tmp_path)
             (path,) = tmp_path.glob("*.jsonl")
             assert path.read_bytes().endswith(b"\n")
             records = read_records(path)
-            assert records[-1]["type"] == "message"
-            assert records[-1]["message"] == {
+            message = next(r for r in reversed(records) if r["type"] == "message")
+            assert message["message"] == {
                 "role": "user",
                 "content": "live question",
             }
