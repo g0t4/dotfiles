@@ -4,7 +4,7 @@ import traceback
 
 from commandlines import yank_last_command_output_and_paste_to_commandline
 from scrape_ask import copy_screen_to_clipboard
-from f9command import on_f9, on_f10, on_f11
+from f9f10f11 import on_f9, on_f10, on_f11
 from logs import log
 from og_ask import ask_openai
 from split import (

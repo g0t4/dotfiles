@@ -194,7 +194,7 @@ async def on_f11(connection: iterm2.Connection):
         log(f'after_restart {was_running=}')
 
         if was_running.is_xonsh():
-            await asyncio.sleep(1) # if you send arrow too soon the prompt won't be ready to up into history... so just wait
+            await asyncio.sleep(1)  # if you send arrow too soon the prompt won't be ready to up into history... so just wait
             # TODO check for shell integration status to know when it is safe to send arrow?
             session = await get_current_session(connection)
             if not session:
