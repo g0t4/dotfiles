@@ -179,8 +179,14 @@ aliases['gstiv'] = _gstiv
 
 # gstiv-style: show symlinks, optionally limited to a path.
 # internal == resolve to this dir and under; external == resolve anywhere else
+from rich.markup import escape as _escape
+
 def _symlinks_for(subpath, outside):
     path = subpath if subpath else "."
+    if not os.path.exists(path):
+        raise ValueError(f"not a valid path: {path}")
+    if not os.path.isdir(path):
+        raise ValueError(f"not a valid directory: {path}")
     root = os.path.realpath(path)
     rows = []
     for dirpath, dirnames, filenames in os.walk(root):
@@ -198,15 +204,21 @@ def _symlinks_for(subpath, outside):
                 rows.append((os.path.relpath(p, path), os.readlink(p), target))
     rows.sort(key=lambda r: r[0])
     for rel, raw, target in rows:
-        print(f"{rel}  ->  {raw}\n    = {target}")
+        print(rel)
+        print(f"  ->  {raw}")
+        rich.print(f"[dim]    = {_escape(target)}[/dim]")
     print(f"{'external' if outside else 'internal'} symlinks ({path}): {len(rows)}")
 
 def _list_internal_symlinks(args, stdin=None, stdout=None, stderr=None):
     """List symlinks (limited to a path) whose real target is this dir and under."""
+    if len(args) > 1:
+        raise ValueError(f"usage: list_internal_symlinks [path]\ngot {len(args)} arguments: {args}")
     _symlinks_for(args[0] if args else None, outside=False)
 
 def _list_external_symlinks(args, stdin=None, stdout=None, stderr=None):
     """List symlinks (limited to a path) whose real target is outside this dir."""
+    if len(args) > 1:
+        raise ValueError(f"usage: list_external_symlinks [path]\ngot {len(args)} arguments: {args}")
     _symlinks_for(args[0] if args else None, outside=True)
 
 aliases['list_internal_symlinks'] = _list_internal_symlinks
