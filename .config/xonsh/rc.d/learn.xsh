@@ -46,14 +46,11 @@ import codecs
 import stat
 from pathlib import Path
 
-@events.on_transform_command
-def implicit_cat(cmd, **kwargs):
-    target_path = Path(cmd.strip()).expanduser()
-
+def is_text_file(target_path):
     try:
         mode = target_path.stat().st_mode
         if not stat.S_ISREG(mode) or mode & 0o111:
-            return None
+            return False
 
         with target_path.open("rb") as f:
             data = f.read(8192)
@@ -62,9 +59,16 @@ def implicit_cat(cmd, **kwargs):
         text = decoder.decode(data, final=len(data) < 8192)
 
     except (OSError, UnicodeDecodeError, ValueError):
-        return None
+        return False
 
-    if not all(c.isprintable() or c in "\n\r\t" for c in text):
+    return all(c.isprintable() or c in "\n\r\t" for c in text)
+
+
+@events.on_transform_command
+def implicit_cat(cmd, **kwargs):
+    target_path = Path(cmd.strip()).expanduser()
+
+    if not is_text_file(target_path):
         return None
 
     return f"highlight -- {str(target_path)!r}"
