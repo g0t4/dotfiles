@@ -20,6 +20,7 @@ from clanker_profiles import (
     DEFAULT_PROFILE,
     PROFILES,
     get_model,
+    resolve_profile,
     selected_profile,
     switch_profile,
 )
@@ -301,14 +302,14 @@ def select_model(models):
     return shared_select_model(models, "$CLANKER_MODEL")
 
 
-def compact_session(session, xsh, *, model=None):
+def compact_session(session, xsh, *, model=None, profile=None):
     from langchain_core.messages import HumanMessage
 
     if session.active:
         raise RuntimeError("Cannot compact a conversation during an active turn")
     if not session.has_conversation():
         raise RuntimeError("No conversation is available to compact")
-    model = model if model is not None else get_model(xsh)
+    model = model if model is not None else get_model(xsh, profile)
     answer = model.invoke([*session.outbound(), HumanMessage(COMPACTION_PROMPT)])
     if answer.tool_calls or answer.invalid_tool_calls:
         raise RuntimeError("Compaction model returned a tool call instead of a summary")
@@ -326,14 +327,16 @@ def run_agent(
     *,
     model=None,
     trace_dir=None,
-    max_rounds=50,
+    max_rounds=None,
     on_event=None,
     steering=None,
     session=None,
     profile=None,
 ):
     session = session or get_session(xsh, trace_dir or TRACE_DIR)
-    profile = selected_profile(xsh, profile)
+    profile = resolve_profile(xsh, profile)
+    if max_rounds is None:
+        max_rounds = profile.max_rounds
     if session.active:
         raise RuntimeError("A Clanker turn is already running in this shell")
     session.active = True
@@ -357,7 +360,14 @@ def run_agent(
         )
 
     try:
-        session.append("turn_start", turn_id=session.turn, profile=profile)
+        session.append(
+            "turn_start", turn_id=session.turn, profile=profile.name,
+            profile_settings={
+                "model": profile.model, "reasoning_effort": profile.reasoning_effort,
+                "temperature": profile.temperature, "max_output_tokens": profile.max_output_tokens,
+                "request_timeout": profile.request_timeout, "max_rounds": max_rounds,
+            },
+        )
         if not session.messages:
             history_type = type(xsh.history)
             history_backend = (

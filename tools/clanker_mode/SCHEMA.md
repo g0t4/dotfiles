@@ -61,7 +61,7 @@ order, even if the wall clock moves backward.
 | --- | --- |
 | `version` | `version`: integer format version, currently `1` |
 | `session` | `session_id`: opaque string; `trace_type`: `"clanker_mode"`; `pid`: shell process ID |
-| `turn_start` | `turn_id`: positive integer identifying one `clank` request. New records include the selected `profile` |
+| `turn_start` | `turn_id`: positive integer identifying one `clank` request. New records include the selected `profile` and `profile_settings` (configured model ID, reasoning effort, temperature, output-token limit, request timeout in seconds, and round limit). Null values mean discovery or provider defaults |
 | `context_fork` | `source_trace`, `source_session`, and `source_turn` identify the original request. The branch inherits context from immediately before that request and records its own user message and subsequent events |
 | `message` | `turn_id`, `message`: conversation body; `metadata`: local diagnostics |
 | `error` | `turn_id`, `error`: object with exception `class` and string `message` |

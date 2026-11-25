@@ -15,7 +15,9 @@ def select_model(models, setting="model override"):
     )
 
 
-def connect(base_url, model=None, api_key="none", setting="model override"):
+def connect(
+    base_url, model=None, api_key="none", setting="model override", *, timeout=120, **client_options
+):
     from langchain_llama_server.chat_models import ChatLlamaServer
 
     if not model:
@@ -27,5 +29,6 @@ def connect(base_url, model=None, api_key="none", setting="model override"):
         response.raise_for_status()
         model = select_model(response.json().get("data", []), setting)
     return ChatLlamaServer(
-        base_url=base_url, model=model, api_key=api_key, timeout=120, max_retries=0
+        base_url=base_url, model=model, api_key=api_key,
+        timeout=timeout, max_retries=0, **client_options,
     )

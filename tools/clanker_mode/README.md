@@ -189,6 +189,59 @@ Optional Xonsh environment overrides: `$CLANKER_BASE_URL`, `$CLANKER_MODEL`,
 `$CLANKER_API_KEY`. Uses a 120-second request timeout, no automatic retries,
 and at most 50 model rounds per invocation.
 
+### Code-based worker profiles
+
+Use `/profile inkling-low` to select Inkling with low reasoning effort, or
+`/retry inkling-low` to try it on the previous input once. The original profiles
+leave sampling, effort, and output length at their provider defaults.
+
+A launcher can derive an immutable profile for one call. Passing the object
+directly to `run_agent`, `retry_agent`, or `compact_session` bypasses named preset
+lookup and leaves the shell's saved selection alone. Start from
+`resolve_profile(xsh, "deepseek")` to include the existing shell connection
+overrides, or use a preset object directly to specify its configured endpoint.
+
+```python
+from dataclasses import replace
+from clanker_profiles import INKLING
+from clanker_mode import run_agent
+
+worker = replace(INKLING, name="reproduce-flake", reasoning_effort=0.42,
+                 temperature=0, max_output_tokens=2048, request_timeout=60,
+                 max_rounds=6)
+run_agent("Reproduce the failure and report the seed.", xsh, profile=worker)
+```
+
+Effort is model-specific. Temperature controls sampling; the output cap bounds
+generated tokens per request, including reasoning on these endpoints. Timeout
+is the model client's request timeout in seconds. Rounds bound the number of
+model requests in a turn; one answer may request several tools. A worker still
+needs its own shell for concurrent execution. Endpoint credentials are looked up
+at connection time by environment variable name.
+
+Inkling accepts numbers from 0 through 0.99 and seven preset names. Its template
+renders a system message such as `Thinking effort level: 0.42`. The names map to
+`none=0`, `minimal=0.1`, `low=0.2`, `medium=0.7`, `high=0.9`, and both
+`xhigh=max=0.99`. The default in the pinned template is 0.9. For the current
+vLLM client, numeric values go through `chat_template_kwargs`; named choices
+use the top-level effort field. The DeepSeek profile exposes `none`, `low`,
+`high`, and `max`.
+[Inkling chat template](https://huggingface.co/thinkingmachines/Inkling-2-Mini/blob/b85c3cfa615fc413cc9af3379f491b963f3b586a/chat_template.jinja)
+
+On the local Inkling vLLM endpoint, we asked for the visible effort without
+giving its value in the user message. It identified 0.2 and 0.9; at 0.42 it hit
+the 1024-token output cap before returning an answer. A shorter follow-up asking
+only for the number returned 0.42, and the named low setting returned 0.2.
+In a separate probe the
+prompt was “How many unordered multisets of coins of values 1, 3, and 4 total
+exactly 17? Use unlimited coins. Return just the integer.” At temperature zero
+and the same cap, each setting returned 18. The table records one call per
+setting on 2026-11-24.
+
+| Numeric effort | 0 | 0.2 | 0.42 | 0.7 | 0.9 | 0.99 |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| Server-reported reasoning tokens | 356 | 374 | 347 | 315 | 435 | 445 |
+
 Traces live in `~/.local/state/nvim/ask-openai/clanker_mode/`. Names begin with
 local time, for example `2026-11-12_1530.jsonl`. Only collisions add a suffix,
 revealing as little of the microsecond timestamp as needed: `_1`, `_1b`, etc.
@@ -346,6 +399,56 @@ A small first experiment would be to try the shared draft inside the existing
 REPL. The gestures for opening it, accepting an edit, and running it are open
 questions. Trying those on a real command would help decide whether this feels
 good enough to make Clanker the terminal's default entry point.
+
+### Clanker Swarm
+
+Each shell session has a primary model. Main Clanker oversees the investigation
+and can delegate a specific question to a child. The user can pair with either
+one. Address a child by its task (“ask whoever reproduced the flake to try a warm
+cache”). A child reports a finding, the evidence, and a way back into its live
+shell. “Take me there” focuses the session that still has the failing seed and
+scratch files. Joining a branch and accepting its edits are separate operations.
+
+The first proposed demo is “reproduce this in another tab while we keep
+talking.” Give the child a task ID, a snapshot of the conversation through the
+request, a model profile, and an execution destination. Record the parent task
+and originating iTerm2 session ID. Create a background tab without moving the
+keyboard, and associate the returned session ID with the child. Task ownership
+and focus can then change independently. The existing iTerm2 AutoLaunch script,
+tab/profile helpers, and ID-based socket routing are precedents.
+[wes.py](../../iterm2/scripts/AutoLaunch/wes/wes/wes.py) ·
+[split.py](../../iterm2/scripts/AutoLaunch/wes/wes/split.py) ·
+[session lookup](../../iterm2/scripts/AutoLaunch/wes/wes/semantic_save_window_state.py)
+
+The human and model can be clients of the same tool service, potentially using
+MCP. Address a long-lived shell by session ID so cwd, variables, and jobs survive
+between calls. A terminal attachment lets the user take the keyboard for an
+interactive program, then hand control back. Model selection, shell destination
+(local Xonsh, SSH, or container), and toolbox image are independent choices.
+A pinned Linux/GNU toolbox gives competing models the same commands and flags.
+The host shell remains useful for macOS-specific work.
+
+For three simultaneous attempts, start from the same input and dirty workspace,
+including untracked fixtures. First try a Docker image containing the working
+files and give each child a writable layer. Host bind mounts share edits across
+containers. Docker Sandbox kits can package a toolbox and its agent instructions;
+local templates capture filesystem state, and the cloud snapshot API offers
+memory capture where supported. A Linux alternative is a stable filesystem
+snapshot with a private overlay and mount namespace per child. Inherited file
+descriptors and cwd need explicit handling. Forking a live threaded Python
+interpreter adds another constraint. A fresh shell per worker is a smaller MVP
+than capturing live Python objects. Docker would own the environment lifecycle;
+Clanker would own the task, conversation, evidence, and handoff.
+[Docker templates](https://docs.docker.com/ai/sandboxes/usage/#saving-a-sandbox-as-a-template) ·
+[Snapshot and fork](https://docs.docker.com/ai/sandboxes-api/cookbook/snapshot-and-fork-a-sandbox/)
+
+A Linux image that boots straight to Clanker could test the OS idea. Measure
+time to first retained keystroke separately from time to first model token.
+A capability-based microkernel experiment could delegate explicit handles for a
+private workspace and services to each worker. A vetted model could propose a
+grant; the kernel would enforce the caller's authority. Inference could remain
+an independently restartable user-space service. Scope external side effects
+separately from filesystem snapshots (for example, pushing a Git ref).
 
 ### Further out
 
