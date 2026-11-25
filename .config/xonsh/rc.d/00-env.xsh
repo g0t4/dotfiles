@@ -27,6 +27,7 @@ if not "XDG_CACHE_HOME" in @.env:
 
 $WES_REPOS = str(_home / "repos")
 $WES_DOTFILES = str(Path($WES_REPOS) / "github/g0t4/dotfiles")
+$WES_VULGAR = True
 
 $VI_MODE = True
 
