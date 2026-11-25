@@ -171,3 +171,6 @@ def register_trace_helpers(aliases, dotfiles):
     totals = '{a+=$1; b+=$2; c+=$3} END {print a "\\t" b "\\t" c}'
     abbr("trace_timings", "jq -r " + single_quote(timing_query)
          + " ./*-trace.json | awk " + single_quote(totals))
+
+    abbr("cr", ".content -r", commands=("jq"), position="anywhere")
+

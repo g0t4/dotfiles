@@ -317,6 +317,13 @@ def reset_registry():
 
 
 def abbr(trigger, replacement, position: Literal["command", "anywhere"] = "command", **options):
+    if "commands" in options:
+        commands = options.get("commands")
+        if isinstance(commands, str):
+            options["commands"] = (commands,)
+        elif isinstance(commands, list):
+            options["commands"] = tuple(commands)
+
     # TODO pass all all options as named options... and replicage that into reminder_abbr() below
     """Register an abbreviation with declaration syntax close to Fish's."""
     # FYI < 1us per abbr to get source_file/source_line, so this is fine
