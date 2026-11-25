@@ -33,6 +33,11 @@ aliases["colorcode"] = [
     str(Path($WES_DOTFILES) / "tools/colorcode/colorcode.py"),
 ]
 
+aliases["color_shifter"] = [
+    str(Path($WES_DOTFILES) / ".venv/bin/python3"),
+    str(Path($WES_DOTFILES) / "tools/color_shifter/color_shifter.py"),
+]
+
 _wcl_script = Path($WES_DOTFILES) / "zsh/compat_fish/pythons/wcl.py"
 _wcl_python = Path($WES_DOTFILES) / ".venv/bin/python3"
 
