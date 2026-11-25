@@ -14,7 +14,7 @@ print(clanker_greeting)
 ```
 
 Run bare `clank` to enter a conversational sub-REPL. Type follow-ups directly at
-the `🐷🖕 clank [profile] ›` prompt without repeating the command. Ctrl+D or Enter on an empty prompt exits
+the avatar-prefixed `clank [profile] ›` prompt without repeating the command. Ctrl+D or Enter on an empty prompt exits
 only after the current turn is complete; entering `clank` again resumes the same
 in-shell conversation. `/rollback`, `/clear`, `/trace`, and `/exit` are available
 at the idle sub-REPL prompt.
@@ -130,6 +130,9 @@ Edit `apply_patch.md` beside `clanker_mode.py` to change the patch tool's
 description. It is a local copy of ask-openai.nvim's instructions, loaded at the
 start of each turn. Edits take effect on the next prompt without restarting
 Xonsh, and changed definitions are recorded in the trace's `tools` events.
+
+The prompt avatar uses the Clanker Code font fork. See [FONT.md](FONT.md) for
+building, installing, and switching back to SauceCodePro Nerd Font.
 
 During each agent execution tool call, the interactive `cat` alias is temporarily
 removed, so `cat` resolves to the executable on PATH. The exact alias and its
@@ -374,7 +377,7 @@ simulate accepting it and verify its behavior. The answer's prose is ungraded.
 ## Design notes for a model-first shell
 
 `clanksh` is a working name for a possible next UX for `clanker_mode`. Open a
-terminal and land at `🐷🖕 clank [profile] ›`. Plain text goes to the model, and
+terminal and land at the avatar-prefixed `clank [profile] ›`. Plain text goes to the model, and
 slash commands such as `/profile` control the REPL. A leading `!` could send a
 command straight to the live Xonsh session. It mirrors today's `clank!` in the
 other direction. Xonsh can keep supplying the working directory, variables,
