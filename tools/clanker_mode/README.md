@@ -312,3 +312,37 @@ suggestion persists even if the agent is interrupted later in the turn.
 Capability validation also probes command-line suggestions: the model must call
 the helper and leave the requested command unexecuted. Only then does the test
 simulate accepting it and verify its behavior. The answer's prose is ungraded.
+
+## Design notes for a model-first shell
+
+`clanksh` is a working name for a possible next UX for `clanker_mode`. Open a
+terminal and land at `🐷 clank [profile] ›`. Plain text goes to the model, and
+slash commands such as `/profile` control the REPL. A leading `!` could send a
+command straight to the live Xonsh session. It mirrors today's `clank!` in the
+other direction. Xonsh can keep supplying the working directory, variables,
+aliases, and execution while gradually receding from the everyday interface.
+
+### Work on a command together
+
+Keep one editable command draft alongside the conversation. Either of us can
+change it. I can paste a half-written pipeline, ask “what would this touch?”,
+edit a filename myself, then ask Clanker to change just the filter. Clanker
+should see the draft as it stands when I ask. If I keep typing while it thinks,
+its proposed edit should preserve my newer work or let me reconcile the edits.
+
+For example, I paste `sort names.txt > names.txt` and say “sort this in place.”
+Clanker can point out that the shell opens the output file before `sort` reads
+it and propose `sort -o names.txt names.txt` in the draft. I can inspect the
+change, edit it again, or run it. Sending a chat message and executing the draft
+need distinct gestures so we can keep talking with a runnable command on screen.
+
+The conversation should also span execution. Once I run the draft, “fix that”
+should refer to the exact command I ran, its exit status, and its relevant
+output. Clanker can explain the failure and put a repair back in the draft.
+That gives the model a role both before execution, when it can catch a mistake,
+and afterward, when the shell has evidence about what happened.
+
+A small first experiment would be to try the shared draft inside the existing
+REPL. The gestures for opening it, accepting an edit, and running it are open
+questions. Trying those on a real command would help decide whether this feels
+good enough to make Clanker the terminal's default entry point.
