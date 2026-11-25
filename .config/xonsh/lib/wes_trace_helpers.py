@@ -4,11 +4,9 @@ from __future__ import annotations
 
 import re
 import os
-import subprocess
 from pathlib import Path
 
 from wes_abbreviations import abbr
-from find_executables import find_fish
 from wes_fish_bridge import fish_function_stream_tty_invoke
 
 
