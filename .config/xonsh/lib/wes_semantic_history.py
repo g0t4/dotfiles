@@ -1,11 +1,10 @@
-"""Small dependency-free client and vector search for semantic shell history."""
+"""Small dependency-free client and vector search for semantic shell lookups."""
 
 from __future__ import annotations
 
 import asyncio
 import math
 import struct
-import time
 from collections.abc import Iterable, Sequence
 from dataclasses import dataclass
 from typing import Any
@@ -227,75 +226,3 @@ def rank_by_embedding(
 ) -> list[str]:
     scored = ((cosine_similarity(query, vector), command) for command, vector in commands)
     return [command for _score, command in sorted(scored, reverse=True)[:limit]]
-
-
-class SemanticHistoryRetriever:
-    INSTRUCTION = (
-        "Find shell history commands useful for completing the current command line."
-    )
-
-    def __init__(
-        self,
-        client: InferenceClient,
-        *,
-        history_limit: int = 500,
-        candidate_limit: int = 20,
-        on_timing=None,
-    ):
-        self.client = client
-        self.history_limit = history_limit
-        self.candidate_limit = candidate_limit
-        self.on_timing = on_timing
-        self.vectors: dict[str, list[float]] = {}
-
-    def _timing(self, stage: str, count: int, started_at: float) -> None:
-        if self.on_timing is not None:
-            self.on_timing(stage, count, (time.monotonic() - started_at) * 1000)
-
-    def _unique_recent(self, history: Iterable[str]) -> list[str]:
-        newest_first = reversed(list(history))
-        commands = []
-        seen = set()
-        for value in newest_first:
-            command = value.strip()
-            if not command or command in seen:
-                continue
-            seen.add(command)
-            commands.append(command)
-            if len(commands) == self.history_limit:
-                break
-        return commands
-
-    async def retrieve(
-        self, query: str, history: Iterable[str], *, limit: int = 8
-    ) -> list[str]:
-        commands = self._unique_recent(history)
-        if not commands:
-            return []
-        missing = [command for command in commands if command not in self.vectors]
-        if missing:
-            started_at = time.monotonic()
-            vectors = await self.client.embed(missing)
-            self.vectors.update(zip(missing, vectors, strict=True))
-            self._timing("embed_new", len(missing), started_at)
-
-        formatted_query = f"Instruct: {self.INSTRUCTION}\nQuery:{query}"
-        started_at = time.monotonic()
-        query_vector = (await self.client.embed([formatted_query]))[0]
-        self._timing("embed_query", 1, started_at)
-        started_at = time.monotonic()
-        shortlist = rank_by_embedding(
-            query_vector,
-            ((command, self.vectors[command]) for command in commands),
-            limit=min(self.candidate_limit, len(commands)),
-        )
-        self._timing("dot", len(commands), started_at)
-        if not shortlist:
-            return []
-        started_at = time.monotonic()
-        scores = await self.client.rerank(
-            RerankRequest(self.INSTRUCTION, query, shortlist)
-        )
-        self._timing("rerank", len(shortlist), started_at)
-        ranked = sorted(zip(scores, shortlist, strict=True), reverse=True)
-        return [command for _score, command in ranked[:limit]]

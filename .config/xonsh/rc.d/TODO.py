@@ -33,7 +33,7 @@
 # TODO: Add Fish-style subsequence completion after learning stock Xonsh completion.
 #
 # Why this is deferred:
-#   Keep native Xonsh completion, abbreviation expansion, and AI autosuggestions
+#   Keep native Xonsh completion and abbreviation expansion
 #   distinguishable while learning how each behaves. This is not blocked on
 #   feasibility; the implementation should be small and does not require a
 #   Prompt Toolkit keybinding.

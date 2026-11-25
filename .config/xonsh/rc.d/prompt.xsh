@@ -18,8 +18,6 @@ _prompt_state = {
     "displayed_generation": 0,
     "statuses": [],
     "show_status": False,
-    "failure_streak": 0,
-    "show_failure_assist": False,
 }
 
 
@@ -155,20 +153,6 @@ def _prompt_status():
     return "{RED}[" + "{RED}|".join(rendered) + "{RED}]{RESET}\n"
 
 
-def _prompt_failure_assist():
-    if not _prompt_state["show_failure_assist"]:
-        return ""
-    if not @.env.get("XONSH_AI_AUTOSUGGEST", True):
-        return ""
-    return "{INTENSE_BLACK}◌ two commands failed in a row — want help?{RESET}\n"
-
-
-def _prompt_ai_snout():
-    if not @.env.get("XONSH_AI_AUTOSUGGEST", True):
-        return " @"
-    return " 🐽"
-
-
 def _prompt_pipeline_status(rtn, cmd):
     pipeline = getattr(XSH, "lastcmd", None)
     statuses = list(getattr(pipeline, "pipestatus", []) or [])
@@ -182,10 +166,6 @@ def _prompt_pipeline_status(rtn, cmd):
 def _wes_prompt_record_status(cmd, rtn, **_):
     _prompt_state["command_generation"] += 1
     _prompt_state["statuses"] = _prompt_pipeline_status(rtn, cmd)
-    failed = any(status != 0 for status in _prompt_state["statuses"])
-    _prompt_state["failure_streak"] = (
-        _prompt_state["failure_streak"] + 1 if failed else 0
-    )
 
 
 @events.on_pre_prompt_format
@@ -195,20 +175,15 @@ def _wes_prompt_choose_status(**_):
     _prompt_state["show_status"] = is_new_command and any(
         status != 0 for status in _prompt_state["statuses"]
     )
-    _prompt_state["show_failure_assist"] = (
-        is_new_command and _prompt_state["failure_streak"] >= 2
-    )
     _prompt_state["displayed_generation"] = generation
 
 
 $PROMPT_FIELDS["wes_status"] = _prompt_status
-$PROMPT_FIELDS["wes_failure_assist"] = _prompt_failure_assist
 $PROMPT_FIELDS["wes_login"] = _prompt_login
 $PROMPT_FIELDS["wes_pwd"] = _prompt_pwd
-$PROMPT_FIELDS["wes_ai_snout"] = _prompt_ai_snout
 
 # iTerm2's rc.d integration wraps this with its OSC 133 prompt markers.
-$PROMPT = "{wes_status}{wes_failure_assist}{wes_login} {wes_pwd}{RESET}{wes_ai_snout} "
+$PROMPT = "{wes_status}{wes_login} {wes_pwd}{RESET} @ "
 $RIGHT_PROMPT = ""
 $TITLE = "{user}"
 

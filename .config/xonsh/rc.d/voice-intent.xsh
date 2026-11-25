@@ -22,6 +22,7 @@ _voice_lib = Path($XONSH_CONFIG_DIR) / "lib"
 if str(_voice_lib) not in sys.path:
     sys.path.insert(0, str(_voice_lib))
 
+from wes_voice_command import VoiceCommand, install_reasoning_window
 from wes_live_voice import LiveVoice, bounded_command_result
 from wes_voice_intent import DEFAULT_MODEL, VoiceIntent, insert_transcript, resolve_executable
 
@@ -37,6 +38,7 @@ from wes_voice_intent import DEFAULT_MODEL, VoiceIntent, insert_transcript, reso
     str(Path.home() / "repos/github/ggml-org/whisper.cpp/models/ggml-tiny.en.bin"),
 )
 @.env.setdefault("XONSH_LIVE_VOICE_INTERVAL_MS", 500)
+_voice_command = VoiceCommand()
 _voice_intent = VoiceIntent(
     audio_device=str($XONSH_VOICE_AUDIO_DEVICE),
     model=Path($XONSH_VOICE_MODEL),
@@ -156,7 +158,7 @@ async def _voice_finish_as_command(buffer, task, app):
         return
     await _voice_notice(f"voice: {transcript}\n🤖 generating command…")
     try:
-        command = await _ai_autosuggester.command_from_intent(buffer, transcript)
+        command = await _voice_command.command_from_intent(buffer, transcript)
     except asyncio.CancelledError:
         return
     except Exception as error:
@@ -173,6 +175,7 @@ async def _voice_finish_as_command(buffer, task, app):
 
 @events.on_ptk_create
 def _wes_voice_keybinding(bindings, prompter=None, **_):
+    install_reasoning_window(prompter, _voice_command)
     if prompter is not None and not getattr(
         prompter.app.layout, "_wes_live_voice_preview", False
     ):
@@ -228,8 +231,7 @@ def _wes_voice_keybinding(bindings, prompter=None, **_):
             _voice_notice(f"🎙 recording{label} — {stop_key} to stop")
         )
 
-    # Prompt Toolkit maps Shift-F7 to F19, alongside Shift-F6/F18 for the AI
-    # autosuggest toggle. Terminals do not normally report key release, so the
+    # Prompt Toolkit maps Shift-F7 to F19. Terminals rarely report key release, so the
     # portable baseline is press once to record and press again to transcribe.
     @bindings.add(Keys.F19, eager=True, save_before=lambda event: False)
     def _toggle_voice(event):
@@ -246,7 +248,7 @@ def _wes_voice_keybinding(bindings, prompter=None, **_):
             global _live_voice_ai_task
             try:
                 await asyncio.sleep(0.35)
-                command = await _ai_autosuggester.command_from_intent(
+                command = await _voice_command.command_from_intent(
                     buffer,
                     transcript,
                     service="xonsh_persistent_voice_command",
@@ -351,7 +353,7 @@ def _wes_voice_keybinding(bindings, prompter=None, **_):
             global _live_voice_ai_task
             try:
                 await asyncio.sleep(0.35)
-                command = await _ai_autosuggester.command_from_intent(
+                command = await _voice_command.command_from_intent(
                     buffer,
                     transcript,
                     service="xonsh_live_voice_command",
@@ -430,7 +432,7 @@ def _wes_voice_keybinding(bindings, prompter=None, **_):
                 _live_voice_state["phase"] = "finalizing"
                 event.app.invalidate()
                 buffer = event.app.current_buffer
-                command = await _ai_autosuggester.command_from_intent(
+                command = await _voice_command.command_from_intent(
                     buffer,
                     transcript,
                     service="xonsh_live_voice_command_final",

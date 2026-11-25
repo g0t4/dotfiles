@@ -5,7 +5,6 @@ import test_setup
 
 from wes_semantic_history import (  # noqa: E402
     InferenceClient,
-    SemanticHistoryRetriever,
     cosine_similarity,
     pack_message,
     rank_by_embedding,
@@ -64,53 +63,3 @@ def test_async_client_speaks_length_prefixed_messagepack():
         assert result == [[0.25, -0.5]]
 
     asyncio.run(scenario())
-
-
-def test_semantic_retriever_caches_command_vectors_and_reranks_shortlist():
-    class FakeClient:
-        def __init__(self):
-            self.embed_calls = []
-            self.rerank_docs = []
-
-        async def embed(self, texts):
-            self.embed_calls.append(texts)
-            vectors = {
-                "git status": [1.0, 0.0],
-                "git log": [0.9, 0.1],
-                "docker ps": [0.0, 1.0],
-            }
-            return [vectors.get(text, [1.0, 0.0]) for text in texts]
-
-        async def rerank(self, request):
-            self.rerank_docs.append(request.docs)
-            scores = {"git log": 0.9, "git status": 0.7, "docker ps": 0.1}
-            return [scores[doc] for doc in request.docs]
-
-    async def scenario():
-        client = FakeClient()
-        retriever = SemanticHistoryRetriever(client, candidate_limit=3)
-        history = ["git status", "docker ps", "git status", "git log"]
-
-        first = await retriever.retrieve("git show", history, limit=2)
-        second = await retriever.retrieve("git inspect", history, limit=2)
-
-        assert first == ["git log", "git status"]
-        assert second == ["git log", "git status"]
-        assert client.embed_calls[0] == ["git log", "git status", "docker ps"]
-        assert client.embed_calls[1][0].startswith("Instruct:")
-        assert client.embed_calls[2][0].startswith("Instruct:")
-        assert len(client.embed_calls) == 3
-
-    asyncio.run(scenario())
-
-
-def test_semantic_retriever_skips_backend_for_empty_history():
-    class BackendMustNotRun:
-        async def embed(self, _texts):
-            raise AssertionError("empty history should not be embedded")
-
-    result = asyncio.run(
-        SemanticHistoryRetriever(BackendMustNotRun()).retrieve("git", [])
-    )
-
-    assert result == []

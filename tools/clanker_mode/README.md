@@ -6,26 +6,29 @@ as the iTerm2 ask helper. No dependency on the Neovim Clanker implementation.
 Open a new Xonsh shell, then:
 
 ```xonsh
-clank "What were my last few commands?"
+clank! What were my last few commands?
 $CLANKER_DEMO_VALUE = 'hello from my shell'
-clank "Read CLANKER_DEMO_VALUE from my shell environment"
-clank "Set a Python variable named clanker_greeting to hello"
+clank! Read CLANKER_DEMO_VALUE from my shell environment
+clank! Set a Python variable named clanker_greeting to hello
 print(clanker_greeting)
 ```
 
 Run bare `clank` to enter a conversational sub-REPL. Type follow-ups directly at
-the profile-labeled prompt without repeating the command. Ctrl+D or Enter on an empty prompt exits
+the `🐷 clank [profile] ›` prompt without repeating the command. Ctrl+D or Enter on an empty prompt exits
 only after the current turn is complete; entering `clank` again resumes the same
 in-shell conversation. `/rollback`, `/clear`, `/trace`, and `/exit` are available
 at the idle sub-REPL prompt.
 
-`c` expands to `clank` on Space or Enter through the existing abbreviation system.
+`c` expands to `clank!` on Space or Enter. Use this Xonsh subprocess macro
+for prose. Everything after the bang reaches Clanker as a single argument,
+including shell operators such as `and`, `|`, and `>`. Use ordinary `clank`
+for controls such as `clank --profile` and `clank manage list`.
 Interactive input starting with `clank` that fails Xonsh syntax parsing is
 dispatched as a literal request, e.g. `clank what does {} mean in c#`. The
 `on_transform_command` handler runs before execution; it never executes the
 request while checking syntax. Valid shell syntax keeps its normal behavior,
-including expansion, comments, pipelines and redirects. Quote requests when
-you want literal text regardless of whether Xonsh considers it valid syntax.
+including expansion, comments, pipelines and redirects. Use `clank!` when
+you want the entire prompt passed literally.
 This fallback applies to interactive submissions, not scripts or tool code.
 `clank --help` shows usage. Conversation and live shell state persist for this shell process.
 `clank --clear` clears model context while retaining the trace with a reset event.

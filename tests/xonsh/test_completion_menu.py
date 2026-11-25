@@ -296,7 +296,6 @@ def test_real_xonsh_bindings_keep_filter_enter_and_escape_local(tmp_path, search
         "_wes_completion_menu",
         "_wes_abbreviation_keybindings",
         "_wes_keybindings",
-        "_wes_install_ai_autosuggester",
         "_wes_voice_keybinding",
     ]
     if not search_first:
@@ -308,7 +307,6 @@ def test_real_xonsh_bindings_keep_filter_enter_and_escape_local(tmp_path, search
 source {rc / "abbreviations.xsh"}
 source {rc / "completion-menu.py"}
 source {rc / "keybindings.xsh"}
-source {rc / "ai-autosuggest.xsh"}
 source {rc / "voice-intent.xsh"}
 # The config's version probe executes sys.argv[0], which is this test script.
 current_xonsh_version = lambda: 'xonsh/0.24.2'

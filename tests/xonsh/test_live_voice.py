@@ -130,10 +130,9 @@ def test_live_voice_client_can_reset_resident_worker():
 
 
 def test_shift_f9_binding_is_registered():
-    ai = ROOT / ".config/xonsh/rc.d/ai-autosuggest.xsh"
     voice = ROOT / ".config/xonsh/rc.d/voice-intent.xsh"
     command = (
-        f"source {ai}; source {voice}; "
+        f"source {voice}; "
         "from prompt_toolkit.key_binding import KeyBindings; "
         "from prompt_toolkit.keys import Keys; "
         "bindings = KeyBindings(); events.on_ptk_create.fire(bindings=bindings); "
@@ -146,10 +145,9 @@ def test_shift_f9_binding_is_registered():
 
 
 def test_shift_f8_persistent_binding_is_registered():
-    ai = ROOT / ".config/xonsh/rc.d/ai-autosuggest.xsh"
     voice = ROOT / ".config/xonsh/rc.d/voice-intent.xsh"
     command = (
-        f"source {ai}; source {voice}; "
+        f"source {voice}; "
         "from prompt_toolkit.key_binding import KeyBindings; "
         "from prompt_toolkit.keys import Keys; "
         "bindings = KeyBindings(); events.on_ptk_create.fire(bindings=bindings); "
@@ -215,10 +213,9 @@ def test_live_preview_changes_color_when_command_is_ready():
 
 
 def test_live_preview_wraps_prompt_layout_in_cursor_float():
-    ai = ROOT / ".config/xonsh/rc.d/ai-autosuggest.xsh"
     voice = ROOT / ".config/xonsh/rc.d/voice-intent.xsh"
     command = (
-        f"source {ai}; source {voice}; "
+        f"source {voice}; "
         "from prompt_toolkit import PromptSession; "
         "from prompt_toolkit.buffer import Buffer; "
         "from prompt_toolkit.key_binding import KeyBindings; "
@@ -236,10 +233,9 @@ def test_live_preview_wraps_prompt_layout_in_cursor_float():
 
 
 def test_enter_accepts_visible_live_command_without_submitting():
-    ai = ROOT / ".config/xonsh/rc.d/ai-autosuggest.xsh"
     voice = ROOT / ".config/xonsh/rc.d/voice-intent.xsh"
     command = (
-        f"source {ai}; source {voice}; "
+        f"source {voice}; "
         "from prompt_toolkit import PromptSession; "
         "from prompt_toolkit.buffer import Buffer; "
         "from prompt_toolkit.key_binding import KeyBindings; "
@@ -263,10 +259,9 @@ def test_enter_accepts_visible_live_command_without_submitting():
 
 
 def test_persistent_enter_submits_visible_command():
-    ai = ROOT / ".config/xonsh/rc.d/ai-autosuggest.xsh"
     voice = ROOT / ".config/xonsh/rc.d/voice-intent.xsh"
     command = (
-        f"source {ai}; source {voice}; "
+        f"source {voice}; "
         "from prompt_toolkit import PromptSession; "
         "from prompt_toolkit.buffer import Buffer; "
         "from prompt_toolkit.key_binding import KeyBindings; "

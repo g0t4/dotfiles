@@ -374,18 +374,18 @@ def test_registered_alias_dispatches_inside_shell(shell, monkeypatch, capsys):
     def agent(prompt, xsh, **kwargs):
         assert xsh is shell
         assert threading.get_ident() == caller
-        assert prompt == "inspect shell"
+        assert prompt == "inspect shell and explain $PATH | cat > out"
         xsh.ctx["alias_was_here"] = True
         return "alias worked"
 
     monkeypatch.setattr(clanker_mode, "run_agent", agent)
-    shell.execer.exec('clank "inspect shell"\n', glbs=shell.ctx)
+    shell.execer.exec("clank! inspect shell and explain $PATH | cat > out\n", glbs=shell.ctx)
     assert shell.ctx["alias_was_here"] is True
     assert "alias worked" in capsys.readouterr().out
     assert shell.aliases["clank"].__xonsh_threadable__ is False
     assert "clanker" in shell.completers
     assert any(
-        ab.trigger == "c" and ab.replacement == "clank"
+        ab.trigger == "c" and ab.replacement == "clank!"
         for ab in XONSH_ABBREVIATIONS.abbreviations
     )
     assert any(
