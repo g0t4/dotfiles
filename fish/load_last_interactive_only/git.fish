@@ -44,9 +44,9 @@ abbr gsti 'git status --ignored .'
 # FYI ok to replace `.` with a dir or path in the repo to limit search
 # look for legit, ignored files (i.e. sensitive log captures) sans the ones I never care about:
 # look at untracked and/or ignored files.. and skip things I know I never care bout
-abbr gstiv --set-cursor 'git status --ignored --untracked-files --short ".%" | rg_grep -i -v "node_modules|\.venv/|\.rag/|__pycache__|DS_Store|\.pytest_cache/|/bin/|/obj/|/target/|iterm2env/|egg-info/|dist/"'
+abbr gstiv --set-cursor 'git status --ignored --untracked-files --short ".%" | rg_grep -i -v "node_modules|\.venv/|\.rag/|__pycache__|ruff_cache|DS_Store|\.pytest_cache/|/bin/|/obj/|/target/|iterm2env/|egg-info/|dist/"'
 # also skip image files (don't always do this, hence a separte abbr)
-abbr gstiv_all --set-cursor 'git status --ignored --untracked-files --short ".%" | rg_grep -i -v "node_modules|\.venv/|\.rag/|__pycache__|DS_Store|\.pytest_cache/|/bin/|/obj/|/target/|iterm2env/|egg-info/|dist/|.*\.(png|bmp|jpg|svg)\$"'
+abbr gstiv_all --set-cursor 'git status --ignored --untracked-files --short ".%" | rg_grep -i -v "node_modules|\.venv/|\.rag/|__pycache__|ruff_cache|DS_Store|\.pytest_cache/|/bin/|/obj/|/target/|iterm2env/|egg-info/|dist/|.*\.(png|bmp|jpg|svg)\$"'
 
 # reset
 abbr grhh 'git reset --hard HEAD' # last commit hard reset
