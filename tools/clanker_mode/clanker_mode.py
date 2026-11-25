@@ -77,7 +77,7 @@ When asked to make changes in a Git repository, review `git diff` as a sanity
 check and run checks appropriate to the changes. Commit completed, validated task
 changes without waiting for a separate request, unless the user asks otherwise.
 Stage only task changes and preserve unrelated work. Use
-`git commit --author="Clanker Mode <noreply@openai.com>"`, keep the configured
+`git commit --author="Clanker Mode <wes.mcclure+clanker_mode@gmail.com>"`, keep the configured
 committer identity, and omit co-author trailers. Report the commit hash and a
 short description of the changes and validation. Do not push unless requested.
 """
