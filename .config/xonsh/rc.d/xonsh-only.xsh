@@ -264,6 +264,7 @@ def _list_external_symlinks(args, stdin=None, stdout=None, stderr=None):
         raise ValueError(f"usage: list_external_symlinks [path]\ngot {len(args)} arguments: {args}")
     _symlinks_for(args[0] if args else None, outside=True)
 
+aliases['list_internal_symlinks'] = _list_internal_symlinks
 aliases['list_external_symlinks'] = _list_external_symlinks
 #
 # * git bisect
