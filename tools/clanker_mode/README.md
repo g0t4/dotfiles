@@ -351,4 +351,5 @@ good enough to make Clanker the terminal's default entry point.
 
 If the shared draft feels right in `clanksh`, the next idea is `clankerterm`:
 what would a terminal built around that interaction feel like? And if we keep
-going, there’s already a name for the operating system: `clankeros`. 🐷
+going, `clankeros` would be a command-line-only OS built on a microkernel.
+The boot target is one second flat to a prompt that accepts input. 🐷
