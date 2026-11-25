@@ -73,35 +73,36 @@ def implicit_cat(cmd, **kwargs):
 
     return f"highlight -- {str(target_path)!r}"
 
+
 import shlex
 
-@events.on_command_not_found
-def wes_clanker_fallback(cmd, **kwargs):
-    if not cmd or cmd[0] == "clank":
-        return None
-
-    prompt = (
-        f"Hi Clanker 👋! Dear friend 🥰!!!!\n\n"
-        "I am writing to you from xonsh's 🐚 on_command_not_found event\n"
-        f"Two possibilities\n"
-        "1. I intended to talk to you\n"
-        "2. OR, I fucked up running a command 😭 \n\n"
-        "I trust you to discern which :)\n"
-        "\n"
-        "THANK YOU! 🤗\n\n"
-        f"Here's the prompt I submitted: {shlex.join(cmd)}"
-    )
-
-    ![clank @(prompt)]
-    return ["/usr/bin/true"] # weird crap if you try to pass back `clank` as a command here... it will return original error message still b/c it cannot find clank either
-    # so pass a known command when done... and before that just run clank mode directly
-
 # @events.on_command_not_found
-# def wes_command_not_found(cmd, **kwargs):
-#     rich.print(f"[red]Command not found...[/]\n    {cmd=}\n")
-#     if kwargs:
-#         rich.print(f"    {kwargs=}")
-#     # return {"cmd": ["echo","do", "something", "else" ...] + cmd, "env": {"FOO": "BAR"}}
+# def wes_clanker_fallback(cmd, **kwargs):
+#     if not cmd or cmd[0] == "clank":
+#         return None
+#
+#     prompt = (
+#         f"Hi Clanker 👋! Dear friend 🥰!!!!\n\n"
+#         "I am writing to you from xonsh's 🐚 on_command_not_found event\n"
+#         f"Two possibilities\n"
+#         "1. I intended to talk to you\n"
+#         "2. OR, I fucked up running a command 😭 \n\n"
+#         "I trust you to discern which :)\n"
+#         "\n"
+#         "THANK YOU! 🤗\n\n"
+#         f"Here's the prompt I submitted: {shlex.join(cmd)}"
+#     )
+#
+#     ![clank @(prompt)]
+#     return ["/usr/bin/true"] # weird crap if you try to pass back `clank` as a command here... it will return original error message still b/c it cannot find clank either
+#     # so pass a known command when done... and before that just run clank mode directly
+
+@events.on_command_not_found
+def wes_command_not_found(cmd, **kwargs):
+    rich.print(f"[red]Command not found...[/]\n    {cmd=}\n")
+    if kwargs:
+        rich.print(f"    {kwargs=}")
+    # return {"cmd": ["echo","do", "something", "else" ...] + cmd, "env": {"FOO": "BAR"}}
 
 # @events.on_precommand # cannot raise or otherwise stop execution, so likely use on_postcommand if you want to warn so it shows right after output (on_precommand puts it before and might be missed if lots of output)
 @events.on_postcommand
