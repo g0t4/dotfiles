@@ -680,7 +680,9 @@ def clank(args, stdin=None, stdout=None, stderr=None):
         def ask(prompt, retry_profile=None):
             display = TurnDisplay(status_console) if status_console.is_terminal else None
             steering = (
-                TerminalSteering.for_session(session, **prompt_io)
+                TerminalSteering.for_session(
+                    session, on_queued=display.show_queued, **prompt_io
+                )
                 if interactive
                 else None
             )

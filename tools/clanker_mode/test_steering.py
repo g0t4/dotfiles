@@ -251,3 +251,37 @@ def test_steering_input_survives_preview_redraw_and_ctrl_c_closes_stream():
             assert closed and steering.preview == ""
         finally:
             steering.close()
+
+
+def test_submissions_appear_in_scrollback_while_model_is_still_running():
+    import io
+
+    from prompt_toolkit.input import create_pipe_input
+    from prompt_toolkit.output import DummyOutput
+    from rich.console import Console
+
+    from clanker_display import TurnDisplay
+
+    output = io.StringIO()
+    display = TurnDisplay(Console(file=output))
+    updates = ["[red]inspect first[/red]", "then summarize"]
+    with create_pipe_input() as pipe:
+        steering = TerminalSteering(
+            input=pipe, output=DummyOutput(), on_queued=display.show_queued
+        )
+
+        class Model:
+            async def ainvoke(self, messages):
+                async with asyncio.timeout(2):
+                    for text in updates:
+                        pipe.send_text(text + "\n")
+                        while f"Queued › {text}\n" not in output.getvalue():
+                            await asyncio.sleep(0.01)
+                return AIMessage(content="done")
+
+        try:
+            _, queued = steering.invoke(Model(), [])
+        finally:
+            steering.close()
+    assert queued == updates
+    assert output.getvalue().splitlines() == [f"Queued › {text}" for text in updates]

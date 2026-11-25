@@ -14,6 +14,8 @@ from rich.text import Text
 from rich.tree import Tree
 from wes_syntax import syntax
 
+TERMINAL_CONTROLS = re.compile(r"[\x00-\x08\x0b-\x1f\x7f-\x9f]")
+
 
 class TerminalConsole(Console):
     @property
@@ -100,7 +102,7 @@ def partial_panel(message, console):
             if body:
                 body.append("\n")
             # Streamed bytes are untrusted literal text, including unfinished escapes.
-            value = re.sub(r"[\x00-\x08\x0b-\x1f\x7f-\x9f]", "", value[-limit:])
+            value = TERMINAL_CONTROLS.sub("", value[-limit:])
             body.append(value, style=style)
 
     append(message.additional_kwargs.get("reasoning_content"), "italic dim")
@@ -186,11 +188,8 @@ class TurnDisplay:
             self.console.print(tool_result_panel(payload, self.console.width))
         elif event == "assistant_intermediate":
             self.console.print(assistant_panel(payload.text, self.console.width))
-        elif event == "steering_queued":
-            count = len(payload)
-            self.console.print(
-                Text(
-                    f"Queued {count} steering message{'s' if count != 1 else ''}.",
-                    style="dim cyan",
-                )
-            )
+
+    def show_queued(self, message):
+        line = Text("Queued › ", style="cyan")
+        line.append(TERMINAL_CONTROLS.sub("", message), style="default")
+        self.console.print(line)

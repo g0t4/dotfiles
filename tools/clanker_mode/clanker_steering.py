@@ -19,7 +19,7 @@ class _PromptInterrupt(Exception):
 class TerminalSteering:
     """Collect complete lines until the model reaches its next response boundary."""
 
-    def __init__(self, loop=None, **prompt_io):
+    def __init__(self, loop=None, *, on_queued=None, **prompt_io):
         self.voice = PrivateDictation()
         self.session = PromptSession(
             erase_when_done=True,
@@ -28,6 +28,7 @@ class TerminalSteering:
             interrupt_exception=_PromptInterrupt,
             **prompt_io,
         )
+        self.on_queued = on_queued
         self.preview = ""
         self.exit_requested = False
         self.unsent_text = ""
@@ -110,6 +111,8 @@ class TerminalSteering:
                         return await model_task, queued
                     if text:
                         queued.append(text)
+                        if self.on_queued is not None:
+                            self.on_queued(text)
                 else:
                     self.unsent_text = self._current_buffer_text()
                     prompt_task.cancel()
