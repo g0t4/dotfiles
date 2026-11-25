@@ -1,5 +1,10 @@
 # Clanker Code
 
+This is a retained experiment, not the active prompt font. iTerm's GPU renderer
+turns its color glyphs into solid text-colored blocks. Disabling GPU rendering
+displays them correctly, but affects all iTerm windows. We restored GPU rendering
+and SauceCodePro and kept the ordinary pig/middle-finger emoji prompt instead.
+
 A separately named fork of the installed SauceCodePro Nerd Font family. The
 original font files remain untouched. All 14 weights/styles retain their existing
 characters and advances; the fork adds two private-use glyphs, U+F8E0 and U+F8E1.
@@ -27,8 +32,9 @@ preferred size. It uses PostScript name `ClankerCode-Regular`. The initial setup
 updated the default profile and sessions using `SauceCodeProNF`, preserving each
 size. Their old values are saved locally in `font-build/iterm-font-before.json`.
 
-Restart Xonsh to load the new Clanker prompt. Later Markdown instruction changes
-still reload each turn without restarting.
+To try the experimental avatar prompt, replace `🐷🖕` with `\uf8e0\uf8e1` in
+`clanker_mode.py`, select Clanker Code, disable iTerm GPU rendering, and restart
+Xonsh. Later Markdown instruction changes still reload each turn without restarting.
 
 To roll back, select **SauceCodePro Nerd Font** again (PostScript name
 `SauceCodeProNF`), and replace `\uf8e0\uf8e1` in the Clanker prompt with `🐷🖕`.
