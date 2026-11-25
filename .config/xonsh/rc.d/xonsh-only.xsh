@@ -176,6 +176,41 @@ def _gstiv(args, stdin=None, stdout=None, stderr=None):
     git status --ignored --untracked-files --short @(path) | rg_grep -i -v @(noise)
 
 aliases['gstiv'] = _gstiv
+
+# gstiv-style: show symlinks, optionally limited to a path.
+# internal == resolve to this dir and under; external == resolve anywhere else
+def _symlinks_for(subpath, outside):
+    path = subpath if subpath else "."
+    root = os.path.realpath(path)
+    rows = []
+    for dirpath, dirnames, filenames in os.walk(root):
+        for name in filenames + dirnames:
+            p = os.path.join(dirpath, name)
+            if not os.path.islink(p):
+                continue
+            target = os.path.realpath(p)
+            try:
+                rel = os.path.relpath(target, root)
+                inside = rel != ".." and not rel.startswith(".." + os.sep)
+            except ValueError:
+                inside = False
+            if inside == (not outside):
+                rows.append((os.path.relpath(p, path), os.readlink(p), target))
+    rows.sort(key=lambda r: r[0])
+    for rel, raw, target in rows:
+        print(f"{rel}  ->  {raw}\n    = {target}")
+    print(f"{'external' if outside else 'internal'} symlinks ({path}): {len(rows)}")
+
+def _list_internal_symlinks(args, stdin=None, stdout=None, stderr=None):
+    """List symlinks (limited to a path) whose real target is this dir and under."""
+    _symlinks_for(args[0] if args else None, outside=False)
+
+def _list_external_symlinks(args, stdin=None, stdout=None, stderr=None):
+    """List symlinks (limited to a path) whose real target is outside this dir."""
+    _symlinks_for(args[0] if args else None, outside=True)
+
+aliases['list_internal_symlinks'] = _list_internal_symlinks
+aliases['list_external_symlinks'] = _list_external_symlinks
 #
 # * git bisect
 abbr('gbs', 'git bisect')
