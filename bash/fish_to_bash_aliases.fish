@@ -1,4 +1,4 @@
-#!/usr/bin/env fish
+#!/usr/bin/env -S fish -i
 
 set -l cache_home "$XDG_CACHE_HOME"
 test -n "$cache_home"; or set cache_home "$HOME/.cache"
@@ -12,8 +12,8 @@ set file_skipped "$bash_cache_dir/.generated.skipped.bash"
 #  ' -- ' after arg ensures not a match in the abbr's "key value" positional args
 # | rg_grep -vE '\-\-(regex).* -- '
 abbr | sort \
-    | rg_grep --invert-match "\\\'" \
-    | rg_grep --invert-match "\-- -F" >"$file_abbrs"
+    | rg --no-config --invert-match "\\\'" \
+    | rg --no-config --invert-match "\-- -F" >"$file_abbrs"
 
 # * produce skipped list BEFORE any mods for regexs (or otherwise)
 # sort both just to be safe, else comm won't work
