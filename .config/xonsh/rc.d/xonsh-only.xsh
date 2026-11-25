@@ -166,6 +166,16 @@ abbr('watch_cert', f'watch -c -n 2 {$WES_DOTFILES}/.venv/bin/python {$WES_DOTFIL
 
 # * git abbrs xonsh only
 abbr('-c', '--create', commands=("git", "switch"))
+
+# gstiv is a function (not an abbr) so fish can delegate to it via `xonsh -c "gstiv"`;
+# the noise-filter pattern lives here in one place instead of being duplicated in the fish config
+def _gstiv(args, stdin=None, stdout=None, stderr=None):
+    """Show ignored/untracked files sans noise, optionally limited to a path."""
+    path = args[0] if args else "."
+    noise = r"node_modules|\.venv/|\.rag/|__pycache__|ruff_cache|DS_Store|pytest_cache/|/bin/|/obj/|/target/|iterm2env/|egg-info/|dist/"
+    git status --ignored --untracked-files --short @(path) | rg_grep -i -v @(noise)
+
+aliases['gstiv'] = _gstiv
 #
 # * git bisect
 abbr('gbs', 'git bisect')

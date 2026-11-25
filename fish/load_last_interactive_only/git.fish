@@ -41,10 +41,10 @@ abbr gstb 'git status -sb'
 abbr gstu 'git status --untracked-files'
 # optionally replace . with a dir or path in the repo:
 abbr gsti 'git status --ignored .'
-# FYI ok to replace `.` with a dir or path in the repo to limit search
+# FYI in xonsh you can limit the search to a path: gstiv <path>
 # look for legit, ignored files (i.e. sensitive log captures) sans the ones I never care about:
 # look at untracked and/or ignored files.. and skip things I know I never care bout
-abbr gstiv --set-cursor 'git status --ignored --untracked-files --short ".%" | rg_grep -i -v "node_modules|\\.venv/|\\.rag/|__pycache__|ruff_cache|DS_Store|pytest_cache/|/bin/|/obj/|/target/|iterm2env/|egg-info/|dist/"'   # use \\ so the xonsh version gets \\\\ which maps to \\ when expanded there too (xonsh doesn't like \. in a string)
+abbr gstiv 'xonsh -c "gstiv"' # delegate to the xonsh _gstiv function (xonsh-only.xsh); in xonsh you can limit to a path: gstiv <path>
 
 # reset
 abbr grhh 'git reset --hard HEAD' # last commit hard reset

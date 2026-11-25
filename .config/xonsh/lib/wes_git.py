@@ -62,7 +62,6 @@ def register_wes_git():
     abbr('gstb', 'git status -sb')
     abbr('gstu', 'git status --untracked-files')
     abbr('gsti', 'git status --ignored .')
-    abbr('gstiv', 'git status --ignored --untracked-files --short ".%" | rg_grep -i -v "node_modules|\\\\.venv/|\\\\.rag/|__pycache__|ruff_cache|DS_Store|pytest_cache/|/bin/|/obj/|/target/|iterm2env/|egg-info/|dist/"', cursor_marker="%")
     abbr('grhh', 'git reset --hard HEAD')
     abbr('grh_undo_amend_commit', 'git reset --hard HEAD@{1}')
     abbr('grsh', 'git reset --soft HEAD~1')
@@ -284,5 +283,4 @@ def register_wes_git():
     abbr('gg', "git grep -Ee '%' $(git rev-list --all)", cursor_marker="%")
     abbr('ggc', "git grep -C10 -Ee '%' $(git rev-list --all)", cursor_marker="%")
     abbr('ggf', "git grep --function-context -Ee '%' $(git rev-list --all)", cursor_marker="%")
-
 
