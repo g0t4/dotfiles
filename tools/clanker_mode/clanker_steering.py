@@ -7,7 +7,7 @@ import weakref
 from contextlib import suppress
 
 from prompt_toolkit import PromptSession
-from prompt_toolkit.formatted_text import HTML
+from prompt_toolkit.formatted_text import ANSI, HTML, to_formatted_text
 
 from clanker_voice import PrivateDictation
 
@@ -28,6 +28,7 @@ class TerminalSteering:
             interrupt_exception=_PromptInterrupt,
             **prompt_io,
         )
+        self.preview = ""
         self.exit_requested = False
         self.unsent_text = ""
         self.owns_loop = loop is None
@@ -54,6 +55,16 @@ class TerminalSteering:
                 self.loop.run_until_complete(task)
             raise
 
+    def update_preview(self, rendered):
+        self.preview = rendered
+        self.session.app.invalidate()
+
+    def prompt_message(self):
+        return [
+            *to_formatted_text(ANSI(self.preview)),
+            *to_formatted_text(HTML("<ansicyan>steer › </ansicyan>")),
+        ]
+
     def close(self):
         if not self.loop.is_closed():
             self.loop.run_until_complete(self.voice.close())
@@ -70,7 +81,7 @@ class TerminalSteering:
             while not model_task.done():
                 prompt_task = asyncio.create_task(
                     self.session.prompt_async(
-                        HTML("<ansicyan>steer › </ansicyan>"),
+                        self.prompt_message,
                         multiline=False,
                         default=self.unsent_text,
                     )

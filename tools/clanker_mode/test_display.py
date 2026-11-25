@@ -177,3 +177,25 @@ def test_console_tracks_output_pane_resize_despite_stale_env(monkeypatch):
                 assert console.width == width
     finally:
         os.close(master)
+
+
+def test_partial_box_tracks_latest_lines_and_literal_tool_arguments():
+    from langchain_core.messages import AIMessageChunk
+
+    from clanker_display import partial_panel
+
+    console = Console(width=55, height=12)
+    chunk = AIMessageChunk(
+        content="",
+        additional_kwargs={
+            "reasoning_content": "earliest\n" + "thinking\n" * 40 + "latest"
+        },
+        tool_call_chunks=[
+            {"index": 0, "name": "shell", "args": '{"code":"[red]lit', "id": "one"}
+        ],
+    )
+    preview = render(partial_panel(chunk, console), width=55)
+    assert "Clanker · streaming" in preview
+    assert 'shell {"code":"[red]lit' in preview
+    assert "latest" in preview and "earliest" not in preview
+    assert len(preview.splitlines()) <= console.height - 5

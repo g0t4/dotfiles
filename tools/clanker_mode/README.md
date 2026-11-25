@@ -290,8 +290,11 @@ To disable, remove `.config/xonsh/rc.d/clanker-mode.py` and start a new shell.
 
 ## Watching agent execution
 
-Interactive `clank` displays a transient thinking spinner while waiting for a
-complete model response. Before each tool executes, a message box shows the tool
+Interactive `clank` streams each model round into a temporary **Clanker · streaming**
+box above the steering prompt. It shows the newest lines of provider reasoning,
+answer text, and raw function arguments as they arrive. Ctrl+C cancels the round.
+Once the response finishes, the preview clears and the parsed messages appear
+in their usual boxes. Before each tool executes, a message box shows the tool
 name and syntax-lab-highlighted Xonsh source in an indented tree, matching the
 chat trace viewer's style. Calls are numbered within each returned batch.
 
@@ -308,8 +311,7 @@ cells; wide characters are measured in terminal cells.
 
 Progress and tool boxes use stderr and are enabled only when it is a terminal.
 The final answer uses stdout; pipes and redirection receive plain original answer
-text. The thinking spinner is stopped before tool execution and on failures or
-Ctrl+C. UI output is outside tool capture, excluded from trace messages, and never
+text. The preview clears on failure or interruption. UI output is outside tool capture, excluded from trace messages, and never
 sent back to the model. Direct `run_agent` callers are quiet unless they provide
 an `on_event(event, payload)` callback.
 

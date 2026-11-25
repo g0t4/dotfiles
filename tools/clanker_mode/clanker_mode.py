@@ -25,6 +25,7 @@ from clanker_profiles import (
     switch_profile,
 )
 from clanker_session import Session, get_session
+from clanker_stream import StreamingRound
 
 SYSTEM_PROMPT = """You are Clanker Mode, an assistant living inside the user's current
 Xonsh process alongside Shell Mode and Python Mode. Give concise, practical help.
@@ -403,7 +404,10 @@ def run_agent(
             for tool in (shell_tool, patch_tool, rollback_tool)
         ]
         session.record_tools(definitions)
-        bound = model.bind_tools(definitions)
+        bound = StreamingRound(
+            model.bind_tools(definitions),
+            (lambda message: emit("assistant_partial", message)) if on_event else None,
+        )
         for round_index in range(max_rounds):
             if round_index:
                 emit("thinking")
@@ -684,6 +688,7 @@ def clank(args, stdin=None, stdout=None, stderr=None):
                 kwargs = {"on_event": display}
                 if steering is not None:
                     kwargs["steering"] = steering
+                    display.steering = steering
                     steering.unsent_text = session.pending_prompt
                 try:
                     if retry_profile is None:

@@ -132,6 +132,7 @@ def test_provider_requests_streaming_usage(shell, asynchronous, streaming):
 
     from clanker_mode import get_model
 
+    shell.env["CLANKER_PROFILE"] = "deepseek"
     shell.env["CLANKER_MODEL"] = "test"
     shell.env["CLANKER_BASE_URL"] = "http://backend.invalid/v1"
     requests = []
@@ -313,19 +314,32 @@ def test_provider_http_tool_roundtrip(shell, tmp_path):
                     )
                 message = {"role": "assistant", "content": hidden}
                 reason = "stop"
-            body = json.dumps(
+            assert request["stream"] is True
+            if calls := message.get("tool_calls"):
+                calls[0]["index"] = 0
+            deltas = [{"reasoning_content": "checking"}, message, {}]
+            frames = [
                 {
                     "id": "test",
-                    "object": "chat.completion",
+                    "object": "chat.completion.chunk",
                     "created": 1,
                     "model": "test",
                     "choices": [
-                        {"index": 0, "message": message, "finish_reason": reason}
+                        {
+                            "index": 0,
+                            "delta": delta,
+                            "finish_reason": reason if not delta else None,
+                        }
                     ],
                 }
+                for delta in deltas
+            ]
+            body = (
+                "".join(f"data: {json.dumps(frame)}\n\n" for frame in frames)
+                + "data: [DONE]\n\n"
             ).encode()
             self.send_response(200)
-            self.send_header("Content-Type", "application/json")
+            self.send_header("Content-Type", "text/event-stream")
             self.send_header("Content-Length", str(len(body)))
             self.end_headers()
             self.wfile.write(body)
@@ -334,6 +348,7 @@ def test_provider_http_tool_roundtrip(shell, tmp_path):
     thread = threading.Thread(target=server.serve_forever)
     thread.start()
     try:
+        shell.env["CLANKER_PROFILE"] = "deepseek"
         shell.env["CLANKER_BASE_URL"] = f"http://127.0.0.1:{server.server_port}/v1"
         shell.env.pop("CLANKER_MODEL", None)
         assert (

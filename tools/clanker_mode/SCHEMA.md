@@ -114,6 +114,10 @@ system message with `metadata.compaction` and `metadata.synthetic` set to true.
 | `raw_tool_calls` | Original raw calls retained when malformed calls were present |
 | `synthetic` | `true` for tool-result placeholders generated when a turn aborts |
 
+Streaming previews are terminal-only. A completed model round writes one assistant
+message after assembling its chunks, including trailing usage when supplied.
+An interrupted stream follows the normal error and turn-end path.
+
 There is no top-level response snapshot. Each assistant message retains its own
 response and usage. Malformed calls are kept in diagnostics and excluded from
 executable/replayed tool calls.

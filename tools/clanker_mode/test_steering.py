@@ -199,3 +199,55 @@ def test_voice_final_at_model_boundary_reaches_unsubmitted_draft():
         assert steering.unsent_text == "spoken draft"
     finally:
         steering.close()
+
+
+def test_steering_input_survives_preview_redraw_and_ctrl_c_closes_stream():
+    import io
+
+    import pytest
+    from langchain_core.messages import AIMessageChunk
+    from prompt_toolkit.input import create_pipe_input
+    from prompt_toolkit.output import DummyOutput
+    from rich.console import Console
+
+    from clanker_display import TurnDisplay
+    from clanker_stream import StreamingRound
+
+    with create_pipe_input() as pipe:
+        steering = TerminalSteering(input=pipe, output=DummyOutput())
+        closed = False
+
+        class Model:
+            async def astream(self, messages):
+                nonlocal closed
+                try:
+                    yield AIMessageChunk(content="live text")
+                    assert "live text" in steering.preview
+                    pipe.send_text("unfinished")
+                    async with asyncio.timeout(2):
+                        while steering.session.app.current_buffer.text != "unfinished":
+                            await asyncio.sleep(0.01)
+                    yield AIMessageChunk(
+                        content="",
+                        tool_call_chunks=[
+                            {"index": 0, "name": "tool", "args": "{", "id": "one"}
+                        ],
+                    )
+                    assert "tool {" in steering.preview
+                    assert steering.session.app.current_buffer.text == "unfinished"
+                    pipe.send_bytes(b"\x03")
+                    await asyncio.Event().wait()
+                finally:
+                    closed = True
+
+        try:
+            with TurnDisplay(Console(file=io.StringIO())) as display:
+                display.steering = steering
+                model = StreamingRound(
+                    Model(), lambda msg: display("assistant_partial", msg)
+                )
+                with pytest.raises(KeyboardInterrupt):
+                    steering.invoke(model, [])
+            assert closed and steering.preview == ""
+        finally:
+            steering.close()
