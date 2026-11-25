@@ -36,10 +36,14 @@ abbr('cmm', 'clank manage messages')
 abbr('cms', 'clank manage save')
 
 
+from clanker_profiles import initialize_profile
 from xonsh.built_ins import XSH
 from xonsh.completers.completer import add_one_completer
 from xonsh.completers.tools import RichCompletion, contextual_command_completer
 from xonsh.events import events
+
+
+initialize_profile(XSH)
 
 
 @contextual_command_completer

@@ -9,6 +9,7 @@ from xonsh.main import setup
 def isolated_clanker_state(tmp_path, monkeypatch):
     import clanker_mode
 
+    monkeypatch.setenv("XDG_STATE_HOME", str(tmp_path / "state"))
     monkeypatch.setattr(clanker_mode, "TRACE_DIR", tmp_path / "traces")
     monkeypatch.setattr(clanker_mode, "SAVED_DIR", tmp_path / "saved")
 

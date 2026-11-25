@@ -1,6 +1,9 @@
 """Shell-local profile selection for Clanker's shared LangChain client."""
 
+import os
 from dataclasses import dataclass
+from pathlib import Path
+from tempfile import mkstemp
 
 
 @dataclass(frozen=True)
@@ -24,6 +27,35 @@ def selected_profile(xsh, name=None):
             f"Unknown Clanker profile {name!r}. Choose from {', '.join(PROFILES)}"
         )
     return name
+
+
+def preference_path(xsh):
+    state = xsh.env.get("XDG_STATE_HOME") or Path.home() / ".local/state"
+    return Path(state) / "clanker_mode" / "profile"
+
+
+def initialize_profile(xsh):
+    try:
+        saved = preference_path(xsh).read_text(encoding="utf-8").strip()
+    except (OSError, UnicodeError):
+        return
+    if saved in PROFILES:
+        xsh.env["CLANKER_PROFILE"] = saved
+
+
+def switch_profile(xsh, name):
+    name = selected_profile(xsh, name)
+    path = preference_path(xsh)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    fd, temporary_name = mkstemp(dir=path.parent)
+    temporary = Path(temporary_name)
+    try:
+        with os.fdopen(fd, "wb") as stream:
+            stream.write((name + "\n").encode("utf-8"))
+        temporary.replace(path)
+    finally:
+        temporary.unlink(missing_ok=True)
+    xsh.env["CLANKER_PROFILE"] = name
 
 
 def get_model(xsh, name=None):

@@ -160,11 +160,14 @@ clank --profile inkling-2-mini
 clank --retry deepseek
 ```
 
-Profile selection applies to follow-ups and compaction in that shell. The default
+Selecting a profile updates the current shell immediately and saves the default
+for new Xonsh shells in `$XDG_STATE_HOME/clanker_mode/profile`
+(usually `~/.local/state/clanker_mode/profile`). Each shell reads it once at startup,
+so other open shells keep their selection. Retry leaves the saved default alone. The default
 `deepseek` profile discovers the model at `http://ask.lan:8014/v1` and honors
 the existing connection overrides. The `inkling-2-mini` profile uses the named
-model at `http://build21:8017/v1`. Both use the same LangChain client. Set
-`$CLANKER_PROFILE` to choose a startup default.
+model at `http://build21:8017/v1`. Both use the same LangChain client. Before the first saved selection,
+Xonsh uses an inherited `$CLANKER_PROFILE` or falls back to `deepseek`.
 
 `--retry` (or `/retry`) forks the latest locally submitted turn using its original
 conversation input. With no name, it opens the picker in a terminal or uses the

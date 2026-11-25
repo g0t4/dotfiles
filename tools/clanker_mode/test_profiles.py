@@ -56,3 +56,26 @@ def test_profile_switch_retains_history_and_rejects_unknown(shell, monkeypatch):
     assert shell.env["CLANKER_PROFILE"] == "inkling-2-mini"
     run_agent("continue", shell)
     assert model.inputs[0] == model.inputs[1][:-2]
+
+
+def test_switch_persists_for_new_shells_only(shell, tmp_path):
+    from types import SimpleNamespace
+
+    from clanker_profiles import initialize_profile, preference_path, selected_profile
+
+    def start_shell(**env):
+        other = SimpleNamespace(env={**shell.env, **env})
+        initialize_profile(other)
+        return other
+
+    shell.env["XDG_STATE_HOME"] = str(tmp_path)
+    earlier = start_shell(CLANKER_PROFILE="deepseek")
+    assert clank(["--profile", "inkling-2-mini"]) == 0
+    assert selected_profile(shell) == "inkling-2-mini"
+    assert selected_profile(earlier) == "deepseek"
+    assert selected_profile(start_shell(**earlier.env)) == "inkling-2-mini"
+
+    # A redirected status query in an older shell must leave the saved choice alone.
+    shell.env["CLANKER_PROFILE"] = "deepseek"
+    assert clank(["--profile"]) == 0
+    assert preference_path(shell).read_text().strip() == "inkling-2-mini"

@@ -16,7 +16,13 @@ from pathlib import Path
 from langchain_core.messages import HumanMessage, SystemMessage, ToolMessage
 from langchain_core.tools import tool
 
-from clanker_profiles import DEFAULT_PROFILE, PROFILES, get_model, selected_profile
+from clanker_profiles import (
+    DEFAULT_PROFILE,
+    PROFILES,
+    get_model,
+    selected_profile,
+    switch_profile,
+)
 from clanker_session import Session, get_session
 
 SYSTEM_PROMPT = """You are Clanker Mode, an assistant living inside the user's current
@@ -634,7 +640,8 @@ def clank(args, stdin=None, stdout=None, stderr=None):
 
         if args[:1] == ["--profile"]:
             name = choose_profile(args[1:])
-            XSH.env["CLANKER_PROFILE"] = name
+            if args[1:] or interactive:
+                switch_profile(XSH, name)
             print(f"Clanker profile: {name}", file=stdout)
             return 0
 
