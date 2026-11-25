@@ -1,7 +1,12 @@
 #!/usr/bin/env fish
 
-set file_abbrs "$WES_DOTFILES/bash/.generated.abbrs.bash"
-set file_skipped "$WES_DOTFILES/bash/.generated.skipped.bash"
+set -l cache_home "$XDG_CACHE_HOME"
+test -n "$cache_home"; or set cache_home "$HOME/.cache"
+set -l bash_cache_dir "$cache_home/dotfiles/bash"
+mkdir -p "$bash_cache_dir"; or exit 1
+
+set file_abbrs "$bash_cache_dir/.generated.abbrs.bash"
+set file_skipped "$bash_cache_dir/.generated.skipped.bash"
 
 # skip options I am not ready to parse yet
 #  ' -- ' after arg ensures not a match in the abbr's "key value" positional args

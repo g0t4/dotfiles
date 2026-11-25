@@ -1075,7 +1075,8 @@ test_expand_abbr
 
 # shellcheck disable=SC2155 # don't care about local define and assign together
 function generate_func_wrappers {
-    local func_file="${BASH_DOTFILES}/.generated.fish_func_wrappers.bash"
+    mkdir -p "$bash_cache_dir" || return
+    local func_file="$bash_cache_dir/.generated.fish_func_wrappers.bash"
     echo >"$func_file" # reset file
 
     # * abbr functions

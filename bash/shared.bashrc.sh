@@ -38,16 +38,22 @@ force_prepend_path ~/repos/github/g0t4/bash
 
 prepend_path_if_exists ~/.local/bin
 
+bash_cache_dir="${XDG_CACHE_HOME:-$HOME/.cache}/dotfiles/bash"
+
 if is_interactive; then
     # FYI use `bash -lc ls` to test non-interactive + login shell (make sure no failures b/c code needs to check is_interactive)
     source "$BASH_DOTFILES/startup/vetted-benign/first/_1test.bash"
     source "$BASH_DOTFILES/startup/vetted-benign/first/_2abbr.bash"
     # load generated abbrs first so I can override in later scripts
-    source "$BASH_DOTFILES/.generated.abbrs.bash"
+    if [[ -f "$bash_cache_dir/.generated.abbrs.bash" ]]; then
+        source "$bash_cache_dir/.generated.abbrs.bash"
+    fi
 fi
 
 # fish function wrappers can always be loaded, regardless interactive
-source "$BASH_DOTFILES/.generated.fish_func_wrappers.bash"
+if [[ -f "$bash_cache_dir/.generated.fish_func_wrappers.bash" ]]; then
+    source "$bash_cache_dir/.generated.fish_func_wrappers.bash"
+fi
 
 for script in "$BASH_DOTFILES/startup/vetted-benign/"*.bash; do
     source "$script"

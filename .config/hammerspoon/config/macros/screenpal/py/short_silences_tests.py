@@ -1,7 +1,8 @@
+from sample_paths import samples_dir
 from short_silences import detect_short_silences
 
 def test_detect_short_silences():
-    detected = detect_short_silences("samples/playhead-darkblue1.png")
+    detected = detect_short_silences(samples_dir / "playhead-darkblue1.png")
 
     expected = {
         "short_silences": [

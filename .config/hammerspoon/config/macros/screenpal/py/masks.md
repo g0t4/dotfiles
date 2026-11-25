@@ -7,7 +7,7 @@
 
 ```sh
 # examples:
-python3 short_silences.py samples/insert-new-recording01.png
+python3 short_silences.py "$dropbox_sync_dir/hammerspoon/dotfiles-screencaps-for-testing/samples/insert-new-recording01.png"
 ```
 
 - insert-new-recording01 => 300x is perfect sampling of Insert New bg in a silence

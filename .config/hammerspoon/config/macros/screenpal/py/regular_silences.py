@@ -120,7 +120,7 @@ def detect_regular_silences(use_file):
 
 if DEBUG:
     # z screenpal/py
-    # time python3 regular_silences.py samples/timeline03a.png --debug
+    # time python3 regular_silences.py "$dropbox_sync_dir/hammerspoon/dotfiles-screencaps-for-testing/samples/timeline03a.png" --debug
     from rich import print
     detected = detect_regular_silences(file_arg)
 

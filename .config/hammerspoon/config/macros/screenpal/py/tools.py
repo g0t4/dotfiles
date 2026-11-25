@@ -167,7 +167,7 @@ def detect_tools(use_file):
     )
 
 if DEBUG:
-    # time python3 tools.py samples/pink-volume-add-open.png --debug
+    # time python3 tools.py "$dropbox_sync_dir/hammerspoon/dotfiles-screencaps-for-testing/samples/pink-volume-add-open.png" --debug
     from rich import print
     detected = detect_tools(file_arg)
 

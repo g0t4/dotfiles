@@ -1,7 +1,8 @@
+from sample_paths import samples_dir
 from regular_silences import detect_regular_silences
 
 def test_detect_regular_silences():
-    detected = detect_regular_silences("samples/timeline03a.png")
+    detected = detect_regular_silences(samples_dir / "timeline03a.png")
 
     expected = {"regular_silences": [
         {"x_start": 754.0, "x_end": 891.0},

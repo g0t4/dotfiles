@@ -2,11 +2,9 @@ import sys
 from typing import NamedTuple
 import numpy as np
 import cv2 as cv
-from pathlib import Path
-import os
+from sample_paths import samples_dir
 
 # this is just to sample colors for timeline detection, if SPAL updates you'll need to do this again, use this file as a guide
-samples_dir = Path(os.getenv("WES_DOTFILES") or "") / ".config/hammerspoon/config/macros/screenpal/py/samples"
 file = samples_dir / "timeline03a.png"
 
 cv_image = cv.imread(str(file), cv.IMREAD_COLOR)  # BGR

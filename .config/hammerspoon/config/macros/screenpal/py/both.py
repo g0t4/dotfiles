@@ -6,7 +6,7 @@ from tools import detect_tools
 
 if __name__ == "__main__":
 
-    # time python3 both.py samples/playhead-darkblue1.png --debug
+    # time python3 both.py "$dropbox_sync_dir/hammerspoon/dotfiles-screencaps-for-testing/samples/playhead-darkblue1.png" --debug
     # FYI just as fast to do both at the same time
     #  IIGC imports eat up most of the time
 

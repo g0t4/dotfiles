@@ -89,7 +89,7 @@ def detect_short_silences(use_file):
     return detected
 
 if DEBUG:
-    # time python3 short_silences.py samples/playhead-darkblue1.png --debug
+    # time python3 short_silences.py "$dropbox_sync_dir/hammerspoon/dotfiles-screencaps-for-testing/samples/playhead-darkblue1.png" --debug
     from rich import print
     detected = detect_short_silences(file_arg)
 

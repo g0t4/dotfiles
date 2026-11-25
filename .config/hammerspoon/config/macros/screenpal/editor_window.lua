@@ -574,7 +574,7 @@ function ScreenPalEditorWindow:detect_zoom_level()
     local screen = hs.screen.mainScreen()
     timer:capture("get screen")
 
-    -- PRN add unit tests that use pre-captured sample images .../py/samples/zoom/zoom{1,2,3,-none}.png
+    -- PRN add unit tests that use pre-captured sample images in Sync: zoom/zoom{1,2,3,-none}.png
     --   this would be the seam to split, and then call and pass in images
     --   would need hammerspoon APIs to get hs.image APIs
 
