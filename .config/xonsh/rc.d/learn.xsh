@@ -61,7 +61,7 @@ def is_text_file(target_path):
     except (OSError, UnicodeDecodeError, ValueError):
         return False
 
-    return all(c.isprintable() or c in "\n\r\t" for c in text)
+    return all(c.isprintable() or c in {"\n", "\r", "\t"} for c in text)
 
 
 @events.on_transform_command
