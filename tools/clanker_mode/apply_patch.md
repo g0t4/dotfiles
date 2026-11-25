@@ -1,17 +1,22 @@
-## Use `apply_patch` to edit files.
+## Editing file contents with `apply_patch`
 
-Uses a diff format that's easy to parse and apply.
+Prefer `apply_patch` for changes to file contents. For a simple file deletion or
+rename, use shell commands such as `rm foo.json` or `mv foo.json bar.json`.
+Choose the tool that fits the change.
+
+`apply_patch` accepts the patch text in its `patch` argument. It uses this format:
 
 *** Begin Patch
 [ one or more file operations ]
 *** End Patch
 
-Each “operation” MUST start with one of three “headers”:
+Each file operation starts with one of these headers:
 *** Add File: <path>
 *** Delete File: <path>
 *** Update File: <path>
 
-UpdateFile may be followed by MoveTo to rename it:
+An Update File header may be followed by Move to when changing contents and
+renaming the file together:
 *** Move to: <new_path>
 
 Then one or more “hunks”, each introduced by @@ (optionally followed by a hunk header).
@@ -24,7 +29,10 @@ Within a hunk each line starts with:
 At the end of a truncated hunk you can emit:
 *** End of File
 
-### Here is the grammar:
+Include enough unchanged context to identify the change uniquely. Use an `@@`
+function or class anchor when nearby lines alone are ambiguous.
+
+### Patch grammar
 
 Patch := Begin { FileOp } End
 Begin := "*** Begin Patch" NEWLINE
@@ -37,7 +45,9 @@ MoveTo := "*** Move to: " newPath NEWLINE
 Hunk := "@@" [ header ] NEWLINE { HunkLine } [ "*** End of File" NEWLINE ]
 HunkLine := (" " | "-" | "+") text NEWLINE
 
-### A patch can combine operations:
+### Combining file operations
+
+A patch can coordinate changes across files, including adding or deleting files:
 
 *** Begin Patch
 *** Add File: hello.txt
@@ -50,18 +60,13 @@ HunkLine := (" " | "-" | "+") text NEWLINE
 *** Delete File: obsolete.txt
 *** End Patch
 
-### Reminders
+### If a patch fails
 
-Prefer commands for simple edits:
-- `rm foo.json` to delete
-- `mv foo.json bar.json` to rename
+- Inspect the current file before retrying; its contents may differ from the patch.
+- Check whitespace and surrounding context.
+- Split a large patch into smaller patches when that makes the failure easier to locate.
 
-
-Tips on a failure:
-- Split bigger patches into smaller patches
-- Watch out for whitespace differences
-
-### More exmaples
+### Keeping patches focused
 
 Here's a patch file to change the type of `win`:
 
