@@ -78,6 +78,25 @@ def test_tool_definitions_changes_and_trace_rotation(tmp_path):
     assert records[0]["tools"] == tools
 
 
+def test_patch_instructions_reload_between_turns(shell, tmp_path, monkeypatch):
+    import clanker_mode
+
+    instructions = tmp_path / "apply_patch.md"
+    instructions.write_text("First patch instructions.")
+    monkeypatch.setattr(clanker_mode, "APPLY_PATCH_INSTRUCTIONS", instructions)
+    first = Reply("done")
+    run_agent("first", shell, model=first, trace_dir=tmp_path)
+    instructions.write_text("Revised patch instructions.")
+    second = Reply("done")
+    run_agent("second", shell, model=second, trace_dir=tmp_path)
+    for model, expected in ((first, "First patch instructions."), (second, "Revised patch instructions.")):
+        patch = next(t for t in model.tools if t["function"]["name"] == "apply_patch")
+        assert patch["function"]["description"] == expected
+        assert "patch" in patch["function"]["parameters"]["properties"]
+    (path,) = tmp_path.glob("*.jsonl")
+    assert len([r for r in read_records(path) if r["type"] == "tools"]) == 2
+
+
 def test_metadata_and_old_reasoning_stay_local_and_original_records_stay_intact(
     shell, tmp_path
 ):

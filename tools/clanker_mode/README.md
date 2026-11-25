@@ -126,6 +126,11 @@ Python variables, aliases, history, cwd, and execute commands with your privileg
 There is deliberately no sandbox or subprocess boundary. Print values to return
 results. The system prompt explains shell internals and history object access.
 
+Edit `apply_patch.md` beside `clanker_mode.py` to change the patch tool's
+description. It is a local copy of ask-openai.nvim's instructions, loaded at the
+start of each turn. Edits take effect on the next prompt without restarting
+Xonsh, and changed definitions are recorded in the trace's `tools` events.
+
 During each agent execution tool call, the interactive `cat` alias is temporarily
 removed, so `cat` resolves to the executable on PATH. The exact alias and its
 explicit help text are restored even after an exception or interruption. Other
