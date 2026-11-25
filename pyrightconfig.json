@@ -11,6 +11,8 @@
 
     "reportImplicitStringConcatenation": "none",
 
+    "reportImplicitRelativeImport": "hint",
+
     // is it just me or are these insane diagnostics to have on warning by default?!
     // these basically underline all code unless (anything untyped)
     "reportUnknownParameterType": "none",
