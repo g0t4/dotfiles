@@ -1,15 +1,8 @@
-"""rich.print with the syntax-lab theme injected.
-
-    from tools.wes import print
-
-    print({"key": 42})  # dict rendered with Wes's palette
-"""
-
 from typing import IO, Any
 
 from rich.console import Console
 
-from .theme import wes_theme
+from wes.theme import wes_theme
 
 
 def make_console(file: IO[str] | None = None) -> Console:

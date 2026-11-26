@@ -1,18 +1,16 @@
-"""Co-located tests for tools.wes.print."""
-
 import io
 import importlib
 
 from rich.color import Color
 from rich.console import Console
 
-from tools.wes import console, print as wes_print
-from tools.wes.theme import wes_theme
+from wes import console, print as wes_print
+from wes.theme import wes_theme
 from wes_syntax import load_style
 
-# `import tools.wes.print as x` would bind the *function* (the package
+# `import wes.print as x` would bind the *function* (the package
 # rebinds the name in __init__), so fetch the module from sys.modules.
-print_module = importlib.import_module("tools.wes.print")
+print_module = importlib.import_module("wes.print")
 
 
 def color_spec(hex_color: str) -> str:

@@ -1,12 +1,10 @@
-"""Co-located tests for tools.wes.theme."""
-
 import json
 
 import pytest
 from rich.color import Color
 from rich.theme import Theme
 
-from tools.wes.theme import PALETTE_ROLES, wes_theme
+from wes.theme import PALETTE_ROLES, wes_theme
 from wes_syntax import load_style
 
 
