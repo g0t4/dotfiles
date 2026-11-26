@@ -19,7 +19,6 @@ macos = [
 ]
 
 [tool.uv.sources]
-wes-ai-shared = { path = "../ai_shared", editable = true }
 langchain-llama-server = { path = "../../../langchain-llama-server", editable = true }
 wes_package = { path = "../wes_package", editable = true }
 

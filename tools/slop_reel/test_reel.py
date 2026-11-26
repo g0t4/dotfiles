@@ -207,7 +207,7 @@ def test_close_stops_owned_processes():
 def test_real_provider_http_images_and_replay(tmp_path, videos):
     from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 
-    from ai_shared.models import connect
+    from wes.ai.models import connect
 
     requests = []
 

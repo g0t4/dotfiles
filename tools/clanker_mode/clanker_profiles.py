@@ -147,7 +147,7 @@ def resolve_profile(xsh, profile=None):
 
 
 def get_model(xsh, name=None):
-    from ai_shared.models import connect
+    from wes.ai.models import connect
 
     profile = resolve_profile(xsh, name)
     api_key = (

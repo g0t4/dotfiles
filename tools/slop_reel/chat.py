@@ -7,8 +7,8 @@ from io import BytesIO
 from pathlib import Path
 from threading import Event
 
-from ai_shared.models import connect
-from ai_shared.session import Session
+from wes.ai.models import connect
+from wes.ai.session import Session
 from langchain_core.messages import HumanMessage, SystemMessage, ToolMessage
 from PIL import Image
 

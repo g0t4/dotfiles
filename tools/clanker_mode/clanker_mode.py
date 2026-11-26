@@ -306,7 +306,7 @@ def apply_patch(patch: str) -> str:
 
 
 def select_model(models):
-    from ai_shared.models import select_model as shared_select_model
+    from wes.ai.models import select_model as shared_select_model
 
     return shared_select_model(models, "$CLANKER_MODEL")
 

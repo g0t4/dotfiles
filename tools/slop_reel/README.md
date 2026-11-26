@@ -136,7 +136,7 @@ uv sync --project tools/slop_reel
 ./tools/slop_reel/.venv/bin/python tools/slop_reel/fixtures.py
 ./tools/slop_reel/.venv/bin/pytest -q tools/slop_reel/test_reel.py
 ./tools/slop_reel/.venv/bin/python tools/slop_reel/smoke_test.py '/path/to/video.mp4' --live
-./tools/slop_reel/.venv/bin/ruff check tools/slop_reel tools/ai_shared
+./tools/slop_reel/.venv/bin/ruff check tools/slop_reel tools/wes_package
 ```
 
 Fixture generation defaults to `face2camera/slop_reel/`; tests use temporary fixture

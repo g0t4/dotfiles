@@ -448,7 +448,7 @@ dependencies = [
     { name = "truststore" },
     { name = "ty" },
     { name = "typer" },
-    { name = "wes-syntax" },
+    { name = "wes-package" },
     { name = "xonsh" },
     { name = "yapf" },
 ]
@@ -500,7 +500,7 @@ requires-dist = [
     { name = "truststore", specifier = ">=0.10.5" },
     { name = "ty", specifier = ">=0.0.1a13" },
     { name = "typer", specifier = ">=0.15.3" },
-    { name = "wes-syntax", editable = "tools/wes_package" },
+    { name = "wes-package", editable = "tools/wes_package" },
     { name = "xonsh", specifier = ">=0.24.2" },
     { name = "yapf", specifier = ">=0.43.0" },
 ]
@@ -2788,12 +2788,14 @@ wheels = [
 ]
 
 [[package]]
-name = "wes-syntax"
+name = "wes-package"
 version = "0.1.0"
 source = { editable = "tools/wes_package" }
 dependencies = [
     { name = "argcomplete" },
     { name = "colorspacious" },
+    { name = "httpx" },
+    { name = "langchain-llama-server" },
     { name = "pillow" },
     { name = "pygments" },
     { name = "rich" },
@@ -2804,6 +2806,8 @@ dependencies = [
 requires-dist = [
     { name = "argcomplete", specifier = ">=3.7,<4" },
     { name = "colorspacious", specifier = ">=1.1.2,<2" },
+    { name = "httpx", specifier = ">=0.28" },
+    { name = "langchain-llama-server" },
     { name = "pillow", specifier = ">=11,<13" },
     { name = "pygments", specifier = ">=2.19,<3" },
     { name = "rich", specifier = ">=13.9,<15" },
