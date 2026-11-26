@@ -157,7 +157,7 @@ def run(args: argparse.Namespace) -> int:
     from rich.console import Console
     from rich.syntax import PygmentsSyntaxTheme, Syntax
 
-    from wes_syntax import load_style, source_lexer, style_for_lexer
+    from wes.syntax import load_style, source_lexer, style_for_lexer
 
     colors, style = load_style(args.palette, grayscale=args.grayscale)
     colored = args.force_color or (sys.stdout.isatty() and "NO_COLOR" not in os.environ)
@@ -200,7 +200,7 @@ def run(args: argparse.Namespace) -> int:
     code = sys.stdin.read() if args.file == "-" else path.read_text()
     lexer = source_lexer(args.language, filename=path)
     if args.pad_tables and lexer.name == "Markdown":
-        from wes_syntax.markdown_tables import pad_tables
+        from wes.syntax.markdown_tables import pad_tables
 
         max_width = args.width
         if max_width is None and sys.stdout.isatty():

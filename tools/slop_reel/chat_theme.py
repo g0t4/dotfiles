@@ -2,7 +2,7 @@
 
 from PySide6.QtCore import Qt
 from PySide6.QtGui import QColor, QFontDatabase, QPalette, QTextCharFormat, QTextCursor
-from wes_syntax import load_style, source_lexer, style_for_lexer
+from wes.syntax import load_style, source_lexer, style_for_lexer
 
 
 def apply_chat_theme(*widgets):

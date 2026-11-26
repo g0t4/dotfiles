@@ -3,7 +3,7 @@
 from PySide6.QtCore import QEvent, QObject, Qt, QTimer
 from PySide6.QtGui import QColor, QPalette
 from PySide6.QtWidgets import QWidget
-from wes_syntax import load_style
+from wes.syntax import load_style
 
 
 def blend(a, b, amount):

@@ -13,7 +13,7 @@ import sys
 from pygments import highlight
 from pygments.formatters import TerminalTrueColorFormatter
 
-from wes_syntax import load_style, source_lexer, style_for_lexer
+from wes.syntax import load_style, source_lexer, style_for_lexer
 
 ROOT = Path(__file__).resolve().parent
 

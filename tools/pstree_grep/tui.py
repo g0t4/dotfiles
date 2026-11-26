@@ -11,7 +11,7 @@ from textual.app import App, ComposeResult
 from textual.binding import Binding
 from textual.containers import ScrollableContainer
 from textual.widgets import Footer, Input, Static
-from wes_syntax import load_style
+from wes.syntax import load_style
 
 from .cli import get_matching_pids, proc_snap, prune_to_rootmost_match
 

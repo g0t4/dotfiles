@@ -6,7 +6,7 @@
 """Compatibility launcher for the first-class ``highlight`` command."""
 
 from tools.highlight.__main__ import contrast, main
-from wes_syntax import load_style
+from wes.syntax import load_style
 
 __all__ = ["contrast", "load_style", "main"]
 

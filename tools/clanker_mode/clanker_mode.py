@@ -572,7 +572,7 @@ def clank(args, stdin=None, stdout=None, stderr=None):
                 session.outbound_bodies(), ensure_ascii=False, indent=2, default=str
             ) + "\n"
             if console.is_terminal:
-                from wes_syntax import syntax
+                from wes.syntax import syntax
 
                 highlighted = syntax(source, "json").highlight(source)
                 console.print(highlighted, end="", soft_wrap=True)

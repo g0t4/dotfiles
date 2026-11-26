@@ -5,7 +5,7 @@ from rich.color import Color
 from rich.theme import Theme
 
 from wes.printing.theme import PALETTE_ROLES, wes_theme
-from wes_syntax import load_style
+from wes.syntax import load_style
 
 
 def test_theme_is_a_rich_theme():

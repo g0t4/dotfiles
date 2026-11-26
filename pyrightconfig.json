@@ -29,7 +29,7 @@
         // deliberatiely redundant (../dotfiles) to copy pasta this into any of my repos
         "../dotfiles/.config/xonsh/lib",
         "../dotfiles/xonsh",
-        // so `import wes_syntax` resolves from anywhere in the repo
+        // so `import wes.syntax` resolves from anywhere in the repo
         // (it's an editable install whose finder pyright can't follow)
         "tools/wes_package",
     ]

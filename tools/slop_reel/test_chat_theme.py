@@ -13,7 +13,7 @@ from PySide6.QtGui import QTextCursor
 from PySide6.QtWidgets import QApplication, QWidget, QVBoxLayout, QTextBrowser, QPlainTextEdit, QLabel
 from app import Window
 from chat_theme import append_markdown, apply_chat_theme, trace_link
-from wes_syntax import load_style
+from wes.syntax import load_style
 
 app = QApplication([])
 window = QWidget()

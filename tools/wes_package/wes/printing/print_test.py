@@ -5,7 +5,7 @@ from rich.console import Console
 
 from wes.printing import print as print_module
 from wes.printing.theme import wes_theme
-from wes_syntax import load_style
+from wes.syntax import load_style
 
 def color_spec(hex_color: str) -> str:
     """The SGR truecolor spec for a #RRGGBB color, e.g. '38;2;172;208;149'."""

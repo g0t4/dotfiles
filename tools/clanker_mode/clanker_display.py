@@ -12,7 +12,7 @@ from rich.panel import Panel
 from rich.pretty import Pretty
 from rich.text import Text
 from rich.tree import Tree
-from wes_syntax import syntax
+from wes.syntax import syntax
 
 TERMINAL_CONTROLS = re.compile(r"[\x00-\x08\x0b-\x1f\x7f-\x9f]")
 

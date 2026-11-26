@@ -70,7 +70,7 @@ def test_yaml_uses_palette_without_falling_back_to_stock_bat(tmp_path):
 def test_bash_commands_are_distinct_from_arguments_and_quoted_text():
     from pygments import lex
     from pygments.token import Name, Text
-    from wes_syntax import source_lexer
+    from wes.syntax import source_lexer
 
     source = (
         "jq -r '.command_line // .code' trace.json | git status --short && echo done\n"
@@ -183,7 +183,7 @@ def test_xonsh_source_with_existing_path_without_ls_colors(tmp_path):
 
 def test_xonsh_python_tokens_match_python_after_imports():
     from pygments import lex
-    from wes_syntax import source_lexer
+    from wes.syntax import source_lexer
 
     loop = 'for i in range(5):\n    print(i)\n'
     for prefix in ('import os\n', 'import os   \n', 'from pathlib import Path\n', 'from pathlib import Path   \n', 'import os, \\\n    sys\n', 'from pathlib import (\n    Path,\n)\n'):
@@ -200,7 +200,7 @@ def test_xonsh_python_tokens_match_python_after_imports():
 
 def test_diff_tokens_use_palette_and_preserve_context():
     from rich.console import Console
-    from wes_syntax import syntax
+    from wes.syntax import syntax
 
     source = 'diff --git a/a.py b/a.py\n--- a/a.py\n+++ b/a.py\n@@ -1 +1 @@\n-old\n+new\n context\n'
     stream = io.StringIO()

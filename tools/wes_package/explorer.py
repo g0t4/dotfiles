@@ -127,7 +127,7 @@ def add_arguments(parser):
 
 
 def text_sample(code, lexer, colors, console):
-    from wes_syntax import make_style, style_for_lexer
+    from wes.syntax import make_style, style_for_lexer
     style = style_for_lexer(lexer, colors, make_style(colors))
     syntax = Syntax(code, lexer, theme=PygmentsSyntaxTheme(style), background_color=colors['background'])
     return syntax.highlight(code)

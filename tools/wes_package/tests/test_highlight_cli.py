@@ -109,7 +109,7 @@ def test_padded_tables_wrap_to_explicit_width_on_stdout() -> None:
 
 def test_pad_tables_width_counts_wide_characters_and_indentation() -> None:
     from rich.cells import cell_len
-    from wes_syntax.markdown_tables import pad_tables
+    from wes.syntax.markdown_tables import pad_tables
 
     source = "  | ID | Note |\r\n  | --- | --- |\r\n  | 1 | 名名名名名 |"
     wrapped = pad_tables(source, max_width=16)

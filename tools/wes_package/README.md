@@ -93,7 +93,7 @@ Rich. Palette edits apply to the next invocation, without reloading Xonsh.
 Bash and `sh` views color external command words (for example `git` and `jq`)
 blue at command positions, while flags and other plain arguments remain neutral.
 This also applies to `run_bash` commands in the Python chat viewer through the
-shared `wes_syntax` renderer. The distinction is lexical; it does not check
+shared `wes.syntax` renderer. The distinction is lexical; it does not check
 whether a command is installed or execute the source.
 
 ## Markdown and grayscale experiments
@@ -265,7 +265,7 @@ wes-syntax = { path = "../dotfiles/tools/wes_package", editable = true }
 
 ```python
 from rich.console import Console
-from wes_syntax import syntax
+from wes.syntax import syntax
 
 Console().print(syntax(markdown_text, "markdown", word_wrap=True))
 Console().print(syntax(python_source, "python", grayscale=True))
@@ -277,7 +277,7 @@ It preserves the terminal background and forwards Rich options such as
 `style_for_lexer()`, `source_lexer()`, and `grayscale_color()` are available for lower-level uses.
 `palette=` accepts another palette JSON path. The CLI and library share the same
 implementation; the existing `palette.json` path is a symlink to the packaged
-palette in `wes_syntax/palette.json`. Editable installs read palette edits on
+palette in `wes/syntax/palette.json`. Editable installs read palette edits on
 each new renderable. Library calls do not invoke the explorer or image renderer.
 
 Pygments' `diff` lexer uses our green for inserted lines, red for deleted lines,

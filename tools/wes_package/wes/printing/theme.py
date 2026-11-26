@@ -1,7 +1,7 @@
 """Build a Rich theme from the wes_package palette.
 
-The palette lives in the ``wes_syntax`` package
-(``tools/wes_package/wes_syntax/palette.json``) and is the single source of
+The palette lives in the ``wes.syntax`` package
+(``tools/wes_package/wes/syntax/palette.json``) and is the single source of
 truth for Wes's colors -- the same one ``highlight`` uses. This module maps
 it onto Rich's theme names, so anything rendered through a themed console
 (``print(some_dict)``, JSON, Markdown, tracebacks) picks up the palette.
@@ -10,7 +10,7 @@ it onto Rich's theme names, so anything rendered through a themed console
 from rich.style import Style, StyleType
 from rich.theme import Theme
 
-from wes_syntax import load_style
+from wes.syntax import load_style
 
 #: Palette roles exposed verbatim as theme names, usable in markup:
 #: print("[keyword]def[/keyword] [function]greet[/function]([string]name[/string])")
@@ -110,7 +110,7 @@ def wes_theme(palette=None, *, grayscale: bool = False) -> Theme:
     """Build a Rich theme from the wes_package palette.
 
     Args:
-        palette: Path to a palette JSON; defaults to wes_syntax's palette.
+        palette: Path to a palette JSON; defaults to wes.syntax's palette.
         grayscale: Strip chroma while preserving luminance, like
             ``highlight --grayscale``.
 

@@ -13,7 +13,7 @@ from PySide6.QtWidgets import QMainWindow, QWidget, QHBoxLayout, QVBoxLayout, QL
 from PySide6.QtGui import QPalette
 from macos_app import Application
 from chat_theme import apply_chat_theme, append_markdown
-from wes_syntax import load_style
+from wes.syntax import load_style
 
 app = Application([])
 window = QMainWindow()
@@ -99,7 +99,7 @@ import ctypes
 from PySide6.QtWidgets import QMainWindow
 from macos_app import Application
 from macos_titlebar import native_window, send
-from wes_syntax import load_style
+from wes.syntax import load_style
 app = Application([])
 if not app.screens():
     raise SystemExit(77)
