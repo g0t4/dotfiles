@@ -23,7 +23,7 @@ highlight = "tools.highlight.__main__:main"
 py-modules = ["explorer"]
 
 [tool.setuptools.packages.find]
-include = ["tools*", "wes_syntax*"]
+include = ["tools*", "wes_syntax*", "wes*"]
 
 [tool.setuptools.package-data]
 wes_syntax = ["palette.json"]
