@@ -1,7 +1,7 @@
-"""Build a Rich theme from the syntax-lab palette.
+"""Build a Rich theme from the wes_package palette.
 
 The palette lives in the ``wes_syntax`` package
-(``tools/syntax-lab/wes_syntax/palette.json``) and is the single source of
+(``tools/wes_package/wes_syntax/palette.json``) and is the single source of
 truth for Wes's colors -- the same one ``highlight`` uses. This module maps
 it onto Rich's theme names, so anything rendered through a themed console
 (``print(some_dict)``, JSON, Markdown, tracebacks) picks up the palette.
@@ -107,7 +107,7 @@ def _rich_styles(colors: dict[str, str]) -> dict[str, StyleType]:
 
 
 def wes_theme(palette=None, *, grayscale: bool = False) -> Theme:
-    """Build a Rich theme from the syntax-lab palette.
+    """Build a Rich theme from the wes_package palette.
 
     Args:
         palette: Path to a palette JSON; defaults to wes_syntax's palette.

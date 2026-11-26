@@ -74,7 +74,7 @@ def kgdump(args, stdin=None, stdout=None, stderr=None, spec=None, **_):
             command_line = "  " + shlex.join(command)
             #
             # FYI my current bash theme does not color the command position?! ... only builtins it seems (so "echo foo" has `echo` colored but not `grc` below)
-            # TODO fix bash syntax-lab handling to not suck a dick on coloring it
+            # TODO fix bash wes_package handling to not suck a dick on coloring it
             # if terminal_output:
             #     console.print(
             #         Syntax(

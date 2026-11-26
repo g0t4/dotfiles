@@ -1,4 +1,4 @@
-"""Personal Pygments palette and Rich source rendering, shared with syntax-lab."""
+"""Personal Pygments palette and Rich source rendering, shared with wes_package."""
 
 import json
 from pathlib import Path

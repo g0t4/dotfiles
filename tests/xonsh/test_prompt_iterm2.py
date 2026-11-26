@@ -35,12 +35,12 @@ def test_disabled_iterm2_integration_does_not_wrap_prompt(tmp_path):
 def test_repo_info_uses_host_org_repo_convention(tmp_path):
     prompt = ROOT / ".config/xonsh/rc.d/prompt.xsh"
     repo = tmp_path / "repos/github/g0t4/dotfiles"
-    nested = repo / "tools/syntax-lab"
+    nested = repo / "tools/wes_package"
     completed = run_xonsh(
         f"source {prompt}; "
         f"assert _prompt_repo_info({str(repo)!r}) == ({str(repo)!r}, ''); "
         f"assert _prompt_repo_info({str(nested)!r}) == "
-        f"({str(repo)!r}, 'tools/syntax-lab')",
+        f"({str(repo)!r}, 'tools/wes_package')",
         tmp_path,
     )
 

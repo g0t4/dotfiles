@@ -209,7 +209,7 @@ def image_grid(code, lexer, variants, args, console):
             tile = tile.filter(ImageFilter.GaussianBlur(variant.blur))
         draw.text((x + 8, y + 3), f'{index + 1:02} {variant.label}', font=font, fill='#cecece')
         canvas.paste(tile, (x, y + 30))
-    output = args.output or Path('/tmp/syntax-lab-blur.png')
+    output = args.output or Path('/tmp/wes_package-blur.png')
     output.parent.mkdir(parents=True, exist_ok=True)
     canvas.save(output, format='PNG')
     console.print(f'Image: {output.resolve()} ({canvas.width}×{canvas.height}, {columns} columns)', soft_wrap=True, markup=False)

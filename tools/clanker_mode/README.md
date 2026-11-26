@@ -281,7 +281,7 @@ Install the provider there (the sibling provider checkout is also used by uv.loc
 
 ```sh
 uv tool install 'xonsh[full]' --with-requirements xonsh/requirements.txt \
-  --with-editable ../langchain-llama-server --with-editable tools/syntax-lab
+  --with-editable ../langchain-llama-server --with-editable tools/wes_package
 ```
 
 Unit/integration tests cover real Xonsh state mutations, exceptions, caller-thread
@@ -298,7 +298,7 @@ box above the steering prompt. It shows the newest lines of provider reasoning,
 answer text, and raw function arguments as they arrive. Ctrl+C cancels the round.
 Once the response finishes, the preview clears and the parsed messages appear
 in their usual boxes. Before each tool executes, a message box shows the tool
-name and syntax-lab-highlighted Xonsh source in an indented tree, matching the
+name and Xonsh source in an indented tree, matching the
 chat trace viewer's style. Calls are numbered within each returned batch.
 
 Tool results follow in separate boxes with literal output (including failures),
@@ -320,7 +320,7 @@ an `on_event(event, payload)` callback.
 
 ## Model capability validation
 
-The terminal displays responses as Markdown source using syntax-lab's shared
+The terminal displays responses as Markdown source using `wes.syntax` shared
 palette. Markdown punctuation remains visible; raw answers remain in traces.
 Pipes and redirection receive the original text without wrapping or ANSI escapes.
 

@@ -11,7 +11,7 @@ from wes_interactive_cat import InteractiveCat
 from wes_syntax_theme import ThemeBat, syntax_theme
 from pygments.token import Keyword
 
-WRAPPER = ROOT / "tools/syntax-lab/bat.py"
+WRAPPER = ROOT / "tools/wes_package/bat.py"
 
 
 def run_bat(*args, input=None, env=None):

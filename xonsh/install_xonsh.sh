@@ -4,7 +4,7 @@ dotfiles_dir="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)" || exit 1
 uv tool install "xonsh[full]" \
     --with-requirements "$dotfiles_dir/xonsh/requirements.txt" \
     --with-editable "$dotfiles_dir/../langchain-llama-server" \
-    --with-editable "$dotfiles_dir/tools/syntax-lab" || exit 1
+    --with-editable "$dotfiles_dir/tools/wes_package" || exit 1
 
 # stop using homebrew to install xonsh
 

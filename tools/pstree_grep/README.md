@@ -23,7 +23,7 @@ a terminal. After updating an existing shell, run
 The TUI refreshes processes every second, independently of typing. Matches are
 pink with `*`; compact names can match arguments you cannot see. The actual
 running Python helper is marked `[self: pstree_grep]`. Colors come from
-syntax-lab's shared palette, with pink reserved for matches.
+wes_package's shared palette, with pink reserved for matches.
 
 | Key | Action |
 | --- | --- |

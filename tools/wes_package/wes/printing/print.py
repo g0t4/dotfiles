@@ -22,7 +22,7 @@ def print(
     flush: bool = False,
     **kwargs: Any,
 ) -> None:
-    """Print like ``rich.print``, but with Wes's syntax-lab theme.
+    """Print like ``rich.print``, but with Wes's wes_package theme.
 
     Same signature as ``rich.print`` (``flush`` is accepted for
     builtin-print compatibility; Rich always flushes), plus any

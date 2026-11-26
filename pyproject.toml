@@ -60,7 +60,7 @@ macos = [
 
 
 [tool.uv.sources]
-wes-syntax = { path = "tools/syntax-lab", editable = true }
+wes-syntax = { path = "tools/wes_package", editable = true }
 langchain-llama-server = { path = "../langchain-llama-server", editable = true }
 
 # # TODO setup more global tools via `uv tool install`?

@@ -1,4 +1,4 @@
-"""Qt chat rendering with syntax-lab's shared Markdown token styles."""
+"""Qt chat rendering with wes_package's shared Markdown token styles."""
 
 from PySide6.QtCore import Qt
 from PySide6.QtGui import QColor, QFontDatabase, QPalette, QTextCharFormat, QTextCursor
@@ -60,7 +60,7 @@ def append_markdown(browser, title, text):
                 "#" + token_style["color"] if token_style["color"] else colors["text"]
             )
         )
-        # syntax-lab deliberately uses color rather than bold/italic font changes.
+        # wes_package deliberately uses color rather than bold/italic font changes.
         cursor.insertText(value, fmt)
     neutral = QTextCharFormat()
     neutral.setForeground(QColor(colors["text"]))

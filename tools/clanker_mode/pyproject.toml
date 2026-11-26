@@ -8,7 +8,7 @@ dependencies = ["langchain-llama-server", "xonsh>=0.24.2", "wes-syntax", "httpx>
 dev = ["pytest>=8.4", "ruff"]
 
 [tool.uv.sources]
-wes-syntax = { path = "../syntax-lab", editable = true }
+wes-syntax = { path = "../wes_package", editable = true }
 langchain-llama-server = { path = "../../../langchain-llama-server", editable = true }
 
 [tool.pytest.ini_options]

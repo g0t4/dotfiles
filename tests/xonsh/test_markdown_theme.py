@@ -6,7 +6,7 @@ import subprocess
 import sys
 
 
-LAB = ROOT / 'tools/syntax-lab'
+LAB = ROOT / 'tools/wes_package'
 
 
 def test_markdown_preserves_source_and_highlights_embedded_code():

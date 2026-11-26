@@ -31,6 +31,6 @@
         "../dotfiles/xonsh",
         // so `import wes_syntax` resolves from anywhere in the repo
         // (it's an editable install whose finder pyright can't follow)
-        "tools/syntax-lab",
+        "tools/wes_package",
     ]
 }

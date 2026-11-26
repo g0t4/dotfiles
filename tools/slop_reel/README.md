@@ -81,10 +81,10 @@ original course files are never modified.
 
 The submitted playhead is frozen for extraction; playback may continue during chat.
 Previews show the attached frame indices and source presentation timestamps.
-Chat uses syntax-lab’s shared Markdown source theme: purple headings, amber
+Chat uses wes_package’s shared Markdown source theme: purple headings, amber
 emphasis, teal inline code, blue links, and language-colored fenced code. Markdown
 markers remain visible and copyable, with no bold/italic font changes. The chat
-and input share its dark palette; edits to syntax-lab colors are picked up on
+and input share its dark palette; edits to wes_package colors are picked up on
 restart. The application panels, menus, frame dialogs, and buttons use the same
 background, with blue-tinted button fills and distinct hover/pressed/focus/disabled
 states. Native macOS title bars match the background while retaining the traffic

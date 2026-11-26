@@ -10,7 +10,7 @@ import sys
 from PIL import Image
 from rich.console import Console
 
-LAB = ROOT / 'tools/syntax-lab'
+LAB = ROOT / 'tools/wes_package'
 sys.path.insert(0, str(LAB))
 import explorer
 import highlight as lab

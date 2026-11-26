@@ -500,7 +500,7 @@ requires-dist = [
     { name = "truststore", specifier = ">=0.10.5" },
     { name = "ty", specifier = ">=0.0.1a13" },
     { name = "typer", specifier = ">=0.15.3" },
-    { name = "wes-syntax", editable = "tools/syntax-lab" },
+    { name = "wes-syntax", editable = "tools/wes_package" },
     { name = "xonsh", specifier = ">=0.24.2" },
     { name = "yapf", specifier = ">=0.43.0" },
 ]
@@ -2790,7 +2790,7 @@ wheels = [
 [[package]]
 name = "wes-syntax"
 version = "0.1.0"
-source = { editable = "tools/syntax-lab" }
+source = { editable = "tools/wes_package" }
 dependencies = [
     { name = "argcomplete" },
     { name = "colorspacious" },

@@ -21,7 +21,7 @@ macos = [
 [tool.uv.sources]
 wes-ai-shared = { path = "../ai_shared", editable = true }
 langchain-llama-server = { path = "../../../langchain-llama-server", editable = true }
-wes-syntax = { path = "../syntax-lab", editable = true }
+wes-syntax = { path = "../wes_package", editable = true }
 
 [tool.ruff.lint]
 ignore = ["E402", "BLE001"]

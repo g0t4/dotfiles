@@ -1,10 +1,12 @@
-# Syntax lab
+# wes_package
+
+Reusuable python modules
 
 Install the command globally from this directory. The editable install keeps
 palette and source changes live:
 
 ```sh
-cd tools/syntax-lab
+cd tools/wes_package
 uv tool install --editable .
 ```
 
@@ -65,13 +67,13 @@ an existing REPL from the dotfiles root:
 
 ```xonsh
 source .config/xonsh/rc.d/syntax-theme.py
-bat tools/syntax-lab/examples/sample.py
-bat tools/syntax-lab/examples/sample.lua
+bat tools/wes_package/examples/sample.py
+bat tools/wes_package/examples/sample.lua
 bat bash/.bashrc
 bat -pl sh - < bash/.bashrc
-cat tools/syntax-lab/examples/sample.py
+cat tools/wes_package/examples/sample.py
 echo 'print("hello\\n")' | bat -pl py
-bat-stock tools/syntax-lab/examples/sample.py
+bat-stock tools/wes_package/examples/sample.py
 ```
 
 The wrapper supports filenames, multiple files, stdin with `-l py`/`-l lua`/`-l bash`/`-l sh`,
@@ -118,9 +120,9 @@ highlight --grayscale --swatches
 In interactive Xonsh:
 
 ```xonsh
-bat tools/syntax-lab/examples/sample.md
-bat --theme=wes-gray tools/syntax-lab/examples/sample.md
-bat --theme=wes-gray tools/syntax-lab/examples/sample.py
+bat tools/wes_package/examples/sample.md
+bat --theme=wes-gray tools/wes_package/examples/sample.md
+bat --theme=wes-gray tools/wes_package/examples/sample.py
 ```
 
 `wes-gray` is derived from the current palette on every invocation. It removes
@@ -201,7 +203,7 @@ reproducible. A sweep includes the original plus `--steps - 1` consecutive seeds
 or 3 pixels by default. Labels stay sharp. Images use a regular monospace font,
 with no bold or italics; `--font` supplies a different TTF/TTC and `--font-size`
 sets its size. This is a controlled specimen, not a screenshot of your terminal.
-PNG output defaults to `/tmp/syntax-lab-blur.png`; `--output` chooses a path and
+PNG output defaults to `/tmp/wes_package-blur.png`; `--output` chooses a path and
 can export any sweep. iTerm2 gets an inline preview using its image protocol,
 with explicit width in terminal cells rather than native pixels. This accounts
 for zoom and Retina scaling; the raster grid's padding counts toward the width,
@@ -248,7 +250,7 @@ for that fallback.
 Install the local package into that tool's environment, preferably editable:
 
 ```sh
-uv pip install --python /path/to/tool/.venv/bin/python -e "$WES_DOTFILES/tools/syntax-lab"
+uv pip install --python /path/to/tool/.venv/bin/python -e "$WES_DOTFILES/tools/wes_package"
 ```
 
 Or declare it in the tool's `pyproject.toml` (as the chat viewer does):
@@ -258,7 +260,7 @@ Or declare it in the tool's `pyproject.toml` (as the chat viewer does):
 dependencies = ["wes-syntax"] # alongside the tool's existing dependencies
 
 [tool.uv.sources]
-wes-syntax = { path = "../dotfiles/tools/syntax-lab", editable = true }
+wes-syntax = { path = "../dotfiles/tools/wes_package", editable = true }
 ```
 
 ```python
