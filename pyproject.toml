@@ -63,16 +63,15 @@ macos = [
 wes_package = { path = "tools/wes_package", editable = true }
 langchain-llama-server = { path = "../langchain-llama-server", editable = true }
 
-# FYI intent here is for GLOBAL tools only, to install them all with one call to:
-#   uv tool install --editable .
-#
-#   # FYI re-run if you add new tools
-#
 [project.scripts]
 colorcode = "tools.colorcode.__main__:main"
 color_shifter = "tools.color_shifter.color_shifter:main"
 pstree_grep = "tools.pstree_grep.cli:main"
-# TODO setup all global tools here and install w/ `uv tool install --editable`
+# wcl = "tools.wes_clone.cli:main" # TODO refactor into a tools dir
+#
+# FYI intent here is for GLOBAL tools only, to install them all with one call to:
+#   uv tool install --editable .
+#   # FYI re-run if you add new tools
 
 # * setuptools backend
 [build-system]

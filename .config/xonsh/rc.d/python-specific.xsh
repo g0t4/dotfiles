@@ -21,6 +21,7 @@ $PYTEST_ADDOPTS = "-o verbosity_assertions=2"
 
 register_wes_python()
 
+# TODO make tools.wcl (tools.wes_clone.cli)
 _wcl_script = Path($WES_DOTFILES) / "zsh/compat_fish/pythons/wcl.py"
 _wcl_python = Path($WES_DOTFILES) / ".venv/bin/python3"
 
