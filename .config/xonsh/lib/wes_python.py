@@ -24,7 +24,6 @@ def register_wes_python():
         'uv_remove',
         'uv_reinstall_package',
         'detect_encoding',
-        'wrc',
         'rich_colors',
         'rich_emoji',
         'matplotlib_colors',
