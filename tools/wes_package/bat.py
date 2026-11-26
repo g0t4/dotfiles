@@ -15,7 +15,7 @@ from pygments.formatters import TerminalTrueColorFormatter
 
 from wes.syntax import load_style, source_lexer, style_for_lexer
 
-ROOT = Path(__file__).resolve().parent
+WES_PACKAGE = Path(__file__).resolve().parent
 
 LANGUAGES = {
     "py": "python", "python": "python", "python3": "python",
@@ -116,7 +116,7 @@ def main(args=None):
     files, languages, color, numbers, grayscale = options
     colored = color == "always" or (color == "auto" and sys.stdout.isatty() and "NO_COLOR" not in os.environ)
     try:
-        colors, style = load_style(ROOT / "palette.json", grayscale=grayscale)
+        colors, style = load_style(WES_PACKAGE / "wes/syntax/palette.json", grayscale=grayscale)
     except (OSError, ValueError):
         # Fall back before consuming any stdin if the theme is unavailable.
         return stock(args)

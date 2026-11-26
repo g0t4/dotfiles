@@ -3,6 +3,7 @@
 
 from __future__ import annotations
 
+import os
 from pathlib import Path
 import re
 
@@ -11,10 +12,10 @@ from fish_to_xonsh import (
     generate_wrapped,
 )
 
-ROOT = Path(__file__).resolve().parents[1]
-FISH_DIR = ROOT / "fish/load_last_interactive_only"
-ZSH_DIR = ROOT / "zsh/compat_fish"
-XONSH_DIR = ROOT / ".config/xonsh/lib"
+REPO_ROOT = Path(os.getenv("WES_DOTFILES"))
+FISH_DIR = REPO_ROOT / "fish/load_last_interactive_only"
+ZSH_DIR = REPO_ROOT / "zsh/compat_fish"
+XONSH_DIR = REPO_ROOT / ".config/xonsh/lib"
 
 # long term everything will be in xonsh so this is fine for a stopgap
 GIT_VALUE_SUBSTITUTIONS = {

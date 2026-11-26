@@ -26,4 +26,4 @@ py-modules = ["explorer"]
 include = ["tools*", "wes*"]
 
 [tool.setuptools.package-data]
-wes = ["palette.json"]
+wes = ["wes/syntax/palette.json"]

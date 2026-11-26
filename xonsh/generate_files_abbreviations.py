@@ -3,14 +3,15 @@
 
 from __future__ import annotations
 
+import os
 import shlex
 from pathlib import Path
 from fish_to_xonsh import declaration, parse_abbreviation
 
 
-ROOT = Path(__file__).resolve().parents[1]
-SOURCE = ROOT / "fish/load_last_interactive_only/files-specific.fish"
-TARGET = ROOT / ".config/xonsh/lib/wes_files_abbreviations.py"
+REPO_ROOT = Path(os.getenv("WES_DOTFILES"))
+SOURCE = REPO_ROOT / "fish/load_last_interactive_only/files-specific.fish"
+TARGET = REPO_ROOT / ".config/xonsh/lib/wes_files_abbreviations.py"
 
 VALUE_SUBSTITUTIONS = {
     "$dust_lots_of_lines": "--number-of-lines 500",

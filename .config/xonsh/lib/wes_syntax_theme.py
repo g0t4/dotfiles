@@ -8,24 +8,24 @@ from rich.syntax import PygmentsSyntaxTheme
 
 from wes_interactive_cat import InteractiveCat
 
-ROOT = Path(os.getenv("WES_DOTFILES"))
-WES_PACKAGE = ROOT / "tools" / "wes_package"
-sys.path.insert(0, str(WES_PACKAGE))
+REPO_ROOT = Path(os.getenv("WES_DOTFILES"))
+WES_PACKAGE_DIR = REPO_ROOT / "tools" / "wes_package"
+sys.path.insert(0, str(WES_PACKAGE_DIR))
 
 
 def syntax_theme():
     # Read the palette for each preview so edits apply without restarting Xonsh.
-    spec = importlib.util.spec_from_file_location("wes_package_highlight", WES_PACKAGE / "highlight.py")
+    spec = importlib.util.spec_from_file_location("wes_package_highlight", WES_PACKAGE_DIR / "highlight.py")
     module = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(module)
-    _, style = module.load_style(WES_PACKAGE / "palette.json")
+    _, style = module.load_style(WES_PACKAGE_DIR / "wes/syntax/palette.json")
     return PygmentsSyntaxTheme(style)
 
 
 class ThemeBat(InteractiveCat):
     def __call__(self, args, stdin=None, stdout=None, stderr=None, spec=None, **_):
-        python = ROOT / ".venv" / "bin" / "python3"
-        command = [str(python), str(WES_PACKAGE / "bat.py")] if python.exists() else [self._command("uv") or "uv", "run", "--script", str(WES_PACKAGE / "bat.py")]
+        python = REPO_ROOT / ".venv" / "bin" / "python3"
+        command = [str(python), str(WES_PACKAGE_DIR / "bat.py")] if python.exists() else [self._command("uv") or "uv", "run", "--script", str(WES_PACKAGE_DIR / "bat.py")]
         # Xonsh's terminal dispatcher may not itself report isatty(). Explicit
         # user --color options follow this default and retain precedence.
         if self._is_terminal_output(stdout, spec) and "NO_COLOR" not in self._env:

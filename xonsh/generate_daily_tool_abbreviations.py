@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
 """Sync the small audio, HTTP, network, gitignore, and GH abbreviation collections."""
 
-import re
+import os
 import shlex
 from pathlib import Path
 
 from fish_to_xonsh import parse_abbreviation
 
-ROOT = Path(__file__).resolve().parents[1]
+REPO_ROOT = Path(os.getenv("WES_DOTFILES"))
 SOURCES = {
     "audio_video": "fish/load_last_interactive_only/audio-vido-specific.fish",
     "http": "fish/load_last_interactive_only/curl_http.fish",
@@ -21,7 +21,7 @@ def generate(domain):
     source = SOURCES[domain]
     declarations = []
     functions = []
-    for line in (ROOT / source).read_text().splitlines():
+    for line in (REPO_ROOT / source).read_text().splitlines():
         if line.startswith("function "):
             functions.append(line.split()[1])
         if line.startswith("_create_abbr_ff_help_filter "):
@@ -54,4 +54,4 @@ def generate(domain):
 
 if __name__ == "__main__":
     for domain in SOURCES:
-        (ROOT / f".config/xonsh/lib/wes_{domain}_tool_abbreviations.py").write_text(generate(domain))
+        (REPO_ROOT / f".config/xonsh/lib/wes_{domain}_tool_abbreviations.py").write_text(generate(domain))

@@ -6,8 +6,8 @@ from xonsh.commands_cache import CommandsCache
 from xonsh.environ import Env
 
 
-ROOT = Path(__file__).parents[2]
-ENV_RC = ROOT / ".config/xonsh/rc.d/00-env.xsh"
+REPO_ROOT = Path(os.getenv("WES_DOTFILES"))
+ENV_RC = REPO_ROOT / ".config/xonsh/rc.d/00-env.xsh"
 
 
 def executable(path):

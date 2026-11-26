@@ -3,13 +3,13 @@ import subprocess
 from pathlib import Path
 
 
-ROOT = Path(__file__).parents[2]
+REPO_ROOT = Path(os.getenv("WES_DOTFILES"))
 
 
 def test_recording_and_shorts_modes_change_current_xonsh_environment():
     env = os.environ.copy()
     env["XONSH_LOG"] = os.devnull
-    always = ROOT / ".config/xonsh/rc.d/always.xsh"
+    always = REPO_ROOT / ".config/xonsh/rc.d/always.xsh"
     command = (
         f"source {always}; "
         "_recording; "

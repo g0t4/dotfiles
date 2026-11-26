@@ -19,8 +19,8 @@ import time
 from typing import Sequence
 
 
-ROOT = Path(__file__).resolve().parents[1]
-RC_DIRECTORY = ROOT / ".config/xonsh/rc.d"
+REPO_ROOT = Path(os.getenv("WES_DOTFILES"))
+RC_DIRECTORY = REPO_ROOT / ".config/xonsh/rc.d"
 STARTUP_CASES = {
     "current": ("Current configuration", ()),
     "no_rc": ("No rc files", ("--no-rc",)),
@@ -59,7 +59,7 @@ def summarize(values: Sequence[float]) -> TimingSummary:
 
 
 def run_quiet(
-    command: Sequence[str], *, cwd: Path = ROOT, reject_stderr: bool = False
+    command: Sequence[str], *, cwd: Path = REPO_ROOT, reject_stderr: bool = False
 ) -> None:
     completed = subprocess.run(
         command,
@@ -105,7 +105,7 @@ def startup_matrix(xonsh: str, runs: int) -> dict[str, TimingSummary]:
 
 def version(command: Sequence[str]) -> str:
     completed = subprocess.run(
-        command, cwd=ROOT, capture_output=True, text=True, check=False
+        command, cwd=REPO_ROOT, capture_output=True, text=True, check=False
     )
     return (completed.stdout or completed.stderr).strip().splitlines()[0]
 
@@ -138,7 +138,7 @@ def profile_files(xonsh: str, *, limit: int = 15) -> list[dict[str, object]]:
         except OSError:
             resolved = path
         try:
-            relative = resolved.relative_to(ROOT)
+            relative = resolved.relative_to(REPO_ROOT)
         except ValueError:
             relative = None
         is_repo_file = relative is not None and (
@@ -265,7 +265,7 @@ def render(snapshot: dict[str, object], previous: dict[str, object] | None) -> N
         print("Inclusive cProfile attribution (distorted absolute time)")
         for item in attribution[:10]:
             try:
-                label = str(Path(item["file"]).relative_to(ROOT))
+                label = str(Path(item["file"]).relative_to(REPO_ROOT))
             except ValueError:
                 label = item["file"]
             print(f"  {item['inclusive_ms']:8.1f} ms  {label}")

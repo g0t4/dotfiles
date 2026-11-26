@@ -9,7 +9,7 @@ from collections.abc import Iterable, Sequence
 from pathlib import Path
 
 
-ROOT = Path(__file__).resolve().parents[2]
+WES_PACKAGE_DIR = Path(__file__).resolve().parents[2]
 LANGUAGE_COMPLETIONS = ("bash", "jinja", "lua", "markdown", "python", "xonsh", "yaml")
 
 
@@ -92,7 +92,7 @@ def build_parser() -> argparse.ArgumentParser:
         "--language", "-l", help="Pygments lexer, e.g. python, lua, or yaml"
     )
     language.completer = complete_languages  # type: ignore[attr-defined]
-    parser.add_argument("--palette", type=Path, default=ROOT / "palette.json")
+    parser.add_argument("--palette", type=Path, default=WES_PACKAGE_DIR / "wes/syntax/palette.json")
     parser.add_argument(
         "--grayscale",
         action="store_true",
@@ -195,7 +195,7 @@ def run(args: argparse.Namespace) -> int:
     path = (
         Path(args.file)
         if args.file and args.file != "-"
-        else ROOT / "examples" / example
+        else WES_PACKAGE_DIR / "examples" / example
     )
     code = sys.stdin.read() if args.file == "-" else path.read_text()
     lexer = source_lexer(args.language, filename=path)

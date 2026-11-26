@@ -8,7 +8,7 @@ import subprocess
 import sys
 import time
 
-ROOT = Path(__file__).resolve().parents[2]
+REPO_ROOT = Path(os.getenv("WES_DOTFILES"))
 
 
 def xonsh_command(command):
@@ -32,14 +32,14 @@ def shell_setup():
 
 
 def shell_env():
-    return {**os.environ, "WES_DOTFILES": str(ROOT), "TERM": "xterm-256color"}
+    return {**os.environ, "WES_DOTFILES": str(REPO_ROOT), "TERM": "xterm-256color"}
 
 
 def test_xonsh_alias_inherits_terminal_and_exits_with_f9():
     master, slave = pty.openpty()
     process = subprocess.Popen(
         xonsh_command(shell_setup() + "pstree_grep\n"),
-        cwd=ROOT,
+        cwd=REPO_ROOT,
         env=shell_env(),
         stdin=slave,
         stdout=slave,
@@ -86,7 +86,7 @@ def test_xonsh_snapshot_keeps_stdout_and_stderr_redirects(tmp_path):
     )
     completed = subprocess.run(
         xonsh_command(command),
-        cwd=ROOT,
+        cwd=REPO_ROOT,
         env=shell_env(),
         capture_output=True,
         text=True,

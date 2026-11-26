@@ -3,10 +3,11 @@
 
 from __future__ import annotations
 
+import os
 import sys
 from pathlib import Path
 
-ROOT = Path(__file__).parents[1]
+REPO_ROOT = Path(os.getenv("WES_DOTFILES"))
 
 XONSH_LIB = Path(__file__).parents[1] / ".config" / "xonsh" / "lib"
 sys.path.insert(0, str(XONSH_LIB))
@@ -16,7 +17,7 @@ from wes_abbreviations import reset_registry  # noqa: E402
 from wes_misc_abbreviations import register_misc_abbreviations  # noqa: E402
 
 
-TARGET = ROOT / "fish/generated/misc-abbreviations.fish"
+TARGET = REPO_ROOT / "fish/generated/misc-abbreviations.fish"
 
 # Xonsh and Fish spell command substitution differently. Keep Fish's quoted
 # path substitutions so a repository path containing spaces stays one argument.

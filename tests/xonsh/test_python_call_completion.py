@@ -6,9 +6,9 @@ from pathlib import Path
 import subprocess
 
 
-ROOT = Path(__file__).parents[2]
-RC = ROOT / ".config/xonsh/rc.d/python-call-completions.py"
-LIB = ROOT / ".config/xonsh/lib"
+REPO_ROOT = Path(os.getenv("WES_DOTFILES"))
+RC = REPO_ROOT / ".config/xonsh/rc.d/python-call-completions.py"
+LIB = REPO_ROOT / ".config/xonsh/lib"
 
 
 def test_python_function_and_shell_function_alias_with_same_name_show_both_choices():
@@ -36,7 +36,7 @@ print(repr([(str(c), c.display, c.provider) for c in completions
     env["XONSH_LOG"] = os.devnull
     result = subprocess.run(
         ["xonsh", "--no-rc", "-c", script],
-        cwd=ROOT,
+        cwd=REPO_ROOT,
         env=env,
         text=True,
         capture_output=True,
@@ -92,7 +92,7 @@ for line in ('sam', 'dump_e', '@.debug.break', 'x = sam', 'print(sam', 'echo @(s
     env["XONSH_LOG"] = os.devnull
     result = subprocess.run(
         ["xonsh", "--no-rc", "-c", script],
-        cwd=ROOT,
+        cwd=REPO_ROOT,
         env=env,
         text=True,
         capture_output=True,

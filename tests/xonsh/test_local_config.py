@@ -1,12 +1,13 @@
 """Exercise local config loading in a real Xonsh session."""
 
+import os
 import subprocess
 from pathlib import Path
 
 
-ROOT = Path(__file__).parents[2]
-LIB = ROOT / ".config/xonsh/lib"
-LOADER = ROOT / ".config/xonsh/rc.d/zzzz-local-config.py"
+REPO_ROOT = Path(os.getenv("WES_DOTFILES"))
+LIB = REPO_ROOT / ".config/xonsh/lib"
+LOADER = REPO_ROOT / ".config/xonsh/rc.d/zzzz-local-config.py"
 
 
 def test_loader_runs_after_global_abbreviation_setup():

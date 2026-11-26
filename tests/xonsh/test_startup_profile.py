@@ -1,12 +1,13 @@
 import importlib.util
+import os
 from pathlib import Path
 import sys
 
 import pytest
 
 
-ROOT = Path(__file__).parents[2]
-MODULE_PATH = ROOT / "tools/xonsh_startup_profile.py"
+REPO_ROOT = Path(os.getenv("WES_DOTFILES"))
+MODULE_PATH = REPO_ROOT / "tools/xonsh_startup_profile.py"
 SPEC = importlib.util.spec_from_file_location("xonsh_startup_profile", MODULE_PATH)
 startup_profile = importlib.util.module_from_spec(SPEC)
 sys.modules[SPEC.name] = startup_profile

@@ -1,10 +1,11 @@
+import os
 from pathlib import Path
 
 import pytest
 
 
-ROOT = Path(__file__).parents[2]
-XONSH_LIB = ROOT / ".config/xonsh/lib"
+REPO_ROOT = Path(os.getenv("WES_DOTFILES"))
+XONSH_LIB = REPO_ROOT / ".config/xonsh/lib"
 
 
 @pytest.fixture

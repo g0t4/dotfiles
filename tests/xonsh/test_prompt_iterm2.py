@@ -3,13 +3,13 @@ import subprocess
 from pathlib import Path
 
 
-ROOT = Path(__file__).parents[2]
+REPO_ROOT = Path(os.getenv("WES_DOTFILES"))
 
 
 def run_xonsh(command, tmp_path):
     env = os.environ.copy()
     env["HOME"] = str(tmp_path)
-    env["XONSH_CONFIG_DIR"] = str(ROOT / ".config/xonsh")
+    env["XONSH_CONFIG_DIR"] = str(REPO_ROOT / ".config/xonsh")
     return subprocess.run(
         ["xonsh", "--no-rc", "-c", command],
         capture_output=True,
@@ -19,8 +19,8 @@ def run_xonsh(command, tmp_path):
 
 
 def test_disabled_iterm2_integration_does_not_wrap_prompt(tmp_path):
-    iterm2 = ROOT / ".config/xonsh/rc.d/iterm2.xsh"
-    prompt = ROOT / ".config/xonsh/rc.d/prompt.xsh"
+    iterm2 = REPO_ROOT / ".config/xonsh/rc.d/iterm2.xsh"
+    prompt = REPO_ROOT / ".config/xonsh/rc.d/prompt.xsh"
     completed = run_xonsh(
         f"source {iterm2}; source {prompt}; "
         "assert not $ITERM2_INTEGRATION; "
@@ -33,7 +33,7 @@ def test_disabled_iterm2_integration_does_not_wrap_prompt(tmp_path):
 
 
 def test_repo_info_uses_host_org_repo_convention(tmp_path):
-    prompt = ROOT / ".config/xonsh/rc.d/prompt.xsh"
+    prompt = REPO_ROOT / ".config/xonsh/rc.d/prompt.xsh"
     repo = tmp_path / "repos/github/g0t4/dotfiles"
     nested = repo / "tools/wes_package"
     completed = run_xonsh(
@@ -48,7 +48,7 @@ def test_repo_info_uses_host_org_repo_convention(tmp_path):
 
 
 def test_repo_info_leaves_paths_outside_repo_convention_alone(tmp_path):
-    prompt = ROOT / ".config/xonsh/rc.d/prompt.xsh"
+    prompt = REPO_ROOT / ".config/xonsh/rc.d/prompt.xsh"
     outside = tmp_path / "projects/example"
     completed = run_xonsh(
         f"source {prompt}; "
@@ -60,8 +60,8 @@ def test_repo_info_leaves_paths_outside_repo_convention_alone(tmp_path):
 
 
 def test_enabled_iterm2_integration_registers_fields_and_wraps_prompt(tmp_path):
-    iterm2 = ROOT / ".config/xonsh/rc.d/iterm2.xsh"
-    prompt = ROOT / ".config/xonsh/rc.d/prompt.xsh"
+    iterm2 = REPO_ROOT / ".config/xonsh/rc.d/iterm2.xsh"
+    prompt = REPO_ROOT / ".config/xonsh/rc.d/prompt.xsh"
     completed = run_xonsh(
         "$XONSH_INTERACTIVE = True; $TERM = 'xterm-256color'; "
         "$TERM_PROGRAM = 'iTerm.app'; "
@@ -78,8 +78,8 @@ def test_enabled_iterm2_integration_registers_fields_and_wraps_prompt(tmp_path):
 
 
 def test_remote_ssh_session_enables_iterm2_without_term_program(tmp_path):
-    iterm2 = ROOT / ".config/xonsh/rc.d/iterm2.xsh"
-    prompt = ROOT / ".config/xonsh/rc.d/prompt.xsh"
+    iterm2 = REPO_ROOT / ".config/xonsh/rc.d/iterm2.xsh"
+    prompt = REPO_ROOT / ".config/xonsh/rc.d/prompt.xsh"
     completed = run_xonsh(
         "$XONSH_INTERACTIVE = True; $TERM = 'xterm-256color'; "
         "$SSH_CONNECTION = 'client 123 server 22'; "
@@ -96,8 +96,8 @@ def test_remote_ssh_session_enables_iterm2_without_term_program(tmp_path):
 
 
 def test_local_non_iterm_terminal_remains_disabled(tmp_path):
-    iterm2 = ROOT / ".config/xonsh/rc.d/iterm2.xsh"
-    prompt = ROOT / ".config/xonsh/rc.d/prompt.xsh"
+    iterm2 = REPO_ROOT / ".config/xonsh/rc.d/iterm2.xsh"
+    prompt = REPO_ROOT / ".config/xonsh/rc.d/prompt.xsh"
     completed = run_xonsh(
         "$XONSH_INTERACTIVE = True; $TERM = 'xterm-256color'; "
         "$TERM_PROGRAM = 'Apple_Terminal'; "

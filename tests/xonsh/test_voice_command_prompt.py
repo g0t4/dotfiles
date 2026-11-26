@@ -1,12 +1,13 @@
+import os
 import subprocess
 from pathlib import Path
 
 
-ROOT = Path(__file__).parents[2]
+REPO_ROOT = Path(os.getenv("WES_DOTFILES"))
 
 
 def test_voice_prompt_prominently_requires_xonsh_and_uses_english_context():
-    voice = ROOT / ".config/xonsh/rc.d/voice-intent.xsh"
+    voice = REPO_ROOT / ".config/xonsh/rc.d/voice-intent.xsh"
     command = (
         f"source {voice}; from wes_voice_command import _AI_VOICE_COMMAND_SYSTEM_PROMPT; "
         "from types import SimpleNamespace; "
@@ -33,7 +34,7 @@ def test_voice_prompt_prominently_requires_xonsh_and_uses_english_context():
 
 
 def test_voice_command_cleaner_preserves_multiline_xonsh():
-    voice = ROOT / ".config/xonsh/rc.d/voice-intent.xsh"
+    voice = REPO_ROOT / ".config/xonsh/rc.d/voice-intent.xsh"
     command = (
         f"source {voice}; from wes_voice_command import _AI_VOICE_COMMAND_SYSTEM_PROMPT; "
         'value = "```xonsh\\nfor item in p`*.py`:\\n    print(item)\\n```"; '

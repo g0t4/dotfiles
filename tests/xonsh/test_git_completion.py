@@ -3,10 +3,10 @@ import subprocess
 from pathlib import Path
 
 
-ROOT = Path(__file__).parents[2]
-XONSH_LIB = ROOT / ".config/xonsh/lib"
-ABBREVIATIONS_RC = ROOT / ".config/xonsh/rc.d/abbreviations.xsh"
-GIT_RC = ROOT / ".config/xonsh/rc.d/git.py"
+REPO_ROOT = Path(os.getenv("WES_DOTFILES"))
+XONSH_LIB = REPO_ROOT / ".config/xonsh/lib"
+ABBREVIATIONS_RC = REPO_ROOT / ".config/xonsh/rc.d/abbreviations.xsh"
+GIT_RC = REPO_ROOT / ".config/xonsh/rc.d/git.py"
 
 
 def _xonsh_env() -> dict[str, str]:

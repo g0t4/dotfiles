@@ -5,8 +5,8 @@ from pathlib import Path
 import pytest
 
 
-ROOT = Path(__file__).parents[2]
-XONSH_LIB = ROOT / ".config/xonsh/lib"
+REPO_ROOT = Path(os.getenv("WES_DOTFILES"))
+XONSH_LIB = REPO_ROOT / ".config/xonsh/lib"
 
 
 def _xonsh_test_env():
@@ -14,7 +14,7 @@ def _xonsh_test_env():
 
 
 def test_directory_history_navigates_and_branches(monkeypatch):
-    monkeypatch.syspath_prepend(str(ROOT / ".config/xonsh/lib"))
+    monkeypatch.syspath_prepend(str(REPO_ROOT / ".config/xonsh/lib"))
     from wes_directory_history import DirectoryHistory
 
     history = DirectoryHistory()
@@ -38,7 +38,7 @@ def test_directory_history_navigates_and_branches(monkeypatch):
 
 
 def test_directory_history_restores_state_when_cd_fails(monkeypatch):
-    monkeypatch.syspath_prepend(str(ROOT / ".config/xonsh/lib"))
+    monkeypatch.syspath_prepend(str(REPO_ROOT / ".config/xonsh/lib"))
     from wes_directory_history import DirectoryHistory
 
     history = DirectoryHistory(previous=["/gone"])
@@ -51,7 +51,7 @@ def test_directory_history_restores_state_when_cd_fails(monkeypatch):
 
 
 def test_directory_history_is_bounded(monkeypatch):
-    monkeypatch.syspath_prepend(str(ROOT / ".config/xonsh/lib"))
+    monkeypatch.syspath_prepend(str(REPO_ROOT / ".config/xonsh/lib"))
     from wes_directory_history import DirectoryHistory
 
     history = DirectoryHistory(limit=3)
@@ -62,7 +62,7 @@ def test_directory_history_is_bounded(monkeypatch):
 
 
 def test_ctrl_y_invokes_redo():
-    keybindings = ROOT / ".config/xonsh/rc.d/keybindings.xsh"
+    keybindings = REPO_ROOT / ".config/xonsh/rc.d/keybindings.xsh"
     command = (
         f"source {keybindings}; "
         "from prompt_toolkit.buffer import Buffer; "
@@ -90,7 +90,7 @@ def test_ctrl_y_invokes_redo():
 
 
 def test_ctrl_r_invokes_redo_only_in_vi_normal_mode():
-    keybindings = ROOT / ".config/xonsh/rc.d/keybindings.xsh"
+    keybindings = REPO_ROOT / ".config/xonsh/rc.d/keybindings.xsh"
     command = (
         f"source {keybindings}; "
         "from prompt_toolkit.buffer import Buffer; "
@@ -122,7 +122,7 @@ def test_ctrl_r_invokes_redo_only_in_vi_normal_mode():
 
 
 def test_alt_up_and_down_cycle_every_history_token_reversibly():
-    keybindings = ROOT / ".config/xonsh/rc.d/keybindings.xsh"
+    keybindings = REPO_ROOT / ".config/xonsh/rc.d/keybindings.xsh"
     command = (
         f"source {keybindings}; "
         "from prompt_toolkit.buffer import Buffer; "
@@ -162,7 +162,7 @@ def test_alt_up_and_down_cycle_every_history_token_reversibly():
 
 
 def test_ctrl_w_uses_vim_small_word_boundaries_in_vi_insert_mode():
-    keybindings = ROOT / ".config/xonsh/rc.d/keybindings.xsh"
+    keybindings = REPO_ROOT / ".config/xonsh/rc.d/keybindings.xsh"
     command = (
         f"source {keybindings}; "
         "from prompt_toolkit.buffer import Buffer; "
@@ -195,7 +195,7 @@ def test_ctrl_w_uses_vim_small_word_boundaries_in_vi_insert_mode():
 
 
 def _surround_command(keybinding_name, keys, before, pos, after):
-    keybindings = ROOT / ".config/xonsh/rc.d/keybindings.xsh"
+    keybindings = REPO_ROOT / ".config/xonsh/rc.d/keybindings.xsh"
     key_list = ", ".join(f"SimpleNamespace(key={key!r})" for key in keys)
     return (
         f"source {keybindings}; "
