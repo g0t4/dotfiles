@@ -28,11 +28,6 @@ aliases["pstree_grep"] = [
     str(Path($WES_DOTFILES) / "zsh/compat_fish/pythons/pstree_grep.py"),
 ]
 
-aliases["colorcode"] = [
-    str(Path($WES_DOTFILES) / ".venv/bin/python3"),
-    str(Path($WES_DOTFILES) / "tools/colorcode/colorcode.py"),
-]
-
 aliases["color_shifter"] = [
     str(Path($WES_DOTFILES) / ".venv/bin/python3"),
     str(Path($WES_DOTFILES) / "tools/color_shifter/color_shifter.py"),

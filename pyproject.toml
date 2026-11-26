@@ -63,20 +63,23 @@ macos = [
 wes_package = { path = "tools/wes_package", editable = true }
 langchain-llama-server = { path = "../langchain-llama-server", editable = true }
 
-# # TODO setup more global tools via `uv tool install`?
-# # TODO repo-local tools?
+# FYI intent here is for GLOBAL tools only, to install them all with one call to:
+#   uv tool install --editable .
 #
-# [project.scripts]
-# foo = "tools.foo.__main__:main"
+#   # FYI re-run if you add new tools
 #
-# # * setuptools backend
-# [build-system]
-# requires = ["setuptools>=77"]
-# build-backend = "setuptools.build_meta"
-#
-# [tool.setuptools.packages.find]
-# include = ["tools*"]
-#
+[project.scripts]
+colorcode = "tools.colorcode.__main__:main"
+# TODO setup all global tools here and install w/ `uv tool install --editable`
+
+# * setuptools backend
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+include = ["tools*"]
+
 
 
 # [dependency-groups]
