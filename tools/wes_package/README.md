@@ -13,9 +13,6 @@ TODO:
 
 Basically customizations to `rich.print` (i.e. combine with my `wes.syntax` theme)
 
-TODO:
-- Move TreeWrapper here
-
 ## wes.syntax
 
 Reusuable python modules
