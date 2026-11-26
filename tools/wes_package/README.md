@@ -1,7 +1,22 @@
 # wes_package
 
-FYI this README is largely from the old syntax-lab package (now nested in `wes.syntax` namespace within this bigger `wes` package (aka `wes_package`))
-TODO codex document briefly the other parts of the bigger `wes_package` i.e. wes.print
+## wes.ai
+
+Reusable AI modules to streamline new AI tools with a consistent feel.
+
+TODO:
+- create/move shared tracing logic here
+- llama-server client creation ChatLlamaServer so we configure timings the same way every time
+- message bubble builder
+
+## wes.printing
+
+Basically customizations to `rich.print` (i.e. combine with my `wes.syntax` theme)
+
+TODO:
+- Move TreeWrapper here
+
+## wes.syntax
 
 Reusuable python modules
 
