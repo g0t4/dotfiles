@@ -23,7 +23,6 @@ def register_wes_python():
         'uv_add',
         'uv_remove',
         'uv_reinstall_package',
-        'pstree_grep',
         'detect_encoding',
         'wrc',
         'rich_colors',

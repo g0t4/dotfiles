@@ -70,6 +70,8 @@ langchain-llama-server = { path = "../langchain-llama-server", editable = true }
 #
 [project.scripts]
 colorcode = "tools.colorcode.__main__:main"
+color_shifter = "tools.color_shifter.color_shifter:main"
+pstree_grep = "tools.pstree_grep.cli:main"
 # TODO setup all global tools here and install w/ `uv tool install --editable`
 
 # * setuptools backend
