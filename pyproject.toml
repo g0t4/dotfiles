@@ -63,6 +63,22 @@ macos = [
 wes-syntax = { path = "tools/syntax-lab", editable = true }
 langchain-llama-server = { path = "../langchain-llama-server", editable = true }
 
+# # TODO setup more global tools via `uv tool install`?
+# # TODO repo-local tools?
+#
+# [project.scripts]
+# foo = "tools.foo.__main__:main"
+#
+# # * setuptools backend
+# [build-system]
+# requires = ["setuptools>=77"]
+# build-backend = "setuptools.build_meta"
+#
+# [tool.setuptools.packages.find]
+# include = ["tools*"]
+#
+
+
 # [dependency-groups]
 # dev = [
 #     "xonsh-lsp==0.2.1",
