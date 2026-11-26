@@ -17,7 +17,7 @@ from PySide6.QtWidgets import (
 
 from app_theme import apply_app_theme
 
-ROOT = Path(__file__).resolve().parent
+SLOP_REEL_DIR = Path(__file__).resolve().parent
 VIDEO_FILTER = "Videos (*.mp4 *.mov *.m4v *.mkv *.webm *.avi *.mpg *.mpeg *.mts *.m2ts *.ts *.ogv);;All files (*)"
 
 
@@ -31,7 +31,7 @@ class Welcome(QMainWindow):
         layout = QVBoxLayout(widget)
         layout.setContentsMargins(50, 35, 50, 40)
         icon = QLabel()
-        icon.setPixmap(QPixmap(str(ROOT / "assets/slop-reel.png")).scaledToWidth(180))
+        icon.setPixmap(QPixmap(str(SLOP_REEL_DIR / "assets/slop-reel.png")).scaledToWidth(180))
         icon.setAlignment(Qt.AlignmentFlag.AlignCenter)
         layout.addWidget(icon)
         label = QLabel("Slop Reel")
@@ -70,7 +70,7 @@ class Application(QApplication):
         super().__init__(argv)
         self.setApplicationName("Slop Reel")
         self.setOrganizationDomain("g0t4.com")
-        self.setWindowIcon(QIcon(str(ROOT / "assets/slop-reel.png")))
+        self.setWindowIcon(QIcon(str(SLOP_REEL_DIR / "assets/slop-reel.png")))
         self.setStyle("Fusion")
         apply_app_theme(self)
         self.aboutToQuit.connect(self.close_reviews)

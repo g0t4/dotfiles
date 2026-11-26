@@ -5,7 +5,7 @@ import sys
 from types import SimpleNamespace
 
 
-ROOT = Path(__file__).parents[1]
+WES_PACKAGE_DIR = Path(__file__).parents[1]
 
 
 def run_highlight(
@@ -13,7 +13,7 @@ def run_highlight(
 ) -> subprocess.CompletedProcess[str]:
     return subprocess.run(
         [sys.executable, "-m", "tools.highlight", *args],
-        cwd=ROOT,
+        cwd=WES_PACKAGE_DIR,
         input=input,
         capture_output=True,
         text=True,

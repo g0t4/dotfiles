@@ -6,7 +6,7 @@ from pathlib import Path
 
 from setuptools import setup
 
-ROOT = Path(__file__).resolve().parent
+SLOP_REEL_DIR = Path(__file__).resolve().parent
 # Finder does not read shell startup files. Record the actual media-tool locations
 # when installing; keep standard paths available for subprocess dependencies too.
 tool_dirs = []
@@ -21,13 +21,13 @@ search_path = os.pathsep.join(
 
 setup(
     name="Slop Reel",
-    app=[str(ROOT / "app.py")],
+    app=[str(SLOP_REEL_DIR / "app.py")],
     options={
         "py2app": {
             "alias": True,
             "argv_emulation": False,
             "no_chdir": True,  # CLI paths belong to the caller's working directory.
-            "iconfile": str(ROOT / "assets/slop-reel.icns"),
+            "iconfile": str(SLOP_REEL_DIR / "assets/slop-reel.icns"),
             "plist": {
                 "CFBundleIdentifier": "com.g0t4.slop-reel",
                 "CFBundleName": "Slop Reel",

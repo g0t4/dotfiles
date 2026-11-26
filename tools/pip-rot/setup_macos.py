@@ -2,15 +2,15 @@
 from pathlib import Path
 from setuptools import setup
 
-ROOT = Path(__file__).resolve().parent
+PIP_ROT_DIR = Path(__file__).resolve().parent
 setup(
     name='Pip Rot',
-    app=[str(ROOT / 'pip_rot.py')],
+    app=[str(PIP_ROT_DIR / 'pip_rot.py')],
     options={'py2app': {
         'alias': True,
         'argv_emulation': False,
         'no_chdir': True,  # Preserve the shell's cwd for paths such as `.`.
-        'iconfile': str(ROOT / 'assets/pip-rot.icns'),
+        'iconfile': str(PIP_ROT_DIR / 'assets/pip-rot.icns'),
         'plist': {
             'CFBundleIdentifier': 'com.g0t4.pip-rot',
             'CFBundleName': 'Pip Rot',
