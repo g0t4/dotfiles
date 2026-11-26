@@ -44,7 +44,7 @@ abbr gsti 'git status --ignored .'
 # FYI in xonsh you can limit the search to a path: gstiv <path>
 # look for legit, ignored files (i.e. sensitive log captures) sans the ones I never care about:
 # look at untracked and/or ignored files.. and skip things I know I never care bout
-abbr gstiv 'xonsh -c "gstiv"' # delegate to the xonsh _gstiv function (xonsh-only.xsh); in xonsh you can limit to a path: gstiv <path>
+abbr gstiv 'xonsh -c "gstiv"' # fish-only
 
 # reset
 abbr grhh 'git reset --hard HEAD' # last commit hard reset
