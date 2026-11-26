@@ -15,7 +15,7 @@ sys.path.insert(0, str(WES_PACKAGE))
 
 def syntax_theme():
     # Read the palette for each preview so edits apply without restarting Xonsh.
-    spec = importlib.util.spec_from_file_location("wes_syntax_lab", WES_PACKAGE / "highlight.py")
+    spec = importlib.util.spec_from_file_location("wes_package_highlight", WES_PACKAGE / "highlight.py")
     module = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(module)
     _, style = module.load_style(WES_PACKAGE / "palette.json")
