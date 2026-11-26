@@ -284,3 +284,4 @@ def register_wes_git():
     abbr('ggc', "git grep -C10 -Ee '%' $(git rev-list --all)", cursor_marker="%")
     abbr('ggf', "git grep --function-context -Ee '%' $(git rev-list --all)", cursor_marker="%")
 
+
