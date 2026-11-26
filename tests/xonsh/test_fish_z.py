@@ -16,7 +16,7 @@ def z_alias(monkeypatch):
     aliases = {}
     monkeypatch.setattr(type(XSH), "aliases", property(lambda self: aliases))
     namespace = {}
-    source = Path(test_setup.ROOT / ".config/xonsh/rc.d/z.py").read_text()
+    source = Path(test_setup.REPO_ROOT / ".config/xonsh/rc.d/z.py").read_text()
     exec(compile(source, "z.py", "exec"), namespace)
     events.on_chdir.discard(namespace["_wes_z_record_directory"])
     return namespace

@@ -1,4 +1,4 @@
-from test_setup import ROOT
+from test_setup import REPO_ROOT
 
 import importlib
 import platform
@@ -80,8 +80,8 @@ def test_function_inventory_and_dynamic_ptw_expansion():
 
 
 def test_python_rc_loads_with_native_wcl():
-    abbreviations = ROOT / ".config/xonsh/rc.d/abbreviations.xsh"
-    python_rc = ROOT / ".config/xonsh/rc.d/python-specific.xsh"
+    abbreviations = REPO_ROOT / ".config/xonsh/rc.d/abbreviations.xsh"
+    python_rc = REPO_ROOT / ".config/xonsh/rc.d/python-specific.xsh"
     command = (
         f"source {abbreviations}; source {python_rc}; "
         "assert $PYTEST_ADDOPTS == '-o verbosity_assertions=2'; "

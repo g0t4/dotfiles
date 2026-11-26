@@ -1,4 +1,4 @@
-from test_setup import ROOT
+from test_setup import REPO_ROOT
 
 import re
 import os
@@ -72,10 +72,10 @@ def test_files_rc_loads_and_cd_to_file_changes_xonsh_directory(tmp_path):
     file = tmp_path / "example.txt"
     file.touch()
     env = os.environ.copy()
-    env["XONSH_CONFIG_DIR"] = str(ROOT / ".config/xonsh")
+    env["XONSH_CONFIG_DIR"] = str(REPO_ROOT / ".config/xonsh")
     env["FILES_TEST_DIR"] = str(tmp_path)
-    abbreviations = ROOT / ".config/xonsh/rc.d/abbreviations.xsh"
-    files_rc = ROOT / ".config/xonsh/rc.d/files-specific.xsh"
+    abbreviations = REPO_ROOT / ".config/xonsh/rc.d/abbreviations.xsh"
+    files_rc = REPO_ROOT / ".config/xonsh/rc.d/files-specific.xsh"
 
     completed = subprocess.run(
         [

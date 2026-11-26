@@ -1,4 +1,4 @@
-from test_setup import ROOT
+from test_setup import REPO_ROOT
 
 import subprocess
 
@@ -106,8 +106,8 @@ def test_copied_patch_sides_preserve_context_for_visual_diffing():
 
 
 def test_diff_rc_uses_xonsh_ptk_event_signature_and_live_command_cache():
-    rc = ROOT / ".config/xonsh/rc.d/diff-specific.py"
-    abbreviations = ROOT / ".config/xonsh/rc.d/abbreviations.xsh"
+    rc = REPO_ROOT / ".config/xonsh/rc.d/diff-specific.py"
+    abbreviations = REPO_ROOT / ".config/xonsh/rc.d/abbreviations.xsh"
     command = (
         f"source {abbreviations}; source {rc}; "
         "from prompt_toolkit.key_binding import KeyBindings; "
@@ -124,8 +124,8 @@ def test_diff_rc_uses_xonsh_ptk_event_signature_and_live_command_cache():
 
 
 def test_diff_command_capture_keeps_output_from_nonzero_command(tmp_path):
-    rc = ROOT / ".config/xonsh/rc.d/diff-specific.py"
-    abbreviations = ROOT / ".config/xonsh/rc.d/abbreviations.xsh"
+    rc = REPO_ROOT / ".config/xonsh/rc.d/diff-specific.py"
+    abbreviations = REPO_ROOT / ".config/xonsh/rc.d/abbreviations.xsh"
     output = tmp_path / "failed-command-output"
     command = (
         f"source {abbreviations}; source {rc}; "
@@ -144,8 +144,8 @@ def test_diff_command_capture_keeps_output_from_nonzero_command(tmp_path):
 
 
 def test_diff_command_capture_removes_one_final_newline(tmp_path):
-    rc = ROOT / ".config/xonsh/rc.d/diff-specific.py"
-    abbreviations = ROOT / ".config/xonsh/rc.d/abbreviations.xsh"
+    rc = REPO_ROOT / ".config/xonsh/rc.d/diff-specific.py"
+    abbreviations = REPO_ROOT / ".config/xonsh/rc.d/abbreviations.xsh"
     output = tmp_path / "normalized-output"
     command = (
         f"source {abbreviations}; source {rc}; "

@@ -290,7 +290,7 @@ def test_rendered_filter_menu_shows_choices_descriptions_and_separate_query(styl
 
 @pytest.mark.parametrize("search_first", [True, False])
 def test_real_xonsh_bindings_keep_filter_enter_and_escape_local(tmp_path, search_first):
-    rc = test_setup.ROOT / ".config/xonsh/rc.d"
+    rc = test_setup.REPO_ROOT / ".config/xonsh/rc.d"
     script = tmp_path / "completion-menu.xsh"
     registration = [
         "_wes_completion_menu",

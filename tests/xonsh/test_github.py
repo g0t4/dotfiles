@@ -1,11 +1,11 @@
-from test_setup import ROOT
+from test_setup import REPO_ROOT
 
 import subprocess
 
 
 def test_github_rc_loads_aliases_and_abbreviations():
-    abbreviations = ROOT / ".config/xonsh/rc.d/abbreviations.xsh"
-    github = ROOT / ".config/xonsh/rc.d/github.py"
+    abbreviations = REPO_ROOT / ".config/xonsh/rc.d/abbreviations.xsh"
+    github = REPO_ROOT / ".config/xonsh/rc.d/github.py"
     command = (
         f"source {abbreviations}; source {github}; "
         "assert callable(aliases['gh_repo_create_private']); "
@@ -22,8 +22,8 @@ def test_github_cli_resolves_from_live_xonsh_path(tmp_path):
     executable = tmp_path / "gh"
     executable.write_text("#!/bin/sh\nexit 0\n")
     executable.chmod(0o755)
-    abbreviations = ROOT / ".config/xonsh/rc.d/abbreviations.xsh"
-    github = ROOT / ".config/xonsh/rc.d/github.py"
+    abbreviations = REPO_ROOT / ".config/xonsh/rc.d/abbreviations.xsh"
+    github = REPO_ROOT / ".config/xonsh/rc.d/github.py"
     command = (
         f"source {abbreviations}; source {github}; "
         f"$PATH = ['{tmp_path}']; "

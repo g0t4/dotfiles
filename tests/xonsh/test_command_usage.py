@@ -97,7 +97,7 @@ def test_static_analysis_never_evaluates_dynamic_expressions(tmp_path):
 
 
 def test_interactive_rc_hooks_record_failed_command_and_distinct_operations(tmp_path):
-    rc = test_setup.ROOT / '.config/xonsh/rc.d/command-usage.py'
+    rc = test_setup.REPO_ROOT / '.config/xonsh/rc.d/command-usage.py'
     env = dict(os.environ, PYTHONPATH=str(test_setup.XONSH_LIB), XDG_STATE_HOME=str(tmp_path/'state'),
                XONSH_COMMAND_USAGE='True', XONSH_COMMAND_USAGE_PYTHON_IO='True')
     completed = subprocess.run([sys.executable, '-m', 'xonsh', '-i', '--rc', str(rc), '--shell-type', 'dumb'],

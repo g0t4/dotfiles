@@ -1,4 +1,4 @@
-from test_setup import ROOT
+from test_setup import REPO_ROOT
 
 import os
 import re
@@ -47,7 +47,7 @@ def test_generated_files_search_abbreviations_are_in_sync():
 
 def test_every_fish_function_has_an_explicit_migration_strategy():
     source = (
-        ROOT / "fish/load_last_interactive_only/files-search-specific.fish"
+        REPO_ROOT / "fish/load_last_interactive_only/files-search-specific.fish"
     ).read_text()
     fish_functions = set(
         re.findall(r"^\s*function\s+([^\s]+)", source, re.MULTILINE)
@@ -125,10 +125,10 @@ def test_unsupported_stateful_function_alias_fails_loudly():
 def test_ripgrep_searches_hidden_config_without_an_inherited_fish_environment():
     env = os.environ.copy()
     env.pop("RIPGREP_CONFIG_PATH", None)
-    env["XONSH_CONFIG_DIR"] = str(ROOT / ".config/xonsh")
-    config_rc = ROOT / ".config/xonsh/rc.d/00-env.xsh"
-    abbreviations_rc = ROOT / ".config/xonsh/rc.d/abbreviations.xsh"
-    rc = ROOT / ".config/xonsh/rc.d/files-search-specific.xsh"
+    env["XONSH_CONFIG_DIR"] = str(REPO_ROOT / ".config/xonsh")
+    config_rc = REPO_ROOT / ".config/xonsh/rc.d/00-env.xsh"
+    abbreviations_rc = REPO_ROOT / ".config/xonsh/rc.d/abbreviations.xsh"
+    rc = REPO_ROOT / ".config/xonsh/rc.d/files-search-specific.xsh"
 
     completed = subprocess.run(
         [
@@ -140,7 +140,7 @@ def test_ripgrep_searches_hidden_config_without_an_inherited_fish_environment():
         capture_output=True,
         text=True,
         env=env,
-        cwd=ROOT,
+        cwd=REPO_ROOT,
     )
 
     assert completed.returncode == 0, completed.stderr

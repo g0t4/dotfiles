@@ -1,4 +1,4 @@
-from test_setup import ROOT
+from test_setup import REPO_ROOT
 
 import re
 
@@ -27,7 +27,7 @@ def registry():
 
 
 def test_all_fish_abbreviations_are_migrated():
-    source = ROOT / "fish/load_last_interactive_only/globals-specific.fish"
+    source = REPO_ROOT / "fish/load_last_interactive_only/globals-specific.fish"
     fish_count = sum(
         bool(re.match(r"^\s*abbr(?:\s|$)", line))
         for line in source.read_text().splitlines()

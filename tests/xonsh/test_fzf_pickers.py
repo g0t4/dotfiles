@@ -1,4 +1,4 @@
-from test_setup import ROOT
+from test_setup import REPO_ROOT
 
 import hashlib
 import os
@@ -99,8 +99,8 @@ def test_cancelled_variable_selection_leaves_buffer_untouched():
 
 
 def test_files_rc_registers_picker_bindings_and_parses_current_token():
-    abbreviations = ROOT / ".config/xonsh/rc.d/abbreviations.xsh"
-    files_rc = ROOT / ".config/xonsh/rc.d/files-specific.xsh"
+    abbreviations = REPO_ROOT / ".config/xonsh/rc.d/abbreviations.xsh"
+    files_rc = REPO_ROOT / ".config/xonsh/rc.d/files-specific.xsh"
     command = (
         f"source {abbreviations}; source {files_rc}; "
         "from prompt_toolkit.buffer import Buffer; "
@@ -139,10 +139,10 @@ def test_files_rc_registers_picker_bindings_and_parses_current_token():
 def test_picker_subprocess_uses_xonsh_path_not_stale_process_path():
     env = os.environ.copy()
     env["PATH"] = "/usr/bin:/bin:/usr/sbin:/sbin"
-    env["XONSH_CONFIG_DIR"] = str(ROOT / ".config/xonsh")
-    abbreviations = ROOT / ".config/xonsh/rc.d/abbreviations.xsh"
-    paths = ROOT / ".config/xonsh/rc.d/00-paths.xsh"
-    files_rc = ROOT / ".config/xonsh/rc.d/files-specific.xsh"
+    env["XONSH_CONFIG_DIR"] = str(REPO_ROOT / ".config/xonsh")
+    abbreviations = REPO_ROOT / ".config/xonsh/rc.d/abbreviations.xsh"
+    paths = REPO_ROOT / ".config/xonsh/rc.d/00-paths.xsh"
+    files_rc = REPO_ROOT / ".config/xonsh/rc.d/files-specific.xsh"
     command = (
         f"source {abbreviations}; source {paths}; source {files_rc}; "
         "candidates, error = _files_picker_candidates('files', None, Path.cwd()); "
@@ -154,7 +154,7 @@ def test_picker_subprocess_uses_xonsh_path_not_stale_process_path():
         capture_output=True,
         text=True,
         env=env,
-        cwd=ROOT,
+        cwd=REPO_ROOT,
     )
 
     assert completed.returncode == 0, completed.stderr

@@ -1,4 +1,4 @@
-from test_setup import ROOT
+from test_setup import REPO_ROOT
 
 import io
 import os
@@ -127,10 +127,10 @@ def test_piped_input_and_options_delegate_one_intact_cat_invocation(
 
 
 def test_cat_override_is_installed_only_for_interactive_xonsh():
-    abbreviations = ROOT / ".config/xonsh/rc.d/abbreviations.xsh"
-    files_rc = ROOT / ".config/xonsh/rc.d/files-specific.xsh"
+    abbreviations = REPO_ROOT / ".config/xonsh/rc.d/abbreviations.xsh"
+    files_rc = REPO_ROOT / ".config/xonsh/rc.d/files-specific.xsh"
     env = os.environ.copy()
-    env["XONSH_CONFIG_DIR"] = str(ROOT / ".config/xonsh")
+    env["XONSH_CONFIG_DIR"] = str(REPO_ROOT / ".config/xonsh")
 
     command = f"source {abbreviations}; source {files_rc}; print('cat' in aliases and callable(aliases['cat']))"
     noninteractive = subprocess.run(

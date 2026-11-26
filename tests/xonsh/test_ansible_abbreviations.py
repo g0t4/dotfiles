@@ -1,5 +1,5 @@
 import subprocess
-from test_setup import ROOT
+from test_setup import REPO_ROOT
 from pathlib import Path
 
 from wes_abbreviations import AbbreviationContext, reset_registry  # noqa: E402
@@ -47,8 +47,8 @@ def test_playbook_inventory_and_cursor_abbreviations():
 
 
 def test_ansible_rc_loads_with_abbreviations_and_bridged_functions():
-    abbreviations = ROOT / ".config/xonsh/rc.d/abbreviations.xsh"
-    ansibles = ROOT / ".config/xonsh/rc.d/ansibles.py"
+    abbreviations = REPO_ROOT / ".config/xonsh/rc.d/abbreviations.xsh"
+    ansibles = REPO_ROOT / ".config/xonsh/rc.d/ansibles.py"
     command = (
         f"source {abbreviations}; source {ansibles}; "
         "print(len(wes_abbreviations.XONSH_ABBREVIATIONS.abbreviations)); "

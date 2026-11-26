@@ -1,4 +1,4 @@
-from test_setup import ROOT
+from test_setup import REPO_ROOT
 
 import importlib.util
 import re
@@ -6,7 +6,7 @@ import subprocess
 import sys
 
 
-WES_PACKAGE_DIR = ROOT / 'tools/wes_package'
+WES_PACKAGE_DIR = REPO_ROOT / 'tools/wes_package'
 
 
 def test_markdown_preserves_source_and_highlights_embedded_code():

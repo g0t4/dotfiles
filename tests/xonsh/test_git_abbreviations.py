@@ -1,4 +1,4 @@
-from test_setup import ROOT
+from test_setup import REPO_ROOT
 
 import subprocess
 
@@ -94,7 +94,7 @@ def test_regex_abbreviation_delegates_to_named_fish_function(monkeypatch):
 
 
 def test_regex_fish_function_preserves_cursor_marker(monkeypatch):
-    source = (ROOT / "fish/load_last_interactive_only/git.fish").read_text()
+    source = (REPO_ROOT / "fish/load_last_interactive_only/git.fish").read_text()
     definition = next(
         line for line in source.splitlines()
         if line.startswith("abbr --set-cursor --regex 'gpt")
@@ -125,17 +125,17 @@ def test_native_line_numbers_matches_fish_shape():
 
 def test_repo_root_value_can_drive_cd_without_terminal_codes():
     command = "; ".join((
-        f"source {ROOT / '.config/xonsh/rc.d/abbreviations.xsh'}",
-        f"source {ROOT / '.config/xonsh/rc.d/files-specific.xsh'}",
-        f"source {ROOT / '.config/xonsh/rc.d/git.py'}",
+        f"source {REPO_ROOT / '.config/xonsh/rc.d/abbreviations.xsh'}",
+        f"source {REPO_ROOT / '.config/xonsh/rc.d/files-specific.xsh'}",
+        f"source {REPO_ROOT / '.config/xonsh/rc.d/git.py'}",
         "cd tests",
         "cd $(_repo_root)",
         "print(__import__('os').getcwd())",
     ))
     completed = subprocess.run(
-        ["xonsh", "--no-rc", "-c", command], cwd=ROOT,
+        ["xonsh", "--no-rc", "-c", command], cwd=REPO_ROOT,
         capture_output=True, text=True,
     )
     assert completed.returncode == 0, completed.stderr
-    assert completed.stdout.strip() == str(ROOT)
+    assert completed.stdout.strip() == str(REPO_ROOT)
     assert "\x1b" not in completed.stdout

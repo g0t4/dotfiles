@@ -1,4 +1,4 @@
-from test_setup import ROOT
+from test_setup import REPO_ROOT
 
 import importlib
 import io
@@ -78,12 +78,12 @@ def test_every_generated_module_has_a_dedicated_source():
 
 def test_misc_fish_abbreviations_are_generated_from_xonsh():
     assert MISC_FISH_TARGET.read_text() == render_misc_fish()
-    source = (ROOT / "fish/load_last_interactive_only/misc-specific.fish").read_text()
+    source = (REPO_ROOT / "fish/load_last_interactive_only/misc-specific.fish").read_text()
     assert "source $WES_DOTFILES/fish/generated/misc-abbreviations.fish" in source
     completed = subprocess.run(
         [
             "fish", "--no-config", "-c",
-            f"set -g WES_DOTFILES {ROOT}; "
+            f"set -g WES_DOTFILES {REPO_ROOT}; "
             "function reminder_abbr; abbr $argv; end; "
             "source $WES_DOTFILES/fish/load_last_interactive_only/misc-specific.fish; "
             "abbr --show",
@@ -239,9 +239,9 @@ def test_current_shell_function_alias_fails_loudly():
 
 
 def test_all_split_rc_files_load_together():
-    rc_files = [ROOT / ".config/xonsh/rc.d/abbreviations.xsh"]
+    rc_files = [REPO_ROOT / ".config/xonsh/rc.d/abbreviations.xsh"]
     rc_files.extend(
-        ROOT / f".config/xonsh/rc.d/{name}"
+        REPO_ROOT / f".config/xonsh/rc.d/{name}"
         for name in (
             "cloud-ai.py",
             "kubernetes.xsh",

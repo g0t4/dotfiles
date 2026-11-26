@@ -1,4 +1,4 @@
-from test_setup import ROOT
+from test_setup import REPO_ROOT
 
 import importlib
 import os
@@ -15,7 +15,7 @@ from wes_daily_tool_bridges import zsh_alias, network_alias, audio_abbreviation
 
 @pytest.mark.parametrize('domain', SOURCES)
 def test_generated_collection_matches_source(domain):
-    assert (ROOT / f'.config/xonsh/lib/wes_{domain}_tool_abbreviations.py').read_text() == generate(domain)
+    assert (REPO_ROOT / f'.config/xonsh/lib/wes_{domain}_tool_abbreviations.py').read_text() == generate(domain)
 
 
 @pytest.fixture
@@ -65,7 +65,7 @@ def test_bridges_preserve_args_streams_and_exit_status(monkeypatch):
     argv, kwargs = calls[-1]
     assert argv == ['/bin/zsh', '-ic', '"$@"', 'xonsh-bridge', 'gitignores_for', *args]
     assert kwargs['stdout'] is stream
-    assert network_alias('_default_gateway', ROOT)(args, stdout=stream) == 17
+    assert network_alias('_default_gateway', REPO_ROOT)(args, stdout=stream) == 17
     assert calls[-1][0][-3:] == ['_default_gateway', *args]
 
 
@@ -87,9 +87,9 @@ def test_real_audio_expanders_and_rc_registration(registry, tmp_path, monkeypatc
     assert 'test.mp4' in expand(registry, 'et').text
     assert 'test.wav' in expand(registry, 'ff_wav').text
     assert '-show_streams' in expand(registry, 'ffpshow_streams').text
-    rc = ROOT / '.config/xonsh/rc.d'
+    rc = REPO_ROOT / '.config/xonsh/rc.d'
     code = '; '.join(f'source {rc / name}' for name in ('audio-video.py', 'http-network.xsh', 'github-cli.py'))
     code += "; assert XSH.aliases['ffmpeg'] == ['ffmpeg', '-hide_banner']; assert callable(XSH.aliases['gitignores_for'])"
-    env = os.environ | {'WES_DOTFILES': str(ROOT), 'PYTHONPATH': str(rc.parent / 'lib')}
+    env = os.environ | {'WES_DOTFILES': str(REPO_ROOT), 'PYTHONPATH': str(rc.parent / 'lib')}
     result = subprocess.run(['xonsh', '--no-rc', '-c', code], env=env, capture_output=True, text=True)
     assert result.returncode == 0, result.stderr

@@ -1,4 +1,4 @@
-from test_setup import ROOT
+from test_setup import REPO_ROOT
 
 import json
 import importlib
@@ -18,7 +18,7 @@ def registry(tmp_path, monkeypatch):
     monkeypatch.chdir(tmp_path)
     registry = reset_registry()
     importlib.reload(wes_trace_helpers)
-    register_trace_helpers({}, ROOT)
+    register_trace_helpers({}, REPO_ROOT)
     return registry
 
 
@@ -79,18 +79,18 @@ def test_note_cursor_and_shortcuts(registry):
 
 
 def test_source_function_inventory_is_accounted_for():
-    sources = [ROOT / "fish/load_last_interactive_only/always/my_ai.fish",
-               ROOT / "fish/load_last_interactive_only/rag_captures.fish"]
+    sources = [REPO_ROOT / "fish/load_last_interactive_only/always/my_ai.fish",
+               REPO_ROOT / "fish/load_last_interactive_only/rag_captures.fish"]
     names = {name for source in sources for name in re.findall(r"^function (\S+)", source.read_text(), re.M)}
     native = {"_abbr_expand_trace_nth_file_args", "abbr_expand_trace_nth_file_vt","abbr_expand_trace_nth_file_nvim", "_abbr_trace_message", "_abbr_trace_command", "_abbr_msg_num"}
     assert names == set(FISH_FUNCTIONS) | native
 
 
 def test_rc_registers_and_wrapper_preserves_exact_stdin():
-    rc = ROOT / ".config/xonsh/rc.d/trace-helpers.xsh"
+    rc = REPO_ROOT / ".config/xonsh/rc.d/trace-helpers.xsh"
     code = f"source {rc}; strip_trailing_newline"
-    env = os.environ | {"XONSH_CONFIG_DIR": str(rc.parent.parent), "WES_DOTFILES": str(ROOT),
-                        "PYTHONPATH": str(ROOT / '.config/xonsh/lib'), "TERM": "dumb"}
+    env = os.environ | {"XONSH_CONFIG_DIR": str(rc.parent.parent), "WES_DOTFILES": str(REPO_ROOT),
+                        "PYTHONPATH": str(REPO_ROOT / '.config/xonsh/lib'), "TERM": "dumb"}
     env.pop("TERM_PROGRAM", None)
     completed = subprocess.run(["xonsh", "--no-rc", "-c", code], input="hello\n\n",
                                capture_output=True, text=True, env=env)
@@ -101,7 +101,7 @@ def test_rc_registers_and_wrapper_preserves_exact_stdin():
 def test_trace_collection_completion(tmp_path):
     (tmp_path / "xonsh").mkdir()
     (tmp_path / "agents").mkdir()
-    rc = ROOT / ".config/xonsh/rc.d/trace-helpers.xsh"
+    rc = REPO_ROOT / ".config/xonsh/rc.d/trace-helpers.xsh"
     code = (
         f"source {rc}; "
         "from xonsh.parsers.completion_context import CompletionContextParser; "
@@ -109,8 +109,8 @@ def test_trace_collection_completion(tmp_path):
         "context = parser.parse('browse_traces x', len('browse_traces x')); "
         "assert {str(value) for value in _trace_helper_completer(context)} == {'xonsh'}"
     )
-    env = os.environ | {"WES_DOTFILES": str(ROOT), "WES_ASK_CAPTURES": str(tmp_path),
-                        "PYTHONPATH": str(ROOT / '.config/xonsh/lib')}
+    env = os.environ | {"WES_DOTFILES": str(REPO_ROOT), "WES_ASK_CAPTURES": str(tmp_path),
+                        "PYTHONPATH": str(REPO_ROOT / '.config/xonsh/lib')}
     completed = subprocess.run(["xonsh", "--no-rc", "-c", code],
                                capture_output=True, text=True, env=env)
     assert completed.returncode == 0, completed.stderr

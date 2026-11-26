@@ -1,4 +1,4 @@
-from test_setup import ROOT
+from test_setup import REPO_ROOT
 
 import asyncio
 import os
@@ -15,7 +15,7 @@ from wes_live_voice import bounded_command_result  # noqa: E402
 @pytest.mark.parametrize("persistent", [True, False])
 @pytest.mark.parametrize("key", ["ControlM", "ControlJ"])
 def test_voice_enter_wins_over_abbreviations(voice_first, persistent, key):
-    rc = ROOT / ".config/xonsh/rc.d"
+    rc = REPO_ROOT / ".config/xonsh/rc.d"
     registration = ["_wes_voice_keybinding", "_wes_abbreviation_keybindings"]
     if not voice_first:
         registration.reverse()
@@ -130,7 +130,7 @@ def test_live_voice_client_can_reset_resident_worker():
 
 
 def test_shift_f9_binding_is_registered():
-    voice = ROOT / ".config/xonsh/rc.d/voice-intent.xsh"
+    voice = REPO_ROOT / ".config/xonsh/rc.d/voice-intent.xsh"
     command = (
         f"source {voice}; "
         "from prompt_toolkit.key_binding import KeyBindings; "
@@ -145,7 +145,7 @@ def test_shift_f9_binding_is_registered():
 
 
 def test_shift_f8_persistent_binding_is_registered():
-    voice = ROOT / ".config/xonsh/rc.d/voice-intent.xsh"
+    voice = REPO_ROOT / ".config/xonsh/rc.d/voice-intent.xsh"
     command = (
         f"source {voice}; "
         "from prompt_toolkit.key_binding import KeyBindings; "
@@ -160,7 +160,7 @@ def test_shift_f8_persistent_binding_is_registered():
 
 
 def test_persistent_capture_settings_are_restored():
-    voice = ROOT / ".config/xonsh/rc.d/voice-intent.xsh"
+    voice = REPO_ROOT / ".config/xonsh/rc.d/voice-intent.xsh"
     command = (
         "$XONSH_CAPTURE_ALWAYS = False; "
         "$XONSH_STORE_STDOUT = False; "
@@ -179,7 +179,7 @@ def test_persistent_capture_settings_are_restored():
 
 
 def test_live_preview_puts_command_first():
-    config = ROOT / ".config/xonsh/rc.d/voice-intent.xsh"
+    config = REPO_ROOT / ".config/xonsh/rc.d/voice-intent.xsh"
     command = (
         f"source {config}; "
         "_live_voice_state.update(status='listening', transcript='cut the video', "
@@ -194,7 +194,7 @@ def test_live_preview_puts_command_first():
 
 
 def test_live_preview_changes_color_when_command_is_ready():
-    config = ROOT / ".config/xonsh/rc.d/voice-intent.xsh"
+    config = REPO_ROOT / ".config/xonsh/rc.d/voice-intent.xsh"
     command = (
         f"source {config}; "
         "_live_voice_state.update(status='listening', transcript='cut video', "
@@ -213,7 +213,7 @@ def test_live_preview_changes_color_when_command_is_ready():
 
 
 def test_live_preview_wraps_prompt_layout_in_cursor_float():
-    voice = ROOT / ".config/xonsh/rc.d/voice-intent.xsh"
+    voice = REPO_ROOT / ".config/xonsh/rc.d/voice-intent.xsh"
     command = (
         f"source {voice}; "
         "from prompt_toolkit import PromptSession; "
@@ -233,7 +233,7 @@ def test_live_preview_wraps_prompt_layout_in_cursor_float():
 
 
 def test_enter_accepts_visible_live_command_without_submitting():
-    voice = ROOT / ".config/xonsh/rc.d/voice-intent.xsh"
+    voice = REPO_ROOT / ".config/xonsh/rc.d/voice-intent.xsh"
     command = (
         f"source {voice}; "
         "from prompt_toolkit import PromptSession; "
@@ -259,7 +259,7 @@ def test_enter_accepts_visible_live_command_without_submitting():
 
 
 def test_persistent_enter_submits_visible_command():
-    voice = ROOT / ".config/xonsh/rc.d/voice-intent.xsh"
+    voice = REPO_ROOT / ".config/xonsh/rc.d/voice-intent.xsh"
     command = (
         f"source {voice}; "
         "from prompt_toolkit import PromptSession; "

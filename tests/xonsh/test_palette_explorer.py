@@ -1,4 +1,4 @@
-from test_setup import ROOT
+from test_setup import REPO_ROOT
 
 import argparse
 import base64
@@ -10,7 +10,7 @@ import sys
 from PIL import Image
 from rich.console import Console
 
-WES_PACKAGE_DIR = ROOT / 'tools/wes_package'
+WES_PACKAGE_DIR = REPO_ROOT / 'tools/wes_package'
 sys.path.insert(0, str(WES_PACKAGE_DIR))
 import explorer
 import highlight as lab

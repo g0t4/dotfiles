@@ -1,4 +1,4 @@
-from test_setup import ROOT
+from test_setup import REPO_ROOT
 
 import io
 import os
@@ -11,7 +11,7 @@ from wes_interactive_cat import InteractiveCat
 from wes_syntax_theme import ThemeBat, syntax_theme
 from pygments.token import Keyword
 
-WRAPPER = ROOT / "tools/wes_package/bat.py"
+WRAPPER = REPO_ROOT / "tools/wes_package/bat.py"
 
 
 def run_bat(*args, input=None, env=None):
@@ -136,9 +136,9 @@ def test_shell_dispatch_uses_theme_and_keeps_explicit_color_override():
 
 
 def test_reload_file_installs_aliases_and_routes_a_real_pipeline():
-    rc = ROOT / '.config/xonsh/rc.d/syntax-theme.py'
+    rc = REPO_ROOT / '.config/xonsh/rc.d/syntax-theme.py'
     command = f'$XONSH_INTERACTIVE = True; source {rc}; source {rc}; echo \'print("hello")\' | bat -pl py --color=always'
-    result = subprocess.run([sys.executable, '-m', 'xonsh', '--no-rc', '-c', command], capture_output=True, text=True, env={**os.environ, 'PYTHONPATH': str(ROOT / '.config/xonsh/lib')})
+    result = subprocess.run([sys.executable, '-m', 'xonsh', '--no-rc', '-c', command], capture_output=True, text=True, env={**os.environ, 'PYTHONPATH': str(REPO_ROOT / '.config/xonsh/lib')})
     assert result.returncode == 0, result.stderr
     assert '\x1b[38;2;' in result.stdout
 

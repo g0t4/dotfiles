@@ -1,4 +1,4 @@
-from test_setup import ROOT
+from test_setup import REPO_ROOT
 
 import asyncio
 import subprocess
@@ -116,7 +116,7 @@ def test_resolve_executable_finds_homebrew_when_path_does_not(monkeypatch):
 
 
 def test_shift_f7_binding_is_registered():
-    config = ROOT / ".config/xonsh/rc.d/voice-intent.xsh"
+    config = REPO_ROOT / ".config/xonsh/rc.d/voice-intent.xsh"
     command = (
         f"source {config}; "
         "from prompt_toolkit.key_binding import KeyBindings; "
