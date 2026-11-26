@@ -1,5 +1,8 @@
 # wes_package
 
+FYI this README is largely from the old syntax-lab package (now nested in `wes.syntax` namespace within this bigger `wes` package (aka `wes_package`))
+TODO codex document briefly the other parts of the bigger `wes_package` i.e. wes.print
+
 Reusuable python modules
 
 Install the command globally from this directory. The editable install keeps
@@ -257,10 +260,10 @@ Or declare it in the tool's `pyproject.toml` (as the chat viewer does):
 
 ```toml
 [project]
-dependencies = ["wes-syntax"] # alongside the tool's existing dependencies
+dependencies = ["wes_package"] # alongside the tool's existing dependencies
 
 [tool.uv.sources]
-wes-syntax = { path = "../dotfiles/tools/wes_package", editable = true }
+wes_package = { path = "../dotfiles/tools/wes_package", editable = true }
 ```
 
 ```python

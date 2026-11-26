@@ -8,7 +8,7 @@ dependencies = [
     "Pillow>=11",
     "wes-ai-shared",
     "langchain-llama-server",
-    "wes-syntax",
+    "wes_package",
 ]
 
 [dependency-groups]
@@ -21,7 +21,7 @@ macos = [
 [tool.uv.sources]
 wes-ai-shared = { path = "../ai_shared", editable = true }
 langchain-llama-server = { path = "../../../langchain-llama-server", editable = true }
-wes-syntax = { path = "../wes_package", editable = true }
+wes_package = { path = "../wes_package", editable = true }
 
 [tool.ruff.lint]
 ignore = ["E402", "BLE001"]

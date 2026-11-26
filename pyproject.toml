@@ -5,7 +5,7 @@ description = "A rug for all my dotfiles, configs, scripts, etc"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
-    "wes-syntax",
+    "wes_package",
     "chardet>=5.2.0",
     "debugpy>=1.8.11",
     "httpx>=0.28.1",
@@ -60,7 +60,7 @@ macos = [
 
 
 [tool.uv.sources]
-wes-syntax = { path = "tools/wes_package", editable = true }
+wes_package = { path = "tools/wes_package", editable = true }
 langchain-llama-server = { path = "../langchain-llama-server", editable = true }
 
 # # TODO setup more global tools via `uv tool install`?
