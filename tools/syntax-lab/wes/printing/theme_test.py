@@ -4,7 +4,7 @@ import pytest
 from rich.color import Color
 from rich.theme import Theme
 
-from wes.print.theme import PALETTE_ROLES, wes_theme
+from wes.printing.theme import PALETTE_ROLES, wes_theme
 from wes_syntax import load_style
 
 

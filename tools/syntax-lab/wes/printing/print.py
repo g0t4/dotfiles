@@ -2,7 +2,7 @@ from typing import IO, Any
 
 from rich.console import Console
 
-from wes.print.theme import wes_theme
+from wes.printing.theme import wes_theme
 
 
 def make_console(file: IO[str] | None = None) -> Console:

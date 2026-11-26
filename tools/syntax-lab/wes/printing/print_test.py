@@ -3,8 +3,8 @@ import io
 from rich.color import Color
 from rich.console import Console
 
-from wes.print import print as print_module
-from wes.print.theme import wes_theme
+from wes.printing import print as print_module
+from wes.printing.theme import wes_theme
 from wes_syntax import load_style
 
 def color_spec(hex_color: str) -> str:
