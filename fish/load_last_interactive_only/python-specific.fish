@@ -209,16 +209,6 @@ complete -c wcl -a '(gh repo list --json name --jq .[].name --limit 1000)' -f
 # PRN complete with gh repo list... with my repos
 # complete -c wcl -a '(gh repo list --json nameWithOwner --jq .[].nameWithOwner --limit 1000)'
 
-function rich_colors
-    set -l _python3 "$WES_DOTFILES/.venv/bin/python3"
-    $_python3 -m rich.color
-end
-
-function rich_emoji
-    set -l _python3 "$WES_DOTFILES/.venv/bin/python3"
-    $_python3 -m rich.emoji
-end
-
 function matplotlib_colors
     set -l _python3 "$WES_DOTFILES/.venv/bin/python3"
     begin
