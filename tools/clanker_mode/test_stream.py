@@ -49,6 +49,10 @@ def test_partial_tool_calls_require_finished_json(shell, tmp_path, finish):
     assert previews[0].additional_kwargs["reasoning_content"] == "inspect"
     assert previews[1].tool_call_chunks[0]["args"] == args[:10]
     records = read_records(next(tmp_path.glob("*.jsonl")))
+    (round_record,) = [r for r in records if r["type"] == "model_round"]
+    trace = round_record["completion"]
+    assert trace["outcome"] == ("cancelled" if finish is KeyboardInterrupt else "completed")
+    assert trace["client_timing"]["ended_at"]
     assistants = [r for r in records if r.get("message", {}).get("role") == "assistant"]
     if finish == "tool_calls":
         (record,) = assistants
@@ -65,10 +69,10 @@ def test_partial_tool_calls_require_finished_json(shell, tmp_path, finish):
 
 def test_parallel_calls_retain_raw_arguments_and_trailing_usage():
     from clanker_session import serialize_message
-    from clanker_stream import CompletionStream
+    from clanker_stream import StreamingRound
 
-    completion = CompletionStream(None)
-    completion.add(
+    chunks = []
+    chunks.append(
         AIMessageChunk(
             content="",
             id="response",
@@ -78,7 +82,7 @@ def test_parallel_calls_retain_raw_arguments_and_trailing_usage():
             ],
         )
     )
-    completion.add(
+    chunks.append(
         AIMessageChunk(
             content="",
             tool_call_chunks=[
@@ -89,14 +93,18 @@ def test_parallel_calls_retain_raw_arguments_and_trailing_usage():
         )
     )
     usage = {"input_tokens": 10, "output_tokens": 2, "total_tokens": 12}
-    completion.add(
+    chunks.append(
         AIMessageChunk(
             content="",
             usage_metadata=usage,
-            response_metadata={"metrics": {"time": 0.2}},
+            response_metadata={"raw_chunks": [{"metrics": {"time": 0.2}}]},
         )
     )
-    answer = completion.finish()
+    class Model:
+        def stream(self, messages):
+            yield from chunks
+
+    answer = StreamingRound(Model(), None).invoke([])
     assert [call["args"] for call in answer.tool_calls] == [{"a": 1}, {"b": 2}]
     body, metadata = serialize_message(answer)
     assert [call["function"]["arguments"] for call in body["tool_calls"]] == [

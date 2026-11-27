@@ -180,3 +180,19 @@ Records are flushed to the OS after each append, not fsynced after each record.
 The writer has one foreground owner per shell. This is a chronological event log,
 not a branching graph or an automatic restart/resume format. The running process
 keeps the current model context in memory. Existing legacy traces are not migrated.
+
+### Model round traces
+
+A `model_round` record contains `turn_id`, a one-based `round`, and a
+`completion`. Each streamed inference attempt produces one record before
+Clanker validates or executes any returned tool calls. Natural exhaustion
+has outcome `completed`. Early close, Ctrl+C, or async cancellation has
+outcome `cancelled`. A provider/consumer exception has outcome `error`.
+A completed stream can still yield a turn error if its tool arguments or
+finish reason fail validation. Partial responses are trace-only.
+
+Read `completion` as an `AccumulatedCompletion` for completed streams or
+an `InterruptedCompletion` otherwise. Both carry parsed backend events,
+client wall times and per-event arrival offsets. Pass either to
+`calculate_stats()` from `langchain_openai_compatible` when displaying it.
+The existing `message` records remain the source for conversation replay.

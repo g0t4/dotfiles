@@ -1,7 +1,7 @@
 # Clanker Mode
 
-An in-process Xonsh agent using `ChatLlamaServer`, the same LangChain provider
-as the iTerm2 ask helper. No dependency on the Neovim Clanker implementation.
+An in-process Xonsh agent using `ChatOpenAICompatible` for model inference and
+per-round traces.
 
 Open a new Xonsh shell, then:
 
@@ -286,8 +286,8 @@ uv tool install 'xonsh[full]' --with-requirements xonsh/requirements.txt \
 
 Unit/integration tests cover real Xonsh state mutations, exceptions, caller-thread
 execution, traces, interruption, and an HTTP tool round trip through the real
-provider. The opt-in live test generates a random hidden environment value and
-asks the model to discover it using its tool; it requires ask.lan to be available.
+provider. The opt-in live test puts a random apple count in the test shell and
+asks the model to look it up using its tool. It uses the selected profile.
 
 To disable, remove `.config/xonsh/rc.d/clanker-mode.py` and start a new shell.
 
@@ -469,3 +469,29 @@ If the shared draft feels right in `clanksh`, the next idea is `clankerterm`:
 what would a terminal built around that interaction feel like? And if we keep
 going, `clankeros` would be a command-line-only OS built on a microkernel.
 The boot target is one second flat to a prompt that accepts input. 🐷
+
+### Compatible-client integration
+
+Each tool-bound round uses `ChatOpenAICompatible`. Clanker wraps the bound
+runnable's actual stream in `capture_completion` (or `acapture_completion` for
+interactive steering). Calling a custom method through LangChain's binding can
+forward configuration while dropping bound tool definitions. The HTTP round-trip
+test checks the definitions on the request and replays a tool result.
+
+Live previews still merge chunks at display cadence. Only the shared accumulator
+assembles the finished response and records the arrival times. Clanker validates
+the exact streamed argument strings with a strict JSON parser and checks for a
+finish reason before executing calls. Partial JSON can look valid in a preview.
+
+The [trace schema](SCHEMA.md) describes the per-round JSONL record. Existing
+assistant records retain diagnostic fields for older viewers. After updating
+the editable packages, start a fresh Xonsh process to load the new classes.
+
+**Integration TODOs**
+
+- Teach the trace viewer to read `model_round`, display partial attempts, and
+  calculate stats from the raw trace. Then revisit the legacy diagnostics copy.
+- Context compaction currently uses a separate non-streaming request. Give it an
+  explicit trace record if its timing and usage should count toward session totals.
+- Round records are written when the stream unwinds. Recovery after a process
+  kill or power loss would require writing events while the request is running.

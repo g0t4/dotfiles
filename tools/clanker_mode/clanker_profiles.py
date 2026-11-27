@@ -147,6 +147,7 @@ def resolve_profile(xsh, profile=None):
 
 
 def get_model(xsh, name=None):
+    from langchain_openai_compatible import ChatOpenAICompatible
     from wes.ai.models import connect
 
     profile = resolve_profile(xsh, name)
@@ -158,5 +159,6 @@ def get_model(xsh, name=None):
         profile.model,
         api_key,
         "$CLANKER_MODEL",
+        client_class=ChatOpenAICompatible,
         **profile.client_options(),
     )

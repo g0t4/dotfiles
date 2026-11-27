@@ -243,12 +243,15 @@ def test_steering_input_survives_preview_redraw_and_ctrl_c_closes_stream():
         try:
             with TurnDisplay(Console(file=io.StringIO())) as display:
                 display.steering = steering
+                traces = []
                 model = StreamingRound(
-                    Model(), lambda msg: display("assistant_partial", msg)
+                    Model(), lambda msg: display("assistant_partial", msg), traces.append
                 )
                 with pytest.raises(KeyboardInterrupt):
                     steering.invoke(model, [])
             assert closed and steering.preview == ""
+            assert [trace.outcome for trace in traces] == ["cancelled"]
+            assert traces[0].client_timing.ended_at is not None
         finally:
             steering.close()
 

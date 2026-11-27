@@ -404,9 +404,15 @@ def run_agent(
             for tool in (shell_tool, patch_tool, rollback_tool)
         ]
         session.record_tools(definitions)
+
+        def record_round(trace):
+            session.append("model_round", turn_id=session.turn, round=round_index + 1,
+                           completion=trace.model_dump(mode="json"))
+
         bound = StreamingRound(
             model.bind_tools(definitions),
             (lambda message: emit("assistant_partial", message)) if on_event else None,
+            record_round,
         )
         for round_index in range(max_rounds):
             if round_index:

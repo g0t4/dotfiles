@@ -107,18 +107,18 @@ def test_interruption_trace(shell, tmp_path):
 @pytest.mark.skipif(
     os.environ.get("CLANKER_LIVE_TEST") != "1", reason="opt-in live model"
 )
-def test_live_model_discovers_hidden_shell_value(shell, tmp_path):
-    hidden = uuid4().hex
-    shell.env["CLANKER_INTEGRATION_HIDDEN"] = hidden
+def test_live_model_reads_shell_inventory(shell, tmp_path):
+    count = str(10000 + uuid4().int % 90000)
+    shell.env["CLANKER_TEST_APPLE_COUNT"] = count
     answer = run_agent(
-        'Use your tool to read XSH.env["CLANKER_INTEGRATION_HIDDEN"]. Reply with its exact value.',
+        'How many apples are in the test inventory? Use your shell tool to read XSH.env["CLANKER_TEST_APPLE_COUNT"]. Reply with the count as digits.',
         shell,
         trace_dir=tmp_path,
     )
-    assert hidden in answer
+    assert count in answer.replace(",", "")
     messages = message_bodies(read_records(next(tmp_path.glob("*.jsonl"))))
     assert any(
-        message["role"] == "tool" and hidden in message["content"]
+        message["role"] == "tool" and count in message["content"]
         for message in messages
     )
 
@@ -245,7 +245,9 @@ def test_provider_requests_streaming_usage(shell, asynchronous, streaming):
         answer = message_chunk_to_message(answer)
     body, metadata = serialize_message(answer)
     for field, value in diagnostics.items():
-        assert metadata["response"][field] == value
+        raw = metadata["response"]
+        payload = raw["raw_chunks"][-1] if streaming else raw["raw_response"]
+        assert payload[field] == value
         assert field not in body
 
 
@@ -362,6 +364,15 @@ def test_provider_http_tool_roundtrip(shell, tmp_path):
             == hidden
         )
         assert len(requests) == 3
+        from langchain_openai_compatible import AccumulatedCompletion
+
+        records = read_records(next(tmp_path.glob("*.jsonl")))
+        rounds = [r for r in records if r["type"] == "model_round"]
+        assert [(r["turn_id"], r["round"]) for r in rounds] == [(1, 1), (1, 2), (2, 1)]
+        for record in rounds:
+            completion = AccumulatedCompletion.model_validate(record["completion"])
+            assert len(completion.raw_chunks) == len(completion.client_timing.event_offsets_ms) == 3
+        assert "raw_chunks" not in json.dumps(requests)
         tool_records = [
             record
             for path in tmp_path.glob("*.jsonl")

@@ -1,29 +1,24 @@
 """Assemble a streamed model round before handing any calls to the shell."""
 
 import json
-from contextlib import aclosing, closing
 from time import monotonic
 
-from langchain_core.messages import AIMessage
+from langchain_openai_compatible import acapture_completion, capture_completion
 
 
-class CompletionStream:
+class _Preview:
     def __init__(self, on_partial):
         self.on_partial = on_partial
         self.pending = []
         self.message = None
         self.next_preview = 0
         self.phase = None
-        self.diagnostics = {}
 
     def add(self, chunk):
-        self.pending.append(chunk)
-        for key in ("timings", "metrics", "sglext"):
-            if key in chunk.response_metadata:
-                self.diagnostics[key] = chunk.response_metadata[key]
         if not self.on_partial:
             return
-        if chunk.tool_call_chunks:
+        self.pending.append(chunk.model_copy(update={"response_metadata": {}}))
+        if getattr(chunk, "tool_call_chunks", None):
             phase = ("tool", chunk.tool_call_chunks[-1]["index"])
         elif chunk.text:
             phase = "answer"
@@ -39,72 +34,69 @@ class CompletionStream:
 
     def merge(self):
         if self.message is None:
-            if not self.pending:
-                raise RuntimeError("Model returned an empty stream")
             self.message = self.pending.pop(0)
         if self.pending:
             self.message = self.message + self.pending
             self.pending.clear()
 
-    def finish(self):
-        self.merge()
-        message = self.message
-        if not message.response_metadata.get("finish_reason"):
-            raise RuntimeError("Model stream ended before a finish reason")
-        extensions = dict(message.additional_kwargs)
-        raw_calls, valid, invalid = [], [], []
-        for call in sorted(message.tool_call_chunks, key=lambda c: c["index"] or 0):
-            name, args, identifier = call["name"], call["args"], call["id"]
-            raw_calls.append(
-                {
-                    "id": identifier,
-                    "type": "function",
-                    "function": {"name": name, "arguments": args},
-                }
-            )
-            try:
-                parsed = json.loads(args or "")
-                if not name or not isinstance(parsed, dict):
-                    raise ValueError(
-                        "Expected a named function with an argument object"
-                    )
-                valid.append({"name": name, "args": parsed, "id": identifier})
-            except ValueError as error:
-                invalid.append(
-                    {"name": name, "args": args, "id": identifier, "error": str(error)}
-                )
-        if raw_calls:
-            extensions["tool_calls"] = raw_calls
-        return AIMessage(
-            content=message.content,
-            id=message.id,
-            additional_kwargs=extensions,
-            tool_calls=valid,
-            invalid_tool_calls=invalid,
-            response_metadata={**message.response_metadata, **self.diagnostics},
-            usage_metadata=message.usage_metadata,
-        )
+
+def _validated_answer(completion):
+    message = completion.message
+    if not message.response_metadata.get("finish_reason"):
+        raise RuntimeError("Model stream ended before a finish reason")
+    valid, invalid = [], []
+    for call in message.additional_kwargs.get("tool_calls", []):
+        function = call["function"]
+        name, args, identifier = function["name"], function["arguments"], call["id"]
+        try:
+            parsed = json.loads(args or "")
+            if not name or not isinstance(parsed, dict):
+                raise ValueError("Expected a named function with an argument object")
+            valid.append({"type": "tool_call", "name": name, "args": parsed, "id": identifier})
+        except (ValueError, TypeError) as error:
+            invalid.append({"type": "invalid_tool_call", "name": name, "args": args, "id": identifier, "error": str(error)})
+    # Existing JSONL readers use these fields on the assistant message.
+    metadata = dict(message.response_metadata)
+    for event in completion.raw_chunks:
+        for key in ("timings", "metrics", "sglext"):
+            if event.get(key) is not None:
+                metadata[key] = event[key]
+    updates = {"response_metadata": metadata}
+    if message.additional_kwargs.get("tool_calls"):
+        updates.update(tool_calls=valid, invalid_tool_calls=invalid)
+    return message.model_copy(update=updates)
 
 
 class StreamingRound:
-    def __init__(self, model, on_partial):
+    def __init__(self, model, on_partial, on_trace=None):
         self.model = model
         self.on_partial = on_partial
+        self.on_trace = on_trace
 
     def invoke(self, messages):
         if not hasattr(self.model, "stream"):
             return self.model.invoke(messages)
-        completion = CompletionStream(self.on_partial)
-        with closing(self.model.stream(messages)) as chunks:
-            for chunk in chunks:
-                completion.add(chunk)
-        return completion.finish()
+        preview = _Preview(self.on_partial)
+        stream = None
+        try:
+            with capture_completion(self.model.stream(messages)) as stream:
+                for chunk in stream:
+                    preview.add(chunk)
+        finally:
+            if self.on_trace and stream is not None:
+                self.on_trace(stream.get_trace())
+        return _validated_answer(stream.get_final_completion())
 
     async def ainvoke(self, messages):
         if not hasattr(self.model, "astream"):
             return await self.model.ainvoke(messages)
-        completion = CompletionStream(self.on_partial)
-        async with aclosing(self.model.astream(messages)) as chunks:
-            async for chunk in chunks:
-                completion.add(chunk)
-        return completion.finish()
+        preview = _Preview(self.on_partial)
+        stream = None
+        try:
+            async with acapture_completion(self.model.astream(messages)) as stream:
+                async for chunk in stream:
+                    preview.add(chunk)
+        finally:
+            if self.on_trace and stream is not None:
+                self.on_trace(stream.get_trace())
+        return _validated_answer(stream.get_final_completion())
