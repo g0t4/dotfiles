@@ -29,6 +29,8 @@ $WES_REPOS = str(_home / "repos")
 $WES_DOTFILES = str(Path($WES_REPOS) / "github/g0t4/dotfiles")
 $WES_VULGAR = True
 
+$XONSH_PROMPT_AUTO_SUGGEST=False # must disable this before every typing a single char in a prompt else bug in 0.24.* causes the suggester to be never cleared
+
 $VI_MODE = True
 
 # All shell features are loaded explicitly from this rc directory. Avoid scanning
