@@ -2,6 +2,18 @@
 ^E noaction 3e
 ^Y noaction 3k
 
+# With --no-keypad, iTerm2 sends the normal cursor-key sequences.
+\e[A back-line
+\e[B forw-line
+\e[C right-scroll
+\e[D left-scroll
+
+#line-edit
+\e[A up
+\e[B down
+\e[C right
+\e[D left
+
 #env
 # Keep the keypad in numeric mode so its digits send the same characters as the top-row digits.
 LESS = ${LESS} --no-keypad
