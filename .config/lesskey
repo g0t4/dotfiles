@@ -1,3 +1,7 @@
 #command
 ^E noaction 3e
 ^Y noaction 3k
+
+#env
+# Keep the keypad in numeric mode so its digits send the same characters as the top-row digits.
+LESS = ${LESS} --no-keypad
