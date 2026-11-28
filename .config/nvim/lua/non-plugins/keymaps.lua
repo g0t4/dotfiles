@@ -63,21 +63,23 @@ vim.keymap.set('n', '<C-S-->', '<C-i>', default_options)
 
 
 
--- *** search navigation: center matches while stepping with n/N
---   by default, n/N land the cursor on the match but leave it wherever the
---   scroll happens to put it (often the top/bottom edge of the window), so
---   the next match is easy to lose
---   zz => center the cursor line on screen
---   zv => open folds so the cursor line is visible (search results hidden in
---         a fold would otherwise be skipped/blanked)
-vim.keymap.set('n', 'n', 'nzzzv', default_options)
-vim.keymap.set('n', 'N', 'Nzzzv', default_options)
-
---   alternative: plain n/N (jam against the window edge, no centering)
---   handy when tracking prev/next position where the tiny scroll between
---   matches is enough to stay oriented (e.g. walking through nearby hits)
-vim.keymap.set('n', '<leader>n', 'n', default_options)
-vim.keymap.set('n', '<leader>N', 'N', default_options)
+-- I am on the fence about this... I hate it when stepping through matches hits edge of screen but when it doesn't I hate having the screen move!
+--   PRN? perhaps set this back up to only scroll when hit edge?
+-- -- *** search navigation: center matches while stepping with n/N
+-- --   by default, n/N land the cursor on the match but leave it wherever the
+-- --   scroll happens to put it (often the top/bottom edge of the window), so
+-- --   the next match is easy to lose
+-- --   zz => center the cursor line on screen
+-- --   zv => open folds so the cursor line is visible (search results hidden in
+-- --         a fold would otherwise be skipped/blanked)
+-- vim.keymap.set('n', 'n', 'nzzzv', default_options)
+-- vim.keymap.set('n', 'N', 'Nzzzv', default_options)
+--
+-- --   alternative: plain n/N (jam against the window edge, no centering)
+-- --   handy when tracking prev/next position where the tiny scroll between
+-- --   matches is enough to stay oriented (e.g. walking through nearby hits)
+-- vim.keymap.set('n', '<leader>n', 'n', default_options)
+-- vim.keymap.set('n', '<leader>N', 'N', default_options)
 
 -- *** help
 --
